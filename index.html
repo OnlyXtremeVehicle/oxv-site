@@ -7042,6 +7042,30 @@ footer {
   .home-journey-card:hover {
     transform: none;
   }
+
+  /* === Performance : remplace l'image hero par un dégradé immédiat sur mobile === */
+  .home-hero-img {
+    display: none !important;
+  }
+  .home-hero-bg {
+    background:
+      radial-gradient(ellipse at top, rgba(184, 115, 51, 0.18) 0%, transparent 50%),
+      linear-gradient(180deg, #060B14 0%, #02050C 100%);
+  }
+  .home-hero-overlay {
+    background:
+      linear-gradient(180deg, rgba(2, 5, 12, 0.4) 0%, rgba(2, 5, 12, 0.6) 100%) !important;
+  }
+
+  /* === Same pour la section finale === */
+  .home-final-bg img {
+    display: none !important;
+  }
+  .home-final-bg {
+    background:
+      radial-gradient(ellipse at center, rgba(184, 115, 51, 0.08) 0%, transparent 60%),
+      linear-gradient(180deg, #060B14 0%, #02050C 100%);
+  }
 }
 
 
@@ -17114,12 +17138,16 @@ function initCircuit3D(canvasId) {
 
 /* === INIT === */
 window.addEventListener('DOMContentLoaded', () => {
-  initHero();
-  initCircuit3D('circuit3d');
-  buildSlots();
-  setupReveal();
-  onAuthChange();
-  updateSummary();
+  // Init résilient : si une fonction plante, les autres continuent
+  const safe = (name, fn) => {
+    try { fn(); } catch (e) { console.warn('[OXV init]', name, 'a planté :', e); }
+  };
+  safe('initHero', () => initHero());
+  safe('initCircuit3D', () => initCircuit3D('circuit3d'));
+  safe('buildSlots', () => buildSlots());
+  safe('setupReveal', () => setupReveal());
+  safe('onAuthChange', () => onAuthChange());
+  safe('updateSummary', () => updateSummary());
 });
 
 </script>
