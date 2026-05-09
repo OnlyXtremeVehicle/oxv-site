@@ -6578,6 +6578,7 @@ footer {
   }
   .topnav .wrap {
     flex-wrap: nowrap !important;
+    gap: 10px !important;
   }
   .nav-links {
     display: none !important;
@@ -6585,12 +6586,23 @@ footer {
   .nav-cta-desktop {
     display: none !important;
   }
+  /* Cache "Se connecter" et "Réserver" sur mobile : ils sont dans le burger menu */
+  .nav-actions .btn {
+    display: none !important;
+  }
+  /* Sauf le burger qui reste visible */
+  .nav-actions .burger {
+    display: flex !important;
+  }
+  /* Raccourcit le logo : on cache "Only Xtreme Vehicle" */
+  .brand-tag {
+    display: none !important;
+  }
   .brand-mark {
     font-size: 18px !important;
   }
-  .brand-text {
-    font-size: 11px !important;
-    letter-spacing: 0.18em !important;
+  .brand {
+    font-size: 14px !important;
   }
   .nav-burger {
     display: flex !important;
@@ -7232,8 +7244,8 @@ footer {
         </p>
 
         <div class="home-hero-actions reveal">
-          <button class="btn btn-primary btn-lg" onclick="goTo(\'booking\')"><span>Réserver une session</span></button>
-          <button class="btn btn-lg" onclick="goTo(\'calendrier\')"><span>Voir le calendrier</span></button>
+          <button class="btn btn-primary btn-lg" onclick="goTo('booking')"><span>Réserver une session</span></button>
+          <button class="btn btn-lg" onclick="goTo('calendrier')"><span>Voir le calendrier</span></button>
         </div>
       </div>
     </div>
@@ -7272,7 +7284,7 @@ footer {
           Une <em>exigence</em>.
         </h2>
         <p class="home-journey-lede reveal">
-          Le pilotage chez OXV se construit. Vous commencez par découvrir, vous progressez vers la maîtrise, vous accédez à la création. Heritage est l\'engagement saison.
+          Le pilotage chez OXV se construit. Vous commencez par découvrir, vous progressez vers la maîtrise, vous accédez à la création. Heritage est l'engagement saison.
         </p>
       </div>
 
@@ -7282,56 +7294,56 @@ footer {
         <!-- Palier 1 — Access -->
         <div class="home-journey-card reveal">
           <div class="home-journey-card-number">01</div>
-          <div class="home-journey-card-img" style="background-image: url(\'https://images.unsplash.com/photo-1503376780353-7e6692767b70?auto=format&fit=crop&w=600&q=70\');"></div>
+          <div class="home-journey-card-img" style="background-image: url('https://images.unsplash.com/photo-1503376780353-7e6692767b70?auto=format&fit=crop&w=600&q=70');"></div>
           <div class="home-journey-card-body">
             <div class="home-journey-card-tag">— Le sésame</div>
             <h3 class="home-journey-card-name"><em>Access</em></h3>
             <p class="home-journey-card-text">
-              Première rencontre avec le circuit. Pilotage libre, briefing groupe, banque photo paddock. Tarif d\'introduction réservé à votre première session.
+              Première rencontre avec le circuit. Pilotage libre, briefing groupe, banque photo paddock. Tarif d'introduction réservé à votre première session.
             </p>
-            <button class="home-journey-card-link" onclick="goTo(\'offers\')">Découvrir →</button>
+            <button class="home-journey-card-link" onclick="goTo('offers')">Découvrir →</button>
           </div>
         </div>
 
         <!-- Palier 2 — Signature -->
         <div class="home-journey-card reveal">
           <div class="home-journey-card-number">02</div>
-          <div class="home-journey-card-img" style="background-image: url(\'https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?auto=format&fit=crop&w=600&q=70\');"></div>
+          <div class="home-journey-card-img" style="background-image: url('https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?auto=format&fit=crop&w=600&q=70');"></div>
           <div class="home-journey-card-body">
             <div class="home-journey-card-tag">— Le pilotage augmenté</div>
             <h3 class="home-journey-card-name"><em>Signature</em></h3>
             <p class="home-journey-card-text">
               Vous connaissez la piste. Apprenez à la dompter. Coaching un-pour-un, télémétrie complète, rapport de session personnalisé.
             </p>
-            <button class="home-journey-card-link" onclick="goTo(\'offers\')">Découvrir →</button>
+            <button class="home-journey-card-link" onclick="goTo('offers')">Découvrir →</button>
           </div>
         </div>
 
         <!-- Palier 3 — Promotion -->
         <div class="home-journey-card reveal">
           <div class="home-journey-card-number">03</div>
-          <div class="home-journey-card-img" style="background-image: url(\'https://images.unsplash.com/photo-1583870908951-71fc24bb3a91?auto=format&fit=crop&w=600&q=70\');"></div>
+          <div class="home-journey-card-img" style="background-image: url('https://images.unsplash.com/photo-1583870908951-71fc24bb3a91?auto=format&fit=crop&w=600&q=70');"></div>
           <div class="home-journey-card-body">
             <div class="home-journey-card-tag">— Le contenu</div>
             <h3 class="home-journey-card-name"><em>Promotion</em></h3>
             <p class="home-journey-card-text">
-              Votre pilotage est propre. Il mérite d\'être immortalisé. Drone FPV, photographe professionnel, droits cédés sans restriction.
+              Votre pilotage est propre. Il mérite d'être immortalisé. Drone FPV, photographe professionnel, droits cédés sans restriction.
             </p>
-            <button class="home-journey-card-link" onclick="goTo(\'offers\')">Découvrir →</button>
+            <button class="home-journey-card-link" onclick="goTo('offers')">Découvrir →</button>
           </div>
         </div>
 
         <!-- Palier 4 — Heritage -->
         <div class="home-journey-card heritage reveal">
           <div class="home-journey-card-number">04</div>
-          <div class="home-journey-card-img" style="background-image: url(\'https://images.unsplash.com/photo-1502136969935-8d8eef54d77b?auto=format&fit=crop&w=600&q=70\');"></div>
+          <div class="home-journey-card-img" style="background-image: url('https://images.unsplash.com/photo-1502136969935-8d8eef54d77b?auto=format&fit=crop&w=600&q=70');"></div>
           <div class="home-journey-card-body">
-            <div class="home-journey-card-tag">— L\'engagement saison</div>
+            <div class="home-journey-card-tag">— L'engagement saison</div>
             <h3 class="home-journey-card-name"><em>Heritage</em></h3>
             <p class="home-journey-card-text">
               Le club. Quatre sessions sur la saison. Place réservée prioritaire, accès anticipé saison N+1, banque photo cumulée.
             </p>
-            <button class="home-journey-card-link" onclick="goTo(\'offers\')">Découvrir →</button>
+            <button class="home-journey-card-link" onclick="goTo('offers')">Découvrir →</button>
           </div>
         </div>
 
@@ -7396,8 +7408,8 @@ footer {
         <h3 class="home-final-cta-headline">Choisissez votre <em>première date</em>.</h3>
         <p class="home-final-cta-sub">Réservation en ligne, paiement par virement, sept jours avant la session.</p>
         <div class="home-final-cta-actions">
-          <button class="btn btn-primary btn-lg" onclick="goTo(\'booking\')"><span>Réserver une session</span></button>
-          <button class="btn btn-lg" onclick="goTo(\'calendrier\')"><span>Voir le calendrier complet</span></button>
+          <button class="btn btn-primary btn-lg" onclick="goTo('booking')"><span>Réserver une session</span></button>
+          <button class="btn btn-lg" onclick="goTo('calendrier')"><span>Voir le calendrier complet</span></button>
         </div>
       </div>
 
@@ -11880,7 +11892,7 @@ async function triggerBookingEmail(reg, session, offerKey, totalAmount) {
       checklist_items: [
         'Vérifier que votre véhicule respecte la norme bruit (≤ 98 dB +3) — voir Porsche GT3 RS comme maximum admissible',
         'Préparer vos équipements pilote selon votre véhicule (casque jet/intégral, crochet de remorque, etc.)',
-        'Présenter à l\'arrivée : permis de conduire valide, attestation d\'assurance circuit, carte grise du véhicule',
+        'Présenter à l'arrivée : permis de conduire valide, attestation d'assurance circuit, carte grise du véhicule',
         'Effectuer le virement avec la référence ' + ref + ' au plus tard 7 jours avant la session',
         'Lire la page Spécifications techniques pour valider la conformité de votre véhicule'
       ],
@@ -12131,7 +12143,7 @@ window.submitForgotPassword = async function() {
 
 window.resendVerificationEmail = async function() {
   if (!lastSignupEmail) {
-    toast('Aucun email récent · réessayez l\'inscription', 'warn');
+    toast('Aucun email récent · réessayez l'inscription', 'warn');
     return;
   }
   const btn = event.target.closest('button');
@@ -12670,7 +12682,7 @@ function renderVehicleCard(v) {
       </div>
       <div class="vehicle-card-foot">
         <button onclick="editVehicle('${v.id}')">Modifier</button>
-        <button class="danger" onclick="deleteVehicle('${v.id}', '${(v.brand || '').replace(/'/g, "\\'")} ${(v.model || '').replace(/'/g, "\\'")}')">Supprimer</button>
+        <button class="danger" onclick="deleteVehicle('${v.id}', '${(v.brand || '').replace(/'/g, "\'")} ${(v.model || '').replace(/'/g, "\'")}')">Supprimer</button>
       </div>
     </div>
   `;
@@ -12844,15 +12856,15 @@ const DOC_CATALOG = {
   },
   id_card: {
     icon: '⊟',
-    name: 'Pièce <em>d\'identité</em>',
+    name: 'Pièce <em>d'identité</em>',
     tier: '— Document obligatoire',
-    description: 'Carte nationale d\'identité ou passeport en cours de validité'
+    description: 'Carte nationale d'identité ou passeport en cours de validité'
   },
   insurance_road: {
     icon: '⊕',
     name: 'Assurance <em>route</em>',
     tier: '— Document obligatoire',
-    description: 'Attestation d\'assurance auto en cours · véhicule(s) déclaré(s)'
+    description: 'Attestation d'assurance auto en cours · véhicule(s) déclaré(s)'
   },
   insurance_track: {
     icon: '⊠',
@@ -13727,7 +13739,7 @@ window.loadProgression = async function() {
       key: 'access',
       tag: 'Palier 1 · Le sésame',
       name: 'Access',
-      tagline: 'Pilotage libre. Briefing groupe. Banque photo paddock. La porte d\'entrée du circuit OXV.',
+      tagline: 'Pilotage libre. Briefing groupe. Banque photo paddock. La porte d'entrée du circuit OXV.',
       thresholdReached: true,
       isCurrent: attendedCount === 0,
       price: attendedCount === 0 ? '250 € · première session' : '350 €',
@@ -13748,7 +13760,7 @@ window.loadProgression = async function() {
       key: 'promotion',
       tag: 'Palier 3 · Le contenu',
       name: 'Promotion',
-      tagline: 'Votre pilotage est propre. Il mérite d\'être immortalisé. Drone FPV, photographe pro, droits cédés.',
+      tagline: 'Votre pilotage est propre. Il mérite d'être immortalisé. Drone FPV, photographe pro, droits cédés.',
       thresholdReached: attendedCount >= 2 || override.promotion === true,
       isCurrent: attendedCount === 2,
       price: '890 €',
@@ -13757,7 +13769,7 @@ window.loadProgression = async function() {
     },
     {
       key: 'heritage',
-      tag: 'Palier 4 · L\'engagement saison',
+      tag: 'Palier 4 · L'engagement saison',
       name: 'Heritage',
       tagline: 'Le club. Quatre sessions sur la saison, place réservée prioritaire, accès anticipé saison N+1, banque photo cumulée.',
       thresholdReached: attendedCount >= 3 || override.heritage === true,
@@ -13923,7 +13935,7 @@ window.exportUserData = async function() {
   const userId = window.OXVApi.user.profile?.id;
   if (!userId) return;
 
-  toast('Préparation de l\'export…', 'ok');
+  toast('Préparation de l'export…', 'ok');
 
   // Récupère toutes les données du pilote
   const [profile, vehicles, documents, registrations, heritagePacks, payments] = await Promise.all([
@@ -14049,10 +14061,10 @@ window.goToAdmin = async function(page) {
 
   // Pages admin pas encore codées (étapes 6-7)
   const notYetAvailable = {
-    'admin-paiements': 'Paiements admin · disponible à l\'étape 6',
-    'admin-medias':    'Gestion médias · disponible à l\'étape 7',
-    'admin-emails':    'Templates emails · disponible à l\'étape 7',
-    'admin-stats':     'Statistiques · disponible à l\'étape 7',
+    'admin-paiements': 'Paiements admin · disponible à l'étape 6',
+    'admin-medias':    'Gestion médias · disponible à l'étape 7',
+    'admin-emails':    'Templates emails · disponible à l'étape 7',
+    'admin-stats':     'Statistiques · disponible à l'étape 7',
     'admin-securite':  'Sécurité & 2FA · disponible bientôt'
   };
   if (notYetAvailable[page]) {
@@ -14782,7 +14794,7 @@ function renderPilotDocs(docs) {
   // Catalogue (réutilise DOC_CATALOG côté pilote, qu'on a défini avant)
   const catalog = (typeof DOC_CATALOG !== 'undefined') ? DOC_CATALOG : {
     driving_license: { icon: '⌬', name: 'Permis de conduire', tier: 'Document obligatoire' },
-    id_card:         { icon: '⊟', name: 'Pièce d\'identité',  tier: 'Document obligatoire' },
+    id_card:         { icon: '⊟', name: 'Pièce d'identité',  tier: 'Document obligatoire' },
     insurance_road:  { icon: '⊕', name: 'Assurance route',    tier: 'Document obligatoire' },
     insurance_track: { icon: '⊠', name: 'Assurance circuit',  tier: 'Document recommandé' }
   };
@@ -15017,7 +15029,7 @@ function renderPilotProgression(p) {
     const cursor = isAccess ? 'default' : 'pointer';
 
     return `
-      <div ${onClickAttr} style="background: ${bg}; border: 1px solid ${border}; padding: 14px 12px; cursor: ${cursor}; transition: all 0.3s; text-align: center;" ${isAccess ? '' : 'onmouseenter="this.style.transform=\'translateY(-2px)\'" onmouseleave="this.style.transform=\'translateY(0)\'"'}>
+      <div ${onClickAttr} style="background: ${bg}; border: 1px solid ${border}; padding: 14px 12px; cursor: ${cursor}; transition: all 0.3s; text-align: center;" ${isAccess ? '' : 'onmouseenter="this.style.transform='translateY(-2px)'" onmouseleave="this.style.transform='translateY(0)'"'}>
         <div style="font-family: var(--mono); font-size: 9px; letter-spacing: 0.22em; text-transform: uppercase; color: ${titleColor}; margin-bottom: 6px;">${symbol} ${o.name}</div>
         <div style="font-family: var(--mono); font-size: 8px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--cream-mute);">${label}</div>
       </div>
@@ -15040,7 +15052,7 @@ window.toggleOfferOverride = async function(offerKey) {
   const newOverride = { ...currentOverride, [offerKey]: newValue };
 
   const verb = newValue ? 'débloquer' : 'verrouiller';
-  if (!confirm(`Voulez-vous ${verb} l'offre ${offerKey.charAt(0).toUpperCase() + offerKey.slice(1)} pour ce pilote ?\n\n${newValue ? 'Ce pilote pourra réserver cette offre même sans avoir effectué les sessions requises.' : 'Le pilote ne pourra plus réserver cette offre tant qu\'il n\'aura pas effectué les sessions requises.'}`)) {
+  if (!confirm(`Voulez-vous ${verb} l'offre ${offerKey.charAt(0).toUpperCase() + offerKey.slice(1)} pour ce pilote ?\n\n${newValue ? 'Ce pilote pourra réserver cette offre même sans avoir effectué les sessions requises.' : 'Le pilote ne pourra plus réserver cette offre tant qu'il n'aura pas effectué les sessions requises.'}`)) {
     return;
   }
 
@@ -15704,7 +15716,7 @@ window.cancelAdminDeletion = async function() {
 window.adminCancelRegistration = async function(regId) {
   if (!confirm('Annuler cette inscription côté admin ?')) return;
 
-  const reason = prompt('Motif d\'annulation (interne) :') || 'Annulation admin';
+  const reason = prompt('Motif d'annulation (interne) :') || 'Annulation admin';
 
   const { error } = await supabase
     .from('registrations')
@@ -16321,7 +16333,7 @@ window.adminConfirmSession = async function() {
 window.adminCancelSession = async function() {
   const sessionId = window._currentAdminSessionId;
   if (!sessionId) return;
-  const reason = prompt('Motif de l\'annulation (sera communiqué aux pilotes inscrits) :', 'Météo défavorable');
+  const reason = prompt('Motif de l'annulation (sera communiqué aux pilotes inscrits) :', 'Météo défavorable');
   if (!reason) return;
 
   if (!confirm(`Annuler cette session ?\n\nMotif : ${reason}\n\nLes inscriptions seront automatiquement annulées et les pilotes informés. Remboursement intégral.`)) return;
@@ -16433,7 +16445,7 @@ window.adminUnprivatizeSession = async function() {
  * - Prépare email de confirmation (placeholder Resend)
  */
 window.adminMarkPaymentReceived = async function(registrationId, paymentId) {
-  if (!confirm('Confirmer que le virement a bien été reçu pour cette inscription ?\n\nL\'inscription sera confirmée et un email envoyé au pilote.')) return;
+  if (!confirm('Confirmer que le virement a bien été reçu pour cette inscription ?\n\nL'inscription sera confirmée et un email envoyé au pilote.')) return;
 
   const adminId = window.OXVApi.user.profile?.id;
 
@@ -16505,7 +16517,7 @@ function triggerPaymentConfirmedEmail(reg, payment) {
       checklist_items: [
         'Vérifier la conformité bruit de votre véhicule (≤ 98 dB +3)',
         'Préparer les équipements pilote selon votre véhicule',
-        'Présenter à l\'arrivée : permis, attestation assurance circuit, carte grise',
+        'Présenter à l'arrivée : permis, attestation assurance circuit, carte grise',
         'Arrivée recommandée 30 min avant le briefing'
       ]
     }
