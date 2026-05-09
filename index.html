@@ -5958,14 +5958,14 @@ footer {
 .home-hero-manifesto .line-2,
 .home-hero-manifesto .line-3 {
   display: block;
-  opacity: 0;
-  transform: translateY(20px);
-  animation: home-hero-line-in 1s var(--ease-out) forwards;
+  opacity: 1;
+  animation: home-hero-line-in 1s var(--ease-out) backwards;
 }
-.home-hero-manifesto .line-1 { animation-delay: 0.3s; }
-.home-hero-manifesto .line-2 { animation-delay: 0.6s; }
-.home-hero-manifesto .line-3 { animation-delay: 0.9s; }
+.home-hero-manifesto .line-1 { animation-delay: 0.2s; }
+.home-hero-manifesto .line-2 { animation-delay: 0.5s; }
+.home-hero-manifesto .line-3 { animation-delay: 0.8s; }
 @keyframes home-hero-line-in {
+  from { opacity: 0; transform: translateY(20px); }
   to { opacity: 1; transform: translateY(0); }
 }
 
@@ -6666,9 +6666,10 @@ footer {
     <!-- Background image cockpit + filter cinéma -->
     <div class="home-hero-bg">
       <img class="home-hero-img"
-           src="https://images.unsplash.com/photo-1568605117036-5fe5e7bab0b7?auto=format&fit=crop&w=2400&q=85"
+           src="https://images.unsplash.com/photo-1568605117036-5fe5e7bab0b7?auto=format&fit=crop&w=1600&q=75"
            alt="Cockpit en mouvement sur circuit"
-           loading="eager" />
+           loading="eager"
+           fetchpriority="high" />
       <div class="home-hero-overlay"></div>
       <div class="home-hero-grain"></div>
     </div>
@@ -6751,7 +6752,7 @@ footer {
         <!-- Palier 1 — Access -->
         <div class="home-journey-card reveal">
           <div class="home-journey-card-number">01</div>
-          <div class="home-journey-card-img" style="background-image: url(\'https://images.unsplash.com/photo-1503376780353-7e6692767b70?auto=format&fit=crop&w=900&q=80\');"></div>
+          <div class="home-journey-card-img" style="background-image: url(\'https://images.unsplash.com/photo-1503376780353-7e6692767b70?auto=format&fit=crop&w=600&q=70\');"></div>
           <div class="home-journey-card-body">
             <div class="home-journey-card-tag">— Le sésame</div>
             <h3 class="home-journey-card-name"><em>Access</em></h3>
@@ -6765,7 +6766,7 @@ footer {
         <!-- Palier 2 — Signature -->
         <div class="home-journey-card reveal">
           <div class="home-journey-card-number">02</div>
-          <div class="home-journey-card-img" style="background-image: url(\'https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?auto=format&fit=crop&w=900&q=80\');"></div>
+          <div class="home-journey-card-img" style="background-image: url(\'https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?auto=format&fit=crop&w=600&q=70\');"></div>
           <div class="home-journey-card-body">
             <div class="home-journey-card-tag">— Le pilotage augmenté</div>
             <h3 class="home-journey-card-name"><em>Signature</em></h3>
@@ -6779,7 +6780,7 @@ footer {
         <!-- Palier 3 — Promotion -->
         <div class="home-journey-card reveal">
           <div class="home-journey-card-number">03</div>
-          <div class="home-journey-card-img" style="background-image: url(\'https://images.unsplash.com/photo-1583870908951-71fc24bb3a91?auto=format&fit=crop&w=900&q=80\');"></div>
+          <div class="home-journey-card-img" style="background-image: url(\'https://images.unsplash.com/photo-1583870908951-71fc24bb3a91?auto=format&fit=crop&w=600&q=70\');"></div>
           <div class="home-journey-card-body">
             <div class="home-journey-card-tag">— Le contenu</div>
             <h3 class="home-journey-card-name"><em>Promotion</em></h3>
@@ -6793,7 +6794,7 @@ footer {
         <!-- Palier 4 — Heritage -->
         <div class="home-journey-card heritage reveal">
           <div class="home-journey-card-number">04</div>
-          <div class="home-journey-card-img" style="background-image: url(\'https://images.unsplash.com/photo-1502136969935-8d8eef54d77b?auto=format&fit=crop&w=900&q=80\');"></div>
+          <div class="home-journey-card-img" style="background-image: url(\'https://images.unsplash.com/photo-1502136969935-8d8eef54d77b?auto=format&fit=crop&w=600&q=70\');"></div>
           <div class="home-journey-card-body">
             <div class="home-journey-card-tag">— L\'engagement saison</div>
             <h3 class="home-journey-card-name"><em>Heritage</em></h3>
@@ -6824,7 +6825,7 @@ footer {
 
     <!-- Visuel de fond circuit -->
     <div class="home-final-bg">
-      <img src="https://images.unsplash.com/photo-1517994112540-009c47ea476b?auto=format&fit=crop&w=2400&q=85"
+      <img src="https://images.unsplash.com/photo-1517994112540-009c47ea476b?auto=format&fit=crop&w=1600&q=70"
            alt="Vue aérienne circuit"
            loading="lazy" />
       <div class="home-final-overlay"></div>
@@ -16100,24 +16101,37 @@ window.loadPublicCalendar = async function() {
   if (grid) grid.style.display = 'none';
   if (empty) empty.style.display = 'none';
 
-  // Récupère sessions futures, non annulées, non privatisées
-  const today = new Date().toISOString().split('T')[0];
-  const { data: sessions, error } = await supabase
-    .from('sessions')
-    .select('*')
-    .gte('date', today)
-    .neq('status', 'cancelled')
-    .eq('is_private', false)
-    .order('date', { ascending: true });
-
-  if (error || !sessions) {
+  // Vérifie que Supabase est dispo
+  if (typeof supabase === 'undefined' || !supabase) {
+    console.warn('[OXV Calendar] Supabase non initialisé');
     if (loading) loading.style.display = 'none';
     if (empty) {
       empty.style.display = 'block';
-      empty.querySelector('p').textContent = 'Calendrier indisponible. Réessayez dans un instant.';
+      empty.querySelector('p').textContent = 'Initialisation en cours, veuillez recharger la page dans 2 secondes.';
     }
     return;
   }
+
+  try {
+    // Récupère sessions futures, non annulées, non privatisées
+    const today = new Date().toISOString().split('T')[0];
+    const { data: sessions, error } = await supabase
+      .from('sessions')
+      .select('*')
+      .gte('date', today)
+      .neq('status', 'cancelled')
+      .eq('is_private', false)
+      .order('date', { ascending: true });
+
+    if (error || !sessions) {
+      console.warn('[OXV Calendar] Erreur Supabase:', error);
+      if (loading) loading.style.display = 'none';
+      if (empty) {
+        empty.style.display = 'block';
+        empty.querySelector('p').textContent = 'Calendrier indisponible. Réessayez dans un instant.';
+      }
+      return;
+    }
 
   // Comptage des inscriptions
   const sessionIds = sessions.map(s => s.id);
@@ -16134,16 +16148,24 @@ window.loadPublicCalendar = async function() {
   }
 
   publicCalSessions = sessions.map(s => ({
-    ...s,
-    _registered: regsBySession[s.id] || 0,
-    _capacity: s.max_capacity || 20,
-    _isFull: (regsBySession[s.id] || 0) >= (s.max_capacity || 20)
-  }));
+      ...s,
+      _registered: regsBySession[s.id] || 0,
+      _capacity: s.max_capacity || 20,
+      _isFull: (regsBySession[s.id] || 0) >= (s.max_capacity || 20)
+    }));
 
-  if (loading) loading.style.display = 'none';
+    if (loading) loading.style.display = 'none';
 
-  renderPublicCalMonthFilters();
-  applyPublicCalFilter();
+    renderPublicCalMonthFilters();
+    applyPublicCalFilter();
+  } catch (err) {
+    console.warn('[OXV Calendar] Exception:', err);
+    if (loading) loading.style.display = 'none';
+    if (empty) {
+      empty.style.display = 'block';
+      empty.querySelector('p').textContent = 'Une erreur est survenue. Réessayez dans un instant.';
+    }
+  }
 };
 
 function renderPublicCalMonthFilters() {
@@ -16296,6 +16318,14 @@ function setupReveal() {
     entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('in'); });
   }, { threshold: 0.12 });
   document.querySelectorAll('.reveal:not(.in), .reveal-stagger:not(.in)').forEach(el => obs.observe(el));
+
+  // Filet de sécurité : si l'observer ne déclenche pas dans les 2 secondes,
+  // on force tous les éléments .reveal à devenir visibles (évite les pages "invisibles")
+  setTimeout(() => {
+    document.querySelectorAll('.reveal:not(.in), .reveal-stagger:not(.in)').forEach(el => {
+      el.classList.add('in');
+    });
+  }, 2000);
 }
 
 /* ============================================================
