@@ -6559,6 +6559,512 @@ footer {
   line-height: 1.5;
 }
 
+/* ============================================================
+   MOBILE — REFONTE GLOBALE iPhone & smartphones
+   (max-width: 720px)
+   ============================================================ */
+@media (max-width: 720px) {
+
+  /* === Wrap général === */
+  .wrap, .wrap-narrow {
+    padding-left: 20px !important;
+    padding-right: 20px !important;
+    box-sizing: border-box;
+  }
+
+  /* === Navigation top === */
+  .topnav {
+    padding: 14px 0 !important;
+  }
+  .topnav .wrap {
+    flex-wrap: nowrap !important;
+  }
+  .nav-links {
+    display: none !important;
+  }
+  .nav-cta-desktop {
+    display: none !important;
+  }
+  .brand-mark {
+    font-size: 18px !important;
+  }
+  .brand-text {
+    font-size: 11px !important;
+    letter-spacing: 0.18em !important;
+  }
+  .nav-burger {
+    display: flex !important;
+  }
+
+  /* === HOME SECTION 1 : Hero plein écran === */
+  .home-hero {
+    min-height: 100vh;
+    min-height: 100svh;
+  }
+  .home-hero-top {
+    padding: 16px 0 0 !important;
+  }
+  .home-hero-meta {
+    padding-top: 60px !important;
+    font-size: 9px !important;
+    letter-spacing: 0.18em !important;
+    gap: 8px !important;
+    line-height: 1.4;
+  }
+  .home-hero-meta .sep {
+    display: none;
+  }
+  .home-hero-content {
+    padding: 32px 0 !important;
+  }
+  .home-hero-eyebrow {
+    font-size: 10px !important;
+    letter-spacing: 0.32em !important;
+    margin-bottom: 18px !important;
+  }
+  .home-hero-manifesto {
+    font-size: 38px !important;
+    line-height: 1.0 !important;
+    letter-spacing: -0.035em !important;
+    margin-bottom: 24px !important;
+    gap: 2px !important;
+  }
+  .home-hero-tagline {
+    font-size: 14px !important;
+    margin-bottom: 28px !important;
+    line-height: 1.45 !important;
+  }
+  .home-hero-actions {
+    flex-direction: column;
+    gap: 10px !important;
+    width: 100%;
+  }
+  .home-hero-actions .btn {
+    width: 100%;
+    justify-content: center;
+  }
+  .home-hero-bottom {
+    padding-bottom: 22px !important;
+  }
+  .home-hero-bottom .wrap {
+    flex-direction: column;
+    align-items: flex-start !important;
+    gap: 12px !important;
+  }
+  .home-hero-credentials {
+    font-size: 9px !important;
+    gap: 8px !important;
+    letter-spacing: 0.18em !important;
+  }
+  .home-hero-credentials .sep {
+    display: none;
+  }
+  .home-hero-scroll {
+    font-size: 9px !important;
+    letter-spacing: 0.24em !important;
+  }
+
+  /* === HOME SECTION 2 : Parcours 4 paliers === */
+  .home-journey {
+    padding: 60px 0 !important;
+  }
+  .home-journey-intro {
+    margin-bottom: 40px !important;
+  }
+  .home-journey-title {
+    font-size: 32px !important;
+    line-height: 1.05 !important;
+    margin-bottom: 16px !important;
+  }
+  .home-journey-lede {
+    font-size: 14px !important;
+    line-height: 1.55 !important;
+  }
+  .home-journey-grid {
+    gap: 12px !important;
+    margin-bottom: 32px !important;
+  }
+  .home-journey-card-img {
+    height: 160px !important;
+  }
+  .home-journey-card-body {
+    padding: 20px 20px 22px !important;
+    gap: 12px !important;
+  }
+  .home-journey-card-name {
+    font-size: 24px !important;
+  }
+  .home-journey-card-text {
+    font-size: 13px !important;
+    line-height: 1.5 !important;
+  }
+  .home-journey-foot {
+    padding-top: 24px !important;
+  }
+  .home-journey-foot-text {
+    font-size: 13px !important;
+    line-height: 1.55 !important;
+  }
+
+  /* === HOME SECTION 3 : Promesse & CTA final === */
+  .home-final {
+    padding: 80px 0 !important;
+  }
+  .home-final-content {
+    margin-bottom: 56px !important;
+  }
+  .home-final-headline {
+    font-size: 34px !important;
+    line-height: 1.05 !important;
+    margin-bottom: 22px !important;
+  }
+  .home-final-text {
+    font-size: 15px !important;
+    line-height: 1.55 !important;
+  }
+  .home-final-proofs {
+    grid-template-columns: 1fr !important;
+    margin-bottom: 56px !important;
+  }
+  .home-final-proof {
+    padding: 28px 20px !important;
+  }
+  .home-final-proof:not(:last-child) {
+    border-right: 0 !important;
+    border-bottom: 1px solid var(--cream-line);
+  }
+  .home-final-proof-num {
+    font-size: 48px !important;
+  }
+  .home-final-proof-label {
+    font-size: 10px !important;
+    letter-spacing: 0.22em !important;
+  }
+  .home-final-cta-headline {
+    font-size: 24px !important;
+    line-height: 1.15 !important;
+  }
+  .home-final-cta-sub {
+    font-size: 13px !important;
+    margin-bottom: 26px !important;
+  }
+  .home-final-cta-actions {
+    flex-direction: column;
+    gap: 10px !important;
+  }
+  .home-final-cta-actions .btn {
+    width: 100%;
+    justify-content: center;
+  }
+
+  /* === Pages éditoriales (calendrier, offres, circuit, etc.) === */
+  .page-hero {
+    padding: 80px 0 60px !important;
+  }
+  .page-hero-eyebrow {
+    font-size: 10px !important;
+    letter-spacing: 0.28em !important;
+    margin-bottom: 16px !important;
+  }
+  .page-hero-title {
+    font-size: 40px !important;
+    line-height: 1.0 !important;
+    margin-bottom: 16px !important;
+  }
+  .page-hero-lede {
+    font-size: 14px !important;
+    line-height: 1.55 !important;
+  }
+  .section {
+    padding: 60px 0 !important;
+  }
+  .section-head {
+    margin-bottom: 36px !important;
+  }
+  .section-title {
+    font-size: 30px !important;
+    line-height: 1.05 !important;
+  }
+  .kicker {
+    font-size: 9px !important;
+    letter-spacing: 0.28em !important;
+    margin-bottom: 14px !important;
+  }
+
+  /* === Boutons === */
+  .btn {
+    padding: 13px 22px !important;
+    font-size: 11px !important;
+    letter-spacing: 0.16em !important;
+  }
+  .btn-lg {
+    padding: 15px 26px !important;
+    font-size: 12px !important;
+  }
+
+  /* === Calendrier public === */
+  .cal-grid {
+    grid-template-columns: 1fr !important;
+    gap: 12px !important;
+  }
+  .cal-card {
+    padding: 22px 22px 18px !important;
+  }
+  .cal-card-date {
+    font-size: 30px !important;
+  }
+  .cal-cta-block {
+    padding: 28px 24px !important;
+    gap: 18px !important;
+  }
+  .cal-cta-title {
+    font-size: 22px !important;
+  }
+  .cal-cta-sub {
+    font-size: 13px !important;
+  }
+  #cal-month-filters {
+    gap: 6px !important;
+  }
+  #cal-month-filters .admin-filter {
+    padding: 8px 12px !important;
+    font-size: 9px !important;
+    letter-spacing: 0.18em !important;
+  }
+
+  /* === Booking wizard === */
+  .booking-wrap {
+    padding: 24px 16px !important;
+  }
+  .bk-step-title {
+    font-size: 26px !important;
+    line-height: 1.05 !important;
+  }
+  .bk-step-sub {
+    font-size: 13px !important;
+    line-height: 1.5 !important;
+  }
+  .bk-dates {
+    grid-template-columns: 1fr !important;
+    gap: 10px !important;
+  }
+  .bk-offers {
+    grid-template-columns: 1fr !important;
+    gap: 10px !important;
+  }
+  .bk-offer {
+    padding: 18px 20px !important;
+  }
+  .bk-offer-name {
+    font-size: 22px !important;
+  }
+  .bk-actions {
+    flex-direction: column-reverse;
+    gap: 10px !important;
+  }
+  .bk-actions .left,
+  .bk-actions .right {
+    width: 100%;
+  }
+  .bk-actions .btn {
+    width: 100%;
+    justify-content: center;
+  }
+  .bk-recap {
+    padding: 18px 20px !important;
+  }
+  .bk-safety-toggle {
+    padding: 14px 18px !important;
+    font-size: 10px !important;
+  }
+  .bk-safety-body {
+    padding: 8px 18px 22px !important;
+  }
+
+  /* === Pages compte (espace pilote) === */
+  .account-layout {
+    grid-template-columns: 1fr !important;
+    gap: 0 !important;
+  }
+  .account-sidebar {
+    position: static !important;
+    padding: 24px 20px !important;
+    border-bottom: 1px solid var(--cream-line);
+  }
+  .account-main {
+    padding: 32px 20px !important;
+  }
+  .account-header-title {
+    font-size: 30px !important;
+    line-height: 1.05 !important;
+  }
+  .account-form .row {
+    grid-template-columns: 1fr !important;
+    gap: 14px !important;
+  }
+  .account-stats {
+    grid-template-columns: 1fr 1fr !important;
+    gap: 10px !important;
+  }
+  .account-stat-value {
+    font-size: 28px !important;
+  }
+  .account-stat-label {
+    font-size: 9px !important;
+  }
+
+  /* === Pages admin === */
+  .admin-layout {
+    grid-template-columns: 1fr !important;
+  }
+  .admin-sidebar {
+    position: static !important;
+    padding: 20px !important;
+    border-bottom: 1px solid var(--cream-line);
+  }
+  .admin-main {
+    padding: 28px 18px !important;
+  }
+  .admin-header-title {
+    font-size: 28px !important;
+    line-height: 1.05 !important;
+  }
+  .admin-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 14px !important;
+  }
+  .admin-stats {
+    grid-template-columns: 1fr 1fr !important;
+    gap: 10px !important;
+  }
+  .admin-stat-value {
+    font-size: 26px !important;
+  }
+  .admin-filters {
+    gap: 6px !important;
+  }
+  .admin-filter {
+    padding: 7px 11px !important;
+    font-size: 9px !important;
+    letter-spacing: 0.18em !important;
+  }
+  .admin-sessions-grid {
+    grid-template-columns: 1fr !important;
+  }
+
+  /* === Tableaux : scrollables horizontalement === */
+  .admin-table-wrap {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  /* === Footer === */
+  footer {
+    padding: 48px 0 32px !important;
+  }
+  .foot-top {
+    grid-template-columns: 1fr !important;
+    gap: 32px !important;
+  }
+  .foot-col h5 {
+    font-size: 10px !important;
+    margin-bottom: 14px !important;
+  }
+  .foot-col ul li {
+    margin-bottom: 8px !important;
+  }
+  .foot-col ul button,
+  .foot-col ul a {
+    font-size: 13px !important;
+  }
+
+  /* === Mockups éditoriaux : prose === */
+  .prose {
+    font-size: 15px !important;
+    line-height: 1.65 !important;
+  }
+  .prose h2 {
+    font-size: 26px !important;
+    line-height: 1.1 !important;
+    margin: 32px 0 14px !important;
+  }
+  .prose h3 {
+    font-size: 17px !important;
+    margin: 22px 0 8px !important;
+  }
+  .prose p {
+    font-size: 15px !important;
+    line-height: 1.6 !important;
+  }
+
+  /* === Toast === */
+  .toast {
+    bottom: 20px !important;
+    left: 16px !important;
+    right: 16px !important;
+    font-size: 12px !important;
+  }
+
+  /* === Cookie banner === */
+  .cookie {
+    bottom: 12px !important;
+    left: 12px !important;
+    right: 12px !important;
+    padding: 18px 18px !important;
+  }
+  .cookie-title {
+    font-size: 12px !important;
+  }
+  .cookie-text {
+    font-size: 12px !important;
+    line-height: 1.5 !important;
+  }
+  .cookie-actions {
+    flex-direction: column;
+    gap: 8px !important;
+  }
+  .cookie-actions button {
+    width: 100%;
+    padding: 11px 16px !important;
+    font-size: 10px !important;
+  }
+
+  /* === Anti débordement horizontal === */
+  body {
+    overflow-x: hidden;
+  }
+
+  /* === Désactive hover transforms sur tactile (anti-bug) === */
+  .home-journey-card:hover .home-journey-card-img {
+    transform: none;
+  }
+  .home-journey-card:hover {
+    transform: none;
+  }
+}
+
+
+/* === MOBILE TRÈS PETIT (< 380px, iPhone SE, etc.) === */
+@media (max-width: 380px) {
+  .home-hero-manifesto {
+    font-size: 32px !important;
+  }
+  .home-final-headline {
+    font-size: 28px !important;
+  }
+  .home-final-proof-num {
+    font-size: 42px !important;
+  }
+  .page-hero-title {
+    font-size: 34px !important;
+  }
+  .home-journey-title {
+    font-size: 28px !important;
+  }
+}
+
+
 /* === COOKIE BANNER === */
 .cookie {
   position: fixed;
