@@ -6548,6 +6548,65 @@ textarea.form-input {
 .admin-session-card-format.half { color: #C4A459; }
 .admin-session-card-format.b2b  { color: #9C8FE6; }
 
+/* === Booking : équipements requis (étape 4) === */
+.bk-requirements {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  margin-bottom: 24px;
+}
+.bk-req-item {
+  display: flex;
+  gap: 16px;
+  padding: 18px 20px;
+  background: rgba(11, 18, 32, 0.5);
+  border-left: 2px solid var(--copper-glow);
+}
+.bk-req-icon {
+  font-family: var(--mono);
+  font-size: 22px;
+  color: var(--copper-glow);
+  flex-shrink: 0;
+  line-height: 1;
+  margin-top: 2px;
+}
+.bk-req-body {
+  flex: 1;
+}
+.bk-req-title {
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: var(--cream);
+  margin-bottom: 8px;
+}
+.bk-req-text {
+  font-family: var(--serif);
+  font-size: 14px;
+  line-height: 1.6;
+  color: var(--cream-mute);
+}
+.bk-req-text strong {
+  color: var(--cream);
+  font-weight: 500;
+}
+.bk-req-link {
+  display: inline-block;
+  margin-top: 10px;
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--copper-glow);
+  cursor: pointer;
+  text-decoration: none;
+}
+.bk-req-link:hover {
+  color: var(--copper);
+  text-decoration: underline;
+}
+
 /* === Booking : conditions à cocher (étape 4) === */
 .bk-conditions {
   display: flex;
@@ -7710,7 +7769,7 @@ textarea.form-input {
         <!-- Palier 3 — Promotion -->
         <div class="home-journey-card reveal">
           <div class="home-journey-card-number">03</div>
-          <div class="home-journey-card-img" style="background-image: url('https://images.unsplash.com/photo-1583870908951-71fc24bb3a91?auto=format&fit=crop&w=600&q=70');"></div>
+          <div class="home-journey-card-img" style="background-image: url('https://images.unsplash.com/photo-1591293836027-e05b48473b67?auto=format&fit=crop&w=600&q=70');"></div>
           <div class="home-journey-card-body">
             <div class="home-journey-card-tag">— Le contenu</div>
             <h3 class="home-journey-card-name"><em>Promotion</em></h3>
@@ -7778,23 +7837,23 @@ textarea.form-input {
       <!-- Trois preuves clés -->
       <div class="home-final-proofs reveal">
         <div class="home-final-proof">
-          <div class="home-final-proof-num"><em>32</em></div>
-          <div class="home-final-proof-label">dates dans la saison</div>
+          <div class="home-final-proof-num"><em>20</em></div>
+          <div class="home-final-proof-label">pilotes par session, jamais plus</div>
         </div>
         <div class="home-final-proof">
-          <div class="home-final-proof-num"><em>20</em></div>
-          <div class="home-final-proof-label">pilotes par jour, pas un de plus</div>
+          <div class="home-final-proof-num"><em>100<span style="font-size: 0.6em;">%</span></em></div>
+          <div class="home-final-proof-label">clé en main · circuit, briefing, contrôles</div>
         </div>
         <div class="home-final-proof">
           <div class="home-final-proof-num"><em>1</em></div>
-          <div class="home-final-proof-label">circuit signé Beltoise</div>
+          <div class="home-final-proof-label">plateforme premium française</div>
         </div>
       </div>
 
       <!-- CTA final -->
       <div class="home-final-cta reveal">
         <h3 class="home-final-cta-headline">Choisissez votre <em>première date</em>.</h3>
-        <p class="home-final-cta-sub">Réservation en ligne, paiement par virement, sept jours avant la session.</p>
+        <p class="home-final-cta-sub">Pré-inscription en ligne · paiement par carte bancaire · capture le jour de la session.</p>
         <div class="home-final-cta-actions">
           <button class="btn btn-primary btn-lg" onclick="goTo('booking')"><span>Réserver une session</span></button>
           <button class="btn btn-lg" onclick="goTo('calendrier')"><span>Voir le calendrier complet</span></button>
@@ -10885,6 +10944,47 @@ textarea.form-input {
           <strong style="color: var(--copper-glow);">Phase de lancement :</strong> votre pré-inscription est sans paiement immédiat. Vous serez recontactée par email dès l'ouverture officielle des paiements (courant juin 2026) pour saisir votre carte bancaire et confirmer votre place.
         </div>
 
+        <!-- Bloc équipements requis VISIBLE -->
+        <div class="bk-step-eyebrow" style="margin-bottom: 16px; margin-top: 32px; padding-top: 24px; border-top: 1px solid var(--cream-line);">— Équipements requis et conformité</div>
+
+        <div class="bk-requirements">
+
+          <div class="bk-req-item">
+            <div class="bk-req-icon">⊟</div>
+            <div class="bk-req-body">
+              <div class="bk-req-title">Norme bruit</div>
+              <div class="bk-req-text">
+                Maximum <strong>98 dB · tolérance 3 dB</strong>. Mesure systématique à l'arrivée.
+                Véhicule non conforme : refus à l'entrée, sans recours ni remboursement.
+              </div>
+            </div>
+          </div>
+
+          <div class="bk-req-item">
+            <div class="bk-req-icon">⌬</div>
+            <div class="bk-req-body">
+              <div class="bk-req-title">Équipement pilote</div>
+              <div class="bk-req-text">
+                <strong>Voiture fermée :</strong> casque homologué CE.<br/>
+                <strong>Cabriolet ou décapotable :</strong> casque intégral obligatoire.<br/>
+                <strong>Voiture compétition :</strong> équipement FFSA complet (combinaison, HANS, gants, cagoule, chaussures).
+              </div>
+            </div>
+          </div>
+
+          <div class="bk-req-item">
+            <div class="bk-req-icon">⊳</div>
+            <div class="bk-req-body">
+              <div class="bk-req-title">Contrôle à l'entrée</div>
+              <div class="bk-req-text">
+                Mesure sonore et vérification technique du véhicule. Présentation du permis et de l'attestation d'assurance circuit obligatoire.
+              </div>
+              <a class="bk-req-link" onclick="event.stopPropagation(); goTo('specs-techniques')">Voir toutes les spécifications →</a>
+            </div>
+          </div>
+
+        </div>
+
         <!-- 4 cases à cocher distinctes -->
         <div class="bk-step-eyebrow" style="margin-bottom: 16px; margin-top: 32px; padding-top: 24px; border-top: 1px solid var(--cream-line);">— Conditions à valider</div>
 
@@ -11843,6 +11943,10 @@ async function bkLoadDatesForOffer() {
   const offerKeyForSession = (selectedOffer === 'heritage') ? 'access' : selectedOffer;
 
   const filteredSessions = (sessions || []).filter(s => {
+    // Sécurité : exclure tout ce qui est privatisé ou B2B
+    if (s.is_private === true) return false;
+    if (s.format === 'b2b') return false;
+    // Filtrer selon offre disponible
     const offers = s.available_offers || {};
     return offers[offerKeyForSession] === true;
   });
@@ -12355,13 +12459,23 @@ function bkBuildRecap() {
 window.bkConfirmBooking = async function() {
   // Validation finale
   if (!bkState.selectedSession || !bkState.selectedOffer || !bkState.selectedVehicle) {
-    toast('Sélection incomplète', 'warn');
+    toast('Sélection incomplète. Vérifiez offre + date + véhicule.', 'warn');
     return;
   }
-  const cb = document.getElementById('bk-cgv');
-  if (!cb || !cb.classList.contains('checked')) {
-    toast('Acceptation des CGV requise', 'warn');
-    return;
+
+  // Vérification des 4 conditions cochées
+  const conditions = [
+    { id: 'bkCondVehicle',   label: 'la conformité véhicule' },
+    { id: 'bkCondLicense',   label: 'le permis et l\'équipement' },
+    { id: 'bkCondInsurance', label: 'l\'assurance circuit' },
+    { id: 'bkCondCgv',       label: 'les CGV' }
+  ];
+  for (const c of conditions) {
+    const el = document.getElementById(c.id);
+    if (!el || !el.checked) {
+      toast(`Veuillez cocher : ${c.label}`, 'warn');
+      return;
+    }
   }
 
   const userId = window.OXVApi.user.profile?.id;
@@ -12373,17 +12487,12 @@ window.bkConfirmBooking = async function() {
   btn.disabled = true;
 
   try {
-    // Calcul prix
-    const offer = BK_OFFERS[bkState.selectedOffer];
     const insurancePrice = bkState.selectedInsurance === 'oxv' ? 3500 : 0;
 
-    // Prix Access dynamique : 1ère session = 250€
-    let offerPrice = offer.price;
-    if (bkState.selectedOffer === 'access' && bkState.attendedCount === 0) {
-      offerPrice = 25000;
-    }
+    // Prix selon la grille tarifaire 2026 figée (selon format de la session)
+    const sessionFormat = bkState.selectedSession.format || 'full_day';
+    const offerPrice = bkComputePrice(bkState.selectedOffer, sessionFormat, bkState.attendedCount);
 
-    // Politique V1 : paiement intégral (plus d'acompte 50%)
     let priceTotal;
     if (bkState.useHeritage) {
       priceTotal = insurancePrice;
@@ -17524,7 +17633,14 @@ window.loadPublicCalendar = async function() {
     });
   }
 
-  publicCalSessions = sessions.map(s => ({
+  // Filtre extra : exclure tout B2B (sécurité au cas où is_private n'est pas en BDD)
+  const visibleSessions = (sessions || []).filter(s => {
+    if (s.is_private === true) return false;
+    if (s.format === 'b2b') return false;
+    return true;
+  });
+
+  publicCalSessions = visibleSessions.map(s => ({
       ...s,
       _registered: regsBySession[s.id] || 0,
       _capacity: s.max_capacity || 20,
