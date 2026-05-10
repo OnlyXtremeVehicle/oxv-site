@@ -6548,6 +6548,68 @@ textarea.form-input {
 .admin-session-card-format.half { color: #C4A459; }
 .admin-session-card-format.b2b  { color: #9C8FE6; }
 
+/* === Auth : toggle œil sur les password fields === */
+.pwd-wrap {
+  position: relative;
+  width: 100%;
+}
+.pwd-wrap input[type="password"],
+.pwd-wrap input[type="text"] {
+  width: 100%;
+  padding-right: 48px;
+}
+.pwd-toggle {
+  position: absolute;
+  top: 50%;
+  right: 8px;
+  transform: translateY(-50%);
+  background: transparent;
+  border: 0;
+  cursor: pointer;
+  padding: 8px;
+  font-size: 16px;
+  color: var(--cream-mute);
+  transition: color 0.2s;
+  line-height: 1;
+}
+.pwd-toggle:hover {
+  color: var(--copper-glow);
+}
+.pwd-toggle.active {
+  color: var(--copper-glow);
+}
+.pwd-eye-icon {
+  pointer-events: none;
+  display: inline-block;
+}
+
+/* === Auth : message correspondance mot de passe === */
+.auth-pwd-match {
+  margin-top: 8px;
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  min-height: 16px;
+  padding: 6px 10px;
+  border-radius: 0;
+  transition: all 0.25s;
+}
+.auth-pwd-match.match {
+  color: #6FBA82;
+  background: rgba(111, 186, 130, 0.08);
+  border-left: 2px solid #6FBA82;
+}
+.auth-pwd-match.no-match {
+  color: #C45959;
+  background: rgba(196, 89, 89, 0.1);
+  border-left: 2px solid #C45959;
+  font-weight: 500;
+  padding: 8px 12px;
+  letter-spacing: 0.2em;
+}
+
+
 /* === Booking : équipements requis (étape 4) === */
 .bk-requirements {
   display: flex;
@@ -8650,13 +8712,24 @@ textarea.form-input {
         </div>
         <div class="form-row">
           <label>Mot de passe</label>
-          <input type="password" id="su-pwd" placeholder="••••••••" autocomplete="new-password" oninput="checkPasswordStrength()" />
+          <div class="pwd-wrap">
+            <input type="password" id="su-pwd" placeholder="••••••••" autocomplete="new-password" oninput="checkPasswordStrength(); checkPasswordMatch();" />
+            <button type="button" class="pwd-toggle" onclick="togglePwdVisibility('su-pwd', this)" aria-label="Afficher le mot de passe">
+              <span class="pwd-eye-icon">👁</span>
+            </button>
+          </div>
           <div class="auth-pwd-meter" id="pwdMeter"><span></span><span></span><span></span></div>
           <div class="auth-pwd-hint" id="pwdHint">Minimum 8 caractères · majuscule · minuscule · chiffre</div>
         </div>
         <div class="form-row">
           <label>Confirmer le mot de passe</label>
-          <input type="password" id="su-pwd-confirm" placeholder="••••••••" autocomplete="new-password" />
+          <div class="pwd-wrap">
+            <input type="password" id="su-pwd-confirm" placeholder="••••••••" autocomplete="new-password" oninput="checkPasswordMatch()" />
+            <button type="button" class="pwd-toggle" onclick="togglePwdVisibility('su-pwd-confirm', this)" aria-label="Afficher le mot de passe">
+              <span class="pwd-eye-icon">👁</span>
+            </button>
+          </div>
+          <div class="auth-pwd-match" id="pwdMatchMsg"></div>
         </div>
 
         <div class="consent" id="su-cgu" onclick="toggleConsent('su-cgu')" style="margin-top: 8px;">
@@ -8717,7 +8790,12 @@ textarea.form-input {
         </div>
         <div class="form-row">
           <label>Mot de passe</label>
-          <input type="password" id="li-pwd" placeholder="••••••••" autocomplete="current-password" />
+          <div class="pwd-wrap">
+            <input type="password" id="li-pwd" placeholder="••••••••" autocomplete="current-password" />
+            <button type="button" class="pwd-toggle" onclick="togglePwdVisibility('li-pwd', this)" aria-label="Afficher le mot de passe">
+              <span class="pwd-eye-icon">👁</span>
+            </button>
+          </div>
         </div>
       </div>
 
@@ -10725,10 +10803,6 @@ textarea.form-input {
         <input type="number" id="vh-year" placeholder="2022" min="1950" max="2030" />
       </div>
       <div class="form-row">
-        <label>Couleur</label>
-        <input type="text" id="vh-color" placeholder="Ex. Argent, Bleu Mer du Nord..." />
-      </div>
-      <div class="form-row">
         <label>Immatriculation</label>
         <input type="text" id="vh-plate" placeholder="AB-123-CD" maxlength="10" style="text-transform: uppercase;" />
       </div>
@@ -12160,7 +12234,7 @@ async function bkLoadOffers() {
           <div class="bk-heritage-info">
             <div class="bk-heritage-title">— Première session</div>
             <div class="bk-heritage-text">
-              Tarif d'introduction : <strong>250 €</strong> au lieu de 350 €. Vivez l'expérience OXV sans engagement. Les offres Signature, Promotion et Heritage se débloquent au fil de votre parcours.
+              <strong>Tarif d'introduction</strong> sur la demi-journée Access : <strong>200 €</strong> au lieu de 250 € pour votre première session découverte. Journée complète à 400 € fixes. Les offres Signature, Promotion et Heritage se débloquent au fil de votre parcours.
             </div>
           </div>
         </div>
@@ -12481,6 +12555,36 @@ window.bkConfirmBooking = async function() {
   const userId = window.OXVApi.user.profile?.id;
   if (!userId) return;
 
+  // === Vérification documents obligatoires (permis + assurance route) ===
+  // Si le pilote n'a pas encore uploadé son permis ou son assurance, on bloque
+  // et on le redirige vers la page documents
+  try {
+    const { data: docs, error: docsErr } = await supabase
+      .from('documents')
+      .select('document_type, status')
+      .eq('user_id', userId)
+      .in('document_type', ['driving_license', 'insurance_road']);
+
+    if (!docsErr) {
+      const docsByType = {};
+      (docs || []).forEach(d => { docsByType[d.document_type] = d; });
+
+      const missingDocs = [];
+      if (!docsByType['driving_license']) missingDocs.push('permis de conduire');
+      if (!docsByType['insurance_road'])  missingDocs.push('assurance route');
+
+      if (missingDocs.length > 0) {
+        const list = missingDocs.join(' et ');
+        toast(`Document manquant : ${list}. Redirection vers vos documents…`, 'warn');
+        setTimeout(() => goToAccount('documents'), 1500);
+        return;
+      }
+    }
+  } catch (err) {
+    console.warn('[OXV] Erreur vérification documents:', err);
+    // En cas d'erreur on continue (ne bloque pas la pré-inscription)
+  }
+
   const btn = document.getElementById('bkConfirmBtn');
   const orig = btn.innerHTML;
   btn.innerHTML = '<span>⟳ Validation…</span>';
@@ -12714,6 +12818,46 @@ window.checkPasswordStrength = function() {
     meter.classList.add('strong');
     hint.classList.add('ok');
     hint.textContent = 'Mot de passe solide';
+  }
+};
+
+/* === Toggle œil sur les champs password === */
+window.togglePwdVisibility = function(inputId, btn) {
+  const input = document.getElementById(inputId);
+  if (!input) return;
+  if (input.type === 'password') {
+    input.type = 'text';
+    btn.classList.add('active');
+    btn.setAttribute('aria-label', 'Masquer le mot de passe');
+  } else {
+    input.type = 'password';
+    btn.classList.remove('active');
+    btn.setAttribute('aria-label', 'Afficher le mot de passe');
+  }
+};
+
+/* === Vérification temps réel : les 2 mots de passe correspondent ? === */
+window.checkPasswordMatch = function() {
+  const pwd = document.getElementById('su-pwd');
+  const confirm = document.getElementById('su-pwd-confirm');
+  const msg = document.getElementById('pwdMatchMsg');
+  if (!pwd || !confirm || !msg) return;
+
+  // Si la confirmation est vide, on n'affiche rien
+  if (confirm.value.length === 0) {
+    msg.textContent = '';
+    msg.classList.remove('match', 'no-match');
+    return;
+  }
+
+  if (pwd.value === confirm.value) {
+    msg.textContent = '✓ Les mots de passe correspondent';
+    msg.classList.add('match');
+    msg.classList.remove('no-match');
+  } else {
+    msg.textContent = '⚠ Les mots de passe ne correspondent pas';
+    msg.classList.add('no-match');
+    msg.classList.remove('match');
   }
 };
 
@@ -13115,7 +13259,7 @@ window.openVehicleModal = function(vehicle) {
   existingPhotoUrls = {};
 
   // Reset visuel des inputs
-  ['vh-brand','vh-model','vh-year','vh-color','vh-plate','vh-value','vh-notes'].forEach(id => {
+  ['vh-brand','vh-model','vh-year','vh-plate','vh-value','vh-notes'].forEach(id => {
     const el = document.getElementById(id);
     if (el) el.value = '';
   });
@@ -13147,7 +13291,6 @@ window.openVehicleModal = function(vehicle) {
     document.getElementById('vh-brand').value = vehicle.brand || '';
     document.getElementById('vh-model').value = vehicle.model || '';
     document.getElementById('vh-year').value = vehicle.year || '';
-    document.getElementById('vh-color').value = vehicle.color || '';
     document.getElementById('vh-plate').value = vehicle.license_plate || '';
     // Convertit centimes -> euros pour l'affichage
     document.getElementById('vh-value').value = vehicle.declared_value ? Math.round(vehicle.declared_value / 100) : '';
@@ -13437,7 +13580,6 @@ window.saveVehicle = async function() {
   const brand = get('vh-brand');
   const model = get('vh-model');
   const year = get('vh-year');
-  const color = get('vh-color');
   const plate = get('vh-plate').toUpperCase();
   const value = get('vh-value');
   const notes = get('vh-notes');
@@ -13464,7 +13606,6 @@ window.saveVehicle = async function() {
       brand: brand,
       model: model,
       year: year ? parseInt(year) : null,
-      color: color || null,
       license_plate: plate || null,
       declared_value: value ? Math.round(parseFloat(value) * 100) : null, // euros -> centimes
       notes: notes || null
@@ -14438,7 +14579,7 @@ window.loadProgression = async function() {
   const heroText = document.getElementById('progHeroText');
   if (heroText) {
     if (attendedCount === 0) {
-      heroText.innerHTML = `Bienvenue${profile.first_name ? ', <strong style="color: var(--cream);">' + escapeHtml(profile.first_name) + '</strong>' : ''}. Votre parcours commence par <strong style="color: var(--copper-glow);">Access</strong>. Tarif d'introduction : 250 €.`;
+      heroText.innerHTML = `Bienvenue${profile.first_name ? ', <strong style="color: var(--cream);">' + escapeHtml(profile.first_name) + '</strong>' : ''}. Votre parcours commence par <strong style="color: var(--copper-glow);">Access</strong>. Tarif d'introduction demi-journée : 200 €.`;
     } else if (attendedCount === 1) {
       heroText.innerHTML = `Première session validée. <strong style="color: var(--copper-glow);">Signature</strong> est désormais accessible : télémétrie, coaching personnalisé.`;
     } else if (attendedCount === 2) {
