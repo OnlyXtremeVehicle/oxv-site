@@ -10862,7 +10862,7 @@ textarea.form-input {
         <div class="bk-step-eyebrow">N° ⊳ · Étape 4 / 4</div>
         <h2 class="bk-step-title">Récapitulatif &amp; <em>conditions</em>.</h2>
         <p class="bk-step-sub">
-          Vérifiez votre commande et acceptez les conditions techniques avant de valider. Paiement intégral par virement à régler au plus tard 7 jours avant la session.
+          Vérifiez votre commande et acceptez les conditions techniques. Le paiement par carte bancaire sera capturé le jour de la session. La plateforme de paiement ouvre courant juin 2026 — votre pré-inscription sera convertie automatiquement.
         </p>
 
         <!-- Récap final visible -->
@@ -10871,20 +10871,18 @@ textarea.form-input {
         <!-- Mode de paiement -->
         <div class="bk-step-eyebrow" style="margin-bottom: 14px; margin-top: 24px; padding-top: 24px; border-top: 1px solid var(--cream-line);">— Mode de paiement</div>
         <div class="bk-payments">
-          <div class="bk-payment selected" data-payment="bank_transfer" onclick="bkSelectPayment('bank_transfer', this)">
-            <div class="bk-payment-icon">⊟</div>
-            <div class="bk-payment-info">
-              <div class="bk-payment-name">Virement bancaire</div>
-              <div class="bk-payment-desc">Paiement intégral à régler au plus tard 7 jours avant la session</div>
-            </div>
-          </div>
-          <div class="bk-payment disabled" data-payment="card">
+          <div class="bk-payment selected" data-payment="card" onclick="bkSelectPayment('card', this)">
             <div class="bk-payment-icon">⊕</div>
             <div class="bk-payment-info">
-              <div class="bk-payment-name">Carte bancaire <span style="color: var(--copper-glow); font-size: 11px; margin-left: 8px;">Bientôt</span></div>
-              <div class="bk-payment-desc">Saisie carte à la réservation · prélèvement automatique 7 jours avant la session</div>
+              <div class="bk-payment-name">Carte bancaire</div>
+              <div class="bk-payment-desc">Saisie de votre carte à la réservation · capture automatique le jour de la session</div>
             </div>
           </div>
+        </div>
+
+        <!-- Bandeau pré-inscription -->
+        <div class="bk-warning info" style="margin-top: 16px; padding: 14px 16px; background: rgba(184, 115, 51, 0.06); border: 1px solid rgba(184, 115, 51, 0.3);">
+          <strong style="color: var(--copper-glow);">Phase de lancement :</strong> votre pré-inscription est sans paiement immédiat. Vous serez recontactée par email dès l'ouverture officielle des paiements (courant juin 2026) pour saisir votre carte bancaire et confirmer votre place.
         </div>
 
         <!-- 4 cases à cocher distinctes -->
@@ -10939,7 +10937,7 @@ textarea.form-input {
             <button class="btn" onclick="bkGoToStep(3)"><span>← Retour</span></button>
           </div>
           <div class="right">
-            <button class="btn btn-primary" onclick="bkConfirmBooking()" id="bkConfirmBtn" disabled><span>Valider ma réservation</span></button>
+            <button class="btn btn-primary" onclick="bkConfirmBooking()" id="bkConfirmBtn" disabled><span>Enregistrer ma pré-inscription</span></button>
           </div>
         </div>
       </div>
@@ -11674,6 +11672,68 @@ const BK_OFFERS = {
   heritage:  { name: 'Heritage',  price: 350000, desc: 'Pack 4 sessions · saison engagée · économie 2 420 €' }
 };
 
+// Cache de la grille tarifaire (chargée depuis Supabase)
+// Format: { '<offer>_<format>': { first_session: cents, subsequent: cents } }
+let bkPricingGrid = null;
+
+async function bkLoadPricing() {
+  if (bkPricingGrid) return bkPricingGrid;
+  try {
+    const { data, error } = await supabase
+      .from('pricing')
+      .select('*')
+      .eq('season', '2026')
+      .eq('active', true);
+    if (error || !data) {
+      console.warn('[OXV pricing] Erreur, fallback sur grille par défaut');
+      bkPricingGrid = bkPricingFallback();
+      return bkPricingGrid;
+    }
+    const grid = {};
+    data.forEach(row => {
+      grid[`${row.offer_key}_${row.format}`] = {
+        first_session: row.price_first_session_cents,
+        subsequent: row.price_subsequent_cents
+      };
+    });
+    bkPricingGrid = grid;
+    return grid;
+  } catch (err) {
+    console.warn('[OXV pricing] Exception, fallback', err);
+    bkPricingGrid = bkPricingFallback();
+    return bkPricingGrid;
+  }
+}
+
+// Grille de secours si Supabase indisponible (mêmes valeurs que la BDD)
+function bkPricingFallback() {
+  return {
+    'access_half_day':    { first_session: 20000, subsequent: 25000 },
+    'access_full_day':    { first_session: 40000, subsequent: 40000 },
+    'signature_full_day': { first_session: 59000, subsequent: 59000 },
+    'promotion_full_day': { first_session: 89000, subsequent: 89000 },
+    'heritage_full_day':  { first_session: 350000, subsequent: 350000 }
+  };
+}
+
+/**
+ * Calcule le prix d'une réservation selon offre + format + nombre de sessions effectuées
+ * @param {string} offerKey - 'access', 'signature', 'promotion', 'heritage'
+ * @param {string} format - 'full_day', 'half_day'
+ * @param {number} attendedCount - sessions déjà effectuées (0 pour 1ère session)
+ * @returns {number} prix en centimes
+ */
+function bkComputePrice(offerKey, format, attendedCount) {
+  if (!bkPricingGrid) bkPricingGrid = bkPricingFallback();
+  const key = `${offerKey}_${format}`;
+  const entry = bkPricingGrid[key];
+  if (!entry) {
+    // Format inconnu pour cette offre (ex: signature en demi-journée → impossible)
+    return 0;
+  }
+  return attendedCount === 0 ? entry.first_session : entry.subsequent;
+}
+
 // État du wizard
 const bkState = {
   step: 1,
@@ -11681,7 +11741,7 @@ const bkState = {
   selectedOffer: null,
   selectedVehicle: null,
   selectedInsurance: 'personal',
-  selectedPayment: 'bank_transfer',
+  selectedPayment: 'card',
   useHeritage: false,
   heritagePack: null,
   vehicles: [],
@@ -11700,13 +11760,16 @@ window.bkOpen = async function() {
   document.getElementById('bookingGate').style.display = 'none';
   document.getElementById('bookingWizard').style.display = 'block';
 
+  // Charge la grille tarifaire dès l'ouverture du wizard
+  await bkLoadPricing();
+
   // Reset state
   bkState.step = 1;
   bkState.selectedSession = null;
   bkState.selectedOffer = null;
   bkState.selectedVehicle = null;
   bkState.selectedInsurance = 'personal';
-  bkState.selectedPayment = 'bank_transfer';
+  bkState.selectedPayment = 'card';
   bkState.useHeritage = false;
   bkState.heritagePack = null;
 
@@ -11758,11 +11821,14 @@ async function bkLoadDatesForOffer() {
   }
 
   // Récupère les sessions à venir (non annulées, non archivées, non privatisées)
-  const today = new Date().toISOString().split('T')[0];
+  // Politique : réservation possible jusqu'à J-3 (3 jours avant la session)
+  const minDate = new Date();
+  minDate.setDate(minDate.getDate() + 3);
+  const minDateStr = minDate.toISOString().split('T')[0];
   const { data: sessions, error } = await supabase
     .from('sessions')
     .select('*')
-    .gte('date', today)
+    .gte('date', minDateStr)
     .not('status', 'in', '(cancelled,archived)')
     .eq('is_private', false)
     .order('date', { ascending: true });
@@ -12046,11 +12112,30 @@ async function bkLoadOffers() {
     }
 
     // Offre débloquée et disponible
-    const displayPrice = key === 'access' ? bkState.accessPrice : off.price;
-    const priceEur = (displayPrice / 100).toLocaleString('fr-FR');
-    const priceLine = (key === 'access' && attendedCount === 0)
-      ? `<div class="bk-offer-price">${priceEur} € <span style="font-size: 14px; color: var(--cream-faint); text-decoration: line-through; margin-left: 8px;">${(35000 / 100).toLocaleString('fr-FR')} €</span></div>`
-      : `<div class="bk-offer-price">${priceEur} €</div>`;
+    // Sur l'étape 1, on ne connaît pas encore le format de la session
+    // donc on affiche le prix MINIMUM possible avec mention "À partir de"
+    let priceLine;
+    if (key === 'access') {
+      // Demi-journée 1ère = 200€, demi-journée suivante = 250€, journée complète = 400€
+      const minPrice = bkComputePrice('access', 'half_day', attendedCount);
+      const maxPrice = bkComputePrice('access', 'full_day', attendedCount);
+      const minEur = (minPrice / 100).toLocaleString('fr-FR');
+      const maxEur = (maxPrice / 100).toLocaleString('fr-FR');
+      if (attendedCount === 0) {
+        // 1ère session : prix découverte sur demi-journée + mention barré
+        priceLine = `<div class="bk-offer-price">À partir de ${minEur} € <span style="font-size: 12px; color: var(--cream-faint); margin-left: 8px;">jusqu'à ${maxEur} €</span></div>`;
+      } else {
+        priceLine = `<div class="bk-offer-price">À partir de ${minEur} €</div>`;
+      }
+    } else if (key === 'signature') {
+      const price = bkComputePrice('signature', 'full_day', attendedCount);
+      priceLine = `<div class="bk-offer-price">${(price / 100).toLocaleString('fr-FR')} €</div>`;
+    } else if (key === 'promotion') {
+      const price = bkComputePrice('promotion', 'full_day', attendedCount);
+      priceLine = `<div class="bk-offer-price">${(price / 100).toLocaleString('fr-FR')} €</div>`;
+    } else {
+      priceLine = `<div class="bk-offer-price">${(off.price / 100).toLocaleString('fr-FR')} €</div>`;
+    }
 
     return `
       <button class="bk-offer" data-offer="${key}" onclick="bkSelectOffer('${key}', this)" type="button">
@@ -12185,16 +12270,21 @@ function bkBuildRecap() {
   const months = ['janvier', 'février', 'mars', 'avril', 'mai', 'juin', 'juillet', 'août', 'septembre', 'octobre', 'novembre', 'décembre'];
   const dateStr = `${days[date.getDay()]} ${date.getDate()} ${months[date.getMonth()]} ${date.getFullYear()}`;
 
+  // Format de la session (full_day / half_day / b2b)
+  const sessionFormat = session.format || 'full_day';
+  const formatLabel = sessionFormat === 'half_day' ? 'Demi-journée' : 'Journée complète';
+
   const offer = BK_OFFERS[bkState.selectedOffer];
   const vehicle = bkState.selectedVehicle;
   const insuranceLabel = bkState.selectedInsurance === 'oxv' ? 'RC Circuit OXV (+35 €)' : 'Personnelle (déjà transmise)';
   const insurancePrice = bkState.selectedInsurance === 'oxv' ? 3500 : 0;
 
-  // Prix dynamique : Access en 1ère session = 250€ au lieu de 350€
-  let offerPrice = offer.price;
-  if (bkState.selectedOffer === 'access' && bkState.attendedCount === 0) {
-    offerPrice = 25000; // 250€
-  }
+  // Prix selon la grille tarifaire 2026 figée :
+  //  - Demi-journée Access : 200€ (1ère) / 250€ (suivantes)
+  //  - Journée Access      : 400€ fixe
+  //  - Signature           : 590€ (vendredi 16 oct seul)
+  //  - Promotion           : 890€ (vendredi 16 oct seul)
+  const offerPrice = bkComputePrice(bkState.selectedOffer, sessionFormat, bkState.attendedCount);
 
   let total, totalLabel, dueLabel;
   if (bkState.useHeritage) {
@@ -12204,11 +12294,16 @@ function bkBuildRecap() {
   } else {
     total = offerPrice + insurancePrice;
     totalLabel = `${(total / 100).toLocaleString('fr-FR')} €`;
-    dueLabel = `${(total / 100).toLocaleString('fr-FR')} € · à régler 7 jours avant la session`;
+    dueLabel = `${(total / 100).toLocaleString('fr-FR')} € · capture le jour de la session`;
   }
 
-  // Label "tarif offre" avec mention du tarif d'introduction si applicable
-  const tarifLabel = (bkState.selectedOffer === 'access' && bkState.attendedCount === 0)
+  // Label "tarif offre" avec mention découverte si demi-journée 1ère session
+  const isFirstHalfDayDiscovery = (
+    bkState.selectedOffer === 'access' &&
+    sessionFormat === 'half_day' &&
+    bkState.attendedCount === 0
+  );
+  const tarifLabel = isFirstHalfDayDiscovery
     ? `<span class="bk-recap-value">${(offerPrice / 100).toLocaleString('fr-FR')} € <em style="font-style: normal; font-size: 12px; color: var(--copper-glow); margin-left: 6px;">— tarif découverte</em></span>`
     : `<span class="bk-recap-value">${(offerPrice / 100).toLocaleString('fr-FR')} €</span>`;
 
@@ -12216,6 +12311,10 @@ function bkBuildRecap() {
     <div class="bk-recap-line">
       <span class="bk-recap-label">Session</span>
       <span class="bk-recap-value">${dateStr}</span>
+    </div>
+    <div class="bk-recap-line">
+      <span class="bk-recap-label">Format</span>
+      <span class="bk-recap-value">${formatLabel}</span>
     </div>
     <div class="bk-recap-line">
       <span class="bk-recap-label">Offre</span>
@@ -12246,7 +12345,7 @@ function bkBuildRecap() {
       <span class="bk-recap-total"><em>${totalLabel}</em></span>
     </div>
     <div class="bk-recap-line">
-      <span class="bk-recap-label">À régler par virement</span>
+      <span class="bk-recap-label">Mode paiement</span>
       <span class="bk-recap-value amount">${dueLabel}</span>
     </div>
   `;
