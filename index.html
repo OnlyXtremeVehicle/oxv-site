@@ -6548,6 +6548,57 @@ textarea.form-input {
 .admin-session-card-format.half { color: #C4A459; }
 .admin-session-card-format.b2b  { color: #9C8FE6; }
 
+/* === Auth : passwordless first === */
+.auth-magic-info {
+  font-family: var(--serif);
+  font-style: italic;
+  font-size: 13px;
+  color: var(--cream-mute);
+  text-align: center;
+  margin: 16px 0 24px 0;
+  line-height: 1.6;
+}
+.auth-divider {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin: 24px 0;
+}
+.auth-divider::before,
+.auth-divider::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: var(--cream-line);
+}
+.auth-divider span {
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--cream-faint);
+}
+.auth-pwd-toggle-link {
+  display: block;
+  width: 100%;
+  background: transparent;
+  border: 1px dashed var(--cream-line);
+  color: var(--cream-mute);
+  padding: 12px 16px;
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: all 0.25s;
+  text-align: center;
+}
+.auth-pwd-toggle-link:hover {
+  border-color: var(--copper);
+  color: var(--copper-glow);
+  background: rgba(184, 115, 51, 0.04);
+}
+
 /* === Auth : toggle œil sur les password fields === */
 .pwd-wrap {
   position: relative;
@@ -7656,6 +7707,26 @@ textarea.form-input {
   body { background: white; color: black; }
 }
 </style>
+
+<!-- ============ CRISP CHAT (support live) ============ -->
+<!-- Affiché uniquement sur pages publiques via crispVisibility() dans goTo() -->
+<script type="text/javascript">
+  window.$crisp = [];
+  window.CRISP_WEBSITE_ID = "331fc55c-319d-4f35-838f-56ecdcdd1a77";
+
+  // Cacher le widget par défaut, on l'activera sur les pages publiques uniquement
+  window.$crisp.push(["safe", true]);
+  window.$crisp.push(["do", "chat:hide"]);
+
+  (function() {
+    var d = document;
+    var s = d.createElement("script");
+    s.src = "https://client.crisp.chat/l.js";
+    s.async = 1;
+    d.getElementsByTagName("head")[0].appendChild(s);
+  })();
+</script>
+
 </head>
 <body>
 
@@ -8637,9 +8708,8 @@ textarea.form-input {
             <div class="prose" style="font-size: 16px;">
               <h3>Adresse circuit</h3>
               <p>
-                Le Petit Châtaignier<br/>
-                17360 La Génétouze<br/>
-                France
+                Bordeaux, France<br/>
+                <em style="color: var(--cream-mute); font-size: 14px;">Adresse précise communiquée à la confirmation de réservation</em>
               </p>
 
               <h3>Contact général</h3>
@@ -8783,7 +8853,32 @@ textarea.form-input {
         Pas encore de compte ? <a onclick="goTo('signup')">S'inscrire</a>
       </p>
 
-      <div class="auth-form">
+      <!-- BLOC PRINCIPAL : Magic link -->
+      <div class="auth-form" id="loginMagicForm">
+        <div class="form-row">
+          <label>Email</label>
+          <input type="email" id="li-magic-email" placeholder="prenom.nom@email.fr" autocomplete="email" onkeydown="if(event.key==='Enter')submitMagicLink()" />
+        </div>
+
+        <div class="auth-actions">
+          <button class="btn btn-primary btn-lg" onclick="submitMagicLink()" id="liMagicBtn"><span>Recevoir mon lien de connexion</span></button>
+        </div>
+
+        <p class="auth-magic-info">
+          Recevez un lien sécurisé par email. Plus besoin de retenir un mot de passe.
+        </p>
+
+        <div class="auth-divider">
+          <span>ou</span>
+        </div>
+
+        <button class="auth-pwd-toggle-link" onclick="toggleClassicLogin()" id="loginToggleBtn">
+          <span>J'ai un mot de passe → utiliser la connexion classique</span>
+        </button>
+      </div>
+
+      <!-- BLOC SECONDAIRE : Connexion classique (caché par défaut) -->
+      <div class="auth-form" id="loginClassicForm" style="display: none;">
         <div class="form-row">
           <label>Email</label>
           <input type="email" id="li-email" placeholder="prenom.nom@email.fr" autocomplete="email" />
@@ -8791,21 +8886,21 @@ textarea.form-input {
         <div class="form-row">
           <label>Mot de passe</label>
           <div class="pwd-wrap">
-            <input type="password" id="li-pwd" placeholder="••••••••" autocomplete="current-password" />
+            <input type="password" id="li-pwd" placeholder="••••••••" autocomplete="current-password" onkeydown="if(event.key==='Enter')submitLogin()" />
             <button type="button" class="pwd-toggle" onclick="togglePwdVisibility('li-pwd', this)" aria-label="Afficher le mot de passe">
               <span class="pwd-eye-icon">👁</span>
             </button>
           </div>
         </div>
-      </div>
 
-      <div class="auth-actions">
-        <button class="btn btn-primary btn-lg" onclick="submitLogin()"><span>Se connecter</span></button>
-      </div>
+        <div class="auth-actions">
+          <button class="btn btn-primary btn-lg" onclick="submitLogin()"><span>Se connecter</span></button>
+        </div>
 
-      <div class="auth-link-row">
-        <a onclick="goTo('forgot-password')">Mot de passe oublié</a>
-        <a onclick="goTo('signup')">Créer un compte</a>
+        <div class="auth-link-row">
+          <a onclick="goTo('forgot-password')">Mot de passe oublié</a>
+          <a onclick="toggleClassicLogin()">← Retour au lien magique</a>
+        </div>
       </div>
 
       <p class="auth-foot">
@@ -8869,6 +8964,67 @@ textarea.form-input {
 
 </div>
 <!-- /forgot-password -->
+
+
+<!-- ============ AUTH : RESET PASSWORD (saisie nouveau mdp) ============ -->
+<div class="page" id="page-reset-password">
+
+  <div class="auth-wrap">
+    <!-- Côté éditorial gauche -->
+    <div class="auth-side">
+      <div class="auth-side-eyebrow">N° ⌬ · Nouveau mot de passe</div>
+      <h1 class="auth-side-title">Définir un<br/><em>nouveau mot</em><br/>de passe.</h1>
+      <p class="auth-side-text">
+        Vous avez cliqué sur le lien de réinitialisation. Saisissez maintenant votre nouveau mot de passe. <em>Choisissez quelque chose de solide.</em>
+      </p>
+      <div class="auth-side-meta">
+        <span class="auth-side-meta-num">⌬</span>
+        <span class="auth-side-meta-txt">Minimum 8 caractères<br>Majuscule · minuscule · chiffre</span>
+      </div>
+    </div>
+
+    <!-- Côté formulaire droite -->
+    <div class="auth-form-side">
+      <div class="auth-form">
+
+        <div class="auth-eyebrow">— Nouveau mot de passe</div>
+
+        <div class="form-row">
+          <label>Nouveau mot de passe</label>
+          <div class="pwd-wrap">
+            <input type="password" id="rp-pwd" placeholder="••••••••" autocomplete="new-password" oninput="checkResetPasswordStrength(); checkResetPasswordMatch();" />
+            <button type="button" class="pwd-toggle" onclick="togglePwdVisibility('rp-pwd', this)" aria-label="Afficher le mot de passe">
+              <span class="pwd-eye-icon">👁</span>
+            </button>
+          </div>
+          <div class="auth-pwd-meter" id="rpPwdMeter"><span></span><span></span><span></span></div>
+          <div class="auth-pwd-hint" id="rpPwdHint">Minimum 8 caractères · majuscule · minuscule · chiffre</div>
+        </div>
+
+        <div class="form-row">
+          <label>Confirmer le nouveau mot de passe</label>
+          <div class="pwd-wrap">
+            <input type="password" id="rp-pwd-confirm" placeholder="••••••••" autocomplete="new-password" oninput="checkResetPasswordMatch()" />
+            <button type="button" class="pwd-toggle" onclick="togglePwdVisibility('rp-pwd-confirm', this)" aria-label="Afficher le mot de passe">
+              <span class="pwd-eye-icon">👁</span>
+            </button>
+          </div>
+          <div class="auth-pwd-match" id="rpPwdMatchMsg"></div>
+        </div>
+
+        <div class="auth-actions">
+          <button class="btn btn-primary btn-lg" onclick="submitResetPassword()" id="rpSubmitBtn"><span>Définir le nouveau mot de passe</span></button>
+        </div>
+
+        <p class="auth-foot">
+          Après validation, vous serez automatiquement connecté(e) à votre espace pilote.
+        </p>
+      </div>
+    </div>
+  </div>
+
+</div>
+<!-- /reset-password -->
 
 
 <!-- ============ AUTH : VERIFY EMAIL ============ -->
@@ -9751,7 +9907,7 @@ textarea.form-input {
             <div class="pref-row-title">Adresse email du compte</div>
             <div class="pref-row-desc" id="prefEmail">—</div>
           </div>
-          <div class="pref-row-fixed">Contact pour modification</div>
+          <button class="btn btn-sm" onclick="requestEmailChange()"><span>Modifier</span></button>
         </div>
       </div>
 
@@ -11169,10 +11325,12 @@ textarea.form-input {
         <h2>Éditeur du site</h2>
         <p>
           <strong>OXV — Only Xtreme Vehicle</strong><br/>
-          Société en cours d'immatriculation<br/>
-          Adresse : Le Petit Châtaignier, 17360 La Génétouze, France<br/>
+          Société par actions simplifiée unipersonnelle (SASU)<br/>
+          en cours d'immatriculation au RCS de Bordeaux<br/>
+          Capital social : 2 000 €<br/>
+          Adresse du siège social : à compléter dès immatriculation<br/>
           SIRET : en cours · TVA intracommunautaire : en cours<br/>
-          Directeur de la publication : à préciser
+          Directrice de la publication : à compléter
         </p>
 
         <h2>Hébergement</h2>
@@ -11292,7 +11450,7 @@ textarea.form-input {
       <div class="prose">
 
         <h2>Responsable du traitement</h2>
-        <p><strong>OXV — Only Xtreme Vehicle</strong>, Le Petit Châtaignier, 17360 La Génétouze. Délégué à la protection des données : <a href="mailto:privacy@oxvehicle.fr">privacy@oxvehicle.fr</a>.</p>
+        <p><strong>OXV — Only Xtreme Vehicle</strong>, société par actions simplifiée unipersonnelle (SASU) en cours d'immatriculation au RCS de Bordeaux. Adresse du siège social : à compléter dès immatriculation. Délégué à la protection des données : <a href="mailto:privacy@oxvehicle.fr">privacy@oxvehicle.fr</a>.</p>
 
         <h2>Données collectées et finalités</h2>
 
@@ -11776,6 +11934,17 @@ window.goTo = function(page) {
   const accountPages = ['compte', 'compte-profil', 'compte-vehicules', 'compte-documents', 'compte-sessions', 'compte-progression', 'compte-heritage', 'compte-paiements', 'compte-preferences'];
   if (accountPages.includes(page)) {
     setTimeout(() => loadAccountSidebar(), 100);
+  }
+
+  // === Affichage du chat Crisp uniquement sur pages publiques ===
+  // Pages où on AFFICHE le widget : home, offers, calendrier, circuit, corporate, contact, specs-techniques
+  const publicChatPages = ['home', 'offers', 'calendrier', 'circuit', 'corporate', 'contact', 'specs-techniques'];
+  if (window.$crisp) {
+    if (publicChatPages.includes(page)) {
+      window.$crisp.push(["do", "chat:show"]);
+    } else {
+      window.$crisp.push(["do", "chat:hide"]);
+    }
   }
   if (page === 'compte-profil') {
     setTimeout(() => loadProfile(), 150);
@@ -12999,6 +13168,195 @@ window.submitForgotPassword = async function() {
   // Message neutre dans tous les cas (anti-énumération)
   toast('Si cet email existe, un lien a été envoyé', 'ok');
   email.value = '';
+};
+
+/* === MAGIC LINK : envoi du lien de connexion === */
+window.submitMagicLink = async function() {
+  const emailInput = document.getElementById('li-magic-email');
+  if (!emailInput) return;
+
+  const email = emailInput.value.trim().toLowerCase();
+  if (!isValidEmail(email)) {
+    toast('Email invalide', 'warn');
+    return;
+  }
+
+  const btn = document.getElementById('liMagicBtn');
+  const orig = btn ? btn.innerHTML : '';
+  if (btn) { btn.innerHTML = '<span>⟳ Envoi du lien…</span>'; btn.disabled = true; }
+
+  try {
+    // Appel Supabase pour envoyer un magic link
+    const { error } = await supabase.auth.signInWithOtp({
+      email: email,
+      options: {
+        // Empêche la création automatique de compte si l'email n'existe pas
+        // Le pilote doit avoir un compte existant pour utiliser le magic link
+        shouldCreateUser: false,
+        emailRedirectTo: window.location.origin
+      }
+    });
+
+    if (btn) { btn.innerHTML = orig; btn.disabled = false; }
+
+    if (error) {
+      console.warn('[OXV] Erreur magic link:', error);
+      // On masque l'erreur exacte pour éviter l'énumération d'emails
+      // Si le pilote n'a pas de compte, on lui dit la même chose
+      toast('Si cet email existe, un lien de connexion a été envoyé', 'ok');
+      emailInput.value = '';
+      return;
+    }
+
+    toast('Lien envoyé sur ' + email + ' · vérifiez votre boîte de réception', 'ok');
+    emailInput.value = '';
+  } catch (err) {
+    console.warn('[OXV] Exception magic link:', err);
+    if (btn) { btn.innerHTML = orig; btn.disabled = false; }
+    toast('Erreur lors de l\'envoi du lien', 'warn');
+  }
+};
+
+/* === Toggle entre magic link et connexion classique === */
+window.toggleClassicLogin = function() {
+  const magicForm = document.getElementById('loginMagicForm');
+  const classicForm = document.getElementById('loginClassicForm');
+  if (!magicForm || !classicForm) return;
+
+  if (magicForm.style.display === 'none') {
+    // Revenir au magic link
+    magicForm.style.display = '';
+    classicForm.style.display = 'none';
+  } else {
+    // Basculer sur classique
+    magicForm.style.display = 'none';
+    classicForm.style.display = '';
+  }
+};
+
+/* === RESET PASSWORD : vérification force du nouveau mdp === */
+window.checkResetPasswordStrength = function() {
+  const pwd = document.getElementById('rp-pwd');
+  const meter = document.getElementById('rpPwdMeter');
+  const hint = document.getElementById('rpPwdHint');
+  if (!pwd || !meter || !hint) return;
+  const v = pwd.value;
+  let score = 0;
+  if (v.length >= 8) score++;
+  if (/[A-Z]/.test(v) && /[a-z]/.test(v)) score++;
+  if (/[0-9]/.test(v)) score++;
+  if (/[^A-Za-z0-9]/.test(v)) score++;
+
+  meter.classList.remove('weak','medium','strong');
+  hint.classList.remove('error','ok');
+  if (v.length === 0) {
+    hint.textContent = 'Minimum 8 caractères · majuscule · minuscule · chiffre';
+  } else if (score < 2) {
+    meter.classList.add('weak');
+    hint.classList.add('error');
+    hint.textContent = 'Trop faible · ajoutez majuscule, chiffre, ou allongez';
+  } else if (score < 4) {
+    meter.classList.add('medium');
+    hint.textContent = 'Acceptable · un caractère spécial le rendra solide';
+  } else {
+    meter.classList.add('strong');
+    hint.classList.add('ok');
+    hint.textContent = 'Mot de passe solide';
+  }
+};
+
+/* === RESET PASSWORD : correspondance des 2 mdp === */
+window.checkResetPasswordMatch = function() {
+  const pwd = document.getElementById('rp-pwd');
+  const confirm = document.getElementById('rp-pwd-confirm');
+  const msg = document.getElementById('rpPwdMatchMsg');
+  if (!pwd || !confirm || !msg) return;
+
+  if (confirm.value.length === 0) {
+    msg.textContent = '';
+    msg.classList.remove('match', 'no-match');
+    return;
+  }
+
+  if (pwd.value === confirm.value) {
+    msg.textContent = '✓ Les mots de passe correspondent';
+    msg.classList.add('match');
+    msg.classList.remove('no-match');
+  } else {
+    msg.textContent = '⚠ Les mots de passe ne correspondent pas';
+    msg.classList.add('no-match');
+    msg.classList.remove('match');
+  }
+};
+
+/* === RESET PASSWORD : soumission du nouveau mot de passe === */
+window.submitResetPassword = async function() {
+  const pwd = document.getElementById('rp-pwd');
+  const confirm = document.getElementById('rp-pwd-confirm');
+
+  if (!pwd || !confirm) return;
+
+  const newPwd = pwd.value;
+  const confirmPwd = confirm.value;
+
+  // Validations
+  if (newPwd.length < 8) {
+    toast('Le mot de passe doit contenir au moins 8 caractères', 'warn');
+    return;
+  }
+  if (!/[A-Z]/.test(newPwd) || !/[a-z]/.test(newPwd)) {
+    toast('Le mot de passe doit contenir majuscules et minuscules', 'warn');
+    return;
+  }
+  if (!/[0-9]/.test(newPwd)) {
+    toast('Le mot de passe doit contenir au moins un chiffre', 'warn');
+    return;
+  }
+  if (newPwd !== confirmPwd) {
+    toast('Les mots de passe ne correspondent pas', 'warn');
+    return;
+  }
+
+  const btn = document.getElementById('rpSubmitBtn');
+  const orig = btn ? btn.innerHTML : '';
+  if (btn) { btn.innerHTML = '<span>⟳ Mise à jour…</span>'; btn.disabled = true; }
+
+  try {
+    // Appel Supabase pour mettre à jour le mdp
+    const { error } = await supabase.auth.updateUser({ password: newPwd });
+
+    if (error) {
+      console.warn('[OXV] Erreur reset password:', error);
+      if (btn) { btn.innerHTML = orig; btn.disabled = false; }
+
+      if (error.message && error.message.toLowerCase().includes('expired')) {
+        toast('Le lien de réinitialisation a expiré. Veuillez en demander un nouveau.', 'warn');
+        setTimeout(() => goTo('forgot-password'), 1500);
+      } else if (error.message && error.message.toLowerCase().includes('same')) {
+        toast('Le nouveau mot de passe doit être différent de l\'ancien', 'warn');
+      } else {
+        toast('Erreur : ' + (error.message || 'Réessayez plus tard'), 'warn');
+      }
+      return;
+    }
+
+    toast('Mot de passe mis à jour avec succès', 'ok');
+
+    // Reset des champs
+    pwd.value = '';
+    confirm.value = '';
+
+    // Redirection vers l'espace pilote
+    setTimeout(() => {
+      if (btn) { btn.innerHTML = orig; btn.disabled = false; }
+      goTo('compte');
+    }, 1200);
+
+  } catch (err) {
+    console.warn('[OXV] Exception reset password:', err);
+    if (btn) { btn.innerHTML = orig; btn.disabled = false; }
+    toast('Erreur lors de la mise à jour', 'warn');
+  }
 };
 
 window.resendVerificationEmail = async function() {
@@ -14783,6 +15141,63 @@ window.requestPasswordChange = async function() {
     toast('Email envoyé · vérifiez votre boîte de réception', 'ok');
   } else {
     toast('Erreur envoi email', 'warn');
+  }
+};
+
+/* === Demande de changement d'adresse email === */
+window.requestEmailChange = async function() {
+  const userId = window.OXVApi.user.profile?.id;
+  if (!userId) return;
+
+  // Demande la nouvelle adresse
+  const newEmail = prompt(
+    'Saisissez votre nouvelle adresse email.\n\n' +
+    'Un email de confirmation sera envoyé sur cette nouvelle adresse. ' +
+    'L\'ancienne adresse restera active tant que vous n\'aurez pas cliqué sur le lien de confirmation.'
+  );
+
+  if (!newEmail) return; // Annulé
+
+  const trimmedEmail = newEmail.trim().toLowerCase();
+
+  // Validation basique
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(trimmedEmail)) {
+    toast('Adresse email invalide', 'warn');
+    return;
+  }
+
+  // Vérifie que c'est différent de l'ancienne
+  const { data: userData } = await supabase
+    .from('users')
+    .select('email')
+    .eq('id', userId)
+    .single();
+
+  if (userData?.email && userData.email.toLowerCase() === trimmedEmail) {
+    toast('Cette adresse est déjà associée à votre compte', 'warn');
+    return;
+  }
+
+  // Lance la procédure Supabase de changement d'email
+  try {
+    const { error } = await supabase.auth.updateUser({ email: trimmedEmail });
+
+    if (error) {
+      console.warn('[OXV] Erreur changement email:', error);
+      if (error.message && error.message.includes('rate')) {
+        toast('Trop de tentatives. Réessayez dans quelques minutes.', 'warn');
+      } else if (error.message && error.message.toLowerCase().includes('already')) {
+        toast('Cette adresse est déjà utilisée par un autre compte', 'warn');
+      } else {
+        toast('Erreur : ' + (error.message || 'Réessayez plus tard'), 'warn');
+      }
+      return;
+    }
+
+    toast('Email de confirmation envoyé sur ' + trimmedEmail + ' · cliquez sur le lien pour finaliser', 'ok');
+  } catch (err) {
+    console.warn('[OXV] Exception changement email:', err);
+    toast('Erreur lors de la demande', 'warn');
   }
 };
 
@@ -18288,6 +18703,94 @@ window.addEventListener('DOMContentLoaded', () => {
   const safe = (name, fn) => {
     try { fn(); } catch (e) { console.warn('[OXV init]', name, 'a planté :', e); }
   };
+
+  // === Détection d'un callback d'authentification Supabase ===
+  // Si l'URL contient un hash avec un access_token, c'est qu'on revient
+  // d'un clic sur le lien de confirmation email, reset password, etc.
+  const hash = window.location.hash || '';
+  const isAuthCallback = hash.includes('access_token=') ||
+                         hash.includes('type=signup') ||
+                         hash.includes('type=recovery') ||
+                         hash.includes('type=invite') ||
+                         hash.includes('type=magiclink') ||
+                         hash.includes('error_code=');
+
+  if (isAuthCallback) {
+    // Affiche un message de confirmation pendant que Supabase traite le token
+    document.body.style.opacity = '0.5';
+    const loadingMsg = document.createElement('div');
+    loadingMsg.id = 'auth-callback-loading';
+    loadingMsg.style.cssText = 'position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);background:#0B1220;border:1px solid #B87333;padding:32px 48px;color:#EFE6D2;font-family:Georgia,serif;font-style:italic;z-index:99999;text-align:center;';
+    loadingMsg.innerHTML = '<div style="font-size:11px;letter-spacing:0.32em;text-transform:uppercase;color:#B87333;margin-bottom:12px;">— Confirmation</div><div style="font-size:18px;">Activation de votre compte en cours…</div>';
+    document.body.appendChild(loadingMsg);
+
+    // Détecte si c'est une erreur d'authentification
+    if (hash.includes('error_code=') || hash.includes('error=')) {
+      // Erreur dans le lien (token expiré, déjà utilisé, etc.)
+      setTimeout(() => {
+        document.body.style.opacity = '1';
+        if (loadingMsg) loadingMsg.remove();
+        const errMatch = hash.match(/error_description=([^&]+)/);
+        const errMsg = errMatch ? decodeURIComponent(errMatch[1].replace(/\+/g, ' ')) : 'Le lien est invalide ou expiré';
+        toast(`Erreur : ${errMsg}`, 'error');
+        // Clean URL
+        history.replaceState(null, '', window.location.pathname);
+        goTo('login');
+      }, 500);
+    } else {
+      // Token valide : attendre que Supabase établisse la session, puis rediriger
+      // detectSessionInUrl est déjà activé, donc Supabase fait son job
+      // Le onAuthStateChange déclenchera SIGNED_IN automatiquement
+      // On surveille l'événement pour rediriger une fois la session établie
+      let redirected = false;
+      const finalizeAuth = (session) => {
+        if (redirected || !session) return;
+        redirected = true;
+        document.body.style.opacity = '1';
+        if (loadingMsg) loadingMsg.remove();
+        // Clean URL (retire le hash)
+        history.replaceState(null, '', window.location.pathname);
+        // Détermine le type de callback
+        if (hash.includes('type=recovery')) {
+          // Reset password → page de saisie nouveau mdp
+          toast('Vous pouvez maintenant définir votre nouveau mot de passe', 'success');
+          goTo('reset-password');
+        } else if (hash.includes('type=signup') || hash.includes('type=invite')) {
+          // Inscription confirmée → espace pilote
+          toast('Votre compte est activé. Bienvenue chez OXV.', 'success');
+          goTo('compte');
+        } else {
+          // Magic link ou autre
+          toast('Connexion réussie', 'success');
+          goTo('compte');
+        }
+      };
+
+      // Vérifie tout de suite si la session est déjà là
+      supabase.auth.getSession().then(({ data }) => {
+        if (data && data.session) finalizeAuth(data.session);
+      });
+
+      // Surveille les futurs événements SIGNED_IN
+      const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
+        if (event === 'SIGNED_IN' && session) {
+          finalizeAuth(session);
+        }
+      });
+
+      // Timeout de sécurité : si rien après 8 secondes, on libère
+      setTimeout(() => {
+        if (!redirected) {
+          document.body.style.opacity = '1';
+          if (loadingMsg) loadingMsg.remove();
+          toast('Le lien a expiré ou est invalide. Veuillez recommencer.', 'error');
+          history.replaceState(null, '', window.location.pathname);
+          goTo('login');
+        }
+      }, 8000);
+    }
+  }
+
   safe('initHero', () => initHero());
   safe('initCircuit3D', () => initCircuit3D('circuit3d'));
   safe('buildSlots', () => buildSlots());
