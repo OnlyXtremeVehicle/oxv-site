@@ -7684,34 +7684,43 @@ textarea.form-input {
   bottom: 32px;
   left: 50%;
   transform: translateX(-50%) translateY(120%);
-  z-index: 300;
+  z-index: 9999;
   background: var(--night-card);
   border: 1px solid var(--copper);
-  padding: 14px 22px;
-  font-family: var(--mono);
-  font-size: 11px;
-  letter-spacing: 0.18em;
-  text-transform: uppercase;
+  border-left-width: 4px;
+  padding: 16px 24px;
+  font-family: var(--serif);
+  font-size: 14px;
+  letter-spacing: 0;
+  text-transform: none;
   color: var(--cream);
-  transition: transform 0.5s var(--ease-out);
-  max-width: min(90vw, 480px);
-  text-align: center;
-  line-height: 1.6;
+  transition: transform 0.4s var(--ease-out);
+  max-width: min(90vw, 520px);
+  text-align: left;
+  line-height: 1.5;
   word-break: break-word;
-}
-@media (max-width: 720px) {
-  .toast {
-    bottom: 16px;
-    padding: 12px 18px;
-    font-size: 10px;
-    letter-spacing: 0.15em;
-    max-width: calc(100vw - 24px);
-  }
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.4);
+  pointer-events: none;
 }
 .toast.show { transform: translateX(-50%) translateY(0); }
-.toast.warn { border-color: var(--warn); }
-.toast.ko { border-color: var(--ko); }
-.toast.ok { border-color: var(--ok); }
+.toast.warn { border-color: var(--warn); border-left-color: var(--warn); }
+.toast.ko, .toast.error { border-color: var(--ko); border-left-color: var(--ko); }
+.toast.ok { border-color: var(--ok); border-left-color: var(--ok); }
+
+@media (max-width: 720px) {
+  .toast {
+    bottom: 80px;
+    left: 12px;
+    right: 12px;
+    transform: translateY(120%);
+    max-width: none;
+    padding: 14px 18px;
+    font-size: 13px;
+  }
+  .toast.show {
+    transform: translateY(0);
+  }
+}
 
 /* === PRINTERIE === */
 @media print {
@@ -13201,13 +13210,12 @@ window.submitMagicLink = async function() {
 
   try {
     // Appel Supabase pour envoyer un magic link
-    const { error } = await supabase.auth.signInWithOtp({
+    // shouldCreateUser: false → seuls les comptes existants peuvent utiliser le magic link
+    const { data, error } = await supabase.auth.signInWithOtp({
       email: email,
       options: {
-        // Empêche la création automatique de compte si l'email n'existe pas
-        // Le pilote doit avoir un compte existant pour utiliser le magic link
         shouldCreateUser: false,
-        emailRedirectTo: window.location.origin
+        emailRedirectTo: window.location.origin + '/'
       }
     });
 
@@ -13215,14 +13223,24 @@ window.submitMagicLink = async function() {
 
     if (error) {
       console.warn('[OXV] Erreur magic link:', error);
-      // On masque l'erreur exacte pour éviter l'énumération d'emails
-      // Si le pilote n'a pas de compte, on lui dit la même chose
-      toast('Si cet email existe, un lien de connexion a été envoyé', 'ok');
-      emailInput.value = '';
+
+      // Cas 1 : email pas en BDD → message clair
+      if (error.message && (error.message.toLowerCase().includes('signups not allowed') ||
+                            error.message.toLowerCase().includes('user not found'))) {
+        toast('Aucun compte trouvé avec cet email. Vérifiez votre adresse ou créez un compte.', 'warn');
+        return;
+      }
+      // Cas 2 : trop de tentatives
+      if (error.message && error.message.toLowerCase().includes('rate')) {
+        toast('Trop de tentatives. Réessayez dans quelques minutes.', 'warn');
+        return;
+      }
+      // Cas générique
+      toast('Erreur : ' + (error.message || 'Réessayez plus tard'), 'warn');
       return;
     }
 
-    toast('Lien envoyé sur ' + email + ' · vérifiez votre boîte de réception', 'ok');
+    toast('Lien envoyé sur ' + email + ' · vérifiez votre boîte de réception (et le spam)', 'ok');
     emailInput.value = '';
   } catch (err) {
     console.warn('[OXV] Exception magic link:', err);
@@ -18354,7 +18372,9 @@ window.toast = function(msg, type) {
   t.textContent = msg;
   t.className = 'toast show' + (type ? ' ' + type : '');
   clearTimeout(window._toastT);
-  window._toastT = setTimeout(() => t.classList.remove('show'), 3500);
+  // Durée adaptative : plus long pour erreurs/warnings, plus court pour les ok
+  const duration = (type === 'warn' || type === 'ko' || type === 'error') ? 6500 : 5000;
+  window._toastT = setTimeout(() => t.classList.remove('show'), duration);
 };
 
 /* === NAV SCROLL === */
@@ -18753,55 +18773,86 @@ window.addEventListener('DOMContentLoaded', () => {
       }, 500);
     } else {
       // Token valide : attendre que Supabase établisse la session, puis rediriger
-      // detectSessionInUrl est déjà activé, donc Supabase fait son job
-      // Le onAuthStateChange déclenchera SIGNED_IN automatiquement
-      // On surveille l'événement pour rediriger une fois la session établie
+      // detectSessionInUrl est activé, donc Supabase parse le hash automatiquement
       let redirected = false;
+      let authSubscription = null;
+      let pollInterval = null;
+
       const finalizeAuth = (session) => {
         if (redirected || !session) return;
         redirected = true;
+
+        // Cleanup
+        if (pollInterval) clearInterval(pollInterval);
+        if (authSubscription) {
+          try { authSubscription.unsubscribe(); } catch(e) {}
+        }
+
         document.body.style.opacity = '1';
         if (loadingMsg) loadingMsg.remove();
+
         // Clean URL (retire le hash)
         history.replaceState(null, '', window.location.pathname);
+
         // Détermine le type de callback
         if (hash.includes('type=recovery')) {
-          // Reset password → page de saisie nouveau mdp
-          toast('Vous pouvez maintenant définir votre nouveau mot de passe', 'success');
+          toast('Vous pouvez maintenant définir votre nouveau mot de passe', 'ok');
           goTo('reset-password');
         } else if (hash.includes('type=signup') || hash.includes('type=invite')) {
-          // Inscription confirmée → espace pilote
-          toast('Votre compte est activé. Bienvenue chez OXV.', 'success');
+          toast('Votre compte est activé. Bienvenue chez OXV.', 'ok');
           goTo('compte');
         } else {
           // Magic link ou autre
-          toast('Connexion réussie', 'success');
+          toast('Connexion réussie. Bienvenue.', 'ok');
           goTo('compte');
         }
       };
 
-      // Vérifie tout de suite si la session est déjà là
+      // STRATÉGIE 1 : check immédiat
       supabase.auth.getSession().then(({ data }) => {
         if (data && data.session) finalizeAuth(data.session);
-      });
+      }).catch(e => console.warn('[OXV] getSession initial error:', e));
 
-      // Surveille les futurs événements SIGNED_IN
+      // STRATÉGIE 2 : surveiller les événements d'auth
       const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
-        if (event === 'SIGNED_IN' && session) {
+        console.log('[OXV] Auth event:', event, 'has session:', !!session);
+        // On accepte plusieurs événements qui signalent une session établie
+        if (session && (event === 'SIGNED_IN' || event === 'TOKEN_REFRESHED' || event === 'INITIAL_SESSION')) {
           finalizeAuth(session);
         }
       });
+      authSubscription = subscription;
 
-      // Timeout de sécurité : si rien après 8 secondes, on libère
+      // STRATÉGIE 3 : polling toutes les secondes (au cas où les events foirent)
+      let pollCount = 0;
+      pollInterval = setInterval(() => {
+        pollCount++;
+        supabase.auth.getSession().then(({ data }) => {
+          if (data && data.session) {
+            finalizeAuth(data.session);
+          }
+        }).catch(e => console.warn('[OXV] poll getSession error:', e));
+
+        // Stop le polling après 15 essais (15 sec)
+        if (pollCount >= 15) {
+          clearInterval(pollInterval);
+        }
+      }, 1000);
+
+      // STRATÉGIE 4 : timeout final de sécurité étendu à 15 sec
       setTimeout(() => {
         if (!redirected) {
+          if (pollInterval) clearInterval(pollInterval);
+          if (authSubscription) {
+            try { authSubscription.unsubscribe(); } catch(e) {}
+          }
           document.body.style.opacity = '1';
           if (loadingMsg) loadingMsg.remove();
-          toast('Le lien a expiré ou est invalide. Veuillez recommencer.', 'error');
+          toast('Le lien a expiré ou est invalide. Veuillez recommencer.', 'warn');
           history.replaceState(null, '', window.location.pathname);
           goTo('login');
         }
-      }, 8000);
+      }, 15000);
     }
   }
 
