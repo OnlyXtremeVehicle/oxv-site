@@ -11927,6 +11927,14 @@ function onAuthChange() {
 
 /* === ROUTING === */
 window.goTo = function(page) {
+  // === Nettoyage de sécurité : supprimer tout résidu de chargement auth ===
+  // Évite qu'un loadingMsg "Activation en cours" reste à l'écran après un callback foiré
+  const ghostLoading = document.getElementById('auth-callback-loading');
+  if (ghostLoading) ghostLoading.remove();
+  if (document.body.style.opacity === '0.5') {
+    document.body.style.opacity = '1';
+  }
+
   // Pages protégées (pilote) : nécessitent une connexion
   const protectedPages = ['compte', 'compte-profil', 'compte-vehicules', 'compte-documents', 'compte-sessions', 'compte-progression', 'compte-heritage', 'compte-paiements', 'compte-preferences'];
   // Pages admin : nécessitent une connexion + role=admin
@@ -18737,6 +18745,12 @@ window.addEventListener('DOMContentLoaded', () => {
   const safe = (name, fn) => {
     try { fn(); } catch (e) { console.warn('[OXV init]', name, 'a planté :', e); }
   };
+
+  // === Nettoyage de sécurité initial ===
+  // Supprime tout résidu de loadingMsg "Activation en cours" qui aurait pu rester
+  const ghostInit = document.getElementById('auth-callback-loading');
+  if (ghostInit) ghostInit.remove();
+  document.body.style.opacity = '1';
 
   // === Détection d'un callback d'authentification Supabase ===
   // Si l'URL contient un hash avec un access_token, c'est qu'on revient
