@@ -1699,7 +1699,8 @@ footer {
     position: sticky;
     top: 80px;
     align-self: start;
-    height: calc(100vh - 80px);
+    max-height: calc(100vh - 80px);
+    overflow-y: auto;
   }
 }
 
@@ -7693,8 +7694,19 @@ textarea.form-input {
   text-transform: uppercase;
   color: var(--cream);
   transition: transform 0.5s var(--ease-out);
-  white-space: nowrap;
-  max-width: 90vw;
+  max-width: min(90vw, 480px);
+  text-align: center;
+  line-height: 1.6;
+  word-break: break-word;
+}
+@media (max-width: 720px) {
+  .toast {
+    bottom: 16px;
+    padding: 12px 18px;
+    font-size: 10px;
+    letter-spacing: 0.15em;
+    max-width: calc(100vw - 24px);
+  }
 }
 .toast.show { transform: translateX(-50%) translateY(0); }
 .toast.warn { border-color: var(--warn); }
@@ -7714,9 +7726,8 @@ textarea.form-input {
   window.$crisp = [];
   window.CRISP_WEBSITE_ID = "331fc55c-319d-4f35-838f-56ecdcdd1a77";
 
-  // Cacher le widget par défaut, on l'activera sur les pages publiques uniquement
-  window.$crisp.push(["safe", true]);
-  window.$crisp.push(["do", "chat:hide"]);
+  // Le widget Crisp est visible par défaut. La logique d'affichage par page
+  // est gérée dans goTo() : visible sur pages publiques, caché ailleurs.
 
   (function() {
     var d = document;
@@ -9267,8 +9278,11 @@ textarea.form-input {
           </div>
           <div class="form-row full">
             <label>Email</label>
-            <input type="email" id="pf-email" disabled style="opacity:.6;" />
-            <span style="font-family:var(--mono);font-size:9px;letter-spacing:0.18em;text-transform:uppercase;color:var(--cream-faint);margin-top:6px;">L'email sert d'identifiant de connexion · contactez-nous pour le modifier</span>
+            <div style="display: flex; gap: 12px; align-items: stretch;">
+              <input type="email" id="pf-email" disabled style="opacity:.6; flex: 1;" />
+              <button type="button" class="btn btn-sm" onclick="requestEmailChange()" style="white-space: nowrap;"><span>Modifier</span></button>
+            </div>
+            <span style="font-family:var(--mono);font-size:9px;letter-spacing:0.18em;text-transform:uppercase;color:var(--cream-faint);margin-top:6px;">L'email sert d'identifiant de connexion · une confirmation sera envoyée sur la nouvelle adresse</span>
           </div>
 
           <div class="account-form-section">— Adresse</div>
@@ -18797,6 +18811,21 @@ window.addEventListener('DOMContentLoaded', () => {
   safe('setupReveal', () => setupReveal());
   safe('onAuthChange', () => onAuthChange());
   safe('updateSummary', () => updateSummary());
+
+  // === Routage par hash au chargement (ex: /#mentions, /#privacy) ===
+  // Si l'URL contient un hash simple (pas un callback auth) et qu'il correspond à une page valide, navigue vers cette page
+  if (!isAuthCallback && hash && hash.length > 1) {
+    const targetPage = hash.replace('#', '').replace('/', '').trim();
+    // Liste des pages valides accessibles via hash direct
+    const validHashPages = ['home', 'offers', 'calendrier', 'circuit', 'corporate', 'contact', 'specs-techniques',
+                            'mentions', 'cgv', 'cgu', 'privacy', 'login', 'signup', 'forgot-password'];
+    if (validHashPages.includes(targetPage)) {
+      // Petit délai pour laisser l'init se finir
+      setTimeout(() => {
+        try { goTo(targetPage); } catch (e) { console.warn('[OXV hash route]', e); }
+      }, 100);
+    }
+  }
 });
 
 </script>
