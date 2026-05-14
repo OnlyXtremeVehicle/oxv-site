@@ -7678,6 +7678,381 @@ textarea.form-input {
 .cookie p { font-size: 13px; color: var(--cream-mute); margin-bottom: 16px; line-height: 1.55; }
 .cookie-actions { display: flex; gap: 8px; flex-wrap: wrap; }
 
+/* === TRACK PASS (carte circuit collection OXV) === */
+.track-pass-wrap {
+  max-width: 720px;
+  margin: 0 auto;
+}
+.track-pass {
+  position: relative;
+  background: linear-gradient(135deg, #0B1220 0%, #0F1A2A 50%, #0B1220 100%);
+  border: 1px solid rgba(184, 115, 51, 0.4);
+  overflow: hidden;
+  transition: transform 0.6s cubic-bezier(0.25, 0.8, 0.25, 1);
+}
+.track-pass::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image: 
+    linear-gradient(rgba(184, 115, 51, 0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(184, 115, 51, 0.04) 1px, transparent 1px);
+  background-size: 20px 20px;
+  pointer-events: none;
+}
+.tp-corner {
+  position: absolute;
+  width: 14px;
+  height: 14px;
+  border: 1px solid #B87333;
+  z-index: 3;
+}
+.tp-corner.tl { top: 8px; left: 8px; border-right: 0; border-bottom: 0; }
+.tp-corner.tr { top: 8px; right: 8px; border-left: 0; border-bottom: 0; }
+.tp-corner.bl { bottom: 8px; left: 8px; border-right: 0; border-top: 0; }
+.tp-corner.br { bottom: 8px; right: 8px; border-left: 0; border-top: 0; }
+.tp-hdr {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 22px 32px 18px;
+  border-bottom: 1px solid rgba(184, 115, 51, 0.2);
+  position: relative;
+  z-index: 2;
+}
+.tp-bdg {
+  font-family: var(--mono);
+  font-size: 9px;
+  letter-spacing: 0.32em;
+  color: #B87333;
+  text-transform: uppercase;
+}
+.tp-srl {
+  font-family: var(--mono);
+  font-size: 9px;
+  letter-spacing: 0.22em;
+  color: rgba(239, 230, 210, 0.5);
+}
+.tp-ttl-bar {
+  padding: 24px 32px 8px;
+  position: relative;
+  z-index: 2;
+}
+.tp-ttl {
+  font-family: var(--serif);
+  font-style: italic;
+  font-weight: 300;
+  font-size: 32px;
+  color: #EFE6D2;
+  margin: 0;
+  letter-spacing: -0.01em;
+  line-height: 1;
+}
+.tp-ttl em { color: #B87333; font-style: italic; }
+.tp-sub {
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.3em;
+  color: #B87333;
+  text-transform: uppercase;
+  margin-top: 8px;
+}
+.tp-trk-wrp {
+  position: relative;
+  padding: 8px 16px;
+}
+.tp-trk-svg {
+  width: 100%;
+  display: block;
+}
+.tp-pdk {
+  fill: #1a2333;
+  stroke: #3A4860;
+  stroke-width: 0.6;
+  opacity: 0;
+  animation: tpAppear 1s ease-out 3.5s forwards;
+}
+.tp-bld {
+  fill: #252e3d;
+  stroke: #B87333;
+  stroke-width: 0.6;
+  stroke-opacity: 0.5;
+  opacity: 0;
+  animation: tpAppear 1s ease-out 3s forwards;
+}
+.tp-pit {
+  stroke: #5A6378;
+  stroke-width: 4;
+  fill: none;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  opacity: 0;
+  animation: tpAppear 1s ease-out 4.2s forwards;
+}
+.tp-bg {
+  stroke: #1F2A3E;
+  stroke-width: 14;
+  fill: none;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.tp-path {
+  stroke: #B87333;
+  stroke-width: 5;
+  fill: none;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-dasharray: 3500;
+  stroke-dashoffset: 3500;
+  animation: tpDraw 4s cubic-bezier(0.65, 0, 0.35, 1) forwards;
+}
+.tp-dash {
+  stroke: #EFE6D2;
+  stroke-width: 0.8;
+  fill: none;
+  stroke-linecap: round;
+  stroke-dasharray: 3,6;
+  opacity: 0;
+  animation: tpAppear 1s ease-out 4s forwards;
+}
+.tp-anno {
+  opacity: 0;
+  animation: tpAppear 0.6s ease-out forwards;
+}
+.tp-anno:nth-of-type(1) { animation-delay: 5s; }
+.tp-anno:nth-of-type(2) { animation-delay: 5.2s; }
+#tpLight {
+  opacity: 0;
+  animation: tpAppearLight 0.6s ease-out 4.5s forwards;
+}
+@keyframes tpDraw { to { stroke-dashoffset: 0; } }
+@keyframes tpAppear { to { opacity: 0.5; } }
+@keyframes tpAppearLight { to { opacity: 1; } }
+.tp-stt {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0;
+  padding: 20px 32px;
+  border-top: 1px solid rgba(184, 115, 51, 0.2);
+  border-bottom: 1px solid rgba(184, 115, 51, 0.2);
+  position: relative;
+  z-index: 2;
+  opacity: 0;
+  animation: tpAppearFull 0.8s ease-out 5.5s forwards;
+}
+@keyframes tpAppearFull { to { opacity: 1; } }
+.tp-st-item {
+  text-align: left;
+  position: relative;
+  padding-right: 20px;
+}
+.tp-st-item + .tp-st-item {
+  border-left: 1px solid rgba(184, 115, 51, 0.15);
+  padding-left: 20px;
+}
+.tp-st-lbl {
+  font-family: var(--mono);
+  font-size: 9px;
+  letter-spacing: 0.28em;
+  color: rgba(239, 230, 210, 0.5);
+  text-transform: uppercase;
+  margin-bottom: 6px;
+  display: block;
+}
+.tp-st-val {
+  font-family: var(--serif);
+  font-size: 16px;
+  color: #EFE6D2;
+  font-weight: 300;
+  display: block;
+}
+.tp-st-unt {
+  font-family: var(--mono);
+  font-size: 10px;
+  color: #B87333;
+  letter-spacing: 0.1em;
+  margin-left: 4px;
+}
+.tp-ftr {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 18px 32px 22px;
+  position: relative;
+  z-index: 2;
+}
+.tp-sig {
+  font-family: var(--serif);
+  font-style: italic;
+  font-size: 14px;
+  color: #B87333;
+}
+.tp-mta {
+  font-family: var(--mono);
+  font-size: 9px;
+  letter-spacing: 0.22em;
+  color: rgba(239, 230, 210, 0.4);
+}
+.track-pass-caption {
+  text-align: center;
+  font-family: var(--serif);
+  font-style: italic;
+  font-size: 14px;
+  color: rgba(239, 230, 210, 0.6);
+  margin-top: 32px;
+  line-height: 1.7;
+}
+.track-pass-caption a {
+  color: #B87333;
+  text-decoration: underline;
+  cursor: pointer;
+}
+@media (max-width: 720px) {
+  .tp-ttl { font-size: 22px; }
+  .tp-stt { grid-template-columns: repeat(2, 1fr); gap: 12px; padding: 16px 20px; }
+  .tp-st-item + .tp-st-item:nth-child(3) { border-left: 0; padding-left: 0; }
+  .tp-hdr, .tp-ttl-bar, .tp-ftr { padding-left: 20px; padding-right: 20px; }
+  .tp-ftr { flex-direction: column; gap: 8px; align-items: flex-start; }
+}
+/* === COLLECTION (portefeuille pilote) === */
+.collection-section {
+  margin-top: 64px;
+  padding-top: 48px;
+  border-top: 1px solid var(--cream-line);
+}
+.collection-eyebrow {
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.32em;
+  color: var(--copper);
+  text-transform: uppercase;
+  margin-bottom: 16px;
+}
+.collection-title {
+  font-family: var(--serif);
+  font-style: italic;
+  font-weight: 300;
+  font-size: 32px;
+  color: var(--cream);
+  margin: 0 0 12px 0;
+  letter-spacing: -0.01em;
+}
+.collection-title em { color: var(--copper-glow); font-style: italic; }
+.collection-sub {
+  font-family: var(--serif);
+  font-size: 14px;
+  color: var(--cream-mute);
+  line-height: 1.7;
+  margin-bottom: 32px;
+  max-width: 560px;
+}
+.collection-stats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+  padding: 24px 32px;
+  background: rgba(11, 18, 32, 0.4);
+  border: 1px solid var(--cream-line);
+  margin-bottom: 40px;
+}
+.collection-stat-label {
+  font-family: var(--mono);
+  font-size: 9px;
+  letter-spacing: 0.3em;
+  color: var(--cream-faint);
+  text-transform: uppercase;
+  display: block;
+  margin-bottom: 6px;
+}
+.collection-stat-value {
+  font-family: var(--serif);
+  font-size: 22px;
+  color: var(--cream);
+  font-weight: 300;
+}
+.collection-stat-value em { color: var(--copper-glow); font-style: italic; }
+.track-pass-locked {
+  position: relative;
+  background: rgba(11, 18, 32, 0.6);
+  border: 1px dashed rgba(184, 115, 51, 0.3);
+  padding: 60px 32px;
+  text-align: center;
+  min-height: 320px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+.track-pass-locked .tp-corner { opacity: 0.4; }
+.track-pass-locked-eyebrow {
+  font-family: var(--mono);
+  font-size: 9px;
+  letter-spacing: 0.32em;
+  color: rgba(184, 115, 51, 0.5);
+  text-transform: uppercase;
+  margin-bottom: 16px;
+}
+.track-pass-locked-title {
+  font-family: var(--serif);
+  font-style: italic;
+  font-weight: 300;
+  font-size: 22px;
+  color: var(--cream-mute);
+  margin: 0 0 12px 0;
+}
+.track-pass-locked-text {
+  font-family: var(--serif);
+  font-style: italic;
+  font-size: 13px;
+  color: rgba(239, 230, 210, 0.4);
+  line-height: 1.6;
+  max-width: 280px;
+  margin-bottom: 24px;
+}
+.track-pass-locked-cta {
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.32em;
+  color: var(--copper);
+  text-transform: uppercase;
+  text-decoration: none;
+  border: 1px solid var(--copper);
+  padding: 12px 24px;
+  cursor: pointer;
+  transition: all 0.3s;
+  background: transparent;
+}
+.track-pass-locked-cta:hover {
+  background: var(--copper);
+  color: var(--night-deep);
+}
+.tp-stamp {
+  position: absolute;
+  top: 70px;
+  right: 26px;
+  transform: rotate(8deg);
+  border: 2px solid #B87333;
+  padding: 8px 14px;
+  z-index: 5;
+  background: rgba(11, 18, 32, 0.7);
+  pointer-events: none;
+}
+.tp-stamp-label {
+  font-family: var(--mono);
+  font-size: 7px;
+  letter-spacing: 0.3em;
+  color: #B87333;
+  display: block;
+  margin-bottom: 2px;
+}
+.tp-stamp-date {
+  font-family: var(--serif);
+  font-style: italic;
+  font-size: 14px;
+  color: #EFE6D2;
+  font-weight: 300;
+}
+
 /* === TOAST === */
 .toast {
   position: fixed;
@@ -8241,82 +8616,112 @@ textarea.form-input {
       <div class="page-hero-eyebrow">N° 03 · Haute Saintonge</div>
       <h1 class="page-hero-title">Le circuit<br/>de <em>Beltoise</em>.</h1>
       <p class="page-hero-lede">
-        Dessiné en 2009 par Jean-Pierre Beltoise lui-même, exploité aujourd'hui par son fils Julien. Un tracé qu'on n'oublie pas, et qu'on ne maîtrise jamais tout à fait.
+        Tracé conçu par Jean-Pierre Beltoise. Exploité aujourd'hui par son fils Julien. Homologué FFSA. À La Génétouze, en Charente-Maritime.
       </p>
     </div>
   </section>
 
   <section class="section">
     <div class="wrap">
-      <div class="circuit-frame reveal">
-        <div class="circuit-canvas-wrap" style="aspect-ratio: 16/9;">
-          <canvas id="circuit3dFull"></canvas>
-          <div class="circuit-overlay-tl">Tracé · 3D<br/><strong>Haute Saintonge</strong></div>
-          <div class="circuit-overlay-tr">Forme<br/><strong>Haricot N–S</strong></div>
-          <div class="circuit-overlay-bl">Conception<br/><strong>JP Beltoise</strong></div>
-          <div class="circuit-overlay-br">Dénivelé V2<br/><strong>+ 9 %</strong></div>
-        </div>
-        <div class="circuit-text">
-          <p class="circuit-pull">
-            « Le tracé n'est pas difficile parce qu'il est rapide. Il est difficile parce qu'il est <em>juste</em>. »
-          </p>
-          <div class="circuit-facts">
-            <div class="circuit-fact">
-              <div class="circuit-fact-label">Longueur</div>
-              <div class="circuit-fact-value">2 200<em>m</em></div>
+      <div class="track-pass-wrap reveal">
+        <div class="track-pass" id="trackPassHS">
+
+          <span class="tp-corner tl"></span>
+          <span class="tp-corner tr"></span>
+          <span class="tp-corner bl"></span>
+          <span class="tp-corner br"></span>
+
+          <div class="tp-hdr">
+            <span class="tp-bdg">— OXV · TRACK PASS</span>
+            <span class="tp-srl">N° 03/A · ÉDITION 2026</span>
+          </div>
+
+          <div class="tp-ttl-bar">
+            <h2 class="tp-ttl">Circuit de <em>Haute Saintonge</em></h2>
+            <div class="tp-sub">Tracé Beltoise · La Génétouze · Charente-Maritime</div>
+          </div>
+
+          <div class="tp-trk-wrp">
+            <svg class="tp-trk-svg" viewBox="0 0 680 420" xmlns="http://www.w3.org/2000/svg">
+
+              <defs>
+                <filter id="tp-glow" x="-100%" y="-100%" width="300%" height="300%">
+                  <feGaussianBlur stdDeviation="3" result="blur1"/>
+                  <feGaussianBlur stdDeviation="6" result="blur2"/>
+                  <feMerge>
+                    <feMergeNode in="blur2"/>
+                    <feMergeNode in="blur1"/>
+                    <feMergeNode in="SourceGraphic"/>
+                  </feMerge>
+                </filter>
+                <filter id="tp-trail" x="-50%" y="-50%" width="200%" height="200%">
+                  <feGaussianBlur stdDeviation="2"/>
+                </filter>
+              </defs>
+
+              <path class="tp-pdk" d="M151.6,325 L203.7,359 L220.8,331.9 L169.9,299.1 L165.7,305.1 L151.3,317.5 L151.5,321.2 L151.6,325 Z"/>
+              <path class="tp-bld" d="M179.7,289.7 L175.0,296.6 L221.7,327.9 L226.3,321 L179.7,289.7 Z"/>
+
+              <path class="tp-pit" d="M440.9,415.6 L417.7,410.6 L359.2,391 L331.9,381.5 L318.1,375.3 L309.5,369.7 L279.3,344.1 L262,328.4 L245.1,317.7 L235.4,311.9 L188.4,283.9 L173.1,275 L163,269.2 L138.1,256.5 L112,243.1 L91.9,228.9 L77.1,213.3 L67.6,195.3 L63.2,181.5 L60.7,164.1 L60,152 L60.5,130.6"/>
+
+              <path class="tp-bg" d="M120.1,68.3 L140.1,71 L232.4,88.6 L526.5,141.4 L582.3,152.2 L609.7,157.5 L614.4,160.1 L617.8,163.6 L619.7,168.7 L620,175.4 L617.4,181.9 L612,186.5 L605,188.9 L579,189.1 L492.6,183.7 L465.1,182.2 L455.4,182.6 L447.4,185.2 L441.9,189.7 L437.3,196.8 L423.4,227.7 L398.5,279.1 L392.6,292.2 L390.1,299.9 L389.6,306.1 L390.8,315.4 L395.2,324.4 L401.9,332.4 L422.7,344.3 L447.8,358.5 L456.5,362.4 L466.3,361.9 L477.2,354.5 L498.9,342.5 L511.2,339.5 L524.8,339.9 L540.1,344.6 L551.6,352.4 L561.4,363.4 L567.2,372.1 L570.5,382.9 L570.9,394 L568.6,404 L562.9,414.7 L553.8,423.2 L543.4,428.8 L530.4,431.7 L519.4,430.8 L477.6,423 L440.9,415.6 L430,408.8 L403.3,386.6 L387.2,373.3 L369,363.6 L342.5,349.4 L304.8,328 L258.5,302.9 L221.2,282.6 L153.2,245.6 L141.4,235.3 L133.2,222.1 L125.5,212 L116.2,204.4 L98.5,192.6 L85.1,182.1 L69.3,162.4 L63.3,148 L60.5,130.6 L64.4,104.6 L76.7,85.3 L91.9,74.2 L106,69 L120.1,68.3 Z"/>
+
+              <path id="tpMainPath" class="tp-path" d="M120.1,68.3 L140.1,71 L232.4,88.6 L526.5,141.4 L582.3,152.2 L609.7,157.5 L614.4,160.1 L617.8,163.6 L619.7,168.7 L620,175.4 L617.4,181.9 L612,186.5 L605,188.9 L579,189.1 L492.6,183.7 L465.1,182.2 L455.4,182.6 L447.4,185.2 L441.9,189.7 L437.3,196.8 L423.4,227.7 L398.5,279.1 L392.6,292.2 L390.1,299.9 L389.6,306.1 L390.8,315.4 L395.2,324.4 L401.9,332.4 L422.7,344.3 L447.8,358.5 L456.5,362.4 L466.3,361.9 L477.2,354.5 L498.9,342.5 L511.2,339.5 L524.8,339.9 L540.1,344.6 L551.6,352.4 L561.4,363.4 L567.2,372.1 L570.5,382.9 L570.9,394 L568.6,404 L562.9,414.7 L553.8,423.2 L543.4,428.8 L530.4,431.7 L519.4,430.8 L477.6,423 L440.9,415.6 L430,408.8 L403.3,386.6 L387.2,373.3 L369,363.6 L342.5,349.4 L304.8,328 L258.5,302.9 L221.2,282.6 L153.2,245.6 L141.4,235.3 L133.2,222.1 L125.5,212 L116.2,204.4 L98.5,192.6 L85.1,182.1 L69.3,162.4 L63.3,148 L60.5,130.6 L64.4,104.6 L76.7,85.3 L91.9,74.2 L106,69 L120.1,68.3 Z"/>
+
+              <path class="tp-dash" d="M120.1,68.3 L140.1,71 L232.4,88.6 L526.5,141.4 L582.3,152.2 L609.7,157.5 L614.4,160.1 L617.8,163.6 L619.7,168.7 L620,175.4 L617.4,181.9 L612,186.5 L605,188.9 L579,189.1 L492.6,183.7 L465.1,182.2 L455.4,182.6 L447.4,185.2 L441.9,189.7 L437.3,196.8 L423.4,227.7 L398.5,279.1 L392.6,292.2 L390.1,299.9 L389.6,306.1 L390.8,315.4 L395.2,324.4 L401.9,332.4 L422.7,344.3 L447.8,358.5 L456.5,362.4 L466.3,361.9 L477.2,354.5 L498.9,342.5 L511.2,339.5 L524.8,339.9 L540.1,344.6 L551.6,352.4 L561.4,363.4 L567.2,372.1 L570.5,382.9 L570.9,394 L568.6,404 L562.9,414.7 L553.8,423.2 L543.4,428.8 L530.4,431.7 L519.4,430.8 L477.6,423 L440.9,415.6 L430,408.8 L403.3,386.6 L387.2,373.3 L369,363.6 L342.5,349.4 L304.8,328 L258.5,302.9 L221.2,282.6 L153.2,245.6 L141.4,235.3 L133.2,222.1 L125.5,212 L116.2,204.4 L98.5,192.6 L85.1,182.1 L69.3,162.4 L63.3,148 L60.5,130.6 L64.4,104.6 L76.7,85.3 L91.9,74.2 L106,69 L120.1,68.3 Z"/>
+
+              <g id="tpLight">
+                <circle cx="0" cy="0" r="12" fill="#B87333" opacity="0.25" filter="url(#tp-glow)"/>
+                <circle cx="0" cy="0" r="6" fill="#EFE6D2" filter="url(#tp-trail)"/>
+                <circle cx="0" cy="0" r="3" fill="#FFFFFF"/>
+                <animateMotion dur="18s" repeatCount="indefinite" begin="5s">
+                  <mpath href="#tpMainPath"/>
+                </animateMotion>
+              </g>
+
+              <g class="tp-anno">
+                <text x="38" y="180" fill="#B87333" font-family="monospace" font-size="7" letter-spacing="2" text-anchor="end" opacity="0.7">VOIE STANDS</text>
+                <line x1="40" y1="183" x2="58" y2="155" stroke="#B87333" stroke-width="0.3" stroke-dasharray="2,2"/>
+              </g>
+
+              <g class="tp-anno">
+                <text x="172" y="378" fill="#B87333" font-family="monospace" font-size="7" letter-spacing="2" text-anchor="middle">PADDOCK</text>
+                <line x1="172" y1="370" x2="185" y2="355" stroke="#B87333" stroke-width="0.3" stroke-dasharray="2,2"/>
+              </g>
+
+            </svg>
+          </div>
+
+          <div class="tp-stt">
+            <div class="tp-st-item">
+              <span class="tp-st-lbl">Conception</span>
+              <span class="tp-st-val">JP Beltoise</span>
             </div>
-            <div class="circuit-fact">
-              <div class="circuit-fact-label">Virages</div>
-              <div class="circuit-fact-value">7</div>
+            <div class="tp-st-item">
+              <span class="tp-st-lbl">Exploitation</span>
+              <span class="tp-st-val">Julien Beltoise</span>
             </div>
-            <div class="circuit-fact">
-              <div class="circuit-fact-label">Lignes droites</div>
-              <div class="circuit-fact-value">650<em>m</em> ×2</div>
+            <div class="tp-st-item">
+              <span class="tp-st-lbl">Homologation</span>
+              <span class="tp-st-val">FFSA</span>
             </div>
-            <div class="circuit-fact">
-              <div class="circuit-fact-label">Homologation</div>
-              <div class="circuit-fact-value">FFSA</div>
+            <div class="tp-st-item">
+              <span class="tp-st-lbl">Données</span>
+              <span class="tp-st-val">GPS<span class="tp-st-unt">·exact</span></span>
             </div>
           </div>
-        </div>
-      </div>
-    </div>
-  </section>
 
-  <section class="section section-light">
-    <div class="wrap">
-      <div class="section-head reveal">
-        <div>
-          <div class="kicker">N° 03.1 · Anatomie du tour</div>
-          <h2 class="section-title">Sept virages,<br/>une <em>chorégraphie</em>.</h2>
+          <div class="tp-ftr">
+            <span class="tp-sig">— Tracé signé Jean-Pierre Beltoise</span>
+            <span class="tp-mta">LAT 45.24° N · LON 0.09° W</span>
+          </div>
+
         </div>
-        <p class="section-lede">
-          Chaque courbe a sa logique. La performance vient de leur enchaînement, jamais d'une seule.
+
+        <p class="track-pass-caption reveal">
+          Cette carte rejoindra votre <a onclick="goTo('compte-portefeuille')">portefeuille pilote</a> dès votre première session effectuée sur le tracé.
         </p>
-      </div>
 
-      <div class="signatures reveal-stagger" style="border-top-color: var(--cream-line);">
-        <div class="signature">
-          <div class="signature-num">V1 · V2</div>
-          <h3 class="signature-title">Le pif-paf, l'<em>épingle</em></h3>
-          <p class="signature-text">
-            Une cuvette à l'aveugle suivie d'une bosse, puis l'épingle V2 en montée à +9 %. Engagement tardif, fluidité, freinage en charge variable. C'est ici que se gagne le tour.
-          </p>
-        </div>
-        <div class="signature">
-          <div class="signature-num">V3 · V4 · V5</div>
-          <h3 class="signature-title">Triple gauche en <em>dévers</em></h3>
-          <p class="signature-text">
-            Une séquence rythmique, en appui constant. La trajectoire se dicte sur la deuxième courbe, jamais la première. Un test de lecture, pas de bras.
-          </p>
-        </div>
-        <div class="signature">
-          <div class="signature-num">V6 · V7</div>
-          <h3 class="signature-title">Le retour en <em>relance</em></h3>
-          <p class="signature-text">
-            Grande parabolique droite, dernier virage à élargir, puis 650 mètres pied droit. Sortie large : le chrono dépend de la patience, pas de l'agressivité.
-          </p>
-        </div>
       </div>
     </div>
   </section>
@@ -8325,11 +8730,11 @@ textarea.form-input {
     <div class="wrap">
       <div class="section-head reveal">
         <div>
-          <div class="kicker">N° 03.2 · Règlement</div>
+          <div class="kicker">N° 03.1 · Règlement</div>
           <h2 class="section-title">Avant<br/>de <em>rouler</em>.</h2>
         </div>
         <p class="section-lede">
-          Quelques règles non négociables, communes à toutes nos sessions. Tout le reste, on s'en occupe.
+          Trois règles non négociables. Le reste est entre vous et la piste.
         </p>
       </div>
 
@@ -8338,21 +8743,21 @@ textarea.form-input {
           <div class="signature-num">▲</div>
           <h3 class="signature-title">Bruit · 98 dB <em>+ 3</em></h3>
           <p class="signature-text">
-            Norme circuit, mesure à 75 % du régime moteur. Tolérance 3 dB. Véhicule refusé en cas de dépassement — nous vous le signalons à l'inscription si possible.
+            Norme circuit, mesure à 75 % du régime moteur. Tolérance 3 dB. Véhicule refusé en cas de dépassement. Vérification possible à l'inscription si vous nous communiquez les références techniques.
           </p>
         </div>
         <div class="signature">
           <div class="signature-num">▣</div>
           <h3 class="signature-title">Briefing <em>obligatoire</em></h3>
           <p class="signature-text">
-            20 minutes en début de session. Drapeaux, lignes, dépassements, comportements en piste, points sensibles du tracé. Aucune dérogation.
+            Vingt minutes en début de session. Drapeaux, lignes, dépassements, comportements en piste, points sensibles du tracé. Aucune dérogation.
           </p>
         </div>
         <div class="signature">
           <div class="signature-num">⊕</div>
           <h3 class="signature-title">Assurance <em>circuit</em></h3>
           <p class="signature-text">
-            La RC route ne couvre pas le circuit. Trois options à la réservation : extension de votre RC route, attestation circuit personnelle, ou souscription via notre partenaire (35 €).
+            La responsabilité civile route ne couvre pas le circuit. Trois options à la réservation : extension de votre contrat route, attestation circuit personnelle, ou souscription via notre partenaire.
           </p>
         </div>
       </div>
@@ -9811,6 +10216,36 @@ textarea.form-input {
           <p class="roadmap-info-text" style="margin-top: 12px;">
             Pilote expérimenté ou licencié FFSA ? Contactez-nous à <strong>contact@oxvehicle.fr</strong>. Nous étudions chaque cas pour un accès anticipé aux offres avancées.
           </p>
+        </div>
+
+        <!-- ============ COLLECTION (portefeuille pilote) ============ -->
+        <div class="collection-section">
+
+          <div class="collection-eyebrow">— Votre portefeuille</div>
+          <h2 class="collection-title">Ma <em>collection</em>.</h2>
+          <p class="collection-sub">
+            Chaque circuit roulé vous laisse sa Track Pass. Une carte unique, signée, datée, à votre nom. Plus vous roulez, plus votre portefeuille s'enrichit.
+          </p>
+
+          <div class="collection-stats">
+            <div>
+              <span class="collection-stat-label">Circuits roulés</span>
+              <span class="collection-stat-value" id="collCircuits">0</span>
+            </div>
+            <div>
+              <span class="collection-stat-label">Cartes débloquées</span>
+              <span class="collection-stat-value" id="collUnlocked">0 / 1</span>
+            </div>
+            <div>
+              <span class="collection-stat-label">Première session</span>
+              <span class="collection-stat-value" id="collFirstDate">—</span>
+            </div>
+          </div>
+
+          <div class="collection-grid" id="collectionGrid">
+            <!-- Cartes injectées par JS -->
+          </div>
+
         </div>
 
       </div>
@@ -11958,7 +12393,8 @@ window.goTo = function(page) {
   // Init / reinit Three.js scenes for current page
   setTimeout(() => {
     if (page === 'home') initCircuit3D('circuit3d');
-    if (page === 'circuit') initCircuit3D('circuit3dFull');
+    // Page circuit : on n'utilise plus la 3D, le Track Pass SVG la remplace
+    // if (page === 'circuit') initCircuit3D('circuit3dFull');
   }, 50);
 
   // Charge les données pour les pages compte
@@ -15088,6 +15524,146 @@ window.loadProgression = async function() {
       `;
     }).join('');
   }
+
+  // === RENDER COLLECTION ===
+  // Récupère les sessions effectivement effectuées (validées admin)
+  const { data: attendedSessions } = await supabase
+    .from('registrations')
+    .select('id, status, sessions!inner(id, date, format)')
+    .eq('user_id', userId)
+    .eq('status', 'confirmed');
+
+  // Filtre côté JS sur les sessions passées (= effectivement roulées)
+  const today = new Date().toISOString().split('T')[0];
+  const completed = (attendedSessions || []).filter(r => r.sessions && r.sessions.date <= today);
+
+  const hasRolled = completed.length > 0;
+  const firstSession = hasRolled
+    ? completed.sort((a, b) => a.sessions.date.localeCompare(b.sessions.date))[0]
+    : null;
+
+  // Stats
+  const collCircuits = document.getElementById('collCircuits');
+  const collUnlocked = document.getElementById('collUnlocked');
+  const collFirstDate = document.getElementById('collFirstDate');
+
+  if (collCircuits) collCircuits.innerHTML = hasRolled ? `<em>1</em>` : '0';
+  if (collUnlocked) collUnlocked.innerHTML = hasRolled ? `<em>1</em> / 1` : '0 / 1';
+  if (collFirstDate) {
+    if (firstSession) {
+      const d = new Date(firstSession.sessions.date);
+      collFirstDate.textContent = d.toLocaleDateString('fr-FR', { day: '2-digit', month: 'short', year: 'numeric' });
+    } else {
+      collFirstDate.textContent = '—';
+    }
+  }
+
+  // Render carte collection (Haute Saintonge)
+  const grid = document.getElementById('collectionGrid');
+  if (grid) {
+    if (hasRolled) {
+      const dateStr = new Date(firstSession.sessions.date).toLocaleDateString('fr-FR', { day: '2-digit', month: 'short', year: 'numeric' }).toUpperCase();
+      grid.innerHTML = renderTrackPassUnlocked(dateStr);
+    } else {
+      grid.innerHTML = renderTrackPassLocked();
+    }
+  }
+};
+
+/* === Rendu Track Pass Verrouillée === */
+window.renderTrackPassLocked = function() {
+  return `
+    <div class="track-pass-locked">
+      <span class="tp-corner tl"></span>
+      <span class="tp-corner tr"></span>
+      <span class="tp-corner bl"></span>
+      <span class="tp-corner br"></span>
+      <div class="track-pass-locked-eyebrow">— OXV · TRACK PASS</div>
+      <h3 class="track-pass-locked-title">Verrouillé</h3>
+      <p class="track-pass-locked-text">Votre 1ère session OXV débloque votre première carte de collection.</p>
+      <button class="track-pass-locked-cta" onclick="goTo('booking')">Réserver une session</button>
+    </div>
+  `;
+};
+
+/* === Rendu Track Pass Débloquée (Haute Saintonge) === */
+window.renderTrackPassUnlocked = function(dateStamp) {
+  return `
+    <div class="track-pass">
+      <span class="tp-corner tl"></span>
+      <span class="tp-corner tr"></span>
+      <span class="tp-corner bl"></span>
+      <span class="tp-corner br"></span>
+
+      <div class="tp-stamp">
+        <span class="tp-stamp-label">— PREMIÈRE SESSION</span>
+        <span class="tp-stamp-date">${dateStamp}</span>
+      </div>
+
+      <div class="tp-hdr">
+        <span class="tp-bdg">— OXV · TRACK PASS</span>
+        <span class="tp-srl">N° 03/A · ÉDITION 2026</span>
+      </div>
+
+      <div class="tp-ttl-bar">
+        <h2 class="tp-ttl">Circuit de <em>Haute Saintonge</em></h2>
+        <div class="tp-sub">Tracé Beltoise · La Génétouze · Charente-Maritime</div>
+      </div>
+
+      <div class="tp-trk-wrp">
+        <svg class="tp-trk-svg" viewBox="0 0 680 420" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <filter id="tp-glow-c" x="-100%" y="-100%" width="300%" height="300%">
+              <feGaussianBlur stdDeviation="3" result="blur1"/>
+              <feGaussianBlur stdDeviation="6" result="blur2"/>
+              <feMerge><feMergeNode in="blur2"/><feMergeNode in="blur1"/><feMergeNode in="SourceGraphic"/></feMerge>
+            </filter>
+            <filter id="tp-trail-c" x="-50%" y="-50%" width="200%" height="200%">
+              <feGaussianBlur stdDeviation="2"/>
+            </filter>
+          </defs>
+          <path class="tp-pdk" d="M151.6,325 L203.7,359 L220.8,331.9 L169.9,299.1 L165.7,305.1 L151.3,317.5 L151.5,321.2 L151.6,325 Z"/>
+          <path class="tp-bld" d="M179.7,289.7 L175.0,296.6 L221.7,327.9 L226.3,321 L179.7,289.7 Z"/>
+          <path class="tp-pit" d="M440.9,415.6 L417.7,410.6 L359.2,391 L331.9,381.5 L318.1,375.3 L309.5,369.7 L279.3,344.1 L262,328.4 L245.1,317.7 L235.4,311.9 L188.4,283.9 L173.1,275 L163,269.2 L138.1,256.5 L112,243.1 L91.9,228.9 L77.1,213.3 L67.6,195.3 L63.2,181.5 L60.7,164.1 L60,152 L60.5,130.6"/>
+          <path class="tp-bg" d="M120.1,68.3 L140.1,71 L232.4,88.6 L526.5,141.4 L582.3,152.2 L609.7,157.5 L614.4,160.1 L617.8,163.6 L619.7,168.7 L620,175.4 L617.4,181.9 L612,186.5 L605,188.9 L579,189.1 L492.6,183.7 L465.1,182.2 L455.4,182.6 L447.4,185.2 L441.9,189.7 L437.3,196.8 L423.4,227.7 L398.5,279.1 L392.6,292.2 L390.1,299.9 L389.6,306.1 L390.8,315.4 L395.2,324.4 L401.9,332.4 L422.7,344.3 L447.8,358.5 L456.5,362.4 L466.3,361.9 L477.2,354.5 L498.9,342.5 L511.2,339.5 L524.8,339.9 L540.1,344.6 L551.6,352.4 L561.4,363.4 L567.2,372.1 L570.5,382.9 L570.9,394 L568.6,404 L562.9,414.7 L553.8,423.2 L543.4,428.8 L530.4,431.7 L519.4,430.8 L477.6,423 L440.9,415.6 L430,408.8 L403.3,386.6 L387.2,373.3 L369,363.6 L342.5,349.4 L304.8,328 L258.5,302.9 L221.2,282.6 L153.2,245.6 L141.4,235.3 L133.2,222.1 L125.5,212 L116.2,204.4 L98.5,192.6 L85.1,182.1 L69.3,162.4 L63.3,148 L60.5,130.6 L64.4,104.6 L76.7,85.3 L91.9,74.2 L106,69 L120.1,68.3 Z"/>
+          <path id="tpMainPathColl" class="tp-path" d="M120.1,68.3 L140.1,71 L232.4,88.6 L526.5,141.4 L582.3,152.2 L609.7,157.5 L614.4,160.1 L617.8,163.6 L619.7,168.7 L620,175.4 L617.4,181.9 L612,186.5 L605,188.9 L579,189.1 L492.6,183.7 L465.1,182.2 L455.4,182.6 L447.4,185.2 L441.9,189.7 L437.3,196.8 L423.4,227.7 L398.5,279.1 L392.6,292.2 L390.1,299.9 L389.6,306.1 L390.8,315.4 L395.2,324.4 L401.9,332.4 L422.7,344.3 L447.8,358.5 L456.5,362.4 L466.3,361.9 L477.2,354.5 L498.9,342.5 L511.2,339.5 L524.8,339.9 L540.1,344.6 L551.6,352.4 L561.4,363.4 L567.2,372.1 L570.5,382.9 L570.9,394 L568.6,404 L562.9,414.7 L553.8,423.2 L543.4,428.8 L530.4,431.7 L519.4,430.8 L477.6,423 L440.9,415.6 L430,408.8 L403.3,386.6 L387.2,373.3 L369,363.6 L342.5,349.4 L304.8,328 L258.5,302.9 L221.2,282.6 L153.2,245.6 L141.4,235.3 L133.2,222.1 L125.5,212 L116.2,204.4 L98.5,192.6 L85.1,182.1 L69.3,162.4 L63.3,148 L60.5,130.6 L64.4,104.6 L76.7,85.3 L91.9,74.2 L106,69 L120.1,68.3 Z"/>
+          <path class="tp-dash" d="M120.1,68.3 L140.1,71 L232.4,88.6 L526.5,141.4 L582.3,152.2 L609.7,157.5 L614.4,160.1 L617.8,163.6 L619.7,168.7 L620,175.4 L617.4,181.9 L612,186.5 L605,188.9 L579,189.1 L492.6,183.7 L465.1,182.2 L455.4,182.6 L447.4,185.2 L441.9,189.7 L437.3,196.8 L423.4,227.7 L398.5,279.1 L392.6,292.2 L390.1,299.9 L389.6,306.1 L390.8,315.4 L395.2,324.4 L401.9,332.4 L422.7,344.3 L447.8,358.5 L456.5,362.4 L466.3,361.9 L477.2,354.5 L498.9,342.5 L511.2,339.5 L524.8,339.9 L540.1,344.6 L551.6,352.4 L561.4,363.4 L567.2,372.1 L570.5,382.9 L570.9,394 L568.6,404 L562.9,414.7 L553.8,423.2 L543.4,428.8 L530.4,431.7 L519.4,430.8 L477.6,423 L440.9,415.6 L430,408.8 L403.3,386.6 L387.2,373.3 L369,363.6 L342.5,349.4 L304.8,328 L258.5,302.9 L221.2,282.6 L153.2,245.6 L141.4,235.3 L133.2,222.1 L125.5,212 L116.2,204.4 L98.5,192.6 L85.1,182.1 L69.3,162.4 L63.3,148 L60.5,130.6 L64.4,104.6 L76.7,85.3 L91.9,74.2 L106,69 L120.1,68.3 Z"/>
+          <g id="tpLight">
+            <circle cx="0" cy="0" r="12" fill="#B87333" opacity="0.25" filter="url(#tp-glow-c)"/>
+            <circle cx="0" cy="0" r="6" fill="#EFE6D2" filter="url(#tp-trail-c)"/>
+            <circle cx="0" cy="0" r="3" fill="#FFFFFF"/>
+            <animateMotion dur="18s" repeatCount="indefinite" begin="5s">
+              <mpath href="#tpMainPathColl"/>
+            </animateMotion>
+          </g>
+        </svg>
+      </div>
+
+      <div class="tp-stt">
+        <div class="tp-st-item">
+          <span class="tp-st-lbl">Conception</span>
+          <span class="tp-st-val">JP Beltoise</span>
+        </div>
+        <div class="tp-st-item">
+          <span class="tp-st-lbl">Exploitation</span>
+          <span class="tp-st-val">Julien Beltoise</span>
+        </div>
+        <div class="tp-st-item">
+          <span class="tp-st-lbl">Homologation</span>
+          <span class="tp-st-val">FFSA</span>
+        </div>
+        <div class="tp-st-item">
+          <span class="tp-st-lbl">Données</span>
+          <span class="tp-st-val">GPS<span class="tp-st-unt">·exact</span></span>
+        </div>
+      </div>
+
+      <div class="tp-ftr">
+        <span class="tp-sig">— Tracé signé Jean-Pierre Beltoise</span>
+        <span class="tp-mta">LAT 45.24° N · LON 0.09° W</span>
+      </div>
+    </div>
+  `;
 };
 
 
@@ -18380,9 +18956,26 @@ window.toast = function(msg, type) {
   t.textContent = msg;
   t.className = 'toast show' + (type ? ' ' + type : '');
   clearTimeout(window._toastT);
-  // Durée adaptative : plus long pour erreurs/warnings, plus court pour les ok
-  const duration = (type === 'warn' || type === 'ko' || type === 'error') ? 6500 : 5000;
+
+  // Durée adaptative selon le type
+  let duration;
+  if (type === 'ko' || type === 'error') {
+    duration = 7000;  // 7 sec : erreurs (besoin de lire et comprendre)
+  } else if (type === 'warn') {
+    duration = 5000;  // 5 sec : avertissements
+  } else {
+    duration = 3500;  // 3.5 sec : confirmations (rapide)
+  }
+
   window._toastT = setTimeout(() => t.classList.remove('show'), duration);
+
+  // Permet de fermer immédiatement en cliquant
+  t.style.pointerEvents = 'auto';
+  t.style.cursor = 'pointer';
+  t.onclick = () => {
+    t.classList.remove('show');
+    clearTimeout(window._toastT);
+  };
 };
 
 /* === NAV SCROLL === */
