@@ -9520,6 +9520,9 @@ textarea.form-input {
         <button class="account-nav-item" onclick="goToAccount('compte-sessions')">
           <span>Mes sessions</span><span class="arr">→</span>
         </button>
+        <button class="account-nav-item" onclick="goToAccount('compte-progression')">
+          <span>Ma progression</span><span class="arr">→</span>
+        </button>
         <button class="account-nav-item" onclick="goToAccount('compte-heritage')">
           <span>Mon Heritage</span><span class="arr">→</span>
         </button>
@@ -9645,6 +9648,9 @@ textarea.form-input {
         </button>
         <button class="account-nav-item" onclick="goToAccount('compte-sessions')">
           <span>Mes sessions</span><span class="arr">→</span>
+        </button>
+        <button class="account-nav-item" onclick="goToAccount('compte-progression')">
+          <span>Ma progression</span><span class="arr">→</span>
         </button>
         <button class="account-nav-item" onclick="goToAccount('compte-heritage')">
           <span>Mon Heritage</span><span class="arr">→</span>
@@ -15388,7 +15394,7 @@ window.loadProgression = async function() {
   if (content) content.style.display = 'none';
 
   // Récupère les infos progression
-  const { data: profile, error } = await supabase
+  const { data: profileRaw, error } = await supabase
     .from('users')
     .select('attended_count, unlocked_offers_override, first_name')
     .eq('id', userId)
@@ -15396,9 +15402,12 @@ window.loadProgression = async function() {
 
   if (loading) loading.style.display = 'none';
 
+  // Si erreur sur la requête users : on log mais on continue avec des valeurs par défaut
+  // (évite de bloquer toute la page progression + collection si users plante)
+  let profile = profileRaw;
   if (error || !profile) {
-    toast('Erreur de chargement', 'warn');
-    return;
+    console.warn('[OXV Progression] Erreur users:', error);
+    profile = { attended_count: 0, unlocked_offers_override: {}, first_name: '' };
   }
 
   const attendedCount = profile.attended_count || 0;
