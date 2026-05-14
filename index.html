@@ -15525,48 +15525,59 @@ window.loadProgression = async function() {
     }).join('');
   }
 
-  // === RENDER COLLECTION ===
-  // Récupère les sessions effectivement effectuées (validées admin)
-  const { data: attendedSessions } = await supabase
-    .from('registrations')
-    .select('id, status, sessions!inner(id, date, format)')
-    .eq('user_id', userId)
-    .eq('status', 'confirmed');
+  // === RENDER COLLECTION (en try/catch pour ne pas casser la page) ===
+  try {
+    // Récupère les sessions effectivement effectuées (validées admin)
+    const { data: attendedSessions, error: regErr } = await supabase
+      .from('registrations')
+      .select('id, status, session_id, sessions(id, date, format)')
+      .eq('user_id', userId)
+      .eq('status', 'confirmed');
 
-  // Filtre côté JS sur les sessions passées (= effectivement roulées)
-  const today = new Date().toISOString().split('T')[0];
-  const completed = (attendedSessions || []).filter(r => r.sessions && r.sessions.date <= today);
-
-  const hasRolled = completed.length > 0;
-  const firstSession = hasRolled
-    ? completed.sort((a, b) => a.sessions.date.localeCompare(b.sessions.date))[0]
-    : null;
-
-  // Stats
-  const collCircuits = document.getElementById('collCircuits');
-  const collUnlocked = document.getElementById('collUnlocked');
-  const collFirstDate = document.getElementById('collFirstDate');
-
-  if (collCircuits) collCircuits.innerHTML = hasRolled ? `<em>1</em>` : '0';
-  if (collUnlocked) collUnlocked.innerHTML = hasRolled ? `<em>1</em> / 1` : '0 / 1';
-  if (collFirstDate) {
-    if (firstSession) {
-      const d = new Date(firstSession.sessions.date);
-      collFirstDate.textContent = d.toLocaleDateString('fr-FR', { day: '2-digit', month: 'short', year: 'numeric' });
-    } else {
-      collFirstDate.textContent = '—';
+    if (regErr) {
+      console.warn('[OXV Collection] Erreur registrations:', regErr);
     }
-  }
 
-  // Render carte collection (Haute Saintonge)
-  const grid = document.getElementById('collectionGrid');
-  if (grid) {
-    if (hasRolled) {
-      const dateStr = new Date(firstSession.sessions.date).toLocaleDateString('fr-FR', { day: '2-digit', month: 'short', year: 'numeric' }).toUpperCase();
-      grid.innerHTML = renderTrackPassUnlocked(dateStr);
-    } else {
-      grid.innerHTML = renderTrackPassLocked();
+    // Filtre côté JS sur les sessions passées (= effectivement roulées)
+    const today = new Date().toISOString().split('T')[0];
+    const completed = (attendedSessions || []).filter(r => r.sessions && r.sessions.date && r.sessions.date <= today);
+
+    const hasRolled = completed.length > 0;
+    const firstSession = hasRolled
+      ? completed.sort((a, b) => a.sessions.date.localeCompare(b.sessions.date))[0]
+      : null;
+
+    // Stats
+    const collCircuits = document.getElementById('collCircuits');
+    const collUnlocked = document.getElementById('collUnlocked');
+    const collFirstDate = document.getElementById('collFirstDate');
+
+    if (collCircuits) collCircuits.innerHTML = hasRolled ? `<em>1</em>` : '0';
+    if (collUnlocked) collUnlocked.innerHTML = hasRolled ? `<em>1</em> / 1` : '0 / 1';
+    if (collFirstDate) {
+      if (firstSession) {
+        const d = new Date(firstSession.sessions.date);
+        collFirstDate.textContent = d.toLocaleDateString('fr-FR', { day: '2-digit', month: 'short', year: 'numeric' });
+      } else {
+        collFirstDate.textContent = '—';
+      }
     }
+
+    // Render carte collection (Haute Saintonge)
+    const grid = document.getElementById('collectionGrid');
+    if (grid) {
+      if (hasRolled) {
+        const dateStr = new Date(firstSession.sessions.date).toLocaleDateString('fr-FR', { day: '2-digit', month: 'short', year: 'numeric' }).toUpperCase();
+        grid.innerHTML = renderTrackPassUnlocked(dateStr);
+      } else {
+        grid.innerHTML = renderTrackPassLocked();
+      }
+    }
+  } catch (err) {
+    console.warn('[OXV Collection] Exception:', err);
+    // Affiche la carte verrouillée par défaut en cas d'erreur
+    const grid = document.getElementById('collectionGrid');
+    if (grid) grid.innerHTML = renderTrackPassLocked();
   }
 };
 
