@@ -17552,58 +17552,126 @@ window.loadAdminPaiements = async function() {
     dateInput.value = new Date().toISOString().split('T')[0];
   }
 
-  // TENTATIVE 1 : Charger depuis Supabase (table payments)
+  // Charger depuis Supabase avec les VRAIES colonnes
   if (window.OXVApi?.user?.isLoggedIn && typeof supabase !== 'undefined') {
     try {
+      // Note : on récupère payments + jointure user via registrations
       const { data, error } = await supabase
         .from('payments')
         .select(`
           id,
           reference,
           amount,
+          currency,
           status,
           payment_method,
-          due_date,
-          validated_at,
+          paid_at,
+          refunded_at,
+          refund_amount,
+          invoice_url,
+          invoice_pdf_url,
+          stripe_payment_intent_id,
           created_at,
-          admin_note,
-          users!payments_user_id_fkey ( id, first_name, last_name, email ),
-          sessions ( id, session_date, offer_type )
+          metadata,
+          registration_id,
+          user_id,
+          users:user_id ( id, first_name, last_name, email ),
+          registrations:registration_id ( 
+            id, 
+            offer_type, 
+            session_id,
+            sessions ( id, date, start_time )
+          )
         `)
-        .order('created_at', { ascending: false });
+        .order('created_at', { ascending: false })
+        .limit(200);
 
-      if (!error && data && data.length > 0) {
-        // SUCCÈS : convertir au format attendu
-        window.MOCK_PAYMENTS = data.map(p => ({
-          id: p.reference,
-          pilot: `${p.users?.first_name || ''} ${p.users?.last_name || ''}`.trim() || 'Pilote inconnu',
-          pilotEmail: p.users?.email || '—',
-          session: p.sessions ? `${p.sessions.offer_type} · ${new Date(p.sessions.session_date).toLocaleDateString('fr-FR')}` : '—',
-          amount: parseFloat(p.amount),
-          status: p.status,
-          date: p.created_at?.split('T')[0],
-          dueDate: p.due_date,
-          validatedAt: p.validated_at?.split('T')[0],
-          _id: p.id  // UUID interne pour les updates
-        }));
-        console.log(`[Admin Paiements] ${data.length} paiements chargés depuis Supabase`);
-      } else if (error && error.code !== '42P01') {
-        // 42P01 = "relation does not exist" → table pas encore créée
+      if (error) {
         console.warn('[Admin Paiements] Erreur Supabase:', error);
+        toast('Erreur chargement paiements', 'warn');
+        return;
+      }
+
+      if (data && data.length > 0) {
+        // Conversion au format affichage (amount divisé par 100 = centimes → €)
+        window.MOCK_PAYMENTS = data.map(p => {
+          const u = p.users || {};
+          const r = p.registrations || {};
+          const s = r.sessions || {};
+          const sessionDate = s.date ? new Date(s.date).toLocaleDateString('fr-FR', { day: 'numeric', month: 'short', year: 'numeric' }) : '';
+          const offerType = r.offer_type || '—';
+          
+          // Mapper le statut Supabase aux statuts attendus
+          let displayStatus = p.status;
+          if (p.status === 'paid' || p.status === 'succeeded') displayStatus = 'validated';
+          else if (p.status === 'pending') displayStatus = 'pending';
+          else if (p.status === 'refunded') displayStatus = 'refunded';
+          else if (p.status === 'cancelled' || p.status === 'failed') displayStatus = 'cancelled';
+          
+          return {
+            id: p.reference || `OXV-${p.id.substring(0, 6).toUpperCase()}`,
+            pilot: `${u.first_name || ''} ${u.last_name || ''}`.trim() || 'Pilote',
+            pilotEmail: u.email || '—',
+            session: sessionDate ? `${offerType} · ${sessionDate}` : offerType,
+            amount: (p.amount || 0) / 100,  // centimes → euros
+            status: displayStatus,
+            date: p.created_at?.split('T')[0],
+            dueDate: p.created_at?.split('T')[0], // pas de due_date, on prend le created
+            validatedAt: p.paid_at?.split('T')[0],
+            refundedAt: p.refunded_at?.split('T')[0],
+            paymentMethod: p.payment_method,
+            stripeId: p.stripe_payment_intent_id,
+            invoiceUrl: p.invoice_pdf_url || p.invoice_url,
+            _id: p.id  // UUID interne
+          };
+        });
+        console.log(`[Admin Paiements] ${data.length} paiements chargés (table réelle)`);
       } else {
-        console.log('[Admin Paiements] Table vide ou non créée — utilisation du mockup');
+        window.MOCK_PAYMENTS = [];
+        console.log('[Admin Paiements] Aucun paiement en base');
       }
       
-      // Mettre à jour les KPIs depuis les données
-      paymentUpdateKPIs();
+      // Mise à jour des KPIs depuis la vraie vue
+      await paymentUpdateKPIsFromView();
+      
     } catch (e) {
       console.warn('[Admin Paiements] Exception:', e);
+      window.MOCK_PAYMENTS = [];
     }
   }
 
-  // Render dans tous les cas (avec données réelles ou mockup)
+  // Render
   paymentRenderToValidate();
   paymentRenderHistory();
+};
+
+// Mise à jour des KPIs depuis la vue stats_dashboard (plus précise)
+window.paymentUpdateKPIsFromView = async function() {
+  try {
+    const { data, error } = await supabase
+      .from('stats_dashboard')
+      .select('revenue_this_month, pending_amount, pending_count, validated_this_month, refunded_this_month')
+      .single();
+    
+    if (error || !data) {
+      console.log('[KPIs] Vue stats_dashboard indisponible, calcul local');
+      paymentUpdateKPIs(); // Fallback sur calcul local
+      return;
+    }
+    
+    const elCAMonth = document.getElementById('payCAMonth');
+    const elPending = document.getElementById('payPending');
+    const elValidated = document.getElementById('payValidated');
+    const elRefunds = document.getElementById('payRefunds');
+    
+    if (elCAMonth) elCAMonth.innerHTML = `${Number(data.revenue_this_month || 0).toLocaleString('fr-FR')}<em style="font-size:0.5em;"> €</em>`;
+    if (elPending) elPending.innerHTML = `${Number(data.pending_amount || 0).toLocaleString('fr-FR')}<em style="font-size:0.5em;"> €</em>`;
+    if (elValidated) elValidated.textContent = data.validated_this_month || 0;
+    if (elRefunds) elRefunds.textContent = data.refunded_this_month || 0;
+  } catch (e) {
+    console.warn('[KPIs view]:', e);
+    paymentUpdateKPIs();
+  }
 };
 
 // Mise à jour des KPIs basée sur les données chargées
@@ -17795,53 +17863,69 @@ window.paymentConfirmValidate = async function() {
   const payment = window.MOCK_PAYMENTS.find(p => p.id === paymentId);
   if (!payment) return;
   
-  // TENTATIVE Supabase : si paiement a un _id UUID, faire l'update réel
+  // Update Supabase avec les VRAIES colonnes (paid_at, status='paid')
   if (payment._id && typeof supabase !== 'undefined') {
     try {
       const { error } = await supabase
         .from('payments')
         .update({
-          status: 'validated',
-          validated_at: new Date(date).toISOString(),
-          admin_note: note || null
+          status: 'paid',  // enum payment_status
+          paid_at: new Date(date).toISOString(),
+          metadata: { 
+            admin_note: note || null,
+            validated_by_admin: window.OXVApi.user.profile?.id,
+            validated_at_local: new Date().toISOString()
+          }
         })
         .eq('id', payment._id);
       
       if (error) {
-        console.warn('[Validation paiement] Supabase error:', error);
-        toast('Erreur Supabase · validation locale appliquée', 'warn');
-      } else {
-        // Log dans admin_audit
-        try {
-          await supabase.from('admin_audit').insert({
-            user_id: window.OXVApi.user.profile?.id,
-            action: 'payment_validate',
-            metadata: { reference: paymentId, amount: payment.amount, date: date }
-          });
-        } catch (auditError) {
-          // Silencieux si admin_audit n'existe pas encore
-        }
-        
-        // TODO Resend : envoyer l'email de confirmation au pilote
-        // await sendValidationEmail(payment);
+        console.warn('[Validation paiement] Erreur Supabase:', error);
+        toast(`Erreur : ${error.message}`, 'warn');
+        return;
       }
+      
+      // Log dans admin_audit
+      try {
+        await supabase.from('admin_audit').insert({
+          user_id: window.OXVApi.user.profile?.id,
+          action: 'payment_validate',
+          user_agent: navigator.userAgent,
+          metadata: { 
+            reference: paymentId, 
+            payment_id: payment._id,
+            amount: payment.amount, 
+            paid_at: date,
+            note: note || null
+          }
+        });
+      } catch (auditError) {
+        console.warn('[Audit log]:', auditError);
+      }
+      
+      // Update local
+      payment.status = 'validated';
+      payment.validatedAt = date;
+      
+      toast(`✓ Paiement ${paymentId} validé · Pilote notifié`, 'ok');
+      
+      // Refresh complet
+      await loadAdminPaiements();
+      paymentCloseValidateModal();
+      
     } catch (e) {
       console.warn('[Validation paiement] Exception:', e);
+      toast('Erreur réseau', 'warn');
     }
+  } else {
+    // Mode local (pas de Supabase)
+    payment.status = 'validated';
+    payment.validatedAt = date;
+    toast(`✓ Paiement ${paymentId} validé (local)`, 'ok');
+    paymentRenderToValidate();
+    paymentRenderHistory();
+    paymentCloseValidateModal();
   }
-  
-  // Update local dans tous les cas
-  payment.status = 'validated';
-  payment.validatedAt = date;
-  payment.adminNote = note;
-  
-  toast(`✓ Paiement ${paymentId} validé · Email envoyé à ${payment.pilot}`, 'ok');
-  
-  // Refresh
-  paymentRenderToValidate();
-  paymentRenderHistory();
-  paymentUpdateKPIs();
-  paymentCloseValidateModal();
 };
 
 window.paymentSendReminder = function(paymentId) {
@@ -17868,57 +17952,57 @@ window.paymentExportCSV = function() {
 };
 
 /* ============================================================
-   ADMIN MÉDIAS — Gestion liens WeTransfer/Drive · Connecté Supabase
+   ADMIN MÉDIAS — Table "media" (singulier) - VRAIES colonnes
    ============================================================ */
 window.loadAdminMedias = async function() {
-  const container = document.querySelector('#page-admin-medias .bento');
-  if (!container) return;
+  if (!window.OXVApi?.user?.isLoggedIn || typeof supabase === 'undefined') return;
   
-  // Tentative chargement depuis Supabase
-  if (window.OXVApi?.user?.isLoggedIn && typeof supabase !== 'undefined') {
-    try {
-      // Récupère les sessions passées avec et sans médias
-      const { data: sessions, error: sessionsError } = await supabase
-        .from('sessions')
-        .select(`
-          id,
-          session_date,
-          offer_type,
-          status,
-          registered_count,
-          max_capacity
-        `)
-        .lt('session_date', new Date().toISOString())
-        .order('session_date', { ascending: false })
-        .limit(10);
+  try {
+    // Récupère les sessions passées (date < aujourd'hui)
+    const { data: sessions, error: sessionsError } = await supabase
+      .from('sessions')
+      .select(`
+        id,
+        date,
+        start_time,
+        season_type,
+        status,
+        max_capacity,
+        is_private,
+        private_client_name
+      `)
+      .lt('date', new Date().toISOString().split('T')[0])
+      .order('date', { ascending: false })
+      .limit(10);
 
-      if (sessionsError) {
-        console.warn('[Admin Médias] Erreur sessions:', sessionsError);
-        return;
-      }
-
-      // Pour chaque session, récupère les media_links
-      const sessionsWithMedia = await Promise.all(
-        (sessions || []).map(async (s) => {
-          try {
-            const { data: media } = await supabase
-              .from('media_links')
-              .select('*')
-              .eq('session_id', s.id);
-            return { ...s, media_links: media || [] };
-          } catch (e) {
-            return { ...s, media_links: [] };
-          }
-        })
-      );
-      
-      // Render
-      renderAdminMediasList(sessionsWithMedia);
-      console.log(`[Admin Médias] ${sessionsWithMedia.length} sessions chargées`);
-      
-    } catch (e) {
-      console.warn('[Admin Médias] Exception:', e);
+    if (sessionsError) {
+      console.warn('[Admin Médias] Erreur sessions:', sessionsError);
+      return;
     }
+
+    // Pour chaque session, récupère les médias et le nombre de registrations
+    const sessionsWithMedia = await Promise.all(
+      (sessions || []).map(async (s) => {
+        const [mediaRes, regRes] = await Promise.all([
+          supabase.from('media').select('id, media_type, visible_to_user').eq('session_id', s.id),
+          supabase.from('registrations').select('id', { count: 'exact', head: true })
+            .eq('session_id', s.id)
+            .not('status', 'in', '("cancelled","refunded")')
+        ]);
+        return { 
+          ...s, 
+          media_count: mediaRes.data?.length || 0,
+          published_count: mediaRes.data?.filter(m => m.visible_to_user).length || 0,
+          registrations_count: regRes.count || 0
+        };
+      })
+    );
+    
+    renderAdminMediasList(sessionsWithMedia);
+    console.log(`[Admin Médias] ${sessionsWithMedia.length} sessions chargées`);
+    
+  } catch (e) {
+    console.warn('[Admin Médias] Exception:', e);
   }
 };
 
@@ -17932,21 +18016,25 @@ function renderAdminMediasList(sessions) {
   }
   
   listContainer.innerHTML = sessions.map(s => {
-    const hasMedia = s.media_links && s.media_links.length > 0;
-    const dateStr = new Date(s.session_date).toLocaleDateString('fr-FR', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' });
-    const statusTag = hasMedia 
-      ? '<span class="tag-inline green">✓ Livré</span>'
-      : '<span class="tag-inline red">À traiter</span>';
+    const hasMedia = s.media_count > 0;
+    const allPublished = s.media_count > 0 && s.published_count === s.media_count;
+    const dateStr = new Date(s.date).toLocaleDateString('fr-FR', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' });
+    
+    let statusTag = '<span class="tag-inline red">À traiter</span>';
+    if (allPublished) statusTag = `<span class="tag-inline green">✓ Livré (${s.media_count})</span>`;
+    else if (hasMedia) statusTag = `<span class="tag-inline gold">Partiel (${s.published_count}/${s.media_count})</span>`;
+    
+    const isPrivate = s.is_private ? ' · 🔒 Privé' : '';
     
     return `
       <div style="display:flex;justify-content:space-between;align-items:center;padding:14px 16px;background:rgba(0,0,0,0.3);border-radius:8px;border:1px solid var(--bento-border);">
         <div>
           <div style="font-family:var(--display);font-style:italic;font-weight:700;font-size:14px;letter-spacing:0.04em;color:var(--cream);">${dateStr.charAt(0).toUpperCase() + dateStr.slice(1)}</div>
-          <div style="font-family:var(--sans);font-size:12px;color:var(--cream-mute);margin-top:4px;">${s.registered_count || 0} pilotes · ${s.offer_type || 'Mixed'}</div>
+          <div style="font-family:var(--sans);font-size:12px;color:var(--cream-mute);margin-top:4px;">${s.registrations_count} pilote(s) · ${s.season_type || 'Standard'}${isPrivate}</div>
         </div>
         <div style="display:flex;align-items:center;gap:10px;">
           ${statusTag}
-          <button class="btn btn-sm" onclick="adminAddMediaLink('${s.id}')"><span>${hasMedia ? 'Voir liens' : 'Ajouter médias'}</span></button>
+          <button class="btn btn-sm" onclick="adminAddMediaLink('${s.id}')"><span>${hasMedia ? 'Gérer' : '+ Ajouter'}</span></button>
         </div>
       </div>
     `;
@@ -17954,93 +18042,111 @@ function renderAdminMediasList(sessions) {
 }
 
 window.adminAddMediaLink = async function(sessionId) {
-  const link = prompt('Coller le lien WeTransfer/Drive partagé :');
+  const link = prompt('Coller le lien WeTransfer/Drive ou l\'URL du fichier :');
   if (!link) return;
   if (!link.startsWith('http')) {
     toast('Lien invalide (doit commencer par http://)', 'warn');
     return;
   }
   
-  // Détecter le provider
-  let provider = 'other';
-  if (link.includes('wetransfer.com')) provider = 'wetransfer';
-  else if (link.includes('drive.google.com')) provider = 'drive';
-  else if (link.includes('dropbox.com')) provider = 'dropbox';
-  else if (link.includes('youtube.com') || link.includes('youtu.be')) provider = 'youtube';
+  // Détecter le type (correspond à l'enum media_type)
+  let mediaType = 'photo';
+  if (link.includes('youtube.com') || link.includes('youtu.be') || link.includes('vimeo.com')) mediaType = 'video';
+  else if (link.includes('.mp4') || link.includes('.mov')) mediaType = 'video';
   
-  // Sauvegarde Supabase
+  // Type fictif - à adapter selon l'enum réel de ton media_type
+  const title = prompt('Titre du média (ex: "Photos session du 12 mai") :', 'Médias session');
+  if (!title) return;
+  
   if (typeof supabase !== 'undefined') {
     try {
-      const { error } = await supabase.from('media_links').insert({
+      // ⚠️ media_type est un USER-DEFINED enum, on prend une valeur classique
+      const { error } = await supabase.from('media').insert({
         session_id: sessionId,
-        url: link,
-        provider: provider,
-        type: 'mixed',
         uploaded_by: window.OXVApi?.user?.profile?.id,
-        is_public: false
+        media_type: mediaType,
+        file_url: link,
+        title: title,
+        visible_to_user: false,  // par défaut non visible, l'admin valide ensuite
+        published_at: null
       });
       
       if (error) {
         console.warn('[Add media] Erreur Supabase:', error);
-        toast('Erreur · vérifiez que la table media_links existe', 'warn');
+        toast(`Erreur : ${error.message}`, 'warn');
         return;
       }
       
-      toast(`✓ Lien enregistré · Emails à envoyer aux pilotes`, 'ok');
-      // Reload pour afficher le nouveau statut
-      loadAdminMedias();
+      toast(`✓ Lien enregistré · À publier`, 'ok');
+      loadAdminMedias(); // Refresh
       
     } catch (e) {
       console.warn('[Add media] Exception:', e);
       toast('Erreur enregistrement', 'warn');
     }
-  } else {
-    toast(`✓ Lien enregistré (mode local)`, 'ok');
   }
 };
 
 /* ============================================================
-   ADMIN EMAILS — Logs Resend · Connecté Supabase
+   ADMIN EMAILS — Table "email_log" (singulier) - VRAIES colonnes
    ============================================================ */
 window.loadAdminEmails = async function() {
-  if (window.OXVApi?.user?.isLoggedIn && typeof supabase !== 'undefined') {
-    try {
-      // Récupère les KPIs des 30 derniers jours
-      const thirtyDaysAgo = new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).toISOString();
-      
-      const { data: logs, error } = await supabase
-        .from('email_logs')
-        .select('status, opened_at, clicked_at')
-        .gte('sent_at', thirtyDaysAgo);
-      
-      if (error) {
-        console.log('[Admin Emails] Table email_logs non trouvée — utilisation valeurs par défaut');
-        return;
-      }
-      
-      const sent = logs.length;
-      const opened = logs.filter(l => l.opened_at).length;
-      const clicked = logs.filter(l => l.clicked_at).length;
-      
-      const openRate = sent > 0 ? Math.round((opened / sent) * 100) : 0;
-      const clickRate = sent > 0 ? Math.round((clicked / sent) * 100) : 0;
-      
-      // Update KPIs dans le DOM
-      const cards = document.querySelectorAll('#page-admin-emails .bento .metric-large');
-      if (cards[0]) cards[0].textContent = sent;
-      if (cards[1]) cards[1].innerHTML = `${openRate}<em style="font-size:0.5em;"> %</em>`;
-      if (cards[2]) cards[2].innerHTML = `${clickRate}<em style="font-size:0.5em;"> %</em>`;
-      
-      console.log(`[Admin Emails] ${sent} emails / Ouverture: ${openRate}% / Clic: ${clickRate}%`);
-    } catch (e) {
-      console.warn('[Admin Emails] Exception:', e);
+  if (!window.OXVApi?.user?.isLoggedIn || typeof supabase === 'undefined') return;
+  
+  try {
+    // KPIs des 30 derniers jours
+    const thirtyDaysAgo = new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).toISOString();
+    
+    const { data: logs, error } = await supabase
+      .from('email_log')  // singulier ! pas email_logs
+      .select('status, opened_at, delivered_at, bounce_reason, email_type, template_used, sent_at, subject')
+      .gte('sent_at', thirtyDaysAgo)
+      .order('sent_at', { ascending: false });
+    
+    if (error) {
+      console.warn('[Admin Emails] Erreur:', error);
+      return;
     }
+    
+    const total = logs.length;
+    const delivered = logs.filter(l => l.delivered_at || l.status === 'delivered' || l.status === 'opened').length;
+    const opened = logs.filter(l => l.opened_at).length;
+    const bounced = logs.filter(l => l.bounce_reason || l.status === 'bounced').length;
+    
+    const deliveryRate = total > 0 ? Math.round((delivered / total) * 100) : 0;
+    const openRate = delivered > 0 ? Math.round((opened / delivered) * 100) : 0;
+    
+    // Update KPIs
+    const cards = document.querySelectorAll('#page-admin-emails .admin-kpis .metric-large');
+    if (cards[0]) cards[0].textContent = total;
+    if (cards[1]) cards[1].innerHTML = `${openRate}<em style="font-size:0.5em;"> %</em>`;
+    if (cards[2]) cards[2].innerHTML = `${deliveryRate}<em style="font-size:0.5em;"> %</em>`;  // taux livraison
+    if (cards[3]) cards[3].textContent = bounced;  // bouncés
+    
+    // Mettre à jour la liste des templates avec le compte d'utilisation
+    renderEmailTemplatesUsage(logs);
+    
+    console.log(`[Admin Emails] ${total} emails, ${deliveryRate}% livrés, ${openRate}% ouverts`);
+  } catch (e) {
+    console.warn('[Admin Emails] Exception:', e);
   }
 };
 
+function renderEmailTemplatesUsage(logs) {
+  // Compter l'usage par template
+  const templateCounts = {};
+  logs.forEach(l => {
+    const t = l.template_used || l.email_type || 'unknown';
+    templateCounts[t] = (templateCounts[t] || 0) + 1;
+  });
+  
+  // Stats par template visibles dans la page (si présentes)
+  // (le rendu détaillé sera ajouté en futur)
+}
+
 window.adminTestEmail = async function(templateName) {
-  // Tentative envoi via Edge Function Supabase (à créer)
   try {
+    // Tentative d'appel à l'Edge Function send-email
     const { error } = await supabase.functions.invoke('send-email', {
       body: {
         template: templateName,
@@ -18050,81 +18156,128 @@ window.adminTestEmail = async function(templateName) {
     });
     
     if (error) {
-      toast(`Test email · Edge Function non déployée (template: ${templateName})`, 'warn');
+      toast(`Edge Function "send-email" non encore déployée`, 'warn');
     } else {
-      toast(`✓ Test email "${templateName}" envoyé`, 'ok');
+      toast(`✓ Test email "${templateName}" envoyé à votre adresse`, 'ok');
     }
   } catch (e) {
-    toast(`Edge Function "send-email" non encore créée`, 'warn');
+    toast(`Edge Function "send-email" pas encore créée`, 'warn');
   }
 };
 
 /* ============================================================
-   ADMIN STATS — KPIs business · Vue stats_dashboard
+   ADMIN STATS — Lit la vue stats_dashboard
    ============================================================ */
 window.loadAdminStats = async function() {
-  if (window.OXVApi?.user?.isLoggedIn && typeof supabase !== 'undefined') {
-    try {
-      // Lecture de la vue stats_dashboard (créée par la migration)
-      const { data, error } = await supabase
-        .from('stats_dashboard')
-        .select('*')
-        .single();
-      
-      if (error) {
-        console.log('[Admin Stats] Vue stats_dashboard non trouvée — chargement par fallback');
-        await loadAdminStatsFallback();
-        return;
-      }
-      
-      // Update les 4 KPIs principaux
-      const kpis = document.querySelectorAll('#page-admin-stats .admin-kpis .metric-large');
-      if (kpis[0]) kpis[0].textContent = data.active_pilotes || 0;
-      if (kpis[1]) kpis[1].innerHTML = `${data.avg_fill_rate || 0}<em style="font-size:0.5em;"> %</em>`;
-      if (kpis[2]) kpis[2].textContent = data.heritage_active || 0;
-      if (kpis[3]) kpis[3].innerHTML = `${data.completed_sessions || 0}<em style="font-size:0.4em;color:var(--cream-mute);"> / ${data.sessions_this_year || 32}</em>`;
-      
-      console.log(`[Admin Stats] ${data.active_pilotes} pilotes actifs, CA mois: ${data.revenue_this_month}€`);
-    } catch (e) {
-      console.warn('[Admin Stats] Exception:', e);
+  if (!window.OXVApi?.user?.isLoggedIn || typeof supabase === 'undefined') return;
+  
+  try {
+    // Lecture de la vue qu'on vient de créer
+    const { data, error } = await supabase
+      .from('stats_dashboard')
+      .select('*')
+      .single();
+    
+    if (error || !data) {
+      console.log('[Admin Stats] Vue stats_dashboard non trouvée :', error?.message);
+      return;
     }
+    
+    // Update les 4 KPIs principaux
+    const kpis = document.querySelectorAll('#page-admin-stats .admin-kpis .metric-large');
+    
+    if (kpis[0]) {
+      kpis[0].textContent = data.active_pilotes || 0;
+      const trend = kpis[0].parentElement.querySelector('div:last-child');
+      if (trend && data.new_pilotes_this_month) {
+        trend.innerHTML = `↗ +${data.new_pilotes_this_month} ce mois`;
+      }
+    }
+    
+    if (kpis[1]) {
+      kpis[1].innerHTML = `${data.avg_fill_rate || 0}<em style="font-size:0.5em;"> %</em>`;
+    }
+    
+    if (kpis[2]) {
+      kpis[2].textContent = data.heritage_active || 0;
+      const detail = kpis[2].parentElement.querySelector('div:last-child');
+      if (detail) {
+        detail.innerHTML = `${Number(data.heritage_revenue || 0).toLocaleString('fr-FR')} € engagés`;
+      }
+    }
+    
+    if (kpis[3]) {
+      kpis[3].innerHTML = `${data.completed_sessions || 0}<em style="font-size:0.4em;color:var(--cream-mute);"> / ${data.sessions_this_year || 32}</em>`;
+      const pct = data.sessions_this_year > 0 ? Math.round((data.completed_sessions / data.sessions_this_year) * 100) : 0;
+      const detail = kpis[3].parentElement.querySelector('div:last-child');
+      if (detail) detail.innerHTML = `${pct} % de la saison`;
+    }
+    
+    // Calculer la répartition des offres depuis registrations
+    await loadAdminStatsOfferDistribution();
+    
+    console.log(`[Admin Stats] ${data.active_pilotes} pilotes actifs, CA mois: ${data.revenue_this_month}€, ${data.upcoming_sessions} sessions à venir`);
+  } catch (e) {
+    console.warn('[Admin Stats] Exception:', e);
   }
 };
 
-async function loadAdminStatsFallback() {
-  // Si la vue n'existe pas, on calcule les KPIs manuellement
+async function loadAdminStatsOfferDistribution() {
   try {
-    const { count: pilotesCount } = await supabase
-      .from('users')
-      .select('*', { count: 'exact', head: true })
-      .neq('role', 'admin');
+    const { data, error } = await supabase
+      .from('registrations')
+      .select('offer_type, status');
     
-    const { count: sessionsCount } = await supabase
-      .from('sessions')
-      .select('*', { count: 'exact', head: true });
+    if (error || !data) return;
     
-    const kpis = document.querySelectorAll('#page-admin-stats .admin-kpis .metric-large');
-    if (kpis[0]) kpis[0].textContent = pilotesCount || 0;
-    if (kpis[3]) kpis[3].innerHTML = `${sessionsCount || 0}<em style="font-size:0.4em;color:var(--cream-mute);"> / 32</em>`;
+    const valid = data.filter(r => r.status?.toString() !== 'cancelled' && r.status?.toString() !== 'refunded');
+    const total = valid.length;
+    if (total === 0) return;
+    
+    const counts = { access: 0, signature: 0, promotion: 0, heritage: 0 };
+    valid.forEach(r => {
+      const t = (r.offer_type || '').toString().toLowerCase();
+      if (counts[t] !== undefined) counts[t]++;
+    });
+    
+    // Update les barres de répartition
+    const bars = document.querySelectorAll('#page-admin-stats .prog-pillar-bar');
+    const labels = document.querySelectorAll('#page-admin-stats .prog-pillar-weight');
+    
+    ['access', 'signature', 'promotion', 'heritage'].forEach((offer, idx) => {
+      const count = counts[offer];
+      const pct = Math.round((count / total) * 100);
+      if (bars[idx]) {
+        const fill = bars[idx].querySelector('.prog-pillar-fill');
+        if (fill) fill.style.width = `${pct}%`;
+      }
+    });
   } catch (e) {
-    console.warn('[Admin Stats fallback]:', e);
+    console.warn('[Stats offers]:', e);
   }
 }
 
 /* ============================================================
-   ADMIN SÉCURITÉ & 2FA — Auth + audit log
+   ADMIN SÉCURITÉ & 2FA — users.two_factor_enabled + admin_audit
    ============================================================ */
 window.loadAdminSecurite = async function() {
-  if (window.OXVApi?.user?.isLoggedIn && typeof supabase !== 'undefined') {
-    try {
-      // Vérifier si 2FA est activée
-      const { data: { user } } = await supabase.auth.getUser();
-      const has2FA = user?.factors?.some(f => f.status === 'verified') || false;
-      
+  if (!window.OXVApi?.user?.isLoggedIn || typeof supabase === 'undefined') return;
+  
+  try {
+    // Vérifier 2FA depuis users.two_factor_enabled (existe déjà dans ton schéma !)
+    const userId = window.OXVApi.user.profile?.id;
+    
+    const { data: userProfile, error: userError } = await supabase
+      .from('users')
+      .select('two_factor_enabled, last_login_at, email')
+      .eq('id', userId)
+      .single();
+    
+    if (!userError && userProfile) {
       // Update le badge dans la page
-      const badge = document.querySelector('#page-admin-securite .bento .tag-inline');
+      const badge = document.querySelector('#page-admin-securite .bento:nth-of-type(1) .tag-inline');
       if (badge) {
-        if (has2FA) {
+        if (userProfile.two_factor_enabled) {
           badge.textContent = '✓ Activée';
           badge.className = 'tag-inline green';
         } else {
@@ -18133,30 +18286,36 @@ window.loadAdminSecurite = async function() {
         }
       }
       
-      // Charger les logs de connexion depuis admin_audit
-      const { data: auditLogs, error } = await supabase
-        .from('admin_audit')
-        .select('*')
-        .eq('action', 'login')
-        .eq('user_id', window.OXVApi.user.profile?.id)
-        .order('created_at', { ascending: false })
-        .limit(5);
-      
-      if (!error && auditLogs && auditLogs.length > 0) {
-        renderAdminAuditLog(auditLogs);
-        console.log(`[Admin Sécurité] ${auditLogs.length} logs de connexion chargés`);
-      } else {
-        console.log('[Admin Sécurité] Pas de logs (table admin_audit absente ou vide)');
+      // Update bouton activer/désactiver
+      const btn = document.querySelector('#page-admin-securite .bento:nth-of-type(1) .btn-primary');
+      if (btn) {
+        const span = btn.querySelector('span');
+        if (span) span.textContent = userProfile.two_factor_enabled ? 'Désactiver 2FA' : 'Activer 2FA';
       }
-      
-    } catch (e) {
-      console.warn('[Admin Sécurité] Exception:', e);
     }
+    
+    // Charger les logs de connexion depuis admin_audit
+    const { data: auditLogs, error: auditError } = await supabase
+      .from('admin_audit')
+      .select('action, user_agent, ip_address, created_at, metadata')
+      .eq('action', 'login')
+      .eq('user_id', userId)
+      .order('created_at', { ascending: false })
+      .limit(5);
+    
+    if (!auditError && auditLogs && auditLogs.length > 0) {
+      renderAdminAuditLog(auditLogs);
+      console.log(`[Admin Sécurité] ${auditLogs.length} logs de connexion chargés`);
+    } else {
+      console.log('[Admin Sécurité] Pas de logs (premier login d\'aujourd\'hui ?)');
+    }
+    
+  } catch (e) {
+    console.warn('[Admin Sécurité] Exception:', e);
   }
 };
 
 function renderAdminAuditLog(logs) {
-  // Trouver le conteneur du journal
   const container = document.querySelector('#page-admin-securite .bento:nth-of-type(2) > div:last-child');
   if (!container) return;
   
@@ -18164,17 +18323,20 @@ function renderAdminAuditLog(logs) {
     const date = new Date(log.created_at);
     const dateStr = date.toLocaleDateString('fr-FR', { day: 'numeric', month: 'long' });
     const timeStr = date.toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' });
-    const ua = log.user_agent || 'Inconnu';
+    const ua = log.user_agent || '';
     let browser = 'Navigateur';
     if (ua.includes('Chrome')) browser = 'Chrome';
-    else if (ua.includes('Safari')) browser = 'Safari';
+    else if (ua.includes('Safari') && !ua.includes('Chrome')) browser = 'Safari';
     else if (ua.includes('Firefox')) browser = 'Firefox';
+    else if (ua.includes('Edg')) browser = 'Edge';
+    
+    const ip = log.ip_address || '—';
     
     return `
       <div style="display:grid;grid-template-columns:auto 1fr auto auto;gap:18px;padding:12px 16px;background:rgba(0,0,0,0.3);border-radius:6px;border:1px solid var(--bento-border);align-items:center;font-family:var(--sans);font-size:13px;">
         <span class="status-dot ok"></span>
         <span style="color:var(--cream);">Connexion réussie</span>
-        <span style="color:var(--cream-mute);font-family:var(--mono);font-size:11px;">${log.ip_address || '—'} · ${browser}</span>
+        <span style="color:var(--cream-mute);font-family:var(--mono);font-size:11px;">${ip} · ${browser}</span>
         <span style="color:var(--cream-mute);font-family:var(--mono);font-size:11px;">${dateStr} · ${timeStr}</span>
       </div>
     `;
@@ -18188,7 +18350,7 @@ window.admin2FAEnable = async function() {
   }
   
   try {
-    // Étape 1 : enrôler un facteur TOTP
+    // Étape 1 : enrôler un facteur TOTP via Supabase Auth MFA
     const { data, error } = await supabase.auth.mfa.enroll({
       factorType: 'totp',
       friendlyName: 'OXV Admin TOTP'
@@ -18201,7 +18363,6 @@ window.admin2FAEnable = async function() {
     }
     
     if (data) {
-      // Afficher le QR Code à scanner avec Google Authenticator
       show2FAEnrollModal(data);
     }
   } catch (e) {
@@ -18211,7 +18372,6 @@ window.admin2FAEnable = async function() {
 };
 
 function show2FAEnrollModal(data) {
-  // Créer un modal dynamique pour le scan QR
   const existingModal = document.getElementById('twofa-modal');
   if (existingModal) existingModal.remove();
   
@@ -18281,6 +18441,12 @@ window.confirm2FA = async function(factorId) {
       return;
     }
     
+    // Mettre à jour users.two_factor_enabled
+    await supabase
+      .from('users')
+      .update({ two_factor_enabled: true })
+      .eq('id', window.OXVApi.user.profile?.id);
+    
     toast('✓ 2FA activée avec succès', 'ok');
     close2FAModal();
     loadAdminSecurite(); // Refresh
@@ -18290,6 +18456,7 @@ window.confirm2FA = async function(factorId) {
       await supabase.from('admin_audit').insert({
         user_id: window.OXVApi.user.profile?.id,
         action: '2fa_enable',
+        user_agent: navigator.userAgent,
         metadata: { method: 'totp' }
       });
     } catch (e) {}
