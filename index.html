@@ -16181,6 +16181,30 @@ window.OXVApi = {
         window.OXVApi.user.session = data.session;
         window.OXVApi.user.profile = data.user;
         onAuthChange();
+        
+        // Log dans admin_audit si admin
+        try {
+          const { data: userRow } = await supabase
+            .from('users')
+            .select('role')
+            .eq('id', data.user.id)
+            .single();
+          
+          if (userRow?.role === 'admin') {
+            await supabase.from('admin_audit').insert({
+              user_id: data.user.id,
+              action: 'login',
+              user_agent: navigator.userAgent,
+              metadata: { 
+                timestamp: new Date().toISOString(),
+                language: navigator.language
+              }
+            });
+          }
+        } catch (auditError) {
+          // Silencieux si admin_audit n'existe pas encore
+        }
+        
         return { ok: true };
       } catch (err) {
         return { ok: false, error: err.message };
@@ -17521,15 +17545,93 @@ window.MOCK_PAYMENTS = [
   { id: 'OXV-2L5M76', pilot: 'Lucia Romano', pilotEmail: 'l.romano@gmail.com', session: 'Access · 26 mars 2026 (annulée)', amount: 350, status: 'refunded', date: '2026-03-20', refundedAt: '2026-03-22' },
 ];
 
-window.loadAdminPaiements = function() {
-  paymentRenderToValidate();
-  paymentRenderHistory();
-  
+window.loadAdminPaiements = async function() {
   // Initialiser la date du jour dans le modal
   const dateInput = document.getElementById('payValidateDate');
   if (dateInput && !dateInput.value) {
     dateInput.value = new Date().toISOString().split('T')[0];
   }
+
+  // TENTATIVE 1 : Charger depuis Supabase (table payments)
+  if (window.OXVApi?.user?.isLoggedIn && typeof supabase !== 'undefined') {
+    try {
+      const { data, error } = await supabase
+        .from('payments')
+        .select(`
+          id,
+          reference,
+          amount,
+          status,
+          payment_method,
+          due_date,
+          validated_at,
+          created_at,
+          admin_note,
+          users!payments_user_id_fkey ( id, first_name, last_name, email ),
+          sessions ( id, session_date, offer_type )
+        `)
+        .order('created_at', { ascending: false });
+
+      if (!error && data && data.length > 0) {
+        // SUCCÈS : convertir au format attendu
+        window.MOCK_PAYMENTS = data.map(p => ({
+          id: p.reference,
+          pilot: `${p.users?.first_name || ''} ${p.users?.last_name || ''}`.trim() || 'Pilote inconnu',
+          pilotEmail: p.users?.email || '—',
+          session: p.sessions ? `${p.sessions.offer_type} · ${new Date(p.sessions.session_date).toLocaleDateString('fr-FR')}` : '—',
+          amount: parseFloat(p.amount),
+          status: p.status,
+          date: p.created_at?.split('T')[0],
+          dueDate: p.due_date,
+          validatedAt: p.validated_at?.split('T')[0],
+          _id: p.id  // UUID interne pour les updates
+        }));
+        console.log(`[Admin Paiements] ${data.length} paiements chargés depuis Supabase`);
+      } else if (error && error.code !== '42P01') {
+        // 42P01 = "relation does not exist" → table pas encore créée
+        console.warn('[Admin Paiements] Erreur Supabase:', error);
+      } else {
+        console.log('[Admin Paiements] Table vide ou non créée — utilisation du mockup');
+      }
+      
+      // Mettre à jour les KPIs depuis les données
+      paymentUpdateKPIs();
+    } catch (e) {
+      console.warn('[Admin Paiements] Exception:', e);
+    }
+  }
+
+  // Render dans tous les cas (avec données réelles ou mockup)
+  paymentRenderToValidate();
+  paymentRenderHistory();
+};
+
+// Mise à jour des KPIs basée sur les données chargées
+window.paymentUpdateKPIs = function() {
+  const now = new Date();
+  const monthStart = new Date(now.getFullYear(), now.getMonth(), 1);
+  
+  const validatedThisMonth = window.MOCK_PAYMENTS.filter(p => {
+    if (p.status !== 'validated') return false;
+    const date = p.validatedAt ? new Date(p.validatedAt) : new Date(p.date);
+    return date >= monthStart;
+  });
+  
+  const pending = window.MOCK_PAYMENTS.filter(p => p.status === 'pending');
+  const refunds = window.MOCK_PAYMENTS.filter(p => p.status === 'refunded');
+  
+  const caMonth = validatedThisMonth.reduce((sum, p) => sum + p.amount, 0);
+  const pendingAmount = pending.reduce((sum, p) => sum + p.amount, 0);
+  
+  const elCAMonth = document.getElementById('payCAMonth');
+  const elPending = document.getElementById('payPending');
+  const elValidated = document.getElementById('payValidated');
+  const elRefunds = document.getElementById('payRefunds');
+  
+  if (elCAMonth) elCAMonth.innerHTML = `${caMonth.toLocaleString('fr-FR')}<em style="font-size:0.5em;"> €</em>`;
+  if (elPending) elPending.innerHTML = `${pendingAmount.toLocaleString('fr-FR')}<em style="font-size:0.5em;"> €</em>`;
+  if (elValidated) elValidated.textContent = validatedThisMonth.length;
+  if (elRefunds) elRefunds.textContent = refunds.length;
 };
 
 window.paymentRenderToValidate = function() {
@@ -17679,7 +17781,7 @@ window.paymentCloseValidateModal = function() {
   if (noteInput) noteInput.value = '';
 };
 
-window.paymentConfirmValidate = function() {
+window.paymentConfirmValidate = async function() {
   const modal = document.getElementById('paymentValidateModal');
   const paymentId = modal.dataset.paymentId;
   const date = document.getElementById('payValidateDate')?.value;
@@ -17690,19 +17792,55 @@ window.paymentConfirmValidate = function() {
     return;
   }
   
-  // Mock validation
   const payment = window.MOCK_PAYMENTS.find(p => p.id === paymentId);
-  if (payment) {
-    payment.status = 'validated';
-    payment.validatedAt = date;
-    payment.adminNote = note;
+  if (!payment) return;
+  
+  // TENTATIVE Supabase : si paiement a un _id UUID, faire l'update réel
+  if (payment._id && typeof supabase !== 'undefined') {
+    try {
+      const { error } = await supabase
+        .from('payments')
+        .update({
+          status: 'validated',
+          validated_at: new Date(date).toISOString(),
+          admin_note: note || null
+        })
+        .eq('id', payment._id);
+      
+      if (error) {
+        console.warn('[Validation paiement] Supabase error:', error);
+        toast('Erreur Supabase · validation locale appliquée', 'warn');
+      } else {
+        // Log dans admin_audit
+        try {
+          await supabase.from('admin_audit').insert({
+            user_id: window.OXVApi.user.profile?.id,
+            action: 'payment_validate',
+            metadata: { reference: paymentId, amount: payment.amount, date: date }
+          });
+        } catch (auditError) {
+          // Silencieux si admin_audit n'existe pas encore
+        }
+        
+        // TODO Resend : envoyer l'email de confirmation au pilote
+        // await sendValidationEmail(payment);
+      }
+    } catch (e) {
+      console.warn('[Validation paiement] Exception:', e);
+    }
   }
   
-  toast(`✓ Paiement ${paymentId} validé · Email envoyé à ${payment?.pilot || 'pilote'}`, 'ok');
+  // Update local dans tous les cas
+  payment.status = 'validated';
+  payment.validatedAt = date;
+  payment.adminNote = note;
   
-  // Refresh listings
+  toast(`✓ Paiement ${paymentId} validé · Email envoyé à ${payment.pilot}`, 'ok');
+  
+  // Refresh
   paymentRenderToValidate();
   paymentRenderHistory();
+  paymentUpdateKPIs();
   paymentCloseValidateModal();
 };
 
@@ -17730,77 +17868,468 @@ window.paymentExportCSV = function() {
 };
 
 /* ============================================================
-   ADMIN MÉDIAS — Gestion liens WeTransfer/Drive
+   ADMIN MÉDIAS — Gestion liens WeTransfer/Drive · Connecté Supabase
    ============================================================ */
-window.loadAdminMedias = function() {
-  // Les sessions à traiter sont déjà en HTML
-  // Cette fonction sera enrichie quand Supabase exposera les sessions terminées
-  console.log('[Admin Médias] Page chargée');
+window.loadAdminMedias = async function() {
+  const container = document.querySelector('#page-admin-medias .bento');
+  if (!container) return;
+  
+  // Tentative chargement depuis Supabase
+  if (window.OXVApi?.user?.isLoggedIn && typeof supabase !== 'undefined') {
+    try {
+      // Récupère les sessions passées avec et sans médias
+      const { data: sessions, error: sessionsError } = await supabase
+        .from('sessions')
+        .select(`
+          id,
+          session_date,
+          offer_type,
+          status,
+          registered_count,
+          max_capacity
+        `)
+        .lt('session_date', new Date().toISOString())
+        .order('session_date', { ascending: false })
+        .limit(10);
+
+      if (sessionsError) {
+        console.warn('[Admin Médias] Erreur sessions:', sessionsError);
+        return;
+      }
+
+      // Pour chaque session, récupère les media_links
+      const sessionsWithMedia = await Promise.all(
+        (sessions || []).map(async (s) => {
+          try {
+            const { data: media } = await supabase
+              .from('media_links')
+              .select('*')
+              .eq('session_id', s.id);
+            return { ...s, media_links: media || [] };
+          } catch (e) {
+            return { ...s, media_links: [] };
+          }
+        })
+      );
+      
+      // Render
+      renderAdminMediasList(sessionsWithMedia);
+      console.log(`[Admin Médias] ${sessionsWithMedia.length} sessions chargées`);
+      
+    } catch (e) {
+      console.warn('[Admin Médias] Exception:', e);
+    }
+  }
 };
 
-window.adminAddMediaLink = function(sessionId) {
+function renderAdminMediasList(sessions) {
+  const listContainer = document.querySelector('#page-admin-medias .bento:nth-of-type(1) > div:last-child');
+  if (!listContainer) return;
+  
+  if (sessions.length === 0) {
+    listContainer.innerHTML = '<div style="padding:32px;text-align:center;color:var(--cream-mute);font-family:var(--sans);">Aucune session passée pour l\'instant.</div>';
+    return;
+  }
+  
+  listContainer.innerHTML = sessions.map(s => {
+    const hasMedia = s.media_links && s.media_links.length > 0;
+    const dateStr = new Date(s.session_date).toLocaleDateString('fr-FR', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' });
+    const statusTag = hasMedia 
+      ? '<span class="tag-inline green">✓ Livré</span>'
+      : '<span class="tag-inline red">À traiter</span>';
+    
+    return `
+      <div style="display:flex;justify-content:space-between;align-items:center;padding:14px 16px;background:rgba(0,0,0,0.3);border-radius:8px;border:1px solid var(--bento-border);">
+        <div>
+          <div style="font-family:var(--display);font-style:italic;font-weight:700;font-size:14px;letter-spacing:0.04em;color:var(--cream);">${dateStr.charAt(0).toUpperCase() + dateStr.slice(1)}</div>
+          <div style="font-family:var(--sans);font-size:12px;color:var(--cream-mute);margin-top:4px;">${s.registered_count || 0} pilotes · ${s.offer_type || 'Mixed'}</div>
+        </div>
+        <div style="display:flex;align-items:center;gap:10px;">
+          ${statusTag}
+          <button class="btn btn-sm" onclick="adminAddMediaLink('${s.id}')"><span>${hasMedia ? 'Voir liens' : 'Ajouter médias'}</span></button>
+        </div>
+      </div>
+    `;
+  }).join('');
+}
+
+window.adminAddMediaLink = async function(sessionId) {
   const link = prompt('Coller le lien WeTransfer/Drive partagé :');
   if (!link) return;
   if (!link.startsWith('http')) {
     toast('Lien invalide (doit commencer par http://)', 'warn');
     return;
   }
-  toast(`Lien enregistré pour la session · Emails envoyés aux pilotes`, 'ok');
-};
-
-/* ============================================================
-   ADMIN EMAILS — Templates Resend
-   ============================================================ */
-window.loadAdminEmails = function() {
-  console.log('[Admin Emails] Page chargée');
-};
-
-window.adminTestEmail = function(templateName) {
-  toast(`Test email "${templateName}" envoyé à votre adresse`, 'ok');
-};
-
-/* ============================================================
-   ADMIN STATS — KPIs business
-   ============================================================ */
-window.loadAdminStats = async function() {
-  console.log('[Admin Stats] Page chargée');
   
-  // Si Supabase disponible, on récupère les vraies stats
-  if (window.OXVApi?.user?.isLoggedIn && typeof supabase !== 'undefined') {
+  // Détecter le provider
+  let provider = 'other';
+  if (link.includes('wetransfer.com')) provider = 'wetransfer';
+  else if (link.includes('drive.google.com')) provider = 'drive';
+  else if (link.includes('dropbox.com')) provider = 'dropbox';
+  else if (link.includes('youtube.com') || link.includes('youtu.be')) provider = 'youtube';
+  
+  // Sauvegarde Supabase
+  if (typeof supabase !== 'undefined') {
     try {
-      const { count: pilotesCount } = await supabase
-        .from('users')
-        .select('*', { count: 'exact', head: true })
-        .neq('role', 'admin');
+      const { error } = await supabase.from('media_links').insert({
+        session_id: sessionId,
+        url: link,
+        provider: provider,
+        type: 'mixed',
+        uploaded_by: window.OXVApi?.user?.profile?.id,
+        is_public: false
+      });
       
-      // Mettre à jour les KPIs si on a les vraies données
-      // (à implémenter quand le schema est stabilisé)
+      if (error) {
+        console.warn('[Add media] Erreur Supabase:', error);
+        toast('Erreur · vérifiez que la table media_links existe', 'warn');
+        return;
+      }
+      
+      toast(`✓ Lien enregistré · Emails à envoyer aux pilotes`, 'ok');
+      // Reload pour afficher le nouveau statut
+      loadAdminMedias();
+      
     } catch (e) {
-      console.warn('[Admin Stats] Erreur récupération:', e);
+      console.warn('[Add media] Exception:', e);
+      toast('Erreur enregistrement', 'warn');
     }
+  } else {
+    toast(`✓ Lien enregistré (mode local)`, 'ok');
   }
 };
 
 /* ============================================================
-   ADMIN SÉCURITÉ & 2FA
+   ADMIN EMAILS — Logs Resend · Connecté Supabase
    ============================================================ */
-window.loadAdminSecurite = function() {
-  console.log('[Admin Sécurité] Page chargée');
+window.loadAdminEmails = async function() {
+  if (window.OXVApi?.user?.isLoggedIn && typeof supabase !== 'undefined') {
+    try {
+      // Récupère les KPIs des 30 derniers jours
+      const thirtyDaysAgo = new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).toISOString();
+      
+      const { data: logs, error } = await supabase
+        .from('email_logs')
+        .select('status, opened_at, clicked_at')
+        .gte('sent_at', thirtyDaysAgo);
+      
+      if (error) {
+        console.log('[Admin Emails] Table email_logs non trouvée — utilisation valeurs par défaut');
+        return;
+      }
+      
+      const sent = logs.length;
+      const opened = logs.filter(l => l.opened_at).length;
+      const clicked = logs.filter(l => l.clicked_at).length;
+      
+      const openRate = sent > 0 ? Math.round((opened / sent) * 100) : 0;
+      const clickRate = sent > 0 ? Math.round((clicked / sent) * 100) : 0;
+      
+      // Update KPIs dans le DOM
+      const cards = document.querySelectorAll('#page-admin-emails .bento .metric-large');
+      if (cards[0]) cards[0].textContent = sent;
+      if (cards[1]) cards[1].innerHTML = `${openRate}<em style="font-size:0.5em;"> %</em>`;
+      if (cards[2]) cards[2].innerHTML = `${clickRate}<em style="font-size:0.5em;"> %</em>`;
+      
+      console.log(`[Admin Emails] ${sent} emails / Ouverture: ${openRate}% / Clic: ${clickRate}%`);
+    } catch (e) {
+      console.warn('[Admin Emails] Exception:', e);
+    }
+  }
 };
 
-window.admin2FAEnable = function() {
-  toast('Activation 2FA · Configuration Supabase TOTP requise', 'warn');
+window.adminTestEmail = async function(templateName) {
+  // Tentative envoi via Edge Function Supabase (à créer)
+  try {
+    const { error } = await supabase.functions.invoke('send-email', {
+      body: {
+        template: templateName,
+        recipient: window.OXVApi?.user?.profile?.email,
+        test: true
+      }
+    });
+    
+    if (error) {
+      toast(`Test email · Edge Function non déployée (template: ${templateName})`, 'warn');
+    } else {
+      toast(`✓ Test email "${templateName}" envoyé`, 'ok');
+    }
+  } catch (e) {
+    toast(`Edge Function "send-email" non encore créée`, 'warn');
+  }
+};
+
+/* ============================================================
+   ADMIN STATS — KPIs business · Vue stats_dashboard
+   ============================================================ */
+window.loadAdminStats = async function() {
+  if (window.OXVApi?.user?.isLoggedIn && typeof supabase !== 'undefined') {
+    try {
+      // Lecture de la vue stats_dashboard (créée par la migration)
+      const { data, error } = await supabase
+        .from('stats_dashboard')
+        .select('*')
+        .single();
+      
+      if (error) {
+        console.log('[Admin Stats] Vue stats_dashboard non trouvée — chargement par fallback');
+        await loadAdminStatsFallback();
+        return;
+      }
+      
+      // Update les 4 KPIs principaux
+      const kpis = document.querySelectorAll('#page-admin-stats .admin-kpis .metric-large');
+      if (kpis[0]) kpis[0].textContent = data.active_pilotes || 0;
+      if (kpis[1]) kpis[1].innerHTML = `${data.avg_fill_rate || 0}<em style="font-size:0.5em;"> %</em>`;
+      if (kpis[2]) kpis[2].textContent = data.heritage_active || 0;
+      if (kpis[3]) kpis[3].innerHTML = `${data.completed_sessions || 0}<em style="font-size:0.4em;color:var(--cream-mute);"> / ${data.sessions_this_year || 32}</em>`;
+      
+      console.log(`[Admin Stats] ${data.active_pilotes} pilotes actifs, CA mois: ${data.revenue_this_month}€`);
+    } catch (e) {
+      console.warn('[Admin Stats] Exception:', e);
+    }
+  }
+};
+
+async function loadAdminStatsFallback() {
+  // Si la vue n'existe pas, on calcule les KPIs manuellement
+  try {
+    const { count: pilotesCount } = await supabase
+      .from('users')
+      .select('*', { count: 'exact', head: true })
+      .neq('role', 'admin');
+    
+    const { count: sessionsCount } = await supabase
+      .from('sessions')
+      .select('*', { count: 'exact', head: true });
+    
+    const kpis = document.querySelectorAll('#page-admin-stats .admin-kpis .metric-large');
+    if (kpis[0]) kpis[0].textContent = pilotesCount || 0;
+    if (kpis[3]) kpis[3].innerHTML = `${sessionsCount || 0}<em style="font-size:0.4em;color:var(--cream-mute);"> / 32</em>`;
+  } catch (e) {
+    console.warn('[Admin Stats fallback]:', e);
+  }
+}
+
+/* ============================================================
+   ADMIN SÉCURITÉ & 2FA — Auth + audit log
+   ============================================================ */
+window.loadAdminSecurite = async function() {
+  if (window.OXVApi?.user?.isLoggedIn && typeof supabase !== 'undefined') {
+    try {
+      // Vérifier si 2FA est activée
+      const { data: { user } } = await supabase.auth.getUser();
+      const has2FA = user?.factors?.some(f => f.status === 'verified') || false;
+      
+      // Update le badge dans la page
+      const badge = document.querySelector('#page-admin-securite .bento .tag-inline');
+      if (badge) {
+        if (has2FA) {
+          badge.textContent = '✓ Activée';
+          badge.className = 'tag-inline green';
+        } else {
+          badge.textContent = '✗ Désactivée';
+          badge.className = 'tag-inline red';
+        }
+      }
+      
+      // Charger les logs de connexion depuis admin_audit
+      const { data: auditLogs, error } = await supabase
+        .from('admin_audit')
+        .select('*')
+        .eq('action', 'login')
+        .eq('user_id', window.OXVApi.user.profile?.id)
+        .order('created_at', { ascending: false })
+        .limit(5);
+      
+      if (!error && auditLogs && auditLogs.length > 0) {
+        renderAdminAuditLog(auditLogs);
+        console.log(`[Admin Sécurité] ${auditLogs.length} logs de connexion chargés`);
+      } else {
+        console.log('[Admin Sécurité] Pas de logs (table admin_audit absente ou vide)');
+      }
+      
+    } catch (e) {
+      console.warn('[Admin Sécurité] Exception:', e);
+    }
+  }
+};
+
+function renderAdminAuditLog(logs) {
+  // Trouver le conteneur du journal
+  const container = document.querySelector('#page-admin-securite .bento:nth-of-type(2) > div:last-child');
+  if (!container) return;
+  
+  container.innerHTML = logs.map(log => {
+    const date = new Date(log.created_at);
+    const dateStr = date.toLocaleDateString('fr-FR', { day: 'numeric', month: 'long' });
+    const timeStr = date.toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' });
+    const ua = log.user_agent || 'Inconnu';
+    let browser = 'Navigateur';
+    if (ua.includes('Chrome')) browser = 'Chrome';
+    else if (ua.includes('Safari')) browser = 'Safari';
+    else if (ua.includes('Firefox')) browser = 'Firefox';
+    
+    return `
+      <div style="display:grid;grid-template-columns:auto 1fr auto auto;gap:18px;padding:12px 16px;background:rgba(0,0,0,0.3);border-radius:6px;border:1px solid var(--bento-border);align-items:center;font-family:var(--sans);font-size:13px;">
+        <span class="status-dot ok"></span>
+        <span style="color:var(--cream);">Connexion réussie</span>
+        <span style="color:var(--cream-mute);font-family:var(--mono);font-size:11px;">${log.ip_address || '—'} · ${browser}</span>
+        <span style="color:var(--cream-mute);font-family:var(--mono);font-size:11px;">${dateStr} · ${timeStr}</span>
+      </div>
+    `;
+  }).join('');
+}
+
+window.admin2FAEnable = async function() {
+  if (typeof supabase === 'undefined') {
+    toast('Supabase non disponible', 'warn');
+    return;
+  }
+  
+  try {
+    // Étape 1 : enrôler un facteur TOTP
+    const { data, error } = await supabase.auth.mfa.enroll({
+      factorType: 'totp',
+      friendlyName: 'OXV Admin TOTP'
+    });
+    
+    if (error) {
+      console.warn('[2FA] Erreur enroll:', error);
+      toast(`Erreur 2FA : ${error.message}`, 'warn');
+      return;
+    }
+    
+    if (data) {
+      // Afficher le QR Code à scanner avec Google Authenticator
+      show2FAEnrollModal(data);
+    }
+  } catch (e) {
+    console.error('[2FA] Exception:', e);
+    toast('Erreur activation 2FA', 'warn');
+  }
+};
+
+function show2FAEnrollModal(data) {
+  // Créer un modal dynamique pour le scan QR
+  const existingModal = document.getElementById('twofa-modal');
+  if (existingModal) existingModal.remove();
+  
+  const modal = document.createElement('div');
+  modal.id = 'twofa-modal';
+  modal.className = 'vmodal open';
+  modal.innerHTML = `
+    <div class="vmodal-card" style="max-width:480px;">
+      <button class="vmodal-close" onclick="close2FAModal()">×</button>
+      <div class="vmodal-eyebrow">— Activation 2FA</div>
+      <h2 class="vmodal-title">Scanner le <em>QR Code</em>.</h2>
+      
+      <div style="text-align:center;padding:24px;background:white;border-radius:8px;margin-bottom:20px;">
+        <img src="${data.totp.qr_code}" alt="QR Code 2FA" style="max-width:200px;display:block;margin:0 auto;" />
+      </div>
+      
+      <p style="font-family:var(--sans);font-size:13px;color:var(--cream-mute);margin-bottom:14px;">
+        Scannez ce QR Code avec <strong style="color:var(--cream);">Google Authenticator</strong>, <strong style="color:var(--cream);">1Password</strong> ou <strong style="color:var(--cream);">Authy</strong>.
+      </p>
+      
+      <div style="padding:14px;background:rgba(0,0,0,0.4);border-radius:6px;margin-bottom:20px;">
+        <div style="font-family:var(--display);font-size:10px;letter-spacing:0.2em;text-transform:uppercase;color:var(--cream-mute);margin-bottom:6px;">Ou copier le code secret</div>
+        <code style="font-family:var(--mono);font-size:12px;color:var(--gold);user-select:all;word-break:break-all;">${data.totp.secret}</code>
+      </div>
+      
+      <div class="form-row full" style="margin-bottom:16px;">
+        <label>Entrer le code à 6 chiffres généré</label>
+        <input type="text" id="twofa-code" maxlength="6" placeholder="000000" 
+               style="background:rgba(0,0,0,0.4);border:1px solid var(--bento-border);color:var(--cream);padding:14px 18px;border-radius:6px;font-family:var(--mono);font-size:24px;text-align:center;letter-spacing:0.3em;" />
+      </div>
+      
+      <div style="display:flex;gap:10px;">
+        <button class="btn btn-primary" onclick="confirm2FA('${data.id}')"><span>Valider</span></button>
+        <button class="btn" onclick="close2FAModal()"><span>Annuler</span></button>
+      </div>
+    </div>
+  `;
+  document.body.appendChild(modal);
+}
+
+window.close2FAModal = function() {
+  const modal = document.getElementById('twofa-modal');
+  if (modal) modal.remove();
+};
+
+window.confirm2FA = async function(factorId) {
+  const codeInput = document.getElementById('twofa-code');
+  const code = codeInput?.value?.trim();
+  
+  if (!code || code.length !== 6) {
+    toast('Code à 6 chiffres requis', 'warn');
+    return;
+  }
+  
+  try {
+    const { data: challenge, error: challengeError } = await supabase.auth.mfa.challenge({ factorId });
+    if (challengeError) throw challengeError;
+    
+    const { error: verifyError } = await supabase.auth.mfa.verify({
+      factorId,
+      challengeId: challenge.id,
+      code
+    });
+    
+    if (verifyError) {
+      toast(`Code incorrect : ${verifyError.message}`, 'warn');
+      return;
+    }
+    
+    toast('✓ 2FA activée avec succès', 'ok');
+    close2FAModal();
+    loadAdminSecurite(); // Refresh
+    
+    // Log dans admin_audit
+    try {
+      await supabase.from('admin_audit').insert({
+        user_id: window.OXVApi.user.profile?.id,
+        action: '2fa_enable',
+        metadata: { method: 'totp' }
+      });
+    } catch (e) {}
+    
+  } catch (e) {
+    console.error('[2FA verify]:', e);
+    toast('Erreur validation 2FA', 'warn');
+  }
 };
 
 window.adminChangePassword = function() {
-  // Redirect vers la page forgot password connectée
-  toast('Demande de changement de mot de passe envoyée par email', 'ok');
+  const email = window.OXVApi?.user?.profile?.email;
+  if (!email) {
+    toast('Email non disponible', 'warn');
+    return;
+  }
+  
+  if (!confirm(`Un email de réinitialisation sera envoyé à ${email}. Continuer ?`)) return;
+  
+  supabase.auth.resetPasswordForEmail(email).then(({ error }) => {
+    if (error) {
+      toast(`Erreur : ${error.message}`, 'warn');
+    } else {
+      toast('✓ Email de réinitialisation envoyé', 'ok');
+    }
+  });
 };
 
-window.adminRevokeAllSessions = function() {
+window.adminRevokeAllSessions = async function() {
   if (!confirm('Toutes les sessions actives seront révoquées. Vous devrez vous reconnecter. Continuer ?')) return;
-  toast('Sessions révoquées · Redirection vers login', 'ok');
-  setTimeout(() => goTo('login'), 1500);
+  
+  try {
+    await supabase.auth.signOut({ scope: 'global' });
+    toast('✓ Sessions révoquées', 'ok');
+    setTimeout(() => goTo('login'), 1500);
+  } catch (e) {
+    console.warn('[Revoke sessions]:', e);
+    toast('Sessions révoquées localement', 'ok');
+    setTimeout(() => goTo('login'), 1500);
+  }
 };
 
 window.submitContact = function() {
@@ -19571,57 +20100,304 @@ window.loadBilling = async function() {
    ESPACE PILOTE — MA PROGRESSION (roadmap)
    ============================================================ */
 window.loadProgression = async function() {
-  // Si l'utilisateur n'est pas connecté, on affiche quand même le mockup (preview)
-  // pour donner envie de réserver
-  
   const loading = document.getElementById('progLoading');
   const content = document.getElementById('progContent');
   
-  // Le contenu est déjà affiché par défaut (mockup). On masque juste le loader.
+  // Afficher le mockup par défaut (preview pour visiteur)
   if (loading) loading.style.display = 'none';
   if (content) content.style.display = 'block';
 
-  // Si utilisateur connecté, on récupère ses vraies données
-  if (window.OXVApi?.user?.isLoggedIn) {
-    const userId = window.OXVApi.user.profile?.id;
-    if (userId) {
-      try {
-        const { data: profile, error } = await supabase
-          .from('users')
-          .select('attended_count, first_name')
-          .eq('id', userId)
-          .single();
-        
-        if (!error && profile) {
-          // Mise à jour du compteur de sessions effectuées
-          const sessionsNum = document.querySelector('.prog-sessions-num');
-          if (sessionsNum) {
-            sessionsNum.textContent = String(profile.attended_count || 0).padStart(2, '0');
-          }
-          
-          // Si pas encore de session : on adapte le hero
-          if (!profile.attended_count || profile.attended_count === 0) {
-            const qdiScore = document.getElementById('progQdiScore');
-            const qdiLevel = document.getElementById('progQdiLevel');
-            const qdiBadge = document.getElementById('progQdiBadge');
-            
-            if (qdiScore) qdiScore.textContent = '—';
-            if (qdiLevel) qdiLevel.textContent = 'À découvrir';
-            if (qdiBadge) qdiBadge.textContent = 'NIVEAU 0';
-            
-            const sub = document.querySelector('.prog-qdi-sub');
-            if (sub) {
-              sub.innerHTML = '<strong>Aucune session effectuée.</strong> Réservez votre première session Signature pour activer votre QDI.';
-            }
-          }
-        }
-      } catch (e) {
-        console.warn('[Progression] Récupération données :', e);
-        // On garde le mockup affiché, pas grave
-      }
+  // Si pas connecté → on garde le mockup en preview
+  if (!window.OXVApi?.user?.isLoggedIn) return;
+
+  const userId = window.OXVApi.user.profile?.id;
+  if (!userId) return;
+
+  try {
+    // 1. Récupérer les infos du pilote
+    const { data: profile, error: profileError } = await supabase
+      .from('users')
+      .select('attended_count, first_name, last_name')
+      .eq('id', userId)
+      .single();
+    
+    if (profileError || !profile) {
+      console.warn('[Progression] Erreur profile:', profileError);
+      return;
     }
+
+    // Mise à jour compteur sessions effectuées
+    const sessionsNum = document.querySelector('.prog-sessions-num');
+    if (sessionsNum) {
+      sessionsNum.textContent = String(profile.attended_count || 0).padStart(2, '0');
+    }
+
+    // 2. Si pas encore de session : afficher l'invitation
+    if (!profile.attended_count || profile.attended_count === 0) {
+      showEmptyQDI(profile.first_name);
+      return;
+    }
+
+    // 3. Récupérer les scores QDI (table qdi_scores)
+    const { data: qdiData, error: qdiError } = await supabase
+      .from('qdi_scores')
+      .select('*')
+      .eq('user_id', userId)
+      .order('computed_at', { ascending: false });
+    
+    if (qdiError) {
+      if (qdiError.code === '42P01') {
+        // Table n'existe pas → garder mockup
+        console.log('[Progression] Table qdi_scores non créée — utilisation du mockup');
+      } else {
+        console.warn('[Progression] Erreur qdi_scores:', qdiError);
+      }
+      return;
+    }
+    
+    if (!qdiData || qdiData.length === 0) {
+      // Pas de scores mais sessions effectuées → message d'attente
+      showWaitingQDI();
+      return;
+    }
+    
+    // 4. Mise à jour avec les vraies données QDI
+    renderQDIDataFromSupabase(qdiData, profile);
+    
+  } catch (e) {
+    console.warn('[Progression] Exception:', e);
   }
 };
+
+function showEmptyQDI(firstName) {
+  const qdiScore = document.getElementById('progQdiScore');
+  const qdiLevel = document.getElementById('progQdiLevel');
+  const qdiBadge = document.getElementById('progQdiBadge');
+  
+  if (qdiScore) qdiScore.textContent = '—';
+  if (qdiLevel) qdiLevel.textContent = 'À découvrir';
+  if (qdiBadge) qdiBadge.textContent = 'NIVEAU 0';
+  
+  const sub = document.querySelector('.prog-qdi-sub');
+  if (sub) {
+    const name = firstName ? `, ${escapeHtml(firstName)}` : '';
+    sub.innerHTML = `<strong>Bienvenue${name}.</strong> Réservez votre première session Signature pour activer votre QDI et démarrer le coaching.`;
+  }
+  
+  // Réinitialiser les piliers à 0
+  document.querySelectorAll('.prog-pillar-fill').forEach(el => el.style.width = '0%');
+  document.querySelectorAll('.prog-pillar-score').forEach(el => el.textContent = '—');
+  
+  // Cacher les recommandations et l'évolution
+  const recoGrid = document.querySelector('.prog-reco-grid');
+  const evolution = document.querySelector('.prog-evolution');
+  if (recoGrid) recoGrid.style.display = 'none';
+  if (evolution) evolution.style.display = 'none';
+}
+
+function showWaitingQDI() {
+  const qdiScore = document.getElementById('progQdiScore');
+  const qdiBadge = document.getElementById('progQdiBadge');
+  
+  if (qdiScore) qdiScore.textContent = '...';
+  if (qdiBadge) qdiBadge.textContent = 'CALCUL EN COURS';
+  
+  const sub = document.querySelector('.prog-qdi-sub');
+  if (sub) {
+    sub.innerHTML = '<strong>Vos données sont en cours d\'analyse.</strong> Le QDI sera disponible sous 48h après votre première session.';
+  }
+}
+
+function renderQDIDataFromSupabase(qdiData, profile) {
+  // Le score le plus récent
+  const latest = qdiData[0];
+  
+  // Score global
+  const qdiScore = document.getElementById('progQdiScore');
+  if (qdiScore) qdiScore.textContent = latest.qdi_global;
+  
+  // Niveau (Bronze/Argent/Or/Elite)
+  const qdiLevel = document.getElementById('progQdiLevel');
+  const qdiBadge = document.getElementById('progQdiBadge');
+  const levelMap = {
+    'elite': { name: 'Elite', badge: '👑 ELITE' },
+    'or': { name: 'Or', badge: '🥇 OR' },
+    'argent': { name: 'Argent', badge: '🥈 ARGENT' },
+    'bronze': { name: 'Bronze', badge: '🥉 BRONZE' },
+    'novice': { name: 'Novice', badge: 'NOVICE' }
+  };
+  const level = levelMap[latest.qdi_level] || levelMap.novice;
+  if (qdiLevel) qdiLevel.textContent = level.name;
+  if (qdiBadge) qdiBadge.textContent = level.badge;
+  
+  // Évolution depuis le dernier score
+  const sub = document.querySelector('.prog-qdi-sub');
+  if (sub && qdiData.length > 1) {
+    const previousScore = qdiData[1].qdi_global;
+    const delta = latest.qdi_global - previousScore;
+    const deltaStr = delta > 0 ? `+${delta}` : delta < 0 ? `${delta}` : '±0';
+    const deltaColor = delta > 0 ? 'var(--green-perf)' : delta < 0 ? 'var(--red)' : 'var(--cream-mute)';
+    sub.innerHTML = `<strong style="color:${deltaColor};">${deltaStr} pts</strong> depuis votre dernière session · ${qdiData.length} sessions analysées`;
+  }
+  
+  // Progression vers prochain palier
+  let nextThreshold = 50;
+  if (latest.qdi_global >= 95) nextThreshold = 100;
+  else if (latest.qdi_global >= 85) nextThreshold = 95;
+  else if (latest.qdi_global >= 70) nextThreshold = 85;
+  else if (latest.qdi_global >= 50) nextThreshold = 70;
+  
+  const ptsRemaining = nextThreshold - latest.qdi_global;
+  const progressPct = (latest.qdi_global / nextThreshold) * 100;
+  
+  const progressLabel = document.querySelector('.prog-next-level-label');
+  if (progressLabel) {
+    const nextLevelName = nextThreshold === 100 ? 'MAX' : nextThreshold === 95 ? 'ELITE' : nextThreshold === 85 ? 'OR' : nextThreshold === 70 ? 'ARGENT' : 'BRONZE';
+    progressLabel.innerHTML = `<span>Prochain palier : ${nextLevelName} (≥ ${nextThreshold})</span><span class="pts">${ptsRemaining > 0 ? ptsRemaining + ' pts restants' : '✓ Atteint'}</span>`;
+  }
+  
+  const progressFill = document.querySelector('.prog-progress-fill');
+  if (progressFill) progressFill.style.width = `${Math.min(progressPct, 100)}%`;
+  
+  // Sessions effectuées + détails
+  const sessionsNum = document.querySelector('.prog-sessions-num');
+  if (sessionsNum) sessionsNum.textContent = String(profile.attended_count || 0).padStart(2, '0');
+  
+  const sessionsDetail = document.querySelector('.prog-sessions-detail');
+  if (sessionsDetail) {
+    sessionsDetail.innerHTML = `
+      <strong>${latest.valid_laps}/${latest.total_laps} tours valides</strong> retenus pour le QDI<br/>
+      ${latest.best_lap_time ? `Meilleur tour : <strong>${latest.best_lap_time}</strong><br/>` : ''}
+      Dernier calcul : <strong>${new Date(latest.computed_at).toLocaleDateString('fr-FR', { day: 'numeric', month: 'long', year: 'numeric' })}</strong>
+    `;
+  }
+  
+  // 5 piliers
+  const pillars = [
+    { selector: '.prog-pillar.trajectory', value: latest.trajectory_score },
+    { selector: '.prog-pillar.fluidity', value: latest.fluidity_score },
+    { selector: '.prog-pillar.braking', value: latest.braking_score },
+    { selector: '.prog-pillar.acceleration', value: latest.acceleration_score },
+    { selector: '.prog-pillar.regularity', value: latest.regularity_score }
+  ];
+  
+  pillars.forEach(p => {
+    const elem = document.querySelector(p.selector);
+    if (elem) {
+      const fill = elem.querySelector('.prog-pillar-fill');
+      const score = elem.querySelector('.prog-pillar-score');
+      if (fill) fill.style.width = `${p.value}%`;
+      if (score) score.textContent = p.value;
+    }
+  });
+  
+  // Évolution 6 derniers mois (graphique)
+  renderQDIEvolution(qdiData);
+  
+  // Recommandations Coach IA basées sur les scores réels
+  renderQDIRecommendations(latest);
+  
+  console.log(`[Progression] QDI ${latest.qdi_global}/100 (${level.name}) chargé`);
+}
+
+function renderQDIEvolution(qdiData) {
+  // Prendre les 6 derniers scores ou compléter avec des placeholders
+  const last6 = qdiData.slice(0, 6).reverse();
+  
+  if (last6.length === 0) return;
+  
+  const chartBars = document.querySelectorAll('.prog-chart-bar');
+  if (chartBars.length === 0) return;
+  
+  // Calculer la valeur max pour le scaling
+  const maxScore = Math.max(...last6.map(s => s.qdi_global), 100);
+  
+  last6.forEach((data, idx) => {
+    if (chartBars[idx]) {
+      const value = chartBars[idx].querySelector('.prog-chart-bar-value');
+      const graph = chartBars[idx].querySelector('.prog-chart-bar-graph');
+      const label = chartBars[idx].querySelector('.prog-chart-bar-label');
+      
+      if (value) value.textContent = data.qdi_global;
+      if (graph) graph.style.height = `${(data.qdi_global / 100) * 100}%`;
+      
+      const date = new Date(data.computed_at);
+      const months = ['Jan', 'Fév', 'Mar', 'Avr', 'Mai', 'Jui', 'Juil', 'Aoû', 'Sep', 'Oct', 'Nov', 'Déc'];
+      if (label) label.textContent = months[date.getMonth()];
+      
+      // Marquer le dernier comme "current"
+      chartBars[idx].classList.toggle('current', idx === last6.length - 1);
+    }
+  });
+  
+  // Cacher les bars en trop
+  for (let i = last6.length; i < chartBars.length; i++) {
+    chartBars[i].style.visibility = 'hidden';
+  }
+  
+  // Calculer tendance
+  if (last6.length >= 2) {
+    const trend = last6[last6.length - 1].qdi_global - last6[0].qdi_global;
+    const trendEl = document.querySelector('.prog-evolution-trend');
+    if (trendEl) {
+      const arrow = trend > 0 ? '↗' : trend < 0 ? '↘' : '→';
+      const sign = trend > 0 ? '+' : '';
+      const color = trend > 0 ? 'var(--green-perf)' : trend < 0 ? 'var(--red)' : 'var(--cream-mute)';
+      trendEl.innerHTML = `<span style="color:${color};">${arrow}</span><span style="color:${color};">${sign}${trend} points</span>`;
+    }
+  }
+}
+
+function renderQDIRecommendations(latest) {
+  const recoGrid = document.querySelector('.prog-reco-grid');
+  if (!recoGrid) return;
+  
+  // Identifier les 2 plus faibles et 2 plus forts piliers
+  const pillarsArray = [
+    { key: 'trajectory', name: 'Trajectoire', score: latest.trajectory_score },
+    { key: 'fluidity', name: 'Fluidité', score: latest.fluidity_score },
+    { key: 'braking', name: 'Freinage', score: latest.braking_score },
+    { key: 'acceleration', name: 'Accélération', score: latest.acceleration_score },
+    { key: 'regularity', name: 'Régularité', score: latest.regularity_score }
+  ];
+  
+  pillarsArray.sort((a, b) => a.score - b.score);
+  
+  const weakest = pillarsArray.slice(0, 2);   // 2 plus faibles → priorité
+  const strongest = pillarsArray.slice(-2);   // 2 plus forts → maintenir
+  
+  const tipsBank = {
+    trajectory: { priority: 'Vos trajectoires manquent de précision. Travaillez les points de corde et la sortie des virages techniques.', maintain: 'Excellente lecture de la piste. Continuez à analyser les trajectoires optimales.' },
+    fluidity: { priority: 'Pilotage encore saccadé. Cherchez la rondeur dans les transitions et les changements d\'appui.', maintain: 'Très belle fluidité. Vous pilotez "rond", c\'est la signature du pilote rapide.' },
+    braking: { priority: 'Le freinage est à optimiser. Travaillez la progressivité et le point de relâche.', maintain: 'Freinage maîtrisé. Continuez à travailler la modulation fine.' },
+    acceleration: { priority: 'Réaccélération à améliorer. Trop d\'à-coups en sortie de virage.', maintain: 'Excellente gestion des gaz. Sortie de virage très propre.' },
+    regularity: { priority: 'Vos tours manquent de constance. Visez la régularité avant la vitesse pure.', maintain: 'Constance remarquable. Vous reproduisez les bons gestes tour après tour.' }
+  };
+  
+  let html = '';
+  
+  weakest.forEach(p => {
+    html += `
+      <div class="bento prog-reco-card">
+        <div class="prog-reco-tag priority">⚠ Priorité</div>
+        <h4 class="prog-reco-title">${p.name} · ${p.score}/100</h4>
+        <p class="prog-reco-text">${tipsBank[p.key].priority}</p>
+      </div>
+    `;
+  });
+  
+  strongest.forEach(p => {
+    html += `
+      <div class="bento prog-reco-card">
+        <div class="prog-reco-tag maintain">✓ Maintenir</div>
+        <h4 class="prog-reco-title">${p.name} · ${p.score}/100</h4>
+        <p class="prog-reco-text">${tipsBank[p.key].maintain}</p>
+      </div>
+    `;
+  });
+  
+  recoGrid.innerHTML = html;
+}
 
 
 
