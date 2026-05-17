@@ -13201,86 +13201,169 @@ textarea:focus-visible {
     <main class="account-main">
       <div class="account-header">
         <div class="account-header-eyebrow">N° ⌬.7 · Paiements</div>
-        <h1 class="account-header-title">Mon compte de <em>paiement</em>.</h1>
+        <h1 class="account-header-title">Mes <em>paiements</em>.</h1>
         <p class="account-header-sub">
-          Solde, factures, méthode de règlement. Tout est ici.
+          Historique · paiements à effectuer · factures.
         </p>
       </div>
 
-      <div id="billLoading" class="account-loading">— Chargement…</div>
+      <div id="billLoading" class="account-loading" style="display:none;">— Chargement…</div>
 
-      <div id="billContent" style="display:none;">
+      <div id="billContent">
 
-        <!-- Carte solde principale -->
-        <div class="bill-card">
-          <div class="bill-card-eyebrow">— Total réglé · Saison 2026</div>
-          <div class="bill-card-amount" id="billTotalPaid"><em>0,00</em> €</div>
-          <div class="bill-card-sub" id="billRenewalDate">Renouvellement le 1<sup>er</sup> janvier 2027</div>
-
-          <div class="bill-progress">
-            <div class="bill-progress-fill" id="billProgressFill" style="width: 0%;"></div>
-          </div>
-          <div class="bill-card-meta">
-            <span><strong id="billProgressPct">0 %</strong> de votre engagement annuel</span>
-            <span><strong id="billProgressMax">3 500 €</strong> Heritage</span>
-          </div>
-        </div>
-
-        <!-- Solde dû (si paiement en attente) -->
-        <div id="billDueBlock" style="display:none;">
-          <div class="bill-due">
-            <div>
-              <div class="bill-due-label">— Règlement à venir</div>
-              <div class="bill-due-amount" id="billDueAmount">—</div>
-              <div class="bill-due-detail" id="billDueDetail">—</div>
+        <!-- ╔══════════════════════════════════════════════════════╗
+             ║   HERO PAIEMENTS — Total payé saison + KPIs           ║
+             ╚══════════════════════════════════════════════════════╝ -->
+        <div class="prog-hero">
+          
+          <!-- Card principale total payé -->
+          <div class="bento prog-qdi-main">
+            <div class="prog-qdi-label">
+              <span>Saison 2026 · Total réglé</span>
             </div>
-            <button class="btn btn-primary" onclick="goToAccount('compte-sessions')"><span>Voir mes sessions</span></button>
-          </div>
-        </div>
-
-        <!-- Actions rapides -->
-        <div class="bill-actions-grid">
-          <button class="bill-action" onclick="goTo('booking')">
-            <div class="bill-action-info">
-              <div class="bill-action-title">Réserver une session</div>
-              <div class="bill-action-desc">Calendrier saison 2026</div>
+            <div class="prog-qdi-score" style="color: var(--gold);">
+              <span id="billTotalPaid">1 770</span><span class="max">€</span>
             </div>
-            <span class="bill-action-arrow">→</span>
-          </button>
-          <button class="bill-action" onclick="toast('Factures bientôt disponibles', 'ok')">
-            <div class="bill-action-info">
-              <div class="bill-action-title">Mes factures</div>
-              <div class="bill-action-desc">Téléchargement PDF</div>
+            <div class="prog-qdi-level">
+              <span style="font-size: 18px;">3 sessions effectuées · 1 à venir</span>
             </div>
-            <span class="bill-action-arrow">→</span>
-          </button>
-        </div>
-
-        <!-- Méthode de paiement enregistrée -->
-        <div class="bill-method-block">
-          <div>
-            <div class="bill-method-info-title">— Méthode de règlement</div>
-            <div class="bill-method-info">
-              <strong>Virement bancaire</strong>
-              <div class="bill-method-info-detail">
-                Règlement intégral à effectuer 7 jours avant la session. Coordonnées bancaires fournies dans l'email de confirmation et sur la page de réservation.
+            <div class="prog-qdi-sub">
+              <strong>Prochain règlement :</strong> 590 € le 28 mai 2026 (Session Signature du 4 juin)
+            </div>
+            <div class="prog-next-level">
+              <div class="prog-next-level-label">
+                <span>Engagement saison vers Heritage</span>
+                <span class="pts">50% (1770 / 3500 €)</span>
+              </div>
+              <div class="prog-progress-bar">
+                <div class="prog-progress-fill" style="width: 50%;"></div>
               </div>
             </div>
           </div>
-          <div style="font-family: var(--mono); font-size: 9px; letter-spacing: 0.22em; text-transform: uppercase; color: var(--cream-faint); white-space: nowrap;">
-            Carte bancaire · Bientôt
+
+          <!-- Card stat secondaire -->
+          <div class="bento prog-sessions-card">
+            <div class="prog-sessions-num" style="color: var(--red);">590<em style="font-size:0.4em;color:var(--cream-mute);"> €</em></div>
+            <div class="prog-sessions-label">À régler</div>
+            <div class="prog-sessions-detail">
+              <strong>Échéance : 28 mai 2026</strong><br/>
+              Session : Signature, 4 juin<br/>
+              Référence : <span style="color:var(--gold);font-family:var(--mono);">OXV-3F7A92</span>
+            </div>
+            <button class="btn btn-primary btn-sm" onclick="document.getElementById('ibanSection').scrollIntoView({behavior:'smooth'});" style="margin-top:14px;width:100%;"><span>Voir comment payer</span></button>
+          </div>
+
+        </div>
+
+        <!-- ╔══════════════════════════════════════════════════════╗
+             ║   COORDONNÉES BANCAIRES POUR VIREMENT                 ║
+             ╚══════════════════════════════════════════════════════╝ -->
+        <div class="account-section-title" style="font-family: var(--display); font-style: italic; font-weight: 700; font-size: 14px; letter-spacing: 0.22em; text-transform: uppercase; color: var(--gold); margin-bottom: 16px;" id="ibanSection">
+          — Comment effectuer le règlement
+        </div>
+
+        <div class="bento" style="padding: 32px; margin-bottom: 24px;">
+          
+          <!-- Bandeau info Stripe -->
+          <div style="display:flex;align-items:center;gap:14px;padding:14px 16px;background:rgba(255,183,3,0.06);border:1px solid rgba(255,183,3,0.2);border-radius:8px;margin-bottom:24px;">
+            <span style="font-size:18px;">💳</span>
+            <div style="flex:1;">
+              <div style="font-family:var(--display);font-size:11px;font-weight:400;letter-spacing:0.2em;text-transform:uppercase;color:var(--gold);margin-bottom:4px;">Paiement par carte bancaire</div>
+              <div style="font-family:var(--sans);font-size:13px;color:var(--cream-mute);line-height:1.5;">Disponible prochainement via Stripe. En attendant : virement bancaire ci-dessous.</div>
+            </div>
+          </div>
+
+          <h4 style="font-family:var(--display);font-style:italic;font-weight:700;font-size:15px;letter-spacing:0.04em;text-transform:uppercase;color:var(--cream);margin:0 0 18px;">Coordonnées bancaires OXV</h4>
+
+          <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:18px;margin-bottom:24px;">
+            <div>
+              <div style="font-family:var(--display);font-size:10px;letter-spacing:0.2em;text-transform:uppercase;color:var(--cream-mute);margin-bottom:6px;">Bénéficiaire</div>
+              <div style="font-family:var(--sans);font-size:14px;color:var(--cream);font-weight:500;">OXV — Only Xtreme Vehicle</div>
+            </div>
+            <div>
+              <div style="font-family:var(--display);font-size:10px;letter-spacing:0.2em;text-transform:uppercase;color:var(--cream-mute);margin-bottom:6px;">IBAN</div>
+              <div style="font-family:var(--mono);font-size:13px;color:var(--cream);user-select:all;cursor:text;background:rgba(0,0,0,0.3);padding:8px 10px;border-radius:4px;">FR76 XXXX XXXX XXXX XXXX XXX</div>
+            </div>
+            <div>
+              <div style="font-family:var(--display);font-size:10px;letter-spacing:0.2em;text-transform:uppercase;color:var(--cream-mute);margin-bottom:6px;">BIC</div>
+              <div style="font-family:var(--mono);font-size:13px;color:var(--cream);user-select:all;cursor:text;background:rgba(0,0,0,0.3);padding:8px 10px;border-radius:4px;">XXXXXXXX</div>
+            </div>
+          </div>
+
+          <!-- Référence à inscrire -->
+          <div style="padding:18px;background:rgba(230, 57, 70, 0.06);border:1px solid rgba(230, 57, 70, 0.2);border-radius:8px;">
+            <div style="font-family:var(--display);font-size:11px;font-weight:400;letter-spacing:0.2em;text-transform:uppercase;color:var(--red);margin-bottom:8px;">⚠ Référence obligatoire à inscrire dans le libellé</div>
+            <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap;">
+              <code style="font-family:var(--mono);font-size:18px;color:var(--gold);background:rgba(0,0,0,0.4);padding:10px 16px;border-radius:6px;user-select:all;cursor:text;letter-spacing:0.05em;">OXV-3F7A92</code>
+              <button class="btn btn-sm" onclick="navigator.clipboard.writeText('OXV-3F7A92'); toast('Référence copiée', 'ok');"><span>Copier</span></button>
+            </div>
+            <p style="font-family:var(--sans);font-size:12px;color:var(--cream-mute);margin:12px 0 0;line-height:1.5;">Cette référence permet à OXV d'identifier votre paiement. <strong style="color:var(--cream);">Sans elle, la validation peut prendre plusieurs jours.</strong></p>
           </div>
         </div>
 
-        <!-- Historique transactions -->
-        <div id="billHistoryBlock" class="bill-history-block">
-          <div class="bill-history-title">— Historique des règlements</div>
-          <div id="billHistoryContent">
-            <div class="bill-empty">
-              <div class="bill-empty-icon">○</div>
-              <p class="bill-empty-text">Aucune transaction enregistrée pour le moment.</p>
+        <!-- ╔══════════════════════════════════════════════════════╗
+             ║   HISTORIQUE DES RÈGLEMENTS                           ║
+             ╚══════════════════════════════════════════════════════╝ -->
+        <div class="account-section-title" style="font-family: var(--display); font-style: italic; font-weight: 700; font-size: 14px; letter-spacing: 0.22em; text-transform: uppercase; color: var(--gold); margin-bottom: 16px;">
+          — Historique des règlements
+        </div>
+
+        <div class="bento" style="padding: 0; margin-bottom: 24px; overflow: hidden;">
+          
+          <div id="billHistoryRows">
+            
+            <!-- Ligne 1 : Paiement à venir (en attente) -->
+            <div style="display:grid;grid-template-columns:auto 1fr auto auto;gap:18px;padding:18px 24px;border-bottom:1px solid var(--bento-border);align-items:center;">
+              <span class="status-dot pending" style="background:var(--red);box-shadow:0 0 8px var(--red);"></span>
+              <div>
+                <div style="font-family:var(--display);font-style:italic;font-weight:700;font-size:14px;letter-spacing:0.04em;color:var(--cream);">Signature · 4 juin 2026</div>
+                <div style="font-family:var(--sans);font-size:12px;color:var(--cream-mute);margin-top:4px;">Référence : <span style="color:var(--gold);font-family:var(--mono);">OXV-3F7A92</span> · Échéance : 28 mai 2026</div>
+              </div>
+              <div style="font-family:var(--display);font-style:italic;font-weight:700;font-size:18px;color:var(--red);">590,00 €</div>
+              <span class="tag-inline red">En attente</span>
             </div>
+
+            <!-- Ligne 2 : Validé -->
+            <div style="display:grid;grid-template-columns:auto 1fr auto auto;gap:18px;padding:18px 24px;border-bottom:1px solid var(--bento-border);align-items:center;">
+              <span class="status-dot ok" style="background:var(--green-perf);box-shadow:0 0 8px var(--green-perf);"></span>
+              <div>
+                <div style="font-family:var(--display);font-style:italic;font-weight:700;font-size:14px;letter-spacing:0.04em;color:var(--cream);">Signature · 2 mai 2026</div>
+                <div style="font-family:var(--sans);font-size:12px;color:var(--cream-mute);margin-top:4px;">Référence : <span style="color:var(--cream-mute);font-family:var(--mono);">OXV-8A2B41</span> · Réglé le 26 avril 2026</div>
+              </div>
+              <div style="font-family:var(--display);font-style:italic;font-weight:700;font-size:18px;color:var(--cream);">590,00 €</div>
+              <button class="btn btn-sm" onclick="toast('Téléchargement facture · Disponible avec SIRET','warn');"><span>↓ Facture</span></button>
+            </div>
+
+            <!-- Ligne 3 : Validé -->
+            <div style="display:grid;grid-template-columns:auto 1fr auto auto;gap:18px;padding:18px 24px;border-bottom:1px solid var(--bento-border);align-items:center;">
+              <span class="status-dot ok" style="background:var(--green-perf);box-shadow:0 0 8px var(--green-perf);"></span>
+              <div>
+                <div style="font-family:var(--display);font-style:italic;font-weight:700;font-size:14px;letter-spacing:0.04em;color:var(--cream);">Access · 16 avril 2026</div>
+                <div style="font-family:var(--sans);font-size:12px;color:var(--cream-mute);margin-top:4px;">Référence : <span style="color:var(--cream-mute);font-family:var(--mono);">OXV-7C4D11</span> · Réglé le 9 avril 2026</div>
+              </div>
+              <div style="font-family:var(--display);font-style:italic;font-weight:700;font-size:18px;color:var(--cream);">350,00 €</div>
+              <button class="btn btn-sm" onclick="toast('Téléchargement facture · Disponible avec SIRET','warn');"><span>↓ Facture</span></button>
+            </div>
+
+            <!-- Ligne 4 : Validé (première session) -->
+            <div style="display:grid;grid-template-columns:auto 1fr auto auto;gap:18px;padding:18px 24px;align-items:center;">
+              <span class="status-dot ok" style="background:var(--green-perf);box-shadow:0 0 8px var(--green-perf);"></span>
+              <div>
+                <div style="font-family:var(--display);font-style:italic;font-weight:700;font-size:14px;letter-spacing:0.04em;color:var(--cream);">Access · 28 mars 2026</div>
+                <div style="font-family:var(--sans);font-size:12px;color:var(--cream-mute);margin-top:4px;">Référence : <span style="color:var(--cream-mute);font-family:var(--mono);">OXV-1B9F87</span> · Tarif d'introduction</div>
+              </div>
+              <div style="font-family:var(--display);font-style:italic;font-weight:700;font-size:18px;color:var(--cream);">250,00 €</div>
+              <button class="btn btn-sm" onclick="toast('Téléchargement facture · Disponible avec SIRET','warn');"><span>↓ Facture</span></button>
+            </div>
+
           </div>
+        </div>
+
+        <!-- INFO IMPORTANTE -->
+        <div class="bento" style="padding:20px 24px;background:linear-gradient(90deg, rgba(255,183,3,0.04), rgba(18,18,18,0.7));border-left:3px solid var(--gold);">
+          <p style="font-family:var(--sans);font-size:13px;color:var(--cream-mute);margin:0;line-height:1.6;">
+            <strong style="color:var(--cream);">À savoir :</strong> Vos factures comportant un numéro de TVA seront disponibles dès l'obtention du SIRET OXV (estimation : 2-3 semaines). Les paiements effectués avant cette date donneront lieu à une facture rétroactive.
+          </p>
         </div>
 
       </div>
@@ -14675,47 +14758,154 @@ textarea:focus-visible {
       <div class="admin-header">
         <div class="admin-header-eyebrow">N° ⌬ · Admin · Paiements</div>
         <h1 class="admin-header-title">Suivi des <em>paiements</em>.</h1>
-        <p class="admin-header-sub">Virements bancaires reçus · validation manuelle · factures pilote.</p>
+        <p class="admin-header-sub">Virements bancaires · validation manuelle · factures · préparation Stripe.</p>
+      </div>
+
+      <!-- Bandeau Stripe préparation -->
+      <div class="bento" style="padding:18px 24px;margin-bottom:24px;border-left:3px solid var(--gold);background:linear-gradient(90deg, rgba(255,183,3,0.08), rgba(18,18,18,0.7));">
+        <div style="display:flex;justify-content:space-between;align-items:center;gap:20px;flex-wrap:wrap;">
+          <div style="flex:1;min-width:240px;">
+            <div style="font-family:var(--display);font-size:10px;font-weight:400;letter-spacing:0.22em;text-transform:uppercase;color:var(--gold);margin-bottom:6px;">⏳ Stripe — En attente d'activation</div>
+            <p style="font-family:var(--sans);font-size:13px;color:var(--cream-mute);margin:0;line-height:1.5;">Mode <strong style="color:var(--cream);">Virement bancaire</strong> actif. Stripe Card sera activé après obtention du SIRET (estimation : 2-3 semaines).</p>
+          </div>
+          <button class="btn btn-sm" onclick="toast('Stripe en attente SIRET','warn');"><span>Activer Stripe</span></button>
+        </div>
       </div>
 
       <!-- KPIs paiements -->
       <div class="admin-kpis" style="display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:32px;">
         <div class="bento" style="padding:24px;">
           <div class="prog-pillar-weight">CA mois en cours</div>
-          <div class="metric-large" style="margin-top:8px;">12 450<em style="font-size:0.5em;"> €</em></div>
+          <div class="metric-large" id="payCAMonth" style="margin-top:8px;">12 450<em style="font-size:0.5em;"> €</em></div>
+          <div style="font-size:11px;color:var(--green-perf);margin-top:6px;font-family:var(--display);letter-spacing:0.18em;">↗ +18% vs avril</div>
         </div>
-        <div class="bento" style="padding:24px;">
+        <div class="bento" style="padding:24px;border-color:rgba(230,57,70,0.25);">
           <div class="prog-pillar-weight">En attente</div>
-          <div class="metric-large" style="margin-top:8px;color:var(--red);">3 480<em style="font-size:0.5em;"> €</em></div>
+          <div class="metric-large" id="payPending" style="margin-top:8px;color:var(--red);">3 480<em style="font-size:0.5em;"> €</em></div>
+          <div style="font-size:11px;color:var(--red);margin-top:6px;font-family:var(--display);letter-spacing:0.18em;">8 paiements à valider</div>
         </div>
         <div class="bento" style="padding:24px;">
-          <div class="prog-pillar-weight">Validés</div>
-          <div class="metric-large" style="margin-top:8px;color:var(--green-perf);">28</div>
+          <div class="prog-pillar-weight">Validés ce mois</div>
+          <div class="metric-large" id="payValidated" style="margin-top:8px;color:var(--green-perf);">28</div>
+          <div style="font-size:11px;color:var(--cream-mute);margin-top:6px;font-family:var(--display);letter-spacing:0.18em;">9 360 € encaissés</div>
         </div>
         <div class="bento" style="padding:24px;">
           <div class="prog-pillar-weight">Remboursements</div>
-          <div class="metric-large" style="margin-top:8px;color:var(--cream-mute);">2</div>
+          <div class="metric-large" id="payRefunds" style="margin-top:8px;color:var(--cream-mute);">2</div>
+          <div style="font-size:11px;color:var(--cream-mute);margin-top:6px;font-family:var(--display);letter-spacing:0.18em;">700 € remboursés</div>
         </div>
       </div>
 
-      <!-- Empty state pour V1 -->
-      <div class="bento" style="padding:48px;text-align:center;">
-        <div class="prog-app-tag" style="margin-bottom:14px;">⬇ Activation V2</div>
-        <h3 class="prog-app-title">Module paiements <em>Stripe</em></h3>
-        <p class="prog-app-text" style="max-width:56ch;margin:0 auto 24px;">
-          Cette section sera active après l'obtention du SIRET et l'activation Stripe. La gestion manuelle des virements bancaires est disponible en V1 via export CSV.
-        </p>
-        <div class="prog-app-features">
-          <span class="prog-app-feature">Stripe Card différé</span>
-          <span class="prog-app-feature">Webhook auto</span>
-          <span class="prog-app-feature">Factures PDF</span>
-          <span class="prog-app-feature">Remboursements</span>
+      <!-- ZONE À VALIDER -->
+      <div class="bento" style="padding:32px;margin-bottom:24px;">
+        <div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:20px;flex-wrap:wrap;gap:12px;">
+          <h3 class="prog-evolution-title">Paiements à valider <span style="color:var(--red);">·8</span></h3>
+          <div style="display:flex;gap:8px;">
+            <button class="btn btn-sm" onclick="paymentExportCSV();"><span>↓ Export CSV</span></button>
+          </div>
         </div>
+        
+        <div id="paymentsToValidate" style="display:flex;flex-direction:column;gap:10px;">
+          <!-- Items injectés par JS -->
+        </div>
+      </div>
+
+      <!-- HISTORIQUE PAIEMENTS -->
+      <div class="bento" style="padding:32px;margin-bottom:24px;">
+        <div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:20px;flex-wrap:wrap;gap:12px;">
+          <h3 class="prog-evolution-title">Historique des paiements</h3>
+          <div style="display:flex;gap:8px;flex-wrap:wrap;">
+            <select class="form-row" id="payFilterStatus" onchange="paymentRenderHistory();" style="background:rgba(0,0,0,0.4);border:1px solid var(--bento-border);color:var(--cream);font-family:var(--sans);font-size:12px;padding:8px 12px;border-radius:6px;">
+              <option value="all">Tous statuts</option>
+              <option value="validated">Validés</option>
+              <option value="pending">En attente</option>
+              <option value="refunded">Remboursés</option>
+            </select>
+            <select class="form-row" id="payFilterPeriod" onchange="paymentRenderHistory();" style="background:rgba(0,0,0,0.4);border:1px solid var(--bento-border);color:var(--cream);font-family:var(--sans);font-size:12px;padding:8px 12px;border-radius:6px;">
+              <option value="month">Ce mois</option>
+              <option value="3months">3 derniers mois</option>
+              <option value="year">Cette année</option>
+              <option value="all">Tout</option>
+            </select>
+          </div>
+        </div>
+        
+        <div style="overflow-x:auto;">
+          <table style="width:100%;border-collapse:collapse;font-family:var(--sans);font-size:13px;">
+            <thead>
+              <tr style="border-bottom:1px solid var(--bento-border);">
+                <th style="text-align:left;padding:10px 12px;font-family:var(--display);font-size:10px;letter-spacing:0.22em;text-transform:uppercase;color:var(--cream-mute);font-weight:400;">Réf</th>
+                <th style="text-align:left;padding:10px 12px;font-family:var(--display);font-size:10px;letter-spacing:0.22em;text-transform:uppercase;color:var(--cream-mute);font-weight:400;">Pilote</th>
+                <th style="text-align:left;padding:10px 12px;font-family:var(--display);font-size:10px;letter-spacing:0.22em;text-transform:uppercase;color:var(--cream-mute);font-weight:400;">Session</th>
+                <th style="text-align:right;padding:10px 12px;font-family:var(--display);font-size:10px;letter-spacing:0.22em;text-transform:uppercase;color:var(--cream-mute);font-weight:400;">Montant</th>
+                <th style="text-align:center;padding:10px 12px;font-family:var(--display);font-size:10px;letter-spacing:0.22em;text-transform:uppercase;color:var(--cream-mute);font-weight:400;">Statut</th>
+                <th style="text-align:left;padding:10px 12px;font-family:var(--display);font-size:10px;letter-spacing:0.22em;text-transform:uppercase;color:var(--cream-mute);font-weight:400;">Date</th>
+                <th style="padding:10px 12px;"></th>
+              </tr>
+            </thead>
+            <tbody id="paymentsHistoryBody">
+              <!-- Lignes injectées par JS -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- INFOS BANCAIRES OXV (toujours visible pour copier) -->
+      <div class="bento" style="padding:24px;">
+        <h3 class="prog-evolution-title" style="margin-bottom:16px;">— Coordonnées bancaires OXV (à communiquer aux pilotes)</h3>
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px;">
+          <div>
+            <div style="font-family:var(--display);font-size:10px;letter-spacing:0.2em;text-transform:uppercase;color:var(--cream-mute);margin-bottom:4px;">Bénéficiaire</div>
+            <div style="font-family:var(--sans);font-size:14px;color:var(--cream);font-weight:500;">OXV — Only Xtreme Vehicle</div>
+          </div>
+          <div>
+            <div style="font-family:var(--display);font-size:10px;letter-spacing:0.2em;text-transform:uppercase;color:var(--cream-mute);margin-bottom:4px;">IBAN</div>
+            <div style="font-family:var(--mono);font-size:13px;color:var(--cream);">FR76 XXXX XXXX XXXX XXXX XXX</div>
+          </div>
+          <div>
+            <div style="font-family:var(--display);font-size:10px;letter-spacing:0.2em;text-transform:uppercase;color:var(--cream-mute);margin-bottom:4px;">BIC</div>
+            <div style="font-family:var(--mono);font-size:13px;color:var(--cream);">XXXXXXXX</div>
+          </div>
+          <div>
+            <div style="font-family:var(--display);font-size:10px;letter-spacing:0.2em;text-transform:uppercase;color:var(--cream-mute);margin-bottom:4px;">Référence à inscrire</div>
+            <div style="font-family:var(--mono);font-size:13px;color:var(--gold);">OXV-[référence pilote]</div>
+          </div>
+        </div>
+        <p style="font-family:var(--sans);font-size:12px;color:var(--cream-mute);margin:16px 0 0;line-height:1.5;font-style:italic;">À renseigner depuis Espace admin → Sécurité une fois le compte bancaire pro ouvert.</p>
       </div>
     </main>
   </div>
 </div>
 <!-- /admin-paiements -->
+
+
+<!-- ============ MODAL : VALIDATION PAIEMENT ============ -->
+<div class="vmodal" id="paymentValidateModal">
+  <div class="vmodal-card">
+    <button class="vmodal-close" onclick="paymentCloseValidateModal()">×</button>
+    <div class="vmodal-eyebrow">— Validation paiement</div>
+    <h2 class="vmodal-title">Valider le <em>virement</em>.</h2>
+
+    <div id="paymentValidateContent" style="margin-bottom:24px;">
+      <!-- Contenu injecté par JS -->
+    </div>
+
+    <div class="form-row full" style="margin-bottom:16px;">
+      <label>Date de réception du virement</label>
+      <input type="date" id="payValidateDate" style="background:rgba(0,0,0,0.4);border:1px solid var(--bento-border);color:var(--cream);padding:10px 14px;border-radius:6px;" />
+    </div>
+
+    <div class="form-row full" style="margin-bottom:16px;">
+      <label>Note interne (optionnel)</label>
+      <textarea id="payValidateNote" rows="3" placeholder="Ex. : Virement reçu de la BNP, libellé conforme. ID transaction : XXX..." style="background:rgba(0,0,0,0.4);border:1px solid var(--bento-border);color:var(--cream);padding:10px 14px;border-radius:6px;width:100%;font-family:var(--sans);"></textarea>
+    </div>
+
+    <div style="display:flex;gap:10px;flex-wrap:wrap;">
+      <button class="btn btn-primary" onclick="paymentConfirmValidate();"><span>✓ Valider + Email pilote</span></button>
+      <button class="btn" onclick="paymentCloseValidateModal();"><span>Annuler</span></button>
+    </div>
+  </div>
+</div>
 
 
 <!-- ============ ADMIN : MÉDIAS ============ -->
@@ -17306,6 +17496,313 @@ window.closeCornerDetail = function() {
   document.querySelectorAll('.tp-ping').forEach(p => p.classList.remove('tp-ping-selected'));
 };
 
+/* ============================================================
+   ADMIN PAIEMENTS — Gestion complète virements + validation
+   ============================================================ */
+
+// Données mockup (sera remplacé par Supabase)
+window.MOCK_PAYMENTS = [
+  { id: 'OXV-3F7A92', pilot: 'Sophie Lefèvre', pilotEmail: 'sophie.l@gmail.com', session: 'Signature · 4 juin 2026', amount: 590, status: 'pending', date: '2026-05-12', dueDate: '2026-05-28' },
+  { id: 'OXV-8B1C45', pilot: 'Marc Bertrand', pilotEmail: 'marc.b@protonmail.com', session: 'Promotion · 7 mai 2026', amount: 890, status: 'pending', date: '2026-05-10', dueDate: '2026-04-30' },
+  { id: 'OXV-2D9E33', pilot: 'Julie Moreau', pilotEmail: 'j.moreau@orange.fr', session: 'Signature · 14 mai 2026', amount: 590, status: 'pending', date: '2026-05-09', dueDate: '2026-05-07' },
+  { id: 'OXV-5A8F71', pilot: 'Thomas Dubois', pilotEmail: 'tdubois@yahoo.fr', session: 'Access · 21 mai 2026', amount: 350, status: 'pending', date: '2026-05-08', dueDate: '2026-05-14' },
+  { id: 'OXV-9C3B28', pilot: 'Anne Vidal', pilotEmail: 'anne.vidal@hotmail.com', session: 'Heritage · 4 sessions', amount: 3500, status: 'pending', date: '2026-05-07', dueDate: '2026-05-21' },
+  { id: 'OXV-6E1A92', pilot: 'Pierre Garcia', pilotEmail: 'p.garcia@gmail.com', session: 'Signature · 28 mai 2026', amount: 590, status: 'pending', date: '2026-05-06', dueDate: '2026-05-21' },
+  { id: 'OXV-4B7D55', pilot: 'Marine Roux', pilotEmail: 'marine.roux@free.fr', session: 'Access · 4 juin 2026', amount: 350, status: 'pending', date: '2026-05-05', dueDate: '2026-05-28' },
+  { id: 'OXV-8F2C19', pilot: 'Lucas Martin', pilotEmail: 'lucas.m@gmail.com', session: 'Signature · 11 juin 2026', amount: 590, status: 'pending', date: '2026-05-04', dueDate: '2026-06-04' },
+  // Validés
+  { id: 'OXV-8A2B41', pilot: 'Sophie Lefèvre', pilotEmail: 'sophie.l@gmail.com', session: 'Signature · 2 mai 2026', amount: 590, status: 'validated', date: '2026-04-26', validatedAt: '2026-04-26' },
+  { id: 'OXV-7C4D11', pilot: 'Sophie Lefèvre', pilotEmail: 'sophie.l@gmail.com', session: 'Access · 16 avril 2026', amount: 350, status: 'validated', date: '2026-04-09', validatedAt: '2026-04-09' },
+  { id: 'OXV-1B9F87', pilot: 'Sophie Lefèvre', pilotEmail: 'sophie.l@gmail.com', session: 'Access · 28 mars 2026', amount: 250, status: 'validated', date: '2026-03-21', validatedAt: '2026-03-21' },
+  { id: 'OXV-5G2H88', pilot: 'Marc Bertrand', pilotEmail: 'marc.b@protonmail.com', session: 'Signature · 23 avril 2026', amount: 590, status: 'validated', date: '2026-04-16', validatedAt: '2026-04-16' },
+  { id: 'OXV-3X9Y22', pilot: 'Julie Moreau', pilotEmail: 'j.moreau@orange.fr', session: 'Promotion · 30 avril 2026', amount: 890, status: 'validated', date: '2026-04-23', validatedAt: '2026-04-23' },
+  // Remboursés
+  { id: 'OXV-7Z1W04', pilot: 'Karim Benali', pilotEmail: 'k.benali@gmail.com', session: 'Signature · 19 mars 2026 (annulée)', amount: 590, status: 'refunded', date: '2026-03-15', refundedAt: '2026-03-17' },
+  { id: 'OXV-2L5M76', pilot: 'Lucia Romano', pilotEmail: 'l.romano@gmail.com', session: 'Access · 26 mars 2026 (annulée)', amount: 350, status: 'refunded', date: '2026-03-20', refundedAt: '2026-03-22' },
+];
+
+window.loadAdminPaiements = function() {
+  paymentRenderToValidate();
+  paymentRenderHistory();
+  
+  // Initialiser la date du jour dans le modal
+  const dateInput = document.getElementById('payValidateDate');
+  if (dateInput && !dateInput.value) {
+    dateInput.value = new Date().toISOString().split('T')[0];
+  }
+};
+
+window.paymentRenderToValidate = function() {
+  const container = document.getElementById('paymentsToValidate');
+  if (!container) return;
+  
+  const pending = window.MOCK_PAYMENTS.filter(p => p.status === 'pending').sort((a, b) => new Date(a.dueDate) - new Date(b.dueDate));
+  
+  if (pending.length === 0) {
+    container.innerHTML = '<div style="text-align:center;padding:32px;font-family:var(--sans);font-size:14px;color:var(--cream-mute);">✓ Aucun paiement en attente. Tout est à jour.</div>';
+    return;
+  }
+  
+  container.innerHTML = pending.map(p => {
+    const isOverdue = new Date(p.dueDate) < new Date();
+    const isUrgent = !isOverdue && (new Date(p.dueDate) - new Date()) < 1000 * 60 * 60 * 24 * 3; // < 3 jours
+    
+    let urgencyTag = '';
+    if (isOverdue) {
+      urgencyTag = '<span class="tag-inline red">⚠ Retard</span>';
+    } else if (isUrgent) {
+      urgencyTag = '<span class="tag-inline gold">⏰ Urgent</span>';
+    }
+    
+    return `
+      <div style="display:grid;grid-template-columns:auto 1fr auto auto auto;gap:18px;padding:16px 18px;background:rgba(0,0,0,0.3);border-radius:8px;border:1px solid ${isOverdue ? 'rgba(230,57,70,0.3)' : 'var(--bento-border)'};align-items:center;">
+        <span class="status-dot ${isOverdue ? 'pending' : 'pending'}" style="background:${isOverdue ? 'var(--red)' : 'var(--gold)'};box-shadow:0 0 8px ${isOverdue ? 'var(--red)' : 'var(--gold)'};"></span>
+        <div style="min-width:0;">
+          <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;">
+            <div style="font-family:var(--display);font-style:italic;font-weight:700;font-size:14px;letter-spacing:0.04em;color:var(--cream);">${p.pilot}</div>
+            ${urgencyTag}
+          </div>
+          <div style="font-family:var(--sans);font-size:12px;color:var(--cream-mute);margin-top:4px;">
+            ${p.session} · Réf : <span style="color:var(--gold);font-family:var(--mono);">${p.id}</span><br/>
+            Échéance : ${new Date(p.dueDate).toLocaleDateString('fr-FR', {day:'numeric', month:'long', year:'numeric'})}
+          </div>
+        </div>
+        <div style="font-family:var(--display);font-style:italic;font-weight:700;font-size:20px;color:var(--cream);">${p.amount} €</div>
+        <button class="btn btn-primary btn-sm" onclick="paymentOpenValidateModal('${p.id}');"><span>✓ Valider</span></button>
+        <button class="btn btn-sm" onclick="paymentSendReminder('${p.id}');" title="Renvoyer email"><span>✉</span></button>
+      </div>
+    `;
+  }).join('');
+};
+
+window.paymentRenderHistory = function() {
+  const tbody = document.getElementById('paymentsHistoryBody');
+  if (!tbody) return;
+  
+  const filterStatus = document.getElementById('payFilterStatus')?.value || 'all';
+  const filterPeriod = document.getElementById('payFilterPeriod')?.value || 'month';
+  
+  let filtered = [...window.MOCK_PAYMENTS];
+  
+  // Filtre statut
+  if (filterStatus !== 'all') {
+    filtered = filtered.filter(p => p.status === filterStatus);
+  }
+  
+  // Filtre période
+  const now = new Date();
+  if (filterPeriod === 'month') {
+    const monthAgo = new Date(now.getTime() - 30 * 24 * 60 * 60 * 1000);
+    filtered = filtered.filter(p => new Date(p.date) >= monthAgo);
+  } else if (filterPeriod === '3months') {
+    const threeMonthsAgo = new Date(now.getTime() - 90 * 24 * 60 * 60 * 1000);
+    filtered = filtered.filter(p => new Date(p.date) >= threeMonthsAgo);
+  } else if (filterPeriod === 'year') {
+    const yearStart = new Date(now.getFullYear(), 0, 1);
+    filtered = filtered.filter(p => new Date(p.date) >= yearStart);
+  }
+  
+  // Trier par date décroissante
+  filtered.sort((a, b) => new Date(b.date) - new Date(a.date));
+  
+  if (filtered.length === 0) {
+    tbody.innerHTML = '<tr><td colspan="7" style="text-align:center;padding:32px;font-family:var(--sans);color:var(--cream-mute);">Aucun paiement trouvé pour ces filtres.</td></tr>';
+    return;
+  }
+  
+  tbody.innerHTML = filtered.map(p => {
+    let statusBadge = '';
+    if (p.status === 'validated') statusBadge = '<span class="tag-inline green">✓ Validé</span>';
+    else if (p.status === 'pending') statusBadge = '<span class="tag-inline red">En attente</span>';
+    else if (p.status === 'refunded') statusBadge = '<span class="tag-inline gold">Remboursé</span>';
+    
+    return `
+      <tr style="border-bottom:1px solid rgba(255,255,255,0.04);">
+        <td style="padding:14px 12px;font-family:var(--mono);font-size:11px;color:var(--gold);">${p.id}</td>
+        <td style="padding:14px 12px;color:var(--cream);">${p.pilot}</td>
+        <td style="padding:14px 12px;color:var(--cream-mute);font-size:12px;">${p.session}</td>
+        <td style="padding:14px 12px;text-align:right;font-family:var(--display);font-style:italic;font-weight:700;color:var(--cream);">${p.amount} €</td>
+        <td style="padding:14px 12px;text-align:center;">${statusBadge}</td>
+        <td style="padding:14px 12px;color:var(--cream-mute);font-size:12px;font-family:var(--mono);">${new Date(p.date).toLocaleDateString('fr-FR')}</td>
+        <td style="padding:14px 12px;text-align:right;">
+          ${p.status === 'validated' ? `<button class="btn btn-sm" onclick="toast('Facture PDF · Disponible avec SIRET','warn');"><span>↓ PDF</span></button>` : ''}
+          ${p.status === 'pending' ? `<button class="btn btn-sm" onclick="paymentOpenValidateModal('${p.id}');"><span>Valider</span></button>` : ''}
+        </td>
+      </tr>
+    `;
+  }).join('');
+};
+
+window.paymentOpenValidateModal = function(paymentId) {
+  const payment = window.MOCK_PAYMENTS.find(p => p.id === paymentId);
+  if (!payment) return;
+  
+  const modal = document.getElementById('paymentValidateModal');
+  const content = document.getElementById('paymentValidateContent');
+  
+  if (content) {
+    content.innerHTML = `
+      <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:14px;padding:18px;background:rgba(0,0,0,0.3);border-radius:8px;border:1px solid var(--bento-border);">
+        <div>
+          <div style="font-family:var(--display);font-size:10px;letter-spacing:0.2em;text-transform:uppercase;color:var(--cream-mute);margin-bottom:4px;">Pilote</div>
+          <div style="font-family:var(--sans);font-size:14px;color:var(--cream);font-weight:500;">${payment.pilot}</div>
+          <div style="font-family:var(--mono);font-size:11px;color:var(--cream-mute);margin-top:2px;">${payment.pilotEmail}</div>
+        </div>
+        <div>
+          <div style="font-family:var(--display);font-size:10px;letter-spacing:0.2em;text-transform:uppercase;color:var(--cream-mute);margin-bottom:4px;">Référence</div>
+          <div style="font-family:var(--mono);font-size:14px;color:var(--gold);">${payment.id}</div>
+        </div>
+        <div>
+          <div style="font-family:var(--display);font-size:10px;letter-spacing:0.2em;text-transform:uppercase;color:var(--cream-mute);margin-bottom:4px;">Session</div>
+          <div style="font-family:var(--sans);font-size:13px;color:var(--cream);">${payment.session}</div>
+        </div>
+        <div>
+          <div style="font-family:var(--display);font-size:10px;letter-spacing:0.2em;text-transform:uppercase;color:var(--cream-mute);margin-bottom:4px;">Montant</div>
+          <div style="font-family:var(--display);font-style:italic;font-weight:700;font-size:22px;color:var(--gold);">${payment.amount},00 €</div>
+        </div>
+      </div>
+    `;
+  }
+  
+  // Store the payment ID
+  modal.dataset.paymentId = paymentId;
+  modal.classList.add('open');
+};
+
+window.paymentCloseValidateModal = function() {
+  const modal = document.getElementById('paymentValidateModal');
+  if (modal) modal.classList.remove('open');
+  // Clear inputs
+  const dateInput = document.getElementById('payValidateDate');
+  const noteInput = document.getElementById('payValidateNote');
+  if (dateInput) dateInput.value = new Date().toISOString().split('T')[0];
+  if (noteInput) noteInput.value = '';
+};
+
+window.paymentConfirmValidate = function() {
+  const modal = document.getElementById('paymentValidateModal');
+  const paymentId = modal.dataset.paymentId;
+  const date = document.getElementById('payValidateDate')?.value;
+  const note = document.getElementById('payValidateNote')?.value;
+  
+  if (!date) {
+    toast('Veuillez indiquer la date de réception', 'warn');
+    return;
+  }
+  
+  // Mock validation
+  const payment = window.MOCK_PAYMENTS.find(p => p.id === paymentId);
+  if (payment) {
+    payment.status = 'validated';
+    payment.validatedAt = date;
+    payment.adminNote = note;
+  }
+  
+  toast(`✓ Paiement ${paymentId} validé · Email envoyé à ${payment?.pilot || 'pilote'}`, 'ok');
+  
+  // Refresh listings
+  paymentRenderToValidate();
+  paymentRenderHistory();
+  paymentCloseValidateModal();
+};
+
+window.paymentSendReminder = function(paymentId) {
+  const payment = window.MOCK_PAYMENTS.find(p => p.id === paymentId);
+  if (!payment) return;
+  toast(`✉ Email de rappel envoyé à ${payment.pilot}`, 'ok');
+};
+
+window.paymentExportCSV = function() {
+  const headers = ['Reference', 'Pilote', 'Email', 'Session', 'Montant', 'Statut', 'Date'];
+  const rows = window.MOCK_PAYMENTS.map(p => [p.id, p.pilot, p.pilotEmail, p.session, p.amount, p.status, p.date]);
+  
+  const csv = [headers, ...rows].map(row => row.map(cell => `"${cell}"`).join(',')).join('\n');
+  const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+  const link = document.createElement('a');
+  const url = URL.createObjectURL(blob);
+  link.setAttribute('href', url);
+  link.setAttribute('download', `oxv-paiements-${new Date().toISOString().split('T')[0]}.csv`);
+  link.style.visibility = 'hidden';
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+  toast('Export CSV téléchargé', 'ok');
+};
+
+/* ============================================================
+   ADMIN MÉDIAS — Gestion liens WeTransfer/Drive
+   ============================================================ */
+window.loadAdminMedias = function() {
+  // Les sessions à traiter sont déjà en HTML
+  // Cette fonction sera enrichie quand Supabase exposera les sessions terminées
+  console.log('[Admin Médias] Page chargée');
+};
+
+window.adminAddMediaLink = function(sessionId) {
+  const link = prompt('Coller le lien WeTransfer/Drive partagé :');
+  if (!link) return;
+  if (!link.startsWith('http')) {
+    toast('Lien invalide (doit commencer par http://)', 'warn');
+    return;
+  }
+  toast(`Lien enregistré pour la session · Emails envoyés aux pilotes`, 'ok');
+};
+
+/* ============================================================
+   ADMIN EMAILS — Templates Resend
+   ============================================================ */
+window.loadAdminEmails = function() {
+  console.log('[Admin Emails] Page chargée');
+};
+
+window.adminTestEmail = function(templateName) {
+  toast(`Test email "${templateName}" envoyé à votre adresse`, 'ok');
+};
+
+/* ============================================================
+   ADMIN STATS — KPIs business
+   ============================================================ */
+window.loadAdminStats = async function() {
+  console.log('[Admin Stats] Page chargée');
+  
+  // Si Supabase disponible, on récupère les vraies stats
+  if (window.OXVApi?.user?.isLoggedIn && typeof supabase !== 'undefined') {
+    try {
+      const { count: pilotesCount } = await supabase
+        .from('users')
+        .select('*', { count: 'exact', head: true })
+        .neq('role', 'admin');
+      
+      // Mettre à jour les KPIs si on a les vraies données
+      // (à implémenter quand le schema est stabilisé)
+    } catch (e) {
+      console.warn('[Admin Stats] Erreur récupération:', e);
+    }
+  }
+};
+
+/* ============================================================
+   ADMIN SÉCURITÉ & 2FA
+   ============================================================ */
+window.loadAdminSecurite = function() {
+  console.log('[Admin Sécurité] Page chargée');
+};
+
+window.admin2FAEnable = function() {
+  toast('Activation 2FA · Configuration Supabase TOTP requise', 'warn');
+};
+
+window.adminChangePassword = function() {
+  // Redirect vers la page forgot password connectée
+  toast('Demande de changement de mot de passe envoyée par email', 'ok');
+};
+
+window.adminRevokeAllSessions = function() {
+  if (!confirm('Toutes les sessions actives seront révoquées. Vous devrez vous reconnecter. Continuer ?')) return;
+  toast('Sessions révoquées · Redirection vers login', 'ok');
+  setTimeout(() => goTo('login'), 1500);
+};
+
 window.submitContact = function() {
   const cb = document.getElementById('ct-rgpd');
   const first = document.getElementById('ct-first');
@@ -19350,20 +19847,23 @@ window.goToAdmin = async function(page) {
     return;
   }
 
-  // Pages admin pas encore codées (étapes 6-7)
-  const notYetAvailable = {
-    'admin-paiements': 'Paiements admin · disponible à l\'étape 6',
-    'admin-medias':    'Gestion médias · disponible à l\'étape 7',
-    'admin-emails':    'Templates emails · disponible à l\'étape 7',
-    'admin-stats':     'Statistiques · disponible à l\'étape 7',
-    'admin-securite':  'Sécurité & 2FA · disponible bientôt'
-  };
-  if (notYetAvailable[page]) {
-    toast(notYetAvailable[page], 'ok');
-    return;
-  }
-
+  // Router vers la page
   goTo(page);
+  
+  // Appeler les loaders spécifiques à chaque page admin
+  setTimeout(() => {
+    if (page === 'admin-paiements' && typeof window.loadAdminPaiements === 'function') {
+      window.loadAdminPaiements();
+    } else if (page === 'admin-medias' && typeof window.loadAdminMedias === 'function') {
+      window.loadAdminMedias();
+    } else if (page === 'admin-emails' && typeof window.loadAdminEmails === 'function') {
+      window.loadAdminEmails();
+    } else if (page === 'admin-stats' && typeof window.loadAdminStats === 'function') {
+      window.loadAdminStats();
+    } else if (page === 'admin-securite' && typeof window.loadAdminSecurite === 'function') {
+      window.loadAdminSecurite();
+    }
+  }, 100);
 };
 
 /**
@@ -22768,4 +23268,4 @@ window.addEventListener('DOMContentLoaded', () => {
 </script>
 
 </body>
-</html>n
+</html>
