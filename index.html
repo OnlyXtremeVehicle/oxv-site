@@ -11103,6 +11103,141 @@ textarea:focus-visible {
   .page { display: block !important; }
 }
 
+/* ─────────────────────────────────────────────────────────────
+   NAVIGATION GRILLE — Tableau de bord pilote & admin
+   Gros boutons accessibles, visibles sur tous les écrans.
+   ───────────────────────────────────────────────────────────── */
+
+.account-nav-grid,
+.admin-nav-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin-bottom: 40px;
+}
+@media (min-width: 560px) {
+  .account-nav-grid,
+  .admin-nav-grid { grid-template-columns: 1fr 1fr 1fr; gap: 12px; }
+}
+@media (min-width: 920px) {
+  .account-nav-grid,
+  .admin-nav-grid { grid-template-columns: 1fr 1fr 1fr 1fr; gap: 14px; }
+}
+
+.account-nav-btn,
+.admin-nav-btn {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 5px;
+  padding: 18px 16px 22px;
+  background: var(--night-card);
+  border: 1px solid var(--cream-line);
+  cursor: pointer;
+  transition: border-color 0.25s, background 0.25s, transform 0.15s;
+  text-align: left;
+  min-height: 96px;
+  position: relative;
+  overflow: hidden;
+}
+.account-nav-btn:hover,
+.admin-nav-btn:hover {
+  border-color: var(--copper-glow);
+  background: rgba(196, 164, 89, 0.05);
+  transform: translateY(-2px);
+}
+.account-nav-btn:active,
+.admin-nav-btn:active { transform: translateY(0); }
+
+.account-nav-btn-icon,
+.admin-nav-btn-icon {
+  font-family: var(--serif);
+  font-style: italic;
+  font-size: 18px;
+  color: var(--copper-glow);
+  line-height: 1;
+  margin-bottom: 4px;
+  opacity: 0.85;
+}
+.account-nav-btn-label,
+.admin-nav-btn-label {
+  font-family: var(--sans);
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--cream);
+  line-height: 1.25;
+}
+.account-nav-btn-sub,
+.admin-nav-btn-sub {
+  font-family: var(--sans);
+  font-size: 11px;
+  color: var(--cream-mute);
+  line-height: 1.4;
+}
+.account-nav-btn::after,
+.admin-nav-btn::after {
+  content: '→';
+  position: absolute;
+  bottom: 12px;
+  right: 14px;
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--copper-glow);
+  opacity: 0;
+  transition: opacity 0.25s, transform 0.25s;
+}
+.account-nav-btn:hover::after,
+.admin-nav-btn:hover::after {
+  opacity: 1;
+  transform: translateX(3px);
+}
+
+/* Bouton CTA (réservation) */
+.account-nav-btn--cta {
+  background: rgba(196, 164, 89, 0.07);
+  border-color: var(--copper);
+}
+.account-nav-btn--cta .account-nav-btn-label { color: var(--copper-glow); }
+
+/* ─── MOBILE : masque la nav sidebar sur le dashboard ─── */
+/* Sur le dashboard, les gros boutons remplacent la nav texte */
+@media (max-width: 920px) {
+  .account-sidebar--dashboard .account-nav { display: none; }
+  .admin-sidebar--dashboard .admin-nav { display: none; }
+
+  /* Sidebar dashboard : compacte (juste nom + statut) */
+  .account-sidebar--dashboard .account-sidebar-eyebrow { font-size: 8px; }
+  .account-sidebar--dashboard {
+    padding-bottom: 20px !important;
+  }
+
+  /* Nav items plus grands sur mobile (pages secondaires) */
+  .account-nav-item {
+    padding: 15px 6px !important;
+    font-size: 12px !important;
+    min-height: 50px;
+    letter-spacing: 0.14em !important;
+  }
+  .admin-nav-item {
+    padding: 13px 6px !important;
+    font-size: 12px !important;
+    min-height: 46px;
+  }
+
+  /* Boutons de navigation plus grands sur mobile */
+  .account-nav-btn,
+  .admin-nav-btn {
+    min-height: 100px;
+    padding: 16px 14px 24px;
+  }
+  .account-nav-btn-label,
+  .admin-nav-btn-label { font-size: 14px; }
+  .account-nav-btn-sub,
+  .admin-nav-btn-sub { font-size: 11px; }
+  .account-nav-btn-icon,
+  .admin-nav-btn-icon { font-size: 20px; }
+}
+
 </style>
 </head>
 <body>
@@ -12642,7 +12777,7 @@ textarea:focus-visible {
   <div class="account-layout">
 
     <!-- Sidebar -->
-    <aside class="account-sidebar" id="acctSidebar">
+    <aside class="account-sidebar account-sidebar--dashboard" id="acctSidebar">
       <div class="account-sidebar-eyebrow">— Espace pilote</div>
       <div class="account-sidebar-name" id="acctName">Pilote <em>OXV</em></div>
       <div class="account-sidebar-email" id="acctEmail">—</div>
@@ -12668,8 +12803,14 @@ textarea:focus-visible {
         <button class="account-nav-item" onclick="goToAccount('compte-sessions')">
           <span>Mes sessions</span><span class="arr">→</span>
         </button>
+        <button class="account-nav-item" onclick="goToAccount('compte-progression')">
+          <span>Ma progression</span><span class="arr">→</span>
+        </button>
         <button class="account-nav-item" onclick="goToAccount('compte-heritage')">
           <span>Mon Heritage</span><span class="arr">→</span>
+        </button>
+        <button class="account-nav-item" onclick="goToAccount('compte-paiements')">
+          <span>Mes paiements</span><span class="arr">→</span>
         </button>
         <div class="account-nav-divider"></div>
         <button class="account-nav-item" onclick="goToAccount('compte-preferences')">
@@ -12689,6 +12830,59 @@ textarea:focus-visible {
         <p class="account-header-sub">
           Votre dossier pilote, vos sessions, vos documents. Tout est centralisé ici.
         </p>
+      </div>
+
+      <!-- Navigation principale : gros boutons accessibles -->
+      <div class="account-nav-grid">
+
+        <button class="account-nav-btn" onclick="goToAccount('compte-profil')">
+          <span class="account-nav-btn-icon">◎</span>
+          <span class="account-nav-btn-label">Mon profil</span>
+          <span class="account-nav-btn-sub">Identité · coordonnées · urgence</span>
+        </button>
+
+        <button class="account-nav-btn" onclick="goToAccount('compte-vehicules')">
+          <span class="account-nav-btn-icon">◈</span>
+          <span class="account-nav-btn-label">Mes véhicules</span>
+          <span class="account-nav-btn-sub">Ajouter · modifier · photos</span>
+        </button>
+
+        <button class="account-nav-btn" onclick="goToAccount('compte-documents')">
+          <span class="account-nav-btn-icon">▣</span>
+          <span class="account-nav-btn-label">Mes documents</span>
+          <span class="account-nav-btn-sub">Permis · assurance · identité</span>
+        </button>
+
+        <button class="account-nav-btn" onclick="goToAccount('compte-sessions')">
+          <span class="account-nav-btn-icon">◷</span>
+          <span class="account-nav-btn-label">Mes sessions</span>
+          <span class="account-nav-btn-sub">Historique · sessions à venir</span>
+        </button>
+
+        <button class="account-nav-btn" onclick="goToAccount('compte-progression')">
+          <span class="account-nav-btn-icon">↗</span>
+          <span class="account-nav-btn-label">Ma progression</span>
+          <span class="account-nav-btn-sub">Niveau · paliers · historique pilote</span>
+        </button>
+
+        <button class="account-nav-btn" onclick="goToAccount('compte-heritage')">
+          <span class="account-nav-btn-icon">★</span>
+          <span class="account-nav-btn-label">Mon Heritage</span>
+          <span class="account-nav-btn-sub">Pack · avantages · place saison</span>
+        </button>
+
+        <button class="account-nav-btn" onclick="goToAccount('compte-paiements')">
+          <span class="account-nav-btn-icon">€</span>
+          <span class="account-nav-btn-label">Paiements</span>
+          <span class="account-nav-btn-sub">Factures · virements · historique</span>
+        </button>
+
+        <button class="account-nav-btn account-nav-btn--cta" onclick="goTo('booking')">
+          <span class="account-nav-btn-icon">⌬</span>
+          <span class="account-nav-btn-label">Réserver une session</span>
+          <span class="account-nav-btn-sub">Voir les dates disponibles</span>
+        </button>
+
       </div>
 
       <!-- KPIs -->
@@ -13839,7 +14033,7 @@ textarea:focus-visible {
 
   <div class="admin-layout">
 
-    <aside class="admin-sidebar">
+    <aside class="admin-sidebar admin-sidebar--dashboard">
       <div class="admin-brand">
         <div class="admin-brand-mark">⌬</div>
         <div class="admin-brand-text">
@@ -13902,6 +14096,53 @@ textarea:focus-visible {
           <h1 class="admin-header-title">Tableau de <em>bord</em>.</h1>
           <div class="admin-header-sub" id="adminGreeting">Chargement…</div>
         </div>
+      </div>
+
+      <!-- Navigation principale admin : gros boutons accessibles -->
+      <div class="admin-nav-grid">
+
+        <button class="admin-nav-btn" onclick="goToAdmin('admin-pilotes')">
+          <span class="admin-nav-btn-icon">◎</span>
+          <span class="admin-nav-btn-label">Pilotes</span>
+          <span class="admin-nav-btn-sub">KYC · inscriptions · dossiers</span>
+        </button>
+
+        <button class="admin-nav-btn" onclick="goToAdmin('admin-sessions')">
+          <span class="admin-nav-btn-icon">⌬</span>
+          <span class="admin-nav-btn-label">Sessions</span>
+          <span class="admin-nav-btn-sub">Calendrier · gestion · capacité</span>
+        </button>
+
+        <button class="admin-nav-btn" onclick="goToAdmin('admin-paiements')">
+          <span class="admin-nav-btn-icon">€</span>
+          <span class="admin-nav-btn-label">Paiements</span>
+          <span class="admin-nav-btn-sub">Validation · virements · historique</span>
+        </button>
+
+        <button class="admin-nav-btn" onclick="goToAdmin('admin-medias')">
+          <span class="admin-nav-btn-icon">▣</span>
+          <span class="admin-nav-btn-label">Médias</span>
+          <span class="admin-nav-btn-sub">Photos · vidéos · livraison</span>
+        </button>
+
+        <button class="admin-nav-btn" onclick="goToAdmin('admin-emails')">
+          <span class="admin-nav-btn-icon">✉</span>
+          <span class="admin-nav-btn-label">Emails</span>
+          <span class="admin-nav-btn-sub">Envois · taux d'ouverture</span>
+        </button>
+
+        <button class="admin-nav-btn" onclick="goToAdmin('admin-stats')">
+          <span class="admin-nav-btn-icon">↗</span>
+          <span class="admin-nav-btn-label">Statistiques</span>
+          <span class="admin-nav-btn-sub">Chiffres · tendances · saison</span>
+        </button>
+
+        <button class="admin-nav-btn" onclick="goToAdmin('admin-securite')">
+          <span class="admin-nav-btn-icon">⊛</span>
+          <span class="admin-nav-btn-label">Sécurité</span>
+          <span class="admin-nav-btn-sub">2FA · audit · connexions</span>
+        </button>
+
       </div>
 
       <!-- KPIs -->
@@ -16116,6 +16357,45 @@ const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
 window.supabase = supabase;
 
 /* ============================================================
+   HELPERS SÉCURITÉ
+   ============================================================ */
+
+/**
+ * Vérifie que la session Supabase est toujours valide.
+ * À appeler avant toute opération sensible sur des données utilisateur.
+ * Retourne false et affiche un toast si la session a expiré.
+ */
+async function requireSession() {
+  const { data: { session }, error } = await supabase.auth.getSession();
+  if (error || !session) {
+    window.OXVApi.user.isLoggedIn = false;
+    window.OXVApi.user.session = null;
+    window.OXVApi.user.profile = null;
+    toast('Session expirée — reconnectez-vous', 'warn');
+    goTo('login');
+    return false;
+  }
+  return true;
+}
+
+/**
+ * Wrapper Supabase avec gestion d'erreur centralisée.
+ * Log les erreurs et renvoie { data, error }.
+ */
+async function sbQuery(queryFn, context = '') {
+  try {
+    const result = await queryFn();
+    if (result.error) {
+      console.error(`[OXV Supabase${context ? ' · ' + context : ''}]`, result.error.message);
+    }
+    return result;
+  } catch (err) {
+    console.error(`[OXV Supabase${context ? ' · ' + context : ''}] Exception:`, err);
+    return { data: null, error: err };
+  }
+}
+
+/* ============================================================
    OXV API NAMESPACE — connecté à Supabase
    ============================================================ */
 window.OXVApi = {
@@ -16337,15 +16617,18 @@ window.goTo = function(page) {
   const protectedPages = ['compte', 'compte-profil', 'compte-vehicules', 'compte-documents', 'compte-sessions', 'compte-progression', 'compte-heritage', 'compte-paiements', 'compte-preferences'];
   // Pages admin : nécessitent une connexion + role=admin
   const adminPages = ['admin', 'admin-pilotes', 'admin-pilote-detail', 'admin-sessions', 'admin-paiements', 'admin-medias', 'admin-emails', 'admin-stats', 'admin-securite'];
+  const isProtected = protectedPages.includes(page) || adminPages.includes(page);
 
-  if (protectedPages.includes(page) && !window.OXVApi.user.isLoggedIn) {
+  if (isProtected && !window.OXVApi.user.isLoggedIn) {
     toast('Connexion requise', 'warn');
     page = 'login';
   }
-  // Pour les pages admin, on vérifie d'abord la connexion, puis le rôle (asynchrone, donc on continue d'afficher la page mais loadAdminDashboard fera le redirect si non-admin)
-  if (adminPages.includes(page) && !window.OXVApi.user.isLoggedIn) {
-    toast('Connexion requise', 'warn');
-    page = 'login';
+
+  // Vérifie la validité de la session Supabase sur chaque accès à une page protégée
+  if (isProtected && window.OXVApi.user.isLoggedIn) {
+    requireSession().then(valid => {
+      if (!valid) return; // requireSession redirige déjà vers login
+    });
   }
 
   document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
@@ -17724,22 +18007,26 @@ window.paymentRenderToValidate = function() {
       urgencyTag = '<span class="tag-inline gold">⏰ Urgent</span>';
     }
     
+    const safeId = escapeHtml(p.id || '');
+    const safePilot = escapeHtml(p.pilot || '');
+    const safeSession = escapeHtml(p.session || '');
+    const safeAmount = escapeHtml(String(p.amount || '0'));
     return `
       <div style="display:grid;grid-template-columns:auto 1fr auto auto auto;gap:18px;padding:16px 18px;background:rgba(0,0,0,0.3);border-radius:8px;border:1px solid ${isOverdue ? 'rgba(230,57,70,0.3)' : 'var(--bento-border)'};align-items:center;">
         <span class="status-dot ${isOverdue ? 'pending' : 'pending'}" style="background:${isOverdue ? 'var(--red)' : 'var(--gold)'};box-shadow:0 0 8px ${isOverdue ? 'var(--red)' : 'var(--gold)'};"></span>
         <div style="min-width:0;">
           <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;">
-            <div style="font-family:var(--display);font-style:italic;font-weight:700;font-size:14px;letter-spacing:0.04em;color:var(--cream);">${p.pilot}</div>
+            <div style="font-family:var(--display);font-style:italic;font-weight:700;font-size:14px;letter-spacing:0.04em;color:var(--cream);">${safePilot}</div>
             ${urgencyTag}
           </div>
           <div style="font-family:var(--sans);font-size:12px;color:var(--cream-mute);margin-top:4px;">
-            ${p.session} · Réf : <span style="color:var(--gold);font-family:var(--mono);">${p.id}</span><br/>
+            ${safeSession} · Réf : <span style="color:var(--gold);font-family:var(--mono);">${safeId}</span><br/>
             Échéance : ${new Date(p.dueDate).toLocaleDateString('fr-FR', {day:'numeric', month:'long', year:'numeric'})}
           </div>
         </div>
-        <div style="font-family:var(--display);font-style:italic;font-weight:700;font-size:20px;color:var(--cream);">${p.amount} €</div>
-        <button class="btn btn-primary btn-sm" onclick="paymentOpenValidateModal('${p.id}');"><span>✓ Valider</span></button>
-        <button class="btn btn-sm" onclick="paymentSendReminder('${p.id}');" title="Renvoyer email"><span>✉</span></button>
+        <div style="font-family:var(--display);font-style:italic;font-weight:700;font-size:20px;color:var(--cream);">${safeAmount} €</div>
+        <button class="btn btn-primary btn-sm" onclick="paymentOpenValidateModal('${safeId}');"><span>✓ Valider</span></button>
+        <button class="btn btn-sm" onclick="paymentSendReminder('${safeId}');" title="Renvoyer email"><span>✉</span></button>
       </div>
     `;
   }).join('');
@@ -17786,12 +18073,16 @@ window.paymentRenderHistory = function() {
     else if (p.status === 'pending') statusBadge = '<span class="tag-inline red">En attente</span>';
     else if (p.status === 'refunded') statusBadge = '<span class="tag-inline gold">Remboursé</span>';
     
+    const safeRowId = escapeHtml(p.id || '');
+    const safeRowPilot = escapeHtml(p.pilot || '');
+    const safeRowSession = escapeHtml(p.session || '');
+    const safeRowAmount = escapeHtml(String(p.amount || '0'));
     return `
       <tr style="border-bottom:1px solid rgba(255,255,255,0.04);">
-        <td style="padding:14px 12px;font-family:var(--mono);font-size:11px;color:var(--gold);">${p.id}</td>
-        <td style="padding:14px 12px;color:var(--cream);">${p.pilot}</td>
-        <td style="padding:14px 12px;color:var(--cream-mute);font-size:12px;">${p.session}</td>
-        <td style="padding:14px 12px;text-align:right;font-family:var(--display);font-style:italic;font-weight:700;color:var(--cream);">${p.amount} €</td>
+        <td style="padding:14px 12px;font-family:var(--mono);font-size:11px;color:var(--gold);">${safeRowId}</td>
+        <td style="padding:14px 12px;color:var(--cream);">${safeRowPilot}</td>
+        <td style="padding:14px 12px;color:var(--cream-mute);font-size:12px;">${safeRowSession}</td>
+        <td style="padding:14px 12px;text-align:right;font-family:var(--display);font-style:italic;font-weight:700;color:var(--cream);">${safeRowAmount} €</td>
         <td style="padding:14px 12px;text-align:center;">${statusBadge}</td>
         <td style="padding:14px 12px;color:var(--cream-mute);font-size:12px;font-family:var(--mono);">${new Date(p.date).toLocaleDateString('fr-FR')}</td>
         <td style="padding:14px 12px;text-align:right;">
@@ -18330,8 +18621,8 @@ function renderAdminAuditLog(logs) {
     else if (ua.includes('Firefox')) browser = 'Firefox';
     else if (ua.includes('Edg')) browser = 'Edge';
     
-    const ip = log.ip_address || '—';
-    
+    const ip = escapeHtml(log.ip_address || '—');
+
     return `
       <div style="display:grid;grid-template-columns:auto 1fr auto auto;gap:18px;padding:12px 16px;background:rgba(0,0,0,0.3);border-radius:6px;border:1px solid var(--bento-border);align-items:center;font-family:var(--sans);font-size:13px;">
         <span class="status-dot ok"></span>
