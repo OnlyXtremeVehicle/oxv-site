@@ -12933,6 +12933,12 @@ textarea:focus-visible {
           <span class="account-nav-btn-sub">Voir les dates disponibles</span>
         </button>
 
+        <button id="adminDashboardTile" class="account-nav-btn" onclick="goTo('admin')" style="display:none;border-color:rgba(255,183,3,0.4);background:rgba(255,183,3,0.05);">
+          <span class="account-nav-btn-icon" style="color:var(--copper-glow);">⌬</span>
+          <span class="account-nav-btn-label" style="color:var(--copper-glow);">Espace Admin</span>
+          <span class="account-nav-btn-sub">Tableau de bord · gestion · réglages</span>
+        </button>
+
       </div>
 
       <!-- KPIs -->
@@ -15789,11 +15795,11 @@ textarea:focus-visible {
       <div class="bk-progress" id="bkProgress">
         <div class="bk-progress-step active" data-step="1">
           <span class="num">1</span>
-          <span>Date</span>
+          <span>Offre</span>
         </div>
         <div class="bk-progress-step" data-step="2">
           <span class="num">2</span>
-          <span>Offre</span>
+          <span>Date</span>
         </div>
         <div class="bk-progress-step" data-step="3">
           <span class="num">3</span>
@@ -15809,7 +15815,7 @@ textarea:focus-visible {
         </div>
       </div>
 
-      <!-- ÉTAPE 1 : Date -->
+      <!-- ÉTAPE 1 : Offre -->
       <div class="bk-step active" data-step="1">
         <div class="bk-step-eyebrow">N° ⊳ · Étape 1 / 4</div>
         <h2 class="bk-step-title">Choisir une <em>offre</em>.</h2>
@@ -17103,7 +17109,7 @@ async function bkLoadDatesForOffer() {
   filteredSessions.forEach(s => {
     const r = regsBySession[s.id] || { access: 0, signature: 0, promotion: 0, heritage: 0, total: 0 };
     const capa = {
-      access:    s.capacity_access || 0,
+      access:    s.capacity_access || 20,
       signature: s.capacity_signature || 0,
       promotion: s.capacity_promotion || 0,
       total:     s.max_capacity || 20
@@ -19418,6 +19424,8 @@ window.loadAccountSidebar = async function() {
   if (data.role === 'admin') {
     const adminBackBtn = document.getElementById('progAdminBackBtn');
     if (adminBackBtn) adminBackBtn.style.display = 'block';
+    const adminTile = document.getElementById('adminDashboardTile');
+    if (adminTile) adminTile.style.display = '';
     document.querySelectorAll('.account-nav').forEach(nav => {
       // Évite les doublons
       if (nav.querySelector('.admin-shortcut')) return;
@@ -23352,7 +23360,7 @@ window.loadAdminSessions = async function() {
   allAdminSessions = sessions.map(s => {
     const regs = regsBySession[s.id] || { access: 0, signature: 0, promotion: 0, heritage: 0, total: 0 };
     const capa = {
-      access:    s.capacity_access || 8,
+      access:    s.capacity_access || 20,
       signature: s.capacity_signature || 4,
       promotion: s.capacity_promotion || 8,
       total:     s.max_capacity || 20
@@ -23714,7 +23722,7 @@ function renderAdminSDStats(s, regs) {
   activeRegs.forEach(r => { counts[r.offer_type] = (counts[r.offer_type] || 0) + 1; });
 
   const offers = [
-    { key: 'access',    label: 'Access',    max: s.capacity_access || 8 },
+    { key: 'access',    label: 'Access',    max: s.capacity_access || 20 },
     { key: 'signature', label: 'Signature', max: s.capacity_signature || 4 },
     { key: 'promotion', label: 'Promotion', max: s.capacity_promotion || 8 },
     { key: 'total',     label: 'Total',     max: s.max_capacity || 20 }
