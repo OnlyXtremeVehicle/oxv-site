@@ -15685,6 +15685,116 @@ textarea:focus-visible {
 </div>
 
 
+<!-- QDI Score Modal (admin) -->
+<div class="vmodal" id="qdiModal">
+  <div class="vmodal-card" style="max-width:580px;">
+    <button class="vmodal-close" onclick="closeQDIModal()">×</button>
+    <div class="vmodal-eyebrow">— Saisie scores QDI</div>
+    <h2 class="vmodal-title" id="qdiModalTitle">Score <em>pilote</em>.</h2>
+
+    <div class="account-form">
+
+      <!-- Score global -->
+      <div class="form-row full">
+        <label>Score global QDI <span id="qdiGlobalVal" style="color:var(--copper-glow);margin-left:8px;">50</span> / 100</label>
+        <input type="range" id="qdi-global" min="0" max="100" value="50"
+          oninput="document.getElementById('qdiGlobalVal').textContent=this.value; autoQDILevel();"
+          style="width:100%;accent-color:var(--copper);" />
+      </div>
+
+      <!-- Niveau -->
+      <div class="form-row">
+        <label>Niveau</label>
+        <select id="qdi-level" style="background:var(--ink);border:1px solid var(--cream-line);color:var(--cream);padding:10px 14px;font-family:var(--mono);font-size:12px;width:100%;">
+          <option value="novice">Novice</option>
+          <option value="bronze">Bronze</option>
+          <option value="argent">Argent</option>
+          <option value="or">Or</option>
+          <option value="elite">Elite</option>
+        </select>
+      </div>
+
+      <!-- Séparateur piliers -->
+      <div class="form-row full" style="margin:4px 0 -4px;">
+        <div style="font-family:var(--mono);font-size:9px;letter-spacing:0.28em;text-transform:uppercase;color:var(--copper-glow);padding-bottom:8px;border-bottom:1px solid var(--cream-line);">— 5 piliers de performance</div>
+      </div>
+
+      <!-- Trajectoire -->
+      <div class="form-row full">
+        <label style="color:var(--qdi-trajectory);">Trajectoire <span id="qdiTrajVal" style="margin-left:8px;">50</span></label>
+        <input type="range" id="qdi-trajectory" min="0" max="100" value="50"
+          oninput="document.getElementById('qdiTrajVal').textContent=this.value"
+          style="width:100%;accent-color:#E63946;" />
+      </div>
+
+      <!-- Fluidité -->
+      <div class="form-row full">
+        <label style="color:var(--qdi-fluidity);">Fluidité <span id="qdiFluidVal" style="margin-left:8px;">50</span></label>
+        <input type="range" id="qdi-fluidity" min="0" max="100" value="50"
+          oninput="document.getElementById('qdiFluidVal').textContent=this.value"
+          style="width:100%;accent-color:#FFB703;" />
+      </div>
+
+      <!-- Freinage -->
+      <div class="form-row full">
+        <label style="color:var(--qdi-braking);">Freinage <span id="qdiBrakeVal" style="margin-left:8px;">50</span></label>
+        <input type="range" id="qdi-braking" min="0" max="100" value="50"
+          oninput="document.getElementById('qdiBrakeVal').textContent=this.value"
+          style="width:100%;accent-color:#60A5FA;" />
+      </div>
+
+      <!-- Accélération -->
+      <div class="form-row full">
+        <label style="color:var(--qdi-acceleration);">Accélération <span id="qdiAccelVal" style="margin-left:8px;">50</span></label>
+        <input type="range" id="qdi-acceleration" min="0" max="100" value="50"
+          oninput="document.getElementById('qdiAccelVal').textContent=this.value"
+          style="width:100%;accent-color:#4ADE80;" />
+      </div>
+
+      <!-- Régularité -->
+      <div class="form-row full">
+        <label style="color:var(--qdi-regularity);">Régularité <span id="qdiRegVal" style="margin-left:8px;">50</span></label>
+        <input type="range" id="qdi-regularity" min="0" max="100" value="50"
+          oninput="document.getElementById('qdiRegVal').textContent=this.value"
+          style="width:100%;accent-color:#C084FC;" />
+      </div>
+
+      <!-- Chronométrie -->
+      <div class="form-row full" style="margin:4px 0 -4px;">
+        <div style="font-family:var(--mono);font-size:9px;letter-spacing:0.28em;text-transform:uppercase;color:var(--copper-glow);padding-bottom:8px;border-bottom:1px solid var(--cream-line);">— Chronométrie (optionnel)</div>
+      </div>
+
+      <div class="form-row">
+        <label>Tours total</label>
+        <input type="number" id="qdi-total-laps" min="0" max="999" placeholder="Ex. 18" style="background:var(--ink);border:1px solid var(--cream-line);color:var(--cream);padding:10px 14px;font-family:var(--mono);font-size:12px;width:100%;" />
+      </div>
+
+      <div class="form-row">
+        <label>Tours valides</label>
+        <input type="number" id="qdi-valid-laps" min="0" max="999" placeholder="Ex. 14" style="background:var(--ink);border:1px solid var(--cream-line);color:var(--cream);padding:10px 14px;font-family:var(--mono);font-size:12px;width:100%;" />
+      </div>
+
+      <div class="form-row full">
+        <label>Meilleur tour</label>
+        <input type="text" id="qdi-best-lap" placeholder="Ex. 1:23.456" style="background:var(--ink);border:1px solid var(--cream-line);color:var(--cream);padding:10px 14px;font-family:var(--mono);font-size:12px;width:100%;" />
+      </div>
+
+      <!-- Notes coach -->
+      <div class="form-row full">
+        <label>Notes coach (visibles pilote)</label>
+        <textarea id="qdi-notes" rows="3" placeholder="Points forts, axes de progression..."
+          style="background:var(--ink);border:1px solid var(--cream-line);color:var(--cream);padding:10px 14px;font-family:var(--sans);font-size:13px;width:100%;resize:vertical;"></textarea>
+      </div>
+
+      <div class="form-row full" style="margin-top:8px;">
+        <button class="admin-btn primary" onclick="adminSaveQDI()" id="qdiSaveBtn">Enregistrer le score QDI</button>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+
 <!-- ============ BOOKING (PRIVÉ) ============ -->
 <div class="page" id="page-booking">
 
@@ -23719,6 +23829,9 @@ function renderAdminSDRegs(regs) {
       if (r.status === 'confirmed') {
         actions.push(`<button class="admin-table-action success" onclick="adminMarkAttended('${r.id}', '${r.users?.id}', '${escapeHtml(fullName)}')" style="border-color: rgba(74,222,128,0.3); color: var(--green-perf);">✓ Effectuée</button>`);
       }
+      if (r.status === 'attended') {
+        actions.push(`<button class="admin-table-action" onclick="adminOpenQDIModal('${r.id}', '${r.users?.id}', '${escapeHtml(fullName)}')" style="border-color: rgba(255,183,3,0.35); color: var(--copper-glow);">QDI →</button>`);
+      }
       actions.push(`<button class="admin-table-action" onclick="goToAdminPilote('${r.users?.id}')">Voir pilote</button>`);
       if (r.status === 'pending' || r.status === 'confirmed') {
         actions.push(`<button class="admin-table-action" onclick="adminCancelRegistration('${r.id}')" style="border-color: rgba(196, 89, 89, 0.3); color: #E07878;">Annuler</button>`);
@@ -23758,6 +23871,9 @@ function renderAdminSDRegs(regs) {
       }
       if (r.status === 'confirmed') {
         actions.push(`<button class="admin-table-action" onclick="adminMarkAttended('${r.id}', '${r.users?.id}', '${escapeHtml(fullName)}')" style="border-color: rgba(74,222,128,0.3); color: var(--green-perf);">✓ Effectuée</button>`);
+      }
+      if (r.status === 'attended') {
+        actions.push(`<button class="admin-table-action" onclick="adminOpenQDIModal('${r.id}', '${r.users?.id}', '${escapeHtml(fullName)}')" style="border-color: rgba(255,183,3,0.35); color: var(--copper-glow);">QDI →</button>`);
       }
       actions.push(`<button class="admin-table-action" onclick="goToAdminPilote('${r.users?.id}')">Voir pilote</button>`);
 
@@ -24049,6 +24165,123 @@ window.adminMarkAttended = async function(registrationId, pilotId, pilotName) {
 
   toast(`${pilotName} — session marquée effectuée`, 'ok');
   loadAdminSessionDetail();
+};
+
+/* === Modal saisie QDI (admin) === */
+
+let _qdiRegistrationId = null;
+let _qdiPilotId = null;
+
+window.adminOpenQDIModal = async function(registrationId, pilotId, pilotName) {
+  _qdiRegistrationId = registrationId;
+  _qdiPilotId = pilotId;
+
+  document.getElementById('qdiModalTitle').innerHTML = `Score <em>${escapeHtml(pilotName)}</em>.`;
+
+  // Charger les scores existants s'il y en a
+  const { data: existing } = await supabase
+    .from('qdi_scores')
+    .select('*')
+    .eq('registration_id', registrationId)
+    .order('computed_at', { ascending: false })
+    .limit(1)
+    .single();
+
+  const s = existing || {};
+  const setSlider = (id, valId, val) => {
+    const el = document.getElementById(id);
+    const vEl = document.getElementById(valId);
+    if (el) el.value = val || 50;
+    if (vEl) vEl.textContent = val || 50;
+  };
+
+  setSlider('qdi-global',       'qdiGlobalVal', s.qdi_global);
+  setSlider('qdi-trajectory',   'qdiTrajVal',   s.trajectory_score);
+  setSlider('qdi-fluidity',     'qdiFluidVal',  s.fluidity_score);
+  setSlider('qdi-braking',      'qdiBrakeVal',  s.braking_score);
+  setSlider('qdi-acceleration', 'qdiAccelVal',  s.acceleration_score);
+  setSlider('qdi-regularity',   'qdiRegVal',    s.regularity_score);
+
+  const level = document.getElementById('qdi-level');
+  if (level) level.value = s.qdi_level || 'novice';
+
+  const totalLaps  = document.getElementById('qdi-total-laps');
+  const validLaps  = document.getElementById('qdi-valid-laps');
+  const bestLap    = document.getElementById('qdi-best-lap');
+  const notes      = document.getElementById('qdi-notes');
+  if (totalLaps) totalLaps.value = s.total_laps || '';
+  if (validLaps) validLaps.value = s.valid_laps || '';
+  if (bestLap)   bestLap.value   = s.best_lap_time || '';
+  if (notes)     notes.value     = s.notes || '';
+
+  document.getElementById('qdiModal').classList.add('open');
+};
+
+window.closeQDIModal = function() {
+  document.getElementById('qdiModal').classList.remove('open');
+  _qdiRegistrationId = null;
+  _qdiPilotId = null;
+};
+
+window.autoQDILevel = function() {
+  const score = parseInt(document.getElementById('qdi-global').value) || 0;
+  const level = document.getElementById('qdi-level');
+  if (!level) return;
+  if (score >= 95)      level.value = 'elite';
+  else if (score >= 85) level.value = 'or';
+  else if (score >= 70) level.value = 'argent';
+  else if (score >= 50) level.value = 'bronze';
+  else                  level.value = 'novice';
+};
+
+window.adminSaveQDI = async function() {
+  if (!_qdiRegistrationId || !_qdiPilotId) return;
+
+  const btn = document.getElementById('qdiSaveBtn');
+  const orig = btn.textContent;
+  btn.textContent = 'Enregistrement…';
+  btn.disabled = true;
+
+  const payload = {
+    user_id:            _qdiPilotId,
+    registration_id:    _qdiRegistrationId,
+    qdi_global:         parseInt(document.getElementById('qdi-global').value) || 0,
+    qdi_level:          document.getElementById('qdi-level').value,
+    trajectory_score:   parseInt(document.getElementById('qdi-trajectory').value) || 0,
+    fluidity_score:     parseInt(document.getElementById('qdi-fluidity').value) || 0,
+    braking_score:      parseInt(document.getElementById('qdi-braking').value) || 0,
+    acceleration_score: parseInt(document.getElementById('qdi-acceleration').value) || 0,
+    regularity_score:   parseInt(document.getElementById('qdi-regularity').value) || 0,
+    total_laps:         parseInt(document.getElementById('qdi-total-laps').value) || null,
+    valid_laps:         parseInt(document.getElementById('qdi-valid-laps').value) || null,
+    best_lap_time:      document.getElementById('qdi-best-lap').value.trim() || null,
+    notes:              document.getElementById('qdi-notes').value.trim() || null,
+    computed_at:        new Date().toISOString()
+  };
+
+  // Récupérer le session_id depuis la registration
+  const { data: reg } = await supabase
+    .from('registrations').select('session_id').eq('id', _qdiRegistrationId).single();
+  if (reg?.session_id) payload.session_id = reg.session_id;
+
+  // Upsert : update si une entrée existe déjà pour cette registration, sinon insert
+  const { data: existing } = await supabase
+    .from('qdi_scores').select('id').eq('registration_id', _qdiRegistrationId).limit(1).single();
+
+  let err;
+  if (existing?.id) {
+    ({ error: err } = await supabase.from('qdi_scores').update(payload).eq('id', existing.id));
+  } else {
+    ({ error: err } = await supabase.from('qdi_scores').insert(payload));
+  }
+
+  btn.textContent = orig;
+  btn.disabled = false;
+
+  if (err) { toast('Erreur enregistrement QDI', 'warn'); return; }
+
+  toast('Score QDI enregistré ✓', 'ok');
+  closeQDIModal();
 };
 
 /**
