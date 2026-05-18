@@ -7814,6 +7814,25 @@ textarea.form-input {
   color: var(--cream-mute);
 }
 
+.cal-card-offers {
+  display: flex;
+  gap: 5px;
+  flex-wrap: wrap;
+}
+.cal-card-offer-pill {
+  font-family: var(--mono);
+  font-size: 8px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  padding: 3px 7px;
+  border: 1px solid rgba(239, 230, 210, 0.12);
+  color: var(--cream-faint);
+}
+.cal-card-offer-pill.access      { border-color: rgba(96, 165, 250, 0.35); color: #60A5FA; }
+.cal-card-offer-pill.signature   { border-color: rgba(255, 183, 3, 0.35);  color: var(--copper-glow); }
+.cal-card-offer-pill.promotion   { border-color: rgba(74, 222, 128, 0.35); color: var(--green-perf); }
+.cal-card-offer-pill.heritage    { border-color: rgba(192, 132, 252, 0.35); color: #C084FC; }
+
 .cal-cta-block {
   background: rgba(11, 18, 32, 0.6);
   border: 1px solid var(--copper);
@@ -12405,7 +12424,7 @@ textarea:focus-visible {
       <div class="page-hero-eyebrow">N° ⊟ · Saison 2026</div>
       <h1 class="page-hero-title">Le <em>calendrier</em>.</h1>
       <p class="page-hero-lede">
-        Trente-deux dates dans la saison. Mardis en haute saison, samedis en basse saison. Vingt pilotes par jour.
+        Lundis demi-journée · offre Access. Vendredis journée complète · offres Signature, Promotion &amp; Héritage. Vingt pilotes par session.
       </p>
     </div>
   </section>
@@ -17678,12 +17697,27 @@ async function triggerBookingEmail(reg, session, offerKey, totalAmount) {
     }
   };
 
-  // V1 : log dans la console pour vérifier que la donnée est correcte
-  console.log('[OXV Email queued]', emailPayload);
-
-  // Stocke dans Supabase qu'un email aurait été envoyé (pour traçabilité)
-  // Cette table sera créée dans la migration ultérieure (étape 8)
-  // Pour l'instant on ne fait rien d'autre — l'email partira quand Resend sera branché.
+  // Appel Edge Function send-confirmation-email
+  try {
+    const { data: { session: authSession } } = await supabase.auth.getSession();
+    if (authSession?.access_token) {
+      const fnUrl = `${SUPABASE_URL}/functions/v1/send-confirmation-email`;
+      const res = await fetch(fnUrl, {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${authSession.access_token}`,
+          'Content-Type': 'application/json',
+          'apikey': SUPABASE_ANON_KEY
+        },
+        body: JSON.stringify({ registration_id: reg.id })
+      });
+      if (!res.ok) {
+        console.warn('[OXV Email] Edge Function error:', await res.text());
+      }
+    }
+  } catch (emailErr) {
+    console.warn('[OXV Email] Exception:', emailErr);
+  }
 }
 
 
@@ -20788,7 +20822,12 @@ window.loadProgression = async function() {
     }
     
     if (!qdiData || qdiData.length === 0) {
-      // Pas de scores mais sessions effectuées → message d'attente
+      showWaitingQDI();
+      return;
+    }
+
+    // Entrées QDI créées mais toutes à 0 → en attente de saisie admin
+    if (qdiData.every(q => q.qdi_global === 0)) {
       showWaitingQDI();
       return;
     }
@@ -23960,13 +23999,15 @@ function triggerPaymentConfirmedEmail(reg, payment) {
  * Incrémente attended_count sur le pilote → active la carte circuit.
  */
 window.adminMarkAttended = async function(registrationId, pilotId, pilotName) {
-  if (!confirm(`Confirmer que ${pilotName} a bien participé à cette session ?\n\nSon compteur de sessions sera incrémenté.`)) return;
+  if (!confirm(`Confirmer que ${pilotName} a bien participé à cette session ?\n\nSon compteur de sessions sera incrémenté et le QDI activé.`)) return;
 
   // Marquer l'inscription comme effectuée
-  const { error: rErr } = await supabase
+  const { data: regData, error: rErr } = await supabase
     .from('registrations')
     .update({ status: 'attended', attended_at: new Date().toISOString() })
-    .eq('id', registrationId);
+    .eq('id', registrationId)
+    .select('session_id')
+    .single();
 
   if (rErr) { toast('Erreur mise à jour inscription', 'warn'); return; }
 
@@ -23982,6 +24023,28 @@ window.adminMarkAttended = async function(registrationId, pilotId, pilotName) {
       .from('users')
       .update({ attended_count: (userData.attended_count || 0) + 1 })
       .eq('id', pilotId);
+  }
+
+  // Créer une entrée QDI en attente (active l'état "analyse en cours" côté pilote)
+  if (regData?.session_id) {
+    const { error: qdiErr } = await supabase
+      .from('qdi_scores')
+      .insert({
+        user_id: pilotId,
+        session_id: regData.session_id,
+        registration_id: registrationId,
+        qdi_global: 0,
+        qdi_level: 'novice',
+        trajectory_score: 0,
+        fluidity_score: 0,
+        braking_score: 0,
+        acceleration_score: 0,
+        regularity_score: 0,
+        computed_at: new Date().toISOString()
+      });
+    if (qdiErr && qdiErr.code !== '42P01') {
+      console.warn('[adminMarkAttended] QDI insert error:', qdiErr);
+    }
   }
 
   toast(`${pilotName} — session marquée effectuée`, 'ok');
@@ -24246,20 +24309,25 @@ function applyPublicCalFilter() {
     const dateNum = date.getDate();
     const monthLabel = months[date.getMonth()];
     const yearLabel = date.getFullYear();
-    const seasonLabel = s.season_type === 'high' ? 'Haute saison' : 'Basse saison';
-    const horaires = s.season_type === 'high' ? '09h00 — 17h30' : '10h00 — 16h30';
-    const lowSeasonClass = s.season_type === 'low' ? ' low-season' : '';
+    const isHalfDay = s.format === 'half_day';
+    const formatLabel = isHalfDay ? 'Demi-journée' : 'Journée complète';
+    const horaires = isHalfDay ? '09h00 — 13h00' : '09h00 — 17h30';
     const fullClass = s._isFull ? ' full' : '';
     const placesValue = s._isFull
       ? `<span class="full-pill">Complet</span>`
       : `${s._capacity - s._registered} / ${s._capacity}`;
+    const offerPills = isHalfDay
+      ? `<span class="cal-card-offer-pill access">Access</span>`
+      : `<span class="cal-card-offer-pill signature">Signature</span><span class="cal-card-offer-pill promotion">Promotion</span><span class="cal-card-offer-pill heritage">Héritage</span>`;
 
     return `
-      <button class="cal-card${lowSeasonClass}${fullClass}" onclick="${s._isFull ? '' : `goTo('booking')`}" type="button">
-        <div class="cal-card-eyebrow">${seasonLabel}</div>
+      <button class="cal-card${fullClass}" onclick="${s._isFull ? '' : `goTo('booking')`}" type="button">
+        <div class="cal-card-eyebrow">${formatLabel}</div>
 
         <div class="cal-card-date">${dateNum} <em>${monthLabel}</em></div>
         <div class="cal-card-day">${dayLabel} · ${yearLabel}</div>
+
+        <div class="cal-card-offers">${offerPills}</div>
 
         <div class="cal-card-info">
           <div class="cal-card-info-row">
