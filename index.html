@@ -70,6 +70,9 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Syncopate:wght@400;700&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
 
+<!-- hCaptcha (chargement conditionnel — actif uniquement si configuré côté Supabase) -->
+<script src="https://js.hcaptcha.com/1/api.js" async defer></script>
+
 <script type="importmap">
 {
   "imports": {
@@ -12752,6 +12755,9 @@ textarea:focus-visible {
             <span class="badge">obligatoire</span>
           </div>
         </div>
+
+        <!-- hCaptcha — visible uniquement si data-sitekey est valorisé -->
+        <div id="signup-captcha" style="margin-top:18px;display:flex;justify-content:center;"></div>
       </div>
 
       <div class="auth-actions">
@@ -16621,6 +16627,56 @@ import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
 const SUPABASE_URL = 'https://fouvuqkdxarjpjbqnsjq.supabase.co';
 const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZvdXZ1cWtkeGFyanBqYnFuc2pxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzgyNzM2MDYsImV4cCI6MjA5Mzg0OTYwNn0.zhigqdPPe7M35mCvBeqoY6MGfp4Kn9quWNn_7mxLqo8';
 
+/* ============================================================
+   CONFIG OXV — Variables d'environnement frontend
+   ============================================================ */
+window.OXV_CONFIG = {
+  // hCaptcha site key (récupérable sur dashboard.hcaptcha.com)
+  // Laisser vide → captcha désactivé (mode dev/test)
+  // Renseigner → captcha actif sur signup, login, contact
+  HCAPTCHA_SITE_KEY: 'b4ea17fa-4596-4e66-8424-333e3fd83486',  // ⚠️ À remplir après création compte hCaptcha
+  
+  // Email pro de contact
+  CONTACT_EMAIL: 'contact@oxvehicle.fr',
+  
+  // URL de base
+  SITE_URL: 'https://oxvehicle.fr'
+};
+
+/* ============================================================
+   hCAPTCHA — Initialisation widgets sur les formulaires
+   Appelé après chargement de la page et après navigation
+   ============================================================ */
+window.initCaptchaWidgets = function() {
+  const siteKey = window.OXV_CONFIG?.HCAPTCHA_SITE_KEY;
+  if (!siteKey) return;  // Pas de clé → captcha désactivé
+  if (typeof hcaptcha === 'undefined') return;  // Script hCaptcha pas encore chargé
+  
+  // Cibles : conteneurs prévus dans les formulaires
+  const containers = ['signup-captcha', 'login-captcha', 'contact-captcha', 'forgot-captcha'];
+  
+  containers.forEach(id => {
+    const el = document.getElementById(id);
+    if (el && !el.dataset.captchaRendered) {
+      try {
+        hcaptcha.render(el, {
+          sitekey: siteKey,
+          theme: 'dark',
+          size: 'normal'
+        });
+        el.dataset.captchaRendered = '1';
+      } catch (e) {
+        console.warn('[hCaptcha] Erreur rendu:', e);
+      }
+    }
+  });
+};
+
+// Tentative d'init au chargement et lors des navigations
+document.addEventListener('DOMContentLoaded', () => {
+  setTimeout(window.initCaptchaWidgets, 500);
+});
+
 // Storage robuste pour Safari mobile (localStorage peut être bloqué en navigation privée)
 const _oxvStorage = (() => {
   try {
@@ -16702,11 +16758,12 @@ window.OXVApi = {
     /**
      * Création de compte
      * Crée l'utilisateur dans Supabase Auth + insert dans table `users`
+     * @param {object} data - { first, last, email, password, captchaToken? }
      */
     register: async (data) => {
       try {
-        // 1. Créer le compte Auth
-        const { data: authData, error: authError } = await supabase.auth.signUp({
+        // 1. Créer le compte Auth (avec captcha si activé)
+        const signUpOptions = {
           email: data.email,
           password: data.password,
           options: {
@@ -16715,7 +16772,14 @@ window.OXVApi = {
               last_name: data.last
             }
           }
-        });
+        };
+        
+        // Si hCaptcha est activé côté Supabase, passer le token
+        if (data.captchaToken) {
+          signUpOptions.options.captchaToken = data.captchaToken;
+        }
+        
+        const { data: authData, error: authError } = await supabase.auth.signUp(signUpOptions);
 
         if (authError) throw authError;
         if (!authData.user) throw new Error('Création de compte échouée');
@@ -16743,13 +16807,20 @@ window.OXVApi = {
 
     /**
      * Connexion email + mot de passe
+     * @param {string} email
+     * @param {string} pwd
+     * @param {string} captchaToken - Optionnel, requis si hCaptcha activé
      */
-    login: async (email, pwd) => {
+    login: async (email, pwd, captchaToken = null) => {
       try {
-        const { data, error } = await supabase.auth.signInWithPassword({
+        const signInOptions = {
           email,
           password: pwd
-        });
+        };
+        if (captchaToken) {
+          signInOptions.options = { captchaToken };
+        }
+        const { data, error } = await supabase.auth.signInWithPassword(signInOptions);
         if (error) throw error;
 
         window.OXVApi.user.isLoggedIn = true;
@@ -17045,6 +17116,13 @@ window.goTo = function(page) {
 
   // Reveal anims
   setTimeout(setupReveal, 100);
+  
+  // Re-init hCaptcha widgets si présents sur la nouvelle page
+  setTimeout(() => {
+    if (typeof window.initCaptchaWidgets === 'function') {
+      window.initCaptchaWidgets();
+    }
+  }, 200);
 };
 
 window.closeMob = function() {
@@ -19343,6 +19421,17 @@ window.submitSignup = async function() {
   if (pwd.value !== pwdConfirm.value) { toast('Les mots de passe ne correspondent pas', 'warn'); return; }
   if (!cb || !cb.classList.contains('checked')) { toast('Acceptation des CGU requise', 'warn'); return; }
 
+  // Récupération token hCaptcha si widget présent
+  let captchaToken = null;
+  const captchaWidget = document.querySelector('#signup-captcha .h-captcha [name="h-captcha-response"]');
+  if (captchaWidget) {
+    captchaToken = captchaWidget.value;
+    if (!captchaToken) { 
+      toast('Veuillez compléter la vérification anti-bot', 'warn'); 
+      return; 
+    }
+  }
+
   const btn = event.target.closest('button');
   const orig = btn ? btn.innerHTML : '';
   if (btn) { btn.innerHTML = '<span>⟳ Création du compte…</span>'; btn.disabled = true; }
@@ -19351,10 +19440,16 @@ window.submitSignup = async function() {
     first: first.value,
     last: last.value,
     email: email.value,
-    password: pwd.value
+    password: pwd.value,
+    captchaToken: captchaToken
   });
 
   if (btn) { btn.innerHTML = orig; btn.disabled = false; }
+
+  // Reset hCaptcha pour permettre une nouvelle tentative
+  if (typeof hcaptcha !== 'undefined' && captchaWidget) {
+    try { hcaptcha.reset(); } catch(e) {}
+  }
 
   if (result.ok) {
     lastSignupEmail = email.value;
@@ -19362,13 +19457,13 @@ window.submitSignup = async function() {
     [first, last, email, pwd, pwdConfirm].forEach(el => el.value = '');
     cb.classList.remove('checked');
 
-    // Si l'utilisateur a une session immédiate (Confirm email désactivé) → /compte
-    // Sinon → page verify-email pour qu'il aille cliquer le lien
+    // Si "Confirm email" activé côté Supabase, l'utilisateur DOIT vérifier son email
+    // Sinon, session immédiate
     if (result.user && window.OXVApi.user.isLoggedIn) {
       toast('Compte créé · bienvenue chez OXV', 'ok');
       goTo('compte');
     } else {
-      toast('Compte créé · vérifiez votre email', 'ok');
+      toast('Compte créé · vérifiez votre boîte email', 'ok');
       goTo('verify-email');
     }
   } else {
@@ -19380,6 +19475,8 @@ window.submitSignup = async function() {
       msg = 'Email invalide';
     } else if (msg.includes('Password should')) {
       msg = 'Mot de passe trop faible';
+    } else if (msg.toLowerCase().includes('captcha')) {
+      msg = 'Vérification anti-bot échouée · réessayez';
     }
     toast(msg, 'warn');
   }
