@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>404 — Hors-piste · OXV</title>
+<link rel="icon" href="/favicon.ico">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="192x192" href="/favicon-192x192.png">
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<meta name="robots" content="noindex">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Syncopate:wght@400;700&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+<style>
+  :root {
+    --night:        #050505;
+    --night-card:   #121212;
+    --cream:        #F8F9FA;
+    --cream-mute:   #A1A1AA;
+    --gold:         #C4A459;
+    --red:          #E63946;
+    --sans:         'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    --mono:         'JetBrains Mono', 'SF Mono', Menlo, monospace;
+    --display:      'Syncopate', 'Inter', sans-serif;
+  }
+  
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  
+  html, body {
+    background: var(--night);
+    color: var(--cream);
+    font-family: var(--sans);
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+  
+  .container {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 40px 24px;
+    position: relative;
+  }
+  
+  /* Filet vertical or à gauche (signature charte) */
+  .container::before {
+    content: '';
+    position: absolute;
+    left: 48px;
+    top: 80px;
+    bottom: 80px;
+    width: 1px;
+    background: var(--gold);
+    opacity: 0.6;
+  }
+  
+  .eyebrow {
+    font-family: var(--mono);
+    font-size: 12px;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 32px;
+  }
+  
+  .code {
+    font-family: var(--display);
+    font-weight: 700;
+    font-style: italic;
+    font-size: clamp(96px, 18vw, 200px);
+    color: var(--cream);
+    line-height: 0.9;
+    letter-spacing: -0.02em;
+    margin-bottom: 24px;
+  }
+  
+  .code em {
+    color: var(--gold);
+    font-style: italic;
+  }
+  
+  .title {
+    font-family: var(--display);
+    font-weight: 700;
+    font-style: italic;
+    font-size: clamp(28px, 5vw, 48px);
+    color: var(--cream);
+    letter-spacing: -0.01em;
+    line-height: 1.1;
+    margin-bottom: 24px;
+    text-align: center;
+  }
+  
+  .title em {
+    color: var(--gold);
+    font-style: italic;
+  }
+  
+  .lede {
+    font-family: var(--sans);
+    font-size: 16px;
+    line-height: 1.65;
+    color: var(--cream-mute);
+    max-width: 520px;
+    text-align: center;
+    margin-bottom: 48px;
+  }
+  
+  .actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+    justify-content: center;
+  }
+  
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 14px 28px;
+    font-family: var(--sans);
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    text-decoration: none;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    background: transparent;
+    color: var(--cream);
+    cursor: pointer;
+    transition: all 0.28s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    border-radius: 4px;
+  }
+  
+  .btn:hover {
+    border-color: var(--cream);
+    background: rgba(255, 255, 255, 0.04);
+    transform: translateY(-1px);
+  }
+  
+  .btn-primary {
+    background: var(--gold);
+    color: var(--night);
+    border-color: var(--gold);
+  }
+  
+  .btn-primary:hover {
+    background: #D4B469;
+    border-color: #D4B469;
+    transform: translateY(-1px);
+  }
+  
+  .footer {
+    position: absolute;
+    bottom: 32px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--cream-mute);
+    opacity: 0.5;
+  }
+  
+  /* Grille subtile en fond */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: 
+      linear-gradient(rgba(255, 255, 255, 0.02) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
+    background-size: 80px 80px;
+    pointer-events: none;
+    z-index: 0;
+  }
+  
+  .container > * {
+    position: relative;
+    z-index: 1;
+  }
+  
+  @media (max-width: 720px) {
+    .container::before { left: 24px; }
+    .actions { flex-direction: column; width: 100%; max-width: 320px; }
+    .btn { width: 100%; }
+  }
+</style>
+</head>
+<body>
+
+<div class="container">
+  
+  <div class="eyebrow">— Erreur 404</div>
+  
+  <h1 class="code">4<em>0</em>4</h1>
+  
+  <h2 class="title">Hors-<em>piste</em>.</h2>
+  
+  <p class="lede">
+    Cette page n'existe pas, ou plus. Vous êtes sorti de la trajectoire. Revenez à la ligne de course principale.
+  </p>
+  
+  <div class="actions">
+    <a href="/" class="btn btn-primary">Retour à l'accueil</a>
+    <a href="/?page=calendrier" class="btn">Voir le calendrier</a>
+    <a href="mailto:contact@oxvehicle.fr" class="btn">Nous contacter</a>
+  </div>
+  
+  <div class="footer">OXV · ONLY XTREME VEHICLE</div>
+</div>
+
+</body>
+</html>
