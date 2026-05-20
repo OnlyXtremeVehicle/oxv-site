@@ -72,9 +72,6 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Syncopate:wght@400;700&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
 
-<!-- hCaptcha (chargement conditionnel — actif uniquement si configuré côté Supabase) -->
-<script src="https://js.hcaptcha.com/1/api.js" async defer></script>
-
 <script type="importmap">
 {
   "imports": {
@@ -10015,6 +10012,45 @@ p a:hover {
   color: var(--green-perf);
   background: rgba(74, 222, 128, 0.05);
 }
+.tag-inline.cream,
+.chip.cream {
+  border-color: rgba(248, 249, 250, 0.2);
+  color: var(--cream);
+  background: rgba(248, 249, 250, 0.04);
+}
+.tag-inline.gray,
+.chip.gray {
+  border-color: rgba(161, 161, 170, 0.2);
+  color: var(--cream-mute);
+  background: rgba(161, 161, 170, 0.04);
+}
+
+/* Filtres admin (boutons de filtre par statut) */
+.admin-filter-btn {
+  display: inline-flex;
+  align-items: center;
+  padding: 7px 14px;
+  font-family: var(--sans);
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  color: var(--cream-mute);
+  background: rgba(0, 0, 0, 0.3);
+  border: 1px solid var(--bento-border);
+  border-radius: 5px;
+  cursor: pointer;
+  transition: all 0.22s var(--ease);
+}
+.admin-filter-btn:hover {
+  border-color: var(--cream-edge);
+  color: var(--cream);
+}
+.admin-filter-btn.active {
+  background: var(--gold);
+  border-color: var(--gold);
+  color: var(--night);
+  font-weight: 600;
+}
 
 /* Dividers harmonisés */
 hr, .divider {
@@ -12780,9 +12816,6 @@ textarea:focus-visible {
             <span class="badge">obligatoire</span>
           </div>
         </div>
-
-        <!-- hCaptcha — visible uniquement si data-sitekey est valorisé -->
-        <div id="signup-captcha" style="margin-top:18px;display:flex;justify-content:center;"></div>
       </div>
 
       <div class="auth-actions">
@@ -12846,9 +12879,6 @@ textarea:focus-visible {
       <div class="auth-actions">
         <button class="btn btn-primary btn-lg" id="loginSubmitBtn" onclick="submitLogin()"><span>Se connecter</span></button>
       </div>
-
-      <!-- hCaptcha INVISIBLE — widget non-visuel ; affiche un badge discret en bas à droite uniquement si nécessaire -->
-      <div id="login-captcha"></div>
 
       <div class="auth-divider"><span>ou</span></div>
 
@@ -14352,6 +14382,14 @@ textarea:focus-visible {
         <button class="admin-nav-item" onclick="goToAdmin('admin-emails')">
           <span>Emails</span>
         </button>
+        <button class="admin-nav-item" onclick="goToAdmin('admin-messages')">
+          <span>Messages</span>
+          <span class="badge-count" id="navBadgeMessages" style="display:none;">0</span>
+        </button>
+        <button class="admin-nav-item" onclick="goToAdmin('admin-messages')">
+          <span>Messages</span>
+          <span class="badge-count" id="navBadgeMessages" style="display:none;">0</span>
+        </button>
 
         <div class="admin-nav-section">— Pilotage</div>
 
@@ -14536,6 +14574,14 @@ textarea:focus-visible {
         <button class="admin-nav-item" onclick="goToAdmin('admin-emails')">
           <span>Emails</span>
         </button>
+        <button class="admin-nav-item" onclick="goToAdmin('admin-messages')">
+          <span>Messages</span>
+          <span class="badge-count" id="navBadgeMessages" style="display:none;">0</span>
+        </button>
+        <button class="admin-nav-item" onclick="goToAdmin('admin-messages')">
+          <span>Messages</span>
+          <span class="badge-count" id="navBadgeMessages" style="display:none;">0</span>
+        </button>
 
         <div class="admin-nav-section">— Pilotage</div>
 
@@ -14673,6 +14719,10 @@ textarea:focus-visible {
         </button>
         <button class="admin-nav-item" onclick="goToAdmin('admin-emails')">
           <span>Emails</span>
+        </button>
+        <button class="admin-nav-item" onclick="goToAdmin('admin-messages')">
+          <span>Messages</span>
+          <span class="badge-count" id="navBadgeMessages" style="display:none;">0</span>
         </button>
         <div class="admin-nav-section">— Pilotage</div>
         <button class="admin-nav-item" onclick="goToAdmin('admin-stats')">
@@ -14857,6 +14907,10 @@ textarea:focus-visible {
         </button>
         <button class="admin-nav-item" onclick="goToAdmin('admin-emails')">
           <span>Emails</span>
+        </button>
+        <button class="admin-nav-item" onclick="goToAdmin('admin-messages')">
+          <span>Messages</span>
+          <span class="badge-count" id="navBadgeMessages" style="display:none;">0</span>
         </button>
         <div class="admin-nav-section">— Pilotage</div>
         <button class="admin-nav-item" onclick="goToAdmin('admin-stats')">
@@ -15061,6 +15115,10 @@ textarea:focus-visible {
         </button>
         <button class="admin-nav-item" onclick="goToAdmin('admin-emails')">
           <span>Emails</span>
+        </button>
+        <button class="admin-nav-item" onclick="goToAdmin('admin-messages')">
+          <span>Messages</span>
+          <span class="badge-count" id="navBadgeMessages" style="display:none;">0</span>
         </button>
         <div class="admin-nav-section">— Pilotage</div>
         <button class="admin-nav-item" onclick="goToAdmin('admin-stats')">
@@ -15497,6 +15555,91 @@ textarea:focus-visible {
 <!-- /admin-emails -->
 
 
+<!-- ============ ADMIN : MESSAGES CONTACT ============ -->
+<div class="page" id="page-admin-messages">
+  <div class="admin-layout">
+    <aside class="admin-sidebar">
+      <div class="admin-sidebar-eyebrow">— Espace admin</div>
+      <div class="admin-sidebar-name acct-name-sync">Pilote <em>OXV</em></div>
+      <nav class="admin-nav">
+        <button class="admin-nav-item" onclick="goToAdmin('admin')"><span>Tableau de bord</span><span class="arr">→</span></button>
+        <button class="admin-nav-item" onclick="goToAdmin('admin-pilotes')"><span>Pilotes</span><span class="arr">→</span></button>
+        <button class="admin-nav-item" onclick="goToAdmin('admin-sessions')"><span>Sessions</span><span class="arr">→</span></button>
+        <button class="admin-nav-item" onclick="goToAdmin('admin-paiements')"><span>Paiements</span><span class="arr">→</span></button>
+        <div class="admin-nav-divider"></div>
+        <div class="admin-nav-section">— Communication</div>
+        <button class="admin-nav-item" onclick="goToAdmin('admin-medias')"><span>Médias</span><span class="arr">→</span></button>
+        <button class="admin-nav-item" onclick="goToAdmin('admin-emails')"><span>Emails</span><span class="arr">→</span></button>
+        <button class="admin-nav-item active" onclick="goToAdmin('admin-messages')">
+          <span>Messages</span>
+          <span class="badge-count" id="navBadgeMessages2" style="display:none;">0</span>
+          <span class="arr">→</span>
+        </button>
+        <div class="admin-nav-divider"></div>
+        <div class="admin-nav-section">— Pilotage</div>
+        <button class="admin-nav-item" onclick="goToAdmin('admin-stats')"><span>Statistiques</span><span class="arr">→</span></button>
+        <button class="admin-nav-item" onclick="goToAdmin('admin-securite')"><span>Sécurité &amp; 2FA</span><span class="arr">→</span></button>
+        <div class="admin-nav-divider"></div>
+        <button class="admin-nav-item" onclick="goTo('compte')"><span>← Retour espace pilote</span><span class="arr">→</span></button>
+        <button class="admin-nav-item" onclick="logoutUser()"><span>Se déconnecter</span><span class="arr">→</span></button>
+      </nav>
+    </aside>
+    <main class="admin-main">
+      <div class="admin-header">
+        <div class="admin-header-eyebrow">N° ⌬ · Admin · Messages</div>
+        <h1 class="admin-header-title">Messages <em>reçus</em>.</h1>
+        <p class="admin-header-sub">
+          Messages envoyés via le formulaire de contact public. Triable par statut.
+        </p>
+      </div>
+
+      <!-- KPIs -->
+      <div class="admin-kpis" style="margin-bottom:24px;">
+        <div class="bento" style="padding:20px;">
+          <div class="prog-pillar-weight" style="margin-bottom:8px;">— Nouveaux</div>
+          <div style="font-family:var(--display);font-size:32px;font-weight:700;color:var(--gold);" id="adminMsgKpiNew">—</div>
+        </div>
+        <div class="bento" style="padding:20px;">
+          <div class="prog-pillar-weight" style="margin-bottom:8px;">— Lus</div>
+          <div style="font-family:var(--display);font-size:32px;font-weight:700;color:var(--cream);" id="adminMsgKpiInProgress">—</div>
+        </div>
+        <div class="bento" style="padding:20px;">
+          <div class="prog-pillar-weight" style="margin-bottom:8px;">— Répondus</div>
+          <div style="font-family:var(--display);font-size:32px;font-weight:700;color:var(--green-perf);" id="adminMsgKpiDone">—</div>
+        </div>
+        <div class="bento" style="padding:20px;">
+          <div class="prog-pillar-weight" style="margin-bottom:8px;">— Total</div>
+          <div style="font-family:var(--display);font-size:32px;font-weight:700;color:var(--cream-mute);" id="adminMsgKpiTotal">—</div>
+        </div>
+      </div>
+
+      <!-- Filtres -->
+      <div class="bento" style="padding:20px;margin-bottom:24px;">
+        <div style="display:flex;gap:10px;flex-wrap:wrap;align-items:center;">
+          <span style="font-family:var(--mono);font-size:11px;letter-spacing:0.2em;color:var(--cream-mute);text-transform:uppercase;margin-right:8px;">Filtrer :</span>
+          <button class="admin-filter-btn active" data-msg-filter="all" onclick="adminFilterMessages('all', this)">Tous</button>
+          <button class="admin-filter-btn" data-msg-filter="new" onclick="adminFilterMessages('new', this)">Nouveaux</button>
+          <button class="admin-filter-btn" data-msg-filter="read" onclick="adminFilterMessages('read', this)">Lus</button>
+          <button class="admin-filter-btn" data-msg-filter="replied" onclick="adminFilterMessages('replied', this)">Répondus</button>
+          <button class="admin-filter-btn" data-msg-filter="archived" onclick="adminFilterMessages('archived', this)">Archivés</button>
+          <button class="admin-filter-btn" data-msg-filter="spam" onclick="adminFilterMessages('spam', this)">Spam</button>
+          <span style="flex:1;"></span>
+          <button class="btn btn-sm" onclick="adminLoadMessages()"><span>↻ Rafraîchir</span></button>
+        </div>
+      </div>
+
+      <!-- Liste des messages -->
+      <div id="adminMessagesList">
+        <div class="bento" style="padding:40px;text-align:center;">
+          <p style="font-family:var(--sans);color:var(--cream-mute);">Chargement…</p>
+        </div>
+      </div>
+    </main>
+  </div>
+</div>
+<!-- /admin-messages -->
+
+
 <!-- ============ ADMIN : STATISTIQUES ============ -->
 <div class="page" id="page-admin-stats">
   <div class="admin-layout">
@@ -15683,6 +15826,47 @@ textarea:focus-visible {
           <p style="font-family:var(--sans);font-size:13px;color:var(--cream-mute);margin:0 0 14px;line-height:1.6;"><strong style="color:var(--cream);">2 sessions actives.</strong> Vous pouvez les révoquer toutes.</p>
           <button class="btn btn-sm btn-danger" onclick="adminRevokeAllSessions()"><span>Tout révoquer</span></button>
         </div>
+      </div>
+
+      <!-- COORDONNÉES BANCAIRES OXV -->
+      <div class="bento" style="padding:32px;margin-top:24px;">
+        <div class="prog-pillar-weight" style="margin-bottom:14px;">— Coordonnées bancaires OXV</div>
+        <h3 style="font-family:var(--display);font-style:italic;font-weight:700;font-size:20px;letter-spacing:0.04em;text-transform:uppercase;color:var(--cream);margin:0 0 14px;">Compte de virement</h3>
+        <p style="font-family:var(--sans);font-size:14px;color:var(--cream-mute);line-height:1.65;margin:0 0 20px;">
+          Renseignez les coordonnées du compte professionnel OXV. Elles seront utilisées pour générer les emails de confirmation après réservation.
+        </p>
+
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:16px;margin-bottom:20px;">
+          <div>
+            <label style="display:block;font-family:var(--mono);font-size:11px;letter-spacing:0.2em;text-transform:uppercase;color:var(--cream-mute);margin-bottom:6px;">Bénéficiaire</label>
+            <input id="adminBankBeneficiary" type="text" value="OXV — Only Xtreme Vehicle" 
+              style="width:100%;background:rgba(0,0,0,0.4);border:1px solid var(--bento-border);color:var(--cream);padding:11px 14px;border-radius:6px;font-family:var(--sans);font-size:14px;" />
+          </div>
+          <div>
+            <label style="display:block;font-family:var(--mono);font-size:11px;letter-spacing:0.2em;text-transform:uppercase;color:var(--cream-mute);margin-bottom:6px;">Banque</label>
+            <input id="adminBankName" type="text" placeholder="Ex : Qonto, BNP Paribas, Crédit Agricole…"
+              style="width:100%;background:rgba(0,0,0,0.4);border:1px solid var(--bento-border);color:var(--cream);padding:11px 14px;border-radius:6px;font-family:var(--sans);font-size:14px;" />
+          </div>
+          <div>
+            <label style="display:block;font-family:var(--mono);font-size:11px;letter-spacing:0.2em;text-transform:uppercase;color:var(--cream-mute);margin-bottom:6px;">IBAN</label>
+            <input id="adminBankIban" type="text" placeholder="FR76 ____ ____ ____ ____ ____ ___"
+              style="width:100%;background:rgba(0,0,0,0.4);border:1px solid var(--bento-border);color:var(--cream);padding:11px 14px;border-radius:6px;font-family:var(--mono);font-size:13px;letter-spacing:0.05em;" />
+          </div>
+          <div>
+            <label style="display:block;font-family:var(--mono);font-size:11px;letter-spacing:0.2em;text-transform:uppercase;color:var(--cream-mute);margin-bottom:6px;">BIC / SWIFT</label>
+            <input id="adminBankBic" type="text" placeholder="Ex : QNTOFRP1XXX"
+              style="width:100%;background:rgba(0,0,0,0.4);border:1px solid var(--bento-border);color:var(--cream);padding:11px 14px;border-radius:6px;font-family:var(--mono);font-size:13px;letter-spacing:0.05em;" />
+          </div>
+        </div>
+
+        <div style="display:flex;gap:12px;align-items:center;">
+          <button class="btn btn-primary" onclick="adminSaveBankDetails()"><span>Enregistrer</span></button>
+          <span id="adminBankStatus" style="font-family:var(--sans);font-size:13px;color:var(--cream-mute);"></span>
+        </div>
+        
+        <p style="font-family:var(--sans);font-size:12px;color:var(--cream-mute);line-height:1.55;margin:18px 0 0;font-style:italic;">
+          Conservées dans le navigateur (localStorage) en attendant la table dédiée. Pour multi-utilisateurs admin : à terme déplacer dans Supabase.
+        </p>
       </div>
     </main>
   </div>
@@ -16659,10 +16843,6 @@ const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBh
    CONFIG OXV — Variables d'environnement frontend
    ============================================================ */
 window.OXV_CONFIG = {
-  // hCaptcha site key — récupérée sur dashboard.hcaptcha.com
-  // Active hCaptcha sur signup (visible) et login (invisible)
-  HCAPTCHA_SITE_KEY: 'b4ea17fa-4596-4e66-8424-333e3fd83486',
-  
   // Email pro de contact
   CONTACT_EMAIL: 'contact@oxvehicle.fr',
   
@@ -16670,75 +16850,9 @@ window.OXV_CONFIG = {
   SITE_URL: 'https://oxvehicle.fr'
 };
 
-/* ============================================================
-   hCAPTCHA — Initialisation widgets sur les formulaires
-   Modes :
-   - signup : visible (l'utilisateur coche la case)
-   - login : invisible (validation automatique en arrière-plan)
-   - contact : visible
-   - forgot : invisible
-   ============================================================ */
-window.initCaptchaWidgets = function() {
-  const siteKey = window.OXV_CONFIG?.HCAPTCHA_SITE_KEY;
-  if (!siteKey) return;  // Pas de clé → captcha désactivé
-  if (typeof hcaptcha === 'undefined') return;  // Script hCaptcha pas encore chargé
-  
-  // Configuration par conteneur
-  const widgets = [
-    { id: 'signup-captcha',  size: 'normal',   theme: 'dark' },
-    { id: 'login-captcha',   size: 'invisible', theme: 'dark' },
-    { id: 'contact-captcha', size: 'normal',   theme: 'dark' },
-    { id: 'forgot-captcha',  size: 'invisible', theme: 'dark' }
-  ];
-  
-  widgets.forEach(w => {
-    const el = document.getElementById(w.id);
-    if (el && !el.dataset.captchaRendered) {
-      try {
-        const widgetId = hcaptcha.render(el, {
-          sitekey: siteKey,
-          theme: w.theme,
-          size: w.size
-        });
-        el.dataset.captchaRendered = '1';
-        el.dataset.widgetId = widgetId;
-      } catch (e) {
-        console.warn('[hCaptcha] Erreur rendu ' + w.id + ':', e);
-      }
-    }
-  });
-};
-
-// Helper pour exécuter un captcha invisible et récupérer le token
-window.executeInvisibleCaptcha = function(containerId) {
-  return new Promise((resolve) => {
-    const el = document.getElementById(containerId);
-    if (!el || !window.OXV_CONFIG?.HCAPTCHA_SITE_KEY || typeof hcaptcha === 'undefined') {
-      resolve(null);
-      return;
-    }
-    const widgetId = el.dataset.widgetId;
-    if (!widgetId) {
-      resolve(null);
-      return;
-    }
-    try {
-      // Réinitialiser pour avoir un fresh challenge
-      hcaptcha.reset(widgetId);
-      // Exécuter et récupérer le token via callback
-      hcaptcha.execute(widgetId, { async: true })
-        .then(({ response }) => resolve(response))
-        .catch(() => resolve(null));
-    } catch (e) {
-      console.warn('[hCaptcha execute]:', e);
-      resolve(null);
-    }
-  });
-};
-
 // Tentative d'init au chargement et lors des navigations
 document.addEventListener('DOMContentLoaded', () => {
-  setTimeout(window.initCaptchaWidgets, 500);
+  // Captcha retiré le 20 mai 2026
 });
 
 // Storage robuste pour Safari mobile (localStorage peut être bloqué en navigation privée)
@@ -16822,12 +16936,12 @@ window.OXVApi = {
     /**
      * Création de compte
      * Crée l'utilisateur dans Supabase Auth + insert dans table `users`
-     * @param {object} data - { first, last, email, password, captchaToken? }
+     * @param {object} data - { first, last, email, password }
      */
     register: async (data) => {
       try {
-        // 1. Créer le compte Auth (avec captcha si activé)
-        const signUpOptions = {
+        // 1. Créer le compte Auth
+        const { data: authData, error: authError } = await supabase.auth.signUp({
           email: data.email,
           password: data.password,
           options: {
@@ -16836,14 +16950,7 @@ window.OXVApi = {
               last_name: data.last
             }
           }
-        };
-        
-        // Si hCaptcha est activé côté Supabase, passer le token
-        if (data.captchaToken) {
-          signUpOptions.options.captchaToken = data.captchaToken;
-        }
-        
-        const { data: authData, error: authError } = await supabase.auth.signUp(signUpOptions);
+        });
 
         if (authError) throw authError;
         if (!authData.user) throw new Error('Création de compte échouée');
@@ -16871,20 +16978,13 @@ window.OXVApi = {
 
     /**
      * Connexion email + mot de passe
-     * @param {string} email
-     * @param {string} pwd
-     * @param {string} captchaToken - Optionnel, requis si hCaptcha activé
      */
-    login: async (email, pwd, captchaToken = null) => {
+    login: async (email, pwd) => {
       try {
-        const signInOptions = {
+        const { data, error } = await supabase.auth.signInWithPassword({
           email,
           password: pwd
-        };
-        if (captchaToken) {
-          signInOptions.options = { captchaToken };
-        }
-        const { data, error } = await supabase.auth.signInWithPassword(signInOptions);
+        });
         if (error) throw error;
 
         window.OXVApi.user.isLoggedIn = true;
@@ -16923,18 +17023,12 @@ window.OXVApi = {
 
     /**
      * Demande de réinitialisation de mot de passe
-     * @param {string} email
-     * @param {string} captchaToken - Optionnel, requis si hCaptcha activé
      */
-    forgotPassword: async (email, captchaToken = null) => {
+    forgotPassword: async (email) => {
       try {
-        const options = {
+        const { error } = await supabase.auth.resetPasswordForEmail(email, {
           redirectTo: window.location.origin + '/?auth=reset'
-        };
-        if (captchaToken) {
-          options.captchaToken = captchaToken;
-        }
-        const { error } = await supabase.auth.resetPasswordForEmail(email, options);
+        });
         if (error) throw error;
         return { ok: true };
       } catch (err) {
@@ -16978,14 +17072,22 @@ window.OXVApi = {
       if (error) { console.warn(error); return []; }
       return data;
     },
-    book: async (data) => ({ ok: true, depositUrl: '#stripe' }) // TODO étape 4
+    // Stripe : actif dès activation du SIRET + clés API en V8
+    // Pour l'instant la réservation enregistre côté Supabase et l'IBAN
+    // est transmis manuellement par email.
+    book: async (data) => ({ 
+      ok: false, 
+      pending: true,
+      message: 'Paiement par virement bancaire en V1 — Stripe sera activé après obtention du SIRET' 
+    })
   },
   telemetry: {
-    connect: async () => {/* TODO BLE pairing */},
-    startSession: async () => {/* TODO */},
-    stopSession: async () => {/* TODO */},
-    getLapData: async () => [],
-    exportCSV: async () => null
+    // App native + RaceBox Mini : Phase 2 (post-V1)
+    connect:      async () => ({ ok: false, message: 'Disponible dans l\'app native OXV' }),
+    startSession: async () => ({ ok: false, message: 'Disponible dans l\'app native OXV' }),
+    stopSession:  async () => ({ ok: false, message: 'Disponible dans l\'app native OXV' }),
+    getLapData:   async () => [],
+    exportCSV:    async () => null
   }
 };
 
@@ -17186,13 +17288,6 @@ window.goTo = function(page) {
 
   // Reveal anims
   setTimeout(setupReveal, 100);
-  
-  // Re-init hCaptcha widgets si présents sur la nouvelle page
-  setTimeout(() => {
-    if (typeof window.initCaptchaWidgets === 'function') {
-      window.initCaptchaWidgets();
-    }
-  }, 200);
 };
 
 window.closeMob = function() {
@@ -19395,7 +19490,7 @@ window.submitContact = async function() {
 };
 
 /* === AUTH FUNCTIONS (signup, login, forgot, verify) === */
-/* TODO Supabase : remplacer les setTimeout par les vrais appels Supabase Auth */
+/* Connectées à Supabase Auth via window.OXVApi.user.* */
 
 window.checkPasswordStrength = function() {
   const pwd = document.getElementById('su-pwd');
@@ -19491,17 +19586,6 @@ window.submitSignup = async function() {
   if (pwd.value !== pwdConfirm.value) { toast('Les mots de passe ne correspondent pas', 'warn'); return; }
   if (!cb || !cb.classList.contains('checked')) { toast('Acceptation des CGU requise', 'warn'); return; }
 
-  // Récupération token hCaptcha si widget présent
-  let captchaToken = null;
-  const captchaWidget = document.querySelector('#signup-captcha .h-captcha [name="h-captcha-response"]');
-  if (captchaWidget) {
-    captchaToken = captchaWidget.value;
-    if (!captchaToken) { 
-      toast('Veuillez compléter la vérification anti-bot', 'warn'); 
-      return; 
-    }
-  }
-
   const btn = event.target.closest('button');
   const orig = btn ? btn.innerHTML : '';
   if (btn) { btn.innerHTML = '<span>⟳ Création du compte…</span>'; btn.disabled = true; }
@@ -19510,16 +19594,10 @@ window.submitSignup = async function() {
     first: first.value,
     last: last.value,
     email: email.value,
-    password: pwd.value,
-    captchaToken: captchaToken
+    password: pwd.value
   });
 
   if (btn) { btn.innerHTML = orig; btn.disabled = false; }
-
-  // Reset hCaptcha pour permettre une nouvelle tentative
-  if (typeof hcaptcha !== 'undefined' && captchaWidget) {
-    try { hcaptcha.reset(); } catch(e) {}
-  }
 
   if (result.ok) {
     lastSignupEmail = email.value;
@@ -19545,8 +19623,6 @@ window.submitSignup = async function() {
       msg = 'Email invalide';
     } else if (msg.includes('Password should')) {
       msg = 'Mot de passe trop faible';
-    } else if (msg.toLowerCase().includes('captcha')) {
-      msg = 'Vérification anti-bot échouée · réessayez';
     }
     toast(msg, 'warn');
   }
@@ -19563,13 +19639,7 @@ window.submitLogin = async function() {
   const orig = btn ? btn.innerHTML : '';
   if (btn) { btn.innerHTML = '<span>⟳ Connexion…</span>'; btn.disabled = true; }
 
-  // Exécution captcha invisible (silencieux si pas configuré)
-  let captchaToken = null;
-  if (window.OXV_CONFIG?.HCAPTCHA_SITE_KEY && typeof window.executeInvisibleCaptcha === 'function') {
-    captchaToken = await window.executeInvisibleCaptcha('login-captcha');
-  }
-
-  const result = await window.OXVApi.user.login(email.value, pwd.value, captchaToken);
+  const result = await window.OXVApi.user.login(email.value, pwd.value);
 
   if (btn) { btn.innerHTML = orig; btn.disabled = false; }
 
@@ -19640,21 +19710,11 @@ window.submitMagicLink = async function() {
   const orig = btn ? btn.innerHTML : '';
   if (btn) { btn.innerHTML = '<span>⟳ Envoi du lien…</span>'; btn.disabled = true; }
 
-  // Captcha invisible
-  let captchaToken = null;
-  if (window.OXV_CONFIG?.HCAPTCHA_SITE_KEY && typeof window.executeInvisibleCaptcha === 'function') {
-    captchaToken = await window.executeInvisibleCaptcha('login-captcha');
-  }
-
   try {
-    const otpOptions = {
+    const { error } = await supabase.auth.signInWithOtp({
       email: email.value,
       options: { emailRedirectTo: window.location.origin + '/?auth=magic' }
-    };
-    if (captchaToken) {
-      otpOptions.options.captchaToken = captchaToken;
-    }
-    const { error } = await supabase.auth.signInWithOtp(otpOptions);
+    });
     if (error) throw error;
     toast('Lien de connexion envoyé · vérifiez votre email', 'ok');
     email.value = '';
@@ -21821,6 +21881,12 @@ window.goToAdmin = async function(page) {
       window.loadAdminStats();
     } else if (page === 'admin-securite' && typeof window.loadAdminSecurite === 'function') {
       window.loadAdminSecurite();
+      // Charge également les coordonnées bancaires sauvegardées
+      if (typeof window.adminLoadBankDetails === 'function') {
+        window.adminLoadBankDetails();
+      }
+    } else if (page === 'admin-messages' && typeof window.adminLoadMessages === 'function') {
+      window.adminLoadMessages();
     }
   }, 100);
 };
@@ -21861,9 +21927,33 @@ window.loadAdminDashboard = async function() {
     loadKpiUpcomingSessions(),
     loadKpiConfirmedRegs(),
     loadAdminTodoList(),
-    loadAdminUpcomingSessions()
+    loadAdminUpcomingSessions(),
+    loadMessagesBadge()
   ]);
 };
+
+// Charge juste le count des messages NEW pour mettre à jour le badge
+async function loadMessagesBadge() {
+  try {
+    const { count, error } = await supabase
+      .from('contact_messages')
+      .select('id', { count: 'exact', head: true })
+      .eq('status', 'new');
+    
+    if (error) return;  // Table pas encore créée, silencieux
+    
+    document.querySelectorAll('[id^="navBadgeMessages"]').forEach(badge => {
+      if ((count || 0) > 0) {
+        badge.textContent = count;
+        badge.style.display = '';
+      } else {
+        badge.style.display = 'none';
+      }
+    });
+  } catch (e) {
+    // Silencieux
+  }
+}
 
 async function loadKpiTotalPilots() {
   const { count, error } = await supabase
@@ -21986,6 +22076,29 @@ async function loadAdminTodoList() {
         action: () => goToAdmin('admin-pilotes')
       });
     });
+  }
+
+  // 3. Messages contact non-lus (formulaire public)
+  try {
+    const { data: newMessages } = await supabase
+      .from('contact_messages')
+      .select('id, first_name, last_name, email, created_at')
+      .eq('status', 'new')
+      .order('created_at', { ascending: true })
+      .limit(5);
+
+    if (newMessages && newMessages.length > 0) {
+      newMessages.forEach(msg => {
+        const fullName = `${msg.first_name || ''} ${msg.last_name || ''}`.trim() || msg.email;
+        todos.push({
+          title: `Nouveau message · ${fullName}`,
+          meta: `Reçu le ${formatDate(msg.created_at)} · à répondre`,
+          action: () => goToAdmin('admin-messages')
+        });
+      });
+    }
+  } catch (e) {
+    // Silencieux si table contact_messages absente
   }
 
   // Render
@@ -23497,6 +23610,259 @@ window.logAdminAction = async function(action, metadata = {}) {
   } catch (e) {
     // Silencieux : ne JAMAIS bloquer l'action principale à cause du logging
   }
+};
+
+/* ============================================================
+   ADMIN — MESSAGES CONTACT (page admin-messages)
+   ============================================================ */
+
+let adminMessagesData = [];
+let adminMessagesFilter = 'all';
+
+/* ============================================================
+   ADMIN — Coordonnées bancaires OXV (localStorage en V1)
+   ============================================================ */
+
+const OXV_BANK_STORAGE_KEY = 'oxv_bank_details_v1';
+
+window.adminSaveBankDetails = function() {
+  const data = {
+    beneficiary: document.getElementById('adminBankBeneficiary')?.value?.trim() || '',
+    bank:        document.getElementById('adminBankName')?.value?.trim() || '',
+    iban:        document.getElementById('adminBankIban')?.value?.trim()?.replace(/\s+/g, ' ') || '',
+    bic:         document.getElementById('adminBankBic')?.value?.trim() || '',
+    updatedAt:   new Date().toISOString()
+  };
+  
+  // Validation simple IBAN (FR + 25 chars sans espace)
+  const ibanClean = data.iban.replace(/\s+/g, '');
+  if (ibanClean && (ibanClean.length < 14 || ibanClean.length > 34)) {
+    toast('IBAN au format invalide (14 à 34 caractères)', 'warn');
+    return;
+  }
+  
+  try {
+    localStorage.setItem(OXV_BANK_STORAGE_KEY, JSON.stringify(data));
+    
+    const statusEl = document.getElementById('adminBankStatus');
+    if (statusEl) {
+      statusEl.textContent = '✓ Enregistré localement';
+      statusEl.style.color = 'var(--green-perf)';
+      setTimeout(() => { statusEl.textContent = ''; }, 3000);
+    }
+    
+    toast('Coordonnées bancaires enregistrées', 'ok');
+  } catch (e) {
+    toast('Erreur d\'enregistrement', 'warn');
+  }
+};
+
+window.adminLoadBankDetails = function() {
+  try {
+    const raw = localStorage.getItem(OXV_BANK_STORAGE_KEY);
+    if (!raw) return;
+    const data = JSON.parse(raw);
+    
+    const setField = (id, val) => {
+      const el = document.getElementById(id);
+      if (el && val) el.value = val;
+    };
+    
+    setField('adminBankBeneficiary', data.beneficiary);
+    setField('adminBankName', data.bank);
+    setField('adminBankIban', data.iban);
+    setField('adminBankBic', data.bic);
+  } catch (e) {
+    // Silencieux
+  }
+};
+
+// Helper pour récupérer les détails bancaires (utilisable par d'autres modules)
+window.getOXVBankDetails = function() {
+  try {
+    const raw = localStorage.getItem(OXV_BANK_STORAGE_KEY);
+    return raw ? JSON.parse(raw) : null;
+  } catch (e) {
+    return null;
+  }
+};
+
+window.adminLoadMessages = async function() {
+  const listEl = document.getElementById('adminMessagesList');
+  if (!listEl) return;
+  
+  listEl.innerHTML = '<div class="bento" style="padding:40px;text-align:center;"><p style="font-family:var(--sans);color:var(--cream-mute);">Chargement…</p></div>';
+  
+  try {
+    const { data, error } = await supabase
+      .from('contact_messages')
+      .select('*')
+      .order('created_at', { ascending: false })
+      .limit(200);
+    
+    if (error) throw error;
+    
+    adminMessagesData = data || [];
+    adminUpdateMessagesKpis();
+    adminRenderMessagesList();
+    adminUpdateMessagesBadge();
+  } catch (err) {
+    console.warn('[Admin Messages] Erreur chargement:', err);
+    listEl.innerHTML = `
+      <div class="bento" style="padding:40px;text-align:center;">
+        <p style="font-family:var(--sans);color:var(--cream-mute);margin-bottom:10px;">Impossible de charger les messages.</p>
+        <p style="font-family:var(--sans);font-size:13px;color:var(--cream-mute);">
+          ${err.message?.includes('does not exist') ? 'Table contact_messages absente. Exécutez la migration migration_v7_7_contact.sql' : 'Vérifiez la connexion Supabase.'}
+        </p>
+      </div>`;
+  }
+};
+
+window.adminUpdateMessagesKpis = function() {
+  const counts = { new: 0, read: 0, replied: 0, archived: 0, spam: 0 };
+  adminMessagesData.forEach(m => {
+    if (counts[m.status] !== undefined) counts[m.status]++;
+  });
+  
+  const setText = (id, val) => {
+    const el = document.getElementById(id);
+    if (el) el.textContent = val;
+  };
+  
+  setText('adminMsgKpiNew', counts.new);
+  setText('adminMsgKpiInProgress', counts.read);
+  setText('adminMsgKpiDone', counts.replied);
+  setText('adminMsgKpiTotal', adminMessagesData.length);
+};
+
+window.adminUpdateMessagesBadge = function() {
+  const newCount = adminMessagesData.filter(m => m.status === 'new').length;
+  document.querySelectorAll('[id^="navBadgeMessages"]').forEach(badge => {
+    if (newCount > 0) {
+      badge.textContent = newCount;
+      badge.style.display = '';
+    } else {
+      badge.style.display = 'none';
+    }
+  });
+};
+
+window.adminFilterMessages = function(filter, btn) {
+  adminMessagesFilter = filter;
+  document.querySelectorAll('[data-msg-filter]').forEach(b => b.classList.remove('active'));
+  if (btn) btn.classList.add('active');
+  adminRenderMessagesList();
+};
+
+window.adminRenderMessagesList = function() {
+  const listEl = document.getElementById('adminMessagesList');
+  if (!listEl) return;
+  
+  let filtered = adminMessagesData;
+  if (adminMessagesFilter !== 'all') {
+    filtered = adminMessagesData.filter(m => m.status === adminMessagesFilter);
+  }
+  
+  if (filtered.length === 0) {
+    listEl.innerHTML = `
+      <div class="bento" style="padding:60px 40px;text-align:center;">
+        <div style="font-family:var(--mono);font-size:11px;letter-spacing:0.25em;color:var(--cream-mute);text-transform:uppercase;margin-bottom:14px;">— Boîte vide</div>
+        <p style="font-family:var(--display);font-style:italic;font-size:22px;color:var(--cream);margin-bottom:10px;">Aucun message <em>ici</em>.</p>
+        <p style="font-family:var(--sans);font-size:14px;color:var(--cream-mute);">Les messages du formulaire de contact public apparaîtront ici.</p>
+      </div>`;
+    return;
+  }
+  
+  // Render des messages
+  const escapeHtml = (str) => String(str || '').replace(/[<>&"']/g, c => ({
+    '<':'&lt;','>':'&gt;','&':'&amp;','"':'&quot;',"'":'&#39;'
+  }[c]));
+  
+  const statusLabels = {
+    new: { txt: 'Nouveau', color: 'gold' },
+    read: { txt: 'Lu', color: 'cream' },
+    replied: { txt: 'Répondu', color: 'green' },
+    archived: { txt: 'Archivé', color: 'gray' },
+    spam: { txt: 'Spam', color: 'red' }
+  };
+  
+  listEl.innerHTML = filtered.map(m => {
+    const status = statusLabels[m.status] || statusLabels.new;
+    const date = new Date(m.created_at);
+    const dateStr = date.toLocaleDateString('fr-FR', { day:'2-digit', month:'short', year:'numeric' });
+    const timeStr = date.toLocaleTimeString('fr-FR', { hour:'2-digit', minute:'2-digit' });
+    const isNew = m.status === 'new';
+    
+    return `
+      <div class="bento" style="padding:24px;margin-bottom:14px;${isNew ? 'border-color:rgba(196,164,89,0.3);' : ''}">
+        <div style="display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;align-items:flex-start;">
+          <div style="flex:1;min-width:240px;">
+            <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px;">
+              <span class="tag-inline ${status.color}">${status.txt}</span>
+              <span style="font-family:var(--mono);font-size:11px;color:var(--cream-mute);">${dateStr} · ${timeStr}</span>
+            </div>
+            <div style="font-family:var(--display);font-style:italic;font-weight:700;font-size:18px;color:var(--cream);letter-spacing:0.02em;margin-bottom:4px;">
+              ${escapeHtml(m.first_name)} ${escapeHtml(m.last_name)}
+            </div>
+            <div style="font-family:var(--mono);font-size:12px;color:var(--cream-mute);margin-bottom:4px;">
+              <a href="mailto:${escapeHtml(m.email)}" style="color:var(--gold);">${escapeHtml(m.email)}</a>
+              ${m.phone ? ` · <a href="tel:${escapeHtml(m.phone)}" style="color:var(--cream-mute);">${escapeHtml(m.phone)}</a>` : ''}
+            </div>
+          </div>
+          <div style="display:flex;gap:8px;flex-wrap:wrap;">
+            ${m.status !== 'replied' ? `<button class="btn btn-sm" onclick="adminReplyMessage('${m.id}', '${escapeHtml(m.email)}', '${escapeHtml(m.first_name)} ${escapeHtml(m.last_name)}')"><span>Répondre</span></button>` : ''}
+            ${m.status === 'new' ? `<button class="btn btn-sm" onclick="adminMarkMessageStatus('${m.id}', 'read')"><span>Marquer lu</span></button>` : ''}
+            ${m.status !== 'archived' ? `<button class="btn btn-sm" onclick="adminMarkMessageStatus('${m.id}', 'archived')"><span>Archiver</span></button>` : ''}
+            ${m.status !== 'spam' ? `<button class="btn btn-sm" onclick="adminMarkMessageStatus('${m.id}', 'spam')"><span>Spam</span></button>` : ''}
+          </div>
+        </div>
+        <div style="margin-top:14px;padding:14px 16px;background:rgba(0,0,0,0.3);border:1px solid var(--bento-border);border-radius:6px;">
+          <p style="font-family:var(--sans);font-size:14px;color:var(--cream);line-height:1.7;margin:0;white-space:pre-wrap;">${escapeHtml(m.message)}</p>
+        </div>
+      </div>
+    `;
+  }).join('');
+};
+
+window.adminMarkMessageStatus = async function(messageId, newStatus) {
+  try {
+    const update = { status: newStatus };
+    if (newStatus === 'read' && !adminMessagesData.find(m => m.id === messageId)?.read_at) {
+      update.read_at = new Date().toISOString();
+      update.read_by = window.OXVApi?.user?.profile?.id;
+    }
+    if (newStatus === 'replied') {
+      update.replied_at = new Date().toISOString();
+    }
+    
+    const { error } = await supabase
+      .from('contact_messages')
+      .update(update)
+      .eq('id', messageId);
+    
+    if (error) throw error;
+    
+    // Update local et re-render
+    const msg = adminMessagesData.find(m => m.id === messageId);
+    if (msg) Object.assign(msg, update);
+    
+    adminUpdateMessagesKpis();
+    adminRenderMessagesList();
+    adminUpdateMessagesBadge();
+    toast('Message mis à jour', 'ok');
+  } catch (err) {
+    console.warn('[Admin Messages] Erreur update:', err);
+    toast('Erreur · réessayez', 'warn');
+  }
+};
+
+window.adminReplyMessage = function(messageId, email, fullname) {
+  // Marque automatiquement comme répondu
+  adminMarkMessageStatus(messageId, 'replied');
+  // Ouvre le client mail
+  const subject = encodeURIComponent('Re : votre message à OXV');
+  const body = encodeURIComponent(`Bonjour ${fullname.split(' ')[0]},\n\nMerci pour votre message.\n\n[Votre réponse]\n\nBien à vous,\nL'équipe OXV\n— Only Xtreme Vehicle\nhttps://oxvehicle.fr`);
+  window.location.href = `mailto:${email}?subject=${subject}&body=${body}`;
 };
 
 window.adminCreditHeritageSession = async function(packId) {

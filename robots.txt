@@ -1,0 +1,42 @@
+# ============================================================
+# OXV — Only Xtreme Vehicle
+# robots.txt — règles d'indexation pour les moteurs de recherche
+# ============================================================
+
+User-agent: *
+
+# Pages publiques autorisées
+Allow: /
+Allow: /?page=home
+Allow: /?page=offers
+Allow: /?page=calendrier
+Allow: /?page=circuit
+Allow: /?page=corporate
+Allow: /?page=specs-techniques
+Allow: /?page=contact
+Allow: /?page=mentions
+Allow: /?page=cgv
+Allow: /?page=cgu
+Allow: /?page=privacy
+
+# Espaces privés à ne pas indexer
+Disallow: /?page=login
+Disallow: /?page=signup
+Disallow: /?page=forgot-password
+Disallow: /?page=reset-password
+Disallow: /?page=verify-email
+Disallow: /?page=compte
+Disallow: /?page=compte-*
+Disallow: /?page=admin
+Disallow: /?page=admin-*
+Disallow: /?page=booking
+
+# Pas d'indexation des paramètres techniques
+Disallow: /*?auth=*
+Disallow: /*?debug=*
+
+# Sitemap
+Sitemap: https://oxvehicle.fr/sitemap.xml
+
+# Crawl-delay sain
+Crawl-delay: 1
