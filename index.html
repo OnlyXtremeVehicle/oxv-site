@@ -4,13 +4,15 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
 <meta name="theme-color" content="#0A0A0A" />
-<!-- OXV Brand Icons -->
-<link rel="icon" type="image/svg+xml" href="/brand/favicon.svg">
-<link rel="icon" type="image/png" sizes="32x32" href="/brand/favicon-32.png">
-<link rel="icon" type="image/png" sizes="16x16" href="/brand/favicon-16.png">
-<link rel="icon" type="image/png" sizes="192x192" href="/brand/favicon-192.png">
-<link rel="apple-touch-icon" sizes="180x180" href="/brand/apple-touch-icon.png">
-<link rel="shortcut icon" href="/brand/favicon.ico">
+<!-- OXV Brand Icons — Insigne bouclier-casque rouge -->
+<link rel="icon" href="/favicon.ico" sizes="any">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="48x48" href="/favicon-48x48.png">
+<link rel="icon" type="image/png" sizes="96x96" href="/favicon-96x96.png">
+<link rel="icon" type="image/png" sizes="192x192" href="/favicon-192x192.png">
+<link rel="icon" type="image/png" sizes="512x512" href="/favicon-512x512.png">
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
 
 <!-- SEO de base -->
 <meta name="description" content="OXV — Track day premium au Circuit de Haute Saintonge. Tracé Beltoise. Sessions confidentielles, 20 pilotes maximum. Accompagnement, télémétrie, photographie." />
@@ -191,6 +193,29 @@
   --sans:    'Inter', -apple-system, BlinkMacSystemFont, 'Helvetica Neue', sans-serif;
   --mono:    'JetBrains Mono', 'SF Mono', Menlo, monospace;
   --display: 'Syncopate', 'Inter', sans-serif;          /* Titres + chiffres géants */
+
+  /* ─── Échelle font-size (cohérence éditoriale) ─── */
+  --fs-2xs:   10px;   /* Eyebrows micro, labels admin compacts */
+  --fs-xs:    11px;   /* Eyebrows mono, tags inline */
+  --fs-sm:    12px;   /* Captions, mentions discrètes */
+  --fs-md:    13px;   /* Texte secondaire, valeurs data */
+  --fs-base:  14px;   /* Texte courant, formulaires */
+  --fs-lg:    16px;   /* Body principal */
+  --fs-xl:    18px;   /* Texte mis en avant */
+  --fs-2xl:   20px;   /* H4 / sous-titres bento */
+  --fs-3xl:   24px;   /* H3 */
+  --fs-4xl:   32px;   /* H2 secondaires */
+  --fs-5xl:   42px;   /* H2 sections */
+  --fs-6xl:   56px;   /* H1 sections */
+  --fs-7xl:   72px;   /* H1 hero pages */
+  --fs-8xl:   96px;   /* Hero titres immenses (rare) */
+
+  /* ─── Letter-spacing standards ─── */
+  --ls-tight:   -0.02em;
+  --ls-normal:  0;
+  --ls-wide:    0.04em;
+  --ls-wider:   0.1em;
+  --ls-widest:  0.2em;   /* Eyebrows tout en majuscules */
 
   /* ─── Easing officiels charte ─── */
   --ease:      cubic-bezier(0.25, 0.46, 0.45, 0.94);   /* Standard */
@@ -11459,7 +11484,7 @@ textarea:focus-visible {
 
 <!-- Mobile menu -->
 <div class="mob" id="mobMenu">
-  <button class="modal-close" onclick="document.getElementById('mobMenu').classList.remove('open')">×</button>
+  <button class="modal-close" aria-label="Fermer cette fenêtre" onclick="document.getElementById('mobMenu').classList.remove('open')">×</button>
   <div class="mob-section">
     <div class="mob-label">Découvrir</div>
     <a class="mob-link" onclick="goTo('home'); closeMob()"><em>Accueil</em></a>
@@ -14601,9 +14626,9 @@ textarea:focus-visible {
 
       <!-- Pagination -->
       <div class="admin-pagination" id="pilotesPagination" style="display:none;">
-        <button class="admin-page-btn" id="pagePrev" onclick="changePilotesPage(-1)">←</button>
+        <button class="admin-page-btn" id="pagePrev" onclick="changePilotesPage(-1)" aria-label="Page précédente">←</button>
         <div class="admin-page-info" id="pageInfo">Page 1 / 1</div>
-        <button class="admin-page-btn" id="pageNext" onclick="changePilotesPage(1)">→</button>
+        <button class="admin-page-btn" id="pageNext" onclick="changePilotesPage(1)" aria-label="Page suivante">→</button>
       </div>
 
     </main>
@@ -14914,13 +14939,13 @@ textarea:focus-visible {
   </div>
 
   <!-- ============ MODALE : AJOUT D'UNE SESSION ============ -->
-  <div class="modal-overlay" id="addSessionModal" style="display:none;" onclick="closeAddSessionModal(event)">
+  <div class="modal-overlay" id="addSessionModal" style="display:none;" role="dialog" aria-modal="true" aria-hidden="true" onclick="closeAddSessionModal(event)">
     <div class="modal-card" onclick="event.stopPropagation()">
 
       <div class="modal-head">
         <div class="modal-eyebrow">— Nouvelle session</div>
         <h2 class="modal-title">Ajouter une <em>date</em>.</h2>
-        <button class="modal-close" onclick="closeAddSessionModal()">×</button>
+        <button class="modal-close" aria-label="Fermer cette fenêtre" onclick="closeAddSessionModal()">×</button>
       </div>
 
       <div class="modal-body">
@@ -15283,9 +15308,9 @@ textarea:focus-visible {
 
 
 <!-- ============ MODAL : VALIDATION PAIEMENT ============ -->
-<div class="vmodal" id="paymentValidateModal">
+<div class="vmodal" id="paymentValidateModal" role="dialog" aria-modal="true">
   <div class="vmodal-card">
-    <button class="vmodal-close" onclick="paymentCloseValidateModal()">×</button>
+    <button class="vmodal-close" aria-label="Fermer cette fenêtre" onclick="paymentCloseValidateModal()">×</button>
     <div class="vmodal-eyebrow">— Validation paiement</div>
     <h2 class="vmodal-title">Valider le <em>virement</em>.</h2>
 
@@ -15668,9 +15693,9 @@ textarea:focus-visible {
 <!-- ============================================================
      Modal Reject Document (existant)
      ============================================================ -->
-<div class="vmodal" id="rejectModal">
+<div class="vmodal" id="rejectModal" role="dialog" aria-modal="true">
   <div class="vmodal-card">
-    <button class="vmodal-close" onclick="closeRejectModal()">×</button>
+    <button class="vmodal-close" aria-label="Fermer cette fenêtre" onclick="closeRejectModal()">×</button>
     <div class="vmodal-eyebrow">— Rejeter le document</div>
     <h2 class="vmodal-title">Motif du <em>rejet</em>.</h2>
 
@@ -15692,9 +15717,9 @@ textarea:focus-visible {
 
 
 <!-- Suspend account modal -->
-<div class="vmodal" id="suspendModal">
+<div class="vmodal" id="suspendModal" role="dialog" aria-modal="true">
   <div class="vmodal-card">
-    <button class="vmodal-close" onclick="closeSuspendModal()">×</button>
+    <button class="vmodal-close" aria-label="Fermer cette fenêtre" onclick="closeSuspendModal()">×</button>
     <div class="vmodal-eyebrow">— Suspension de compte</div>
     <h2 class="vmodal-title">Suspendre le <em>compte</em>.</h2>
 
@@ -15716,9 +15741,9 @@ textarea:focus-visible {
 
 
 <!-- Document upload modal -->
-<div class="vmodal" id="documentModal">
+<div class="vmodal" id="documentModal" role="dialog" aria-modal="true">
   <div class="vmodal-card">
-    <button class="vmodal-close" onclick="closeDocumentModal()">×</button>
+    <button class="vmodal-close" aria-label="Fermer cette fenêtre" onclick="closeDocumentModal()">×</button>
     <div class="vmodal-eyebrow" id="dmEyebrow">— Nouveau document</div>
     <h2 class="vmodal-title" id="dmTitle">Ajouter un <em>document</em>.</h2>
 
@@ -15753,9 +15778,9 @@ textarea:focus-visible {
 
 
 <!-- Vehicle modal (formulaire ajout / édition) -->
-<div class="vmodal" id="vehicleModal">
+<div class="vmodal" id="vehicleModal" role="dialog" aria-modal="true">
   <div class="vmodal-card">
-    <button class="vmodal-close" onclick="closeVehicleModal()">×</button>
+    <button class="vmodal-close" aria-label="Fermer cette fenêtre" onclick="closeVehicleModal()">×</button>
     <div class="vmodal-eyebrow" id="vmEyebrow">— Nouveau véhicule</div>
     <h2 class="vmodal-title" id="vmTitle">Ajouter une <em>voiture</em>.</h2>
 
@@ -15818,9 +15843,9 @@ textarea:focus-visible {
 
 
 <!-- QDI Score Modal (admin) -->
-<div class="vmodal" id="qdiModal">
+<div class="vmodal" id="qdiModal" role="dialog" aria-modal="true">
   <div class="vmodal-card" style="max-width:580px;">
-    <button class="vmodal-close" onclick="closeQDIModal()">×</button>
+    <button class="vmodal-close" aria-label="Fermer cette fenêtre" onclick="closeQDIModal()">×</button>
     <div class="vmodal-eyebrow">— Saisie scores QDI</div>
     <h2 class="vmodal-title" id="qdiModalTitle">Score <em>pilote</em>.</h2>
 
@@ -19146,7 +19171,7 @@ function show2FAEnrollModal(data) {
   modal.className = 'vmodal open';
   modal.innerHTML = `
     <div class="vmodal-card" style="max-width:480px;">
-      <button class="vmodal-close" onclick="close2FAModal()">×</button>
+      <button class="vmodal-close" aria-label="Fermer cette fenêtre" onclick="close2FAModal()">×</button>
       <div class="vmodal-eyebrow">— Activation 2FA</div>
       <h2 class="vmodal-title">Scanner le <em>QR Code</em>.</h2>
       
