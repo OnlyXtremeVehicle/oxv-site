@@ -27,7 +27,7 @@
 <meta property="og:url" content="https://oxvehicle.fr/" />
 <meta property="og:site_name" content="OXV" />
 <meta property="og:locale" content="fr_FR" />
-<meta property="og:image" content="https://oxvehicle.fr/brand/og-image.jpg" />
+<meta property="og:image" content="https://oxvehicle.fr/og-image.jpg" />
 <meta property="og:image:width" content="1200" />
 <meta property="og:image:height" content="630" />
 <meta property="og:image:alt" content="OXV — Only Xtreme Vehicle" />
@@ -36,7 +36,7 @@
 <meta name="twitter:card" content="summary_large_image" />
 <meta name="twitter:title" content="OXV · Only Xtreme Vehicle" />
 <meta name="twitter:description" content="Track day premium au Circuit de Haute Saintonge. Tracé Beltoise." />
-<meta name="twitter:image" content="https://oxvehicle.fr/brand/og-image.jpg" />
+<meta name="twitter:image" content="https://oxvehicle.fr/og-image.jpg" />
 
 <!-- Theme -->
 <meta name="theme-color" content="#050505" />
@@ -12819,8 +12819,11 @@ textarea:focus-visible {
       </div>
 
       <div class="auth-actions">
-        <button class="btn btn-primary btn-lg" onclick="submitLogin()"><span>Se connecter</span></button>
+        <button class="btn btn-primary btn-lg" id="loginSubmitBtn" onclick="submitLogin()"><span>Se connecter</span></button>
       </div>
+
+      <!-- hCaptcha INVISIBLE — widget non-visuel ; affiche un badge discret en bas à droite uniquement si nécessaire -->
+      <div id="login-captcha"></div>
 
       <div class="auth-divider"><span>ou</span></div>
 
@@ -16631,10 +16634,9 @@ const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBh
    CONFIG OXV — Variables d'environnement frontend
    ============================================================ */
 window.OXV_CONFIG = {
-  // hCaptcha site key (récupérable sur dashboard.hcaptcha.com)
-  // Laisser vide → captcha désactivé (mode dev/test)
-  // Renseigner → captcha actif sur signup, login, contact
-  HCAPTCHA_SITE_KEY: 'b4ea17fa-4596-4e66-8424-333e3fd83486',  // ⚠️ À remplir après création compte hCaptcha
+  // hCaptcha site key — récupérée sur dashboard.hcaptcha.com
+  // Active hCaptcha sur signup (visible) et login (invisible)
+  HCAPTCHA_SITE_KEY: 'b4ea17fa-4596-4e66-8424-333e3fd83486',
   
   // Email pro de contact
   CONTACT_EMAIL: 'contact@oxvehicle.fr',
@@ -16645,29 +16647,66 @@ window.OXV_CONFIG = {
 
 /* ============================================================
    hCAPTCHA — Initialisation widgets sur les formulaires
-   Appelé après chargement de la page et après navigation
+   Modes :
+   - signup : visible (l'utilisateur coche la case)
+   - login : invisible (validation automatique en arrière-plan)
+   - contact : visible
+   - forgot : invisible
    ============================================================ */
 window.initCaptchaWidgets = function() {
   const siteKey = window.OXV_CONFIG?.HCAPTCHA_SITE_KEY;
   if (!siteKey) return;  // Pas de clé → captcha désactivé
   if (typeof hcaptcha === 'undefined') return;  // Script hCaptcha pas encore chargé
   
-  // Cibles : conteneurs prévus dans les formulaires
-  const containers = ['signup-captcha', 'login-captcha', 'contact-captcha', 'forgot-captcha'];
+  // Configuration par conteneur
+  const widgets = [
+    { id: 'signup-captcha',  size: 'normal',   theme: 'dark' },
+    { id: 'login-captcha',   size: 'invisible', theme: 'dark' },
+    { id: 'contact-captcha', size: 'normal',   theme: 'dark' },
+    { id: 'forgot-captcha',  size: 'invisible', theme: 'dark' }
+  ];
   
-  containers.forEach(id => {
-    const el = document.getElementById(id);
+  widgets.forEach(w => {
+    const el = document.getElementById(w.id);
     if (el && !el.dataset.captchaRendered) {
       try {
-        hcaptcha.render(el, {
+        const widgetId = hcaptcha.render(el, {
           sitekey: siteKey,
-          theme: 'dark',
-          size: 'normal'
+          theme: w.theme,
+          size: w.size
         });
         el.dataset.captchaRendered = '1';
+        el.dataset.widgetId = widgetId;
       } catch (e) {
-        console.warn('[hCaptcha] Erreur rendu:', e);
+        console.warn('[hCaptcha] Erreur rendu ' + w.id + ':', e);
       }
+    }
+  });
+};
+
+// Helper pour exécuter un captcha invisible et récupérer le token
+window.executeInvisibleCaptcha = function(containerId) {
+  return new Promise((resolve) => {
+    const el = document.getElementById(containerId);
+    if (!el || !window.OXV_CONFIG?.HCAPTCHA_SITE_KEY || typeof hcaptcha === 'undefined') {
+      resolve(null);
+      return;
+    }
+    const widgetId = el.dataset.widgetId;
+    if (!widgetId) {
+      resolve(null);
+      return;
+    }
+    try {
+      // Réinitialiser pour avoir un fresh challenge
+      hcaptcha.reset(widgetId);
+      // Exécuter et récupérer le token via callback
+      hcaptcha.execute(widgetId, { async: true })
+        .then(({ response }) => resolve(response))
+        .catch(() => resolve(null));
+    } catch (e) {
+      console.warn('[hCaptcha execute]:', e);
+      resolve(null);
     }
   });
 };
@@ -16859,12 +16898,18 @@ window.OXVApi = {
 
     /**
      * Demande de réinitialisation de mot de passe
+     * @param {string} email
+     * @param {string} captchaToken - Optionnel, requis si hCaptcha activé
      */
-    forgotPassword: async (email) => {
+    forgotPassword: async (email, captchaToken = null) => {
       try {
-        const { error } = await supabase.auth.resetPasswordForEmail(email, {
+        const options = {
           redirectTo: window.location.origin + '/?auth=reset'
-        });
+        };
+        if (captchaToken) {
+          options.captchaToken = captchaToken;
+        }
+        const { error } = await supabase.auth.resetPasswordForEmail(email, options);
         if (error) throw error;
         return { ok: true };
       } catch (err) {
@@ -19493,7 +19538,13 @@ window.submitLogin = async function() {
   const orig = btn ? btn.innerHTML : '';
   if (btn) { btn.innerHTML = '<span>⟳ Connexion…</span>'; btn.disabled = true; }
 
-  const result = await window.OXVApi.user.login(email.value, pwd.value);
+  // Exécution captcha invisible (silencieux si pas configuré)
+  let captchaToken = null;
+  if (window.OXV_CONFIG?.HCAPTCHA_SITE_KEY && typeof window.executeInvisibleCaptcha === 'function') {
+    captchaToken = await window.executeInvisibleCaptcha('login-captcha');
+  }
+
+  const result = await window.OXVApi.user.login(email.value, pwd.value, captchaToken);
 
   if (btn) { btn.innerHTML = orig; btn.disabled = false; }
 
@@ -19564,11 +19615,21 @@ window.submitMagicLink = async function() {
   const orig = btn ? btn.innerHTML : '';
   if (btn) { btn.innerHTML = '<span>⟳ Envoi du lien…</span>'; btn.disabled = true; }
 
+  // Captcha invisible
+  let captchaToken = null;
+  if (window.OXV_CONFIG?.HCAPTCHA_SITE_KEY && typeof window.executeInvisibleCaptcha === 'function') {
+    captchaToken = await window.executeInvisibleCaptcha('login-captcha');
+  }
+
   try {
-    const { error } = await supabase.auth.signInWithOtp({
+    const otpOptions = {
       email: email.value,
       options: { emailRedirectTo: window.location.origin + '/?auth=magic' }
-    });
+    };
+    if (captchaToken) {
+      otpOptions.options.captchaToken = captchaToken;
+    }
+    const { error } = await supabase.auth.signInWithOtp(otpOptions);
     if (error) throw error;
     toast('Lien de connexion envoyé · vérifiez votre email', 'ok');
     email.value = '';
