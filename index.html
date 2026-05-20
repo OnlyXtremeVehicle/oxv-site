@@ -11,11 +11,60 @@
 <link rel="icon" type="image/png" sizes="192x192" href="/brand/favicon-192.png">
 <link rel="apple-touch-icon" sizes="180x180" href="/brand/apple-touch-icon.png">
 <link rel="shortcut icon" href="/brand/favicon.ico">
-<meta name="description" content="OXV — Only Xtreme Vehicle. Track day signature au Circuit de Haute Saintonge. Tracé Beltoise. Sessions confidentielles." />
-<meta property="og:title" content="OXV · Only Xtreme Vehicle" />
-<meta property="og:description" content="Le track day comme un objet. Circuit de Haute Saintonge — tracé Beltoise." />
+
+<!-- SEO de base -->
+<meta name="description" content="OXV — Track day premium au Circuit de Haute Saintonge. Tracé Beltoise. Sessions confidentielles, 20 pilotes maximum. Accompagnement, télémétrie, photographie." />
+<meta name="keywords" content="track day, circuit, Haute Saintonge, Beltoise, pilotage, stage, sport mécanique, automobile, premium" />
+<meta name="author" content="OXV — Only Xtreme Vehicle" />
+<meta name="robots" content="index, follow" />
+<meta name="language" content="fr" />
+<link rel="canonical" href="https://oxvehicle.fr/" />
+
+<!-- Open Graph (Facebook, LinkedIn, etc.) -->
+<meta property="og:title" content="OXV · Only Xtreme Vehicle — Track Day Premium" />
+<meta property="og:description" content="Le track day comme un objet. Circuit de Haute Saintonge — tracé Beltoise. 20 pilotes maximum par session." />
 <meta property="og:type" content="website" />
-<title>OXV — Only Xtreme Vehicle</title>
+<meta property="og:url" content="https://oxvehicle.fr/" />
+<meta property="og:site_name" content="OXV" />
+<meta property="og:locale" content="fr_FR" />
+<meta property="og:image" content="https://oxvehicle.fr/brand/og-image.jpg" />
+<meta property="og:image:width" content="1200" />
+<meta property="og:image:height" content="630" />
+<meta property="og:image:alt" content="OXV — Only Xtreme Vehicle" />
+
+<!-- Twitter Card -->
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content="OXV · Only Xtreme Vehicle" />
+<meta name="twitter:description" content="Track day premium au Circuit de Haute Saintonge. Tracé Beltoise." />
+<meta name="twitter:image" content="https://oxvehicle.fr/brand/og-image.jpg" />
+
+<!-- Theme -->
+<meta name="theme-color" content="#050505" />
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+<meta name="apple-mobile-web-app-title" content="OXV" />
+<meta name="mobile-web-app-capable" content="yes" />
+
+<!-- Schema.org structured data pour Google -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  "name": "OXV — Only Xtreme Vehicle",
+  "url": "https://oxvehicle.fr",
+  "logo": "https://oxvehicle.fr/brand/logo.png",
+  "description": "Track day premium au Circuit de Haute Saintonge. Tracé Beltoise.",
+  "address": {
+    "@type": "PostalAddress",
+    "addressCountry": "FR",
+    "addressLocality": "La Génétouze",
+    "addressRegion": "Charente-Maritime"
+  },
+  "sameAs": []
+}
+</script>
+
+<title>OXV — Only Xtreme Vehicle · Track Day Premium au Circuit de Haute Saintonge</title>
 
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -31,6 +80,23 @@
 
 <!-- HOTFIX bouton : queue d'appels en attente du module -->
 <script>
+  /* ============================================================
+     PRODUCTION MODE — Silence console.log en prod
+     Conserve console.warn, console.error pour le debug
+     Activable par ?debug=1 dans l'URL pour réactiver les logs
+     ============================================================ */
+  (function() {
+    const isLocalhost = ['localhost', '127.0.0.1'].includes(location.hostname);
+    const isDebug = location.search.includes('debug=1');
+    if (!isLocalhost && !isDebug) {
+      const noop = function() {};
+      console.log = noop;
+      console.info = noop;
+      console.debug = noop;
+      // console.warn et console.error restent actifs pour le suivi
+    }
+  })();
+
   window.__oxvQueue = [];
   window.goTo = function(page) {
     if (window.__oxvReady) {
@@ -38,7 +104,6 @@
       return;
     }
     window.__oxvQueue.push(['goTo', page]);
-    console.log('[OXV] Queued goTo:', page);
   };
   window.goToAccount = function(page) {
     if (window.__oxvReady) return;
@@ -766,9 +831,10 @@ h1, h2, h3, h4, h5 {
   position: relative;
 }
 .manifesto-quote::before, .manifesto-quote::after {
-  font-family: 'Georgia', serif;
+  font-family: var(--display);
   font-size: 100px;
   font-style: italic;
+  font-weight: 400;
   color: var(--gold);
   opacity: 0.4;
   line-height: 0.5;
@@ -1201,7 +1267,7 @@ h1, h2, h3, h4, h5 {
   margin-bottom: 32px;
 }
 .tp-title {
-  font-family: 'Georgia', 'Cormorant Garamond', serif;
+  font-family: var(--display);
   font-size: clamp(28px, 4vw, 44px);
   font-weight: 400;
   font-style: italic;
@@ -1275,7 +1341,7 @@ h1, h2, h3, h4, h5 {
   margin-bottom: 8px;
 }
 .tp-info-value {
-  font-family: 'Georgia', 'Cormorant Garamond', serif;
+  font-family: var(--display);
   font-style: italic;
   font-size: 17px;
   font-weight: 400;
@@ -1308,7 +1374,7 @@ h1, h2, h3, h4, h5 {
 .tp-mention {
   margin-top: 28px;
   text-align: center;
-  font-family: 'Georgia', serif;
+  font-family: var(--display);
   font-style: italic;
   font-size: 14px;
   color: var(--cream-mute);
@@ -13654,19 +13720,15 @@ textarea:focus-visible {
 
           <h4 style="font-family:var(--display);font-style:italic;font-weight:700;font-size:15px;letter-spacing:0.04em;text-transform:uppercase;color:var(--cream);margin:0 0 18px;">Coordonnées bancaires OXV</h4>
 
-          <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:18px;margin-bottom:24px;">
-            <div>
-              <div style="font-family:var(--display);font-size:10px;letter-spacing:0.2em;text-transform:uppercase;color:var(--cream-mute);margin-bottom:6px;">Bénéficiaire</div>
-              <div style="font-family:var(--sans);font-size:14px;color:var(--cream);font-weight:500;">OXV — Only Xtreme Vehicle</div>
-            </div>
-            <div>
-              <div style="font-family:var(--display);font-size:10px;letter-spacing:0.2em;text-transform:uppercase;color:var(--cream-mute);margin-bottom:6px;">IBAN</div>
-              <div style="font-family:var(--mono);font-size:13px;color:var(--cream);user-select:all;cursor:text;background:rgba(0,0,0,0.3);padding:8px 10px;border-radius:4px;">FR76 XXXX XXXX XXXX XXXX XXX</div>
-            </div>
-            <div>
-              <div style="font-family:var(--display);font-size:10px;letter-spacing:0.2em;text-transform:uppercase;color:var(--cream-mute);margin-bottom:6px;">BIC</div>
-              <div style="font-family:var(--mono);font-size:13px;color:var(--cream);user-select:all;cursor:text;background:rgba(0,0,0,0.3);padding:8px 10px;border-radius:4px;">XXXXXXXX</div>
-            </div>
+          <div style="padding:18px;background:rgba(196, 164, 89, 0.06);border:1px solid rgba(196, 164, 89, 0.2);border-radius:8px;margin-bottom:24px;">
+            <div style="font-family:var(--display);font-size:11px;font-weight:400;letter-spacing:0.2em;text-transform:uppercase;color:var(--gold);margin-bottom:10px;">— Compte bancaire OXV</div>
+            <p style="font-family:var(--sans);font-size:13px;color:var(--cream);line-height:1.6;margin:0;">
+              <strong style="color:var(--cream);">Bénéficiaire :</strong> OXV — Only Xtreme Vehicle<br/>
+              <strong style="color:var(--cream);">IBAN &amp; BIC :</strong> Communiqués par email après confirmation de votre réservation.
+            </p>
+            <p style="font-family:var(--sans);font-size:12px;color:var(--cream-mute);margin:12px 0 0;line-height:1.5;font-style:italic;">
+              Le compte professionnel OXV est en cours de finalisation. En attendant, contactez <a href="mailto:contact@oxvehicle.fr" style="color:var(--gold);">contact@oxvehicle.fr</a> pour obtenir les coordonnées bancaires.
+            </p>
           </div>
 
           <!-- Référence à inscrire -->
@@ -15192,11 +15254,11 @@ textarea:focus-visible {
           </div>
           <div>
             <div style="font-family:var(--display);font-size:10px;letter-spacing:0.2em;text-transform:uppercase;color:var(--cream-mute);margin-bottom:4px;">IBAN</div>
-            <div style="font-family:var(--mono);font-size:13px;color:var(--cream);">FR76 XXXX XXXX XXXX XXXX XXX</div>
+            <div style="font-family:var(--mono);font-size:13px;color:var(--cream);">Communiqué après confirmation</div>
           </div>
           <div>
             <div style="font-family:var(--display);font-size:10px;letter-spacing:0.2em;text-transform:uppercase;color:var(--cream-mute);margin-bottom:4px;">BIC</div>
-            <div style="font-family:var(--mono);font-size:13px;color:var(--cream);">XXXXXXXX</div>
+            <div style="font-family:var(--mono);font-size:13px;color:var(--cream);">—</div>
           </div>
           <div>
             <div style="font-family:var(--display);font-size:10px;letter-spacing:0.2em;text-transform:uppercase;color:var(--cream-mute);margin-bottom:4px;">Référence à inscrire</div>
@@ -15545,7 +15607,7 @@ textarea:focus-visible {
           </div>
           <div style="display:flex;flex-direction:column;align-items:flex-end;gap:10px;">
             <span class="tag-inline red">✗ Désactivée</span>
-            <button class="btn btn-primary btn-sm"><span>Activer 2FA</span></button>
+            <button class="btn btn-primary btn-sm" onclick="admin2FAEnable()"><span>Activer 2FA</span></button>
           </div>
         </div>
       </div>
@@ -15585,7 +15647,7 @@ textarea:focus-visible {
         <div class="bento" style="padding:24px;">
           <div class="prog-pillar-weight" style="margin-bottom:10px;">— Sessions actives</div>
           <p style="font-family:var(--sans);font-size:13px;color:var(--cream-mute);margin:0 0 14px;line-height:1.6;"><strong style="color:var(--cream);">2 sessions actives.</strong> Vous pouvez les révoquer toutes.</p>
-          <button class="btn btn-sm btn-danger" onclick="toast('Sessions révoquées','ok');"><span>Tout révoquer</span></button>
+          <button class="btn btn-sm btn-danger" onclick="adminRevokeAllSessions()"><span>Tout révoquer</span></button>
         </div>
       </div>
     </main>
@@ -16137,17 +16199,17 @@ textarea:focus-visible {
         </div>
 
         <div class="bk-rib-block">
-          <div class="bk-rib-title">— Coordonnées bancaires OXV</div>
-          <div class="bk-rib-line"><span class="label">Bénéficiaire</span><span class="value">OXV — Only Xtreme Vehicle</span></div>
-          <div class="bk-rib-line"><span class="label">IBAN</span><span class="value" id="bkRibIban">FR76 XXXX XXXX XXXX XXXX XXXX XXX</span></div>
-          <div class="bk-rib-line"><span class="label">BIC</span><span class="value" id="bkRibBic">XXXXXXXX</span></div>
-          <div class="bk-rib-line"><span class="label">Banque</span><span class="value" id="bkRibBank">À renseigner</span></div>
-          <div class="bk-rib-line"><span class="label">Référence à indiquer</span><span class="value" id="bkRibRef" style="color: var(--copper-glow); font-weight: 600;">—</span></div>
+          <div class="bk-rib-title">— Récapitulatif de votre réservation</div>
+          <div class="bk-rib-line"><span class="label">Référence pilote</span><span class="value" id="bkRibRef" style="color: var(--copper-glow); font-weight: 600;">—</span></div>
           <div class="bk-rib-line"><span class="label">Montant à régler</span><span class="value" id="bkRibAmount">—</span></div>
         </div>
 
+        <div class="bk-warning" style="background:rgba(196, 164, 89, 0.08);border-color:rgba(196, 164, 89, 0.3);color:var(--cream);">
+          <strong style="color:var(--gold);">Prochaine étape :</strong> Vous recevrez par email les coordonnées bancaires complètes (IBAN, BIC, bénéficiaire) ainsi que votre référence de paiement personnelle.
+        </div>
+
         <div class="bk-warning">
-          ⚠ Important : indiquez impérativement la référence ci-dessus dans le libellé du virement, sans quoi nous ne pourrons pas associer votre paiement à votre inscription.
+          ⚠ Important : indiquez impérativement la référence transmise dans le libellé du virement, sans quoi nous ne pourrons pas associer votre paiement à votre inscription.
         </div>
 
         <div class="bk-actions">
@@ -17038,10 +17100,10 @@ async function bkLoadPricing() {
 // Grille de secours si Supabase indisponible (mêmes valeurs que la BDD)
 function bkPricingFallback() {
   return {
-    'access_half_day':    { first_session: 25000, subsequent: 25000 },
-    'signature_full_day': { first_session: 40000, subsequent: 40000 },
-    'promotion_full_day': { first_session: 89000, subsequent: 89000 },
-    'heritage_full_day':  { first_session: 267000, subsequent: 267000 }
+    'access_half_day':    { first_session: 25000, subsequent: 35000 },  // 250€ première, 350€ ensuite
+    'signature_full_day': { first_session: 59000, subsequent: 59000 },  // 590€
+    'promotion_full_day': { first_session: 89000, subsequent: 89000 },  // 890€
+    'heritage_full_day':  { first_session: 350000, subsequent: 350000 } // 3500€ pack 4 sessions
   };
 }
 
@@ -18112,25 +18174,11 @@ window.closeCornerDetail = function() {
    ============================================================ */
 
 // Données mockup (sera remplacé par Supabase)
-window.MOCK_PAYMENTS = [
-  { id: 'OXV-3F7A92', pilot: 'Sophie Lefèvre', pilotEmail: 'sophie.l@gmail.com', session: 'Signature · 4 juin 2026', amount: 590, status: 'pending', date: '2026-05-12', dueDate: '2026-05-28' },
-  { id: 'OXV-8B1C45', pilot: 'Marc Bertrand', pilotEmail: 'marc.b@protonmail.com', session: 'Promotion · 7 mai 2026', amount: 890, status: 'pending', date: '2026-05-10', dueDate: '2026-04-30' },
-  { id: 'OXV-2D9E33', pilot: 'Julie Moreau', pilotEmail: 'j.moreau@orange.fr', session: 'Signature · 14 mai 2026', amount: 590, status: 'pending', date: '2026-05-09', dueDate: '2026-05-07' },
-  { id: 'OXV-5A8F71', pilot: 'Thomas Dubois', pilotEmail: 'tdubois@yahoo.fr', session: 'Access · 21 mai 2026', amount: 350, status: 'pending', date: '2026-05-08', dueDate: '2026-05-14' },
-  { id: 'OXV-9C3B28', pilot: 'Anne Vidal', pilotEmail: 'anne.vidal@hotmail.com', session: 'Heritage · 4 sessions', amount: 3500, status: 'pending', date: '2026-05-07', dueDate: '2026-05-21' },
-  { id: 'OXV-6E1A92', pilot: 'Pierre Garcia', pilotEmail: 'p.garcia@gmail.com', session: 'Signature · 28 mai 2026', amount: 590, status: 'pending', date: '2026-05-06', dueDate: '2026-05-21' },
-  { id: 'OXV-4B7D55', pilot: 'Marine Roux', pilotEmail: 'marine.roux@free.fr', session: 'Access · 4 juin 2026', amount: 350, status: 'pending', date: '2026-05-05', dueDate: '2026-05-28' },
-  { id: 'OXV-8F2C19', pilot: 'Lucas Martin', pilotEmail: 'lucas.m@gmail.com', session: 'Signature · 11 juin 2026', amount: 590, status: 'pending', date: '2026-05-04', dueDate: '2026-06-04' },
-  // Validés
-  { id: 'OXV-8A2B41', pilot: 'Sophie Lefèvre', pilotEmail: 'sophie.l@gmail.com', session: 'Signature · 2 mai 2026', amount: 590, status: 'validated', date: '2026-04-26', validatedAt: '2026-04-26' },
-  { id: 'OXV-7C4D11', pilot: 'Sophie Lefèvre', pilotEmail: 'sophie.l@gmail.com', session: 'Access · 16 avril 2026', amount: 350, status: 'validated', date: '2026-04-09', validatedAt: '2026-04-09' },
-  { id: 'OXV-1B9F87', pilot: 'Sophie Lefèvre', pilotEmail: 'sophie.l@gmail.com', session: 'Access · 28 mars 2026', amount: 250, status: 'validated', date: '2026-03-21', validatedAt: '2026-03-21' },
-  { id: 'OXV-5G2H88', pilot: 'Marc Bertrand', pilotEmail: 'marc.b@protonmail.com', session: 'Signature · 23 avril 2026', amount: 590, status: 'validated', date: '2026-04-16', validatedAt: '2026-04-16' },
-  { id: 'OXV-3X9Y22', pilot: 'Julie Moreau', pilotEmail: 'j.moreau@orange.fr', session: 'Promotion · 30 avril 2026', amount: 890, status: 'validated', date: '2026-04-23', validatedAt: '2026-04-23' },
-  // Remboursés
-  { id: 'OXV-7Z1W04', pilot: 'Karim Benali', pilotEmail: 'k.benali@gmail.com', session: 'Signature · 19 mars 2026 (annulée)', amount: 590, status: 'refunded', date: '2026-03-15', refundedAt: '2026-03-17' },
-  { id: 'OXV-2L5M76', pilot: 'Lucia Romano', pilotEmail: 'l.romano@gmail.com', session: 'Access · 26 mars 2026 (annulée)', amount: 350, status: 'refunded', date: '2026-03-20', refundedAt: '2026-03-22' },
-];
+/* ============================================================
+   PAYMENTS — Données chargées depuis Supabase uniquement
+   MOCK_PAYMENTS reste vide tant que la table payments est vide
+   ============================================================ */
+window.MOCK_PAYMENTS = [];
 
 window.loadAdminPaiements = async function() {
   // Initialiser la date du jour dans le modal
@@ -19094,17 +19142,108 @@ window.adminRevokeAllSessions = async function() {
   }
 };
 
-window.submitContact = function() {
+window.submitContact = async function() {
   const cb = document.getElementById('ct-rgpd');
   const first = document.getElementById('ct-first');
   const last = document.getElementById('ct-last');
   const email = document.getElementById('ct-email');
+  const phone = document.getElementById('ct-phone');
   const msg = document.getElementById('ct-msg');
-  if (!cb || !cb.classList.contains('checked')) { toast('Acceptation RGPD requise', 'warn'); return; }
-  if (!first.value || !last.value || !email.value || !msg.value) { toast('Tous les champs sont requis', 'warn'); return; }
-  toast('Message envoyé · réponse sous 48h ouvrées', 'ok');
-  ['ct-first','ct-last','ct-email','ct-msg'].forEach(id => { const el = document.getElementById(id); if (el) el.value = ''; });
-  cb.classList.remove('checked');
+  
+  if (!cb || !cb.classList.contains('checked')) { 
+    toast('Acceptation RGPD requise', 'warn'); 
+    return; 
+  }
+  if (!first.value || !last.value || !email.value || !msg.value) { 
+    toast('Tous les champs requis doivent être remplis', 'warn'); 
+    return; 
+  }
+  
+  // Validation email basique
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.value)) {
+    toast('Adresse email invalide', 'warn');
+    return;
+  }
+  
+  // Empêcher double clic
+  const btn = document.querySelector('button[onclick*="submitContact"]');
+  if (btn) {
+    btn.disabled = true;
+    const span = btn.querySelector('span');
+    if (span) span.textContent = 'Envoi en cours…';
+  }
+  
+  try {
+    // Insert dans Supabase
+    const { error } = await supabase.from('contact_messages').insert({
+      first_name: first.value.trim(),
+      last_name: last.value.trim(),
+      email: email.value.trim().toLowerCase(),
+      phone: phone?.value?.trim() || null,
+      message: msg.value.trim(),
+      source: 'contact_form',
+      user_agent: navigator.userAgent,
+      metadata: {
+        page: 'contact',
+        language: navigator.language,
+        submitted_at: new Date().toISOString()
+      }
+    });
+    
+    if (error) {
+      console.warn('[Contact] Erreur Supabase:', error);
+      toast('Erreur d\'envoi · réessayez ou écrivez à contact@oxvehicle.fr', 'warn');
+      if (btn) {
+        btn.disabled = false;
+        const span = btn.querySelector('span');
+        if (span) span.textContent = 'Envoyer le message';
+      }
+      return;
+    }
+    
+    // Tentative d'envoi d'email de notification à l'admin (best-effort)
+    try {
+      await supabase.functions.invoke('send-email', {
+        body: {
+          template: 'contact_admin_notification',
+          recipient: 'contact@oxvehicle.fr',
+          data: {
+            first_name: first.value,
+            last_name: last.value,
+            email: email.value,
+            phone: phone?.value || '—',
+            message: msg.value
+          }
+        }
+      });
+    } catch (emailErr) {
+      // Silencieux : le message est sauvegardé en BDD même si l'email échoue
+    }
+    
+    toast('Message envoyé · réponse sous 48h ouvrées', 'ok');
+    
+    // Reset formulaire
+    ['ct-first','ct-last','ct-email','ct-phone','ct-msg'].forEach(id => { 
+      const el = document.getElementById(id); 
+      if (el) el.value = ''; 
+    });
+    cb.classList.remove('checked');
+    
+    if (btn) {
+      btn.disabled = false;
+      const span = btn.querySelector('span');
+      if (span) span.textContent = 'Envoyer le message';
+    }
+    
+  } catch (err) {
+    console.error('[Contact] Exception:', err);
+    toast('Erreur · écrivez directement à contact@oxvehicle.fr', 'warn');
+    if (btn) {
+      btn.disabled = false;
+      const span = btn.querySelector('span');
+      if (span) span.textContent = 'Envoyer le message';
+    }
+  }
 };
 
 /* === AUTH FUNCTIONS (signup, login, forgot, verify) === */
@@ -23160,12 +23299,29 @@ window.adminCancelRegistration = async function(regId) {
   loadAdminPiloteDetail();
 };
 
+/* ============================================================
+   ADMIN AUDIT — Helper de logging des actions sensibles
+   ============================================================ */
+window.logAdminAction = async function(action, metadata = {}) {
+  if (typeof supabase === 'undefined') return;
+  try {
+    await supabase.from('admin_audit').insert({
+      user_id: window.OXVApi?.user?.profile?.id,
+      action: action,
+      user_agent: navigator.userAgent,
+      metadata: metadata
+    });
+  } catch (e) {
+    // Silencieux : ne JAMAIS bloquer l'action principale à cause du logging
+  }
+};
+
 window.adminCreditHeritageSession = async function(packId) {
   if (!confirm('Créditer +1 session sur ce pack Heritage ?\n(Augmente sessions_total de 1, geste commercial)')) return;
 
   const { data: pack } = await supabase
     .from('heritage_packs')
-    .select('sessions_total')
+    .select('sessions_total, user_id')
     .eq('id', packId)
     .single();
 
@@ -23184,6 +23340,13 @@ window.adminCreditHeritageSession = async function(packId) {
     return;
   }
 
+  // Log audit
+  await logAdminAction('heritage_credit', { 
+    pack_id: packId, 
+    target_user_id: pack.user_id,
+    new_total: (pack.sessions_total || 4) + 1 
+  });
+
   toast('Pack crédité de 1 session', 'ok');
   loadAdminPiloteDetail();
 };
@@ -23200,6 +23363,8 @@ window.adminMarkHeritageCompleted = async function(packId) {
     toast('Erreur', 'warn');
     return;
   }
+
+  await logAdminAction('heritage_complete', { pack_id: packId });
 
   toast('Pack marqué complété', 'ok');
   loadAdminPiloteDetail();
@@ -23361,8 +23526,15 @@ window.confirmAddSession = async function() {
     closeAddSessionModal();
     btn.disabled = false;
     btn.querySelector('span').textContent = 'Créer la session';
-    // Recharge la liste
+    // Recharge la liste admin + invalide caches public/wizard
     loadAdminSessions();
+    if (typeof invalidateSessionsCache === 'function') invalidateSessionsCache();
+    if (typeof logAdminAction === 'function') logAdminAction('session_create', { 
+      session_id: data?.id, 
+      date: dateStr, 
+      format: format,
+      offers: availableOffers
+    });
   } catch (err) {
     console.error('[OXV addSession] Exception', err);
     toast('Une erreur est survenue', 'warn');
@@ -23406,6 +23578,12 @@ window.quickCancelSession = async function(sessionId, dateStr) {
 
     toast('Session annulée. Notifications envoyées.', 'ok');
     loadAdminSessions();
+    if (typeof invalidateSessionsCache === 'function') invalidateSessionsCache();
+    if (typeof logAdminAction === 'function') logAdminAction('session_cancel', { 
+      session_id: sessionId, 
+      date: dateStr,
+      reason: reason 
+    });
   } catch (err) {
     console.error('[OXV quickCancel] Exception', err);
     toast('Une erreur est survenue', 'warn');
@@ -24049,6 +24227,7 @@ window.adminCancelSession = async function() {
 
   toast('Session annulée · pilotes notifiés', 'ok');
   loadAdminSessionDetail();
+  if (typeof invalidateSessionsCache === 'function') invalidateSessionsCache();
 };
 
 window.adminRestoreSession = async function() {
@@ -24068,6 +24247,7 @@ window.adminRestoreSession = async function() {
   if (error) { toast('Erreur restauration', 'warn'); return; }
   toast('Session restaurée', 'ok');
   loadAdminSessionDetail();
+  if (typeof invalidateSessionsCache === 'function') invalidateSessionsCache();
 };
 
 window.adminPrivatizeSession = async function() {
@@ -24083,6 +24263,7 @@ window.adminPrivatizeSession = async function() {
   if (error) { toast('Erreur', 'warn'); return; }
   toast('Session privatisée', 'ok');
   loadAdminSessionDetail();
+  if (typeof invalidateSessionsCache === 'function') invalidateSessionsCache();
 };
 
 window.adminUnprivatizeSession = async function() {
@@ -24098,6 +24279,7 @@ window.adminUnprivatizeSession = async function() {
   if (error) { toast('Erreur', 'warn'); return; }
   toast('Session redevenue publique', 'ok');
   loadAdminSessionDetail();
+  if (typeof invalidateSessionsCache === 'function') invalidateSessionsCache();
 };
 
 
@@ -24469,6 +24651,32 @@ window.exportSessionList = function() {
    ============================================================ */
 
 let publicCalSessions = [];
+
+/* ============================================================
+   INVALIDATION CACHE — Appelée après toute mutation session
+   par l'admin pour propager au calendrier public + wizard
+   ============================================================ */
+window.invalidateSessionsCache = function() {
+  // Vide le cache calendrier public
+  publicCalSessions = [];
+  // Vide le state du wizard de réservation
+  if (typeof bkState !== 'undefined' && bkState) {
+    bkState.sessions = [];
+    bkState.capacities = {};
+    bkState.regsBySession = {};
+  }
+  // Si la page calendrier est actuellement affichée, recharger
+  const calendarPage = document.getElementById('page-calendrier');
+  if (calendarPage && calendarPage.classList.contains('active') && typeof loadPublicCalendar === 'function') {
+    loadPublicCalendar();
+  }
+  // Si la page réserver est actuellement affichée, recharger les dates
+  const reserverPage = document.getElementById('page-reserver');
+  if (reserverPage && reserverPage.classList.contains('active') && typeof bkLoadDatesForOffer === 'function') {
+    bkLoadDatesForOffer();
+  }
+  console.log('[OXV] Cache sessions invalidé · calendrier et wizard rafraîchis');
+};
 let publicCalCurrentMonth = 'all';
 
 window.loadPublicCalendar = async function() {
