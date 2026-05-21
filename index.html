@@ -3,7 +3,6 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
-<meta name="theme-color" content="#0A0A0A" />
 <!-- OXV Brand Icons — Insigne bouclier-casque rouge -->
 <link rel="icon" href="/favicon.ico" sizes="any">
 <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
@@ -70,6 +69,8 @@
 
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link rel="preconnect" href="https://images.unsplash.com" />
+<link rel="dns-prefetch" href="https://fouvuqkdxarjpjbqnsjq.supabase.co" />
 <link href="https://fonts.googleapis.com/css2?family=Syncopate:wght@400;700&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
 
 <script type="importmap">
@@ -2222,6 +2223,32 @@ footer {
   outline: none;
   border-color: var(--copper);
 }
+
+/* États validation temps réel */
+.form-row input.valid {
+  border-color: rgba(74, 222, 128, 0.5);
+}
+.form-row input.invalid {
+  border-color: rgba(230, 57, 70, 0.5);
+}
+
+/* Hint sous les champs (validation live) */
+.field-hint {
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 0.04em;
+  margin-top: 6px;
+  min-height: 14px;
+  color: var(--cream-mute);
+  transition: color 0.22s;
+}
+.field-hint.ok {
+  color: var(--green-perf);
+}
+.field-hint.error {
+  color: var(--red);
+}
+
 .form-row textarea { resize: vertical; min-height: 120px; }
 .form-row select { cursor: pointer; }
 
@@ -4488,24 +4515,185 @@ footer {
 
 /* Empty state admin */
 .admin-empty {
-  padding: 32px;
+  padding: 48px 32px;
   text-align: center;
-  border: 1px dashed rgba(239, 230, 210, 0.1);
-  background: rgba(11, 18, 32, 0.3);
+  border: 1px dashed rgba(196, 164, 89, 0.15);
+  background: linear-gradient(180deg, rgba(11, 18, 32, 0.3), rgba(11, 18, 32, 0.1));
+  border-radius: 8px;
 }
 .admin-empty-icon {
-  font-family: var(--serif);
+  font-family: var(--display);
   font-style: italic;
-  font-size: 24px;
-  color: var(--cream-faint);
-  margin-bottom: 10px;
+  font-weight: 700;
+  font-size: 32px;
+  color: var(--gold);
+  margin-bottom: 14px;
+  opacity: 0.85;
 }
 .admin-empty-text {
-  font-family: var(--serif);
+  font-family: var(--display);
   font-style: italic;
-  font-size: 14px;
-  color: var(--cream-mute);
+  font-weight: 400;
+  font-size: 16px;
+  color: var(--cream);
   line-height: 1.5;
+  letter-spacing: 0.01em;
+}
+.admin-empty-sub {
+  font-family: var(--sans);
+  font-size: 13px;
+  color: var(--cream-mute);
+  margin-top: 8px;
+  line-height: 1.6;
+}
+
+/* ============================================================
+   EFFETS PREMIUM — Micro-animations & polish visuel
+   ============================================================ */
+
+/* Lift subtil au hover sur les cards Bento */
+.bento {
+  transition: transform 0.4s var(--ease-out), 
+              border-color 0.3s var(--ease),
+              box-shadow 0.4s var(--ease-out);
+}
+.bento:not(.admin-empty):hover {
+  border-color: var(--bento-border-h);
+}
+
+/* Hover signature sur les boutons primaires */
+.btn-primary {
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+}
+.btn-primary::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(110deg, 
+    transparent 35%, 
+    rgba(255, 255, 255, 0.18) 50%, 
+    transparent 65%);
+  transform: translateX(-100%);
+  transition: transform 0.7s var(--ease-out);
+  pointer-events: none;
+  z-index: 1;
+}
+.btn-primary:hover::after {
+  transform: translateX(100%);
+}
+
+/* Focus visible amélioré (a11y) */
+*:focus-visible {
+  outline: 2px solid var(--gold);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+/* Selection cuivrée sur le texte */
+::selection {
+  background: var(--gold);
+  color: var(--night);
+}
+
+/* Scrollbar discrète */
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+::-webkit-scrollbar-track {
+  background: var(--night);
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(196, 164, 89, 0.2);
+  border-radius: 5px;
+  border: 2px solid var(--night);
+}
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(196, 164, 89, 0.4);
+}
+
+/* Loader spinner premium */
+@keyframes oxv-spin {
+  0%   { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+.oxv-spinner {
+  display: inline-block;
+  width: 18px;
+  height: 18px;
+  border: 2px solid rgba(196, 164, 89, 0.2);
+  border-top-color: var(--gold);
+  border-radius: 50%;
+  animation: oxv-spin 0.9s linear infinite;
+  vertical-align: middle;
+}
+.oxv-spinner.lg {
+  width: 32px;
+  height: 32px;
+  border-width: 3px;
+}
+
+/* Pulse subtil sur les badges nouveaux */
+@keyframes oxv-pulse {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(196, 164, 89, 0.4); }
+  50%      { box-shadow: 0 0 0 6px rgba(196, 164, 89, 0); }
+}
+.badge-count {
+  animation: oxv-pulse 2.4s ease-in-out infinite;
+}
+
+/* Fade-in subtil sur changement de page */
+@keyframes oxv-page-in {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.page.active {
+  animation: oxv-page-in 0.35s var(--ease-out) both;
+}
+
+/* Image hero : zoom subtil pour effet ciné */
+@keyframes oxv-ken-burns {
+  0%   { transform: scale(1.0); }
+  100% { transform: scale(1.05); }
+}
+.home-hero-img {
+  animation: oxv-ken-burns 18s ease-in-out infinite alternate;
+}
+
+/* Soulignement or au hover des liens prose */
+.prose a {
+  position: relative;
+  color: var(--gold);
+  text-decoration: none;
+  background-image: linear-gradient(var(--gold), var(--gold));
+  background-size: 0% 1px;
+  background-position: 0 100%;
+  background-repeat: no-repeat;
+  transition: background-size 0.35s var(--ease-out);
+}
+.prose a:hover {
+  background-size: 100% 1px;
+}
+
+/* Touch-target mobile (a11y) */
+@media (max-width: 720px) {
+  .btn, button.admin-nav-item, .nav-link {
+    min-height: 44px;
+  }
+}
+
+/* Reduced motion (utilisateurs sensibles) */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+  .home-hero-img {
+    animation: none;
+  }
 }
 
 /* === ADMIN : Liste pilotes === */
@@ -10052,6 +10240,81 @@ p a:hover {
   font-weight: 600;
 }
 
+/* ============================================================
+   SKELETONS — Loading states uniformes
+   ============================================================ */
+.skel {
+  background: linear-gradient(
+    90deg,
+    rgba(255, 255, 255, 0.04) 0%,
+    rgba(255, 255, 255, 0.08) 50%,
+    rgba(255, 255, 255, 0.04) 100%
+  );
+  background-size: 200% 100%;
+  animation: skelShimmer 1.4s ease-in-out infinite;
+  border-radius: 4px;
+  display: inline-block;
+}
+.skel-line {
+  height: 14px;
+  width: 100%;
+  margin: 6px 0;
+}
+.skel-line.short { width: 40%; }
+.skel-line.medium { width: 70%; }
+.skel-title {
+  height: 24px;
+  width: 60%;
+  margin: 4px 0 12px;
+}
+.skel-block {
+  height: 80px;
+  width: 100%;
+  border-radius: 8px;
+}
+.skel-circle {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+}
+@keyframes skelShimmer {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+/* ============================================================
+   PAGE FADE-IN — Transitions douces entre pages
+   ============================================================ */
+.page {
+  animation: pageFadeIn 0.32s var(--ease) both;
+}
+@keyframes pageFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Spinner discret pour les boutons */
+.spin-loader {
+  display: inline-block;
+  width: 14px;
+  height: 14px;
+  border: 2px solid currentColor;
+  border-right-color: transparent;
+  border-radius: 50%;
+  animation: spinRotate 0.7s linear infinite;
+  vertical-align: -2px;
+  margin-right: 8px;
+}
+@keyframes spinRotate {
+  to { transform: rotate(360deg); }
+}
+
 /* Dividers harmonisés */
 hr, .divider {
   height: 1px;
@@ -12677,7 +12940,8 @@ textarea:focus-visible {
               </div>
               <div class="form-row">
                 <label>Email</label>
-                <input type="email" id="ct-email" placeholder="email@exemple.fr" />
+                <input type="email" id="ct-email" placeholder="email@exemple.fr" oninput="validateEmailLive('ct-email')" />
+                <div class="field-hint" id="ct-email-hint"></div>
               </div>
               <div class="form-row">
                 <label>Sujet</label>
@@ -12785,7 +13049,8 @@ textarea:focus-visible {
         </div>
         <div class="form-row">
           <label>Email</label>
-          <input type="email" id="su-email" placeholder="prenom.nom@email.fr" autocomplete="email" />
+          <input type="email" id="su-email" placeholder="prenom.nom@email.fr" autocomplete="email" oninput="validateEmailLive('su-email')" />
+          <div class="field-hint" id="su-email-hint"></div>
         </div>
         <div class="form-row">
           <label>Mot de passe</label>
@@ -12863,7 +13128,8 @@ textarea:focus-visible {
       <div class="auth-form">
         <div class="form-row">
           <label>Email</label>
-          <input type="email" id="li-email" placeholder="prenom.nom@email.fr" autocomplete="email" />
+          <input type="email" id="li-email" placeholder="prenom.nom@email.fr" autocomplete="email" oninput="validateEmailLive('li-email')" />
+          <div class="field-hint" id="li-email-hint"></div>
         </div>
         <div class="form-row">
           <label>Mot de passe</label>
@@ -12932,7 +13198,8 @@ textarea:focus-visible {
       <div class="auth-form">
         <div class="form-row">
           <label>Email</label>
-          <input type="email" id="fp-email" placeholder="prenom.nom@email.fr" autocomplete="email" />
+          <input type="email" id="fp-email" placeholder="prenom.nom@email.fr" autocomplete="email" oninput="validateEmailLive('fp-email')" />
+          <div class="field-hint" id="fp-email-hint"></div>
         </div>
       </div>
 
@@ -14384,11 +14651,11 @@ textarea:focus-visible {
         </button>
         <button class="admin-nav-item" onclick="goToAdmin('admin-messages')">
           <span>Messages</span>
-          <span class="badge-count" id="navBadgeMessages" style="display:none;">0</span>
+          <span class="badge-count js-msg-badge" style="display:none;">0</span>
         </button>
         <button class="admin-nav-item" onclick="goToAdmin('admin-messages')">
           <span>Messages</span>
-          <span class="badge-count" id="navBadgeMessages" style="display:none;">0</span>
+          <span class="badge-count js-msg-badge" style="display:none;">0</span>
         </button>
 
         <div class="admin-nav-section">— Pilotage</div>
@@ -14576,11 +14843,11 @@ textarea:focus-visible {
         </button>
         <button class="admin-nav-item" onclick="goToAdmin('admin-messages')">
           <span>Messages</span>
-          <span class="badge-count" id="navBadgeMessages" style="display:none;">0</span>
+          <span class="badge-count js-msg-badge" style="display:none;">0</span>
         </button>
         <button class="admin-nav-item" onclick="goToAdmin('admin-messages')">
           <span>Messages</span>
-          <span class="badge-count" id="navBadgeMessages" style="display:none;">0</span>
+          <span class="badge-count js-msg-badge" style="display:none;">0</span>
         </button>
 
         <div class="admin-nav-section">— Pilotage</div>
@@ -14722,7 +14989,7 @@ textarea:focus-visible {
         </button>
         <button class="admin-nav-item" onclick="goToAdmin('admin-messages')">
           <span>Messages</span>
-          <span class="badge-count" id="navBadgeMessages" style="display:none;">0</span>
+          <span class="badge-count js-msg-badge" style="display:none;">0</span>
         </button>
         <div class="admin-nav-section">— Pilotage</div>
         <button class="admin-nav-item" onclick="goToAdmin('admin-stats')">
@@ -14910,7 +15177,7 @@ textarea:focus-visible {
         </button>
         <button class="admin-nav-item" onclick="goToAdmin('admin-messages')">
           <span>Messages</span>
-          <span class="badge-count" id="navBadgeMessages" style="display:none;">0</span>
+          <span class="badge-count js-msg-badge" style="display:none;">0</span>
         </button>
         <div class="admin-nav-section">— Pilotage</div>
         <button class="admin-nav-item" onclick="goToAdmin('admin-stats')">
@@ -15118,7 +15385,7 @@ textarea:focus-visible {
         </button>
         <button class="admin-nav-item" onclick="goToAdmin('admin-messages')">
           <span>Messages</span>
-          <span class="badge-count" id="navBadgeMessages" style="display:none;">0</span>
+          <span class="badge-count js-msg-badge" style="display:none;">0</span>
         </button>
         <div class="admin-nav-section">— Pilotage</div>
         <button class="admin-nav-item" onclick="goToAdmin('admin-stats')">
@@ -15572,7 +15839,7 @@ textarea:focus-visible {
         <button class="admin-nav-item" onclick="goToAdmin('admin-emails')"><span>Emails</span><span class="arr">→</span></button>
         <button class="admin-nav-item active" onclick="goToAdmin('admin-messages')">
           <span>Messages</span>
-          <span class="badge-count" id="navBadgeMessages2" style="display:none;">0</span>
+          <span class="badge-count js-msg-badge" style="display:none;">0</span>
           <span class="arr">→</span>
         </button>
         <div class="admin-nav-divider"></div>
@@ -16461,7 +16728,7 @@ textarea:focus-visible {
           Société en cours d'immatriculation<br/>
           Adresse : Le Petit Châtaignier, 17360 La Génétouze, France<br/>
           SIRET : en cours · TVA intracommunautaire : en cours<br/>
-          Directeur de la publication : à préciser
+          Contact éditorial : <a href="mailto:contact@oxvehicle.fr">contact@oxvehicle.fr</a>
         </p>
 
         <h2>Hébergement</h2>
@@ -18126,7 +18393,7 @@ window.bkConfirmBooking = async function() {
     console.warn('Booking error:', err);
     btn.innerHTML = orig;
     btn.disabled = false;
-    toast(`Erreur : ${err.message || 'Réservation échouée'}`, 'warn');
+    toast(translateError(err), 'warn');
   }
 };
 
@@ -19566,6 +19833,126 @@ function isValidEmail(s) {
   return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(s);
 }
 
+/**
+ * Validation visuelle en temps réel d'un champ email
+ * Affiche ✓ ou ✗ sous le champ
+ */
+window.validateEmailLive = function(inputId) {
+  const input = document.getElementById(inputId);
+  const hint = document.getElementById(inputId + '-hint');
+  if (!input || !hint) return;
+  
+  const val = input.value.trim();
+  
+  if (val.length === 0) {
+    hint.textContent = '';
+    hint.className = 'field-hint';
+    input.classList.remove('valid', 'invalid');
+    return;
+  }
+  
+  if (isValidEmail(val)) {
+    hint.textContent = '✓ Format valide';
+    hint.className = 'field-hint ok';
+    input.classList.remove('invalid');
+    input.classList.add('valid');
+  } else {
+    hint.textContent = '✗ Email invalide (ex : prenom@domaine.fr)';
+    hint.className = 'field-hint error';
+    input.classList.remove('valid');
+    input.classList.add('invalid');
+  }
+};
+
+/* ============================================================
+   TRADUCTEUR D'ERREURS — Centralisé
+   Convertit les messages Supabase/PostgreSQL en français lisible
+   ============================================================ */
+window.translateError = function(error) {
+  if (!error) return 'Erreur inattendue';
+  
+  const msg = typeof error === 'string' 
+    ? error 
+    : (error.message || error.error_description || error.error || JSON.stringify(error));
+  
+  const lower = msg.toLowerCase();
+  
+  // Auth Supabase
+  if (lower.includes('invalid login credentials') || lower.includes('invalid email or password')) {
+    return 'Email ou mot de passe incorrect';
+  }
+  if (lower.includes('email not confirmed')) {
+    return 'Email non confirmé · vérifiez votre boîte de réception';
+  }
+  if (lower.includes('already registered') || lower.includes('user already')) {
+    return 'Un compte existe déjà avec cet email';
+  }
+  if (lower.includes('invalid email')) {
+    return 'Adresse email invalide';
+  }
+  if (lower.includes('password should')) {
+    return 'Mot de passe trop faible (8 caractères minimum)';
+  }
+  if (lower.includes('email rate limit')) {
+    return 'Trop de tentatives · réessayez dans quelques minutes';
+  }
+  if (lower.includes('user not found')) {
+    return 'Compte introuvable';
+  }
+  if (lower.includes('jwt expired') || lower.includes('session expired')) {
+    return 'Session expirée · reconnectez-vous';
+  }
+  if (lower.includes('captcha')) {
+    return 'Vérification anti-bot échouée · réessayez';
+  }
+  if (lower.includes('signup_disabled') || lower.includes('signup disabled')) {
+    return 'Inscriptions temporairement fermées';
+  }
+  
+  // Erreurs réseau
+  if (lower.includes('failed to fetch') || lower.includes('network')) {
+    return 'Erreur réseau · vérifiez votre connexion';
+  }
+  if (lower.includes('timeout')) {
+    return 'Délai dépassé · réessayez';
+  }
+  
+  // PostgreSQL / RLS
+  if (lower.includes('violates row-level security') || lower.includes('rls')) {
+    return 'Action non autorisée';
+  }
+  if (lower.includes('duplicate key') || lower.includes('23505')) {
+    return 'Cet enregistrement existe déjà';
+  }
+  if (lower.includes('foreign key') || lower.includes('23503')) {
+    return 'Référence introuvable · données liées manquantes';
+  }
+  if (lower.includes('not null') || lower.includes('23502')) {
+    return 'Champ obligatoire manquant';
+  }
+  if (lower.includes('does not exist')) {
+    return 'Élément introuvable';
+  }
+  if (lower.includes('permission denied') || lower.includes('not allowed')) {
+    return 'Permission refusée';
+  }
+  
+  // Stockage
+  if (lower.includes('payload too large') || lower.includes('file size')) {
+    return 'Fichier trop volumineux';
+  }
+  if (lower.includes('invalid format') || lower.includes('mime type')) {
+    return 'Format de fichier non accepté';
+  }
+  
+  // Si message court et propre, on le garde
+  if (msg.length < 80 && /^[a-zA-Z0-9 .,\-éèàçâêîôûœëïü']+$/.test(msg)) {
+    return msg;
+  }
+  
+  return 'Une erreur est survenue · réessayez ou contactez le support';
+};
+
 // Garde la dernière email tentée pour le renvoi de vérification
 let lastSignupEmail = '';
 
@@ -19615,16 +20002,7 @@ window.submitSignup = async function() {
       goTo('verify-email');
     }
   } else {
-    // Supabase renvoie des messages en anglais : on les traduit pour l'utilisateur
-    let msg = result.error || 'Erreur inattendue';
-    if (msg.includes('already registered') || msg.includes('User already')) {
-      msg = 'Un compte existe déjà avec cet email';
-    } else if (msg.includes('invalid email')) {
-      msg = 'Email invalide';
-    } else if (msg.includes('Password should')) {
-      msg = 'Mot de passe trop faible';
-    }
-    toast(msg, 'warn');
+    toast(translateError(result.error), 'warn');
   }
 };
 
@@ -19675,13 +20053,7 @@ window.submitLogin = async function() {
       goTo('compte');
     }
   } else {
-    let msg = result.error || 'Erreur inattendue';
-    if (msg.includes('Invalid login') || msg.includes('credentials')) {
-      msg = 'Email ou mot de passe incorrect';
-    } else if (msg.includes('Email not confirmed')) {
-      msg = 'Email non vérifié · vérifiez votre boîte';
-    }
-    toast(msg, 'warn');
+    toast(translateError(result.error), 'warn');
   }
 };
 
@@ -19719,7 +20091,7 @@ window.submitMagicLink = async function() {
     toast('Lien de connexion envoyé · vérifiez votre email', 'ok');
     email.value = '';
   } catch (err) {
-    toast(err.message || 'Erreur lors de l\'envoi', 'warn');
+    toast(translateError(err), 'warn');
   }
 
   if (btn) { btn.innerHTML = orig; btn.disabled = false; }
@@ -19746,7 +20118,7 @@ window.submitResetPassword = async function() {
     pwd.value = ''; confirm.value = '';
     setTimeout(() => goTo('compte'), 1200);
   } catch (err) {
-    toast(err.message || 'Erreur lors de la mise à jour', 'warn');
+    toast(translateError(err), 'warn');
   }
 
   if (btn) { btn.innerHTML = orig; btn.disabled = false; }
@@ -19768,7 +20140,7 @@ window.resendVerificationEmail = async function() {
   if (result.ok) {
     toast('Email de vérification renvoyé', 'ok');
   } else {
-    toast(result.error || 'Erreur lors du renvoi', 'warn');
+    toast(translateError(result.error), 'warn');
   }
 };
 
@@ -20454,7 +20826,7 @@ window.saveVehicle = async function() {
   } catch (err) {
     console.warn('Save vehicle error:', err);
     if (btn) { btn.innerHTML = orig; btn.disabled = false; }
-    toast(`Erreur : ${err.message || 'Sauvegarde échouée'}`, 'warn');
+    toast(translateError(err), 'warn');
   }
 };
 
@@ -20840,7 +21212,7 @@ window.saveDocument = async function() {
   } catch (err) {
     console.warn('Save document error:', err);
     if (btn) { btn.innerHTML = orig; btn.disabled = false; }
-    toast(`Erreur : ${err.message || 'Sauvegarde échouée'}`, 'warn');
+    toast(translateError(err), 'warn');
   }
 };
 
@@ -21310,7 +21682,7 @@ window.loadBilling = async function() {
               const desc = sessionDate ? `Session ${sessionDate} · ${offer}` : `Règlement ${offer}`;
               const amount = ((p.amount || 0) / 100).toLocaleString('fr-FR', { minimumFractionDigits: 2 });
               const invoice = p.invoice_pdf_url
-                ? `<a href="${escapeHtml(p.invoice_pdf_url)}" target="_blank">PDF →</a>`
+                ? `<a href="${escapeHtml(p.invoice_pdf_url)}" target="_blank" rel="noopener noreferrer">PDF →</a>`
                 : '<span style="color: var(--cream-faint); font-family: var(--mono); font-size: 9px;">—</span>';
               return `
                 <tr>
@@ -21942,7 +22314,7 @@ async function loadMessagesBadge() {
     
     if (error) return;  // Table pas encore créée, silencieux
     
-    document.querySelectorAll('[id^="navBadgeMessages"]').forEach(badge => {
+    document.querySelectorAll('.js-msg-badge').forEach(badge => {
       if ((count || 0) > 0) {
         badge.textContent = count;
         badge.style.display = '';
@@ -23377,7 +23749,7 @@ function renderPilotPayments(payments) {
           const refunded = p.refund_amount ? `<em>Dont remb. ${(p.refund_amount / 100).toLocaleString('fr-FR')} €</em>` : '';
           const ref = p.stripe_payment_intent_id ? p.stripe_payment_intent_id.slice(0, 14) + '…' : '—';
           const invoice = p.invoice_pdf_url
-            ? `<a href="${escapeHtml(p.invoice_pdf_url)}" target="_blank" style="color: var(--copper-glow);">PDF →</a>`
+            ? `<a href="${escapeHtml(p.invoice_pdf_url)}" target="_blank" rel="noopener noreferrer" style="color: var(--copper-glow);">PDF →</a>`
             : '—';
           return `
             <tr>
@@ -23691,7 +24063,28 @@ window.adminLoadMessages = async function() {
   const listEl = document.getElementById('adminMessagesList');
   if (!listEl) return;
   
-  listEl.innerHTML = '<div class="bento" style="padding:40px;text-align:center;"><p style="font-family:var(--sans);color:var(--cream-mute);">Chargement…</p></div>';
+  // Skeleton de chargement
+  listEl.innerHTML = `
+    <div class="bento" style="padding:24px;margin-bottom:14px;">
+      <div style="display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;">
+        <div style="flex:1;min-width:240px;">
+          <div class="skel skel-line short"></div>
+          <div class="skel skel-title"></div>
+          <div class="skel skel-line medium"></div>
+        </div>
+      </div>
+      <div class="skel skel-block" style="margin-top:14px;"></div>
+    </div>
+    <div class="bento" style="padding:24px;margin-bottom:14px;">
+      <div style="display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;">
+        <div style="flex:1;min-width:240px;">
+          <div class="skel skel-line short"></div>
+          <div class="skel skel-title"></div>
+          <div class="skel skel-line medium"></div>
+        </div>
+      </div>
+      <div class="skel skel-block" style="margin-top:14px;"></div>
+    </div>`;
   
   try {
     const { data, error } = await supabase
@@ -23737,7 +24130,7 @@ window.adminUpdateMessagesKpis = function() {
 
 window.adminUpdateMessagesBadge = function() {
   const newCount = adminMessagesData.filter(m => m.status === 'new').length;
-  document.querySelectorAll('[id^="navBadgeMessages"]').forEach(badge => {
+  document.querySelectorAll('.js-msg-badge').forEach(badge => {
     if (newCount > 0) {
       badge.textContent = newCount;
       badge.style.display = '';
