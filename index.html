@@ -12242,6 +12242,11 @@ textarea:focus-visible {
 }
 
 /* ---------- Modal (envoi test) — préfixé pour ne pas écraser .modal éventuel ---------- */
+/* L'attribut [hidden] doit toujours gagner sur display:flex */
+#dryrun-modal[hidden],
+#dispatch-detail-drawer[hidden] {
+  display: none !important;
+}
 #dryrun-modal.modal {
   position: fixed;
   inset: 0;
