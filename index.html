@@ -11731,18 +11731,18 @@ textarea:focus-visible {
 
 /* =========================================================================
    ADMIN — RITUELS PRÉ-SESSION (BLOC E)
-   Styles scopés à #page-admin-rituels / #dispatch-detail-drawer / #dryrun-modal
-   pour ne pas casser le thème OXV cream/dark global.
+   En charte OXV "Executive Dashboard" : Noir Abysse, Blanc Pur, Or Doré,
+   Rouge Adrénaline. Bento glassmorphism. Fonts Syncopate/Inter/JetBrains.
    ========================================================================= */
 
-/* Eyebrow local (le markup utilise .eyebrow non stylé globalement) */
 #page-admin-rituels .eyebrow,
 #dispatch-detail-drawer .eyebrow {
-  font-family: 'Courier New', monospace;
+  display: inline-block;
+  font-family: var(--mono);
   font-size: 10px;
-  letter-spacing: 0.22em;
+  letter-spacing: 0.28em;
   text-transform: uppercase;
-  color: #6B6B6B;
+  color: var(--cream-mute);
 }
 
 /* ---------- Header de page ---------- */
@@ -11756,22 +11756,25 @@ textarea:focus-visible {
 }
 #page-admin-rituels .admin-page__header-left { flex: 1; min-width: 300px; }
 #page-admin-rituels .admin-page__title {
-  font-family: 'Georgia', serif;
-  font-weight: 200;
+  font-family: var(--display);
+  font-weight: 700;
   font-style: italic;
-  font-size: 36px;
-  margin: 8px 0 6px;
-  color: #1A1A1A;
-  letter-spacing: -0.01em;
+  font-size: 34px;
+  margin: 12px 0 8px;
+  color: var(--cream);
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
 }
 #page-admin-rituels .admin-page__subtitle {
   margin: 0;
+  font-family: var(--sans);
   font-size: 14px;
-  color: #6B6B6B;
+  line-height: 1.6;
+  color: var(--cream-mute);
 }
 #page-admin-rituels .admin-page__header-actions {
   display: flex;
-  gap: 8px;
+  gap: 10px;
   flex-wrap: wrap;
 }
 
@@ -11780,46 +11783,58 @@ textarea:focus-visible {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
   gap: 12px;
-  margin-bottom: 32px;
+  margin-bottom: 28px;
 }
 #page-admin-rituels .kpi-card {
-  background: #FFFFFF;
-  border: 0.5px solid #E8E6E0;
-  border-radius: 8px;
-  padding: 18px 20px;
+  background: var(--bento-bg);
+  border: 1px solid var(--bento-border);
+  border-radius: var(--bento-radius);
+  padding: 20px 22px;
   position: relative;
   overflow: hidden;
+  backdrop-filter: var(--bento-blur);
+  -webkit-backdrop-filter: var(--bento-blur);
+  transition: border-color 0.25s ease, background 0.25s ease;
+}
+#page-admin-rituels .kpi-card:hover {
+  border-color: var(--bento-border-h);
+  background: var(--bento-bg-hover);
 }
 #page-admin-rituels .kpi-card__label {
-  font-family: 'Courier New', monospace;
-  font-size: 11px;
-  letter-spacing: 0.18em;
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.22em;
   text-transform: uppercase;
-  color: #6B6B6B;
-  margin: 0 0 8px 0;
+  color: var(--cream-mute);
+  margin: 0 0 10px 0;
 }
 #page-admin-rituels .kpi-card__value {
-  font-family: 'Georgia', serif;
-  font-weight: 300;
+  font-family: var(--display);
+  font-weight: 700;
   font-size: 32px;
-  color: #1A1A1A;
+  color: var(--cream);
   line-height: 1;
   margin: 0;
+  letter-spacing: 0.02em;
 }
 #page-admin-rituels .kpi-card__delta {
-  margin-top: 6px;
+  margin-top: 8px;
+  font-family: var(--sans);
   font-size: 12px;
-  color: #6B6B6B;
+  color: var(--cream-mute);
 }
-#page-admin-rituels .kpi-card__delta--success { color: #16A34A; }
-#page-admin-rituels .kpi-card__delta--warning { color: #D97706; }
-#page-admin-rituels .kpi-card__delta--danger  { color: #C8102E; }
-#page-admin-rituels .kpi-card--accent { border-left: 3px solid #C8102E; }
+#page-admin-rituels .kpi-card__delta--success { color: var(--ok); }
+#page-admin-rituels .kpi-card__delta--warning { color: var(--warn); }
+#page-admin-rituels .kpi-card__delta--danger  { color: var(--oxv-red); }
+#page-admin-rituels .kpi-card--accent {
+  border-left: 2px solid var(--oxv-red);
+}
+#page-admin-rituels .kpi-card--accent .kpi-card__value { color: var(--copper); }
 #page-admin-rituels .kpi-card--loading .kpi-card__skeleton {
   height: 50px;
-  background: linear-gradient(90deg, #F5F4F1 0%, #E8E6E0 50%, #F5F4F1 100%);
+  background: linear-gradient(90deg, rgba(255,255,255,0.03) 0%, rgba(255,255,255,0.08) 50%, rgba(255,255,255,0.03) 100%);
   background-size: 200% 100%;
-  animation: rituels-skeleton-shimmer 1.5s infinite;
+  animation: rituels-skeleton-shimmer 1.6s infinite;
   border-radius: 4px;
 }
 @keyframes rituels-skeleton-shimmer {
@@ -11833,15 +11848,16 @@ textarea:focus-visible {
   gap: 12px;
   align-items: flex-end;
   flex-wrap: wrap;
-  padding: 16px 20px;
-  background: #F5F4F1;
-  border-radius: 8px;
+  padding: 18px 22px;
+  background: var(--bento-bg);
+  border: 1px solid var(--bento-border);
+  border-radius: var(--bento-radius);
   margin-bottom: 16px;
 }
 #page-admin-rituels .filter-group {
   display: flex;
   flex-direction: column;
-  gap: 4px;
+  gap: 6px;
   min-width: 140px;
 }
 #page-admin-rituels .filter-group--reset {
@@ -11850,76 +11866,84 @@ textarea:focus-visible {
   padding-bottom: 2px;
 }
 #page-admin-rituels .filter-label {
-  font-family: 'Courier New', monospace;
-  font-size: 10px;
-  letter-spacing: 0.15em;
+  font-family: var(--mono);
+  font-size: 9px;
+  letter-spacing: 0.28em;
   text-transform: uppercase;
-  color: #6B6B6B;
+  color: var(--cream-mute);
 }
 #page-admin-rituels .filter-select,
 #page-admin-rituels .filter-input {
-  height: 36px;
+  height: 38px;
   padding: 0 12px;
+  font-family: var(--sans);
   font-size: 13px;
-  border: 0.5px solid #C9C5BB;
+  border: 1px solid var(--cream-line);
   border-radius: 6px;
-  background: #FFFFFF;
-  color: #1A1A1A;
-  font-family: inherit;
+  background: rgba(0, 0, 0, 0.4);
+  color: var(--cream);
+  transition: border-color 0.25s ease, background 0.25s ease;
+}
+#page-admin-rituels .filter-select:hover,
+#page-admin-rituels .filter-input:hover {
+  border-color: var(--cream-edge);
 }
 #page-admin-rituels .filter-select:focus,
 #page-admin-rituels .filter-input:focus {
   outline: none;
-  border-color: #1A1A1A;
+  border-color: var(--copper);
+  background: rgba(255, 183, 3, 0.04);
 }
+#page-admin-rituels .filter-input::placeholder { color: var(--cream-faint); }
 
 /* ---------- Tableau ---------- */
 #page-admin-rituels .admin-rituels__table-wrap {
-  background: #FFFFFF;
-  border: 0.5px solid #E8E6E0;
-  border-radius: 8px;
+  background: var(--bento-bg);
+  border: 1px solid var(--bento-border);
+  border-radius: var(--bento-radius);
   overflow-x: auto;
 }
 #page-admin-rituels .admin-table {
   width: 100%;
   border-collapse: collapse;
+  font-family: var(--sans);
   font-size: 13px;
 }
 #page-admin-rituels .admin-table thead th {
   text-align: left;
-  padding: 14px 16px;
-  font-family: 'Courier New', monospace;
+  padding: 16px 18px;
+  font-family: var(--mono);
   font-size: 10px;
-  letter-spacing: 0.15em;
+  letter-spacing: 0.22em;
   text-transform: uppercase;
-  color: #6B6B6B;
-  background: #FAFAF7;
-  border-bottom: 0.5px solid #E8E6E0;
+  color: var(--cream-mute);
+  background: rgba(0, 0, 0, 0.25);
+  border-bottom: 1px solid var(--bento-border);
   font-weight: 500;
   white-space: nowrap;
 }
 #page-admin-rituels .admin-table tbody td {
-  padding: 12px 16px;
-  border-bottom: 0.5px solid #F0EEE8;
+  padding: 14px 18px;
+  border-bottom: 1px solid var(--bento-border);
   vertical-align: middle;
-  color: #1A1A1A;
+  color: var(--cream);
 }
 #page-admin-rituels .admin-table tbody tr {
   cursor: pointer;
-  transition: background-color 100ms ease;
+  transition: background-color 120ms ease;
 }
 #page-admin-rituels .admin-table tbody tr:hover {
-  background: #FAFAF7;
+  background: rgba(255, 255, 255, 0.02);
 }
 #page-admin-rituels .admin-table__empty td {
   text-align: center;
   padding: 32px 16px;
-  color: #6B6B6B;
+  color: var(--cream-mute);
 }
-#page-admin-rituels .col-status      { width: 80px; }
+#page-admin-rituels .col-status      { width: 96px; }
 #page-admin-rituels .col-type        { width: 70px; }
-#page-admin-rituels .col-engagement  { width: 130px; }
-#page-admin-rituels .col-actions     { width: 80px; text-align: right; }
+#page-admin-rituels .col-engagement  { width: 140px; }
+#page-admin-rituels .col-actions     { width: 90px; text-align: right; }
 #page-admin-rituels .cell-pilot {
   display: flex;
   flex-direction: column;
@@ -11927,26 +11951,28 @@ textarea:focus-visible {
 }
 #page-admin-rituels .cell-pilot__name {
   font-weight: 500;
-  color: #1A1A1A;
+  color: var(--cream);
 }
 #page-admin-rituels .cell-pilot__email {
+  font-family: var(--mono);
   font-size: 11px;
-  color: #6B6B6B;
+  color: var(--cream-mute);
 }
 
-/* ---------- Badges de statut ---------- */
+/* ---------- Badges de statut (couleurs sémantiques sur fond cohérent dark) ---------- */
 #page-admin-rituels .status-badge,
 #dispatch-detail-drawer .status-badge {
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  padding: 4px 10px;
-  border-radius: 4px;
-  font-family: 'Courier New', monospace;
-  font-size: 10px;
-  letter-spacing: 0.1em;
+  padding: 5px 10px;
+  border-radius: 999px;
+  font-family: var(--mono);
+  font-size: 9px;
+  letter-spacing: 0.18em;
   text-transform: uppercase;
   font-weight: 500;
+  border: 1px solid transparent;
 }
 #page-admin-rituels .status-badge__dot,
 #dispatch-detail-drawer .status-badge__dot {
@@ -11954,36 +11980,38 @@ textarea:focus-visible {
   height: 6px;
   border-radius: 50%;
 }
-.status-badge--pending     { background: #FEF3C7; color: #92400E; }
-.status-badge--pending     .status-badge__dot { background: #D97706; }
-.status-badge--generating  { background: #DBEAFE; color: #1E40AF; }
-.status-badge--generating  .status-badge__dot { background: #2563EB; animation: rituels-pulse 1.5s infinite; }
-.status-badge--sent        { background: #D1FAE5; color: #065F46; }
-.status-badge--sent        .status-badge__dot { background: #16A34A; }
-.status-badge--failed      { background: #FEE2E2; color: #991B1B; }
-.status-badge--failed      .status-badge__dot { background: #C8102E; }
-.status-badge--skipped     { background: #F3F4F6; color: #4B5563; }
-.status-badge--skipped     .status-badge__dot { background: #6B7280; }
+.status-badge--pending     { background: rgba(255, 183, 3, 0.10);  color: var(--warn);   border-color: rgba(255, 183, 3, 0.25); }
+.status-badge--pending     .status-badge__dot { background: var(--warn); }
+.status-badge--generating  { background: rgba(96, 165, 250, 0.10); color: var(--blue-tech); border-color: rgba(96, 165, 250, 0.25); }
+.status-badge--generating  .status-badge__dot { background: var(--blue-tech); animation: rituels-pulse 1.5s infinite; }
+.status-badge--sent        { background: rgba(74, 222, 128, 0.10); color: var(--ok);     border-color: rgba(74, 222, 128, 0.25); }
+.status-badge--sent        .status-badge__dot { background: var(--ok); }
+.status-badge--failed      { background: rgba(230, 57, 70, 0.10);  color: var(--ko);     border-color: rgba(230, 57, 70, 0.30); }
+.status-badge--failed      .status-badge__dot { background: var(--ko); }
+.status-badge--skipped     { background: rgba(255, 255, 255, 0.04); color: var(--cream-mute); border-color: var(--cream-line); }
+.status-badge--skipped     .status-badge__dot { background: var(--cream-mute); }
 @keyframes rituels-pulse {
   0%, 100% { opacity: 1; }
-  50% { opacity: 0.3; }
+  50% { opacity: 0.35; }
 }
 
 /* ---------- Badge type de rituel ---------- */
 #page-admin-rituels .ritual-badge {
   display: inline-block;
-  padding: 3px 8px;
+  padding: 4px 9px;
   border-radius: 4px;
-  font-family: 'Courier New', monospace;
+  font-family: var(--mono);
   font-size: 10px;
-  letter-spacing: 0.1em;
+  letter-spacing: 0.16em;
   font-weight: 500;
-  background: #F5F4F1;
-  color: #1A1A1A;
+  background: rgba(255, 255, 255, 0.04);
+  color: var(--cream);
+  border: 1px solid var(--cream-line);
 }
 #page-admin-rituels .ritual-badge--jminus2 {
-  background: rgba(200, 16, 46, 0.08);
-  color: #C8102E;
+  background: rgba(200, 16, 46, 0.10);
+  color: var(--oxv-red);
+  border-color: rgba(200, 16, 46, 0.30);
 }
 
 /* ---------- Engagement (jauge mini) ---------- */
@@ -11997,16 +12025,21 @@ textarea:focus-visible {
   display: flex;
   align-items: center;
   gap: 8px;
+  font-family: var(--sans);
   font-size: 11px;
-  color: #6B6B6B;
+  color: var(--cream-mute);
 }
 #page-admin-rituels .engagement-row__icon {
   font-size: 12px;
   width: 14px;
   display: inline-block;
+  color: var(--cream-faint);
 }
 #page-admin-rituels .engagement-row--filled {
-  color: #1A1A1A;
+  color: var(--cream);
+}
+#page-admin-rituels .engagement-row--filled .engagement-row__icon {
+  color: var(--copper);
 }
 
 /* ---------- Pagination ---------- */
@@ -12014,13 +12047,16 @@ textarea:focus-visible {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 16px 4px;
+  padding: 18px 4px;
   flex-wrap: wrap;
   gap: 12px;
 }
 #page-admin-rituels .pagination-info {
-  font-size: 13px;
-  color: #6B6B6B;
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--cream-mute);
 }
 #page-admin-rituels .pagination-controls {
   display: flex;
@@ -12028,32 +12064,33 @@ textarea:focus-visible {
   gap: 12px;
 }
 #page-admin-rituels .pagination-current {
-  font-family: 'Courier New', monospace;
+  font-family: var(--mono);
   font-size: 12px;
-  color: #1A1A1A;
+  color: var(--cream);
+  letter-spacing: 0.12em;
 }
 
-/* ---------- Boutons (scoped pour ne pas casser le .btn OXV global) ---------- */
+/* ---------- Boutons admin-rituels (re-stylés OXV mais isolés des .btn globaux) ---------- */
 #page-admin-rituels .btn,
 #dispatch-detail-drawer .btn,
 #dryrun-modal .btn {
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  padding: 8px 16px;
-  border: 0.5px solid transparent;
+  padding: 10px 18px;
+  border: 1px solid var(--cream-edge);
   border-radius: 6px;
-  font-family: inherit;
-  font-size: 13px;
-  font-weight: 500;
-  letter-spacing: 0;
-  text-transform: none;
+  font-family: var(--display);
+  font-size: 10px;
+  font-weight: 400;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
   cursor: pointer;
-  transition: all 120ms ease;
+  transition: all 0.25s ease;
   text-decoration: none;
   white-space: nowrap;
   background: transparent;
-  color: #1A1A1A;
+  color: var(--cream);
   overflow: visible;
 }
 #page-admin-rituels .btn::before,
@@ -12063,76 +12100,107 @@ textarea:focus-visible {
 #dispatch-detail-drawer .btn:hover,
 #dryrun-modal .btn:hover {
   transform: none;
+  border-color: var(--cream);
+  background: rgba(255, 255, 255, 0.04);
 }
 #page-admin-rituels .btn--primary,
 #dispatch-detail-drawer .btn--primary,
 #dryrun-modal .btn--primary {
-  background: #1A1A1A;
-  color: #FFFFFF;
-  border-color: #1A1A1A;
+  background: var(--gold);
+  color: var(--night);
+  border-color: var(--gold);
+  font-weight: 700;
 }
 #page-admin-rituels .btn--primary:hover,
 #dispatch-detail-drawer .btn--primary:hover,
-#dryrun-modal .btn--primary:hover { background: #000000; border-color: #000000; }
+#dryrun-modal .btn--primary:hover {
+  background: var(--copper-glow);
+  border-color: var(--copper-glow);
+  color: var(--night);
+  box-shadow: 0 6px 20px rgba(255, 183, 3, 0.25);
+}
 #page-admin-rituels .btn--secondary,
 #dispatch-detail-drawer .btn--secondary,
 #dryrun-modal .btn--secondary {
-  background: #FFFFFF;
-  color: #1A1A1A;
-  border-color: #C9C5BB;
+  background: transparent;
+  color: var(--cream);
+  border-color: var(--cream-edge);
 }
 #page-admin-rituels .btn--secondary:hover,
 #dispatch-detail-drawer .btn--secondary:hover,
-#dryrun-modal .btn--secondary:hover { border-color: #1A1A1A; }
+#dryrun-modal .btn--secondary:hover {
+  border-color: var(--cream);
+  background: rgba(255, 255, 255, 0.04);
+}
 #page-admin-rituels .btn--danger,
 #dispatch-detail-drawer .btn--danger,
 #dryrun-modal .btn--danger {
-  background: #C8102E;
-  color: #FFFFFF;
-  border-color: #C8102E;
+  background: var(--oxv-red);
+  color: var(--cream);
+  border-color: var(--oxv-red);
 }
 #page-admin-rituels .btn--danger:hover,
 #dispatch-detail-drawer .btn--danger:hover,
-#dryrun-modal .btn--danger:hover { background: #A00D26; border-color: #A00D26; }
+#dryrun-modal .btn--danger:hover {
+  background: #A00D26;
+  border-color: #A00D26;
+  box-shadow: 0 6px 20px rgba(200, 16, 46, 0.30);
+}
 #page-admin-rituels .btn--text,
 #dispatch-detail-drawer .btn--text,
 #dryrun-modal .btn--text {
   background: transparent;
-  color: #1A1A1A;
-  padding: 8px 12px;
-  text-decoration: underline;
+  color: var(--copper);
+  padding: 6px 10px;
   border-color: transparent;
+  text-decoration: underline;
+  letter-spacing: 0.14em;
+  font-size: 10px;
+}
+#page-admin-rituels .btn--text:hover,
+#dispatch-detail-drawer .btn--text:hover,
+#dryrun-modal .btn--text:hover {
+  background: transparent;
+  border-color: transparent;
+  color: var(--copper-glow);
 }
 #page-admin-rituels .btn--sm,
 #dispatch-detail-drawer .btn--sm,
 #dryrun-modal .btn--sm {
-  padding: 5px 12px;
-  font-size: 12px;
+  padding: 7px 14px;
+  font-size: 9px;
+  letter-spacing: 0.20em;
 }
 #page-admin-rituels .btn:disabled,
 #dispatch-detail-drawer .btn:disabled,
 #dryrun-modal .btn:disabled {
-  opacity: 0.4;
+  opacity: 0.35;
   cursor: not-allowed;
+  background: transparent;
+  border-color: var(--cream-line);
+  color: var(--cream-mute);
+  box-shadow: none;
 }
 #page-admin-rituels .btn-icon,
 #dispatch-detail-drawer .btn-icon,
 #dryrun-modal .btn-icon {
-  font-size: 14px;
+  font-size: 12px;
   line-height: 1;
 }
 
-/* ---------- Drawer détail ---------- */
+/* ---------- Drawer détail (charte OXV dark) ---------- */
 .drawer {
   position: fixed;
   inset: 0;
-  z-index: 100;
+  z-index: 9000;
 }
 .drawer__backdrop {
   position: absolute;
   inset: 0;
-  background: rgba(10, 10, 10, 0.4);
-  animation: rituels-fade-in 150ms ease;
+  background: rgba(0, 0, 0, 0.65);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  animation: rituels-fade-in 180ms ease;
 }
 .drawer__panel {
   position: absolute;
@@ -12140,12 +12208,13 @@ textarea:focus-visible {
   right: 0;
   bottom: 0;
   width: 100%;
-  max-width: 600px;
-  background: #FFFFFF;
+  max-width: 620px;
+  background: var(--night-card);
+  border-left: 1px solid var(--bento-border-h);
   display: flex;
   flex-direction: column;
-  animation: rituels-slide-in-right 200ms ease;
-  box-shadow: -20px 0 60px rgba(0,0,0,0.1);
+  animation: rituels-slide-in-right 240ms ease;
+  box-shadow: -30px 0 80px rgba(0, 0, 0, 0.6);
 }
 @keyframes rituels-fade-in {
   from { opacity: 0; }
@@ -12156,93 +12225,115 @@ textarea:focus-visible {
   to   { transform: translateX(0); }
 }
 .drawer__header {
-  padding: 24px 32px 16px;
-  border-bottom: 0.5px solid #E8E6E0;
+  padding: 28px 32px 20px;
+  border-bottom: 1px solid var(--bento-border);
   position: relative;
+  background: rgba(0, 0, 0, 0.25);
 }
 .drawer__title {
-  font-family: 'Georgia', serif;
-  font-weight: 300;
+  font-family: var(--display);
+  font-weight: 700;
+  font-style: italic;
   font-size: 22px;
-  margin: 6px 0 0;
-  color: #1A1A1A;
+  margin: 8px 0 0;
+  color: var(--cream);
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
 }
 .drawer__close {
   position: absolute;
-  top: 20px;
+  top: 22px;
   right: 24px;
   background: none;
   border: none;
   font-size: 28px;
   line-height: 1;
   cursor: pointer;
-  color: #6B6B6B;
-  padding: 4px 8px;
+  color: var(--cream-mute);
+  padding: 4px 10px;
+  transition: color 0.2s ease;
 }
-.drawer__close:hover { color: #1A1A1A; }
+.drawer__close:hover { color: var(--cream); }
 .drawer__body {
   flex: 1;
   overflow-y: auto;
   padding: 24px 32px;
-  color: #1A1A1A;
+  color: var(--cream);
+  font-family: var(--sans);
 }
-.drawer__loading { color: #6B6B6B; font-size: 13px; }
+.drawer__loading {
+  color: var(--cream-mute);
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
 .drawer__footer {
-  padding: 16px 32px;
-  border-top: 0.5px solid #E8E6E0;
+  padding: 18px 32px;
+  border-top: 1px solid var(--bento-border);
   display: flex;
-  gap: 8px;
+  gap: 10px;
   justify-content: flex-end;
+  background: rgba(0, 0, 0, 0.25);
 }
 .drawer__section {
   margin-bottom: 28px;
 }
 .drawer__section-label {
-  font-family: 'Courier New', monospace;
-  font-size: 10px;
-  letter-spacing: 0.18em;
+  font-family: var(--mono);
+  font-size: 9px;
+  letter-spacing: 0.28em;
   text-transform: uppercase;
-  color: #6B6B6B;
-  margin: 0 0 8px;
+  color: var(--cream-mute);
+  margin: 0 0 10px;
 }
 .drawer__info-grid {
   display: grid;
   grid-template-columns: 130px 1fr;
-  gap: 8px 16px;
+  gap: 10px 16px;
+  font-family: var(--sans);
   font-size: 13px;
 }
-.drawer__info-key { color: #6B6B6B; }
-.drawer__info-val { color: #1A1A1A; }
+.drawer__info-key {
+  color: var(--cream-mute);
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+.drawer__info-val { color: var(--cream); }
 .drawer__audio-player {
   width: 100%;
   margin-top: 8px;
   border-radius: 6px;
+  filter: invert(0.9) hue-rotate(180deg);
 }
 .drawer__script {
-  background: #FAFAF7;
-  border-radius: 6px;
+  background: rgba(0, 0, 0, 0.4);
+  border: 1px solid var(--bento-border);
+  border-radius: 8px;
   padding: 18px 20px;
   font-family: 'Georgia', serif;
   font-size: 14px;
-  line-height: 1.8;
-  color: #1A1A1A;
+  line-height: 1.85;
+  color: var(--cream);
   white-space: pre-wrap;
 }
 .drawer__payload {
-  background: #1A1A1A;
-  color: #C9C5BB;
+  background: var(--night-deep);
+  color: var(--copper);
+  border: 1px solid var(--bento-border);
   border-radius: 6px;
   padding: 16px;
-  font-family: 'Courier New', monospace;
+  font-family: var(--mono);
   font-size: 11px;
-  line-height: 1.5;
+  line-height: 1.55;
   overflow-x: auto;
-  max-height: 300px;
+  max-height: 320px;
   overflow-y: auto;
 }
 
-/* ---------- Modal (envoi test) — préfixé pour ne pas écraser .modal éventuel ---------- */
-/* L'attribut [hidden] doit toujours gagner sur display:flex */
+/* ---------- Modal (envoi test) — charte OXV ---------- */
 #dryrun-modal[hidden],
 #dispatch-detail-drawer[hidden] {
   display: none !important;
@@ -12250,7 +12341,7 @@ textarea:focus-visible {
 #dryrun-modal.modal {
   position: fixed;
   inset: 0;
-  z-index: 100;
+  z-index: 9000;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -12259,157 +12350,169 @@ textarea:focus-visible {
 #dryrun-modal .modal__backdrop {
   position: absolute;
   inset: 0;
-  background: rgba(10, 10, 10, 0.4);
-  animation: rituels-fade-in 150ms ease;
+  background: rgba(0, 0, 0, 0.65);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  animation: rituels-fade-in 180ms ease;
 }
 #dryrun-modal .modal__panel {
   position: relative;
-  background: #FFFFFF !important;
-  color: #1A1A1A !important;
-  border-radius: 12px;
+  background: var(--night-card);
+  color: var(--cream);
+  border: 1px solid var(--bento-border-h);
+  border-radius: var(--bento-radius);
   width: 100%;
-  max-width: 520px;
+  max-width: 540px;
   max-height: 90vh;
   display: flex;
   flex-direction: column;
-  animation: rituels-scale-in 200ms ease;
-  box-shadow: 0 20px 60px rgba(0,0,0,0.15);
-}
-#dryrun-modal .modal__panel * {
-  /* Réinitialise les hérités cream du body OXV pour tout texte non explicitement coloré */
-  color: inherit;
-}
-#dryrun-modal .modal__title,
-#dryrun-modal .modal__body,
-#dryrun-modal .form-label,
-#dryrun-modal .form-input,
-#dryrun-modal .form-select {
-  color: #1A1A1A !important;
-}
-#dryrun-modal .modal__description,
-#dryrun-modal .form-details summary {
-  color: #6B6B6B !important;
-}
-#dryrun-modal .form-input,
-#dryrun-modal .form-select {
-  background: #FFFFFF !important;
+  animation: rituels-scale-in 220ms ease;
+  box-shadow: 0 30px 80px rgba(0, 0, 0, 0.6);
 }
 @keyframes rituels-scale-in {
   from { transform: scale(0.96); opacity: 0; }
   to   { transform: scale(1);    opacity: 1; }
 }
 #dryrun-modal .modal__header {
-  padding: 24px 28px 16px;
-  border-bottom: 0.5px solid #E8E6E0;
+  padding: 26px 30px 18px;
+  border-bottom: 1px solid var(--bento-border);
   position: relative;
+  background: rgba(0, 0, 0, 0.25);
+  border-top-left-radius: var(--bento-radius);
+  border-top-right-radius: var(--bento-radius);
 }
 #dryrun-modal .modal__title {
-  font-family: 'Georgia', serif;
-  font-weight: 300;
+  font-family: var(--display);
+  font-weight: 700;
+  font-style: italic;
   font-size: 22px;
   margin: 0;
-  color: #1A1A1A;
+  color: var(--cream);
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
 }
 #dryrun-modal .modal__close {
   position: absolute;
-  top: 20px;
+  top: 22px;
   right: 24px;
   background: none;
   border: none;
   font-size: 28px;
   line-height: 1;
   cursor: pointer;
-  color: #6B6B6B;
-  padding: 4px 8px;
+  color: var(--cream-mute);
+  padding: 4px 10px;
+  transition: color 0.2s ease;
 }
+#dryrun-modal .modal__close:hover { color: var(--cream); }
 #dryrun-modal .modal__body {
-  padding: 20px 28px;
+  padding: 22px 30px;
   overflow-y: auto;
-  color: #1A1A1A;
+  color: var(--cream);
+  font-family: var(--sans);
 }
 #dryrun-modal .modal__description {
-  font-size: 13px;
-  color: #6B6B6B;
-  margin: 0 0 20px;
-  line-height: 1.6;
+  font-size: 14px;
+  color: var(--cream-mute);
+  margin: 0 0 22px;
+  line-height: 1.65;
 }
 #dryrun-modal .modal__footer {
-  padding: 16px 28px;
-  border-top: 0.5px solid #E8E6E0;
+  padding: 18px 30px;
+  border-top: 1px solid var(--bento-border);
   display: flex;
-  gap: 8px;
+  gap: 10px;
   justify-content: flex-end;
+  background: rgba(0, 0, 0, 0.25);
+  border-bottom-left-radius: var(--bento-radius);
+  border-bottom-right-radius: var(--bento-radius);
 }
 #dryrun-modal .modal__alert {
-  padding: 12px 14px;
+  padding: 14px 16px;
   border-radius: 6px;
   font-size: 13px;
   margin-top: 16px;
   display: flex;
   flex-direction: column;
   gap: 4px;
+  border: 1px solid;
 }
 #dryrun-modal .modal__alert--warning {
-  background: #FEF3C7;
-  color: #92400E;
-  border: 0.5px solid #FCD34D;
+  background: rgba(255, 183, 3, 0.08);
+  color: var(--warn);
+  border-color: rgba(255, 183, 3, 0.30);
 }
 #dryrun-modal .modal__alert--success {
-  background: #D1FAE5;
-  color: #065F46;
-  border: 0.5px solid #6EE7B7;
+  background: rgba(74, 222, 128, 0.08);
+  color: var(--ok);
+  border-color: rgba(74, 222, 128, 0.30);
 }
 #dryrun-modal .modal__alert strong { font-weight: 600; }
 
-/* Form elements (scopé au modal pour éviter le conflit avec .form-input/.form-label OXV) */
+/* Form elements scopés au modal — charte OXV cream-on-dark */
 #dryrun-modal .form-group {
-  margin-bottom: 16px;
+  margin-bottom: 18px;
 }
 #dryrun-modal .form-label {
   display: block;
-  font-family: 'Courier New', monospace;
-  font-size: 10px;
-  letter-spacing: 0.15em;
+  font-family: var(--mono);
+  font-size: 9px;
+  letter-spacing: 0.28em;
   text-transform: uppercase;
-  color: #6B6B6B;
-  margin-bottom: 6px;
+  color: var(--cream-mute);
+  margin-bottom: 8px;
 }
 #dryrun-modal .form-input,
 #dryrun-modal .form-select {
   width: 100%;
-  height: 40px;
-  padding: 0 12px;
+  height: 42px;
+  padding: 0 14px;
+  font-family: var(--sans);
   font-size: 14px;
-  border: 0.5px solid #C9C5BB;
+  border: 1px solid var(--cream-line);
   border-radius: 6px;
-  background: #FFFFFF;
-  color: #1A1A1A;
-  font-family: inherit;
+  background: rgba(0, 0, 0, 0.4);
+  color: var(--cream);
   box-sizing: border-box;
+  transition: border-color 0.25s ease, background 0.25s ease;
+}
+#dryrun-modal .form-input::placeholder { color: var(--cream-faint); }
+#dryrun-modal .form-input:hover,
+#dryrun-modal .form-select:hover {
+  border-color: var(--cream-edge);
 }
 #dryrun-modal .form-input:focus,
 #dryrun-modal .form-select:focus {
   outline: none;
-  border-color: #1A1A1A;
+  border-color: var(--copper);
+  background: rgba(255, 183, 3, 0.04);
 }
 #dryrun-modal .form-details {
-  margin-top: 16px;
+  margin-top: 18px;
+  border-top: 1px solid var(--bento-border);
+  padding-top: 14px;
 }
 #dryrun-modal .form-details summary {
-  font-size: 12px;
-  color: #6B6B6B;
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--cream-mute);
   cursor: pointer;
-  padding: 8px 0;
+  padding: 6px 0 10px;
+  transition: color 0.2s ease;
 }
+#dryrun-modal .form-details summary:hover { color: var(--cream); }
 
 /* ---------- Responsive ---------- */
 @media (max-width: 768px) {
   #page-admin-rituels .admin-page__header { padding: 32px 0 24px; }
-  #page-admin-rituels .admin-page__title { font-size: 28px; }
-  #page-admin-rituels .admin-rituels__filters { padding: 12px; }
+  #page-admin-rituels .admin-page__title { font-size: 26px; }
+  #page-admin-rituels .admin-rituels__filters { padding: 14px; }
   #page-admin-rituels .filter-group { min-width: 130px; flex: 1; }
-  .drawer__panel { max-width: 100%; }
+  .drawer__panel { max-width: 100%; border-left: none; }
   .drawer__body { padding: 20px; }
+  #dryrun-modal .modal__panel { max-width: 100%; }
 }
 
 </style>
