@@ -11729,6 +11729,664 @@ textarea:focus-visible {
 .oxv-logotype--lg { height: 2.5rem; }
 .oxv-logotype--xl { height: 4rem; }
 
+/* =========================================================================
+   ADMIN — RITUELS PRÉ-SESSION (BLOC E)
+   Styles scopés à #page-admin-rituels / #dispatch-detail-drawer / #dryrun-modal
+   pour ne pas casser le thème OXV cream/dark global.
+   ========================================================================= */
+
+/* Eyebrow local (le markup utilise .eyebrow non stylé globalement) */
+#page-admin-rituels .eyebrow,
+#dispatch-detail-drawer .eyebrow {
+  font-family: 'Courier New', monospace;
+  font-size: 10px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: #6B6B6B;
+}
+
+/* ---------- Header de page ---------- */
+#page-admin-rituels .admin-page__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 24px;
+  padding: 48px 0 32px;
+  flex-wrap: wrap;
+}
+#page-admin-rituels .admin-page__header-left { flex: 1; min-width: 300px; }
+#page-admin-rituels .admin-page__title {
+  font-family: 'Georgia', serif;
+  font-weight: 200;
+  font-style: italic;
+  font-size: 36px;
+  margin: 8px 0 6px;
+  color: #1A1A1A;
+  letter-spacing: -0.01em;
+}
+#page-admin-rituels .admin-page__subtitle {
+  margin: 0;
+  font-size: 14px;
+  color: #6B6B6B;
+}
+#page-admin-rituels .admin-page__header-actions {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+/* ---------- KPIs ---------- */
+#page-admin-rituels .admin-rituels__stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 12px;
+  margin-bottom: 32px;
+}
+#page-admin-rituels .kpi-card {
+  background: #FFFFFF;
+  border: 0.5px solid #E8E6E0;
+  border-radius: 8px;
+  padding: 18px 20px;
+  position: relative;
+  overflow: hidden;
+}
+#page-admin-rituels .kpi-card__label {
+  font-family: 'Courier New', monospace;
+  font-size: 11px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: #6B6B6B;
+  margin: 0 0 8px 0;
+}
+#page-admin-rituels .kpi-card__value {
+  font-family: 'Georgia', serif;
+  font-weight: 300;
+  font-size: 32px;
+  color: #1A1A1A;
+  line-height: 1;
+  margin: 0;
+}
+#page-admin-rituels .kpi-card__delta {
+  margin-top: 6px;
+  font-size: 12px;
+  color: #6B6B6B;
+}
+#page-admin-rituels .kpi-card__delta--success { color: #16A34A; }
+#page-admin-rituels .kpi-card__delta--warning { color: #D97706; }
+#page-admin-rituels .kpi-card__delta--danger  { color: #C8102E; }
+#page-admin-rituels .kpi-card--accent { border-left: 3px solid #C8102E; }
+#page-admin-rituels .kpi-card--loading .kpi-card__skeleton {
+  height: 50px;
+  background: linear-gradient(90deg, #F5F4F1 0%, #E8E6E0 50%, #F5F4F1 100%);
+  background-size: 200% 100%;
+  animation: rituels-skeleton-shimmer 1.5s infinite;
+  border-radius: 4px;
+}
+@keyframes rituels-skeleton-shimmer {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+/* ---------- Filtres ---------- */
+#page-admin-rituels .admin-rituels__filters {
+  display: flex;
+  gap: 12px;
+  align-items: flex-end;
+  flex-wrap: wrap;
+  padding: 16px 20px;
+  background: #F5F4F1;
+  border-radius: 8px;
+  margin-bottom: 16px;
+}
+#page-admin-rituels .filter-group {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 140px;
+}
+#page-admin-rituels .filter-group--reset {
+  min-width: auto;
+  align-self: flex-end;
+  padding-bottom: 2px;
+}
+#page-admin-rituels .filter-label {
+  font-family: 'Courier New', monospace;
+  font-size: 10px;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: #6B6B6B;
+}
+#page-admin-rituels .filter-select,
+#page-admin-rituels .filter-input {
+  height: 36px;
+  padding: 0 12px;
+  font-size: 13px;
+  border: 0.5px solid #C9C5BB;
+  border-radius: 6px;
+  background: #FFFFFF;
+  color: #1A1A1A;
+  font-family: inherit;
+}
+#page-admin-rituels .filter-select:focus,
+#page-admin-rituels .filter-input:focus {
+  outline: none;
+  border-color: #1A1A1A;
+}
+
+/* ---------- Tableau ---------- */
+#page-admin-rituels .admin-rituels__table-wrap {
+  background: #FFFFFF;
+  border: 0.5px solid #E8E6E0;
+  border-radius: 8px;
+  overflow-x: auto;
+}
+#page-admin-rituels .admin-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+}
+#page-admin-rituels .admin-table thead th {
+  text-align: left;
+  padding: 14px 16px;
+  font-family: 'Courier New', monospace;
+  font-size: 10px;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: #6B6B6B;
+  background: #FAFAF7;
+  border-bottom: 0.5px solid #E8E6E0;
+  font-weight: 500;
+  white-space: nowrap;
+}
+#page-admin-rituels .admin-table tbody td {
+  padding: 12px 16px;
+  border-bottom: 0.5px solid #F0EEE8;
+  vertical-align: middle;
+  color: #1A1A1A;
+}
+#page-admin-rituels .admin-table tbody tr {
+  cursor: pointer;
+  transition: background-color 100ms ease;
+}
+#page-admin-rituels .admin-table tbody tr:hover {
+  background: #FAFAF7;
+}
+#page-admin-rituels .admin-table__empty td {
+  text-align: center;
+  padding: 32px 16px;
+  color: #6B6B6B;
+}
+#page-admin-rituels .col-status      { width: 80px; }
+#page-admin-rituels .col-type        { width: 70px; }
+#page-admin-rituels .col-engagement  { width: 130px; }
+#page-admin-rituels .col-actions     { width: 80px; text-align: right; }
+#page-admin-rituels .cell-pilot {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+#page-admin-rituels .cell-pilot__name {
+  font-weight: 500;
+  color: #1A1A1A;
+}
+#page-admin-rituels .cell-pilot__email {
+  font-size: 11px;
+  color: #6B6B6B;
+}
+
+/* ---------- Badges de statut ---------- */
+#page-admin-rituels .status-badge,
+#dispatch-detail-drawer .status-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 10px;
+  border-radius: 4px;
+  font-family: 'Courier New', monospace;
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  font-weight: 500;
+}
+#page-admin-rituels .status-badge__dot,
+#dispatch-detail-drawer .status-badge__dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+}
+.status-badge--pending     { background: #FEF3C7; color: #92400E; }
+.status-badge--pending     .status-badge__dot { background: #D97706; }
+.status-badge--generating  { background: #DBEAFE; color: #1E40AF; }
+.status-badge--generating  .status-badge__dot { background: #2563EB; animation: rituels-pulse 1.5s infinite; }
+.status-badge--sent        { background: #D1FAE5; color: #065F46; }
+.status-badge--sent        .status-badge__dot { background: #16A34A; }
+.status-badge--failed      { background: #FEE2E2; color: #991B1B; }
+.status-badge--failed      .status-badge__dot { background: #C8102E; }
+.status-badge--skipped     { background: #F3F4F6; color: #4B5563; }
+.status-badge--skipped     .status-badge__dot { background: #6B7280; }
+@keyframes rituels-pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.3; }
+}
+
+/* ---------- Badge type de rituel ---------- */
+#page-admin-rituels .ritual-badge {
+  display: inline-block;
+  padding: 3px 8px;
+  border-radius: 4px;
+  font-family: 'Courier New', monospace;
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  font-weight: 500;
+  background: #F5F4F1;
+  color: #1A1A1A;
+}
+#page-admin-rituels .ritual-badge--jminus2 {
+  background: rgba(200, 16, 46, 0.08);
+  color: #C8102E;
+}
+
+/* ---------- Engagement (jauge mini) ---------- */
+#page-admin-rituels .engagement-cell {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 110px;
+}
+#page-admin-rituels .engagement-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 11px;
+  color: #6B6B6B;
+}
+#page-admin-rituels .engagement-row__icon {
+  font-size: 12px;
+  width: 14px;
+  display: inline-block;
+}
+#page-admin-rituels .engagement-row--filled {
+  color: #1A1A1A;
+}
+
+/* ---------- Pagination ---------- */
+#page-admin-rituels .admin-rituels__pagination {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px 4px;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+#page-admin-rituels .pagination-info {
+  font-size: 13px;
+  color: #6B6B6B;
+}
+#page-admin-rituels .pagination-controls {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+#page-admin-rituels .pagination-current {
+  font-family: 'Courier New', monospace;
+  font-size: 12px;
+  color: #1A1A1A;
+}
+
+/* ---------- Boutons (scoped pour ne pas casser le .btn OXV global) ---------- */
+#page-admin-rituels .btn,
+#dispatch-detail-drawer .btn,
+#dryrun-modal .btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 16px;
+  border: 0.5px solid transparent;
+  border-radius: 6px;
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: 500;
+  letter-spacing: 0;
+  text-transform: none;
+  cursor: pointer;
+  transition: all 120ms ease;
+  text-decoration: none;
+  white-space: nowrap;
+  background: transparent;
+  color: #1A1A1A;
+  overflow: visible;
+}
+#page-admin-rituels .btn::before,
+#dispatch-detail-drawer .btn::before,
+#dryrun-modal .btn::before { display: none; content: none; }
+#page-admin-rituels .btn:hover,
+#dispatch-detail-drawer .btn:hover,
+#dryrun-modal .btn:hover {
+  transform: none;
+}
+#page-admin-rituels .btn--primary,
+#dispatch-detail-drawer .btn--primary,
+#dryrun-modal .btn--primary {
+  background: #1A1A1A;
+  color: #FFFFFF;
+  border-color: #1A1A1A;
+}
+#page-admin-rituels .btn--primary:hover,
+#dispatch-detail-drawer .btn--primary:hover,
+#dryrun-modal .btn--primary:hover { background: #000000; border-color: #000000; }
+#page-admin-rituels .btn--secondary,
+#dispatch-detail-drawer .btn--secondary,
+#dryrun-modal .btn--secondary {
+  background: #FFFFFF;
+  color: #1A1A1A;
+  border-color: #C9C5BB;
+}
+#page-admin-rituels .btn--secondary:hover,
+#dispatch-detail-drawer .btn--secondary:hover,
+#dryrun-modal .btn--secondary:hover { border-color: #1A1A1A; }
+#page-admin-rituels .btn--danger,
+#dispatch-detail-drawer .btn--danger,
+#dryrun-modal .btn--danger {
+  background: #C8102E;
+  color: #FFFFFF;
+  border-color: #C8102E;
+}
+#page-admin-rituels .btn--danger:hover,
+#dispatch-detail-drawer .btn--danger:hover,
+#dryrun-modal .btn--danger:hover { background: #A00D26; border-color: #A00D26; }
+#page-admin-rituels .btn--text,
+#dispatch-detail-drawer .btn--text,
+#dryrun-modal .btn--text {
+  background: transparent;
+  color: #1A1A1A;
+  padding: 8px 12px;
+  text-decoration: underline;
+  border-color: transparent;
+}
+#page-admin-rituels .btn--sm,
+#dispatch-detail-drawer .btn--sm,
+#dryrun-modal .btn--sm {
+  padding: 5px 12px;
+  font-size: 12px;
+}
+#page-admin-rituels .btn:disabled,
+#dispatch-detail-drawer .btn:disabled,
+#dryrun-modal .btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+#page-admin-rituels .btn-icon,
+#dispatch-detail-drawer .btn-icon,
+#dryrun-modal .btn-icon {
+  font-size: 14px;
+  line-height: 1;
+}
+
+/* ---------- Drawer détail ---------- */
+.drawer {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+}
+.drawer__backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(10, 10, 10, 0.4);
+  animation: rituels-fade-in 150ms ease;
+}
+.drawer__panel {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  width: 100%;
+  max-width: 600px;
+  background: #FFFFFF;
+  display: flex;
+  flex-direction: column;
+  animation: rituels-slide-in-right 200ms ease;
+  box-shadow: -20px 0 60px rgba(0,0,0,0.1);
+}
+@keyframes rituels-fade-in {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+@keyframes rituels-slide-in-right {
+  from { transform: translateX(100%); }
+  to   { transform: translateX(0); }
+}
+.drawer__header {
+  padding: 24px 32px 16px;
+  border-bottom: 0.5px solid #E8E6E0;
+  position: relative;
+}
+.drawer__title {
+  font-family: 'Georgia', serif;
+  font-weight: 300;
+  font-size: 22px;
+  margin: 6px 0 0;
+  color: #1A1A1A;
+}
+.drawer__close {
+  position: absolute;
+  top: 20px;
+  right: 24px;
+  background: none;
+  border: none;
+  font-size: 28px;
+  line-height: 1;
+  cursor: pointer;
+  color: #6B6B6B;
+  padding: 4px 8px;
+}
+.drawer__close:hover { color: #1A1A1A; }
+.drawer__body {
+  flex: 1;
+  overflow-y: auto;
+  padding: 24px 32px;
+  color: #1A1A1A;
+}
+.drawer__loading { color: #6B6B6B; font-size: 13px; }
+.drawer__footer {
+  padding: 16px 32px;
+  border-top: 0.5px solid #E8E6E0;
+  display: flex;
+  gap: 8px;
+  justify-content: flex-end;
+}
+.drawer__section {
+  margin-bottom: 28px;
+}
+.drawer__section-label {
+  font-family: 'Courier New', monospace;
+  font-size: 10px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: #6B6B6B;
+  margin: 0 0 8px;
+}
+.drawer__info-grid {
+  display: grid;
+  grid-template-columns: 130px 1fr;
+  gap: 8px 16px;
+  font-size: 13px;
+}
+.drawer__info-key { color: #6B6B6B; }
+.drawer__info-val { color: #1A1A1A; }
+.drawer__audio-player {
+  width: 100%;
+  margin-top: 8px;
+  border-radius: 6px;
+}
+.drawer__script {
+  background: #FAFAF7;
+  border-radius: 6px;
+  padding: 18px 20px;
+  font-family: 'Georgia', serif;
+  font-size: 14px;
+  line-height: 1.8;
+  color: #1A1A1A;
+  white-space: pre-wrap;
+}
+.drawer__payload {
+  background: #1A1A1A;
+  color: #C9C5BB;
+  border-radius: 6px;
+  padding: 16px;
+  font-family: 'Courier New', monospace;
+  font-size: 11px;
+  line-height: 1.5;
+  overflow-x: auto;
+  max-height: 300px;
+  overflow-y: auto;
+}
+
+/* ---------- Modal (envoi test) — préfixé pour ne pas écraser .modal éventuel ---------- */
+#dryrun-modal.modal {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+#dryrun-modal .modal__backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(10, 10, 10, 0.4);
+  animation: rituels-fade-in 150ms ease;
+}
+#dryrun-modal .modal__panel {
+  position: relative;
+  background: #FFFFFF;
+  border-radius: 12px;
+  width: 100%;
+  max-width: 520px;
+  max-height: 90vh;
+  display: flex;
+  flex-direction: column;
+  animation: rituels-scale-in 200ms ease;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.15);
+}
+@keyframes rituels-scale-in {
+  from { transform: scale(0.96); opacity: 0; }
+  to   { transform: scale(1);    opacity: 1; }
+}
+#dryrun-modal .modal__header {
+  padding: 24px 28px 16px;
+  border-bottom: 0.5px solid #E8E6E0;
+  position: relative;
+}
+#dryrun-modal .modal__title {
+  font-family: 'Georgia', serif;
+  font-weight: 300;
+  font-size: 22px;
+  margin: 0;
+  color: #1A1A1A;
+}
+#dryrun-modal .modal__close {
+  position: absolute;
+  top: 20px;
+  right: 24px;
+  background: none;
+  border: none;
+  font-size: 28px;
+  line-height: 1;
+  cursor: pointer;
+  color: #6B6B6B;
+  padding: 4px 8px;
+}
+#dryrun-modal .modal__body {
+  padding: 20px 28px;
+  overflow-y: auto;
+  color: #1A1A1A;
+}
+#dryrun-modal .modal__description {
+  font-size: 13px;
+  color: #6B6B6B;
+  margin: 0 0 20px;
+  line-height: 1.6;
+}
+#dryrun-modal .modal__footer {
+  padding: 16px 28px;
+  border-top: 0.5px solid #E8E6E0;
+  display: flex;
+  gap: 8px;
+  justify-content: flex-end;
+}
+#dryrun-modal .modal__alert {
+  padding: 12px 14px;
+  border-radius: 6px;
+  font-size: 13px;
+  margin-top: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+#dryrun-modal .modal__alert--warning {
+  background: #FEF3C7;
+  color: #92400E;
+  border: 0.5px solid #FCD34D;
+}
+#dryrun-modal .modal__alert--success {
+  background: #D1FAE5;
+  color: #065F46;
+  border: 0.5px solid #6EE7B7;
+}
+#dryrun-modal .modal__alert strong { font-weight: 600; }
+
+/* Form elements (scopé au modal pour éviter le conflit avec .form-input/.form-label OXV) */
+#dryrun-modal .form-group {
+  margin-bottom: 16px;
+}
+#dryrun-modal .form-label {
+  display: block;
+  font-family: 'Courier New', monospace;
+  font-size: 10px;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: #6B6B6B;
+  margin-bottom: 6px;
+}
+#dryrun-modal .form-input,
+#dryrun-modal .form-select {
+  width: 100%;
+  height: 40px;
+  padding: 0 12px;
+  font-size: 14px;
+  border: 0.5px solid #C9C5BB;
+  border-radius: 6px;
+  background: #FFFFFF;
+  color: #1A1A1A;
+  font-family: inherit;
+  box-sizing: border-box;
+}
+#dryrun-modal .form-input:focus,
+#dryrun-modal .form-select:focus {
+  outline: none;
+  border-color: #1A1A1A;
+}
+#dryrun-modal .form-details {
+  margin-top: 16px;
+}
+#dryrun-modal .form-details summary {
+  font-size: 12px;
+  color: #6B6B6B;
+  cursor: pointer;
+  padding: 8px 0;
+}
+
+/* ---------- Responsive ---------- */
+@media (max-width: 768px) {
+  #page-admin-rituels .admin-page__header { padding: 32px 0 24px; }
+  #page-admin-rituels .admin-page__title { font-size: 28px; }
+  #page-admin-rituels .admin-rituels__filters { padding: 12px; }
+  #page-admin-rituels .filter-group { min-width: 130px; flex: 1; }
+  .drawer__panel { max-width: 100%; }
+  .drawer__body { padding: 20px; }
+}
+
 </style>
 </head>
 <body>
@@ -14649,6 +15307,9 @@ textarea:focus-visible {
         <button class="admin-nav-item" onclick="goToAdmin('admin-emails')">
           <span>Emails</span>
         </button>
+        <button class="admin-nav-item" onclick="goToAdmin('admin-rituels')">
+          <span>Rituels</span>
+        </button>
         <button class="admin-nav-item" onclick="goToAdmin('admin-messages')">
           <span>Messages</span>
           <span class="badge-count js-msg-badge" style="display:none;">0</span>
@@ -14718,6 +15379,12 @@ textarea:focus-visible {
           <span class="admin-nav-btn-icon">✉</span>
           <span class="admin-nav-btn-label">Emails</span>
           <span class="admin-nav-btn-sub">Envois · taux d'ouverture</span>
+        </button>
+
+        <button class="admin-nav-btn" onclick="goToAdmin('admin-rituels')">
+          <span class="admin-nav-btn-icon">⌬</span>
+          <span class="admin-nav-btn-label">Rituels</span>
+          <span class="admin-nav-btn-sub">J-7 · J-2 · J-1 · engagement</span>
         </button>
 
         <button class="admin-nav-btn" onclick="goToAdmin('admin-stats')">
@@ -14840,6 +15507,9 @@ textarea:focus-visible {
         </button>
         <button class="admin-nav-item" onclick="goToAdmin('admin-emails')">
           <span>Emails</span>
+        </button>
+        <button class="admin-nav-item" onclick="goToAdmin('admin-rituels')">
+          <span>Rituels</span>
         </button>
         <button class="admin-nav-item" onclick="goToAdmin('admin-messages')">
           <span>Messages</span>
@@ -14986,6 +15656,9 @@ textarea:focus-visible {
         </button>
         <button class="admin-nav-item" onclick="goToAdmin('admin-emails')">
           <span>Emails</span>
+        </button>
+        <button class="admin-nav-item" onclick="goToAdmin('admin-rituels')">
+          <span>Rituels</span>
         </button>
         <button class="admin-nav-item" onclick="goToAdmin('admin-messages')">
           <span>Messages</span>
@@ -15174,6 +15847,9 @@ textarea:focus-visible {
         </button>
         <button class="admin-nav-item" onclick="goToAdmin('admin-emails')">
           <span>Emails</span>
+        </button>
+        <button class="admin-nav-item" onclick="goToAdmin('admin-rituels')">
+          <span>Rituels</span>
         </button>
         <button class="admin-nav-item" onclick="goToAdmin('admin-messages')">
           <span>Messages</span>
@@ -15383,6 +16059,9 @@ textarea:focus-visible {
         <button class="admin-nav-item" onclick="goToAdmin('admin-emails')">
           <span>Emails</span>
         </button>
+        <button class="admin-nav-item" onclick="goToAdmin('admin-rituels')">
+          <span>Rituels</span>
+        </button>
         <button class="admin-nav-item" onclick="goToAdmin('admin-messages')">
           <span>Messages</span>
           <span class="badge-count js-msg-badge" style="display:none;">0</span>
@@ -15498,6 +16177,7 @@ textarea:focus-visible {
         <div class="admin-nav-section">— Communication</div>
         <button class="admin-nav-item" onclick="goToAdmin('admin-medias')"><span>Médias</span><span class="arr">→</span></button>
         <button class="admin-nav-item" onclick="goToAdmin('admin-emails')"><span>Emails</span><span class="arr">→</span></button>
+        <button class="admin-nav-item" onclick="goToAdmin('admin-rituels')"><span>Rituels</span><span class="arr">→</span></button>
         <div class="admin-nav-divider"></div>
         <div class="admin-nav-section">— Pilotage</div>
         <button class="admin-nav-item" onclick="goToAdmin('admin-stats')"><span>Statistiques</span><span class="arr">→</span></button>
@@ -15676,6 +16356,7 @@ textarea:focus-visible {
         <div class="admin-nav-section">— Communication</div>
         <button class="admin-nav-item active" onclick="goToAdmin('admin-medias')"><span>Médias</span><span class="arr">→</span></button>
         <button class="admin-nav-item" onclick="goToAdmin('admin-emails')"><span>Emails</span><span class="arr">→</span></button>
+        <button class="admin-nav-item" onclick="goToAdmin('admin-rituels')"><span>Rituels</span><span class="arr">→</span></button>
         <div class="admin-nav-divider"></div>
         <div class="admin-nav-section">— Pilotage</div>
         <button class="admin-nav-item" onclick="goToAdmin('admin-stats')"><span>Statistiques</span><span class="arr">→</span></button>
@@ -15746,6 +16427,7 @@ textarea:focus-visible {
         <div class="admin-nav-section">— Communication</div>
         <button class="admin-nav-item" onclick="goToAdmin('admin-medias')"><span>Médias</span><span class="arr">→</span></button>
         <button class="admin-nav-item active" onclick="goToAdmin('admin-emails')"><span>Emails</span><span class="arr">→</span></button>
+        <button class="admin-nav-item" onclick="goToAdmin('admin-rituels')"><span>Rituels</span><span class="arr">→</span></button>
         <div class="admin-nav-divider"></div>
         <div class="admin-nav-section">— Pilotage</div>
         <button class="admin-nav-item" onclick="goToAdmin('admin-stats')"><span>Statistiques</span><span class="arr">→</span></button>
@@ -15837,6 +16519,7 @@ textarea:focus-visible {
         <div class="admin-nav-section">— Communication</div>
         <button class="admin-nav-item" onclick="goToAdmin('admin-medias')"><span>Médias</span><span class="arr">→</span></button>
         <button class="admin-nav-item" onclick="goToAdmin('admin-emails')"><span>Emails</span><span class="arr">→</span></button>
+        <button class="admin-nav-item" onclick="goToAdmin('admin-rituels')"><span>Rituels</span><span class="arr">→</span></button>
         <button class="admin-nav-item active" onclick="goToAdmin('admin-messages')">
           <span>Messages</span>
           <span class="badge-count js-msg-badge" style="display:none;">0</span>
@@ -15922,6 +16605,7 @@ textarea:focus-visible {
         <div class="admin-nav-section">— Communication</div>
         <button class="admin-nav-item" onclick="goToAdmin('admin-medias')"><span>Médias</span><span class="arr">→</span></button>
         <button class="admin-nav-item" onclick="goToAdmin('admin-emails')"><span>Emails</span><span class="arr">→</span></button>
+        <button class="admin-nav-item" onclick="goToAdmin('admin-rituels')"><span>Rituels</span><span class="arr">→</span></button>
         <div class="admin-nav-divider"></div>
         <div class="admin-nav-section">— Pilotage</div>
         <button class="admin-nav-item active" onclick="goToAdmin('admin-stats')"><span>Statistiques</span><span class="arr">→</span></button>
@@ -16023,6 +16707,7 @@ textarea:focus-visible {
         <div class="admin-nav-section">— Communication</div>
         <button class="admin-nav-item" onclick="goToAdmin('admin-medias')"><span>Médias</span><span class="arr">→</span></button>
         <button class="admin-nav-item" onclick="goToAdmin('admin-emails')"><span>Emails</span><span class="arr">→</span></button>
+        <button class="admin-nav-item" onclick="goToAdmin('admin-rituels')"><span>Rituels</span><span class="arr">→</span></button>
         <div class="admin-nav-divider"></div>
         <div class="admin-nav-section">— Pilotage</div>
         <button class="admin-nav-item" onclick="goToAdmin('admin-stats')"><span>Statistiques</span><span class="arr">→</span></button>
@@ -16139,6 +16824,144 @@ textarea:focus-visible {
   </div>
 </div>
 <!-- /admin-securite -->
+
+
+<!-- ============ ADMIN : RITUELS PRÉ-SESSION (BLOC E) ============ -->
+<div class="page" id="page-admin-rituels">
+  <div class="admin-layout">
+    <aside class="admin-sidebar">
+      <div class="admin-sidebar-eyebrow">— Espace admin</div>
+      <div class="admin-sidebar-name acct-name-sync">Pilote <em>OXV</em></div>
+      <nav class="admin-nav">
+        <button class="admin-nav-item" onclick="goToAdmin('admin')"><span>Tableau de bord</span><span class="arr">→</span></button>
+        <button class="admin-nav-item" onclick="goToAdmin('admin-pilotes')"><span>Pilotes</span><span class="arr">→</span></button>
+        <button class="admin-nav-item" onclick="goToAdmin('admin-sessions')"><span>Sessions</span><span class="arr">→</span></button>
+        <button class="admin-nav-item" onclick="goToAdmin('admin-paiements')"><span>Paiements</span><span class="arr">→</span></button>
+        <div class="admin-nav-divider"></div>
+        <div class="admin-nav-section">— Communication</div>
+        <button class="admin-nav-item" onclick="goToAdmin('admin-medias')"><span>Médias</span><span class="arr">→</span></button>
+        <button class="admin-nav-item" onclick="goToAdmin('admin-emails')"><span>Emails</span><span class="arr">→</span></button>
+        <button class="admin-nav-item" onclick="goToAdmin('admin-rituels')"><span>Rituels</span><span class="arr">→</span></button>
+        <button class="admin-nav-item active" onclick="goToAdmin('admin-rituels')"><span>Rituels</span><span class="arr">→</span></button>
+        <div class="admin-nav-divider"></div>
+        <div class="admin-nav-section">— Pilotage</div>
+        <button class="admin-nav-item" onclick="goToAdmin('admin-stats')"><span>Statistiques</span><span class="arr">→</span></button>
+        <button class="admin-nav-item" onclick="goToAdmin('admin-securite')"><span>Sécurité &amp; 2FA</span><span class="arr">→</span></button>
+        <div class="admin-nav-divider"></div>
+        <button class="admin-nav-item" onclick="goTo('compte')"><span>← Retour espace pilote</span><span class="arr">→</span></button>
+        <button class="admin-nav-item" onclick="logoutUser()"><span>Se déconnecter</span><span class="arr">→</span></button>
+      </nav>
+    </aside>
+    <main class="admin-main">
+
+      <!-- En-tête de page -->
+      <header class="admin-page__header">
+        <div class="admin-page__header-left">
+          <span class="eyebrow">ADMINISTRATION</span>
+          <h1 class="admin-page__title">Rituels pré-session</h1>
+          <p class="admin-page__subtitle">Monitoring des envois J-7, J-2, J-1 et engagement pilotes.</p>
+        </div>
+        <div class="admin-page__header-actions">
+          <button type="button" class="btn btn--secondary" data-action="open-dryrun">
+            <span class="btn-icon" aria-hidden="true">▶</span>
+            Envoi test
+          </button>
+          <button type="button" class="btn btn--secondary" data-action="export-csv">
+            <span class="btn-icon" aria-hidden="true">↓</span>
+            Export CSV
+          </button>
+          <button type="button" class="btn btn--primary" data-action="refresh">
+            Actualiser
+          </button>
+        </div>
+      </header>
+
+      <!-- KPIs / Stats globales -->
+      <div class="admin-rituels__stats" data-stats-container>
+        <div class="kpi-card kpi-card--loading"><div class="kpi-card__skeleton"></div></div>
+        <div class="kpi-card kpi-card--loading"><div class="kpi-card__skeleton"></div></div>
+        <div class="kpi-card kpi-card--loading"><div class="kpi-card__skeleton"></div></div>
+        <div class="kpi-card kpi-card--loading"><div class="kpi-card__skeleton"></div></div>
+        <div class="kpi-card kpi-card--loading"><div class="kpi-card__skeleton"></div></div>
+      </div>
+
+      <!-- Filtres -->
+      <div class="admin-rituels__filters">
+        <div class="filter-group">
+          <label for="filter-type" class="filter-label">Type</label>
+          <select id="filter-type" class="filter-select" data-filter="ritual_type">
+            <option value="">Tous</option>
+            <option value="jminus7">J-7</option>
+            <option value="jminus2">J-2</option>
+            <option value="jminus1">J-1</option>
+          </select>
+        </div>
+        <div class="filter-group">
+          <label for="filter-status" class="filter-label">Statut</label>
+          <select id="filter-status" class="filter-select" data-filter="status">
+            <option value="">Tous</option>
+            <option value="pending">En attente</option>
+            <option value="generating">En cours</option>
+            <option value="sent">Envoyé</option>
+            <option value="failed">Échec</option>
+            <option value="skipped">Ignoré</option>
+          </select>
+        </div>
+        <div class="filter-group">
+          <label for="filter-pilot" class="filter-label">Pilote</label>
+          <input type="text" id="filter-pilot" class="filter-input" placeholder="Nom, prénom ou email" data-filter="pilot_query" />
+        </div>
+        <div class="filter-group">
+          <label for="filter-period" class="filter-label">Période</label>
+          <select id="filter-period" class="filter-select" data-filter="period">
+            <option value="7">7 derniers jours</option>
+            <option value="30" selected>30 derniers jours</option>
+            <option value="90">90 derniers jours</option>
+            <option value="365">12 derniers mois</option>
+          </select>
+        </div>
+        <div class="filter-group filter-group--reset">
+          <button type="button" class="btn btn--text" data-action="reset-filters">Réinitialiser</button>
+        </div>
+      </div>
+
+      <!-- Tableau des dispatches -->
+      <div class="admin-rituels__table-wrap">
+        <table class="admin-table" id="rituels-table">
+          <thead>
+            <tr>
+              <th scope="col" class="col-status">État</th>
+              <th scope="col" class="col-type">Rituel</th>
+              <th scope="col" class="col-pilot">Pilote</th>
+              <th scope="col" class="col-session">Session</th>
+              <th scope="col" class="col-scheduled">Planifié</th>
+              <th scope="col" class="col-sent">Envoyé</th>
+              <th scope="col" class="col-engagement">Engagement</th>
+              <th scope="col" class="col-actions">Actions</th>
+            </tr>
+          </thead>
+          <tbody data-rows-container>
+            <tr class="admin-table__empty">
+              <td colspan="8">Chargement...</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Pagination -->
+      <div class="admin-rituels__pagination">
+        <span class="pagination-info" data-pagination-info>—</span>
+        <div class="pagination-controls">
+          <button type="button" class="btn btn--secondary btn--sm" data-action="prev-page" disabled>Précédent</button>
+          <span class="pagination-current" data-pagination-current>Page 1</span>
+          <button type="button" class="btn btn--secondary btn--sm" data-action="next-page" disabled>Suivant</button>
+        </div>
+      </div>
+
+    </main>
+  </div>
+</div>
+<!-- /admin-rituels -->
 
 
 <!-- ============================================================
@@ -17093,6 +17916,81 @@ textarea:focus-visible {
   </div>
 </div>
 
+<!-- ============ ADMIN RITUELS — DRAWER DÉTAIL DISPATCH ============ -->
+<div id="dispatch-detail-drawer" class="drawer" hidden role="dialog" aria-modal="true" aria-labelledby="drawer-title">
+  <div class="drawer__backdrop" data-action="close-drawer"></div>
+  <aside class="drawer__panel">
+    <header class="drawer__header">
+      <span class="eyebrow" data-drawer-eyebrow>RITUEL · J−?</span>
+      <h2 id="drawer-title" class="drawer__title" data-drawer-title>Détail du dispatch</h2>
+      <button type="button" class="drawer__close" data-action="close-drawer" aria-label="Fermer">×</button>
+    </header>
+    <div class="drawer__body" data-drawer-body>
+      <p class="drawer__loading">Chargement...</p>
+    </div>
+    <footer class="drawer__footer" data-drawer-footer></footer>
+  </aside>
+</div>
+
+<!-- ============ ADMIN RITUELS — MODAL ENVOI TEST (DRYRUN) ============ -->
+<div id="dryrun-modal" class="modal" hidden role="dialog" aria-modal="true" aria-labelledby="dryrun-title">
+  <div class="modal__backdrop" data-action="close-dryrun"></div>
+  <div class="modal__panel modal__panel--md">
+    <header class="modal__header">
+      <h2 id="dryrun-title" class="modal__title">Envoi test</h2>
+      <button type="button" class="modal__close" data-action="close-dryrun" aria-label="Fermer">×</button>
+    </header>
+    <div class="modal__body">
+      <p class="modal__description">
+        Envoyer un rituel à une adresse email de votre choix, avec des données fictives.
+        Aucune ligne ne sera créée en base. Idéal pour valider le rendu avant déploiement.
+      </p>
+      <div class="form-group">
+        <label for="dryrun-type" class="form-label">Type de rituel</label>
+        <select id="dryrun-type" class="form-select">
+          <option value="jminus7">J-7 — Confirmation + Playlist</option>
+          <option value="jminus2">J-2 — Audio briefing</option>
+          <option value="jminus1">J-1 — Dernier mot + Météo</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label for="dryrun-email" class="form-label">Adresse email de destination</label>
+        <input type="email" id="dryrun-email" class="form-input" placeholder="votre.email@example.com" required />
+      </div>
+      <div class="form-group">
+        <label for="dryrun-pilot-name" class="form-label">Prénom (variable)</label>
+        <input type="text" id="dryrun-pilot-name" class="form-input" value="Gabin" />
+      </div>
+      <details class="form-details">
+        <summary>Paramètres avancés</summary>
+        <div class="form-group">
+          <label for="dryrun-vehicle" class="form-label">Véhicule simulé</label>
+          <input type="text" id="dryrun-vehicle" class="form-input" value="Porsche 911 GT3" />
+        </div>
+        <div class="form-group">
+          <label for="dryrun-format" class="form-label">Format de session</label>
+          <select id="dryrun-format" class="form-select">
+            <option value="Access">Access</option>
+            <option value="Signature">Signature</option>
+            <option value="Promotion">Promotion</option>
+            <option value="Heritage">Heritage</option>
+          </select>
+        </div>
+      </details>
+      <div class="modal__alert modal__alert--warning" data-dryrun-alert hidden>
+        <strong>Attention</strong>
+        <span data-dryrun-alert-message></span>
+      </div>
+    </div>
+    <footer class="modal__footer">
+      <button type="button" class="btn btn--secondary" data-action="close-dryrun">Annuler</button>
+      <button type="button" class="btn btn--primary" data-action="submit-dryrun">
+        <span data-dryrun-submit-label>Envoyer le test</span>
+      </button>
+    </footer>
+  </div>
+</div>
+
 <!-- ============ TOAST ============ -->
 <div class="toast" id="toast"></div>
 
@@ -17469,7 +18367,7 @@ window.goTo = function(page) {
   // Pages protégées (pilote) : nécessitent une connexion
   const protectedPages = ['compte', 'compte-profil', 'compte-vehicules', 'compte-documents', 'compte-sessions', 'compte-progression', 'compte-heritage', 'compte-paiements', 'compte-preferences'];
   // Pages admin : nécessitent une connexion + role=admin
-  const adminPages = ['admin', 'admin-pilotes', 'admin-pilote-detail', 'admin-sessions', 'admin-paiements', 'admin-medias', 'admin-emails', 'admin-stats', 'admin-securite'];
+  const adminPages = ['admin', 'admin-pilotes', 'admin-pilote-detail', 'admin-sessions', 'admin-paiements', 'admin-medias', 'admin-emails', 'admin-stats', 'admin-securite', 'admin-rituels'];
   const isProtected = protectedPages.includes(page) || adminPages.includes(page);
 
   if (isProtected && !window.OXVApi.user.isLoggedIn) {
@@ -22259,6 +23157,8 @@ window.goToAdmin = async function(page) {
       }
     } else if (page === 'admin-messages' && typeof window.adminLoadMessages === 'function') {
       window.adminLoadMessages();
+    } else if (page === 'admin-rituels' && typeof window.OXV?.showAdminRituels === 'function') {
+      window.OXV.showAdminRituels();
     }
   }, 100);
 };
@@ -26237,6 +27137,597 @@ window.addEventListener('DOMContentLoaded', () => {
   console.log('%c—\nCircuit de Haute Saintonge · tracé Beltoise\noxvehicle.fr', 'color: #F8F9FA; font-size: 10px;');
 });
 
+/* ============================================================
+   BLOC E — BRIDGE OXV pour admin-rituels.js
+   Expose le client Supabase et le routing au module IIFE ci-dessous.
+   ============================================================ */
+window.OXV = Object.assign(window.OXV || {}, {
+  supabase: window.supabase,
+  showPage: window.goTo,
+});
+Object.defineProperty(window.OXV, 'isAdmin', {
+  get() { return window.OXVApi?.user?.dbProfile?.role === 'admin'; },
+  configurable: true,
+});
+
+</script>
+
+<!-- ============ ADMIN RITUELS — LOGIQUE (BLOC E) ============ -->
+<script>
+/* =========================================================================
+   Page admin — Rituels pré-session · Logique JavaScript
+   Lecture/écriture Supabase via window.OXV.supabase (exposé ci-dessus).
+   ========================================================================= */
+(function () {
+  'use strict';
+
+  const PAGE_SIZE = 20;
+  const STATE = {
+    currentPage: 1,
+    totalRows: 0,
+    filters: {
+      ritual_type: '',
+      status: '',
+      pilot_query: '',
+      period: '30',
+    },
+    rows: [],
+    selectedDispatchId: null,
+  };
+
+  function init() {
+    const section = document.getElementById('page-admin-rituels');
+    if (!section) {
+      console.warn('[admin-rituels] page-admin-rituels introuvable');
+      return;
+    }
+    bindEvents();
+    window.OXV = window.OXV || {};
+    window.OXV.showAdminRituels = openPage;
+  }
+
+  function openPage() {
+    STATE.currentPage = 1;
+    loadStats();
+    loadRows();
+  }
+
+  function bindEvents() {
+    document.addEventListener('click', (e) => {
+      const target = e.target.closest('[data-action]');
+      if (!target) return;
+      // Ne déclencher que si le data-action est dans notre périmètre admin-rituels
+      if (!target.closest('#page-admin-rituels, #dispatch-detail-drawer, #dryrun-modal')) return;
+      const action = target.dataset.action;
+      switch (action) {
+        case 'refresh':         openPage(); break;
+        case 'reset-filters':   resetFilters(); break;
+        case 'export-csv':      exportCsv(); break;
+        case 'prev-page':       changePage(-1); break;
+        case 'next-page':       changePage(1); break;
+        case 'open-dryrun':     openDryrun(); break;
+        case 'close-dryrun':    closeDryrun(); break;
+        case 'submit-dryrun':   submitDryrun(); break;
+        case 'close-drawer':    closeDrawer(); break;
+        case 'relaunch':        relaunchDispatch(target.dataset.id); break;
+      }
+    });
+
+    document.addEventListener('change', (e) => {
+      const target = e.target.closest('[data-filter]');
+      if (!target) return;
+      if (!target.closest('#page-admin-rituels')) return;
+      STATE.filters[target.dataset.filter] = target.value;
+      STATE.currentPage = 1;
+      loadRows();
+    });
+
+    document.addEventListener('input', debounce((e) => {
+      const target = e.target.closest('[data-filter="pilot_query"]');
+      if (!target) return;
+      if (!target.closest('#page-admin-rituels')) return;
+      STATE.filters.pilot_query = target.value;
+      STATE.currentPage = 1;
+      loadRows();
+    }, 350));
+
+    document.addEventListener('click', (e) => {
+      const row = e.target.closest('[data-row-id]');
+      if (row && row.closest('#page-admin-rituels') && !e.target.closest('[data-action]')) {
+        openDrawer(row.dataset.rowId);
+      }
+    });
+  }
+
+  function debounce(fn, ms) {
+    let t;
+    return (...args) => {
+      clearTimeout(t);
+      t = setTimeout(() => fn(...args), ms);
+    };
+  }
+
+  async function loadStats() {
+    const sb = window.OXV?.supabase;
+    if (!sb) return;
+
+    const { data, error } = await sb.rpc('admin_ritual_stats', {
+      p_days_back: parseInt(STATE.filters.period, 10),
+    });
+    if (error) {
+      console.error('[admin-rituels] loadStats:', error);
+      return;
+    }
+    renderStats(data);
+  }
+
+  function renderStats(stats) {
+    const container = document.querySelector('[data-stats-container]');
+    if (!container) return;
+
+    const sent       = stats?.engagement?.sent       ?? 0;
+    const delivered  = stats?.engagement?.delivered  ?? 0;
+    const opened     = stats?.engagement?.opened     ?? 0;
+    const clicked    = stats?.engagement?.clicked    ?? 0;
+    const total      = stats?.total                  ?? 0;
+    const cost       = stats?.cost_estimate_eur      ?? 0;
+
+    const openRate = sent > 0 ? Math.round((opened / sent) * 100) : 0;
+    const clickRate = sent > 0 ? Math.round((clicked / sent) * 100) : 0;
+
+    container.innerHTML = `
+      <div class="kpi-card kpi-card--accent">
+        <p class="kpi-card__label">Total ${stats.period_days}j</p>
+        <p class="kpi-card__value">${total}</p>
+        <p class="kpi-card__delta">${sent} envoyés</p>
+      </div>
+      <div class="kpi-card">
+        <p class="kpi-card__label">Taux d'ouverture</p>
+        <p class="kpi-card__value">${openRate}%</p>
+        <p class="kpi-card__delta">${opened} / ${sent}</p>
+      </div>
+      <div class="kpi-card">
+        <p class="kpi-card__label">Taux de clic</p>
+        <p class="kpi-card__value">${clickRate}%</p>
+        <p class="kpi-card__delta">${clicked} / ${sent}</p>
+      </div>
+      <div class="kpi-card">
+        <p class="kpi-card__label">Échecs</p>
+        <p class="kpi-card__value">${stats.by_status?.failed ?? 0}</p>
+        <p class="kpi-card__delta ${(stats.by_status?.failed ?? 0) > 0 ? 'kpi-card__delta--danger' : ''}">${(stats.by_status?.failed ?? 0) > 0 ? 'À traiter' : 'Aucun'}</p>
+      </div>
+      <div class="kpi-card">
+        <p class="kpi-card__label">Coût estimé</p>
+        <p class="kpi-card__value">${cost.toFixed(2)}€</p>
+        <p class="kpi-card__delta">Période</p>
+      </div>
+    `;
+  }
+
+  async function loadRows() {
+    const sb = window.OXV?.supabase;
+    if (!sb) return;
+
+    const tbody = document.querySelector('#page-admin-rituels [data-rows-container]');
+    if (!tbody) return;
+    tbody.innerHTML = '<tr class="admin-table__empty"><td colspan="8">Chargement...</td></tr>';
+
+    const since = new Date(Date.now() - parseInt(STATE.filters.period, 10) * 86400 * 1000).toISOString();
+
+    let query = sb
+      .from('admin_ritual_dispatches_view')
+      .select('*', { count: 'exact' })
+      .gte('created_at', since)
+      .order('scheduled_for', { ascending: false });
+
+    if (STATE.filters.ritual_type) query = query.eq('ritual_type', STATE.filters.ritual_type);
+    if (STATE.filters.status)      query = query.eq('status', STATE.filters.status);
+    if (STATE.filters.pilot_query) {
+      const q = STATE.filters.pilot_query.trim();
+      query = query.or(`pilot_email.ilike.%${q}%,pilot_first_name.ilike.%${q}%,pilot_last_name.ilike.%${q}%`);
+    }
+
+    const from = (STATE.currentPage - 1) * PAGE_SIZE;
+    const to = from + PAGE_SIZE - 1;
+    query = query.range(from, to);
+
+    const { data, error, count } = await query;
+    if (error) {
+      console.error('[admin-rituels] loadRows:', error);
+      tbody.innerHTML = `<tr class="admin-table__empty"><td colspan="8">Erreur: ${escapeHtml(error.message)}</td></tr>`;
+      return;
+    }
+
+    STATE.rows = data ?? [];
+    STATE.totalRows = count ?? 0;
+    renderRows(STATE.rows);
+    renderPagination();
+  }
+
+  function renderRows(rows) {
+    const tbody = document.querySelector('#page-admin-rituels [data-rows-container]');
+    if (!tbody) return;
+    if (rows.length === 0) {
+      tbody.innerHTML = '<tr class="admin-table__empty"><td colspan="8">Aucun dispatch sur cette période avec ces filtres.</td></tr>';
+      return;
+    }
+
+    tbody.innerHTML = rows.map(row => `
+      <tr data-row-id="${row.id}">
+        <td class="col-status">${renderStatusBadge(row.status)}</td>
+        <td class="col-type">${renderTypeBadge(row.ritual_type)}</td>
+        <td>
+          <div class="cell-pilot">
+            <span class="cell-pilot__name">${escapeHtml(row.pilot_first_name ?? '')} ${escapeHtml(row.pilot_last_name ?? '')}</span>
+            <span class="cell-pilot__email">${escapeHtml(row.pilot_email ?? '')}</span>
+          </div>
+        </td>
+        <td>${formatSessionLabel(row.session_date, row.session_format)}</td>
+        <td>${formatDateTime(row.scheduled_for)}</td>
+        <td>${row.sent_at ? formatDateTime(row.sent_at) : '<span style="color:#6B6B6B">—</span>'}</td>
+        <td>${renderEngagement(row)}</td>
+        <td class="col-actions">${renderRowActions(row)}</td>
+      </tr>
+    `).join('');
+  }
+
+  function renderStatusBadge(status) {
+    const labels = {
+      pending: 'En attente', generating: 'En cours', sent: 'Envoyé',
+      failed: 'Échec', skipped: 'Ignoré',
+    };
+    return `<span class="status-badge status-badge--${status}"><span class="status-badge__dot"></span>${labels[status] ?? status}</span>`;
+  }
+
+  function renderTypeBadge(type) {
+    const labels = { jminus7: 'J-7', jminus2: 'J-2', jminus1: 'J-1' };
+    return `<span class="ritual-badge ritual-badge--${type}">${labels[type] ?? type}</span>`;
+  }
+
+  function renderEngagement(row) {
+    if (row.status !== 'sent') return '<span style="color:#6B6B6B;font-size:11px">—</span>';
+    const delivered = row.delivered_at ? '✓' : '·';
+    const opened = row.opened_at ? `✓ ${row.opened_count}×` : '·';
+    const clicked = row.clicked_at ? `✓ ${row.clicked_count}×` : '·';
+    return `
+      <div class="engagement-cell">
+        <span class="engagement-row ${row.delivered_at ? 'engagement-row--filled' : ''}"><span class="engagement-row__icon">→</span> Livré ${delivered}</span>
+        <span class="engagement-row ${row.opened_at ? 'engagement-row--filled' : ''}"><span class="engagement-row__icon">●</span> Ouvert ${opened}</span>
+        <span class="engagement-row ${row.clicked_at ? 'engagement-row--filled' : ''}"><span class="engagement-row__icon">↗</span> Cliqué ${clicked}</span>
+      </div>
+    `;
+  }
+
+  function renderRowActions(row) {
+    if (row.status === 'failed') {
+      return `<button type="button" class="btn btn--text btn--sm" data-action="relaunch" data-id="${row.id}" onclick="event.stopPropagation()">Relancer</button>`;
+    }
+    return '<span style="color:#6B6B6B;font-size:11px">—</span>';
+  }
+
+  function renderPagination() {
+    const info = document.querySelector('#page-admin-rituels [data-pagination-info]');
+    const current = document.querySelector('#page-admin-rituels [data-pagination-current]');
+    const prevBtn = document.querySelector('#page-admin-rituels [data-action="prev-page"]');
+    const nextBtn = document.querySelector('#page-admin-rituels [data-action="next-page"]');
+    if (!info || !current || !prevBtn || !nextBtn) return;
+
+    const totalPages = Math.max(1, Math.ceil(STATE.totalRows / PAGE_SIZE));
+    const from = (STATE.currentPage - 1) * PAGE_SIZE + 1;
+    const to = Math.min(STATE.currentPage * PAGE_SIZE, STATE.totalRows);
+
+    info.textContent = STATE.totalRows > 0
+      ? `${from}–${to} sur ${STATE.totalRows}`
+      : 'Aucun résultat';
+    current.textContent = `Page ${STATE.currentPage} / ${totalPages}`;
+    prevBtn.disabled = STATE.currentPage <= 1;
+    nextBtn.disabled = STATE.currentPage >= totalPages;
+  }
+
+  function changePage(delta) {
+    STATE.currentPage = Math.max(1, STATE.currentPage + delta);
+    loadRows();
+  }
+
+  function resetFilters() {
+    STATE.filters = { ritual_type: '', status: '', pilot_query: '', period: '30' };
+    document.querySelectorAll('#page-admin-rituels [data-filter]').forEach(el => {
+      el.value = el.dataset.filter === 'period' ? '30' : '';
+    });
+    STATE.currentPage = 1;
+    loadStats();
+    loadRows();
+  }
+
+  async function openDrawer(dispatchId) {
+    STATE.selectedDispatchId = dispatchId;
+    const drawer = document.getElementById('dispatch-detail-drawer');
+    drawer.hidden = false;
+
+    const row = STATE.rows.find(r => r.id === dispatchId);
+    if (!row) return;
+
+    const eyebrow = document.querySelector('[data-drawer-eyebrow]');
+    const title = document.querySelector('[data-drawer-title]');
+    const body = document.querySelector('[data-drawer-body]');
+    const footer = document.querySelector('[data-drawer-footer]');
+
+    const typeLabels = { jminus7: 'J−7 · CONFIRMATION', jminus2: 'J−2 · AUDIO BRIEFING', jminus1: 'J−1 · DERNIER MOT' };
+    eyebrow.textContent = typeLabels[row.ritual_type] ?? row.ritual_type;
+    title.textContent = `${row.pilot_first_name} ${row.pilot_last_name} — ${formatSessionLabel(row.session_date)}`;
+
+    body.innerHTML = renderDrawerContent(row);
+
+    if (row.ritual_type === 'jminus2' && row.audio_storage_path) {
+      await injectAudioPlayer(row.audio_storage_path);
+    }
+
+    footer.innerHTML = renderDrawerActions(row);
+  }
+
+  function renderDrawerContent(row) {
+    const payload = row.payload || {};
+    const scriptText = payload.script_text || null;
+
+    let html = `
+      <section class="drawer__section">
+        <p class="drawer__section-label">État</p>
+        ${renderStatusBadge(row.status)}
+        ${row.last_error ? `<p style="margin-top:8px;color:#C8102E;font-size:13px">${escapeHtml(row.last_error)}</p>` : ''}
+      </section>
+
+      <section class="drawer__section">
+        <p class="drawer__section-label">Pilote & session</p>
+        <div class="drawer__info-grid">
+          <span class="drawer__info-key">Pilote</span><span class="drawer__info-val">${escapeHtml(row.pilot_first_name)} ${escapeHtml(row.pilot_last_name)}</span>
+          <span class="drawer__info-key">Email</span><span class="drawer__info-val">${escapeHtml(row.pilot_email)}</span>
+          <span class="drawer__info-key">Référence</span><span class="drawer__info-val">${escapeHtml(row.registration_ref ?? '—')}</span>
+          <span class="drawer__info-key">Session</span><span class="drawer__info-val">${formatSessionLabel(row.session_date, row.session_format)}</span>
+        </div>
+      </section>
+
+      <section class="drawer__section">
+        <p class="drawer__section-label">Calendrier</p>
+        <div class="drawer__info-grid">
+          <span class="drawer__info-key">Planifié</span><span class="drawer__info-val">${formatDateTime(row.scheduled_for)}</span>
+          <span class="drawer__info-key">Envoyé</span><span class="drawer__info-val">${row.sent_at ? formatDateTime(row.sent_at) : '—'}</span>
+          <span class="drawer__info-key">Livré</span><span class="drawer__info-val">${row.delivered_at ? formatDateTime(row.delivered_at) : '—'}</span>
+          <span class="drawer__info-key">Ouvert</span><span class="drawer__info-val">${row.opened_at ? `${formatDateTime(row.opened_at)} (${row.opened_count}×)` : '—'}</span>
+          <span class="drawer__info-key">Cliqué</span><span class="drawer__info-val">${row.clicked_at ? `${formatDateTime(row.clicked_at)} (${row.clicked_count}×)` : '—'}</span>
+        </div>
+      </section>
+    `;
+
+    if (row.ritual_type === 'jminus2' && row.audio_storage_path) {
+      html += `
+        <section class="drawer__section">
+          <p class="drawer__section-label">Audio généré (${row.audio_duration_sec ?? '?'}s)</p>
+          <div data-audio-player-container><p style="color:#6B6B6B;font-size:13px">Génération du lien signé...</p></div>
+        </section>
+      `;
+    }
+
+    if (scriptText) {
+      html += `
+        <section class="drawer__section">
+          <p class="drawer__section-label">Script audio</p>
+          <div class="drawer__script">${escapeHtml(scriptText)}</div>
+          ${payload.personalization_level_used ? `<p style="margin-top:8px;color:#6B6B6B;font-size:12px">Niveau ${payload.personalization_level_used}${payload.downgraded_from_c ? ' (dégradé depuis C)' : ''} · ${payload.script_word_count ?? '?'} mots</p>` : ''}
+        </section>
+      `;
+    }
+
+    html += `
+      <section class="drawer__section">
+        <p class="drawer__section-label">Payload technique</p>
+        <pre class="drawer__payload">${escapeHtml(JSON.stringify(payload, null, 2))}</pre>
+      </section>
+    `;
+
+    return html;
+  }
+
+  async function injectAudioPlayer(storagePath) {
+    const sb = window.OXV?.supabase;
+    if (!sb) return;
+    const container = document.querySelector('[data-audio-player-container]');
+    if (!container) return;
+
+    const { data, error } = await sb.storage
+      .from('audio_briefings')
+      .createSignedUrl(storagePath, 3600);
+
+    if (error || !data?.signedUrl) {
+      container.innerHTML = `<p style="color:#C8102E;font-size:13px">Impossible de générer le lien : ${escapeHtml(error?.message ?? 'erreur inconnue')}</p>`;
+      return;
+    }
+
+    container.innerHTML = `<audio controls class="drawer__audio-player" src="${data.signedUrl}"></audio>`;
+  }
+
+  function renderDrawerActions(row) {
+    if (row.status === 'failed') {
+      return `<button type="button" class="btn btn--secondary" data-action="close-drawer">Fermer</button>
+              <button type="button" class="btn btn--danger" data-action="relaunch" data-id="${row.id}">Relancer ce dispatch</button>`;
+    }
+    return `<button type="button" class="btn btn--secondary" data-action="close-drawer">Fermer</button>`;
+  }
+
+  function closeDrawer() {
+    document.getElementById('dispatch-detail-drawer').hidden = true;
+    STATE.selectedDispatchId = null;
+  }
+
+  async function relaunchDispatch(id) {
+    if (!id) return;
+    if (!confirm('Relancer ce dispatch ? Il repassera en attente et sera retraité au prochain cycle (ou immédiatement via un appel manuel).')) return;
+
+    const sb = window.OXV?.supabase;
+    const { error } = await sb
+      .from('ritual_dispatches')
+      .update({ status: 'pending', last_error: null, attempt_count: 0 })
+      .eq('id', id);
+
+    if (error) {
+      alert('Erreur : ' + error.message);
+      return;
+    }
+    closeDrawer();
+    loadRows();
+  }
+
+  function exportCsv() {
+    if (STATE.rows.length === 0) {
+      alert('Aucune donnée à exporter sur la page courante. Ajustez les filtres.');
+      return;
+    }
+
+    const headers = ['ID', 'Rituel', 'Statut', 'Pilote', 'Email', 'Session', 'Format', 'Planifié', 'Envoyé', 'Livré', 'Ouvert', 'Cliqué', 'Erreur'];
+    const lines = [headers.join(',')];
+
+    STATE.rows.forEach(row => {
+      lines.push([
+        row.id,
+        row.ritual_type,
+        row.status,
+        `"${row.pilot_first_name ?? ''} ${row.pilot_last_name ?? ''}"`,
+        row.pilot_email ?? '',
+        row.session_date ?? '',
+        row.session_format ?? '',
+        row.scheduled_for ?? '',
+        row.sent_at ?? '',
+        row.delivered_at ?? '',
+        row.opened_at ?? '',
+        row.clicked_at ?? '',
+        `"${(row.last_error ?? '').replace(/"/g, '""')}"`,
+      ].join(','));
+    });
+
+    const csv = '﻿' + lines.join('\n');
+    const blob = new Blob([csv], { type: 'text/csv;charset=utf-8' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `oxv_rituels_${new Date().toISOString().split('T')[0]}.csv`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+  }
+
+  function openDryrun() {
+    document.getElementById('dryrun-modal').hidden = false;
+  }
+
+  function closeDryrun() {
+    document.getElementById('dryrun-modal').hidden = true;
+    const alertEl = document.querySelector('[data-dryrun-alert]');
+    if (alertEl) alertEl.hidden = true;
+  }
+
+  async function submitDryrun() {
+    const sb = window.OXV?.supabase;
+    if (!sb) return;
+
+    const ritualType = document.getElementById('dryrun-type').value;
+    const email = document.getElementById('dryrun-email').value.trim();
+    const pilotName = document.getElementById('dryrun-pilot-name').value.trim() || 'Pilote test';
+    const vehicle = document.getElementById('dryrun-vehicle').value.trim() || 'Porsche 911';
+    const format = document.getElementById('dryrun-format').value;
+
+    const alertBox = document.querySelector('[data-dryrun-alert]');
+    const alertMsg = document.querySelector('[data-dryrun-alert-message]');
+    const submitLabel = document.querySelector('[data-dryrun-submit-label]');
+
+    alertBox.hidden = true;
+
+    if (!email || !/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)) {
+      alertBox.hidden = false;
+      alertBox.classList.remove('modal__alert--success');
+      alertBox.classList.add('modal__alert--warning');
+      alertMsg.textContent = 'Email invalide.';
+      return;
+    }
+
+    submitLabel.textContent = 'Envoi en cours...';
+
+    try {
+      const { data, error } = await sb.functions.invoke('ritual_dryrun', {
+        body: {
+          ritual_type: ritualType,
+          to_email: email,
+          pilot_first_name: pilotName,
+          vehicle_label: vehicle,
+          session_format: format,
+        },
+      });
+
+      // Le SDK Supabase masque le détail des erreurs HTTP non-2xx.
+      // On lit le body de la réponse pour récupérer le vrai message.
+      if (error) {
+        let detail = error.message ?? 'inconnue';
+        try {
+          if (error.context?.body) {
+            const txt = typeof error.context.body === 'string'
+              ? error.context.body
+              : await new Response(error.context.body).text();
+            try {
+              const parsed = JSON.parse(txt);
+              detail = parsed.error || parsed.message || txt;
+            } catch { detail = txt; }
+          } else if (error.context?.status) {
+            detail = `HTTP ${error.context.status} ${error.context.statusText ?? ''} — ${detail}`;
+          }
+        } catch (_) { /* fallback */ }
+        console.error('[ritual_dryrun]', error, 'detail:', detail);
+        throw new Error(detail);
+      }
+
+      alertBox.classList.remove('modal__alert--warning');
+      alertBox.classList.add('modal__alert--success');
+      alertBox.hidden = false;
+      alertMsg.textContent = `Email envoyé à ${email}. Vérifiez la boîte de réception (et les spams).`;
+      submitLabel.textContent = 'Envoyer le test';
+    } catch (e) {
+      alertBox.classList.remove('modal__alert--success');
+      alertBox.classList.add('modal__alert--warning');
+      alertBox.hidden = false;
+      alertMsg.textContent = 'Erreur : ' + (e.message ?? 'inconnue');
+      submitLabel.textContent = 'Envoyer le test';
+    }
+  }
+
+  function escapeHtml(s) {
+    if (s === null || s === undefined) return '';
+    return String(s)
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;')
+      .replace(/'/g, '&#039;');
+  }
+
+  function formatDateTime(iso) {
+    if (!iso) return '—';
+    const d = new Date(iso);
+    return d.toLocaleDateString('fr-FR', { day: '2-digit', month: 'short' }) +
+           ' · ' +
+           d.toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' });
+  }
+
+  function formatSessionLabel(isoDate, format) {
+    if (!isoDate) return '—';
+    const d = new Date(isoDate + 'T12:00:00Z');
+    const label = d.toLocaleDateString('fr-FR', { day: '2-digit', month: 'short', year: '2-digit' });
+    return format ? `${label} (${format})` : label;
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', init);
+  } else {
+    init();
+  }
+})();
 </script>
 
 </body>
