@@ -27750,7 +27750,12 @@ Object.defineProperty(window.OXV, 'isAdmin', {
 
   function formatSessionLabel(isoDate, format) {
     if (!isoDate) return '—';
-    const d = new Date(isoDate + 'T12:00:00Z');
+    // La vue admin_ritual_dispatches_view renvoie session_date comme
+    // timestamp complet (ex: "2026-05-19T09:00:00+00:00") parce qu'elle
+    // calcule (s.date + s.start_time)::timestamptz. Mais on peut aussi
+    // recevoir une simple date "2026-05-19" → on gère les deux cas.
+    const d = /T\d{2}:/.test(isoDate) ? new Date(isoDate) : new Date(`${isoDate}T12:00:00Z`);
+    if (isNaN(d.getTime())) return '—';
     const label = d.toLocaleDateString('fr-FR', { day: '2-digit', month: 'short', year: '2-digit' });
     return format ? `${label} (${format})` : label;
   }
