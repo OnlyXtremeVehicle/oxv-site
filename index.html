@@ -12264,7 +12264,8 @@ textarea:focus-visible {
 }
 #dryrun-modal .modal__panel {
   position: relative;
-  background: #FFFFFF;
+  background: #FFFFFF !important;
+  color: #1A1A1A !important;
   border-radius: 12px;
   width: 100%;
   max-width: 520px;
@@ -12273,6 +12274,25 @@ textarea:focus-visible {
   flex-direction: column;
   animation: rituels-scale-in 200ms ease;
   box-shadow: 0 20px 60px rgba(0,0,0,0.15);
+}
+#dryrun-modal .modal__panel * {
+  /* Réinitialise les hérités cream du body OXV pour tout texte non explicitement coloré */
+  color: inherit;
+}
+#dryrun-modal .modal__title,
+#dryrun-modal .modal__body,
+#dryrun-modal .form-label,
+#dryrun-modal .form-input,
+#dryrun-modal .form-select {
+  color: #1A1A1A !important;
+}
+#dryrun-modal .modal__description,
+#dryrun-modal .form-details summary {
+  color: #6B6B6B !important;
+}
+#dryrun-modal .form-input,
+#dryrun-modal .form-select {
+  background: #FFFFFF !important;
 }
 @keyframes rituels-scale-in {
   from { transform: scale(0.96); opacity: 0; }
@@ -27632,17 +27652,24 @@ Object.defineProperty(window.OXV, 'isAdmin', {
 
   async function submitDryrun() {
     const sb = window.OXV?.supabase;
-    if (!sb) return;
+    const alertBox = document.querySelector('[data-dryrun-alert]');
+    const alertMsg = document.querySelector('[data-dryrun-alert-message]');
+    const submitLabel = document.querySelector('[data-dryrun-submit-label]');
+
+    if (!sb) {
+      console.error('[ritual_dryrun] window.OXV.supabase introuvable — bridge OXV non initialisé');
+      alertBox.hidden = false;
+      alertBox.classList.remove('modal__alert--success');
+      alertBox.classList.add('modal__alert--warning');
+      alertMsg.textContent = 'Client Supabase non chargé. Rechargez la page.';
+      return;
+    }
 
     const ritualType = document.getElementById('dryrun-type').value;
     const email = document.getElementById('dryrun-email').value.trim();
     const pilotName = document.getElementById('dryrun-pilot-name').value.trim() || 'Pilote test';
     const vehicle = document.getElementById('dryrun-vehicle').value.trim() || 'Porsche 911';
     const format = document.getElementById('dryrun-format').value;
-
-    const alertBox = document.querySelector('[data-dryrun-alert]');
-    const alertMsg = document.querySelector('[data-dryrun-alert-message]');
-    const submitLabel = document.querySelector('[data-dryrun-submit-label]');
 
     alertBox.hidden = true;
 
@@ -27655,6 +27682,7 @@ Object.defineProperty(window.OXV, 'isAdmin', {
     }
 
     submitLabel.textContent = 'Envoi en cours...';
+    console.log('[ritual_dryrun] envoi vers', email, '— type:', ritualType);
 
     try {
       const { data, error } = await sb.functions.invoke('ritual_dryrun', {
