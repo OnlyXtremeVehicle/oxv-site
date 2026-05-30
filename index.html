@@ -11792,7 +11792,6 @@ textarea:focus-visible {
   text-transform: uppercase;
   color: var(--oxv-red);
 }
-#page-admin-rituels .filter-input::placeholder { color: var(--cream-faint); }
 
 /* Corps d'article */
 .article-shell { padding: 72px 0 96px; }
@@ -18182,7 +18181,7 @@ window.goTo = function(page, opts) {
     setTimeout(() => loadAdminArticles(), 150);
   }
   if (page === 'actualites') {
-    setTimeout(() => renderActuList(), 50);
+    setTimeout(async () => { await oxvHydrateArticles(); renderActuList(); }, 50);
   }
   if (page === 'calendrier') {
     setTimeout(() => loadPublicCalendar(), 150);
@@ -18346,8 +18345,6 @@ window.addEventListener('popstate', () => oxvRouteFromLocation());
    Corps d'article : format markdown-léger
      ## Titre de section · > citation · - liste · **gras** · *italique*
    ============================================================ */
-
-const OXV_ARTICLES_KEY = 'oxv_articles_v2';
 
 // Catégories éditoriales normalisées (réf. document de refonte, partie 12.4)
 const OXV_CATEGORIES = ['Annonces', 'Coulisses', 'Technique', "Retours d'expérience", 'Presse'];
@@ -18560,32 +18557,67 @@ Quel que soit le scénario, le principe reste le même que pour nos sessions pil
   }
 ];
 
-// ─── Persistance ───
-function oxvLoadArticles() {
+// ─── Persistance (Supabase + cache mémoire) ───
+// Cache initialisé avec le seed pour que l'affichage fonctionne immédiatement,
+// même avant l'hydratation Supabase ou si la table « articles » n'existe pas encore.
+let oxvArticlesCache = JSON.parse(JSON.stringify(OXV_ARTICLES_SEED));
+let oxvArticlesHydrated = false;
+
+function oxvDateLabel(iso) {
+  try { return new Date(iso + 'T00:00:00').toLocaleDateString('fr-FR', { day: 'numeric', month: 'long', year: 'numeric' }); }
+  catch (e) { return iso || ''; }
+}
+
+// Ligne Supabase (snake_case) → objet article (camelCase)
+function oxvRowToArticle(r) {
+  return {
+    id: r.id,
+    category: r.category || 'Annonces',
+    published: r.published !== false,
+    date: r.date || '',
+    dateLabel: r.date_label || oxvDateLabel(r.date),
+    title: r.title || '',
+    lead: r.lead || '',
+    body: r.body || '',
+    featured: !!r.featured,
+    ctaLabel: r.cta_label || '',
+    ctaPage: r.cta_page || ''
+  };
+}
+
+// Hydrate le cache depuis Supabase (une fois, ou forcé après écriture)
+async function oxvHydrateArticles(force) {
+  if (oxvArticlesHydrated && !force) return oxvArticlesCache;
+  if (typeof supabase === 'undefined') { oxvArticlesHydrated = true; return oxvArticlesCache; }
   try {
-    const raw = localStorage.getItem(OXV_ARTICLES_KEY);
-    if (!raw) {
-      localStorage.setItem(OXV_ARTICLES_KEY, JSON.stringify(OXV_ARTICLES_SEED));
-      return JSON.parse(JSON.stringify(OXV_ARTICLES_SEED));
+    const { data, error } = await supabase
+      .from('articles')
+      .select('*')
+      .order('date', { ascending: false });
+    if (error) {
+      console.warn('[Articles] Supabase indisponible — affichage du seed local. Détail :', error.message);
+      oxvArticlesHydrated = true;
+      return oxvArticlesCache;
     }
-    const parsed = JSON.parse(raw);
-    if (!Array.isArray(parsed)) return JSON.parse(JSON.stringify(OXV_ARTICLES_SEED));
-    return parsed;
+    if (Array.isArray(data) && data.length) {
+      oxvArticlesCache = data.map(oxvRowToArticle);
+    }
+    // Si la table est vide, on conserve le seed en mémoire (lecture seule
+    // jusqu'à ce qu'elle soit peuplée via le SQL de setup ou l'admin).
+    oxvArticlesHydrated = true;
   } catch (e) {
-    console.warn('[OXV] Articles : lecture localStorage impossible, fallback seed', e);
-    return JSON.parse(JSON.stringify(OXV_ARTICLES_SEED));
+    console.warn('[Articles] Exception hydratation :', e);
+    oxvArticlesHydrated = true;
   }
+  return oxvArticlesCache;
 }
-function oxvSaveArticles(list) {
-  try { localStorage.setItem(OXV_ARTICLES_KEY, JSON.stringify(list)); }
-  catch (e) { console.warn('[OXV] Articles : écriture localStorage impossible', e); }
-}
+
 function oxvGetArticles() {
-  // tri par date décroissante
-  return oxvLoadArticles().slice().sort((a, b) => (b.date || '').localeCompare(a.date || ''));
+  // tri par date décroissante (sur le cache)
+  return oxvArticlesCache.slice().sort((a, b) => (b.date || '').localeCompare(a.date || ''));
 }
 function oxvGetArticle(id) {
-  return oxvLoadArticles().find(a => a.id === id) || null;
+  return oxvArticlesCache.find(a => a.id === id) || null;
 }
 
 // ─── Markdown léger → HTML ───
@@ -18671,9 +18703,11 @@ function renderActuList() {
 }
 
 // ─── Rendu détail article ───
-window.openArticle = function(id, opts) {
+window.openArticle = async function(id, opts) {
   opts = opts || {};
-  const a = oxvGetArticle(id);
+  let a = oxvGetArticle(id);
+  // Article absent du cache (ex. deep-link à froid) → on tente une hydratation
+  if (!a && !oxvArticlesHydrated) { await oxvHydrateArticles(); a = oxvGetArticle(id); }
   if (!a) { goTo('actualites'); return; }
   const set = (elId, html) => { const el = document.getElementById(elId); if (el) el.innerHTML = html; };
   set('articleCat', oxvEsc(a.category));
@@ -18704,7 +18738,8 @@ function oxvArticleStatus(a) {
   return { key: 'published', label: 'Publié', cls: 'published' };
 }
 
-function loadAdminArticles() {
+async function loadAdminArticles() {
+  await oxvHydrateArticles(true);
   adminArticleHideForm();
   const list = document.getElementById('adminArticlesList');
   if (!list) return;
@@ -18778,13 +18813,15 @@ function renderAdminArticleCalendar() {
 }
 
 // Bascule publié / brouillon
-window.adminArticleTogglePublish = function(id) {
-  const list = oxvLoadArticles();
-  const idx = list.findIndex(a => a.id === id);
-  if (idx < 0) return;
-  list[idx].published = (list[idx].published === false);
-  oxvSaveArticles(list);
-  toast(list[idx].published ? 'Article publié' : 'Article dépublié', 'success');
+window.adminArticleTogglePublish = async function(id) {
+  const a = oxvGetArticle(id);
+  if (!a) return;
+  if (typeof supabase === 'undefined') { toast('Supabase indisponible', 'warn'); return; }
+  const target = !(a.published !== false); // inverse l'état courant
+  const { error } = await supabase.from('articles').update({ published: target, updated_at: new Date().toISOString() }).eq('id', id);
+  if (error) { console.warn('[Articles] toggle:', error); toast('Erreur : ' + error.message, 'warn'); return; }
+  toast(target ? 'Article publié' : 'Article dépublié', 'success');
+  await oxvHydrateArticles(true);
   loadAdminArticles();
 };
 
@@ -18873,57 +18910,62 @@ function oxvSlugify(s) {
     .replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '').slice(0, 48) || ('art-' + Date.now());
 }
 
-window.adminArticleSave = function() {
+window.adminArticleSave = async function() {
   const title = document.getElementById('afTitle').value.trim();
   const lead = document.getElementById('afLead').value.trim();
   const body = document.getElementById('afBody').value.trim();
   if (!title) { toast('Le titre est obligatoire', 'warn'); return; }
   if (!lead) { toast('Le chapô est obligatoire', 'warn'); return; }
   if (!body) { toast("Le corps de l'article est obligatoire", 'warn'); return; }
+  if (typeof supabase === 'undefined') { toast('Supabase indisponible', 'warn'); return; }
 
   const dateIso = document.getElementById('afDate').value || new Date().toISOString().slice(0, 10);
-  let dateLabel = dateIso;
-  try {
-    dateLabel = new Date(dateIso + 'T00:00:00').toLocaleDateString('fr-FR', { day: 'numeric', month: 'long', year: 'numeric' });
-  } catch (e) {}
+  const dateLabel = oxvDateLabel(dateIso);
 
-  const list = oxvLoadArticles();
-  const payload = {
+  // Identifiant : conservé en édition, sinon slug unique
+  let id = adminArticleEditingId;
+  if (!id) {
+    id = oxvSlugify(title);
+    while (oxvGetArticle(id)) id = id + '-' + Math.floor(Math.random() * 1000);
+  }
+
+  const row = {
+    id: id,
     category: document.getElementById('afCategory').value.trim() || 'Annonces',
     date: dateIso,
-    dateLabel: dateLabel,
+    date_label: dateLabel,
     title: title,
     lead: lead,
     body: body,
     featured: document.getElementById('afFeatured').checked,
     published: document.getElementById('afPublished').checked,
-    ctaLabel: document.getElementById('afCtaLabel').value.trim(),
-    ctaPage: document.getElementById('afCtaPage').value.trim()
+    cta_label: document.getElementById('afCtaLabel').value.trim(),
+    cta_page: document.getElementById('afCtaPage').value.trim(),
+    updated_at: new Date().toISOString()
   };
 
-  if (adminArticleEditingId) {
-    const idx = list.findIndex(a => a.id === adminArticleEditingId);
-    if (idx >= 0) { list[idx] = Object.assign({}, list[idx], payload); }
-  } else {
-    let id = oxvSlugify(title);
-    while (list.some(a => a.id === id)) id = id + '-' + Math.floor(Math.random() * 1000);
-    payload.id = id;
-    list.push(payload);
+  const { error } = await supabase.from('articles').upsert(row);
+  if (error) {
+    console.warn('[Articles] save:', error);
+    toast('Erreur : ' + error.message + ' (table « articles » créée ?)', 'warn');
+    return;
   }
-  oxvSaveArticles(list);
   toast(adminArticleEditingId ? 'Article mis à jour' : 'Article publié', 'success');
   adminArticleEditingId = null;
   adminArticleHideForm();
+  await oxvHydrateArticles(true);
   loadAdminArticles();
 };
 
-window.adminArticleDelete = function(id) {
+window.adminArticleDelete = async function(id) {
   const a = oxvGetArticle(id);
   if (!a) return;
   if (!confirm("Supprimer définitivement l'article « " + a.title.replace(/\*/g, '') + " » ?")) return;
-  const list = oxvLoadArticles().filter(x => x.id !== id);
-  oxvSaveArticles(list);
+  if (typeof supabase === 'undefined') { toast('Supabase indisponible', 'warn'); return; }
+  const { error } = await supabase.from('articles').delete().eq('id', id);
+  if (error) { console.warn('[Articles] delete:', error); toast('Erreur : ' + error.message, 'warn'); return; }
   toast('Article supprimé', 'success');
+  await oxvHydrateArticles(true);
   loadAdminArticles();
 };
 
@@ -20995,14 +21037,44 @@ window.adminRevokeAllSessions = async function() {
   }
 };
 
-window.submitContact = function() {
+window.submitContact = async function() {
   const cb = document.getElementById('ct-rgpd');
   const first = document.getElementById('ct-first');
   const last = document.getElementById('ct-last');
   const email = document.getElementById('ct-email');
+  const subj = document.getElementById('ct-subj');
   const msg = document.getElementById('ct-msg');
   if (!cb || !cb.classList.contains('checked')) { toast('Acceptation RGPD requise', 'warn'); return; }
   if (!first.value || !last.value || !email.value || !msg.value) { toast('Tous les champs sont requis', 'warn'); return; }
+
+  const emailOk = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.value.trim());
+  if (!emailOk) { toast('Adresse email invalide', 'warn'); return; }
+
+  const btn = document.querySelector('#page-contact .btn-primary');
+  if (btn) btn.style.pointerEvents = 'none';
+
+  const payload = {
+    first_name: first.value.trim(),
+    last_name:  last.value.trim(),
+    email:      email.value.trim(),
+    subject:    subj ? subj.value : 'Question générale',
+    message:    msg.value.trim()
+  };
+
+  try {
+    if (typeof supabase !== 'undefined') {
+      const { error } = await supabase.from('contact_messages').insert(payload);
+      if (error) {
+        // Table absente → on ne bloque pas l'utilisateur, on log pour l'admin
+        console.warn('[Contact] Erreur Supabase (table contact_messages ?):', error);
+      }
+    }
+  } catch (e) {
+    console.warn('[Contact] Exception:', e);
+  } finally {
+    if (btn) btn.style.pointerEvents = '';
+  }
+
   toast('Message envoyé · réponse sous 48h ouvrées', 'ok');
   ['ct-first','ct-last','ct-email','ct-msg'].forEach(id => { const el = document.getElementById(id); if (el) el.value = ''; });
   cb.classList.remove('checked');
