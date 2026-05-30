@@ -16938,114 +16938,7 @@ textarea:focus-visible {
 </div>
 
 
-<!-- QDI Score Modal (admin) -->
-<div class="vmodal" id="qdiModal">
-  <div class="vmodal-card" style="max-width:580px;">
-    <button class="vmodal-close" onclick="closeQDIModal()">×</button>
-    <div class="vmodal-eyebrow">— Saisie scores QDI</div>
-    <h2 class="vmodal-title" id="qdiModalTitle">Score <em>pilote</em>.</h2>
-
-    <div class="account-form">
-
-      <!-- Score global -->
-      <div class="form-row full">
-        <label>Score global QDI <span id="qdiGlobalVal" style="color:var(--copper-glow);margin-left:8px;">50</span> / 100</label>
-        <input type="range" id="qdi-global" min="0" max="100" value="50"
-          oninput="document.getElementById('qdiGlobalVal').textContent=this.value; autoQDILevel();"
-          style="width:100%;accent-color:var(--copper);" />
-      </div>
-
-      <!-- Niveau -->
-      <div class="form-row">
-        <label>Niveau</label>
-        <select id="qdi-level" style="background:var(--ink);border:1px solid var(--cream-line);color:var(--cream);padding:10px 14px;font-family:var(--mono);font-size:12px;width:100%;">
-          <option value="novice">Novice</option>
-          <option value="bronze">Bronze</option>
-          <option value="argent">Argent</option>
-          <option value="or">Or</option>
-          <option value="elite">Elite</option>
-        </select>
-      </div>
-
-      <!-- Séparateur piliers -->
-      <div class="form-row full" style="margin:4px 0 -4px;">
-        <div style="font-family:var(--mono);font-size:9px;letter-spacing:0.28em;text-transform:uppercase;color:var(--copper-glow);padding-bottom:8px;border-bottom:1px solid var(--cream-line);">— 5 piliers de performance</div>
-      </div>
-
-      <!-- Trajectoire -->
-      <div class="form-row full">
-        <label style="color:var(--qdi-trajectory);">Trajectoire <span id="qdiTrajVal" style="margin-left:8px;">50</span></label>
-        <input type="range" id="qdi-trajectory" min="0" max="100" value="50"
-          oninput="document.getElementById('qdiTrajVal').textContent=this.value"
-          style="width:100%;accent-color:#E63946;" />
-      </div>
-
-      <!-- Fluidité -->
-      <div class="form-row full">
-        <label style="color:var(--qdi-fluidity);">Fluidité <span id="qdiFluidVal" style="margin-left:8px;">50</span></label>
-        <input type="range" id="qdi-fluidity" min="0" max="100" value="50"
-          oninput="document.getElementById('qdiFluidVal').textContent=this.value"
-          style="width:100%;accent-color:#FFB703;" />
-      </div>
-
-      <!-- Freinage -->
-      <div class="form-row full">
-        <label style="color:var(--qdi-braking);">Freinage <span id="qdiBrakeVal" style="margin-left:8px;">50</span></label>
-        <input type="range" id="qdi-braking" min="0" max="100" value="50"
-          oninput="document.getElementById('qdiBrakeVal').textContent=this.value"
-          style="width:100%;accent-color:#60A5FA;" />
-      </div>
-
-      <!-- Accélération -->
-      <div class="form-row full">
-        <label style="color:var(--qdi-acceleration);">Accélération <span id="qdiAccelVal" style="margin-left:8px;">50</span></label>
-        <input type="range" id="qdi-acceleration" min="0" max="100" value="50"
-          oninput="document.getElementById('qdiAccelVal').textContent=this.value"
-          style="width:100%;accent-color:#4ADE80;" />
-      </div>
-
-      <!-- Régularité -->
-      <div class="form-row full">
-        <label style="color:var(--qdi-regularity);">Régularité <span id="qdiRegVal" style="margin-left:8px;">50</span></label>
-        <input type="range" id="qdi-regularity" min="0" max="100" value="50"
-          oninput="document.getElementById('qdiRegVal').textContent=this.value"
-          style="width:100%;accent-color:#C084FC;" />
-      </div>
-
-      <!-- Chronométrie -->
-      <div class="form-row full" style="margin:4px 0 -4px;">
-        <div style="font-family:var(--mono);font-size:9px;letter-spacing:0.28em;text-transform:uppercase;color:var(--copper-glow);padding-bottom:8px;border-bottom:1px solid var(--cream-line);">— Chronométrie (optionnel)</div>
-      </div>
-
-      <div class="form-row">
-        <label>Tours total</label>
-        <input type="number" id="qdi-total-laps" min="0" max="999" placeholder="Ex. 18" style="background:var(--ink);border:1px solid var(--cream-line);color:var(--cream);padding:10px 14px;font-family:var(--mono);font-size:12px;width:100%;" />
-      </div>
-
-      <div class="form-row">
-        <label>Tours valides</label>
-        <input type="number" id="qdi-valid-laps" min="0" max="999" placeholder="Ex. 14" style="background:var(--ink);border:1px solid var(--cream-line);color:var(--cream);padding:10px 14px;font-family:var(--mono);font-size:12px;width:100%;" />
-      </div>
-
-      <div class="form-row full">
-        <label>Meilleur tour</label>
-        <input type="text" id="qdi-best-lap" placeholder="Ex. 1:23.456" style="background:var(--ink);border:1px solid var(--cream-line);color:var(--cream);padding:10px 14px;font-family:var(--mono);font-size:12px;width:100%;" />
-      </div>
-
-      <!-- Notes coach -->
-      <div class="form-row full">
-        <label>Notes coach (visibles pilote)</label>
-        <textarea id="qdi-notes" rows="3" placeholder="Points forts, axes de progression..."
-          style="background:var(--ink);border:1px solid var(--cream-line);color:var(--cream);padding:10px 14px;font-family:var(--sans);font-size:13px;width:100%;resize:vertical;"></textarea>
-      </div>
-
-      <div class="form-row full" style="margin-top:8px;">
-        <button class="admin-btn primary" onclick="adminSaveQDI()" id="qdiSaveBtn">Enregistrer le score QDI</button>
-      </div>
-
-    </div>
-  </div>
-</div>
+<!-- Modale de saisie QDI manuelle retirée (marges = algo trackviz) -->
 
 
 <!-- ============ BOOKING (PRIVÉ) ============ -->
@@ -20587,12 +20480,12 @@ window.adminAddMediaLink = async function(sessionId) {
     return;
   }
   
-  // Détecter le type (correspond à l'enum media_type)
+  // Détecter le type (enum media_type_enum : photo / video_drone / video_embedded / telemetry_report)
   let mediaType = 'photo';
-  if (link.includes('youtube.com') || link.includes('youtu.be') || link.includes('vimeo.com')) mediaType = 'video';
-  else if (link.includes('.mp4') || link.includes('.mov')) mediaType = 'video';
-  
-  // Type fictif - à adapter selon l'enum réel de ton media_type
+  if (link.includes('youtube.com') || link.includes('youtu.be') || link.includes('vimeo.com')) mediaType = 'video_embedded';
+  else if (link.includes('.mp4') || link.includes('.mov')) mediaType = 'video_embedded';
+  else if (link.includes('drone')) mediaType = 'video_drone';
+
   const title = prompt('Titre du média (ex: "Photos session du 12 mai") :', 'Médias session');
   if (!title) return;
   
@@ -22939,65 +22832,62 @@ window.loadProgression = async function() {
   if (!userId) return;
 
   try {
-    // 1. Récupérer les infos du pilote
-    const { data: profile, error: profileError } = await supabase
-      .from('users')
-      .select('attended_count, first_name, last_name')
-      .eq('id', userId)
-      .single();
-    
-    if (profileError || !profile) {
-      console.warn('[Progression] Erreur profile:', profileError);
-      return;
-    }
+    // 1. Prénom du pilote (pour les messages)
+    let firstName = '';
+    try {
+      const { data: profile } = await supabase
+        .from('users').select('first_name').eq('id', userId).single();
+      firstName = profile?.first_name || '';
+    } catch (e) {}
 
-    // Mise à jour compteur sessions effectuées
-    const sessionsNum = document.querySelector('.prog-sessions-num');
-    if (sessionsNum) {
-      sessionsNum.textContent = String(profile.attended_count || 0).padStart(2, '0');
-    }
-
-    // 2. Si pas encore de session : afficher l'invitation
-    if (!profile.attended_count || profile.attended_count === 0) {
-      showEmptyQDI(profile.first_name);
-      return;
-    }
-
-    // 3. Récupérer les scores QDI (table qdi_scores)
-    const { data: qdiData, error: qdiError } = await supabase
-      .from('qdi_scores')
+    // 2. Analyses de session — moteur « margins » (table app_session_analyses)
+    const { data: analyses, error: aErr } = await supabase
+      .from('app_session_analyses')
       .select('*')
       .eq('user_id', userId)
       .order('computed_at', { ascending: false });
-    
-    if (qdiError) {
-      if (qdiError.code === '42P01') {
-        // Table n'existe pas → garder mockup
-        console.log('[Progression] Table qdi_scores non créée — utilisation du mockup');
-      } else {
-        console.warn('[Progression] Erreur qdi_scores:', qdiError);
-      }
-      return;
-    }
-    
-    if (!qdiData || qdiData.length === 0) {
-      showWaitingQDI();
-      return;
+
+    if (aErr) {
+      if (aErr.code === '42P01') console.log('[Progression] app_session_analyses absente — mockup conservé');
+      else console.warn('[Progression] Erreur app_session_analyses:', aErr);
+      return; // garde le mockup
     }
 
-    // Entrées QDI créées mais toutes à 0 → en attente de saisie admin
-    if (qdiData.every(q => q.qdi_global === 0)) {
-      showWaitingQDI();
-      return;
-    }
-    
-    // 4. Mise à jour avec les vraies données QDI
-    renderQDIDataFromSupabase(qdiData, profile);
-    
+    // Compteur de sessions analysées
+    const sessionsNum = document.querySelector('.prog-sessions-num');
+    if (sessionsNum) sessionsNum.textContent = String((analyses && analyses.length) || 0).padStart(2, '0');
+
+    // Aucune analyse → invitation
+    if (!analyses || analyses.length === 0) { showEmptyQDI(firstName); return; }
+
+    // Analyses présentes mais margin_global non calculé partout → en attente
+    if (analyses.every(a => a.margin_global == null)) { showWaitingQDI(); return; }
+
+    // 3. Rendu avec les vraies marges
+    renderMarginData(analyses, firstName);
+
   } catch (e) {
     console.warn('[Progression] Exception:', e);
   }
 };
+
+// Normalise une marge en score 0–100 (gère échelle 0–1 ou 0–100)
+function oxvMarginScore(v) {
+  if (v == null) return null;
+  let n = Number(v);
+  if (!isFinite(n)) return null;
+  if (n > 0 && n <= 1) n = n * 100;       // échelle 0–1 → 0–100
+  return Math.max(0, Math.min(100, Math.round(n)));
+}
+// Palier OXV à partir du score
+function oxvScoreLevel(s) {
+  if (s == null) return { name: 'À découvrir', badge: 'NIVEAU 0' };
+  if (s >= 95) return { name: 'Elite', badge: '👑 ELITE' };
+  if (s >= 85) return { name: 'Or', badge: '🥇 OR' };
+  if (s >= 70) return { name: 'Argent', badge: '🥈 ARGENT' };
+  if (s >= 50) return { name: 'Bronze', badge: '🥉 BRONZE' };
+  return { name: 'Novice', badge: 'NOVICE' };
+}
 
 function showEmptyQDI(firstName) {
   const qdiScore = document.getElementById('progQdiScore');
@@ -23038,199 +22928,166 @@ function showWaitingQDI() {
   }
 }
 
-function renderQDIDataFromSupabase(qdiData, profile) {
-  // Le score le plus récent
-  const latest = qdiData[0];
-  
+function renderMarginData(analyses, firstName) {
+  const latest = analyses[0];
+  const score = oxvMarginScore(latest.margin_global);
+  const level = oxvScoreLevel(score);
+
   // Score global
-  const qdiScore = document.getElementById('progQdiScore');
-  if (qdiScore) qdiScore.textContent = latest.qdi_global;
-  
-  // Niveau (Bronze/Argent/Or/Elite)
-  const qdiLevel = document.getElementById('progQdiLevel');
-  const qdiBadge = document.getElementById('progQdiBadge');
-  const levelMap = {
-    'elite': { name: 'Elite', badge: '👑 ELITE' },
-    'or': { name: 'Or', badge: '🥇 OR' },
-    'argent': { name: 'Argent', badge: '🥈 ARGENT' },
-    'bronze': { name: 'Bronze', badge: '🥉 BRONZE' },
-    'novice': { name: 'Novice', badge: 'NOVICE' }
-  };
-  const level = levelMap[latest.qdi_level] || levelMap.novice;
-  if (qdiLevel) qdiLevel.textContent = level.name;
-  if (qdiBadge) qdiBadge.textContent = level.badge;
-  
-  // Évolution depuis le dernier score
+  const elScore = document.getElementById('progQdiScore');
+  if (elScore) elScore.textContent = score == null ? '—' : score;
+  const elLevel = document.getElementById('progQdiLevel');
+  if (elLevel) elLevel.textContent = level.name;
+  const elBadge = document.getElementById('progQdiBadge');
+  if (elBadge) elBadge.textContent = level.badge;
+
+  // Sous-titre : évolution vs session précédente
   const sub = document.querySelector('.prog-qdi-sub');
-  if (sub && qdiData.length > 1) {
-    const previousScore = qdiData[1].qdi_global;
-    const delta = latest.qdi_global - previousScore;
-    const deltaStr = delta > 0 ? `+${delta}` : delta < 0 ? `${delta}` : '±0';
-    const deltaColor = delta > 0 ? 'var(--green-perf)' : delta < 0 ? 'var(--red)' : 'var(--cream-mute)';
-    sub.innerHTML = `<strong style="color:${deltaColor};">${deltaStr} pts</strong> depuis votre dernière session · ${qdiData.length} sessions analysées`;
-  }
-  
-  // Progression vers prochain palier
-  let nextThreshold = 50;
-  if (latest.qdi_global >= 95) nextThreshold = 100;
-  else if (latest.qdi_global >= 85) nextThreshold = 95;
-  else if (latest.qdi_global >= 70) nextThreshold = 85;
-  else if (latest.qdi_global >= 50) nextThreshold = 70;
-  
-  const ptsRemaining = nextThreshold - latest.qdi_global;
-  const progressPct = (latest.qdi_global / nextThreshold) * 100;
-  
-  const progressLabel = document.querySelector('.prog-next-level-label');
-  if (progressLabel) {
-    const nextLevelName = nextThreshold === 100 ? 'MAX' : nextThreshold === 95 ? 'ELITE' : nextThreshold === 85 ? 'OR' : nextThreshold === 70 ? 'ARGENT' : 'BRONZE';
-    progressLabel.innerHTML = `<span>Prochain palier : ${nextLevelName} (≥ ${nextThreshold})</span><span class="pts">${ptsRemaining > 0 ? ptsRemaining + ' pts restants' : '✓ Atteint'}</span>`;
-  }
-  
-  const progressFill = document.querySelector('.prog-progress-fill');
-  if (progressFill) progressFill.style.width = `${Math.min(progressPct, 100)}%`;
-  
-  // Sessions effectuées + détails
-  const sessionsNum = document.querySelector('.prog-sessions-num');
-  if (sessionsNum) sessionsNum.textContent = String(profile.attended_count || 0).padStart(2, '0');
-  
-  const sessionsDetail = document.querySelector('.prog-sessions-detail');
-  if (sessionsDetail) {
-    sessionsDetail.innerHTML = `
-      <strong>${latest.valid_laps}/${latest.total_laps} tours valides</strong> retenus pour le QDI<br/>
-      ${latest.best_lap_time ? `Meilleur tour : <strong>${latest.best_lap_time}</strong><br/>` : ''}
-      Dernier calcul : <strong>${new Date(latest.computed_at).toLocaleDateString('fr-FR', { day: 'numeric', month: 'long', year: 'numeric' })}</strong>
-    `;
-  }
-  
-  // 5 piliers
-  const pillars = [
-    { selector: '.prog-pillar.trajectory', value: latest.trajectory_score },
-    { selector: '.prog-pillar.fluidity', value: latest.fluidity_score },
-    { selector: '.prog-pillar.braking', value: latest.braking_score },
-    { selector: '.prog-pillar.acceleration', value: latest.acceleration_score },
-    { selector: '.prog-pillar.regularity', value: latest.regularity_score }
-  ];
-  
-  pillars.forEach(p => {
-    const elem = document.querySelector(p.selector);
-    if (elem) {
-      const fill = elem.querySelector('.prog-pillar-fill');
-      const score = elem.querySelector('.prog-pillar-score');
-      if (fill) fill.style.width = `${p.value}%`;
-      if (score) score.textContent = p.value;
+  if (sub) {
+    if (analyses.length > 1 && score != null) {
+      const prev = oxvMarginScore(analyses[1].margin_global);
+      if (prev != null) {
+        const delta = score - prev;
+        const ds = delta > 0 ? `+${delta}` : delta < 0 ? `${delta}` : '±0';
+        const dc = delta > 0 ? 'var(--green-perf)' : delta < 0 ? 'var(--red)' : 'var(--cream-mute)';
+        sub.innerHTML = `<strong style="color:${dc};">${ds} pts</strong> depuis votre dernière session · ${analyses.length} sessions analysées`;
+      }
+    } else {
+      sub.innerHTML = `<strong>Première analyse disponible.</strong> Votre marge globale est calculée à partir de votre télémétrie 25 Hz.`;
     }
-  });
-  
-  // Évolution 6 derniers mois (graphique)
-  renderQDIEvolution(qdiData);
-  
-  // Recommandations Coach IA basées sur les scores réels
-  renderQDIRecommendations(latest);
-  
-  console.log(`[Progression] QDI ${latest.qdi_global}/100 (${level.name}) chargé`);
+  }
+
+  // Progression vers le prochain palier
+  if (score != null) {
+    let next = 50;
+    if (score >= 95) next = 100; else if (score >= 85) next = 95;
+    else if (score >= 70) next = 85; else if (score >= 50) next = 70;
+    const remaining = next - score;
+    const label = document.querySelector('.prog-next-level-label');
+    if (label) {
+      const nm = next === 100 ? 'MAX' : next === 95 ? 'ELITE' : next === 85 ? 'OR' : next === 70 ? 'ARGENT' : 'BRONZE';
+      label.innerHTML = `<span>Prochain palier : ${nm} (≥ ${next})</span><span class="pts">${remaining > 0 ? remaining + ' pts restants' : '✓ Atteint'}</span>`;
+    }
+    const fill = document.querySelector('.prog-progress-fill');
+    if (fill) fill.style.width = `${Math.min((score / next) * 100, 100)}%`;
+  }
+
+  // Détail de la dernière session (marges pilote / véhicule / zone)
+  const detail = document.querySelector('.prog-sessions-detail');
+  if (detail) {
+    const mv = oxvMarginScore(latest.margin_vehicle);
+    const mp = oxvMarginScore(latest.margin_pilot);
+    let lines = '';
+    if (mp != null) lines += `Marge pilote : <strong>${mp}/100</strong><br/>`;
+    if (mv != null) lines += `Marge véhicule : <strong>${mv}/100</strong><br/>`;
+    if (latest.margin_zone) lines += `Zone dominante : <strong>${escapeHtml(String(latest.margin_zone))}</strong><br/>`;
+    lines += `Dernier calcul : <strong>${new Date(latest.computed_at).toLocaleDateString('fr-FR', { day: 'numeric', month: 'long', year: 'numeric' })}</strong>`;
+    detail.innerHTML = lines;
+  }
+
+  // Piliers détaillés : depuis margin_breakdown si exploitable, sinon masqués
+  renderMarginPillars(latest);
+
+  // Évolution + recommandations coach (texte réel)
+  renderMarginEvolution(analyses);
+  renderMarginReco(latest);
+
+  console.log(`[Progression] margin_global=${score} (${level.name}) · ${analyses.length} analyses`);
 }
 
-function renderQDIEvolution(qdiData) {
-  // Prendre les 6 derniers scores ou compléter avec des placeholders
-  const last6 = qdiData.slice(0, 6).reverse();
-  
-  if (last6.length === 0) return;
-  
-  const chartBars = document.querySelectorAll('.prog-chart-bar');
-  if (chartBars.length === 0) return;
-  
-  // Calculer la valeur max pour le scaling
-  const maxScore = Math.max(...last6.map(s => s.qdi_global), 100);
-  
-  last6.forEach((data, idx) => {
-    if (chartBars[idx]) {
-      const value = chartBars[idx].querySelector('.prog-chart-bar-value');
-      const graph = chartBars[idx].querySelector('.prog-chart-bar-graph');
-      const label = chartBars[idx].querySelector('.prog-chart-bar-label');
-      
-      if (value) value.textContent = data.qdi_global;
-      if (graph) graph.style.height = `${(data.qdi_global / 100) * 100}%`;
-      
-      const date = new Date(data.computed_at);
-      const months = ['Jan', 'Fév', 'Mar', 'Avr', 'Mai', 'Jui', 'Juil', 'Aoû', 'Sep', 'Oct', 'Nov', 'Déc'];
-      if (label) label.textContent = `${date.getDate()} ${months[date.getMonth()]}`;
-      
-      // Marquer le dernier comme "current"
-      chartBars[idx].classList.toggle('current', idx === last6.length - 1);
+// Piliers : alimentés par margin_breakdown (jsonb) si c'est un objet de nombres,
+// sinon la section est masquée proprement (le vrai modèle n'a pas 5 piliers nommés).
+function renderMarginPillars(latest) {
+  const pillarEls = document.querySelectorAll('.prog-pillar');
+  if (!pillarEls.length) return;
+  const section = document.querySelector('.prog-pillars');
+
+  let entries = [];
+  const bd = latest.margin_breakdown;
+  if (bd && typeof bd === 'object' && !Array.isArray(bd)) {
+    for (const [k, val] of Object.entries(bd)) {
+      const s = oxvMarginScore(val);
+      if (s != null) entries.push({ name: k, score: s });
     }
+  }
+
+  if (!entries.length) { if (section) section.style.display = 'none'; return; }
+  if (section) section.style.display = '';
+
+  entries.slice(0, pillarEls.length).forEach((e, i) => {
+    const el = pillarEls[i];
+    el.style.display = '';
+    const fill = el.querySelector('.prog-pillar-fill');
+    const sc = el.querySelector('.prog-pillar-score');
+    const nm = el.querySelector('.prog-pillar-name, .prog-pillar-label');
+    if (fill) fill.style.width = `${e.score}%`;
+    if (sc) sc.textContent = e.score;
+    if (nm) nm.textContent = e.name;
   });
-  
-  // Mettre à jour le titre avec le nombre réel de sessions
+  for (let i = entries.length; i < pillarEls.length; i++) pillarEls[i].style.display = 'none';
+}
+
+function renderMarginEvolution(analyses) {
+  const last6 = analyses.slice(0, 6).reverse().map(a => ({ s: oxvMarginScore(a.margin_global), at: a.computed_at }));
+  const bars = document.querySelectorAll('.prog-chart-bar');
+  if (!bars.length || !last6.length) return;
+  const months = ['Jan', 'Fév', 'Mar', 'Avr', 'Mai', 'Jui', 'Juil', 'Aoû', 'Sep', 'Oct', 'Nov', 'Déc'];
+
+  last6.forEach((d, idx) => {
+    if (!bars[idx]) return;
+    bars[idx].style.visibility = '';
+    const val = bars[idx].querySelector('.prog-chart-bar-value');
+    const graph = bars[idx].querySelector('.prog-chart-bar-graph');
+    const label = bars[idx].querySelector('.prog-chart-bar-label');
+    if (val) val.textContent = d.s == null ? '—' : d.s;
+    if (graph) graph.style.height = `${d.s == null ? 0 : d.s}%`;
+    const dt = new Date(d.at);
+    if (label) label.textContent = `${dt.getDate()} ${months[dt.getMonth()]}`;
+    bars[idx].classList.toggle('current', idx === last6.length - 1);
+  });
+  for (let i = last6.length; i < bars.length; i++) bars[i].style.visibility = 'hidden';
+
   const evTitle = document.querySelector('.prog-evolution-title');
   if (evTitle) evTitle.textContent = last6.length <= 1 ? 'Première session' : `Évolution · ${last6.length} sessions`;
 
-  // Cacher les bars en trop
-  for (let i = last6.length; i < chartBars.length; i++) {
-    chartBars[i].style.visibility = 'hidden';
-  }
-
-  // Calculer tendance
   if (last6.length >= 2) {
-    const trend = last6[last6.length - 1].qdi_global - last6[0].qdi_global;
-    const trendEl = document.querySelector('.prog-evolution-trend');
-    if (trendEl) {
-      const arrow = trend > 0 ? '↗' : trend < 0 ? '↘' : '→';
-      const sign = trend > 0 ? '+' : '';
-      const color = trend > 0 ? 'var(--green-perf)' : trend < 0 ? 'var(--red)' : 'var(--cream-mute)';
-      trendEl.innerHTML = `<span style="color:${color};">${arrow}</span><span style="color:${color};">${sign}${trend} points</span>`;
+    const a = last6[0].s, b = last6[last6.length - 1].s;
+    if (a != null && b != null) {
+      const trend = b - a;
+      const el = document.querySelector('.prog-evolution-trend');
+      if (el) {
+        const ar = trend > 0 ? '↗' : trend < 0 ? '↘' : '→';
+        const sg = trend > 0 ? '+' : '';
+        const c = trend > 0 ? 'var(--green-perf)' : trend < 0 ? 'var(--red)' : 'var(--cream-mute)';
+        el.innerHTML = `<span style="color:${c};">${ar}</span><span style="color:${c};">${sg}${trend} points</span>`;
+      }
     }
   }
 }
 
-function renderQDIRecommendations(latest) {
-  const recoGrid = document.querySelector('.prog-reco-grid');
-  if (!recoGrid) return;
-  
-  // Identifier les 2 plus faibles et 2 plus forts piliers
-  const pillarsArray = [
-    { key: 'trajectory', name: 'Trajectoire', score: latest.trajectory_score },
-    { key: 'fluidity', name: 'Fluidité', score: latest.fluidity_score },
-    { key: 'braking', name: 'Freinage', score: latest.braking_score },
-    { key: 'acceleration', name: 'Accélération', score: latest.acceleration_score },
-    { key: 'regularity', name: 'Régularité', score: latest.regularity_score }
-  ];
-  
-  pillarsArray.sort((a, b) => a.score - b.score);
-  
-  const weakest = pillarsArray.slice(0, 2);   // 2 plus faibles → priorité
-  const strongest = pillarsArray.slice(-2);   // 2 plus forts → maintenir
-  
-  const tipsBank = {
-    trajectory: { priority: 'Vos trajectoires manquent de précision. Travaillez les points de corde et la sortie des virages techniques.', maintain: 'Excellente lecture de la piste. Continuez à analyser les trajectoires optimales.' },
-    fluidity: { priority: 'Pilotage encore saccadé. Cherchez la rondeur dans les transitions et les changements d\'appui.', maintain: 'Très belle fluidité. Vous pilotez "rond", c\'est la signature du pilote rapide.' },
-    braking: { priority: 'Le freinage est à optimiser. Travaillez la progressivité et le point de relâche.', maintain: 'Freinage maîtrisé. Continuez à travailler la modulation fine.' },
-    acceleration: { priority: 'Réaccélération à améliorer. Trop d\'à-coups en sortie de virage.', maintain: 'Excellente gestion des gaz. Sortie de virage très propre.' },
-    regularity: { priority: 'Vos tours manquent de constance. Visez la régularité avant la vitesse pure.', maintain: 'Constance remarquable. Vous reproduisez les bons gestes tour après tour.' }
-  };
-  
+// Recommandations : on affiche le débrief coach réel (next_focus_phrase, debrief_text)
+function renderMarginReco(latest) {
+  const grid = document.querySelector('.prog-reco-grid');
+  if (!grid) return;
   let html = '';
-  
-  weakest.forEach(p => {
-    html += `
-      <div class="bento prog-reco-card">
-        <div class="prog-reco-tag priority">⚠ Priorité</div>
-        <h4 class="prog-reco-title">${p.name} · ${p.score}/100</h4>
-        <p class="prog-reco-text">${tipsBank[p.key].priority}</p>
-      </div>
-    `;
-  });
-  
-  strongest.forEach(p => {
-    html += `
-      <div class="bento prog-reco-card">
-        <div class="prog-reco-tag maintain">✓ Maintenir</div>
-        <h4 class="prog-reco-title">${p.name} · ${p.score}/100</h4>
-        <p class="prog-reco-text">${tipsBank[p.key].maintain}</p>
-      </div>
-    `;
-  });
-  
-  recoGrid.innerHTML = html;
+  if (latest.next_focus_phrase) {
+    const corner = latest.next_focus_corner_index != null ? ('Virage ' + latest.next_focus_corner_index) : 'Axe prioritaire';
+    html += `<div class="bento prog-reco-card">
+        <div class="prog-reco-tag priority">⚠ Prochain focus</div>
+        <h4 class="prog-reco-title">${escapeHtml(corner)}</h4>
+        <p class="prog-reco-text">${escapeHtml(String(latest.next_focus_phrase))}</p>
+      </div>`;
+  }
+  if (latest.debrief_text) {
+    html += `<div class="bento prog-reco-card">
+        <div class="prog-reco-tag maintain">✓ Débrief coach</div>
+        <h4 class="prog-reco-title">Analyse de session</h4>
+        <p class="prog-reco-text">${escapeHtml(String(latest.debrief_text))}</p>
+      </div>`;
+  }
+  if (!html) { grid.style.display = 'none'; return; }
+  grid.style.display = '';
+  grid.innerHTML = html;
 }
 
 
@@ -25871,9 +25728,6 @@ function renderAdminSDRegs(regs) {
       if (r.status === 'confirmed') {
         actions.push(`<button class="admin-table-action success" onclick="adminMarkAttended('${r.id}', '${r.users?.id}', '${escapeHtml(fullName)}')" style="border-color: rgba(74,222,128,0.3); color: var(--green-perf);">✓ Effectuée</button>`);
       }
-      if (r.status === 'attended') {
-        actions.push(`<button class="admin-table-action" onclick="adminOpenQDIModal('${r.id}', '${r.users?.id}', '${escapeHtml(fullName)}')" style="border-color: rgba(255,183,3,0.35); color: var(--copper-glow);">QDI →</button>`);
-      }
       actions.push(`<button class="admin-table-action" onclick="goToAdminPilote('${r.users?.id}')">Voir pilote</button>`);
       if (r.status === 'pending' || r.status === 'confirmed') {
         actions.push(`<button class="admin-table-action" onclick="adminCancelRegistration('${r.id}')" style="border-color: rgba(196, 89, 89, 0.3); color: #E07878;">Annuler</button>`);
@@ -25913,9 +25767,6 @@ function renderAdminSDRegs(regs) {
       }
       if (r.status === 'confirmed') {
         actions.push(`<button class="admin-table-action" onclick="adminMarkAttended('${r.id}', '${r.users?.id}', '${escapeHtml(fullName)}')" style="border-color: rgba(74,222,128,0.3); color: var(--green-perf);">✓ Effectuée</button>`);
-      }
-      if (r.status === 'attended') {
-        actions.push(`<button class="admin-table-action" onclick="adminOpenQDIModal('${r.id}', '${r.users?.id}', '${escapeHtml(fullName)}')" style="border-color: rgba(255,183,3,0.35); color: var(--copper-glow);">QDI →</button>`);
       }
       actions.push(`<button class="admin-table-action" onclick="goToAdminPilote('${r.users?.id}')">Voir pilote</button>`);
 
@@ -26183,147 +26034,19 @@ window.adminMarkAttended = async function(registrationId, pilotId, pilotName) {
       .eq('id', pilotId);
   }
 
-  // Créer une entrée QDI en attente (active l'état "analyse en cours" côté pilote)
-  if (regData?.session_id) {
-    const { error: qdiErr } = await supabase
-      .from('qdi_scores')
-      .insert({
-        user_id: pilotId,
-        session_id: regData.session_id,
-        registration_id: registrationId,
-        qdi_global: 0,
-        qdi_level: 'novice',
-        trajectory_score: 0,
-        fluidity_score: 0,
-        braking_score: 0,
-        acceleration_score: 0,
-        regularity_score: 0,
-        computed_at: new Date().toISOString()
-      });
-    if (qdiErr && qdiErr.code !== '42P01') {
-      console.warn('[adminMarkAttended] QDI insert error:', qdiErr);
-    }
-  }
+  // Note : les marges (app_session_analyses) sont calculées par l'algo trackviz
+  // depuis la télémétrie — aucune entrée n'est créée manuellement ici.
 
   toast(`${pilotName} — session marquée effectuée`, 'ok');
   loadAdminSessionDetail();
 };
 
-/* === Modal saisie QDI (admin) === */
-
-let _qdiRegistrationId = null;
-let _qdiPilotId = null;
-
-window.adminOpenQDIModal = async function(registrationId, pilotId, pilotName) {
-  _qdiRegistrationId = registrationId;
-  _qdiPilotId = pilotId;
-
-  document.getElementById('qdiModalTitle').innerHTML = `Score <em>${escapeHtml(pilotName)}</em>.`;
-
-  // Charger les scores existants s'il y en a
-  const { data: existing } = await supabase
-    .from('qdi_scores')
-    .select('*')
-    .eq('registration_id', registrationId)
-    .order('computed_at', { ascending: false })
-    .limit(1)
-    .single();
-
-  const s = existing || {};
-  const setSlider = (id, valId, val) => {
-    const el = document.getElementById(id);
-    const vEl = document.getElementById(valId);
-    if (el) el.value = val || 50;
-    if (vEl) vEl.textContent = val || 50;
-  };
-
-  setSlider('qdi-global',       'qdiGlobalVal', s.qdi_global);
-  setSlider('qdi-trajectory',   'qdiTrajVal',   s.trajectory_score);
-  setSlider('qdi-fluidity',     'qdiFluidVal',  s.fluidity_score);
-  setSlider('qdi-braking',      'qdiBrakeVal',  s.braking_score);
-  setSlider('qdi-acceleration', 'qdiAccelVal',  s.acceleration_score);
-  setSlider('qdi-regularity',   'qdiRegVal',    s.regularity_score);
-
-  const level = document.getElementById('qdi-level');
-  if (level) level.value = s.qdi_level || 'novice';
-
-  const totalLaps  = document.getElementById('qdi-total-laps');
-  const validLaps  = document.getElementById('qdi-valid-laps');
-  const bestLap    = document.getElementById('qdi-best-lap');
-  const notes      = document.getElementById('qdi-notes');
-  if (totalLaps) totalLaps.value = s.total_laps || '';
-  if (validLaps) validLaps.value = s.valid_laps || '';
-  if (bestLap)   bestLap.value   = s.best_lap_time || '';
-  if (notes)     notes.value     = s.notes || '';
-
-  document.getElementById('qdiModal').classList.add('open');
-};
-
+/* === Saisie QDI manuelle (admin) — RETIRÉE ===
+   Les marges (app_session_analyses) sont calculées automatiquement par l'algo
+   trackviz depuis la télémétrie 25 Hz. closeQDIModal conservé en no-op défensif. */
 window.closeQDIModal = function() {
-  document.getElementById('qdiModal').classList.remove('open');
-  _qdiRegistrationId = null;
-  _qdiPilotId = null;
-};
-
-window.autoQDILevel = function() {
-  const score = parseInt(document.getElementById('qdi-global').value) || 0;
-  const level = document.getElementById('qdi-level');
-  if (!level) return;
-  if (score >= 95)      level.value = 'elite';
-  else if (score >= 85) level.value = 'or';
-  else if (score >= 70) level.value = 'argent';
-  else if (score >= 50) level.value = 'bronze';
-  else                  level.value = 'novice';
-};
-
-window.adminSaveQDI = async function() {
-  if (!_qdiRegistrationId || !_qdiPilotId) return;
-
-  const btn = document.getElementById('qdiSaveBtn');
-  const orig = btn.textContent;
-  btn.textContent = 'Enregistrement…';
-  btn.disabled = true;
-
-  const payload = {
-    user_id:            _qdiPilotId,
-    registration_id:    _qdiRegistrationId,
-    qdi_global:         parseInt(document.getElementById('qdi-global').value) || 0,
-    qdi_level:          document.getElementById('qdi-level').value,
-    trajectory_score:   parseInt(document.getElementById('qdi-trajectory').value) || 0,
-    fluidity_score:     parseInt(document.getElementById('qdi-fluidity').value) || 0,
-    braking_score:      parseInt(document.getElementById('qdi-braking').value) || 0,
-    acceleration_score: parseInt(document.getElementById('qdi-acceleration').value) || 0,
-    regularity_score:   parseInt(document.getElementById('qdi-regularity').value) || 0,
-    total_laps:         parseInt(document.getElementById('qdi-total-laps').value) || null,
-    valid_laps:         parseInt(document.getElementById('qdi-valid-laps').value) || null,
-    best_lap_time:      document.getElementById('qdi-best-lap').value.trim() || null,
-    notes:              document.getElementById('qdi-notes').value.trim() || null,
-    computed_at:        new Date().toISOString()
-  };
-
-  // Récupérer le session_id depuis la registration
-  const { data: reg } = await supabase
-    .from('registrations').select('session_id').eq('id', _qdiRegistrationId).single();
-  if (reg?.session_id) payload.session_id = reg.session_id;
-
-  // Upsert : update si une entrée existe déjà pour cette registration, sinon insert
-  const { data: existing } = await supabase
-    .from('qdi_scores').select('id').eq('registration_id', _qdiRegistrationId).limit(1).single();
-
-  let err;
-  if (existing?.id) {
-    ({ error: err } = await supabase.from('qdi_scores').update(payload).eq('id', existing.id));
-  } else {
-    ({ error: err } = await supabase.from('qdi_scores').insert(payload));
-  }
-
-  btn.textContent = orig;
-  btn.disabled = false;
-
-  if (err) { toast('Erreur enregistrement QDI', 'warn'); return; }
-
-  toast('Score QDI enregistré ✓', 'ok');
-  closeQDIModal();
+  const m = document.getElementById('qdiModal');
+  if (m) m.classList.remove('open');
 };
 
 /**
