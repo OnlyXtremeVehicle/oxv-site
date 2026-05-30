@@ -16338,27 +16338,8 @@ textarea:focus-visible {
       <!-- Liste sessions avec médias -->
       <div class="bento" style="padding:32px;margin-bottom:24px;">
         <h3 class="prog-evolution-title" style="margin-bottom:20px;">Sessions à traiter</h3>
-        <div style="display:flex;flex-direction:column;gap:10px;">
-          <div style="display:flex;justify-content:space-between;align-items:center;padding:14px 16px;background:rgba(0,0,0,0.3);border-radius:8px;border:1px solid var(--bento-border);">
-            <div>
-              <div style="font-family:var(--display);font-style:italic;font-weight:700;font-size:14px;letter-spacing:0.04em;color:var(--cream);">Vendredi 7 mai 2027</div>
-              <div style="font-family:var(--sans);font-size:12px;color:var(--cream-mute);margin-top:4px;">20 pilotes · Signature &amp; Heritage</div>
-            </div>
-            <div style="display:flex;align-items:center;gap:10px;">
-              <span class="badge-urgent">À traiter</span>
-              <button class="btn btn-sm"><span>Ajouter médias</span></button>
-            </div>
-          </div>
-          <div style="display:flex;justify-content:space-between;align-items:center;padding:14px 16px;background:rgba(0,0,0,0.3);border-radius:8px;border:1px solid var(--bento-border);">
-            <div>
-              <div style="font-family:var(--display);font-style:italic;font-weight:700;font-size:14px;letter-spacing:0.04em;color:var(--cream);">Vendredi 30 avril 2027</div>
-              <div style="font-family:var(--sans);font-size:12px;color:var(--cream-mute);margin-top:4px;">14 pilotes · Médias livrés</div>
-            </div>
-            <div style="display:flex;align-items:center;gap:10px;">
-              <span class="tag-inline green">✓ Livré</span>
-              <button class="btn btn-sm"><span>Voir liens</span></button>
-            </div>
-          </div>
+        <div id="adminMediasList" style="display:flex;flex-direction:column;gap:10px;">
+          <div style="padding:24px;text-align:center;color:var(--cream-mute);font-family:var(--sans);">Chargement…</div>
         </div>
       </div>
 
@@ -20438,7 +20419,7 @@ window.loadAdminMedias = async function() {
 };
 
 function renderAdminMediasList(sessions) {
-  const listContainer = document.querySelector('#page-admin-medias .bento:nth-of-type(1) > div:last-child');
+  const listContainer = document.getElementById('adminMediasList');
   if (!listContainer) return;
   
   if (sessions.length === 0) {
