@@ -1,42 +1,29 @@
-# ============================================================
-# OXV — Only Xtreme Vehicle
-# robots.txt — règles d'indexation pour les moteurs de recherche
-# ============================================================
-
 User-agent: *
-
-# Pages publiques autorisées
 Allow: /
-Allow: /?page=home
-Allow: /?page=offers
-Allow: /?page=calendrier
-Allow: /?page=circuit
-Allow: /?page=corporate
-Allow: /?page=specs-techniques
-Allow: /?page=contact
-Allow: /?page=mentions
-Allow: /?page=cgv
-Allow: /?page=cgu
-Allow: /?page=privacy
+Disallow: /compte
+Disallow: /compte-profil
+Disallow: /compte-vehicules
+Disallow: /compte-documents
+Disallow: /compte-sessions
+Disallow: /compte-progression
+Disallow: /compte-heritage
+Disallow: /compte-paiements
+Disallow: /compte-preferences
+Disallow: /admin
+Disallow: /admin-pilotes
+Disallow: /admin-pilote-detail
+Disallow: /admin-sessions
+Disallow: /admin-session-detail
+Disallow: /admin-paiements
+Disallow: /admin-medias
+Disallow: /admin-articles
+Disallow: /admin-emails
+Disallow: /admin-stats
+Disallow: /admin-securite
+Disallow: /login
+Disallow: /signup
+Disallow: /forgot-password
+Disallow: /reset-password
+Disallow: /verify-email
 
-# Espaces privés à ne pas indexer
-Disallow: /?page=login
-Disallow: /?page=signup
-Disallow: /?page=forgot-password
-Disallow: /?page=reset-password
-Disallow: /?page=verify-email
-Disallow: /?page=compte
-Disallow: /?page=compte-*
-Disallow: /?page=admin
-Disallow: /?page=admin-*
-Disallow: /?page=booking
-
-# Pas d'indexation des paramètres techniques
-Disallow: /*?auth=*
-Disallow: /*?debug=*
-
-# Sitemap
-Sitemap: https://oxvehicle.fr/sitemap.xml
-
-# Crawl-delay sain
-Crawl-delay: 1
+Sitemap: https://www.oxvehicle.fr/sitemap.xml
