@@ -3421,6 +3421,193 @@ footer {
 }
 .media-card-link:hover { color: var(--copper-glow); }
 
+/* ── Admin médias — gestion ────────────────────────────────── */
+.amr { /* admin-media-row : session header */
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 18px 22px;
+  background: rgba(18,18,18,0.75);
+  border: 1px solid var(--bento-border);
+  border-radius: 10px;
+  cursor: pointer;
+  transition: border-color .18s ease;
+}
+.amr:hover, .amr.open { border-color: rgba(255,183,3,.35); }
+.amr-date {
+  font-family: var(--display);
+  font-style: italic;
+  font-weight: 700;
+  font-size: 15px;
+  letter-spacing: .04em;
+  color: var(--cream);
+}
+.amr-meta {
+  font-family: var(--mono);
+  font-size: 9px;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: var(--cream-mute);
+  margin-top: 4px;
+}
+.amr-right { display: flex; align-items: center; gap: 10px; flex-shrink: 0; }
+.amr-chevron {
+  font-family: var(--mono);
+  font-size: 12px;
+  color: var(--cream-mute);
+  transition: transform .2s ease;
+}
+.amr.open .amr-chevron { transform: rotate(90deg); }
+
+.amp { /* admin-media-panel : expandable section */
+  display: none;
+  border: 1px solid rgba(255,183,3,.15);
+  border-top: none;
+  border-radius: 0 0 10px 10px;
+  padding: 24px;
+  background: rgba(10,10,10,.6);
+  margin-top: -4px;
+}
+.amp.visible { display: block; }
+
+/* Media card in admin panel */
+.amc { /* admin-media-card */
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 14px 16px;
+  border-radius: 8px;
+  background: rgba(30,30,30,.7);
+  border: 1px solid var(--cream-line);
+  margin-bottom: 10px;
+  transition: border-color .15s;
+}
+.amc:hover { border-color: rgba(255,183,3,.3); }
+.amc-icon {
+  width: 44px; height: 44px;
+  border-radius: 6px;
+  background: rgba(255,183,3,.07);
+  border: 1px solid rgba(255,183,3,.15);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 20px;
+  flex-shrink: 0;
+}
+.amc-body { flex: 1; min-width: 0; }
+.amc-title {
+  font-family: var(--sans);
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--cream);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.amc-url {
+  font-family: var(--mono);
+  font-size: 9px;
+  letter-spacing: .08em;
+  color: var(--cream-mute);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 300px;
+  margin-top: 3px;
+}
+.amc-pilot {
+  font-family: var(--mono);
+  font-size: 9px;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin-top: 4px;
+}
+.amc-actions { display: flex; align-items: center; gap: 8px; flex-shrink: 0; }
+.btn-publish {
+  font-family: var(--mono);
+  font-size: 9px;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  padding: 6px 12px;
+  border-radius: 4px;
+  border: 1px solid;
+  cursor: pointer;
+  transition: all .15s;
+  background: transparent;
+}
+.btn-publish.published {
+  color: var(--green-perf, #4ade80);
+  border-color: rgba(74,222,128,.4);
+}
+.btn-publish.published:hover {
+  background: rgba(74,222,128,.08);
+}
+.btn-publish.unpublished {
+  color: var(--cream-mute);
+  border-color: var(--cream-line);
+}
+.btn-publish.unpublished:hover {
+  color: var(--gold);
+  border-color: rgba(255,183,3,.4);
+}
+.btn-danger-xs {
+  font-family: var(--mono);
+  font-size: 9px;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: var(--red);
+  border: 1px solid rgba(230,57,70,.3);
+  background: transparent;
+  padding: 6px 10px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all .15s;
+}
+.btn-danger-xs:hover { background: rgba(230,57,70,.08); }
+
+/* Add media form */
+.amp-add-form {
+  margin-top: 18px;
+  padding-top: 18px;
+  border-top: 1px solid var(--cream-line);
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+.amp-add-form .full { grid-column: 1 / -1; }
+.amp-field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.amp-label {
+  font-family: var(--mono);
+  font-size: 9px;
+  letter-spacing: .16em;
+  text-transform: uppercase;
+  color: var(--cream-mute);
+}
+.amp-input, .amp-select {
+  font-family: var(--sans);
+  font-size: 13px;
+  color: var(--cream);
+  background: rgba(0,0,0,.4);
+  border: 1px solid var(--cream-line);
+  border-radius: 6px;
+  padding: 10px 12px;
+  outline: none;
+  transition: border-color .15s;
+  width: 100%;
+  box-sizing: border-box;
+}
+.amp-input:focus, .amp-select:focus { border-color: rgba(255,183,3,.5); }
+.amp-select option { background: #1a1a1a; }
+@media (max-width: 600px) {
+  .amp-add-form { grid-template-columns: 1fr; }
+  .amc { flex-wrap: wrap; }
+  .amc-actions { width: 100%; justify-content: flex-end; }
+}
+
 /* Desktop : vrai tableau */
 .session-table {
   width: 100%;
@@ -16431,19 +16618,12 @@ textarea:focus-visible {
         <p class="admin-header-sub">Photos, vidéos, drone — distribution post-session aux pilotes.</p>
       </div>
 
-      <!-- Liste sessions avec médias -->
-      <div class="bento" style="padding:32px;margin-bottom:24px;">
-        <h3 class="prog-evolution-title" style="margin-bottom:20px;">Sessions à traiter</h3>
-        <div id="adminMediasList" style="display:flex;flex-direction:column;gap:10px;">
-          <div style="padding:24px;text-align:center;color:var(--cream-mute);font-family:var(--sans);">Chargement…</div>
-        </div>
-      </div>
+      <!-- KPIs -->
+      <div id="adminMediaStats" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:16px;margin-bottom:28px;"></div>
 
-      <div class="bento" style="padding:24px;">
-        <h3 class="prog-evolution-title" style="margin-bottom:14px;">Comment ça marche</h3>
-        <p style="font-family:var(--sans);font-size:14px;color:var(--cream-mute);line-height:1.7;margin:0;">
-          Les médias sont stockés sur <strong style="color:var(--cream);">WeTransfer Pro / Drive partagé</strong>. Vous renseignez le lien ici, et chaque pilote concerné reçoit automatiquement le lien dans son espace personnel + par email (étape 7 — Resend).
-        </p>
+      <!-- Sessions list (expandable) -->
+      <div id="adminMediasList" style="display:flex;flex-direction:column;gap:12px;">
+        <div style="padding:32px;text-align:center;color:var(--cream-mute);font-family:var(--sans);">Chargement…</div>
       </div>
     </main>
   </div>
@@ -20462,137 +20642,298 @@ window.paymentExportCSV = function() {
 /* ============================================================
    ADMIN MÉDIAS — Table "media" (singulier) - VRAIES colonnes
    ============================================================ */
+/* ─────────────────────────────────────────────────────────────
+   ADMIN MÉDIAS — interface complète
+   ───────────────────────────────────────────────────────────── */
+
+const MEDIA_TYPE_META = {
+  photo:            { label: 'Photo',     icon: '◳' },
+  video_embedded:   { label: 'Embarquée', icon: '▶' },
+  video_drone:      { label: 'Drone',     icon: '⛟' },
+  telemetry_report: { label: 'Télémétrie',icon: '⊞' }
+};
+
+// Set of expanded session panel IDs
+const _ampOpen = new Set();
+
 window.loadAdminMedias = async function() {
   if (!window.OXVApi?.user?.isLoggedIn || typeof supabase === 'undefined') return;
-  
-  try {
-    // Récupère les sessions passées (date < aujourd'hui)
-    const { data: sessions, error: sessionsError } = await supabase
-      .from('sessions')
-      .select(`
-        id,
-        date,
-        start_time,
-        season_type,
-        status,
-        max_capacity,
-        is_private,
-        private_client_name
-      `)
-      .lt('date', new Date().toISOString().split('T')[0])
-      .order('date', { ascending: false })
-      .limit(10);
 
-    if (sessionsError) {
-      console.warn('[Admin Médias] Erreur sessions:', sessionsError);
+  const listEl  = document.getElementById('adminMediasList');
+  const statsEl = document.getElementById('adminMediaStats');
+  if (listEl) listEl.innerHTML = '<div style="padding:32px;text-align:center;color:var(--cream-mute);font-family:var(--sans);">Chargement…</div>';
+
+  try {
+    const today = new Date().toISOString().split('T')[0];
+
+    // Sessions passées (20 dernières)
+    const { data: sessions, error: sErr } = await supabase
+      .from('sessions')
+      .select('id, date, season_type, is_private, private_client_name')
+      .lt('date', today)
+      .order('date', { ascending: false })
+      .limit(20);
+
+    if (sErr) { console.warn('[Admin Médias]', sErr); return; }
+
+    // Pour chaque session : nb médias, nb publiés, nb pilotes inscrits
+    const rows = await Promise.all((sessions || []).map(async s => {
+      const [mRes, rRes] = await Promise.all([
+        supabase.from('media').select('id, media_type, visible_to_user').eq('session_id', s.id),
+        supabase.from('registrations').select('id', { count: 'exact', head: true })
+          .eq('session_id', s.id).neq('status', 'cancelled')
+      ]);
+      return {
+        ...s,
+        media_count:      mRes.data?.length || 0,
+        published_count:  mRes.data?.filter(m => m.visible_to_user).length || 0,
+        pilots_count:     rRes.count || 0
+      };
+    }));
+
+    // KPIs
+    const totalMedia     = rows.reduce((a, r) => a + r.media_count, 0);
+    const totalPublished = rows.reduce((a, r) => a + r.published_count, 0);
+    const toTreat        = rows.filter(r => r.media_count === 0).length;
+
+    if (statsEl) {
+      statsEl.innerHTML = [
+        { label: 'Sessions passées', val: rows.length, sub: '20 dernières' },
+        { label: 'Médias ajoutés',   val: totalMedia,  sub: `dont ${totalPublished} publiés` },
+        { label: 'Àtraiter',         val: toTreat,     sub: 'sans médias' }
+      ].map(k => `
+        <div class="bento" style="padding:20px 24px;">
+          <div style="font-family:var(--mono);font-size:9px;letter-spacing:.18em;text-transform:uppercase;color:var(--cream-mute);margin-bottom:8px;">${k.label}</div>
+          <div style="font-family:var(--display);font-style:italic;font-weight:700;font-size:28px;color:var(--gold);">${k.val}</div>
+          <div style="font-family:var(--mono);font-size:9px;color:var(--cream-mute);margin-top:4px;">${k.sub}</div>
+        </div>`).join('');
+    }
+
+    if (!listEl) return;
+    if (!rows.length) {
+      listEl.innerHTML = '<div style="padding:32px;text-align:center;color:var(--cream-mute);font-family:var(--sans);">Aucune session passée.</div>';
       return;
     }
 
-    // Pour chaque session, récupère les médias et le nombre de registrations
-    const sessionsWithMedia = await Promise.all(
-      (sessions || []).map(async (s) => {
-        const [mediaRes, regRes] = await Promise.all([
-          supabase.from('media').select('id, media_type, visible_to_user').eq('session_id', s.id),
-          supabase.from('registrations').select('id', { count: 'exact', head: true })
-            .eq('session_id', s.id)
-            .neq('status', 'cancelled')
-        ]);
-        return { 
-          ...s, 
-          media_count: mediaRes.data?.length || 0,
-          published_count: mediaRes.data?.filter(m => m.visible_to_user).length || 0,
-          registrations_count: regRes.count || 0
-        };
-      })
-    );
-    
-    renderAdminMediasList(sessionsWithMedia);
-    console.log(`[Admin Médias] ${sessionsWithMedia.length} sessions chargées`);
-    
+    listEl.innerHTML = rows.map(s => {
+      const dateStr = new Date(s.date).toLocaleDateString('fr-FR', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' });
+      const cap = dateStr.charAt(0).toUpperCase() + dateStr.slice(1);
+      const priv = s.is_private ? ` · 🔒 ${escapeHtml(s.private_client_name || 'Privé')}` : '';
+      const meta = `${s.pilots_count} pilote(s) · ${s.season_type || 'Standard'}${priv}`;
+
+      let badge = '<span class="tag-inline red">À traiter</span>';
+      if (s.media_count > 0 && s.published_count === s.media_count) {
+        badge = `<span class="tag-inline green">✓ Livré (${s.media_count})</span>`;
+      } else if (s.media_count > 0) {
+        badge = `<span class="tag-inline gold">Partiel ${s.published_count}/${s.media_count}</span>`;
+      }
+
+      return `
+        <div id="amr-wrap-${s.id}">
+          <div class="amr${_ampOpen.has(s.id) ? ' open' : ''}" onclick="adminTogglePanel('${s.id}')">
+            <div>
+              <div class="amr-date">${cap}</div>
+              <div class="amr-meta">${meta}</div>
+            </div>
+            <div class="amr-right">
+              ${badge}
+              <span class="amr-chevron">›</span>
+            </div>
+          </div>
+          <div class="amp${_ampOpen.has(s.id) ? ' visible' : ''}" id="amp-${s.id}">
+            <div style="padding:12px 0;color:var(--cream-mute);font-family:var(--sans);font-size:13px;">Chargement…</div>
+          </div>
+        </div>`;
+    }).join('');
+
+    // Recharger les panneaux déjà ouverts
+    for (const id of _ampOpen) {
+      adminLoadPanel(id);
+    }
+
   } catch (e) {
     console.warn('[Admin Médias] Exception:', e);
   }
 };
 
-function renderAdminMediasList(sessions) {
-  const listContainer = document.getElementById('adminMediasList');
-  if (!listContainer) return;
-  
-  if (sessions.length === 0) {
-    listContainer.innerHTML = '<div style="padding:32px;text-align:center;color:var(--cream-mute);font-family:var(--sans);">Aucune session passée pour l\'instant.</div>';
-    return;
+window.adminTogglePanel = async function(sessionId) {
+  const row = document.querySelector(`#amr-wrap-${sessionId} .amr`);
+  const panel = document.getElementById(`amp-${sessionId}`);
+  if (!row || !panel) return;
+
+  const isOpen = _ampOpen.has(sessionId);
+  if (isOpen) {
+    _ampOpen.delete(sessionId);
+    row.classList.remove('open');
+    panel.classList.remove('visible');
+  } else {
+    _ampOpen.add(sessionId);
+    row.classList.add('open');
+    panel.classList.add('visible');
+    await adminLoadPanel(sessionId);
   }
-  
-  listContainer.innerHTML = sessions.map(s => {
-    const hasMedia = s.media_count > 0;
-    const allPublished = s.media_count > 0 && s.published_count === s.media_count;
-    const dateStr = new Date(s.date).toLocaleDateString('fr-FR', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' });
-    
-    let statusTag = '<span class="tag-inline red">À traiter</span>';
-    if (allPublished) statusTag = `<span class="tag-inline green">✓ Livré (${s.media_count})</span>`;
-    else if (hasMedia) statusTag = `<span class="tag-inline gold">Partiel (${s.published_count}/${s.media_count})</span>`;
-    
-    const isPrivate = s.is_private ? ' · 🔒 Privé' : '';
-    
-    return `
-      <div style="display:flex;justify-content:space-between;align-items:center;padding:14px 16px;background:rgba(0,0,0,0.3);border-radius:8px;border:1px solid var(--bento-border);">
-        <div>
-          <div style="font-family:var(--display);font-style:italic;font-weight:700;font-size:14px;letter-spacing:0.04em;color:var(--cream);">${dateStr.charAt(0).toUpperCase() + dateStr.slice(1)}</div>
-          <div style="font-family:var(--sans);font-size:12px;color:var(--cream-mute);margin-top:4px;">${s.registrations_count} pilote(s) · ${s.season_type || 'Standard'}${isPrivate}</div>
-        </div>
-        <div style="display:flex;align-items:center;gap:10px;">
-          ${statusTag}
-          <button class="btn btn-sm" onclick="adminAddMediaLink('${s.id}')"><span>${hasMedia ? 'Gérer' : '+ Ajouter'}</span></button>
-        </div>
-      </div>
-    `;
-  }).join('');
+};
+
+async function adminLoadPanel(sessionId) {
+  const panel = document.getElementById(`amp-${sessionId}`);
+  if (!panel) return;
+
+  try {
+    // Médias de la session
+    const { data: media, error: mErr } = await supabase
+      .from('media')
+      .select('id, media_type, file_url, title, description, visible_to_user, file_size_kb, original_filename, user_id, uploaded_at')
+      .eq('session_id', sessionId)
+      .order('uploaded_at', { ascending: false });
+
+    if (mErr) {
+      panel.innerHTML = `<p style="color:var(--red);font-family:var(--sans);font-size:13px;">Erreur : ${escapeHtml(mErr.message)}</p>`;
+      return;
+    }
+
+    // Pilotes inscrits à la session (pour le sélecteur)
+    const { data: regs } = await supabase
+      .from('registrations')
+      .select('user_id, offer_type, users(id, first_name, last_name, email)')
+      .eq('session_id', sessionId)
+      .neq('status', 'cancelled');
+
+    const pilots = (regs || [])
+      .map(r => r.users)
+      .filter(Boolean)
+      .filter((u, i, arr) => arr.findIndex(x => x.id === u.id) === i); // dédupliquer
+
+    panel.innerHTML = adminRenderPanel(sessionId, media || [], pilots);
+
+  } catch (e) {
+    console.warn('[Admin Panel] Exception:', e);
+    panel.innerHTML = '<p style="color:var(--red);font-family:var(--sans);font-size:13px;">Erreur de chargement.</p>';
+  }
 }
 
-window.adminAddMediaLink = async function(sessionId) {
-  const link = prompt('Coller le lien WeTransfer/Drive ou l\'URL du fichier :');
-  if (!link) return;
-  if (!link.startsWith('http')) {
-    toast('Lien invalide (doit commencer par http://)', 'warn');
+function adminRenderPanel(sessionId, media, pilots) {
+  const pilotOptions = [
+    '<option value="">— Tous les pilotes —</option>',
+    ...pilots.map(p =>
+      `<option value="${escapeHtml(p.id)}">${escapeHtml((p.first_name || '') + ' ' + (p.last_name || '')).trim() || p.email}</option>`
+    )
+  ].join('');
+
+  const mediaCards = media.length ? media.map(m => {
+    const t = MEDIA_TYPE_META[m.media_type] || { icon: '◈', label: m.media_type || '—' };
+    const publishClass = m.visible_to_user ? 'published' : 'unpublished';
+    const publishLabel = m.visible_to_user ? '✓ Publié' : 'Publier';
+    const pilot = pilots.find(p => p.id === m.user_id);
+    const pilotLabel = pilot
+      ? escapeHtml(`${pilot.first_name || ''} ${pilot.last_name || ''}`.trim() || pilot.email)
+      : 'Tous les pilotes';
+    const safeUrl = escapeHtml(m.file_url || '');
+
+    return `
+      <div class="amc" id="amc-${m.id}">
+        <div class="amc-icon">${t.icon}</div>
+        <div class="amc-body">
+          <div class="amc-title">${escapeHtml(m.title || m.original_filename || t.label)}</div>
+          <div class="amc-url"><a href="${safeUrl}" target="_blank" rel="noopener" style="color:inherit;">${safeUrl}</a></div>
+          <div class="amc-pilot">↳ ${pilotLabel} · ${t.label}</div>
+        </div>
+        <div class="amc-actions">
+          <button class="btn-publish ${publishClass}" onclick="adminToggleVisible('${m.id}','${sessionId}',${m.visible_to_user})">${publishLabel}</button>
+          <button class="btn-danger-xs" onclick="adminDeleteMedia('${m.id}','${sessionId}')">✕</button>
+        </div>
+      </div>`;
+  }).join('') : '<p style="font-family:var(--sans);font-size:13px;color:var(--cream-mute);margin:0 0 16px;">Aucun média pour cette session. Ajoutez-en ci-dessous.</p>';
+
+  return `
+    ${mediaCards}
+    <div class="amp-add-form">
+      <div class="amp-field full" style="border-bottom:0;">
+        <div class="amp-label">— Ajouter un média</div>
+      </div>
+      <div class="amp-field">
+        <label class="amp-label">Type</label>
+        <select class="amp-select" id="amp-type-${sessionId}">
+          <option value="photo">◳ Photo</option>
+          <option value="video_embedded">▶ Vidéo embarquée</option>
+          <option value="video_drone">⛟ Drone</option>
+          <option value="telemetry_report">⊞ Télémétrie</option>
+        </select>
+      </div>
+      <div class="amp-field">
+        <label class="amp-label">Pilote ciblé</label>
+        <select class="amp-select" id="amp-pilot-${sessionId}">${pilotOptions}</select>
+      </div>
+      <div class="amp-field full">
+        <label class="amp-label">Titre</label>
+        <input class="amp-input" id="amp-title-${sessionId}" placeholder="ex : Photos session 12 mai" />
+      </div>
+      <div class="amp-field full">
+        <label class="amp-label">Lien (URL complète)</label>
+        <input class="amp-input" id="amp-url-${sessionId}" type="url" placeholder="https://…" />
+      </div>
+      <div class="amp-field full" style="margin-top:4px;">
+        <button class="btn btn-primary btn-sm" onclick="adminSaveMedia('${sessionId}')"><span>Enregistrer le média</span></button>
+      </div>
+    </div>`;
+}
+
+window.adminToggleVisible = async function(mediaId, sessionId, currentState) {
+  const newState = !currentState;
+  const { error } = await supabase
+    .from('media')
+    .update({
+      visible_to_user: newState,
+      published_at: newState ? new Date().toISOString() : null
+    })
+    .eq('id', mediaId);
+
+  if (error) { toast(`Erreur : ${error.message}`, 'warn'); return; }
+  toast(newState ? '✓ Média publié — visible par le pilote' : 'Média dépublié', 'ok');
+  await adminLoadPanel(sessionId);
+  loadAdminMedias(); // refresh counters
+};
+
+window.adminDeleteMedia = async function(mediaId, sessionId) {
+  if (!confirm('Supprimer ce média définitivement ?')) return;
+  const { error } = await supabase.from('media').delete().eq('id', mediaId);
+  if (error) { toast(`Erreur : ${error.message}`, 'warn'); return; }
+  toast('Média supprimé', 'ok');
+  await adminLoadPanel(sessionId);
+  loadAdminMedias();
+};
+
+window.adminSaveMedia = async function(sessionId) {
+  const url   = document.getElementById(`amp-url-${sessionId}`)?.value?.trim();
+  const title = document.getElementById(`amp-title-${sessionId}`)?.value?.trim();
+  const type  = document.getElementById(`amp-type-${sessionId}`)?.value || 'photo';
+  const pilot = document.getElementById(`amp-pilot-${sessionId}`)?.value || null;
+
+  if (!url || !url.startsWith('http')) {
+    toast('URL invalide — doit commencer par https://', 'warn');
     return;
   }
-  
-  // Détecter le type (enum media_type_enum : photo / video_drone / video_embedded / telemetry_report)
-  let mediaType = 'photo';
-  if (link.includes('youtube.com') || link.includes('youtu.be') || link.includes('vimeo.com')) mediaType = 'video_embedded';
-  else if (link.includes('.mp4') || link.includes('.mov')) mediaType = 'video_embedded';
-  else if (link.includes('drone')) mediaType = 'video_drone';
-
-  const title = prompt('Titre du média (ex: "Photos session du 12 mai") :', 'Médias session');
-  if (!title) return;
-  
-  if (typeof supabase !== 'undefined') {
-    try {
-      // ⚠️ media_type est un USER-DEFINED enum, on prend une valeur classique
-      const { error } = await supabase.from('media').insert({
-        session_id: sessionId,
-        uploaded_by: window.OXVApi?.user?.profile?.id,
-        media_type: mediaType,
-        file_url: link,
-        title: title,
-        visible_to_user: false,  // par défaut non visible, l'admin valide ensuite
-        published_at: null
-      });
-      
-      if (error) {
-        console.warn('[Add media] Erreur Supabase:', error);
-        toast(`Erreur : ${error.message}`, 'warn');
-        return;
-      }
-      
-      toast(`✓ Lien enregistré · À publier`, 'ok');
-      loadAdminMedias(); // Refresh
-      
-    } catch (e) {
-      console.warn('[Add media] Exception:', e);
-      toast('Erreur enregistrement', 'warn');
-    }
+  if (!title) {
+    toast('Titre requis', 'warn');
+    return;
   }
+
+  const payload = {
+    session_id:    sessionId,
+    uploaded_by:   window.OXVApi?.user?.profile?.id,
+    media_type:    type,
+    file_url:      url,
+    title:         title,
+    visible_to_user: false,
+    published_at:  null
+  };
+  if (pilot) payload.user_id = pilot;
+
+  const { error } = await supabase.from('media').insert(payload);
+  if (error) { toast(`Erreur : ${error.message}`, 'warn'); return; }
+
+  toast('✓ Média enregistré — cliquez « Publier » pour le rendre visible', 'ok');
+  await adminLoadPanel(sessionId);
+  loadAdminMedias();
 };
 
 /* ============================================================
