@@ -3333,6 +3333,94 @@ footer {
   border-bottom: 1px solid var(--cream-line);
 }
 
+/* ── Médias pilote ─────────────────────────────────────────── */
+.media-session-group { margin-bottom: 34px; }
+.media-session-date {
+  font-family: var(--display);
+  font-style: italic;
+  font-weight: 700;
+  font-size: 15px;
+  letter-spacing: 0.04em;
+  color: var(--cream);
+  margin-bottom: 14px;
+}
+.media-session-date span {
+  font-family: var(--mono);
+  font-style: normal;
+  font-size: 9px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--cream-mute);
+  margin-left: 10px;
+}
+.media-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(210px, 1fr));
+  gap: 16px;
+}
+.media-card {
+  display: flex;
+  flex-direction: column;
+  background: rgba(18, 18, 18, 0.7);
+  border: 1px solid var(--cream-line);
+  border-radius: 8px;
+  overflow: hidden;
+  transition: border-color 0.2s ease, transform 0.2s ease;
+}
+.media-card:hover { border-color: rgba(255, 183, 3, 0.4); transform: translateY(-2px); }
+.media-card-thumb {
+  position: relative;
+  aspect-ratio: 16 / 10;
+  background: linear-gradient(135deg, rgba(40,40,40,0.9), rgba(18,18,18,0.9));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 30px;
+  color: var(--cream-mute);
+}
+.media-card-thumb img { width: 100%; height: 100%; object-fit: cover; }
+.media-card-type {
+  position: absolute;
+  top: 8px; left: 8px;
+  font-family: var(--mono);
+  font-size: 8px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--cream);
+  background: rgba(0,0,0,0.6);
+  padding: 4px 8px;
+  border-radius: 4px;
+}
+.media-card-body { padding: 14px 16px; flex: 1; display: flex; flex-direction: column; gap: 6px; }
+.media-card-title {
+  font-family: var(--sans);
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--cream);
+  line-height: 1.3;
+}
+.media-card-meta {
+  font-family: var(--mono);
+  font-size: 9px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--cream-mute);
+}
+.media-card-link {
+  margin-top: auto;
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--gold);
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding-top: 8px;
+}
+.media-card-link:hover { color: var(--copper-glow); }
+
 /* Desktop : vrai tableau */
 .session-table {
   width: 100%;
@@ -14531,6 +14619,14 @@ textarea:focus-visible {
           <div id="sessionsPast"></div>
         </div>
 
+        <div class="session-block" id="sessionsMediaBlock" style="display:none;">
+          <div class="session-block-title">Mes médias</div>
+          <p class="account-header-sub" style="margin:-6px 0 20px;">
+            Photos, vidéos embarquées et drone de vos roulages. Disponibles aussi dans l'application OXV.
+          </p>
+          <div id="sessionsMedia"></div>
+        </div>
+
       </div>
 
       <div id="sessionsEmpty" class="account-empty" style="display:none;">
@@ -22458,7 +22554,117 @@ window.loadMySessions = async function() {
     pastBlock.style.display = 'block';
     pastDiv.innerHTML = renderSessionsTable(past, /*isPast*/ true);
   }
+
+  // Médias du pilote (photos, vidéos embarquées / drone)
+  loadPilotMedia();
 };
+
+window.oxvScrollToMedia = function() {
+  const block = document.getElementById('sessionsMediaBlock');
+  if (block && block.style.display !== 'none') {
+    block.scrollIntoView({ behavior: 'smooth' });
+  } else {
+    toast('Vos médias seront disponibles ici dès leur mise en ligne par OXV.', 'ok');
+  }
+};
+
+/**
+ * Charge les médias du pilote connecté et les regroupe par session.
+ * La RLS Supabase ne renvoie que les médias visible_to_user=true des
+ * sessions auxquelles le pilote a participé. Mêmes données que l'app mobile.
+ */
+window.loadPilotMedia = async function() {
+  const block = document.getElementById('sessionsMediaBlock');
+  const container = document.getElementById('sessionsMedia');
+  if (!block || !container) return;
+
+  const userId = window.OXVApi?.user?.profile?.id;
+  if (!userId) { block.style.display = 'none'; return; }
+
+  const { data, error } = await supabase
+    .from('media')
+    .select('id, session_id, media_type, file_url, title, description, file_size_kb, original_filename, uploaded_at, published_at, sessions ( date, season_type )')
+    .eq('visible_to_user', true)
+    .order('uploaded_at', { ascending: false });
+
+  if (error) {
+    // Table absente ou RLS : on masque proprement, pas d'erreur visible
+    if (error.code !== '42P01') console.warn('[Médias] Erreur:', error);
+    block.style.display = 'none';
+    return;
+  }
+
+  if (!data || data.length === 0) {
+    block.style.display = 'none';
+    return;
+  }
+
+  // Regroupement par session (clé = session_id), tri des groupes par date décroissante
+  const groups = new Map();
+  data.forEach(m => {
+    const key = m.session_id || 'autres';
+    if (!groups.has(key)) {
+      groups.set(key, { date: m.sessions?.date || null, season: m.sessions?.season_type || null, items: [] });
+    }
+    groups.get(key).items.push(m);
+  });
+
+  const sorted = [...groups.values()].sort((a, b) => {
+    if (!a.date) return 1;
+    if (!b.date) return -1;
+    return a.date < b.date ? 1 : -1;
+  });
+
+  container.innerHTML = sorted.map(renderMediaGroup).join('');
+  block.style.display = 'block';
+};
+
+function renderMediaGroup(group) {
+  const dateLabel = group.date
+    ? new Date(group.date).toLocaleDateString('fr-FR', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' })
+    : 'Médias';
+  const season = group.season ? `<span>Saison ${escapeHtml(String(group.season))}</span>` : '';
+  const cards = group.items.map(renderMediaCard).join('');
+  return `
+    <div class="media-session-group">
+      <div class="media-session-date">${escapeHtml(dateLabel)}${season}</div>
+      <div class="media-grid">${cards}</div>
+    </div>`;
+}
+
+function renderMediaCard(m) {
+  const typeMap = {
+    photo:            { label: 'Photo',    icon: '◳' },
+    video_embedded:   { label: 'Embarquée', icon: '▶' },
+    video_drone:      { label: 'Drone',    icon: '⛟' },
+    telemetry_report: { label: 'Télémétrie', icon: '⊞' }
+  };
+  const t = typeMap[m.media_type] || { label: m.media_type || 'Média', icon: '◈' };
+  const url = m.file_url || '#';
+  const isPhoto = m.media_type === 'photo';
+  const isVideo = m.media_type === 'video_embedded' || m.media_type === 'video_drone';
+
+  // Aperçu : image directe pour les photos, sinon icône typée
+  let thumb = `<div class="media-card-thumb">${t.icon}<span class="media-card-type">${t.label}</span></div>`;
+  if (isPhoto && /^https?:\/\//.test(url)) {
+    thumb = `<div class="media-card-thumb"><img src="${escapeHtml(url)}" alt="${escapeHtml(m.title || 'Photo')}" loading="lazy" onerror="this.style.display='none'"/><span class="media-card-type">${t.label}</span></div>`;
+  }
+
+  const title = escapeHtml(m.title || m.original_filename || t.label);
+  const size = m.file_size_kb ? `${(m.file_size_kb / 1024).toFixed(1)} Mo` : '';
+  const meta = [t.label, size].filter(Boolean).join(' · ');
+  const linkLabel = isVideo ? 'Visionner →' : isPhoto ? 'Ouvrir →' : 'Télécharger →';
+
+  return `
+    <div class="media-card">
+      ${thumb}
+      <div class="media-card-body">
+        <div class="media-card-title">${title}</div>
+        <div class="media-card-meta">${escapeHtml(meta)}</div>
+        <a class="media-card-link" href="${escapeHtml(url)}" target="_blank" rel="noopener">${linkLabel}</a>
+      </div>
+    </div>`;
+}
 
 function renderSessionsTable(rows, isPast) {
   // Version desktop (table)
@@ -22479,7 +22685,7 @@ function renderSessionsTable(rows, isPast) {
     if (!isPast && reg.status !== 'cancelled') {
       actions = `<button class="danger" onclick="cancelRegistration('${reg.id}', '${date.replace(/'/g, "")}')">Annuler</button>`;
     } else if (isPast && reg.status === 'attended') {
-      actions = `<a onclick="toast('Médias bientôt disponibles', 'ok')">Voir médias</a>`;
+      actions = `<a onclick="oxvScrollToMedia()">Voir médias</a>`;
     }
 
     return `
@@ -22511,7 +22717,7 @@ function renderSessionsTable(rows, isPast) {
     if (!isPast && reg.status !== 'cancelled') {
       actions = `<button class="danger" onclick="cancelRegistration('${reg.id}', '${date.replace(/'/g, "")}')">Annuler</button>`;
     } else if (isPast && reg.status === 'attended') {
-      actions = `<a onclick="toast('Médias bientôt disponibles', 'ok')">Voir médias</a>`;
+      actions = `<a onclick="oxvScrollToMedia()">Voir médias</a>`;
     }
 
     const [datePart, timePart] = date.split(' · ');
@@ -22801,7 +23007,10 @@ window.loadBilling = async function() {
 window.loadProgression = async function() {
   const loading = document.getElementById('progLoading');
   const content = document.getElementById('progContent');
-  
+  const pg = document.getElementById('page-compte-progression');
+  const qs = sel => pg ? pg.querySelector(sel) : document.querySelector(sel);
+  const qsAll = sel => pg ? pg.querySelectorAll(sel) : document.querySelectorAll(sel);
+
   // Afficher le mockup par défaut (preview pour visiteur)
   if (loading) loading.style.display = 'none';
   if (content) content.style.display = 'block';
@@ -22835,17 +23044,17 @@ window.loadProgression = async function() {
     }
 
     // Compteur de sessions analysées
-    const sessionsNum = document.querySelector('.prog-sessions-num');
+    const sessionsNum = qs('.prog-sessions-num');
     if (sessionsNum) sessionsNum.textContent = String((analyses && analyses.length) || 0).padStart(2, '0');
 
     // Aucune analyse → invitation
-    if (!analyses || analyses.length === 0) { showEmptyQDI(firstName); return; }
+    if (!analyses || analyses.length === 0) { showEmptyQDI(firstName, qs, qsAll); return; }
 
     // Analyses présentes mais margin_global non calculé partout → en attente
-    if (analyses.every(a => a.margin_global == null)) { showWaitingQDI(); return; }
+    if (analyses.every(a => a.margin_global == null)) { showWaitingQDI(qs); return; }
 
     // 3. Rendu avec les vraies marges
-    renderMarginData(analyses, firstName);
+    renderMarginData(analyses, firstName, qs, qsAll);
 
   } catch (e) {
     console.warn('[Progression] Exception:', e);
@@ -22870,46 +23079,51 @@ function oxvScoreLevel(s) {
   return { name: 'Novice', badge: 'NOVICE' };
 }
 
-function showEmptyQDI(firstName) {
+function showEmptyQDI(firstName, qs, qsAll) {
+  qs = qs || (s => document.querySelector(s));
+  qsAll = qsAll || (s => document.querySelectorAll(s));
   const qdiScore = document.getElementById('progQdiScore');
   const qdiLevel = document.getElementById('progQdiLevel');
   const qdiBadge = document.getElementById('progQdiBadge');
-  
+
   if (qdiScore) qdiScore.textContent = '—';
   if (qdiLevel) qdiLevel.textContent = 'À découvrir';
   if (qdiBadge) qdiBadge.textContent = 'NIVEAU 0';
-  
-  const sub = document.querySelector('.prog-qdi-sub');
+
+  const sub = qs('.prog-qdi-sub');
   if (sub) {
     const name = firstName ? `, ${escapeHtml(firstName)}` : '';
     sub.innerHTML = `<strong>Bienvenue${name}.</strong> Réservez votre première session Signature pour activer votre QDI et démarrer le coaching.`;
   }
-  
+
   // Réinitialiser les piliers à 0
-  document.querySelectorAll('.prog-pillar-fill').forEach(el => el.style.width = '0%');
-  document.querySelectorAll('.prog-pillar-score').forEach(el => el.textContent = '—');
-  
+  qsAll('.prog-pillar-fill').forEach(el => el.style.width = '0%');
+  qsAll('.prog-pillar-score').forEach(el => el.textContent = '—');
+
   // Cacher les recommandations et l'évolution
-  const recoGrid = document.querySelector('.prog-reco-grid');
-  const evolution = document.querySelector('.prog-evolution');
+  const recoGrid = qs('.prog-reco-grid');
+  const evolution = qs('.prog-evolution');
   if (recoGrid) recoGrid.style.display = 'none';
   if (evolution) evolution.style.display = 'none';
 }
 
-function showWaitingQDI() {
+function showWaitingQDI(qs) {
+  qs = qs || (s => document.querySelector(s));
   const qdiScore = document.getElementById('progQdiScore');
   const qdiBadge = document.getElementById('progQdiBadge');
-  
+
   if (qdiScore) qdiScore.textContent = '...';
   if (qdiBadge) qdiBadge.textContent = 'CALCUL EN COURS';
-  
-  const sub = document.querySelector('.prog-qdi-sub');
+
+  const sub = qs('.prog-qdi-sub');
   if (sub) {
     sub.innerHTML = '<strong>Vos données sont en cours d\'analyse.</strong> Le QDI sera disponible sous 48h après votre première session.';
   }
 }
 
-function renderMarginData(analyses, firstName) {
+function renderMarginData(analyses, firstName, qs, qsAll) {
+  qs = qs || (s => document.querySelector(s));
+  qsAll = qsAll || (s => document.querySelectorAll(s));
   const latest = analyses[0];
   const score = oxvMarginScore(latest.margin_global);
   const level = oxvScoreLevel(score);
@@ -22923,7 +23137,7 @@ function renderMarginData(analyses, firstName) {
   if (elBadge) elBadge.textContent = level.badge;
 
   // Sous-titre : évolution vs session précédente
-  const sub = document.querySelector('.prog-qdi-sub');
+  const sub = qs('.prog-qdi-sub');
   if (sub) {
     if (analyses.length > 1 && score != null) {
       const prev = oxvMarginScore(analyses[1].margin_global);
@@ -22944,17 +23158,17 @@ function renderMarginData(analyses, firstName) {
     if (score >= 95) next = 100; else if (score >= 85) next = 95;
     else if (score >= 70) next = 85; else if (score >= 50) next = 70;
     const remaining = next - score;
-    const label = document.querySelector('.prog-next-level-label');
+    const label = qs('.prog-next-level-label');
     if (label) {
       const nm = next === 100 ? 'MAX' : next === 95 ? 'ELITE' : next === 85 ? 'OR' : next === 70 ? 'ARGENT' : 'BRONZE';
       label.innerHTML = `<span>Prochain palier : ${nm} (≥ ${next})</span><span class="pts">${remaining > 0 ? remaining + ' pts restants' : '✓ Atteint'}</span>`;
     }
-    const fill = document.querySelector('.prog-progress-fill');
+    const fill = qs('.prog-progress-fill');
     if (fill) fill.style.width = `${Math.min((score / next) * 100, 100)}%`;
   }
 
   // Détail de la dernière session (marges pilote / véhicule / zone)
-  const detail = document.querySelector('.prog-sessions-detail');
+  const detail = qs('.prog-sessions-detail');
   if (detail) {
     const mv = oxvMarginScore(latest.margin_vehicle);
     const mp = oxvMarginScore(latest.margin_pilot);
@@ -22967,21 +23181,23 @@ function renderMarginData(analyses, firstName) {
   }
 
   // Piliers détaillés : depuis margin_breakdown si exploitable, sinon masqués
-  renderMarginPillars(latest);
+  renderMarginPillars(latest, qs, qsAll);
 
   // Évolution + recommandations coach (texte réel)
-  renderMarginEvolution(analyses);
-  renderMarginReco(latest);
+  renderMarginEvolution(analyses, qs, qsAll);
+  renderMarginReco(latest, qs);
 
   console.log(`[Progression] margin_global=${score} (${level.name}) · ${analyses.length} analyses`);
 }
 
 // Piliers : alimentés par margin_breakdown (jsonb) si c'est un objet de nombres,
 // sinon la section est masquée proprement (le vrai modèle n'a pas 5 piliers nommés).
-function renderMarginPillars(latest) {
-  const pillarEls = document.querySelectorAll('.prog-pillar');
+function renderMarginPillars(latest, qs, qsAll) {
+  qs = qs || (s => document.querySelector(s));
+  qsAll = qsAll || (s => document.querySelectorAll(s));
+  const pillarEls = qsAll('.prog-pillar');
   if (!pillarEls.length) return;
-  const section = document.querySelector('.prog-pillars');
+  const section = qs('.prog-pillars');
 
   let entries = [];
   const bd = latest.margin_breakdown;
@@ -23008,9 +23224,11 @@ function renderMarginPillars(latest) {
   for (let i = entries.length; i < pillarEls.length; i++) pillarEls[i].style.display = 'none';
 }
 
-function renderMarginEvolution(analyses) {
+function renderMarginEvolution(analyses, qs, qsAll) {
+  qs = qs || (s => document.querySelector(s));
+  qsAll = qsAll || (s => document.querySelectorAll(s));
   const last6 = analyses.slice(0, 6).reverse().map(a => ({ s: oxvMarginScore(a.margin_global), at: a.computed_at }));
-  const bars = document.querySelectorAll('.prog-chart-bar');
+  const bars = qsAll('.prog-chart-bar');
   if (!bars.length || !last6.length) return;
   const months = ['Jan', 'Fév', 'Mar', 'Avr', 'Mai', 'Jui', 'Juil', 'Aoû', 'Sep', 'Oct', 'Nov', 'Déc'];
 
@@ -23028,14 +23246,14 @@ function renderMarginEvolution(analyses) {
   });
   for (let i = last6.length; i < bars.length; i++) bars[i].style.visibility = 'hidden';
 
-  const evTitle = document.querySelector('.prog-evolution-title');
+  const evTitle = qs('.prog-evolution-title');
   if (evTitle) evTitle.textContent = last6.length <= 1 ? 'Première session' : `Évolution · ${last6.length} sessions`;
 
   if (last6.length >= 2) {
     const a = last6[0].s, b = last6[last6.length - 1].s;
     if (a != null && b != null) {
       const trend = b - a;
-      const el = document.querySelector('.prog-evolution-trend');
+      const el = qs('.prog-evolution-trend');
       if (el) {
         const ar = trend > 0 ? '↗' : trend < 0 ? '↘' : '→';
         const sg = trend > 0 ? '+' : '';
@@ -23047,8 +23265,9 @@ function renderMarginEvolution(analyses) {
 }
 
 // Recommandations : on affiche le débrief coach réel (next_focus_phrase, debrief_text)
-function renderMarginReco(latest) {
-  const grid = document.querySelector('.prog-reco-grid');
+function renderMarginReco(latest, qs) {
+  qs = qs || (s => document.querySelector(s));
+  const grid = qs('.prog-reco-grid');
   if (!grid) return;
   let html = '';
   if (latest.next_focus_phrase) {
