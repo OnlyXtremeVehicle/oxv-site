@@ -2503,6 +2503,62 @@ footer {
 .auth-pwd-hint.error { color: #C45959; }
 .auth-pwd-hint.ok { color: var(--copper-glow); }
 
+/* === Demande d'inscription : sélecteur de profil + blocs adaptatifs === */
+.dmd-seg {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+  margin: 4px 0 22px;
+}
+.dmd-seg-opt {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 5px;
+  padding: 12px 8px;
+  border: 1px solid var(--cream-line);
+  border-radius: 10px;
+  background: transparent;
+  color: var(--cream-mute);
+  font-family: var(--sans);
+  font-size: 12.5px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: border-color .2s, color .2s, background .2s;
+  text-align: center;
+  line-height: 1.25;
+}
+.dmd-seg-opt:hover { border-color: var(--gold); color: var(--cream); }
+.dmd-seg-opt.active {
+  border-color: var(--gold);
+  color: var(--gold);
+  background: rgba(184, 115, 51, 0.06);
+}
+.dmd-seg-ic { font-size: 18px; line-height: 1; }
+.dmd-block { display: none; }
+.dmd-block.show { display: block; }
+.dmd-block-label {
+  font-family: var(--sans);
+  font-size: 11px;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: var(--cream-mute);
+  margin: 18px 0 12px;
+  padding-top: 18px;
+  border-top: 1px solid var(--cream-line);
+}
+.dmd-note {
+  font-family: var(--sans);
+  font-size: 12px;
+  line-height: 1.55;
+  color: var(--cream-mute);
+  margin: 14px 0 0;
+  padding: 12px 14px;
+  background: rgba(184, 115, 51, 0.05);
+  border: 1px solid rgba(184, 115, 51, 0.25);
+  border-radius: 8px;
+}
+
 .auth-actions {
   display: flex;
   flex-direction: column;
@@ -3606,6 +3662,281 @@ footer {
   .amp-add-form { grid-template-columns: 1fr; }
   .amc { flex-wrap: wrap; }
   .amc-actions { width: 100%; justify-content: flex-end; }
+}
+
+/* ── Bandeau Founding ──────────────────────────────────────── */
+#foundingBandeau {
+  display: none; /* affiché via JS si places < 30 */
+  background: var(--gold);
+  color: #0a0a0a;
+  text-align: center;
+  padding: 9px 20px;
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: background 0.15s;
+  position: relative;
+  z-index: 200;
+}
+#foundingBandeau:hover { background: var(--copper-glow); }
+#foundingBandeau strong { font-weight: 700; }
+#foundingBandeau .bandeau-count {
+  display: inline-block;
+  background: rgba(0,0,0,0.18);
+  padding: 1px 8px;
+  border-radius: 20px;
+  margin-left: 8px;
+  font-size: 10px;
+}
+
+/* ── Page Founding ──────────────────────────────────────────── */
+.founding-hero {
+  padding: 100px 0 60px;
+  max-width: 820px;
+}
+.founding-eyebrow {
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin-bottom: 18px;
+}
+.founding-title {
+  font-family: var(--display);
+  font-style: italic;
+  font-weight: 700;
+  font-size: clamp(36px, 5vw, 60px);
+  color: var(--cream);
+  line-height: 1.1;
+  margin: 0 0 20px;
+}
+.founding-sub {
+  font-family: var(--sans);
+  font-size: 17px;
+  color: var(--cream-mute);
+  line-height: 1.6;
+  max-width: 600px;
+  margin-bottom: 36px;
+}
+.founding-counter {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 10px;
+  background: rgba(255,183,3,0.07);
+  border: 1px solid rgba(255,183,3,0.3);
+  border-radius: 10px;
+  padding: 16px 28px;
+  margin-bottom: 60px;
+}
+.founding-counter-num {
+  font-family: var(--display);
+  font-style: italic;
+  font-weight: 700;
+  font-size: 42px;
+  color: var(--gold);
+  line-height: 1;
+}
+.founding-counter-label {
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--cream-mute);
+}
+.founding-avantages {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 16px;
+  margin-bottom: 60px;
+}
+.founding-avantage {
+  display: flex;
+  gap: 18px;
+  align-items: flex-start;
+  background: rgba(18,18,18,0.7);
+  border: 1px solid var(--cream-line);
+  border-radius: 10px;
+  padding: 22px 24px;
+  transition: border-color .18s;
+}
+.founding-avantage:hover { border-color: rgba(255,183,3,0.3); }
+.founding-avantage-num {
+  font-family: var(--mono);
+  font-size: 9px;
+  letter-spacing: 0.2em;
+  color: var(--gold);
+  flex-shrink: 0;
+  padding-top: 3px;
+}
+.founding-avantage-title {
+  font-family: var(--display);
+  font-style: italic;
+  font-weight: 700;
+  font-size: 15px;
+  color: var(--cream);
+  margin-bottom: 6px;
+}
+.founding-avantage-text {
+  font-family: var(--sans);
+  font-size: 13px;
+  color: var(--cream-mute);
+  line-height: 1.6;
+  margin: 0;
+}
+.founding-form-section {
+  max-width: 640px;
+  margin-bottom: 60px;
+}
+.founding-form-title {
+  font-family: var(--display);
+  font-style: italic;
+  font-weight: 700;
+  font-size: 26px;
+  color: var(--cream);
+  margin-bottom: 8px;
+}
+.founding-form-sub {
+  font-family: var(--sans);
+  font-size: 14px;
+  color: var(--cream-mute);
+  margin-bottom: 28px;
+  line-height: 1.6;
+}
+.founding-form-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+}
+.founding-form-grid .full { grid-column: 1 / -1; }
+.founding-faq { max-width: 720px; margin-bottom: 60px; }
+.founding-faq-item {
+  border-bottom: 1px solid var(--cream-line);
+  padding: 20px 0;
+}
+.founding-faq-q {
+  font-family: var(--display);
+  font-style: italic;
+  font-weight: 700;
+  font-size: 16px;
+  color: var(--cream);
+  margin-bottom: 10px;
+}
+.founding-faq-a {
+  font-family: var(--sans);
+  font-size: 14px;
+  color: var(--cream-mute);
+  line-height: 1.7;
+  margin: 0;
+}
+
+/* ── Page Coach ─────────────────────────────────────────────── */
+.coach-hero { padding: 100px 0 60px; max-width: 820px; }
+.coach-price-block {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 10px;
+  margin-bottom: 40px;
+}
+.coach-price {
+  font-family: var(--display);
+  font-style: italic;
+  font-weight: 700;
+  font-size: 56px;
+  color: var(--gold);
+  line-height: 1;
+}
+.coach-price-label {
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--cream-mute);
+}
+.coach-inclus {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 16px;
+  margin-bottom: 48px;
+}
+.coach-inclus-item {
+  background: rgba(18,18,18,0.7);
+  border: 1px solid var(--cream-line);
+  border-radius: 10px;
+  padding: 24px;
+  transition: border-color .18s;
+}
+.coach-inclus-item:hover { border-color: rgba(255,183,3,0.3); }
+.coach-inclus-icon {
+  font-size: 22px;
+  margin-bottom: 12px;
+}
+.coach-inclus-title {
+  font-family: var(--display);
+  font-style: italic;
+  font-weight: 700;
+  font-size: 15px;
+  color: var(--cream);
+  margin-bottom: 8px;
+}
+.coach-inclus-text {
+  font-family: var(--sans);
+  font-size: 13px;
+  color: var(--cream-mute);
+  line-height: 1.6;
+  margin: 0;
+}
+.coach-degressive {
+  border: 1px solid var(--cream-line);
+  border-radius: 10px;
+  overflow: hidden;
+  margin-bottom: 48px;
+  max-width: 480px;
+}
+.coach-degressive-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 14px 20px;
+  border-bottom: 1px solid var(--cream-line);
+  font-family: var(--sans);
+  font-size: 14px;
+}
+.coach-degressive-row:last-child { border-bottom: none; }
+.coach-degressive-row .discount {
+  font-family: var(--mono);
+  font-size: 12px;
+  color: var(--gold);
+  letter-spacing: 0.1em;
+}
+.coach-legal {
+  background: rgba(255,183,3,0.04);
+  border: 1px solid rgba(255,183,3,0.15);
+  border-radius: 10px;
+  padding: 24px 28px;
+  max-width: 600px;
+  margin-bottom: 48px;
+}
+.coach-legal-title {
+  font-family: var(--mono);
+  font-size: 9px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin-bottom: 10px;
+}
+.coach-legal-text {
+  font-family: var(--sans);
+  font-size: 13px;
+  color: var(--cream-mute);
+  line-height: 1.7;
+  margin: 0;
+}
+@media (max-width: 600px) {
+  .founding-form-grid { grid-template-columns: 1fr; }
+  .founding-form-grid .full { grid-column: 1; }
 }
 
 /* Desktop : vrai tableau */
@@ -4816,6 +5147,89 @@ footer {
 }
 
 /* Empty state admin */
+
+/* === Admin · cartes de demande d'inscription === */
+.dmc {
+  border: 1px solid var(--cream-line);
+  border-radius: 12px;
+  background: rgba(11, 18, 32, 0.35);
+  padding: 20px 22px;
+  margin-bottom: 16px;
+}
+.dmc-head {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  flex-wrap: wrap;
+}
+.dmc-id {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px; height: 44px;
+  border-radius: 50%;
+  background: rgba(184, 115, 51, 0.1);
+  color: var(--gold);
+  font-family: var(--sans);
+  font-weight: 500;
+  font-size: 14px;
+  flex-shrink: 0;
+}
+.dmc-name { font-family: var(--serif); font-size: 19px; color: var(--cream); margin: 0; }
+.dmc-meta { font-family: var(--sans); font-size: 12.5px; color: var(--cream-mute); margin-top: 2px; }
+.dmc-badges { display: flex; gap: 6px; margin-left: auto; flex-wrap: wrap; align-items: center; }
+.dmc-badge {
+  font-family: var(--sans);
+  font-size: 10px;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  padding: 4px 10px;
+  border-radius: 20px;
+  font-weight: 500;
+}
+.dmc-badge.pilote     { background: rgba(55,138,221,0.12); color: #6FB3E8; }
+.dmc-badge.pilote_pro { background: rgba(239,159,39,0.12); color: #E6A93B; }
+.dmc-badge.coach      { background: rgba(127,119,221,0.14); color: #9F99E0; }
+.dmc-badge.st-en_attente { background: rgba(239,230,210,0.08); color: var(--cream-mute); }
+.dmc-badge.st-acceptee   { background: rgba(29,158,117,0.14); color: #5DCAA5; }
+.dmc-badge.st-refusee    { background: rgba(226,75,74,0.14); color: #F09595; }
+.dmc-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 10px 24px;
+  margin-top: 16px;
+  padding-top: 16px;
+  border-top: 1px solid var(--cream-line);
+}
+.dmc-field-label {
+  font-family: var(--sans);
+  font-size: 10px;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  color: var(--cream-mute);
+  margin-bottom: 2px;
+}
+.dmc-field-val { font-family: var(--sans); font-size: 13.5px; color: var(--cream); line-height: 1.45; }
+.dmc-quote {
+  margin-top: 14px;
+  padding: 12px 14px;
+  border-left: 2px solid var(--gold);
+  background: rgba(184,115,51,0.05);
+  font-family: var(--sans);
+  font-size: 13px;
+  color: var(--cream);
+  line-height: 1.55;
+  font-style: italic;
+}
+.dmc-actions { display: flex; gap: 10px; margin-top: 18px; flex-wrap: wrap; }
+.dmc-note-input {
+  width: 100%;
+  margin-top: 12px;
+  font-family: var(--sans);
+  font-size: 13px;
+}
+.dmc-link { font-family: var(--mono); font-size: 11px; color: var(--gold); word-break: break-all; }
+
 .admin-empty {
   padding: 32px;
   text-align: center;
@@ -12336,7 +12750,88 @@ textarea:focus-visible {
   flex-shrink: 0;
 }
 
+/* ==========================================
+   HOME-DATA — Bilan data pédagogique
+   ========================================== */
+.home-data { background: var(--obsidian); padding: 100px 0; }
+.home-data-intro { text-align: center; max-width: 640px; margin: 0 auto 60px; }
+.home-data-title { font-size: clamp(28px, 4vw, 48px); font-weight: 800; letter-spacing: -0.02em; margin-bottom: 16px; }
+.home-data-lede { font-size: 16px; color: var(--cream-mute); line-height: 1.7; }
+.home-data-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 16px; }
+.home-data-pillar { background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.07); border-radius: 12px; padding: 24px 20px; text-align: center; transition: transform 0.2s, border-color 0.2s; }
+.home-data-pillar:hover { transform: translateY(-4px); }
+.home-data-pillar-dot { width: 10px; height: 10px; border-radius: 50%; margin: 0 auto 14px; }
+.home-data-pillar-name { font-size: 12px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 10px; }
+.home-data-pillar-text { font-size: 12px; color: var(--cream-mute); line-height: 1.6; }
+.home-data-pillar.trajectory { border-color: rgba(230,57,70,0.25); }
+.home-data-pillar.trajectory:hover { border-color: rgba(230,57,70,0.55); }
+.home-data-pillar.trajectory .home-data-pillar-dot { background: var(--qdi-trajectory); box-shadow: 0 0 8px rgba(230,57,70,0.5); }
+.home-data-pillar.trajectory .home-data-pillar-name { color: var(--qdi-trajectory); }
+.home-data-pillar.fluidity { border-color: rgba(255,183,3,0.25); }
+.home-data-pillar.fluidity:hover { border-color: rgba(255,183,3,0.55); }
+.home-data-pillar.fluidity .home-data-pillar-dot { background: var(--qdi-fluidity); box-shadow: 0 0 8px rgba(255,183,3,0.5); }
+.home-data-pillar.fluidity .home-data-pillar-name { color: var(--qdi-fluidity); }
+.home-data-pillar.braking { border-color: rgba(96,165,250,0.25); }
+.home-data-pillar.braking:hover { border-color: rgba(96,165,250,0.55); }
+.home-data-pillar.braking .home-data-pillar-dot { background: var(--qdi-braking); box-shadow: 0 0 8px rgba(96,165,250,0.5); }
+.home-data-pillar.braking .home-data-pillar-name { color: var(--qdi-braking); }
+.home-data-pillar.acceleration { border-color: rgba(74,222,128,0.25); }
+.home-data-pillar.acceleration:hover { border-color: rgba(74,222,128,0.55); }
+.home-data-pillar.acceleration .home-data-pillar-dot { background: var(--qdi-acceleration); box-shadow: 0 0 8px rgba(74,222,128,0.5); }
+.home-data-pillar.acceleration .home-data-pillar-name { color: var(--qdi-acceleration); }
+.home-data-pillar.regularity { border-color: rgba(192,132,252,0.25); }
+.home-data-pillar.regularity:hover { border-color: rgba(192,132,252,0.55); }
+.home-data-pillar.regularity .home-data-pillar-dot { background: var(--qdi-regularity); box-shadow: 0 0 8px rgba(192,132,252,0.5); }
+.home-data-pillar.regularity .home-data-pillar-name { color: var(--qdi-regularity); }
+.home-data-cta { text-align: center; margin-top: 48px; }
+@media (max-width: 900px) { .home-data-grid { grid-template-columns: repeat(3, 1fr); } }
+@media (max-width: 560px) { .home-data-grid { grid-template-columns: repeat(2, 1fr); } .home-data-pillar { padding: 18px 14px; } }
+
+/* ==========================================
+   HOME-RITUELS — J-7/J-2/J-1
+   ========================================== */
+.home-rituels { background: var(--void); padding: 100px 0; }
+.home-rituels-intro { max-width: 600px; margin: 0 auto 56px; text-align: center; }
+.home-rituels-title { font-size: clamp(26px, 3.5vw, 44px); font-weight: 800; letter-spacing: -0.02em; margin-bottom: 14px; }
+.home-rituels-lede { font-size: 15px; color: var(--cream-mute); line-height: 1.7; }
+.home-rituels-timeline { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; margin: 0 auto; max-width: 960px; }
+.home-rituel { background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.07); border-radius: 14px; padding: 32px 28px; transition: border-color 0.2s; }
+.home-rituel:hover { border-color: rgba(255,183,3,0.3); }
+.home-rituel-day { font-size: 11px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: var(--gold); margin-bottom: 6px; }
+.home-rituel-title { font-size: 20px; font-weight: 800; margin-bottom: 12px; }
+.home-rituel-text { font-size: 13px; color: var(--cream-mute); line-height: 1.7; margin-bottom: 20px; }
+.home-rituel-player { background: rgba(0,0,0,0.4); border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; padding: 12px 14px; display: flex; align-items: center; gap: 12px; cursor: default; }
+.home-rituel-play { width: 28px; height: 28px; background: var(--gold); border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.home-rituel-play svg { width: 10px; height: 10px; fill: var(--void); margin-left: 2px; }
+.home-rituel-wave { flex: 1; display: flex; align-items: center; gap: 2px; height: 22px; }
+.home-rituel-wave span { display: inline-block; width: 3px; border-radius: 2px; background: rgba(255,183,3,0.35); }
+.home-rituel-duration { font-size: 11px; font-family: var(--mono); color: var(--cream-mute); flex-shrink: 0; }
+@media (max-width: 800px) { .home-rituels-timeline { grid-template-columns: 1fr; max-width: 480px; } }
+
+/* ==========================================
+   PAGE PLATEAU
+   ========================================== */
+.plateau-hero { padding: 80px 0 50px; }
+.plateau-hero-eyebrow { font-size: 11px; font-weight: 700; letter-spacing: 0.16em; text-transform: uppercase; color: var(--gold); margin-bottom: 16px; }
+.plateau-hero-title { font-size: clamp(32px, 5vw, 64px); font-weight: 900; letter-spacing: -0.03em; line-height: 1.05; margin-bottom: 20px; }
+.plateau-hero-lede { font-size: 17px; color: var(--cream-mute); line-height: 1.7; max-width: 560px; }
+.plateau-principles { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; margin: 48px 0; }
+.plateau-principle { background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.07); border-radius: 14px; padding: 28px 24px; }
+.plateau-principle-num { font-size: 11px; font-weight: 700; letter-spacing: 0.14em; color: var(--gold); margin-bottom: 8px; }
+.plateau-principle-title { font-size: 20px; font-weight: 800; margin-bottom: 10px; }
+.plateau-principle-text { font-size: 13px; color: var(--cream-mute); line-height: 1.7; }
+.plateau-members-label { font-size: 11px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: var(--cream-mute); margin-bottom: 24px; }
+.plateau-members-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(190px, 1fr)); gap: 12px; }
+.plateau-member { background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.06); border-radius: 10px; padding: 16px; display: flex; align-items: center; gap: 14px; }
+.plateau-member-avatar { width: 40px; height: 40px; border-radius: 50%; background: rgba(255,183,3,0.1); border: 1px solid rgba(255,183,3,0.2); display: flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 800; color: var(--gold); flex-shrink: 0; }
+.plateau-member-name { font-size: 14px; font-weight: 600; }
+.plateau-member-sub { font-size: 11px; color: var(--cream-mute); margin-top: 2px; }
+.plateau-empty { text-align: center; padding: 48px; color: var(--cream-mute); font-size: 14px; border: 1px dashed rgba(255,255,255,0.1); border-radius: 12px; }
+@media (max-width: 600px) { .plateau-principles { grid-template-columns: 1fr; } .plateau-members-grid { grid-template-columns: repeat(2, 1fr); } }
+
 </style>
+<!-- Vercel Analytics -->
+<script defer src="/_vercel/insights/script.js"></script>
 </head>
 <body>
 <!-- OXV SVG Sprite -->
@@ -12366,6 +12861,12 @@ textarea:focus-visible {
 </div>
 
 <!-- ============ NAV ============ -->
+<!-- Bandeau Founding Members -->
+<div id="foundingBandeau" onclick="goTo('founding')" role="button" tabindex="0" aria-label="Founding Members — Postuler">
+  <strong>Founding Members</strong> — Programme de lancement · Places limitées à 30
+  <span class="bandeau-count" id="foundingBandeauCount"></span>
+</div>
+
 <nav class="nav" id="topnav">
   <a class="brand" onclick="goTo('home')" aria-label="OXV — Retour à l'accueil">
     <svg class="brand-insignia" aria-hidden="true" focusable="false"><use href="#oxv-insignia"/></svg>
@@ -12376,14 +12877,15 @@ textarea:focus-visible {
     <a class="nav-link" onclick="goTo('calendrier')">Calendrier</a>
     <a class="nav-link" onclick="goTo('circuit')">Le circuit</a>
     <a class="nav-link" onclick="goTo('corporate')">Corporate</a>
+    <a class="nav-link" onclick="goTo('coach')">Coach</a>
     <a class="nav-link" onclick="goTo('about')">À propos</a>
     <a class="nav-link" onclick="goTo('actualites')">Actualités</a>
     <a class="nav-link" onclick="goTo('contact')">Contact</a>
-    <a class="nav-link priv" onclick="goTo('booking')">Réserver</a>
+    <a class="nav-link priv" data-cta="reserve" onclick="ctaPrimaryGo()">Réserver</a>
   </div>
   <div class="nav-actions">
     <button class="btn btn-ghost btn-sm" onclick="goTo('login')" id="navAuth">Se connecter</button>
-    <button class="btn btn-primary btn-sm" onclick="goTo('booking')">Réserver</button>
+    <button class="btn btn-primary btn-sm" id="navCtaJoin" onclick="ctaPrimaryGo()">Rejoindre le cercle</button>
     <button class="burger" onclick="document.getElementById('mobMenu').classList.add('open')" aria-label="Menu">
       <i></i><i></i><i></i>
     </button>
@@ -12405,12 +12907,18 @@ textarea:focus-visible {
     <a class="mob-link" onclick="goTo('contact'); closeMob()">Contact</a>
   </div>
   <div class="mob-section">
+    <div class="mob-label">Le cercle</div>
+    <a class="mob-link" onclick="goTo('founding'); closeMob()" style="color:var(--gold);">⌬ Founding Members</a>
+    <a class="mob-link" onclick="goTo('coach'); closeMob()">Coach partenaire</a>
+    <a class="mob-link" onclick="goTo('plateau'); closeMob()">Le plateau</a>
+  </div>
+  <div class="mob-section">
     <div class="mob-label">Espace pilote</div>
-    <a class="mob-link" onclick="goTo('booking'); closeMob()">Réserver</a>
+    <a class="mob-link" data-cta="reserve" onclick="ctaPrimaryGo(); closeMob()">Réserver</a>
   </div>
   <div class="mob-actions">
     <button class="btn btn-ghost" onclick="goTo('login'); closeMob()">Se connecter</button>
-    <button class="btn btn-primary" onclick="goTo('signup'); closeMob()">Créer un compte</button>
+    <button class="btn btn-primary" id="mobCtaJoin" onclick="ctaPrimaryGo(); closeMob()">Rejoindre le cercle</button>
   </div>
 </div>
 
@@ -12456,11 +12964,11 @@ textarea:focus-visible {
           <span class="line-3">La <em>sensation</em>, enfin.</span>
         </h1>
         <p class="home-hero-tagline reveal">
-          Track day premium au Circuit de Haute Saintonge, tracé Beltoise.
+          Cercle privé. Circuit Beltoise, Haute Saintonge. Vingt pilotes, pas vingt-et-un.
         </p>
 
         <div class="home-hero-actions reveal">
-          <button class="btn btn-primary btn-lg" onclick="goTo('booking')"><span>Réserver une session</span></button>
+          <button class="btn btn-primary btn-lg" onclick="ctaPrimaryGo()"><span>Réserver une session</span></button>
           <button class="btn btn-lg" onclick="goTo('calendrier')"><span>Voir le calendrier</span></button>
         </div>
       </div>
@@ -12529,7 +13037,7 @@ textarea:focus-visible {
             <div class="home-journey-card-tag">— L'expérience complète</div>
             <h3 class="home-journey-card-name"><em>Signature</em></h3>
             <p class="home-journey-card-text">
-              Journée pleine le vendredi. Coaching individuel, télémétrie GPS 25 Hz, rapport QDI personnalisé, déjeuner gastronomique, reportage photo dédié, vidéo onboard. Tout est compris, pour 690 € TTC.
+              Journée pleine le vendredi. Télémétrie GPS 25 Hz, rapport QDI personnalisé, déjeuner gastronomique, reportage photo dédié, vidéo onboard. Coaching partenaire disponible en option. Tout est compris, pour 690 € TTC.
             </p>
             <button class="home-journey-card-link" onclick="goTo('offers')">Découvrir →</button>
           </div>
@@ -12626,6 +13134,100 @@ textarea:focus-visible {
   </section>
 
   <!-- ============================================================
+       SECTION 3b — BILAN DATA PÉDAGOGIQUE
+       ============================================================ -->
+  <section class="home-data">
+    <div class="wrap">
+      <div class="home-data-intro">
+        <div class="kicker reveal">N° 03 · La donnée</div>
+        <h2 class="home-data-title reveal">
+          Cinq dimensions.<br/>
+          Une <em>progression</em> mesurable.
+        </h2>
+        <p class="home-data-lede reveal">OXV ne mesure pas la vitesse — il mesure la maîtrise. Le QDI (Quality Driving Index) décompose chaque session en cinq axes objectifs. Pas de classement. Une lecture personnelle de votre pilotage.</p>
+      </div>
+      <div class="home-data-grid">
+        <div class="home-data-pillar trajectory reveal">
+          <div class="home-data-pillar-dot"></div>
+          <div class="home-data-pillar-name">Trajectoire</div>
+          <p class="home-data-pillar-text">Précision des lignes, points de corde, gestion des zones de freinage.</p>
+        </div>
+        <div class="home-data-pillar fluidity reveal">
+          <div class="home-data-pillar-dot"></div>
+          <div class="home-data-pillar-name">Fluidité</div>
+          <p class="home-data-pillar-text">Régularité des inputs volant, absence de corrections brusques, transitions.</p>
+        </div>
+        <div class="home-data-pillar braking reveal">
+          <div class="home-data-pillar-dot"></div>
+          <div class="home-data-pillar-name">Freinage</div>
+          <p class="home-data-pillar-text">Points d'attaque, progressivité, modulation, relâche au corde.</p>
+        </div>
+        <div class="home-data-pillar acceleration reveal">
+          <div class="home-data-pillar-dot"></div>
+          <div class="home-data-pillar-name">Accélération</div>
+          <p class="home-data-pillar-text">Progressivité à la remise des gaz, anticipation, traction en sortie.</p>
+        </div>
+        <div class="home-data-pillar regularity reveal">
+          <div class="home-data-pillar-dot"></div>
+          <div class="home-data-pillar-name">Régularité</div>
+          <p class="home-data-pillar-text">Écart-type entre vos tours, stabilité de performance sur la durée.</p>
+        </div>
+      </div>
+      <div class="home-data-cta reveal">
+        <button class="btn btn-secondary" onclick="goTo('offers')"><span>Découvrir les offres →</span></button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================
+       SECTION 3c — RITUELS AUDIO J-7/J-2/J-1
+       ============================================================ -->
+  <section class="home-rituels">
+    <div class="wrap">
+      <div class="home-rituels-intro">
+        <div class="kicker reveal">N° 04 · La préparation</div>
+        <h2 class="home-rituels-title reveal">
+          Trois rituels.<br/>
+          Vous arrivez <em>préparé</em>.
+        </h2>
+        <p class="home-rituels-lede reveal">À J-7, J-2, J-1 — OXV vous envoie un contenu audio dédié. Confirmation de session, briefing du tracé, météo et derniers mots. Vous ne découvrez pas le circuit le jour J.</p>
+      </div>
+      <div class="home-rituels-timeline">
+        <div class="home-rituel reveal">
+          <div class="home-rituel-day">J — 7</div>
+          <div class="home-rituel-title">Confirmation</div>
+          <p class="home-rituel-text">Votre inscription est confirmée. Votre dossier pilote, la liste des participants, la playlist OXV de la session — tout est dans votre boîte.</p>
+          <div class="home-rituel-player" aria-label="Aperçu audio – démo visuelle">
+            <div class="home-rituel-play" aria-hidden="true"><svg viewBox="0 0 10 10"><polygon points="2,1 9,5 2,9"/></svg></div>
+            <div class="home-rituel-wave" aria-hidden="true"><span style="height:8px"></span><span style="height:14px"></span><span style="height:6px"></span><span style="height:18px"></span><span style="height:10px"></span><span style="height:16px"></span><span style="height:8px"></span><span style="height:12px"></span><span style="height:20px"></span><span style="height:7px"></span><span style="height:15px"></span><span style="height:9px"></span><span style="height:18px"></span><span style="height:11px"></span><span style="height:14px"></span></div>
+            <div class="home-rituel-duration">3 min</div>
+          </div>
+        </div>
+        <div class="home-rituel reveal">
+          <div class="home-rituel-day">J — 2</div>
+          <div class="home-rituel-title">Briefing tracé</div>
+          <p class="home-rituel-text">Le tracé Beltoise virage par virage. Les points clés, les pièges, les zones d'amélioration identifiées sur vos sessions précédentes.</p>
+          <div class="home-rituel-player" aria-label="Aperçu audio – démo visuelle">
+            <div class="home-rituel-play" aria-hidden="true"><svg viewBox="0 0 10 10"><polygon points="2,1 9,5 2,9"/></svg></div>
+            <div class="home-rituel-wave" aria-hidden="true"><span style="height:12px"></span><span style="height:7px"></span><span style="height:20px"></span><span style="height:14px"></span><span style="height:9px"></span><span style="height:18px"></span><span style="height:6px"></span><span style="height:16px"></span><span style="height:10px"></span><span style="height:20px"></span><span style="height:13px"></span><span style="height:8px"></span><span style="height:17px"></span><span style="height:11px"></span><span style="height:15px"></span></div>
+            <div class="home-rituel-duration">14 min</div>
+          </div>
+        </div>
+        <div class="home-rituel reveal">
+          <div class="home-rituel-day">J — 1</div>
+          <div class="home-rituel-title">Dernier mot</div>
+          <p class="home-rituel-text">Météo, état de la piste, rappels techniques. Ce que vous devez savoir avant de partir. Une minute, pas plus.</p>
+          <div class="home-rituel-player" aria-label="Aperçu audio – démo visuelle">
+            <div class="home-rituel-play" aria-hidden="true"><svg viewBox="0 0 10 10"><polygon points="2,1 9,5 2,9"/></svg></div>
+            <div class="home-rituel-wave" aria-hidden="true"><span style="height:16px"></span><span style="height:10px"></span><span style="height:8px"></span><span style="height:19px"></span><span style="height:12px"></span><span style="height:7px"></span><span style="height:15px"></span><span style="height:20px"></span><span style="height:9px"></span><span style="height:14px"></span><span style="height:18px"></span><span style="height:11px"></span><span style="height:7px"></span><span style="height:16px"></span><span style="height:13px"></span></div>
+            <div class="home-rituel-duration">1 min</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================
        SECTION 4 — LA PROMESSE & CTA FINAL
        ============================================================ -->
   <section class="home-final">
@@ -12673,7 +13275,7 @@ textarea:focus-visible {
         <h3 class="home-final-cta-headline">Choisissez votre <em>première date</em>.</h3>
         <p class="home-final-cta-sub">Pré-inscription en ligne · paiement par carte bancaire · capture le jour de la session.</p>
         <div class="home-final-cta-actions">
-          <button class="btn btn-primary btn-lg" onclick="goTo('booking')"><span>Réserver une session</span></button>
+          <button class="btn btn-primary btn-lg" onclick="ctaPrimaryGo()"><span>Réserver une session</span></button>
           <button class="btn btn-lg" onclick="goTo('calendrier')"><span>Voir le calendrier complet</span></button>
         </div>
       </div>
@@ -12731,7 +13333,7 @@ textarea:focus-visible {
               <div class="offer-price">390<em>€</em></div>
               <span class="offer-price-tag">par pilote · TTC</span>
             </div>
-            <button class="btn btn-sm" onclick="goTo('booking')"><span>Réserver</span></button>
+            <button class="btn btn-sm" onclick="ctaPrimaryGo()"><span>Réserver</span></button>
           </div>
         </article>
 
@@ -12749,9 +13351,9 @@ textarea:focus-visible {
           <div class="offer-includes">Inclus dans Signature</div>
           <ul class="offer-features">
             <li>Accès intégral à la piste · Open Pitlane sur la journée complète</li>
-            <li>Briefing premium OXV · coaching individuel pendant la journée</li>
+            <li>Briefing premium OXV · accès coach partenaire en option</li>
             <li>Télémétrie GPS 25 Hz capturée intégralement</li>
-            <li>Rapport QDI personnalisé sous 48h · 5 dimensions · Coach IA</li>
+            <li>Rapport QDI personnalisé sous 48h · 5 dimensions analysées</li>
             <li>Petit-déjeuner d'accueil · déjeuner gastronomique 3 services · café d'après-piste</li>
             <li>Reportage photo individualisé (10-15 clichés) · vidéo onboard montée</li>
             <li>Drone FPV professionnel sur certaines sessions · livraison sous 7 jours</li>
@@ -12766,7 +13368,7 @@ textarea:focus-visible {
               <div class="offer-price">690<em>€</em></div>
               <span class="offer-price-tag">par pilote · TTC</span>
             </div>
-            <button class="btn btn-primary btn-sm" onclick="goTo('booking')"><span>Réserver</span></button>
+            <button class="btn btn-primary btn-sm" onclick="ctaPrimaryGo()"><span>Réserver</span></button>
           </div>
         </article>
 
@@ -12803,7 +13405,7 @@ textarea:focus-visible {
               <div class="offer-price">2 490<em>€</em></div>
               <span class="offer-price-tag">soit 622,50 € / session · économie 270 €</span>
             </div>
-            <button class="btn btn-sm" onclick="goTo('booking')"><span>Souscrire</span></button>
+            <button class="btn btn-sm" onclick="ctaPrimaryGo()"><span>Souscrire</span></button>
           </div>
         </article>
 
@@ -12835,7 +13437,7 @@ textarea:focus-visible {
           <div class="compare-cell featured">20 pilotes</div>
           <div class="compare-cell">20 · prioritaire</div>
 
-          <div class="compare-cell label">Coaching individuel</div>
+          <div class="compare-cell label">Coaching partenaire (option)</div>
           <div class="compare-cell dot-no">○</div>
           <div class="compare-cell featured dot-yes">●</div>
           <div class="compare-cell dot-yes">●</div>
@@ -13412,7 +14014,7 @@ textarea:focus-visible {
       </div>
 
       <div style="text-align: center; margin-top: 64px;" class="reveal">
-        <button class="btn btn-primary btn-lg" onclick="goTo('booking')"><span>Réserver une session</span></button>
+        <button class="btn btn-primary btn-lg" onclick="ctaPrimaryGo()"><span>Réserver une session</span></button>
       </div>
     </div>
   </section>
@@ -13527,7 +14129,7 @@ textarea:focus-visible {
           <ul class="corp-format-features">
             <li>Privatisation circuit journée complète</li>
             <li>20 pilotes maximum</li>
-            <li>Coaching individuel pour chaque participant</li>
+            <li>Coach partenaire OXV disponible sur demande (option)</li>
             <li>Télémétrie GPS 25 Hz + QDI par pilote</li>
             <li>Reportage photo professionnel</li>
             <li>Captation vidéo onboard dédiée</li>
@@ -13549,7 +14151,7 @@ textarea:focus-visible {
           <div class="corp-scenario">
             <div class="corp-scenario-icon">⌘</div>
             <h3 class="corp-scenario-title">Comité de direction</h3>
-            <p class="corp-scenario-text">12 à 20 dirigeants. Coaching individuel, restitution data collective en fin de session. Un moment de cohésion qui se mesure en données réelles.</p>
+            <p class="corp-scenario-text">12 à 20 dirigeants. Restitution data collective en fin de session, accès coach partenaire en option. Un moment de cohésion qui se mesure en données réelles.</p>
           </div>
 
           <div class="corp-scenario">
@@ -13590,7 +14192,7 @@ textarea:focus-visible {
         <div class="kicker" style="margin-bottom: 24px;">N° 04.2 · Demande de devis</div>
         <h2 class="section-title" style="margin-bottom: 32px;">Parlez-nous<br/>de <em>votre projet</em>.</h2>
 
-        <form id="corpForm" onsubmit="event.preventDefault(); submitCorporateMailto();" class="corp-form">
+        <form id="corpForm" onsubmit="event.preventDefault(); submitCorporate();" class="corp-form">
           
           <div class="corp-form-row">
             <div class="corp-form-field">
@@ -13666,7 +14268,7 @@ textarea:focus-visible {
           </div>
 
           <p class="corp-form-info">
-            Votre demande s'enverra à <strong>contact@oxvehicle.fr</strong> via votre client mail.<br/>
+            Votre demande est transmise directement à l'équipe OXV.<br/>
             Devis HT sous 5 jours ouvrés.
           </p>
 
@@ -13678,6 +14280,8 @@ textarea:focus-visible {
 
 </div>
 <!-- /corporate -->
+
+
 
 
 <!-- ============ À PROPOS ============ -->
@@ -13753,7 +14357,7 @@ textarea:focus-visible {
         <div class="about-value reveal">
           <div class="about-value-num">II</div>
           <div class="about-value-title">Le développement</div>
-          <p class="about-value-text">Télémétrie GPS 25 Hz, QDI, coaching individuel. Chaque session laisse une trace exploitable. La progression n'est pas un bonus — c'est l'objet.</p>
+          <p class="about-value-text">Télémétrie GPS 25 Hz, QDI, lecture par secteur. Chaque session laisse une trace exploitable. La progression n'est pas un bonus — c'est l'objet.</p>
         </div>
 
         <div class="about-value reveal">
@@ -13771,7 +14375,7 @@ textarea:focus-visible {
       <h2 class="about-cta-headline reveal">Rejoignez la <em>saison 2027</em>.</h2>
       <p class="about-cta-sub reveal">Pré-inscription en ligne. Places limitées à vingt pilotes par session.</p>
       <div class="reveal" style="display: flex; gap: 16px; justify-content: center; flex-wrap: wrap;">
-        <button class="btn btn-primary btn-lg" onclick="goTo('booking')"><span>Pré-inscription saison 2027 →</span></button>
+        <button class="btn btn-primary btn-lg" onclick="ctaPrimaryGo()"><span>Pré-inscription saison 2027 →</span></button>
         <button class="btn btn-lg" onclick="goTo('offers')"><span>Découvrir les offres</span></button>
       </div>
     </div>
@@ -13869,7 +14473,7 @@ textarea:focus-visible {
             Réservation en ligne, paiement par virement, sept jours avant la session.
           </p>
         </div>
-        <button class="btn btn-primary" onclick="goTo('booking')"><span>Réserver une session</span></button>
+        <button class="btn btn-primary" onclick="ctaPrimaryGo()"><span>Réserver une session</span></button>
       </div>
 
     </div>
@@ -14064,6 +14668,225 @@ textarea:focus-visible {
 
 </div>
 <!-- /signup -->
+
+<!-- ============ DEMANDE D'INSCRIPTION (candidature sur sélection) ============ -->
+<div class="page" id="page-demande">
+
+  <div class="auth-wrap">
+    <!-- Côté éditorial gauche -->
+    <div class="auth-side">
+      <div class="auth-side-eyebrow">N° ⌬ · Le cercle</div>
+      <h1 class="auth-side-title">Rejoindre<br/>le <em>cercle</em>.</h1>
+      <p class="auth-side-text">
+        OXV est un cercle fermé : vingt pilotes par session, pas vingt-et-un. Chaque candidature est étudiée individuellement. <em>Déposez la vôtre — nous revenons vers vous.</em>
+      </p>
+      <ul class="auth-side-bullets">
+        <li>Candidature étudiée sous quelques jours</li>
+        <li>Aucun paiement à ce stade</li>
+        <li>Identifiants envoyés à l'acceptation</li>
+        <li>Données chiffrées · serveurs en Europe</li>
+      </ul>
+    </div>
+
+    <!-- Carte de candidature -->
+    <div class="auth-card">
+      <div class="auth-card-eyebrow">— Demande d'inscription</div>
+      <h2 class="auth-card-title">Votre <em>candidature</em>.</h2>
+      <p class="auth-card-sub">
+        Vous avez déjà un compte ? <a onclick="goTo('login')">Se connecter</a>
+      </p>
+
+      <!-- Sélecteur de profil -->
+      <div class="dmd-seg" id="dmdSeg">
+        <button type="button" class="dmd-seg-opt active" data-type="pilote" onclick="dmdSelectType('pilote')">
+          <span class="dmd-seg-ic">⊙</span><span>Pilote</span>
+        </button>
+        <button type="button" class="dmd-seg-opt" data-type="pilote_pro" onclick="dmdSelectType('pilote_pro')">
+          <span class="dmd-seg-ic">⊳</span><span>Pilote pro · FFSA</span>
+        </button>
+        <button type="button" class="dmd-seg-opt" data-type="coach" onclick="dmdSelectType('coach')">
+          <span class="dmd-seg-ic">⌬</span><span>Coach</span>
+        </button>
+      </div>
+
+      <div class="auth-form">
+
+        <!-- BLOC IDENTITÉ (tous) -->
+        <div class="form-grid" style="grid-template-columns: 1fr 1fr; gap: 14px;">
+          <div class="form-row">
+            <label>Prénom</label>
+            <input type="text" id="dmd-first" placeholder="Prénom" autocomplete="given-name" />
+          </div>
+          <div class="form-row">
+            <label>Nom</label>
+            <input type="text" id="dmd-last" placeholder="Nom" autocomplete="family-name" />
+          </div>
+        </div>
+        <div class="form-grid" style="grid-template-columns: 1fr 1fr; gap: 14px;">
+          <div class="form-row">
+            <label>Date de naissance</label>
+            <input type="date" id="dmd-birth" autocomplete="bday" />
+          </div>
+          <div class="form-row">
+            <label>Téléphone</label>
+            <input type="tel" id="dmd-phone" placeholder="+33 6 ..." autocomplete="tel" />
+          </div>
+        </div>
+        <div class="form-row">
+          <label>Email</label>
+          <input type="email" id="dmd-email" placeholder="prenom.nom@email.fr" autocomplete="email" />
+        </div>
+        <div class="form-row">
+          <label>Ville / région</label>
+          <input type="text" id="dmd-city" placeholder="Bordeaux, Nouvelle-Aquitaine" autocomplete="address-level2" />
+        </div>
+
+        <!-- BLOC VÉHICULE (pilote / pilote_pro) -->
+        <div class="dmd-block" data-block="vehicle">
+          <div class="dmd-block-label">— Votre véhicule</div>
+          <div class="form-grid" style="grid-template-columns: 1fr 1fr; gap: 14px;">
+            <div class="form-row">
+              <label>Marque</label>
+              <input type="text" id="dmd-veh-brand" placeholder="Ex. Porsche" />
+            </div>
+            <div class="form-row">
+              <label>Modèle</label>
+              <input type="text" id="dmd-veh-model" placeholder="Ex. 911 GT3" />
+            </div>
+          </div>
+          <div class="form-grid" style="grid-template-columns: 1fr 1fr; gap: 14px;">
+            <div class="form-row">
+              <label>Année <span style="opacity:.6;font-weight:400;">(facultatif)</span></label>
+              <input type="number" id="dmd-veh-year" placeholder="2022" min="1950" max="2030" />
+            </div>
+            <div class="form-row">
+              <label>Type</label>
+              <select id="dmd-veh-type">
+                <option value="">—</option>
+                <option value="route">Voiture fermée (route)</option>
+                <option value="cabriolet">Cabriolet / décapotable</option>
+                <option value="competition">Voiture compétition</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <!-- BLOC EXPÉRIENCE (pilote / pilote_pro) -->
+        <div class="dmd-block" data-block="experience">
+          <div class="dmd-block-label">— Expérience circuit</div>
+          <div class="form-row">
+            <label>Avez-vous déjà roulé sur circuit ?</label>
+            <select id="dmd-track-exp">
+              <option value="">—</option>
+              <option value="jamais">Jamais</option>
+              <option value="quelques_fois">Quelques fois</option>
+              <option value="regulierement">Régulièrement</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- BLOC LICENCE FFSA (pilote_pro) -->
+        <div class="dmd-block" data-block="ffsa">
+          <div class="dmd-block-label">— Licence FFSA</div>
+          <div class="form-grid" style="grid-template-columns: 1fr 1fr; gap: 14px;">
+            <div class="form-row">
+              <label>N° de licence</label>
+              <input type="text" id="dmd-ffsa-num" placeholder="N° FFSA" />
+            </div>
+            <div class="form-row">
+              <label>Catégorie</label>
+              <input type="text" id="dmd-ffsa-cat" placeholder="Ex. Circuit Concurrent" />
+            </div>
+          </div>
+        </div>
+
+        <!-- BLOC COACH (coach) -->
+        <div class="dmd-block" data-block="coach">
+          <div class="dmd-block-label">— Qualification professionnelle</div>
+          <div class="form-row">
+            <label>Diplôme BPJEPS (ou équivalent)</label>
+            <input type="text" id="dmd-bpjeps" placeholder="N° · mention · année d'obtention" />
+          </div>
+          <div class="form-row">
+            <label>Assurance responsabilité civile professionnelle</label>
+            <input type="text" id="dmd-rcpro" placeholder="Assureur · n° de contrat" />
+          </div>
+          <div class="form-row">
+            <label>Statut professionnel</label>
+            <input type="text" id="dmd-pro-status" placeholder="Auto-entrepreneur, société, salarié porté…" />
+          </div>
+          <div class="dmd-block-label" style="margin-top:18px;">— Expérience d'encadrement</div>
+          <div class="form-row">
+            <label>Années d'expérience en coaching circuit</label>
+            <input type="text" id="dmd-coach-years" placeholder="Ex. 6 ans · GT, sportives" />
+          </div>
+          <div class="form-row">
+            <label>Circuits et disciplines pratiqués <span style="opacity:.6;font-weight:400;">(facultatif)</span></label>
+            <input type="text" id="dmd-coach-tracks" placeholder="Ex. Le Mans, Magny-Cours · perfectionnement" />
+          </div>
+          <div class="dmd-block-label" style="margin-top:18px;">— Activité envisagée avec OXV</div>
+          <div class="form-row">
+            <label>Pilotes que vous pensez amener <span style="opacity:.6;font-weight:400;">(estimation)</span></label>
+            <input type="text" id="dmd-coach-pilots" placeholder="Ex. 3 à 5 pilotes par saison" />
+          </div>
+          <div class="form-row">
+            <label>Votre approche du coaching <span style="opacity:.6;font-weight:400;">(facultatif)</span></label>
+            <textarea id="dmd-coach-pitch" rows="3" placeholder="Quelques lignes sur votre méthode et ce que vous recherchez chez OXV"></textarea>
+          </div>
+          <p class="dmd-note">
+            Le coach exerce sous sa propre responsabilité et son propre diplôme. OXV fournit l'outil, le lieu et la mise en relation — jamais le conseil de pilotage.
+          </p>
+        </div>
+
+        <!-- BLOC ADHÉSION (tous) -->
+        <div class="dmd-block-label" style="margin-top:6px;">— Adhésion au cercle</div>
+        <div class="form-row">
+          <label>Parrainé par un membre ? <span style="opacity:.6;font-weight:400;">(facultatif)</span></label>
+          <input type="text" id="dmd-referral" placeholder="Nom du membre, le cas échéant" />
+        </div>
+        <div class="form-row">
+          <label id="dmd-motivation-label">Pourquoi OXV ? <span style="opacity:.6;font-weight:400;">(facultatif)</span></label>
+          <textarea id="dmd-motivation" rows="3" placeholder="Quelques mots sur ce qui vous amène vers OXV"></textarea>
+        </div>
+
+        <!-- CONSENTEMENTS -->
+        <div class="consent" id="dmd-c-cgv" onclick="toggleConsent('dmd-c-cgv')" style="margin-top: 8px;">
+          <div class="ck"></div>
+          <div class="text">
+            J'accepte les <a onclick="event.stopPropagation(); goTo('cgv')">conditions générales de vente</a> et d'<a onclick="event.stopPropagation(); goTo('cgu')">utilisation</a> d'OXV.
+            <span class="badge">obligatoire</span>
+          </div>
+        </div>
+        <div class="consent" id="dmd-c-rgpd" onclick="toggleConsent('dmd-c-rgpd')">
+          <div class="ck"></div>
+          <div class="text">
+            J'autorise OXV à conserver et traiter les données de ma candidature, conformément à la <a onclick="event.stopPropagation(); goTo('privacy')">politique de confidentialité</a>.
+            <span class="badge">obligatoire</span>
+          </div>
+        </div>
+        <div class="consent" id="dmd-c-contact" onclick="toggleConsent('dmd-c-contact')">
+          <div class="ck"></div>
+          <div class="text">
+            J'accepte d'être recontacté par OXV au sujet de ma candidature.
+            <span class="badge">obligatoire</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="auth-actions">
+        <button class="btn btn-primary btn-lg" onclick="submitDemande()" id="dmdSubmitBtn"><span>Envoyer ma candidature</span></button>
+      </div>
+
+      <p class="auth-foot">
+        Réponse sous quelques jours. À l'acceptation, vous recevrez un email pour définir votre mot de passe et accéder à votre espace.<br/>
+        Besoin d'aide ? <a href="mailto:contact@oxvehicle.fr">contact@oxvehicle.fr</a>
+      </p>
+    </div>
+  </div>
+
+</div>
+<!-- /demande -->
+
 
 
 <!-- ============ AUTH : LOGIN ============ -->
@@ -14733,7 +15556,7 @@ textarea:focus-visible {
       <div class="account-header">
         <div class="account-header-eyebrow">N° ⌬.3 · Documents</div>
         <h1 class="account-header-title">Mes <em>documents</em>.</h1>
-        <p class="account-header-sub">
+        <p class="account-header-sub" id="docHeaderSub">
           Permis, identité, assurances. Ces documents sont conservés en Europe (Frankfurt), chiffrés, et accessibles uniquement à vous et au service de validation OXV. Après upload, comptez 24 à 48 heures pour la validation manuelle.
         </p>
       </div>
@@ -15035,7 +15858,7 @@ textarea:focus-visible {
           <div style="padding:18px;background:rgba(230, 57, 70, 0.06);border:1px solid rgba(230, 57, 70, 0.2);border-radius:8px;">
             <div style="font-family:var(--display);font-size:11px;font-weight:400;letter-spacing:0.2em;text-transform:uppercase;color:var(--red);margin-bottom:8px;">⚠ Référence obligatoire à inscrire dans le libellé</div>
             <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap;">
-              <code style="font-family:var(--mono);font-size:18px;color:var(--gold);background:rgba(0,0,0,0.4);padding:10px 16px;border-radius:6px;letter-spacing:0.05em;">OXV-XXXXXX</code>
+              <code id="billRef" style="font-family:var(--mono);font-size:18px;color:var(--gold);background:rgba(0,0,0,0.4);padding:10px 16px;border-radius:6px;letter-spacing:0.05em;">—</code>
             </div>
             <p style="font-family:var(--sans);font-size:12px;color:var(--cream-mute);margin:12px 0 0;line-height:1.5;">Une référence unique vous sera communiquée à l'ouverture des paiements (janvier 2027). Elle permet à OXV d'identifier votre virement. <strong style="color:var(--cream);">Sans elle, la validation peut prendre plusieurs jours.</strong></p>
           </div>
@@ -15051,18 +15874,7 @@ textarea:focus-visible {
         <div class="bento" style="padding: 0; margin-bottom: 24px; overflow: hidden;">
           
           <div id="billHistoryRows">
-
-            <!-- Démonstration : exemple de règlement en attente (saison 2027) -->
-            <div style="display:grid;grid-template-columns:auto 1fr auto auto;gap:18px;padding:18px 24px;align-items:center;">
-              <span class="status-dot pending" style="background:var(--red);box-shadow:0 0 8px var(--red);"></span>
-              <div>
-                <div style="font-family:var(--display);font-style:italic;font-weight:700;font-size:14px;letter-spacing:0.04em;color:var(--cream);">Signature · saison 2027 <span style="font-family:var(--mono);font-size:9px;font-style:normal;letter-spacing:0.12em;text-transform:uppercase;color:var(--cream-mute);opacity:0.7;">· exemple</span></div>
-                <div style="font-family:var(--sans);font-size:12px;color:var(--cream-mute);margin-top:4px;">Référence : <span style="color:var(--gold);font-family:var(--mono);">OXV-XXXXXX</span> · à régler à l'ouverture des paiements (janvier 2027)</div>
-              </div>
-              <div style="font-family:var(--display);font-style:italic;font-weight:700;font-size:18px;color:var(--red);">—</div>
-              <span class="tag-inline red">En attente</span>
-            </div>
-
+            <div style="padding:32px;text-align:center;color:var(--cream-mute);font-family:var(--sans);font-size:13px;">Aucun règlement pour le moment.</div>
           </div>
         </div>
 
@@ -15315,7 +16127,7 @@ textarea:focus-visible {
              ║   RECOMMANDATIONS COACH IA                            ║
              ╚══════════════════════════════════════════════════════╝ -->
         <div class="account-section-title" style="font-family: var(--display); font-style: italic; font-weight: 700; font-size: 14px; letter-spacing: 0.22em; text-transform: uppercase; color: var(--gold); margin-bottom: 16px;">
-          — Recommandations Coach IA
+          — Lecture de votre session
         </div>
 
         <div class="prog-reco-grid">
@@ -15361,12 +16173,12 @@ textarea:focus-visible {
           <div class="prog-app-tag">⬇ Prochainement</div>
           <h3 class="prog-app-title">L'application <em>OXV</em> arrive</h3>
           <p class="prog-app-text">
-            Téléchargez votre coach virtuel sur iPhone & Android. Analyse en temps réel, télémétrie GPS-25Hz, ghost replay, coaching IA personnalisé. <strong style="color: var(--cream);">Sortie prévue : printemps 2027.</strong>
+            Téléchargez l'application OXV sur iPhone & Android. Analyse en temps réel, télémétrie GPS 25 Hz, ghost replay, lecture par secteur. <strong style="color: var(--cream);">Sortie prévue : printemps 2027.</strong>
           </p>
           <div class="prog-app-features">
             <span class="prog-app-feature">HUD temps réel</span>
             <span class="prog-app-feature">Ghost LIVE</span>
-            <span class="prog-app-feature">Coach IA</span>
+            <span class="prog-app-feature">Bilan de session</span>
             <span class="prog-app-feature">Module B.3 Analyse</span>
             <span class="prog-app-feature">Heatmap circuit</span>
           </div>
@@ -15565,6 +16377,10 @@ textarea:focus-visible {
 
         <div class="admin-nav-section">— Opérations</div>
 
+        <button class="admin-nav-item" onclick="goToAdmin('admin-demandes')">
+          <span>Demandes</span>
+          <span class="badge-count" id="navBadgeDemandesGlobal" style="display:none;"></span>
+        </button>
         <button class="admin-nav-item" onclick="goToAdmin('admin-pilotes')">
           <span>Pilotes</span>
           <span class="badge-count" id="navBadgePilotes" style="display:none;">0</span>
@@ -15759,6 +16575,10 @@ textarea:focus-visible {
 
         <div class="admin-nav-section">— Opérations</div>
 
+        <button class="admin-nav-item" onclick="goToAdmin('admin-demandes')">
+          <span>Demandes</span>
+          <span class="badge-count" id="navBadgeDemandesGlobal" style="display:none;"></span>
+        </button>
         <button class="admin-nav-item active" onclick="goToAdmin('admin-pilotes')">
           <span>Pilotes</span>
         </button>
@@ -15882,6 +16702,121 @@ textarea:focus-visible {
 </div>
 <!-- /admin-pilotes -->
 
+<!-- ============ ADMIN : DEMANDES D'INSCRIPTION ============ -->
+<div class="page" id="page-admin-demandes">
+
+  <div class="admin-layout">
+
+    <aside class="admin-sidebar">
+      <div class="admin-brand">
+        <div class="admin-brand-mark">⌬</div>
+        <div class="admin-brand-text">
+          OXV
+          <em>Admin</em>
+        </div>
+      </div>
+
+      <nav class="admin-nav">
+        <button class="admin-nav-item" onclick="goToAdmin('admin')">
+          <span>Tableau de bord</span>
+        </button>
+
+        <div class="admin-nav-section">— Opérations</div>
+
+        <button class="admin-nav-item active" onclick="goToAdmin('admin-demandes')">
+          <span>Demandes</span>
+          <span class="badge-count" id="navBadgeDemandes" style="display:none;">0</span>
+        </button>
+        <button class="admin-nav-item" onclick="goToAdmin('admin-pilotes')">
+          <span>Pilotes</span>
+        </button>
+        <button class="admin-nav-item" onclick="goToAdmin('admin-sessions')">
+          <span>Sessions</span>
+        </button>
+        <button class="admin-nav-item" onclick="goToAdmin('admin-paiements')">
+          <span>Paiements</span>
+        </button>
+
+        <div class="admin-nav-section">— Communication</div>
+
+        <button class="admin-nav-item" onclick="goToAdmin('admin-medias')">
+          <span>Médias</span>
+        </button>
+        <button class="admin-nav-item" onclick="goToAdmin('admin-articles')">
+          <span>Articles</span>
+        </button>
+        <button class="admin-nav-item" onclick="goToAdmin('admin-emails')">
+          <span>Emails</span>
+        </button>
+
+        <div class="admin-nav-section">— Pilotage</div>
+
+        <button class="admin-nav-item" onclick="goToAdmin('admin-stats')">
+          <span>Statistiques</span>
+        </button>
+        <button class="admin-nav-item" onclick="goToAdmin('admin-securite')">
+          <span>Sécurité &amp; 2FA</span>
+        </button>
+
+        <div class="admin-nav-divider"></div>
+
+        <button class="admin-nav-item" onclick="goTo('compte')">
+          <span>← Vue pilote</span>
+        </button>
+        <button class="admin-nav-item" onclick="logoutUser()">
+          <span>Se déconnecter</span>
+        </button>
+      </nav>
+    </aside>
+
+    <main class="admin-main">
+      <div class="admin-header">
+        <div class="admin-header-left">
+          <div class="admin-header-eyebrow">N° ⌬.0 · Opérations</div>
+          <h1 class="admin-header-title">Demandes d'<em>inscription</em>.</h1>
+          <div class="admin-header-sub" id="demandesCountSub">— candidatures</div>
+        </div>
+      </div>
+
+      <!-- Filtres statut -->
+      <div class="admin-filters">
+        <button class="admin-filter active" data-dfilter="en_attente" onclick="setDemandesFilter('en_attente')">
+          En attente <span class="count" id="dCountAttente">—</span>
+        </button>
+        <button class="admin-filter" data-dfilter="acceptee" onclick="setDemandesFilter('acceptee')">
+          Acceptées <span class="count" id="dCountAcceptee">—</span>
+        </button>
+        <button class="admin-filter" data-dfilter="refusee" onclick="setDemandesFilter('refusee')">
+          Refusées <span class="count" id="dCountRefusee">—</span>
+        </button>
+        <button class="admin-filter" data-dfilter="all" onclick="setDemandesFilter('all')">
+          Toutes <span class="count" id="dCountAll">—</span>
+        </button>
+      </div>
+
+      <!-- Filtres type -->
+      <div class="admin-filters" style="margin-top:8px;">
+        <button class="admin-filter active" data-dtype="all" onclick="setDemandesType('all')">Tous profils</button>
+        <button class="admin-filter" data-dtype="pilote" onclick="setDemandesType('pilote')">Pilote</button>
+        <button class="admin-filter" data-dtype="pilote_pro" onclick="setDemandesType('pilote_pro')">Pilote pro</button>
+        <button class="admin-filter" data-dtype="coach" onclick="setDemandesType('coach')">Coach</button>
+      </div>
+
+      <div id="demandesLoading" class="account-loading" style="margin-top:32px;">— Chargement des candidatures…</div>
+
+      <div id="demandesEmpty" class="admin-empty" style="display:none;">
+        <div class="admin-empty-icon">○</div>
+        <div class="admin-empty-text">Aucune candidature pour ce filtre.</div>
+      </div>
+
+      <div id="demandesList" style="display:none; margin-top:24px;"></div>
+    </main>
+  </div>
+
+</div>
+<!-- /admin-demandes -->
+
+
 
 <!-- ============ ADMIN : FICHE PILOTE DÉTAILLÉE ============ -->
 <div class="page" id="page-admin-pilote-detail">
@@ -15902,6 +16837,10 @@ textarea:focus-visible {
           <span>Tableau de bord</span>
         </button>
         <div class="admin-nav-section">— Opérations</div>
+        <button class="admin-nav-item" onclick="goToAdmin('admin-demandes')">
+          <span>Demandes</span>
+          <span class="badge-count" id="navBadgeDemandesGlobal" style="display:none;"></span>
+        </button>
         <button class="admin-nav-item active" onclick="goToAdmin('admin-pilotes')">
           <span>Pilotes</span>
         </button>
@@ -16089,6 +17028,10 @@ textarea:focus-visible {
           <span>Tableau de bord</span>
         </button>
         <div class="admin-nav-section">— Opérations</div>
+        <button class="admin-nav-item" onclick="goToAdmin('admin-demandes')">
+          <span>Demandes</span>
+          <span class="badge-count" id="navBadgeDemandesGlobal" style="display:none;"></span>
+        </button>
         <button class="admin-nav-item" onclick="goToAdmin('admin-pilotes')">
           <span>Pilotes</span>
         </button>
@@ -16292,6 +17235,10 @@ textarea:focus-visible {
           <span>Tableau de bord</span>
         </button>
         <div class="admin-nav-section">— Opérations</div>
+        <button class="admin-nav-item" onclick="goToAdmin('admin-demandes')">
+          <span>Demandes</span>
+          <span class="badge-count" id="navBadgeDemandesGlobal" style="display:none;"></span>
+        </button>
         <button class="admin-nav-item" onclick="goToAdmin('admin-pilotes')">
           <span>Pilotes</span>
         </button>
@@ -17523,7 +18470,7 @@ textarea:focus-visible {
           Société en cours d'immatriculation<br/>
           Adresse : Le Petit Châtaignier, 17360 La Génétouze, France<br/>
           SIRET : en cours · TVA intracommunautaire : en cours<br/>
-          Directeur de la publication : à préciser
+          Directeur de la publication : Gabin Fillat
         </p>
 
         <h2>Hébergement</h2>
@@ -17822,6 +18769,273 @@ textarea:focus-visible {
 </div>
 
 
+<!-- ============ FOUNDING MEMBERS ============ -->
+<div class="page" id="page-founding">
+  <section class="page-section" style="max-width:1100px;margin:0 auto;padding:0 32px 80px;">
+
+    <div class="founding-hero">
+      <div class="founding-eyebrow">— Programme fondateur · Saison 2027</div>
+      <h1 class="founding-title">Rejoindre les<br/>30 Fondateurs.</h1>
+      <p class="founding-sub">Avant l'ouverture commerciale. Avant le premier roulage. Vous êtes parmi les premiers à savoir qu'OXV existe — c'est le moment d'en faire partie.</p>
+
+      <div class="founding-counter">
+        <span class="founding-counter-num" id="foundingCount">—</span>
+        <div>
+          <div style="font-family:var(--display);font-style:italic;font-weight:700;font-size:18px;color:var(--cream-mute);">/ 30 Founding Members</div>
+          <div class="founding-counter-label" id="foundingCountLabel">ont déjà rejoint le cercle</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 7 avantages -->
+    <div style="font-family:var(--mono);font-size:10px;letter-spacing:0.28em;text-transform:uppercase;color:var(--gold);margin-bottom:20px;">— Les 7 avantages exclusifs</div>
+    <div class="founding-avantages">
+      <div class="founding-avantage">
+        <span class="founding-avantage-num">01</span>
+        <div>
+          <div class="founding-avantage-title">Tarif figé à vie</div>
+          <p class="founding-avantage-text">Access 390 € · Signature 690 € · Heritage 2 490 €. Ces prix ne seront jamais réévalués pour vous, quelle que soit l'évolution du catalogue.</p>
+        </div>
+      </div>
+      <div class="founding-avantage">
+        <span class="founding-avantage-num">02</span>
+        <div>
+          <div class="founding-avantage-title">Priorité absolue de réservation</div>
+          <p class="founding-avantage-text">Accès au calendrier avant toute ouverture publique. Les 20 places par session sont à votre disposition en premier.</p>
+        </div>
+      </div>
+      <div class="founding-avantage">
+        <span class="founding-avantage-num">03</span>
+        <div>
+          <div class="founding-avantage-title">Accès anticipé saison N+1</div>
+          <p class="founding-avantage-text">Chaque nouvelle saison, vous recevez le calendrier et ouvrez vos réservations avant les membres standard — à vie.</p>
+        </div>
+      </div>
+      <div class="founding-avantage">
+        <span class="founding-avantage-num">04</span>
+        <div>
+          <div class="founding-avantage-title">Statut « Founding Member »</div>
+          <p class="founding-avantage-text">Inscrit dans votre profil et visible sur le plateau. Reconnu par les autres membres et l'équipe OXV pour toujours.</p>
+        </div>
+      </div>
+      <div class="founding-avantage">
+        <span class="founding-avantage-num">05</span>
+        <div>
+          <div class="founding-avantage-title">Invitation au lancement</div>
+          <p class="founding-avantage-text">Présent pour les premières journées. L'événement de lancement officiel — 30 personnes, pas une de plus.</p>
+        </div>
+      </div>
+      <div class="founding-avantage">
+        <span class="founding-avantage-num">06</span>
+        <div>
+          <div class="founding-avantage-title">App OXV premium illimitée</div>
+          <p class="founding-avantage-text">Accès complet à toutes les fonctionnalités de l'application OXV sans restriction de sessions ni de durée.</p>
+        </div>
+      </div>
+      <div class="founding-avantage">
+        <span class="founding-avantage-num">07</span>
+        <div>
+          <div class="founding-avantage-title">Newsletter privée du porteur</div>
+          <p class="founding-avantage-text">Les coulisses du projet. Ce qui se construit, les décisions, les arbitrages. Un accès direct, sans filtre communication.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Formulaire de candidature -->
+    <div class="founding-form-section">
+      <div style="width:40px;height:2px;background:var(--gold);margin-bottom:28px;"></div>
+      <div class="founding-form-title">Postuler au cercle.</div>
+      <p class="founding-form-sub">La candidature est gratuite et sans engagement. Nous la lisons personnellement et revenons vers vous sous 48h.</p>
+
+      <div class="founding-form-grid">
+        <div class="founding-field">
+          <label class="form-label" style="font-family:var(--mono);font-size:9px;letter-spacing:0.2em;text-transform:uppercase;color:var(--cream-mute);display:block;margin-bottom:7px;">Prénom</label>
+          <input class="form-input" id="fndFirstName" type="text" placeholder="Alexandre" autocomplete="given-name" />
+        </div>
+        <div class="founding-field">
+          <label class="form-label" style="font-family:var(--mono);font-size:9px;letter-spacing:0.2em;text-transform:uppercase;color:var(--cream-mute);display:block;margin-bottom:7px;">Nom</label>
+          <input class="form-input" id="fndLastName" type="text" placeholder="Dupont" autocomplete="family-name" />
+        </div>
+        <div class="founding-field full">
+          <label class="form-label" style="font-family:var(--mono);font-size:9px;letter-spacing:0.2em;text-transform:uppercase;color:var(--cream-mute);display:block;margin-bottom:7px;">Email</label>
+          <input class="form-input" id="fndEmail" type="email" placeholder="alexandre@exemple.fr" autocomplete="email" />
+        </div>
+        <div class="founding-field full">
+          <label class="form-label" style="font-family:var(--mono);font-size:9px;letter-spacing:0.2em;text-transform:uppercase;color:var(--cream-mute);display:block;margin-bottom:7px;">Votre véhicule (marque, modèle)</label>
+          <input class="form-input" id="fndVehicle" type="text" placeholder="Porsche 911 GT3, Ferrari 488, Lotus Emira…" />
+        </div>
+        <div class="founding-field full">
+          <label class="form-label" style="font-family:var(--mono);font-size:9px;letter-spacing:0.2em;text-transform:uppercase;color:var(--cream-mute);display:block;margin-bottom:7px;">Pourquoi OXV ? <span style="color:var(--cream-mute);font-style:italic;">(optionnel — mais nous le lisons vraiment)</span></label>
+          <textarea class="form-input" id="fndMessage" rows="4" placeholder="Votre expérience des circuits, ce que vous cherchez, ce qui vous a attiré vers OXV…" style="resize:vertical;"></textarea>
+        </div>
+        <div class="full" style="display:flex;align-items:center;gap:10px;margin-top:4px;">
+          <input type="checkbox" id="fndConsent" style="width:16px;height:16px;flex-shrink:0;accent-color:var(--gold);" />
+          <label for="fndConsent" style="font-family:var(--sans);font-size:12px;color:var(--cream-mute);line-height:1.5;cursor:pointer;">J'accepte que OXV traite ces informations pour répondre à ma candidature, conformément à la <a onclick="goTo('privacy')" style="color:var(--gold);">politique de confidentialité</a>.</label>
+        </div>
+        <div class="full" style="margin-top:8px;">
+          <button class="btn btn-primary" onclick="submitFoundingForm()"><span>Envoyer ma candidature →</span></button>
+        </div>
+      </div>
+    </div>
+
+    <!-- FAQ -->
+    <div class="founding-faq">
+      <div style="font-family:var(--mono);font-size:10px;letter-spacing:0.28em;text-transform:uppercase;color:var(--gold);margin-bottom:24px;">— Questions fréquentes</div>
+      <div class="founding-faq-item">
+        <div class="founding-faq-q">La candidature engage-t-elle financièrement ?</div>
+        <p class="founding-faq-a">Non. Candidater est gratuit et sans engagement. Il n'y a aucun paiement à cette étape. Si votre candidature est retenue, vous recevez une invitation à pré-réserver. Les paiements ouvrent courant janvier 2027.</p>
+      </div>
+      <div class="founding-faq-item">
+        <div class="founding-faq-q">Qu'est-ce qui différencie un Founding Member d'un membre standard ?</div>
+        <p class="founding-faq-a">Le tarif figé à vie, la priorité de réservation permanente, le statut reconnu sur le plateau, et l'invitation à l'événement de lancement. Ces avantages sont réservés aux 30 premiers — ils ne seront plus disponibles après l'ouverture commerciale.</p>
+      </div>
+      <div class="founding-faq-item">
+        <div class="founding-faq-q">Que se passe-t-il si 30 Founding Members ont déjà rejoint ?</div>
+        <p class="founding-faq-a">Le programme ferme. Les candidatures reçues après la 30e validation sont placées sur liste d'attente et traitées en conditions standard à l'ouverture commerciale.</p>
+      </div>
+      <div class="founding-faq-item">
+        <div class="founding-faq-q">Mon véhicule est-il compatible ?</div>
+        <p class="founding-faq-a">OXV accueille toute voiture de route ou préparée piste homologuée, à partir du moment où elle respecte les exigences techniques du circuit (casque, combinaison, extincteur selon configuration). Les spécifications complètes sont sur la page <a onclick="goTo('specs-techniques')" style="color:var(--gold);">spécifications techniques</a>.</p>
+      </div>
+      <div class="founding-faq-item">
+        <div class="founding-faq-q">Quand est le premier roulage ?</div>
+        <p class="founding-faq-a">La saison 2027 ouvre en avril 2027 sur le Circuit de Haute Saintonge, tracé Beltoise. Les Founding Members reçoivent le calendrier complet en avant-première dès janvier 2027.</p>
+      </div>
+    </div>
+
+  </section>
+</div>
+<!-- /founding -->
+
+
+<!-- ============ COACH PARTENAIRE ============ -->
+<div class="page" id="page-coach">
+  <section class="page-section" style="max-width:1100px;margin:0 auto;padding:0 32px 80px;">
+
+    <div class="coach-hero">
+      <div class="founding-eyebrow">— Coach partenaire OXV · Licence fondateur</div>
+      <h1 class="founding-title">La licence qui<br/>ouvre le circuit.</h1>
+      <p class="founding-sub">Vous êtes coach diplômé BPJEPS. Vos pilotes cherchent un terrain, un outil de mesure, une référence. OXV vous donne les trois.</p>
+
+      <div class="coach-price-block">
+        <span class="coach-price">750 €</span>
+        <div>
+          <div class="coach-price-label">Tarif fondateur · Saison 2027</div>
+          <div style="font-family:var(--mono);font-size:9px;color:var(--cream-mute);letter-spacing:0.12em;">Figé pour les coachs partenaires de la première saison</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Ce qu'inclut la licence -->
+    <div style="font-family:var(--mono);font-size:10px;letter-spacing:0.28em;text-transform:uppercase;color:var(--gold);margin-bottom:20px;">— Ce qu'inclut la licence</div>
+    <div class="coach-inclus">
+      <div class="coach-inclus-item">
+        <div class="coach-inclus-icon">⊞</div>
+        <div class="coach-inclus-title">L'outil version coach</div>
+        <p class="coach-inclus-text">Accès aux données détaillées multi-pilotes. Lecture par secteur, comparaison entre sessions, suivi de progression sur la saison. Ce que vous ne pouvez pas voir à l'œil nu, enfin lisible.</p>
+      </div>
+      <div class="coach-inclus-item">
+        <div class="coach-inclus-icon">◎</div>
+        <div class="coach-inclus-title">Accès circuit à tarif dégressif</div>
+        <p class="coach-inclus-text">Chaque pilote que vous amenez sur une session OXV vous ouvre une remise sur votre propre accès. La grille est transparente et figée pour la saison 2027.</p>
+      </div>
+      <div class="coach-inclus-item">
+        <div class="coach-inclus-icon">⌬</div>
+        <div class="coach-inclus-title">Mise en relation avec les membres</div>
+        <p class="coach-inclus-text">Les membres OXV cherchant un accompagnement vous sont présentés en priorité. Votre profil est référencé dans l'application et visible des pilotes actifs.</p>
+      </div>
+      <div class="coach-inclus-item">
+        <div class="coach-inclus-icon">◈</div>
+        <div class="coach-inclus-title">Statut de partenaire référencé</div>
+        <p class="coach-inclus-text">Tarif fondateur figé à 750 € pour toutes les saisons suivantes, tant que vous êtes partenaire actif. Vous entrez dans l'histoire d'OXV dès le départ.</p>
+      </div>
+    </div>
+
+    <!-- Grille dégressive -->
+    <div style="font-family:var(--mono);font-size:10px;letter-spacing:0.28em;text-transform:uppercase;color:var(--gold);margin-bottom:16px;">— Grille d'accès dégressif</div>
+    <div class="coach-degressive">
+      <div class="coach-degressive-row" style="background:rgba(255,183,3,0.04);">
+        <span style="font-family:var(--mono);font-size:9px;letter-spacing:0.14em;text-transform:uppercase;color:var(--cream-mute);">Pilotes amenés / saison</span>
+        <span style="font-family:var(--mono);font-size:9px;letter-spacing:0.14em;text-transform:uppercase;color:var(--cream-mute);">Réduction sur votre accès</span>
+      </div>
+      <div class="coach-degressive-row">
+        <span style="color:var(--cream);">1 à 2 pilotes</span>
+        <span class="discount">− 5 %</span>
+      </div>
+      <div class="coach-degressive-row">
+        <span style="color:var(--cream);">3 à 4 pilotes</span>
+        <span class="discount">− 10 %</span>
+      </div>
+      <div class="coach-degressive-row">
+        <span style="color:var(--cream);">5 pilotes et plus</span>
+        <span class="discount">− 15 %</span>
+      </div>
+    </div>
+
+    <!-- Cadre légal -->
+    <div class="coach-legal">
+      <div class="coach-legal-title">— Cadre légal · Transparence</div>
+      <p class="coach-legal-text">OXV n'est pas un organisme de coaching. OXV fournit <strong style="color:var(--cream);">l'outil, le lieu et la mise en relation</strong>. Le coach diplômé BPJEPS coache sous <strong style="color:var(--cream);">sa propre responsabilité professionnelle</strong>, dans le cadre légal qui est le sien. Cette distinction n'est pas une précaution rhétorique — c'est le fondement du modèle, et elle protège les deux parties.</p>
+    </div>
+
+    <!-- CTA -->
+    <div style="display:flex;gap:16px;flex-wrap:wrap;">
+      <button class="btn btn-primary" onclick="goToDemande('coach')"><span>Candidater comme coach partenaire →</span></button>
+      <button class="btn" onclick="goTo('offers')"><span>Voir les offres pilotes</span></button>
+    </div>
+
+  </section>
+</div>
+<!-- /coach -->
+
+<div class="page" id="page-plateau">
+  <section class="page-hero plateau-hero">
+    <div class="wrap">
+      <div class="plateau-hero-eyebrow">Le plateau</div>
+      <h1 class="plateau-hero-title">Vingt pilotes.<br/>Un <em>cercle</em>.</h1>
+      <p class="plateau-hero-lede">Le plateau OXV, c'est la communauté active de la saison en cours. Pas un classement, pas un réseau — un cercle privé de passionnés exigeants qui partagent le même tracé.</p>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="wrap">
+      <div class="kicker">Les quatre principes</div>
+      <div class="plateau-principles">
+        <div class="plateau-principle reveal">
+          <div class="plateau-principle-num">01</div>
+          <div class="plateau-principle-title">La sécurité avant tout</div>
+          <p class="plateau-principle-text">Le circuit est un espace exigeant. Chaque pilote est responsable de sa conduite et respecte l'espace des autres. Les règles du briefing ne sont pas négociables — elles protègent tout le monde.</p>
+        </div>
+        <div class="plateau-principle reveal">
+          <div class="plateau-principle-num">02</div>
+          <div class="plateau-principle-title">Le développement toujours</div>
+          <p class="plateau-principle-text">Chaque session est une opportunité d'apprendre. Les données sont là pour progresser, pas pour comparer. Sur OXV, vous pilotez contre votre propre référence — aucune autre.</p>
+        </div>
+        <div class="plateau-principle reveal">
+          <div class="plateau-principle-num">03</div>
+          <div class="plateau-principle-title">La sensation enfin</div>
+          <p class="plateau-principle-text">La performance est une conséquence, jamais un objectif déclaré. Ce qui compte c'est la qualité du moment — la précision d'un freinage réussi, la fluidité d'un enchaînement maîtrisé.</p>
+        </div>
+        <div class="plateau-principle reveal">
+          <div class="plateau-principle-num">04</div>
+          <div class="plateau-principle-title">Le respect du cercle</div>
+          <p class="plateau-principle-text">Les membres se connaissent, s'entre-aident, préservent l'esprit de la session. Ce qui se dit dans le paddock reste dans le paddock. Confiance et discrétion.</p>
+        </div>
+      </div>
+
+      <div style="margin-top: 64px;">
+        <div class="plateau-members-label">Les membres de la saison</div>
+        <div id="plateauMembers">
+          <div class="plateau-empty">Les membres apparaîtront ici à l'ouverture de la saison 2027.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+<!-- /plateau -->
+
+
+
 <!-- ============ FOOTER ============ -->
 <footer>
   <div class="foot-rule" aria-hidden="true"></div>
@@ -17834,7 +19048,7 @@ textarea:focus-visible {
             <div class="foot-brand-insignia" aria-hidden="true"><svg><use href="#oxv-insignia"/></svg></div>
           </div>
           <p class="foot-tag">Sessions confidentielles au Circuit de Haute Saintonge. Vingt pilotes. Un seul niveau d'exigence.</p>
-          <button class="btn btn-sm" style="font-family:var(--mono);font-size:9px;letter-spacing:0.22em;text-transform:uppercase;" onclick="goTo('booking')"><span>Pré-inscription saison 2027 →</span></button>
+          <button class="btn btn-sm" style="font-family:var(--mono);font-size:9px;letter-spacing:0.22em;text-transform:uppercase;" onclick="ctaPrimaryGo()"><span>Pré-inscription saison 2027 →</span></button>
         </div>
 
         <div class="foot-col">
@@ -17852,7 +19066,7 @@ textarea:focus-visible {
         <div class="foot-col">
           <h5>Espace pilote</h5>
           <ul>
-            <li><button onclick="goTo('booking')">Réserver</button></li>
+            <li><button onclick="ctaPrimaryGo()">Réserver</button></li>
             <li><button onclick="goTo('login')">Se connecter</button></li>
             <li><button onclick="goTo('signup')">Créer un compte</button></li>
             <li><button onclick="toast('Application mobile — prochainement')">App mobile <span style="color:var(--oxv-red);font-size:8px;letter-spacing:0.15em;margin-left:6px;">BIENTÔT</span></button></li>
@@ -18242,7 +19456,35 @@ function onAuthChange() {
       if (main) main.style.display = logged ? 'block' : 'none';
     }
   });
+
+  // Bascule des CTA d'adhésion : non connecté = "Rejoindre le cercle", membre = "Réserver une session"
+  const navJoin = document.getElementById('navCtaJoin');
+  if (navJoin) navJoin.textContent = logged ? 'Réserver une session' : 'Rejoindre le cercle';
+  const mobJoin = document.getElementById('mobCtaJoin');
+  if (mobJoin) mobJoin.textContent = logged ? 'Réserver une session' : 'Rejoindre le cercle';
+
+  // Lien admin "Demandes" : visible seulement si admin (badge mis à jour par loadAdminDemandes)
+  document.querySelectorAll('[data-nav="demandes"]').forEach(el => {
+    el.style.display = (window.OXVApi.user.dbProfile?.role === 'admin') ? '' : 'none';
+  });
 }
+
+/* CTA principal : route selon l'état de connexion.
+   - Connecté  → tunnel de réservation (booking)
+   - Visiteur  → demande d'inscription (candidature) */
+window.ctaPrimaryGo = function() {
+  if (window.OXVApi?.user?.isLoggedIn) {
+    goTo('booking');
+  } else {
+    goTo('demande');
+  }
+};
+
+/* Ouvre la demande d'inscription en pré-sélectionnant un profil (pilote / pilote_pro / coach) */
+window.goToDemande = function(type) {
+  window._dmdType = type || 'pilote';
+  goTo('demande');
+};
 
 /* === ROUTING === */
 window.goTo = function(page, opts) {
@@ -18250,7 +19492,7 @@ window.goTo = function(page, opts) {
   // Pages protégées (pilote) : nécessitent une connexion
   const protectedPages = ['compte', 'compte-profil', 'compte-vehicules', 'compte-documents', 'compte-sessions', 'compte-progression', 'compte-heritage', 'compte-paiements', 'compte-preferences'];
   // Pages admin : nécessitent une connexion + role=admin
-  const adminPages = ['admin', 'admin-pilotes', 'admin-pilote-detail', 'admin-sessions', 'admin-paiements', 'admin-medias', 'admin-articles', 'admin-emails', 'admin-stats', 'admin-securite'];
+  const adminPages = ['admin', 'admin-pilotes', 'admin-pilote-detail', 'admin-sessions', 'admin-paiements', 'admin-medias', 'admin-articles', 'admin-emails', 'admin-stats', 'admin-securite', 'admin-demandes'];
   const isProtected = protectedPages.includes(page) || adminPages.includes(page);
 
   if (isProtected && !window.OXVApi.user.isLoggedIn) {
@@ -18339,6 +19581,18 @@ window.goTo = function(page, opts) {
   if (page === 'booking') {
     setTimeout(() => bkOpen(), 100);
   }
+  if (page === 'demande') {
+    setTimeout(() => { if (typeof window.dmdSelectType === 'function') dmdSelectType(window._dmdType || 'pilote'); }, 60);
+  }
+  if (page === 'admin-demandes') {
+    setTimeout(() => { if (typeof window.loadAdminDemandes === 'function') loadAdminDemandes(); }, 150);
+  }
+  if (page === 'founding') {
+    setTimeout(() => { if (typeof window.loadFounding === 'function') window.loadFounding(); }, 150);
+  }
+  if (page === 'plateau') {
+    setTimeout(() => { if (typeof window.loadPlateau === 'function') window.loadPlateau(); }, 150);
+  }
 
   // Synchronisation URL (History API) + meta SEO
   if (!opts.fromPop) oxvSyncUrl(page, opts);
@@ -18364,7 +19618,7 @@ const OXV_NOINDEX_PAGES = ['login', 'signup', 'forgot-password', 'reset-password
   'compte', 'compte-profil', 'compte-vehicules', 'compte-documents', 'compte-sessions',
   'compte-progression', 'compte-heritage', 'compte-paiements', 'compte-preferences',
   'admin', 'admin-pilotes', 'admin-pilote-detail', 'admin-sessions', 'admin-session-detail',
-  'admin-paiements', 'admin-medias', 'admin-articles', 'admin-emails', 'admin-stats', 'admin-securite'];
+  'admin-paiements', 'admin-medias', 'admin-articles', 'admin-emails', 'admin-stats', 'admin-securite', 'admin-demandes', 'demande'];
 
 // Titre + description par page publique
 const OXV_PAGE_SEO = {
@@ -18377,13 +19631,17 @@ const OXV_PAGE_SEO = {
   actualites:  { title: 'Actualités — le journal de la saison · OXV', description: 'Annonces, coulisses, technique et presse. Le journal de la première saison OXV au Circuit de Haute Saintonge.' },
   contact:     { title: 'Contact · OXV', description: 'Contactez OXV pour une session, une privatisation corporate ou toute question sur le track day au Circuit de Haute Saintonge.' },
   booking:     { title: 'Réserver une session · OXV', description: 'Pré-inscription en ligne aux sessions OXV de la saison 2027. Access, Signature ou Heritage sur le tracé Beltoise.' },
+  founding:    { title: 'Founding Members — Rejoindre le cercle OXV', description: 'Postulez au programme Founding Members OXV : accès prioritaire, tarif fondateur et participation active à la construction du cercle. Trente places, pas trente-et-une.' },
+  coach:       { title: 'OXV Coach — devenir coach partenaire · Licence Fondateur 2027', description: 'Coach diplômé BPJEPS : rejoignez le cercle des coachs partenaires OXV. Licence Fondateur 750 € la saison, outil de données multi-pilotes, accès circuit à tarif dégressif et mise en relation avec les membres.' },
+  plateau:     { title: 'Le plateau — la communauté OXV · Saison 2027', description: 'Le plateau OXV : vingt pilotes, quatre principes, un cercle. Découvrez la communauté active et les membres de la saison en cours au Circuit de Haute Saintonge.' },
   mentions:    { title: 'Mentions légales · OXV', description: 'Mentions légales du site OXV — Only Xtreme Vehicle.' },
   cgv:         { title: 'Conditions générales de vente · OXV', description: 'Conditions générales de vente OXV : offres, paiements, annulations.' },
   cgu:         { title: 'Conditions générales d\'utilisation · OXV', description: 'Conditions générales d\'utilisation du site OXV.' },
   privacy:     { title: 'Confidentialité · RGPD · OXV', description: 'Politique de confidentialité et traitement des données personnelles OXV, conforme au RGPD.' },
   'specs-techniques': { title: 'Spécifications techniques · OXV', description: 'Exigences techniques et de sécurité pour rouler sur le tracé Beltoise avec OXV.' },
   login:       { title: 'Connexion · OXV', description: 'Connexion à l\'espace pilote OXV.' },
-  signup:      { title: 'Créer un compte · OXV', description: 'Créez votre compte pilote OXV.' }
+  signup:      { title: 'Créer un compte · OXV', description: 'Créez votre compte pilote OXV.' },
+  demande:     { title: 'Rejoindre le cercle — demande d\'inscription · OXV', description: 'Déposez votre candidature pour rejoindre OXV : pilote, pilote licencié FFSA ou coach partenaire. Chaque demande est étudiée individuellement.' }
 };
 
 function oxvRouteToPath(page, articleId) {
@@ -18522,7 +19780,7 @@ La saison 2027 est la première saison OXV. Les pilotes qui s'inscrivent mainten
 Concrètement, trois portes d'entrée s'offrent à vous :
 
 - **Access** — la demi-journée du lundi, 20 pilotes, le circuit dans sa forme la plus pure, pour 390 € TTC.
-- **Signature** — la journée complète du vendredi, coaching individuel, télémétrie 25 Hz, QDI, déjeuner gastronomique, média dédié, pour 690 € TTC.
+- **Signature** — la journée complète du vendredi, télémétrie 25 Hz, QDI, déjeuner gastronomique, média dédié, coaching partenaire en option, pour 690 € TTC.
 - **Heritage** — l'engagement saison : quatre sessions Signature, priorité de réservation, app premium illimitée, pour 2 490 € TTC.
 
 ## Comment *s'inscrire*
@@ -18689,7 +19947,7 @@ Au-delà des formats, ce sont les usages qui comptent. Voici trois scénarios qu
 
 ## 1 · Le *comité de direction*
 
-Douze à vingt dirigeants, une journée hors du cadre habituel. Coaching individuel sur piste, puis restitution collective des données en fin de session. La performance de chacun devient un objet de discussion partagé — un exercice de cohésion qui se mesure en chiffres réels, pas en discours.
+Douze à vingt dirigeants, une journée hors du cadre habituel. Restitution collective des données en fin de session, accès coach partenaire OXV en option. La performance de chacun devient un objet de discussion partagé — un exercice de cohésion qui se mesure en chiffres réels, pas en discours.
 
 ## 2 · Le *concessionnaire premium*
 
@@ -20048,21 +21306,20 @@ window.submitB2B = function() {
   cb.classList.remove('checked');
 };
 
-/* === FORMULAIRE CORPORATE - Envoi via mailto === */
-window.submitCorporateMailto = function() {
+/* === FORMULAIRE CORPORATE — Envoi Supabase === */
+window.submitCorporate = async function() {
   const company = document.getElementById('cf-company').value.trim();
-  const sector = document.getElementById('cf-sector').value.trim();
-  const name = document.getElementById('cf-name').value.trim();
-  const role = document.getElementById('cf-role').value.trim();
-  const email = document.getElementById('cf-email').value.trim();
-  const phone = document.getElementById('cf-phone').value.trim();
-  const format = document.getElementById('cf-format').value;
-  const guests = document.getElementById('cf-guests').value.trim();
-  const dates = document.getElementById('cf-dates').value.trim();
+  const sector  = document.getElementById('cf-sector').value.trim();
+  const name    = document.getElementById('cf-name').value.trim();
+  const role    = document.getElementById('cf-role').value.trim();
+  const email   = document.getElementById('cf-email').value.trim();
+  const phone   = document.getElementById('cf-phone').value.trim();
+  const format  = document.getElementById('cf-format').value;
+  const guests  = document.getElementById('cf-guests').value.trim();
+  const dates   = document.getElementById('cf-dates').value.trim();
   const message = document.getElementById('cf-msg').value.trim();
-  const rgpd = document.getElementById('cf-rgpd').checked;
+  const rgpd    = document.getElementById('cf-rgpd').checked;
 
-  // Validation
   if (!company || !name || !email || !format || !rgpd) {
     toast('Veuillez remplir tous les champs obligatoires (*)', 'warn');
     return;
@@ -20072,46 +21329,41 @@ window.submitCorporateMailto = function() {
     return;
   }
 
-  // Construction du corps du mail
-  const subject = `[OXV Corporate] Demande de devis · ${company}`;
-  const body = `Demande de devis OXV Corporate
+  const btn = document.querySelector('#corpForm .btn-primary');
+  if (btn) btn.style.pointerEvents = 'none';
 
-═══════════════════════════════════════
-SOCIÉTÉ
-═══════════════════════════════════════
-Société : ${company}
-Secteur : ${sector || '—'}
+  const msgBody = [
+    `Société : ${company}`, `Secteur : ${sector || '—'}`, `Fonction : ${role || '—'}`,
+    `Téléphone : ${phone || '—'}`, `Format : ${format}`,
+    `Invités : ${guests || '—'}`, `Date envisagée : ${dates || '—'}`,
+    message ? `\nDétails :\n${message}` : ''
+  ].filter(Boolean).join('\n');
 
-═══════════════════════════════════════
-CONTACT
-═══════════════════════════════════════
-Nom : ${name}
-Fonction : ${role || '—'}
-Email : ${email}
-Téléphone : ${phone || '—'}
+  try {
+    if (typeof supabase !== 'undefined') {
+      const { error } = await supabase.from('contact_messages').insert({
+        first_name: name.split(' ')[0] || name,
+        last_name:  name.split(' ').slice(1).join(' ') || '—',
+        email,
+        subject:   `Demande corporate · ${company}`,
+        message:   msgBody,
+        source:    'corporate-form'
+      });
+      if (error) console.warn('[Corporate] Insert error:', error);
+    }
+  } catch (e) {
+    console.warn('[Corporate] Exception:', e);
+  } finally {
+    if (btn) btn.style.pointerEvents = '';
+  }
 
-═══════════════════════════════════════
-PROJET
-═══════════════════════════════════════
-Format : ${format}
-Nombre d'invités : ${guests || '—'}
-Date envisagée : ${dates || '—'}
-
-Détails :
-${message || '—'}
-
-═══════════════════════════════════════
-Envoyé depuis oxvehicle.fr
-═══════════════════════════════════════`;
-
-  // Ouverture du client mail
-  const mailtoUrl = `mailto:contact@oxvehicle.fr?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
-  window.location.href = mailtoUrl;
-  
-  // Feedback utilisateur
-  setTimeout(() => {
-    toast('Votre client mail s\'est ouvert. Vérifiez les informations puis envoyez.', 'ok');
-  }, 500);
+  toast('Demande envoyée · devis sous 5 jours ouvrés', 'ok');
+  ['cf-company','cf-sector','cf-name','cf-role','cf-email','cf-phone','cf-guests','cf-dates','cf-msg'].forEach(id => {
+    const el = document.getElementById(id); if (el) el.value = '';
+  });
+  const sel = document.getElementById('cf-format');
+  if (sel) sel.selectedIndex = 0;
+  document.getElementById('cf-rgpd').checked = false;
 };
 
 /* ============================================================
@@ -20210,20 +21462,8 @@ window.closeCornerDetail = function() {
    ADMIN PAIEMENTS — Gestion complète virements + validation
    ============================================================ */
 
-// Données mockup de démonstration (sera remplacé par Supabase) — saison 2027, grille BP v8
-window.MOCK_PAYMENTS = [
-  { id: 'OXV-3F7A92', pilot: 'Sophie Lefèvre', pilotEmail: 'sophie.l@gmail.com', session: 'Signature · 4 juin 2027', amount: 690, status: 'pending', date: '2027-01-12', dueDate: '2027-05-28' },
-  { id: 'OXV-2D9E33', pilot: 'Julie Moreau', pilotEmail: 'j.moreau@orange.fr', session: 'Signature · 14 mai 2027', amount: 690, status: 'pending', date: '2027-01-09', dueDate: '2027-05-07' },
-  { id: 'OXV-5A8F71', pilot: 'Thomas Dubois', pilotEmail: 'tdubois@yahoo.fr', session: 'Access · 17 mai 2027', amount: 390, status: 'pending', date: '2027-01-08', dueDate: '2027-05-10' },
-  { id: 'OXV-9C3B28', pilot: 'Anne Vidal', pilotEmail: 'anne.vidal@hotmail.com', session: 'Heritage · 4 sessions Signature', amount: 2490, status: 'pending', date: '2027-01-07', dueDate: '2027-05-21' },
-  { id: 'OXV-6E1A92', pilot: 'Pierre Garcia', pilotEmail: 'p.garcia@gmail.com', session: 'Signature · 28 mai 2027', amount: 690, status: 'pending', date: '2027-01-06', dueDate: '2027-05-21' },
-  { id: 'OXV-4B7D55', pilot: 'Marine Roux', pilotEmail: 'marine.roux@free.fr', session: 'Access · 7 juin 2027', amount: 390, status: 'pending', date: '2027-01-05', dueDate: '2027-05-31' },
-  // Validés (paiements reçus pour des sessions à venir 2027)
-  { id: 'OXV-8A2B41', pilot: 'Sophie Lefèvre', pilotEmail: 'sophie.l@gmail.com', session: 'Signature · 23 avril 2027', amount: 690, status: 'validated', date: '2027-01-15', validatedAt: '2027-01-16' },
-  { id: 'OXV-5G2H88', pilot: 'Marc Bertrand', pilotEmail: 'marc.b@protonmail.com', session: 'Access · 19 avril 2027', amount: 390, status: 'validated', date: '2027-01-14', validatedAt: '2027-01-15' },
-  // Remboursés
-  { id: 'OXV-2L5M76', pilot: 'Lucia Romano', pilotEmail: 'l.romano@gmail.com', session: 'Access · 3 mai 2027 (annulée)', amount: 390, status: 'refunded', date: '2027-01-10', refundedAt: '2027-01-12' },
-];
+// Tableau de données paiements — alimenté par Supabase dans loadAdminPaiements()
+window.MOCK_PAYMENTS = [];
 
 window.loadAdminPaiements = async function() {
   // Initialiser la date du jour dans le modal
@@ -21471,6 +22711,131 @@ function isValidEmail(s) {
 // Garde la dernière email tentée pour le renvoi de vérification
 let lastSignupEmail = '';
 
+
+/* ============================================================
+   DEMANDE D'INSCRIPTION — sélecteur de profil + soumission
+   ============================================================ */
+window._dmdType = 'pilote';
+
+window.dmdSelectType = function(type) {
+  window._dmdType = type;
+  // Onglets
+  document.querySelectorAll('#dmdSeg .dmd-seg-opt').forEach(b => {
+    b.classList.toggle('active', b.getAttribute('data-type') === type);
+  });
+  // Blocs adaptatifs
+  const show = {
+    pilote:     ['vehicle', 'experience'],
+    pilote_pro: ['vehicle', 'experience', 'ffsa'],
+    coach:      ['coach']
+  }[type] || [];
+  document.querySelectorAll('#page-demande .dmd-block').forEach(blk => {
+    const name = blk.getAttribute('data-block');
+    blk.classList.toggle('show', show.includes(name));
+  });
+  // Libellé de motivation adapté au coach
+  const mlabel = document.getElementById('dmd-motivation-label');
+  if (mlabel) {
+    mlabel.innerHTML = (type === 'coach')
+      ? 'Votre approche / pourquoi OXV ? <span style="opacity:.6;font-weight:400;">(facultatif)</span>'
+      : 'Pourquoi OXV ? <span style="opacity:.6;font-weight:400;">(facultatif)</span>';
+  }
+};
+
+window.submitDemande = async function() {
+  const v = id => (document.getElementById(id)?.value || '').trim();
+  const checked = id => document.getElementById(id)?.classList.contains('checked');
+  const type = window._dmdType || 'pilote';
+
+  // --- Validation commune ---
+  const first = v('dmd-first'), last = v('dmd-last'), email = v('dmd-email'), phone = v('dmd-phone');
+  if (!first || !last) { toast('Indiquez votre prénom et votre nom', 'warn'); return; }
+  if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)) { toast('Email invalide', 'warn'); return; }
+  if (!phone) { toast('Indiquez un numéro de téléphone', 'warn'); return; }
+
+  // --- Validation par profil ---
+  if (type === 'pilote' || type === 'pilote_pro') {
+    if (!v('dmd-veh-brand') || !v('dmd-veh-model')) { toast('Renseignez la marque et le modèle de votre véhicule', 'warn'); return; }
+    if (!v('dmd-veh-type')) { toast('Précisez le type de véhicule', 'warn'); return; }
+    if (!v('dmd-track-exp')) { toast('Indiquez votre expérience circuit', 'warn'); return; }
+  }
+  if (type === 'pilote_pro') {
+    if (!v('dmd-ffsa-num')) { toast('Renseignez votre numéro de licence FFSA', 'warn'); return; }
+  }
+  if (type === 'coach') {
+    if (!v('dmd-bpjeps')) { toast('Le diplôme BPJEPS est requis pour candidater comme coach', 'warn'); return; }
+    if (!v('dmd-rcpro'))  { toast('L\u2019assurance RC professionnelle est requise', 'warn'); return; }
+    if (!v('dmd-pro-status')) { toast('Précisez votre statut professionnel', 'warn'); return; }
+    if (!v('dmd-coach-years')) { toast('Indiquez vos années d\u2019expérience en coaching', 'warn'); return; }
+  }
+
+  // --- Consentements ---
+  if (!checked('dmd-c-cgv') || !checked('dmd-c-rgpd') || !checked('dmd-c-contact')) {
+    toast('Merci de valider les trois consentements obligatoires', 'warn'); return;
+  }
+
+  // --- Construction de la ligne ---
+  const row = {
+    type_demande: type,
+    statut: 'en_attente',
+    first_name: first, last_name: last,
+    birth_date: v('dmd-birth') || null,
+    email, phone,
+    city: v('dmd-city') || null,
+    referral: v('dmd-referral') || null,
+    motivation: v('dmd-motivation') || null,
+    consent_cgv: true, consent_rgpd: true, consent_contact: true
+  };
+  if (type === 'pilote' || type === 'pilote_pro') {
+    row.vehicle_brand = v('dmd-veh-brand') || null;
+    row.vehicle_model = v('dmd-veh-model') || null;
+    row.vehicle_year  = v('dmd-veh-year') ? parseInt(v('dmd-veh-year'), 10) : null;
+    row.vehicle_type  = v('dmd-veh-type') || null;
+    row.track_experience = v('dmd-track-exp') || null;
+  }
+  if (type === 'pilote_pro') {
+    row.ffsa_number = v('dmd-ffsa-num') || null;
+    row.ffsa_category = v('dmd-ffsa-cat') || null;
+  }
+  if (type === 'coach') {
+    row.bpjeps = v('dmd-bpjeps') || null;
+    row.rc_pro = v('dmd-rcpro') || null;
+    row.pro_status = v('dmd-pro-status') || null;
+    row.coaching_years = v('dmd-coach-years') || null;
+    row.coaching_tracks = v('dmd-coach-tracks') || null;
+    row.coaching_pilots = v('dmd-coach-pilots') || null;
+    row.coaching_pitch = v('dmd-coach-pitch') || null;
+  }
+
+  const btn = document.getElementById('dmdSubmitBtn');
+  if (btn) { btn.disabled = true; btn.innerHTML = '<span>Envoi…</span>'; }
+
+  const { error } = await supabase.from('demandes_inscription').insert(row);
+
+  if (btn) { btn.disabled = false; btn.innerHTML = '<span>Envoyer ma candidature</span>'; }
+
+  if (error) {
+    if (/uniq_demande_email_attente|duplicate key/i.test(error.message || '')) {
+      toast('Une candidature est déjà en cours pour cet email', 'warn');
+    } else {
+      toast('Erreur lors de l\u2019envoi · réessayez', 'warn');
+      console.warn('[demande] insert error:', error);
+    }
+    return;
+  }
+
+  // Succès : message + retour accueil
+  toast('✓ Candidature envoyée — nous revenons vers vous', 'ok');
+  // Réinitialise les champs
+  document.querySelectorAll('#page-demande input, #page-demande textarea, #page-demande select')
+    .forEach(el => { el.value = ''; });
+  ['dmd-c-cgv','dmd-c-rgpd','dmd-c-contact'].forEach(id => {
+    document.getElementById(id)?.classList.remove('checked');
+  });
+  setTimeout(() => goTo('home'), 1200);
+};
+
+
 window.submitSignup = async function() {
   const first = document.getElementById('su-first');
   const last = document.getElementById('su-last');
@@ -22420,10 +23785,29 @@ const DOC_CATALOG = {
     name: 'Assurance <em>circuit</em>',
     tier: '— Document recommandé',
     description: 'Couverture spécifique track day · facultative si OXV RC souscrite'
+  },
+  bpjeps: {
+    icon: '⌬',
+    name: 'Diplôme <em>BPJEPS</em>',
+    tier: '— Document obligatoire (coach)',
+    description: 'Diplôme d\'État en cours de validité autorisant l\'encadrement sur circuit'
+  },
+  rc_pro: {
+    icon: '⊕',
+    name: 'RC <em>professionnelle</em>',
+    tier: '— Document obligatoire (coach)',
+    description: 'Attestation d\'assurance responsabilité civile professionnelle en cours'
   }
 };
 
 const DOC_ORDER = ['driving_license', 'id_card', 'insurance_road', 'insurance_track'];
+const DOC_ORDER_COACH = ['bpjeps', 'rc_pro', 'id_card'];
+// Renvoie l'ordre de documents adapté au rôle de l'utilisateur connecté
+function docOrderForCurrentUser() {
+  const role = window.OXVApi?.user?.dbProfile?.role;
+  if (role === 'coach') return DOC_ORDER_COACH;
+  return DOC_ORDER;
+}
 
 // État courant du modal document
 let currentDocument = null;     // null = création, sinon objet doc en cours d'édition
@@ -22437,6 +23821,15 @@ window.loadDocuments = async function() {
 
   const userId = window.OXVApi.user.profile?.id;
   if (!userId) return;
+
+  // Sous-titre adapté au rôle
+  const subEl = document.getElementById('docHeaderSub');
+  if (subEl) {
+    const isCoach = window.OXVApi?.user?.dbProfile?.role === 'coach';
+    subEl.textContent = isCoach
+      ? "Diplôme BPJEPS, RC professionnelle, identité. Ces documents sont conservés en Europe (Frankfurt), chiffrés, et accessibles uniquement à vous et au service de validation OXV. Après upload, comptez 24 à 48 heures pour la validation manuelle."
+      : "Permis, identité, assurances. Ces documents sont conservés en Europe (Frankfurt), chiffrés, et accessibles uniquement à vous et au service de validation OXV. Après upload, comptez 24 à 48 heures pour la validation manuelle.";
+  }
 
   const loading = document.getElementById('docLoading');
   const list = document.getElementById('docList');
@@ -22469,7 +23862,7 @@ window.loadDocuments = async function() {
   // Affiche les 4 cartes (toujours dans le même ordre)
   if (list) {
     list.style.display = 'flex';
-    list.innerHTML = DOC_ORDER.map(type => renderDocumentCard(type, docsByType[type])).join('');
+    list.innerHTML = docOrderForCurrentUser().map(type => renderDocumentCard(type, docsByType[type])).join('');
   }
 };
 
@@ -23252,6 +24645,10 @@ window.loadBilling = async function() {
   if (loading) loading.style.display = 'none';
   if (content) content.style.display = 'block';
 
+  // Référence virement : OXV- + 6 premiers chars du user_id en majuscule
+  const ref = document.getElementById('billRef');
+  if (ref && userId) ref.textContent = 'OXV-' + userId.replace(/-/g,'').substring(0,6).toUpperCase();
+
   // Carte principale
   const totalEuros = (totalPaid / 100).toLocaleString('fr-FR', { minimumFractionDigits: 2 });
   document.getElementById('billTotalPaid').innerHTML = `<em>${totalEuros}</em> €`;
@@ -23877,6 +25274,21 @@ window.goToAdmin = async function(page) {
 /**
  * Chargement du tableau de bord admin (KPIs + todo + prochaines sessions)
  */
+window.refreshDemandesBadge = async function() {
+  try {
+    const { count } = await supabase
+      .from('demandes_inscription')
+      .select('id', { count: 'exact', head: true })
+      .eq('statut', 'en_attente');
+    const n = count || 0;
+    document.querySelectorAll('#navBadgeDemandesGlobal, #navBadgeDemandes').forEach(b => {
+      if (!b) return;
+      if (n > 0) { b.textContent = n; b.style.display = ''; }
+      else b.style.display = 'none';
+    });
+  } catch (_) { /* table peut-être pas encore créée */ }
+};
+
 window.loadAdminDashboard = async function() {
   if (!window.OXVApi.user.isLoggedIn) return;
   const isAdmin = await isCurrentUserAdmin();
@@ -23885,6 +25297,8 @@ window.loadAdminDashboard = async function() {
     goTo('compte');
     return;
   }
+
+  refreshDemandesBadge();
 
   // Greeting
   const userId = window.OXVApi.user.profile?.id;
@@ -24126,6 +25540,211 @@ let filteredPilotes = [];     // Après filtre/recherche
 let currentPilotesFilter = 'all';
 let currentPilotesSort = { field: 'created', dir: 'desc' };
 let currentPilotesPage = 1;
+
+
+/* ============================================================
+   ADMIN — Demandes d'inscription (candidatures)
+   ============================================================ */
+window._demandesCache = [];
+window._demandesFilter = 'en_attente';
+window._demandesType = 'all';
+
+const DMD_TYPE_LABEL = { pilote: 'Pilote', pilote_pro: 'Pilote pro · FFSA', coach: 'Coach' };
+const DMD_EXP_LABEL = { jamais: 'Jamais', quelques_fois: 'Quelques fois', regulierement: 'Régulièrement' };
+const DMD_VEHTYPE_LABEL = { route: 'Voiture fermée', cabriolet: 'Cabriolet', competition: 'Compétition' };
+
+window.loadAdminDemandes = async function() {
+  if (!window.OXVApi.user.isLoggedIn) return;
+  const isAdmin = await isCurrentUserAdmin();
+  if (!isAdmin) { toast('Accès admin requis', 'warn'); goTo('compte'); return; }
+
+  const loading = document.getElementById('demandesLoading');
+  const list = document.getElementById('demandesList');
+  const empty = document.getElementById('demandesEmpty');
+  if (loading) loading.style.display = 'block';
+  if (list) list.style.display = 'none';
+  if (empty) empty.style.display = 'none';
+
+  const { data, error } = await supabase
+    .from('demandes_inscription')
+    .select('*')
+    .order('created_at', { ascending: false });
+
+  if (loading) loading.style.display = 'none';
+
+  if (error) {
+    if (empty) { empty.style.display = 'block'; empty.querySelector('.admin-empty-text').textContent = 'Erreur de chargement des candidatures.'; }
+    console.warn('[admin-demandes]', error);
+    return;
+  }
+
+  window._demandesCache = data || [];
+  renderAdminDemandes();
+};
+
+function demandesCounts() {
+  const c = { en_attente: 0, acceptee: 0, refusee: 0, all: 0 };
+  window._demandesCache.forEach(d => { c[d.statut] = (c[d.statut] || 0) + 1; c.all++; });
+  return c;
+}
+
+window.setDemandesFilter = function(f) {
+  window._demandesFilter = f;
+  document.querySelectorAll('#page-admin-demandes [data-dfilter]').forEach(b =>
+    b.classList.toggle('active', b.getAttribute('data-dfilter') === f));
+  renderAdminDemandes();
+};
+window.setDemandesType = function(t) {
+  window._demandesType = t;
+  document.querySelectorAll('#page-admin-demandes [data-dtype]').forEach(b =>
+    b.classList.toggle('active', b.getAttribute('data-dtype') === t));
+  renderAdminDemandes();
+};
+
+function renderAdminDemandes() {
+  const list = document.getElementById('demandesList');
+  const empty = document.getElementById('demandesEmpty');
+  const sub = document.getElementById('demandesCountSub');
+  if (!list) return;
+
+  const counts = demandesCounts();
+  const setTxt = (id, v) => { const e = document.getElementById(id); if (e) e.textContent = v; };
+  setTxt('dCountAttente', counts.en_attente);
+  setTxt('dCountAcceptee', counts.acceptee);
+  setTxt('dCountRefusee', counts.refusee);
+  setTxt('dCountAll', counts.all);
+  if (sub) sub.textContent = `${counts.all} candidature${counts.all > 1 ? 's' : ''} · ${counts.en_attente} en attente`;
+
+  // Badge nav
+  const badge = document.getElementById('navBadgeDemandes');
+  if (badge) {
+    if (counts.en_attente > 0) { badge.textContent = counts.en_attente; badge.style.display = ''; }
+    else badge.style.display = 'none';
+  }
+
+  let rows = window._demandesCache;
+  if (window._demandesFilter !== 'all') rows = rows.filter(d => d.statut === window._demandesFilter);
+  if (window._demandesType !== 'all') rows = rows.filter(d => d.type_demande === window._demandesType);
+
+  if (!rows.length) {
+    list.style.display = 'none';
+    if (empty) empty.style.display = 'block';
+    return;
+  }
+  if (empty) empty.style.display = 'none';
+  list.style.display = 'block';
+  list.innerHTML = rows.map(renderDemandeCard).join('');
+}
+
+function dField(label, value) {
+  if (!value && value !== 0) return '';
+  return `<div><div class="dmc-field-label">${escapeHtml(label)}</div><div class="dmc-field-val">${escapeHtml(String(value))}</div></div>`;
+}
+
+function renderDemandeCard(d) {
+  const initials = ((d.first_name || '?')[0] + (d.last_name || '')[0]).toUpperCase();
+  const dateStr = d.created_at ? new Date(d.created_at).toLocaleDateString('fr-FR', { day: '2-digit', month: 'short', year: 'numeric' }) : '';
+
+  let fields = '';
+  fields += dField('Email', d.email);
+  fields += dField('Téléphone', d.phone);
+  if (d.birth_date) fields += dField('Naissance', new Date(d.birth_date).toLocaleDateString('fr-FR'));
+  fields += dField('Ville / région', d.city);
+
+  if (d.type_demande === 'pilote' || d.type_demande === 'pilote_pro') {
+    const veh = [d.vehicle_brand, d.vehicle_model, d.vehicle_year].filter(Boolean).join(' ');
+    fields += dField('Véhicule', veh);
+    fields += dField('Type véhicule', DMD_VEHTYPE_LABEL[d.vehicle_type] || d.vehicle_type);
+    fields += dField('Expérience circuit', DMD_EXP_LABEL[d.track_experience] || d.track_experience);
+  }
+  if (d.type_demande === 'pilote_pro') {
+    fields += dField('Licence FFSA', d.ffsa_number);
+    fields += dField('Catégorie FFSA', d.ffsa_category);
+  }
+  if (d.type_demande === 'coach') {
+    fields += dField('Diplôme BPJEPS', d.bpjeps);
+    fields += dField('RC professionnelle', d.rc_pro);
+    fields += dField('Statut pro', d.pro_status);
+    fields += dField('Années de coaching', d.coaching_years);
+    fields += dField('Circuits / disciplines', d.coaching_tracks);
+    fields += dField('Pilotes amenés (est.)', d.coaching_pilots);
+  }
+  fields += dField('Parrainage', d.referral);
+
+  const quoteText = d.type_demande === 'coach' ? d.coaching_pitch : d.motivation;
+  const quote = quoteText ? `<div class="dmc-quote">${escapeHtml(quoteText)}</div>` : '';
+  const motivExtra = (d.type_demande === 'coach' && d.motivation) ? `<div class="dmc-quote">${escapeHtml(d.motivation)}</div>` : '';
+
+  let actions = '';
+  if (d.statut === 'en_attente') {
+    actions = `
+      <textarea class="dmc-note-input" id="dnote-${d.id}" rows="2" placeholder="Note interne (facultatif, jointe à l'email en cas de refus)"></textarea>
+      <div class="dmc-actions">
+        <button class="btn btn-primary btn-sm" onclick="adminDecideDemande('${d.id}','accept')"><span>Accepter &amp; créer le compte</span></button>
+        <button class="btn btn-sm" onclick="adminDecideDemande('${d.id}','reject')"><span>Refuser</span></button>
+      </div>`;
+  } else {
+    const who = d.reviewed_at ? ` le ${new Date(d.reviewed_at).toLocaleDateString('fr-FR')}` : '';
+    actions = `<div class="dmc-actions"><span class="dmc-meta">Traitée${who}${d.admin_note ? ' · ' + escapeHtml(d.admin_note) : ''}</span></div>`;
+  }
+
+  return `
+    <div class="dmc" id="dmc-${d.id}">
+      <div class="dmc-head">
+        <div class="dmc-id">${escapeHtml(initials)}</div>
+        <div>
+          <p class="dmc-name">${escapeHtml((d.first_name || '') + ' ' + (d.last_name || ''))}</p>
+          <div class="dmc-meta">Candidature du ${dateStr}</div>
+        </div>
+        <div class="dmc-badges">
+          <span class="dmc-badge ${d.type_demande}">${escapeHtml(DMD_TYPE_LABEL[d.type_demande] || d.type_demande)}</span>
+          <span class="dmc-badge st-${d.statut}">${d.statut === 'en_attente' ? 'En attente' : d.statut === 'acceptee' ? 'Acceptée' : 'Refusée'}</span>
+        </div>
+      </div>
+      <div class="dmc-grid">${fields}</div>
+      ${quote}${motivExtra}
+      ${actions}
+    </div>`;
+}
+
+window.adminDecideDemande = async function(demandeId, action) {
+  const verb = action === 'accept' ? 'accepter cette candidature et créer le compte' : 'refuser cette candidature';
+  if (!confirm(`Confirmer : ${verb} ?`)) return;
+
+  const noteEl = document.getElementById('dnote-' + demandeId);
+  const admin_note = noteEl ? noteEl.value.trim() : null;
+
+  const card = document.getElementById('dmc-' + demandeId);
+  const btns = card ? card.querySelectorAll('.dmc-actions button') : [];
+  btns.forEach(b => { b.disabled = true; });
+
+  try {
+    const { data, error } = await supabase.functions.invoke('validate-inscription', {
+      body: { demande_id: demandeId, action, admin_note }
+    });
+    if (error) throw error;
+    if (data && data.error) throw new Error(data.error);
+
+    if (action === 'accept') {
+      toast('✓ Compte créé · email d\u2019accès envoyé', 'ok');
+      if (data && data.action_link) {
+        console.info('[validate-inscription] lien de secours (si email non reçu) :', data.action_link);
+      }
+    } else {
+      toast('Candidature refusée', 'ok');
+    }
+    await loadAdminDemandes();
+  } catch (e) {
+    btns.forEach(b => { b.disabled = false; });
+    const msg = (e && e.message) ? e.message : '';
+    if (/forbidden_not_admin/.test(msg)) toast('Action réservée aux admins', 'warn');
+    else if (/already_processed/.test(msg)) { toast('Candidature déjà traitée', 'warn'); await loadAdminDemandes(); }
+    else if (/Function not found|not deployed|Failed to send/i.test(msg)) toast('Edge function "validate-inscription" non déployée', 'warn');
+    else toast('Erreur · réessayez', 'warn');
+    console.warn('[adminDecideDemande]', e);
+  }
+};
+
 
 window.loadAdminPilotes = async function() {
   if (!window.OXVApi.user.isLoggedIn) return;
@@ -25003,7 +26622,12 @@ window.adminResetDoc = async function(docId) {
 async function updateGlobalKycStatus(pilotId) {
   if (!pilotId) return;
 
-  const required = ['driving_license', 'id_card', 'insurance_road'];
+  // Documents requis selon le rôle du pilote concerné (coach ≠ pilote)
+  let required = ['driving_license', 'id_card', 'insurance_road'];
+  try {
+    const { data: u } = await supabase.from('users').select('role').eq('id', pilotId).single();
+    if (u && u.role === 'coach') required = ['bpjeps', 'rc_pro', 'id_card'];
+  } catch (_) { /* défaut pilote */ }
 
   const { data: docs } = await supabase
     .from('documents')
@@ -27266,6 +28890,129 @@ window.bkGoToStep = function(n) {
 
 
 /* === INIT === */
+/* ============================================================
+   FOUNDING MEMBERS
+   ============================================================ */
+window.loadFounding = async function() {
+  const counter = document.getElementById('foundingCount');
+  const bandeauCount = document.getElementById('foundingBandeauCount');
+  if (!counter) return;
+  try {
+    const { count } = await supabase
+      .from('contact_messages')
+      .select('id', { count: 'exact', head: true })
+      .eq('subject', 'Candidature Founding Members');
+    const n = count || 0;
+    const remaining = Math.max(0, 30 - n);
+    counter.textContent = remaining;
+    if (bandeauCount) bandeauCount.textContent = remaining > 0 ? ` · ${remaining} place${remaining > 1 ? 's' : ''} restante${remaining > 1 ? 's' : ''}` : ' · Complet';
+  } catch (e) {
+    console.warn('[Founding] loadFounding error:', e);
+    counter.textContent = '—';
+  }
+};
+
+window.submitFoundingForm = async function() {
+  const consent = document.getElementById('fndConsent');
+  if (!consent || !consent.checked) { toast('Vous devez accepter la politique de confidentialité', 'warn'); return; }
+
+  const firstName = (document.getElementById('fndFirstName')?.value || '').trim();
+  const lastName  = (document.getElementById('fndLastName')?.value  || '').trim();
+  const email     = (document.getElementById('fndEmail')?.value     || '').trim();
+  const vehicle   = (document.getElementById('fndVehicle')?.value   || '').trim();
+  const message   = (document.getElementById('fndMessage')?.value   || '').trim();
+
+  if (!firstName || !lastName || !email) { toast('Prénom, nom et email sont requis', 'warn'); return; }
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { toast('Adresse email invalide', 'warn'); return; }
+
+  const btn = document.querySelector('#page-founding .btn-primary');
+  if (btn) btn.style.pointerEvents = 'none';
+
+  const payload = {
+    first_name: firstName,
+    last_name:  lastName,
+    email:      email,
+    subject:    'Candidature Founding Members',
+    message:    (vehicle ? `Véhicule : ${vehicle}\n\n` : '') + (message || '—'),
+    source:     'founding-form'
+  };
+
+  try {
+    if (typeof supabase !== 'undefined') {
+      const { error } = await supabase.from('contact_messages').insert(payload);
+      if (error) console.warn('[Founding] Insert error:', error);
+    }
+  } catch (e) {
+    console.warn('[Founding] Exception:', e);
+  } finally {
+    if (btn) btn.style.pointerEvents = '';
+  }
+
+  toast('Candidature envoyée · nous reviendrons vers vous sous 72h', 'ok');
+  ['fndFirstName','fndLastName','fndEmail','fndVehicle','fndMessage'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.value = '';
+  });
+  if (consent) consent.checked = false;
+  window.loadFounding();
+};
+
+/* ============================================================
+   PLATEAU — Communauté / Annuaire anonymisé
+   ============================================================ */
+window.loadPlateau = async function() {
+  const container = document.getElementById('plateauMembers');
+  if (!container) return;
+  try {
+    const { data: members, error } = await supabase
+      .from('profiles')
+      .select('first_name, last_name, city')
+      .not('first_name', 'is', null)
+      .limit(30);
+    if (error || !members || members.length === 0) {
+      container.innerHTML = '<div class="plateau-empty">Les membres apparaîtront ici à l\'ouverture de la saison 2027.</div>';
+      return;
+    }
+    const grid = document.createElement('div');
+    grid.className = 'plateau-members-grid';
+    members.forEach(m => {
+      const initials = ((m.first_name || '').charAt(0) + (m.last_name || '').charAt(0)).toUpperCase();
+      const displayName = m.first_name + (m.last_name ? ' ' + m.last_name.charAt(0) + '.' : '');
+      grid.innerHTML += `<div class="plateau-member">
+        <div class="plateau-member-avatar">${initials}</div>
+        <div>
+          <div class="plateau-member-name">${displayName}</div>
+          ${m.city ? `<div class="plateau-member-sub">${m.city}</div>` : ''}
+        </div>
+      </div>`;
+    });
+    container.innerHTML = '';
+    container.appendChild(grid);
+  } catch (e) {
+    console.warn('[Plateau] loadPlateau error:', e);
+    container.innerHTML = '<div class="plateau-empty">Les membres apparaîtront ici à l\'ouverture de la saison 2027.</div>';
+  }
+};
+
+function initFoundingBandeau() {
+  const bandeau = document.getElementById('foundingBandeau');
+  if (!bandeau) return;
+  bandeau.style.display = 'flex';
+  if (typeof supabase !== 'undefined') {
+    supabase
+      .from('contact_messages')
+      .select('id', { count: 'exact', head: true })
+      .eq('subject', 'Candidature Founding Members')
+      .then(({ count }) => {
+        const n = count || 0;
+        const remaining = Math.max(0, 30 - n);
+        const el = document.getElementById('foundingBandeauCount');
+        if (el) el.textContent = remaining > 0 ? ` · ${remaining} place${remaining > 1 ? 's' : ''} restante${remaining > 1 ? 's' : ''}` : ' · Complet';
+      })
+      .catch(() => {});
+  }
+}
+
 window.addEventListener('DOMContentLoaded', () => {
   // Init résilient : si une fonction plante, les autres continuent
   const safe = (name, fn) => {
@@ -27310,6 +29057,8 @@ window.addEventListener('DOMContentLoaded', () => {
     if (boot) boot.classList.add('fade');
   }, 600);
   
+  safe('initFoundingBandeau', () => initFoundingBandeau());
+
   // Console branding (clin d'œil aux devs curieux)
   console.log('%c⌬ OXV', 'color: #FFB703; font-size: 24px; font-style: italic; font-weight: 700;');
   console.log('%cOnly Xtreme Vehicle · Track Day Premium', 'color: #A1A1AA; font-size: 11px; letter-spacing: 2px;');
