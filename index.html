@@ -17972,7 +17972,7 @@ window.OXVApi = {
   sessions: {
     list: async () => {
       const { data, error } = await supabase
-        .from('sessions')
+        .from('sessions_public')
         .select('*')
         .order('date', { ascending: true });
       if (error) { console.warn(error); return []; }
@@ -19095,7 +19095,7 @@ async function bkLoadDatesForOffer() {
   minDate.setDate(minDate.getDate() + 3);
   const minDateStr = minDate.toISOString().split('T')[0];
   const { data: sessions, error } = await supabase
-    .from('sessions')
+    .from('sessions_public')
     .select('*')
     .gte('date', minDateStr)
     .not('status', 'in', '(cancelled,archived)')
@@ -26385,7 +26385,7 @@ window.loadPublicCalendar = async function() {
     // Récupère sessions futures, non annulées, non archivées, non privatisées
     const today = new Date().toISOString().split('T')[0];
     const { data: sessions, error } = await supabase
-      .from('sessions')
+      .from('sessions_public')
       .select('*')
       .gte('date', today)
       .not('status', 'in', '(cancelled,archived)')
