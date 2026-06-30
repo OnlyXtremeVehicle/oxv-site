@@ -17876,6 +17876,36 @@ textarea:focus-visible {
     <div id="inboxModalMeta" style="font-family:var(--sans);font-size:13px;color:var(--cream);margin-bottom:16px;"></div>
     <div id="inboxModalBody" style="font-family:var(--sans);font-size:14px;color:var(--cream-mute);line-height:1.6;background:rgba(0,0,0,0.3);border:1px solid var(--bento-border);border-radius:8px;padding:16px;"></div>
     <div id="inboxModalExtra"></div>
+    <div style="margin-top:16px;padding:14px;border:1px solid var(--bento-border);border-radius:8px;background:rgba(0,0,0,0.2);">
+      <div style="font-family:var(--sans);font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--gold);margin-bottom:10px;">Suivi commercial</div>
+      <div style="display:flex;gap:10px;flex-wrap:wrap;">
+        <div style="flex:1;min-width:130px;">
+          <label style="display:block;font-family:var(--sans);font-size:11px;color:var(--cream-mute);margin-bottom:4px;">Statut lead</label>
+          <select id="inboxCrmStatus" style="width:100%;background:rgba(0,0,0,0.4);border:1px solid var(--bento-border);color:var(--cream);padding:8px 10px;border-radius:6px;font-family:var(--sans);">
+            <option value="">—</option>
+            <option value="lead">Nouveau lead</option>
+            <option value="contacted">Contacté</option>
+            <option value="qualified">Qualifié</option>
+            <option value="proposal">Proposition envoyée</option>
+            <option value="won">Gagné</option>
+            <option value="lost">Perdu</option>
+          </select>
+        </div>
+        <div style="flex:1;min-width:110px;">
+          <label style="display:block;font-family:var(--sans);font-size:11px;color:var(--cream-mute);margin-bottom:4px;">Priorité</label>
+          <select id="inboxCrmPriority" style="width:100%;background:rgba(0,0,0,0.4);border:1px solid var(--bento-border);color:var(--cream);padding:8px 10px;border-radius:6px;font-family:var(--sans);">
+            <option value="normal">Normale</option>
+            <option value="high">Haute</option>
+            <option value="urgent">Urgente</option>
+          </select>
+        </div>
+        <div style="flex:1;min-width:130px;">
+          <label style="display:block;font-family:var(--sans);font-size:11px;color:var(--cream-mute);margin-bottom:4px;">Relance le</label>
+          <input type="date" id="inboxCrmNext" style="width:100%;background:rgba(0,0,0,0.4);border:1px solid var(--bento-border);color:var(--cream);padding:7px 10px;border-radius:6px;font-family:var(--sans);">
+        </div>
+      </div>
+      <button class="btn btn-sm" onclick="inboxSaveCrm()" style="margin-top:10px;"><span>Enregistrer le suivi</span></button>
+    </div>
     <div class="form-row full" style="margin-top:16px;">
       <label>Note interne</label>
       <textarea id="inboxModalNote" rows="2" placeholder="Note privée admin…" style="background:rgba(0,0,0,0.4);border:1px solid var(--bento-border);color:var(--cream);padding:10px 14px;border-radius:6px;width:100%;font-family:var(--sans);"></textarea>
@@ -25924,6 +25954,15 @@ const INBOX_STATUS = {
   spam:     { label: 'Spam', cls: 'gold' },
   archived: { label: 'Archivé', cls: '' }
 };
+/* Pipeline CRM lead (PR-COMP-07) — stocké dans metadata.crm */
+const INBOX_CRM_STATUS = {
+  lead:      { label: 'Lead', cls: '' },
+  contacted: { label: 'Contacté', cls: '' },
+  qualified: { label: 'Qualifié', cls: 'gold' },
+  proposal:  { label: 'Proposition', cls: 'gold' },
+  won:       { label: 'Gagné', cls: 'green' },
+  lost:      { label: 'Perdu', cls: 'red' }
+};
 
 window.refreshInboxBadge = async function() {
   try {
@@ -25990,14 +26029,18 @@ window.inboxRender = function() {
   tbody.innerHTML = rows.map(m => {
     const st = INBOX_STATUS[m.status] || { label: m.status || '—', cls: '' };
     const src = INBOX_SOURCE_LABEL[m.source] || (m.source || '—');
+    const crm = (m.metadata && m.metadata.crm) || {};
+    const crmSt = INBOX_CRM_STATUS[crm.lead_status];
+    const crmBadge = crmSt ? `<div style="margin-top:4px;"><span class="tag-inline ${crmSt.cls}" style="font-size:10px;">${crmSt.label}</span></div>` : '';
+    const prio = (crm.priority === 'urgent' || crm.priority === 'high') ? `<span title="Priorité ${crm.priority}" style="color:var(--${crm.priority === 'urgent' ? 'red' : 'gold'});">${crm.priority === 'urgent' ? '⚑ ' : '↑ '}</span>` : '';
     const name = escapeHtml(`${m.first_name || ''} ${m.last_name || ''}`.trim() || '—');
     const date = m.created_at ? new Date(m.created_at).toLocaleDateString('fr-FR', { day: '2-digit', month: 'short', year: 'numeric' }) : '—';
     const unread = m.status === 'new';
     return `<tr style="border-bottom:1px solid var(--bento-border);${unread ? 'background:rgba(230,57,70,0.05);' : ''}">
-      <td style="padding:10px 12px;">${unread ? '<span class="status-dot ko"></span> ' : ''}${name}<div style="font-size:11px;color:var(--cream-mute);">${escapeHtml(m.email || '')}</div></td>
+      <td style="padding:10px 12px;">${unread ? '<span class="status-dot ko"></span> ' : ''}${prio}${name}<div style="font-size:11px;color:var(--cream-mute);">${escapeHtml(m.email || '')}</div></td>
       <td style="padding:10px 12px;"><span class="tag-inline">${escapeHtml(src)}</span></td>
       <td style="padding:10px 12px;color:var(--cream-mute);max-width:280px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${escapeHtml(m.subject || '—')}</td>
-      <td style="padding:10px 12px;text-align:center;"><span class="tag-inline ${st.cls}">${st.label}</span></td>
+      <td style="padding:10px 12px;text-align:center;"><span class="tag-inline ${st.cls}">${st.label}</span>${crmBadge}</td>
       <td style="padding:10px 12px;color:var(--cream-mute);white-space:nowrap;">${date}</td>
       <td style="padding:10px 12px;text-align:right;"><button class="btn btn-sm" onclick="inboxOpen('${m.id}')"><span>Ouvrir</span></button></td>
     </tr>`;
@@ -26011,9 +26054,14 @@ window.inboxOpen = function(id) {
   const meta = m.metadata || {};
   const set = (elid, v) => { const el = document.getElementById(elid); if (el) el.innerHTML = v; };
   const metaRows = Object.entries(meta)
-    .filter(([k]) => ['admin_notes', 'ack_sent_at'].indexOf(k) === -1)
+    .filter(([k]) => ['admin_notes', 'ack_sent_at', 'crm'].indexOf(k) === -1)
     .map(([k, v]) => `<div style="display:flex;justify-content:space-between;gap:12px;padding:5px 0;border-top:1px solid var(--bento-border);"><span style="color:var(--cream-mute);">${escapeHtml(k)}</span><span style="text-align:right;color:var(--cream);">${escapeHtml(String(v))}</span></div>`)
     .join('');
+  const crm = meta.crm || {};
+  const setVal = (elid, v) => { const el = document.getElementById(elid); if (el) el.value = v || ''; };
+  setVal('inboxCrmStatus', crm.lead_status);
+  setVal('inboxCrmPriority', crm.priority || 'normal');
+  setVal('inboxCrmNext', crm.next_action);
   set('inboxModalTitle', escapeHtml(m.subject || 'Message'));
   set('inboxModalMeta', `<strong>${escapeHtml(`${m.first_name || ''} ${m.last_name || ''}`.trim() || '—')}</strong> · <a href="mailto:${escapeHtml(m.email || '')}" style="color:var(--gold);">${escapeHtml(m.email || '')}</a>${m.phone ? (' · ' + escapeHtml(m.phone)) : ''}`);
   set('inboxModalBody', (escapeHtml(m.message || '')).replace(/\n/g, '<br>'));
@@ -26053,6 +26101,24 @@ window.inboxSaveNote = async function() {
   const { error } = await supabase.from('contact_messages').update({ metadata: meta }).eq('id', m.id);
   if (error) { toast(`Erreur : ${error.message}`, 'warn'); return; }
   m.metadata = meta; toast('Note enregistrée', 'ok');
+};
+
+/* Suivi commercial CRM (PR-COMP-07) — statut lead / priorité / relance dans metadata.crm */
+window.inboxSaveCrm = async function() {
+  const m = window._inboxCurrent; if (!m) return;
+  const val = (elid) => (document.getElementById(elid) || {}).value || '';
+  const crm = {
+    lead_status: val('inboxCrmStatus') || null,
+    priority: val('inboxCrmPriority') || 'normal',
+    next_action: val('inboxCrmNext') || null,
+    updated_at: new Date().toISOString(),
+    updated_by: window.OXVApi?.user?.profile?.id || null
+  };
+  const meta = Object.assign({}, m.metadata || {}, { crm });
+  const { error } = await supabase.from('contact_messages').update({ metadata: meta }).eq('id', m.id);
+  if (error) { toast(`Erreur : ${error.message}`, 'warn'); return; }
+  m.metadata = meta; toast('Suivi commercial enregistré', 'ok');
+  inboxRender();
 };
 
 window.loadAdminDashboard = async function() {
