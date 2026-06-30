@@ -106,7 +106,7 @@
     { "@type": "Question", "name": "Quelle voiture puis-je amener ?", "acceptedAnswer": { "@type": "Answer", "text": "Votre voiture personnelle, dès lors qu'elle passe le contrôle technique de pré-inscription (état général, freins, pneus, niveaux) et respecte la limite sonore du circuit. La location d'un véhicule de piste est possible via nos partenaires." } },
     { "@type": "Question", "name": "Suis-je assuré ? Et mon véhicule ?", "acceptedAnswer": { "@type": "Answer", "text": "La responsabilité civile de l'organisateur est incluse. Les dommages à votre propre véhicule ne sont pas couverts par cette RC : une assurance dommages circuit dédiée est vivement recommandée. Le port d'un équipement homologué est requis." } },
     { "@type": "Question", "name": "Que deviennent mes données ?", "acceptedAnswer": { "@type": "Answer", "text": "Vos données (identité, documents, télémétrie) sont chiffrées, hébergées en Europe et accessibles dans votre seul espace pilote. Elles ne sont jamais vendues ni partagées avec un autre pilote, et vous pouvez les exporter ou demander leur suppression." } },
-    { "@type": "Question", "name": "Comment se passe le paiement ?", "acceptedAnswer": { "@type": "Answer", "text": "Vous pré-inscrivez votre place en ligne sans paiement immédiat pendant la phase de lancement. Votre place est confirmée à réception du règlement par virement (coordonnées et référence dans votre espace pilote). Le paiement par carte arrive prochainement." } },
+    { "@type": "Question", "name": "Comment se passe le paiement ?", "acceptedAnswer": { "@type": "Answer", "text": "Vous pré-inscrivez votre place en ligne, sans paiement immédiat pendant la phase de lancement. Votre place est confirmée à réception du règlement, via un lien de paiement en ligne sécurisé (CB, Visa, PayPal, Apple Pay) communiqué par email après la pré-inscription." } },
     { "@type": "Question", "name": "Quelle est la politique d'annulation ?", "acceptedAnswer": { "@type": "Answer", "text": "Annulation à plus de 7 jours de la session : remboursement intégral. À moins de 7 jours : aucun remboursement. Si OXV doit annuler (météo, force majeure), vous êtes intégralement remboursé ou reporté, à votre choix." } }
   ]
 }
@@ -13375,7 +13375,7 @@ textarea:focus-visible {
       <!-- CTA final -->
       <div class="home-final-cta reveal">
         <h3 class="home-final-cta-headline">Choisissez votre <em>première date</em>.</h3>
-        <p class="home-final-cta-sub">Pré-inscription en ligne · paiement par carte bancaire · capture le jour de la session.</p>
+        <p class="home-final-cta-sub">Pré-inscription en ligne · paiement en ligne sécurisé · CB, Visa, PayPal, Apple Pay.</p>
         <div class="home-final-cta-actions">
           <button class="btn btn-primary btn-lg" onclick="ctaPrimaryGo()"><span>Réserver une session</span></button>
           <button class="btn btn-lg" onclick="goTo('calendrier')"><span>Voir le calendrier complet</span></button>
@@ -13624,7 +13624,7 @@ textarea:focus-visible {
           <div class="how-step">
             <div class="how-step-num">03</div>
             <h4 class="how-step-title">Confirmation et règlement</h4>
-            <p class="how-step-text">À J-30, votre place est confirmée définitivement. Le règlement se fait par virement, en attendant la mise en service Stripe.</p>
+            <p class="how-step-text">Votre place est confirmée par le règlement, au plus tard 7 jours avant la session, via un lien de paiement en ligne sécurisé.</p>
           </div>
           <div class="how-step">
             <div class="how-step-num">04</div>
@@ -13668,7 +13668,7 @@ textarea:focus-visible {
           </div>
           <div class="founding-faq-item">
             <div class="founding-faq-q">Comment se passe le paiement ?</div>
-            <p class="founding-faq-a">Vous pré-inscrivez votre place en ligne, sans paiement immédiat pendant la phase de lancement. Votre place est confirmée à réception du règlement par virement (coordonnées et référence fournies dans votre espace pilote). Le paiement par carte bancaire (Stripe) sera activé prochainement.</p>
+            <p class="founding-faq-a">Vous pré-inscrivez votre place en ligne, sans paiement immédiat pendant la phase de lancement. Votre place est confirmée à réception du règlement, via un lien de paiement en ligne sécurisé (CB, Visa, PayPal, Apple Pay) communiqué par email après la pré-inscription.</p>
           </div>
           <div class="founding-faq-item">
             <div class="founding-faq-q">Quelle est la politique d'annulation ?</div>
@@ -14619,7 +14619,7 @@ textarea:focus-visible {
           <div class="cal-cta-eyebrow">— Réservation</div>
           <h3 class="cal-cta-title">Choisissez votre <em>date</em>.</h3>
           <p class="cal-cta-sub">
-            Réservation en ligne, paiement par virement, sept jours avant la session.
+            Réservation en ligne, paiement en ligne sécurisé avant la session.
           </p>
         </div>
         <button class="btn btn-primary" onclick="ctaPrimaryGo()"><span>Réserver une session</span></button>
@@ -15406,7 +15406,7 @@ textarea:focus-visible {
         <button class="account-nav-btn" onclick="goToAccount('compte-paiements')">
           <span class="account-nav-btn-icon">€</span>
           <span class="account-nav-btn-label">Paiements</span>
-          <span class="account-nav-btn-sub">Factures · virements · historique</span>
+          <span class="account-nav-btn-sub">Factures · paiements · historique</span>
         </button>
 
         <button class="account-nav-btn account-nav-btn--cta" onclick="goTo('booking')">
@@ -16017,55 +16017,27 @@ textarea:focus-visible {
             <div class="prog-sessions-detail">
               <strong>Premier roulage : avril 2027</strong><br/>
               Ouverture des paiements : janvier 2027<br/>
-              Règlement par virement à la confirmation
+              Règlement à la confirmation (paiement en ligne sécurisé)
             </div>
-            <button class="btn btn-primary btn-sm" onclick="document.getElementById('ibanSection').scrollIntoView({behavior:'smooth'});" style="margin-top:14px;width:100%;"><span>Voir comment payer</span></button>
+            <button class="btn btn-primary btn-sm" onclick="document.getElementById('paymentSection').scrollIntoView({behavior:'smooth'});" style="margin-top:14px;width:100%;"><span>Voir les modalités de paiement</span></button>
           </div>
 
         </div>
 
         <!-- ╔══════════════════════════════════════════════════════╗
-             ║   COORDONNÉES BANCAIRES POUR VIREMENT                 ║
+             ║   MODALITÉS DE PAIEMENT                               ║
              ╚══════════════════════════════════════════════════════╝ -->
-        <div class="account-section-title" style="font-family: var(--display); font-style: italic; font-weight: 700; font-size: 14px; letter-spacing: 0.22em; text-transform: uppercase; color: var(--gold); margin-bottom: 16px;" id="ibanSection">
+        <div class="account-section-title" style="font-family: var(--display); font-style: italic; font-weight: 700; font-size: 14px; letter-spacing: 0.22em; text-transform: uppercase; color: var(--gold); margin-bottom: 16px;" id="paymentSection">
           — Comment effectuer le règlement
         </div>
 
         <div class="bento" style="padding: 32px; margin-bottom: 24px;">
-          
-          <!-- Bandeau info Stripe -->
-          <div style="display:flex;align-items:center;gap:14px;padding:14px 16px;background:rgba(255,183,3,0.06);border:1px solid rgba(255,183,3,0.2);border-radius:8px;margin-bottom:24px;">
-            <span style="font-size:18px;">💳</span>
+          <div style="display:flex;align-items:flex-start;gap:14px;">
+            <span style="font-size:20px;">🔒</span>
             <div style="flex:1;">
-              <div style="font-family:var(--display);font-size:11px;font-weight:400;letter-spacing:0.2em;text-transform:uppercase;color:var(--gold);margin-bottom:4px;">Paiement par carte bancaire</div>
-              <div style="font-family:var(--sans);font-size:13px;color:var(--cream-mute);line-height:1.5;">Disponible prochainement via Stripe. En attendant : virement bancaire ci-dessous.</div>
+              <h4 style="font-family:var(--display);font-style:italic;font-weight:700;font-size:15px;letter-spacing:0.04em;text-transform:uppercase;color:var(--cream);margin:0 0 10px;">Paiement en ligne sécurisé</h4>
+              <p style="font-family:var(--sans);font-size:14px;line-height:1.65;color:var(--cream-mute);margin:0;">Le règlement s'effectue via un <strong style="color:var(--cream);">lien de paiement sécurisé</strong> (CB, Visa, PayPal, Apple Pay) envoyé par email à la confirmation de votre place. <strong style="color:var(--cream);">Aucune coordonnée bancaire à saisir ici.</strong></p>
             </div>
-          </div>
-
-          <h4 style="font-family:var(--display);font-style:italic;font-weight:700;font-size:15px;letter-spacing:0.04em;text-transform:uppercase;color:var(--cream);margin:0 0 18px;">Coordonnées bancaires OXV</h4>
-
-          <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:18px;margin-bottom:24px;">
-            <div>
-              <div style="font-family:var(--display);font-size:10px;letter-spacing:0.2em;text-transform:uppercase;color:var(--cream-mute);margin-bottom:6px;">Bénéficiaire</div>
-              <div style="font-family:var(--sans);font-size:14px;color:var(--cream);font-weight:500;">OXV — Only Xtreme Vehicle</div>
-            </div>
-            <div>
-              <div style="font-family:var(--display);font-size:10px;letter-spacing:0.2em;text-transform:uppercase;color:var(--cream-mute);margin-bottom:6px;">IBAN</div>
-              <div style="font-family:var(--mono);font-size:13px;color:var(--cream);user-select:all;cursor:text;background:rgba(0,0,0,0.3);padding:8px 10px;border-radius:4px;">FR76 XXXX XXXX XXXX XXXX XXX</div>
-            </div>
-            <div>
-              <div style="font-family:var(--display);font-size:10px;letter-spacing:0.2em;text-transform:uppercase;color:var(--cream-mute);margin-bottom:6px;">BIC</div>
-              <div style="font-family:var(--mono);font-size:13px;color:var(--cream);user-select:all;cursor:text;background:rgba(0,0,0,0.3);padding:8px 10px;border-radius:4px;">XXXXXXXX</div>
-            </div>
-          </div>
-
-          <!-- Référence à inscrire -->
-          <div style="padding:18px;background:rgba(230, 57, 70, 0.06);border:1px solid rgba(230, 57, 70, 0.2);border-radius:8px;">
-            <div style="font-family:var(--display);font-size:11px;font-weight:400;letter-spacing:0.2em;text-transform:uppercase;color:var(--red);margin-bottom:8px;">⚠ Référence obligatoire à inscrire dans le libellé</div>
-            <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap;">
-              <code id="billRef" style="font-family:var(--mono);font-size:18px;color:var(--gold);background:rgba(0,0,0,0.4);padding:10px 16px;border-radius:6px;letter-spacing:0.05em;">—</code>
-            </div>
-            <p style="font-family:var(--sans);font-size:12px;color:var(--cream-mute);margin:12px 0 0;line-height:1.5;">Une référence unique vous sera communiquée à l'ouverture des paiements (janvier 2027). Elle permet à OXV d'identifier votre virement. <strong style="color:var(--cream);">Sans elle, la validation peut prendre plusieurs jours.</strong></p>
           </div>
         </div>
 
@@ -17619,17 +17591,17 @@ textarea:focus-visible {
       <div class="admin-header">
         <div class="admin-header-eyebrow">N° ⌬ · Admin · Paiements</div>
         <h1 class="admin-header-title">Suivi des <em>paiements</em>.</h1>
-        <p class="admin-header-sub">Virements bancaires · validation manuelle · factures · préparation Stripe.</p>
+        <p class="admin-header-sub">Validation manuelle · factures · historique · activation du lien de paiement.</p>
       </div>
 
-      <!-- Bandeau Stripe préparation -->
+      <!-- Bandeau activation lien de paiement -->
       <div class="bento" style="padding:18px 24px;margin-bottom:24px;border-left:3px solid var(--gold);background:linear-gradient(90deg, rgba(255,183,3,0.08), rgba(18,18,18,0.7));">
         <div style="display:flex;justify-content:space-between;align-items:center;gap:20px;flex-wrap:wrap;">
           <div style="flex:1;min-width:240px;">
-            <div style="font-family:var(--display);font-size:10px;font-weight:400;letter-spacing:0.22em;text-transform:uppercase;color:var(--gold);margin-bottom:6px;">⏳ Stripe — En attente d'activation</div>
-            <p style="font-family:var(--sans);font-size:13px;color:var(--cream-mute);margin:0;line-height:1.5;">Mode <strong style="color:var(--cream);">Virement bancaire</strong> actif. Stripe Card sera activé après obtention du SIRET (estimation : 2-3 semaines).</p>
+            <div style="font-family:var(--display);font-size:10px;font-weight:400;letter-spacing:0.22em;text-transform:uppercase;color:var(--gold);margin-bottom:6px;">⏳ Lien de paiement — En attente d'activation</div>
+            <p style="font-family:var(--sans);font-size:13px;color:var(--cream-mute);margin:0;line-height:1.5;">Validation manuelle active. Le <strong style="color:var(--cream);">lien de paiement sécurisé</strong> (CB, Visa, PayPal, Apple Pay) s'activera via la configuration <code style="font-family:var(--mono);color:var(--gold);">OXV_PAYMENT</code> une fois le prestataire en place.</p>
           </div>
-          <button class="btn btn-sm" onclick="toast('Stripe en attente SIRET','warn');"><span>Activer Stripe</span></button>
+          <button class="btn btn-sm" onclick="toast('Lien de paiement : à configurer dans OXV_PAYMENT (mode link + URL)','warn');"><span>Configurer le paiement</span></button>
         </div>
       </div>
 
@@ -17711,28 +17683,10 @@ textarea:focus-visible {
         </div>
       </div>
 
-      <!-- INFOS BANCAIRES OXV (toujours visible pour copier) -->
+      <!-- PAIEMENT OXV (lien sécurisé) -->
       <div class="bento" style="padding:24px;">
-        <h3 class="prog-evolution-title" style="margin-bottom:16px;">— Coordonnées bancaires OXV (à communiquer aux pilotes)</h3>
-        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px;">
-          <div>
-            <div style="font-family:var(--display);font-size:10px;letter-spacing:0.2em;text-transform:uppercase;color:var(--cream-mute);margin-bottom:4px;">Bénéficiaire</div>
-            <div style="font-family:var(--sans);font-size:14px;color:var(--cream);font-weight:500;">OXV — Only Xtreme Vehicle</div>
-          </div>
-          <div>
-            <div style="font-family:var(--display);font-size:10px;letter-spacing:0.2em;text-transform:uppercase;color:var(--cream-mute);margin-bottom:4px;">IBAN</div>
-            <div style="font-family:var(--mono);font-size:13px;color:var(--cream);">FR76 XXXX XXXX XXXX XXXX XXX</div>
-          </div>
-          <div>
-            <div style="font-family:var(--display);font-size:10px;letter-spacing:0.2em;text-transform:uppercase;color:var(--cream-mute);margin-bottom:4px;">BIC</div>
-            <div style="font-family:var(--mono);font-size:13px;color:var(--cream);">XXXXXXXX</div>
-          </div>
-          <div>
-            <div style="font-family:var(--display);font-size:10px;letter-spacing:0.2em;text-transform:uppercase;color:var(--cream-mute);margin-bottom:4px;">Référence à inscrire</div>
-            <div style="font-family:var(--mono);font-size:13px;color:var(--gold);">OXV-[référence pilote]</div>
-          </div>
-        </div>
-        <p style="font-family:var(--sans);font-size:12px;color:var(--cream-mute);margin:16px 0 0;line-height:1.5;font-style:italic;">À renseigner depuis Espace admin → Sécurité une fois le compte bancaire pro ouvert.</p>
+        <h3 class="prog-evolution-title" style="margin-bottom:16px;">— Paiement OXV</h3>
+        <p style="font-family:var(--sans);font-size:14px;color:var(--cream-mute);margin:0;line-height:1.6;">Le paiement est géré par <strong style="color:var(--cream);">lien de paiement sécurisé</strong> (CB, Visa, PayPal, Apple Pay) envoyé aux pilotes. Aucune coordonnée bancaire à communiquer manuellement. Le lien s'active depuis la configuration <code style="font-family:var(--mono);color:var(--gold);">OXV_PAYMENT</code> (mode « link » + URL) une fois le prestataire de paiement en place.</p>
       </div>
     </main>
   </div>
@@ -17745,20 +17699,20 @@ textarea:focus-visible {
   <div class="vmodal-card">
     <button class="vmodal-close" onclick="paymentCloseValidateModal()">×</button>
     <div class="vmodal-eyebrow">— Validation paiement</div>
-    <h2 class="vmodal-title">Valider le <em>virement</em>.</h2>
+    <h2 class="vmodal-title">Valider le <em>paiement</em>.</h2>
 
     <div id="paymentValidateContent" style="margin-bottom:24px;">
       <!-- Contenu injecté par JS -->
     </div>
 
     <div class="form-row full" style="margin-bottom:16px;">
-      <label>Date de réception du virement</label>
+      <label>Date de réception du paiement</label>
       <input type="date" id="payValidateDate" style="background:rgba(0,0,0,0.4);border:1px solid var(--bento-border);color:var(--cream);padding:10px 14px;border-radius:6px;" />
     </div>
 
     <div class="form-row full" style="margin-bottom:16px;">
       <label>Note interne (optionnel)</label>
-      <textarea id="payValidateNote" rows="3" placeholder="Ex. : Virement reçu de la BNP, libellé conforme. ID transaction : XXX..." style="background:rgba(0,0,0,0.4);border:1px solid var(--bento-border);color:var(--cream);padding:10px 14px;border-radius:6px;width:100%;font-family:var(--sans);"></textarea>
+      <textarea id="payValidateNote" rows="3" placeholder="Ex. : Paiement confirmé par le prestataire. ID transaction : XXX..." style="background:rgba(0,0,0,0.4);border:1px solid var(--bento-border);color:var(--cream);padding:10px 14px;border-radius:6px;width:100%;font-family:var(--sans);"></textarea>
     </div>
 
     <div style="display:flex;gap:10px;flex-wrap:wrap;">
@@ -18698,15 +18652,15 @@ textarea:focus-visible {
           <div class="bk-payment selected" data-payment="card" onclick="bkSelectPayment('card', this)">
             <div class="bk-payment-icon">⊕</div>
             <div class="bk-payment-info">
-              <div class="bk-payment-name">Carte bancaire</div>
-              <div class="bk-payment-desc">Saisie de votre carte à la réservation · capture automatique le jour de la session</div>
+              <div class="bk-payment-name">Paiement en ligne sécurisé</div>
+              <div class="bk-payment-desc">CB, Visa, PayPal, Apple Pay · lien de paiement communiqué après l'enregistrement</div>
             </div>
           </div>
         </div>
 
         <!-- Bandeau pré-inscription -->
         <div class="bk-warning info" style="margin-top: 16px; padding: 14px 16px; background: rgba(184, 115, 51, 0.06); border: 1px solid rgba(184, 115, 51, 0.3);">
-          <strong style="color: var(--copper-glow);">Phase de lancement :</strong> votre pré-inscription est sans paiement immédiat. Vous serez recontacté par email dès l'ouverture officielle des paiements (courant janvier 2027) pour saisir votre carte bancaire et confirmer votre place.
+          <strong style="color: var(--copper-glow);">Phase de lancement :</strong> votre pré-inscription est sans paiement immédiat. Vous serez recontacté par email dès l'ouverture officielle des paiements (courant janvier 2027) pour procéder au paiement en ligne sécurisé et confirmer votre place.
         </div>
 
         <!-- Bloc équipements requis VISIBLE -->
@@ -18814,22 +18768,14 @@ textarea:focus-visible {
           <div class="bk-step-eyebrow" style="justify-content: center;"><span style="background: var(--night); padding-right: 14px;">— Réservation enregistrée</span></div>
           <h2 class="bk-step-title">Bienvenue<br/>en <em>piste</em>.</h2>
           <p class="bk-step-sub" style="margin: 0 auto;">
-            Votre dossier d'inscription est créé. Pour confirmer définitivement votre place, transmettez le règlement intégral par virement au plus tard 7 jours avant la session.
+            Votre dossier d'inscription est créé. Pour confirmer définitivement votre place, un lien de paiement sécurisé (CB, Visa, PayPal, Apple Pay) vous sera communiqué.
           </p>
         </div>
 
-        <div class="bk-rib-block">
-          <div class="bk-rib-title">— Coordonnées bancaires OXV</div>
-          <div class="bk-rib-line"><span class="label">Bénéficiaire</span><span class="value">OXV — Only Xtreme Vehicle</span></div>
-          <div class="bk-rib-line"><span class="label">IBAN</span><span class="value" id="bkRibIban">FR76 XXXX XXXX XXXX XXXX XXXX XXX</span></div>
-          <div class="bk-rib-line"><span class="label">BIC</span><span class="value" id="bkRibBic">XXXXXXXX</span></div>
-          <div class="bk-rib-line"><span class="label">Banque</span><span class="value" id="bkRibBank">À renseigner</span></div>
-          <div class="bk-rib-line"><span class="label">Référence à indiquer</span><span class="value" id="bkRibRef" style="color: var(--copper-glow); font-weight: 600;">—</span></div>
-          <div class="bk-rib-line"><span class="label">Montant à régler</span><span class="value" id="bkRibAmount">—</span></div>
-        </div>
+        <div id="bkConfirmPayment" class="bk-payment-confirm"></div>
 
         <div class="bk-warning">
-          ⚠ Important : indiquez impérativement la référence ci-dessus dans le libellé du virement, sans quoi nous ne pourrons pas associer votre paiement à votre inscription.
+          Conservez votre référence OXV ci-dessus : elle identifie votre dossier lors du paiement.
         </div>
 
         <div class="bk-actions">
@@ -18911,7 +18857,7 @@ textarea:focus-visible {
         <p>Pour les offres OXV Corporate (privatisations B2B), les tarifs sont communiqués sur devis personnalisé, à partir de 13 000 € HT pour le format Standard et 15 000 € HT pour le format Signature.</p>
 
         <h2>Article 3 — Réservation et paiement</h2>
-        <p>Pendant la phase de pré-inscription 2026, aucun paiement n'est exigé : la pré-inscription enregistre votre place sans engagement financier immédiat. À l'ouverture officielle des paiements (prévue courant janvier 2027), votre pré-inscription est convertie en réservation. La réservation est alors confirmée par le règlement intégral du montant de la prestation, à effectuer par virement bancaire au plus tard 7 jours avant la session (en attendant la mise en service du paiement par carte via Stripe). À défaut de paiement dans ce délai, l'inscription est automatiquement annulée et la place libérée.</p>
+        <p>Pendant la phase de pré-inscription 2026, aucun paiement n'est exigé : la pré-inscription enregistre votre place sans engagement financier immédiat. À l'ouverture officielle des paiements (prévue courant janvier 2027), votre pré-inscription est convertie en réservation. La réservation est alors confirmée par le règlement intégral du montant de la prestation, à effectuer par les moyens de paiement proposés par OXV (paiement en ligne sécurisé : CB, Visa, PayPal, Apple Pay) au plus tard 7 jours avant la session. À défaut de paiement dans ce délai, l'inscription est automatiquement annulée et la place libérée.</p>
 
         <h2>Article 4 — Annulation et remboursement</h2>
         <p>Pendant la phase de pré-inscription 2026, aucun paiement n'est exigé. Le pilote peut annuler sans frais sa pré-inscription à tout moment jusqu'à conversion en réservation confirmée (ouverture officielle des paiements prévue janvier 2027).</p>
@@ -19011,13 +18957,13 @@ textarea:focus-visible {
         <p>Captation pendant la session. <strong>Finalité</strong> : livraison au pilote, communication OXV (sous réserve d'opposition). <strong>Base légale</strong> : intérêt légitime + consentement (pour usage communication).</p>
 
         <h3>Données de paiement</h3>
-        <p>Traitées exclusivement par <strong>Stripe</strong>, prestataire PCI-DSS certifié. OXV ne stocke jamais de données bancaires.</p>
+        <p>Traitées par un prestataire de paiement sécurisé certifié PCI-DSS. OXV ne stocke jamais de données bancaires.</p>
 
         <h2>Sous-traitants</h2>
         <p>
           <strong>Vercel Inc.</strong> — hébergement web (US, transfert encadré par les Clauses Contractuelles Types).<br/>
           <strong>Amazon Web Services Paris</strong> — infrastructure base de données (UE).<br/>
-          <strong>Stripe</strong> — paiement (Irlande, transfert encadré par les CCT).<br/>
+          Prestataire de paiement sécurisé (PCI-DSS) — paiement.<br/>
           <strong>Brevo (ex-Sendinblue)</strong> — emails transactionnels (UE).<br/>
           <strong>Position Assurance</strong> — souscription RC circuit (UE).<br/>
           <strong>RaceBox</strong> — fournisseur du dispositif de télémétrie (UE).
@@ -20442,7 +20388,7 @@ Concrètement, trois portes d'entrée s'offrent à vous :
 
 ## Comment *s'inscrire*
 
-Les pré-inscriptions se font en ligne. Vous choisissez votre offre, vous renseignez votre dossier pilote et votre véhicule, et vous validez. Le paiement intervient en amont de la première session, par carte bancaire. La capture des données et des images se fait le jour même, sur place.
+Les pré-inscriptions se font en ligne. Vous choisissez votre offre, vous renseignez votre dossier pilote et votre véhicule, et vous validez. Le paiement intervient en amont de la première session, par paiement en ligne sécurisé. La capture des données et des images se fait le jour même, sur place.
 
 > La sécurité, d'abord. Le développement, toujours. La sensation, enfin.
 
@@ -21106,6 +21052,52 @@ function bkComputePrice(offerKey, format, attendedCount) {
   return attendedCount === 0 ? entry.first_session : entry.subsequent;
 }
 
+/* ============================================================
+   PAIEMENT — point de bascule unique (lien CB / Visa / PayPal / Apple Pay)
+   mode 'pending' : réservation enregistrée, lien de paiement à venir (AUJOURD'HUI)
+   mode 'link'    : bouton « Payer maintenant » vers OXV_PAYMENT.linkUrl (ou linkByOffer)
+   Pour activer : passer mode:'link' + renseigner linkUrl (ou linkByOffer).
+   ============================================================ */
+window.OXV_PAYMENT = {
+  mode: 'pending',            // 'pending' | 'link'
+  linkUrl: '',                // URL du lien de paiement hébergé (à renseigner quand prêt)
+  linkByOffer: null,          // optionnel : { access:'…', signature:'…', heritage:'…' }
+  methods: ['CB', 'Visa', 'PayPal', 'Apple Pay']
+};
+function oxvPaymentLink(offerType) {
+  const p = window.OXV_PAYMENT || {};
+  if (p.mode !== 'link') return '';
+  if (p.linkByOffer && offerType && p.linkByOffer[offerType]) return p.linkByOffer[offerType];
+  return p.linkUrl || '';
+}
+/* Rendu de l'état de paiement sur la page 5 du booking (#bkConfirmPayment). */
+function bkRenderPaymentConfirm(reg, priceDeposit, offerType) {
+  const el = document.getElementById('bkConfirmPayment');
+  if (!el) return;
+  const p = window.OXV_PAYMENT || {};
+  const ref = (reg && reg.id) ? `OXV-${reg.id.slice(0, 8).toUpperCase()}` : '—';
+  const amount = (typeof priceDeposit === 'number') ? `${(priceDeposit / 100).toLocaleString('fr-FR')} €` : '—';
+  const methods = (p.methods || []).join(' · ');
+  const lines = `
+    <div class="bk-rib-line"><span class="label">Référence</span><span class="value" style="color: var(--copper-glow); font-weight: 600;">${ref}</span></div>
+    <div class="bk-rib-line"><span class="label">Montant</span><span class="value">${amount}</span></div>`;
+  const link = oxvPaymentLink(offerType);
+  if (p.mode === 'link' && link) {
+    el.innerHTML = `<div class="bk-rib-block">
+      <div class="bk-rib-title">— Paiement sécurisé</div>${lines}
+      <div style="margin-top:16px;text-align:center;">
+        <a class="btn btn-primary btn-lg" href="${link}" target="_blank" rel="noopener"><span>Payer maintenant</span></a>
+        <div style="font-family:var(--sans);font-size:12px;color:var(--cream-mute);margin-top:8px;">${methods}</div>
+      </div>
+    </div>`;
+  } else {
+    el.innerHTML = `<div class="bk-rib-block">
+      <div class="bk-rib-title">— Paiement</div>
+      <p style="font-family:var(--sans);font-size:14px;line-height:1.6;color:var(--cream-mute);margin:0 0 14px;">Votre réservation est enregistrée. Un <strong style="color:var(--cream);">lien de paiement sécurisé</strong> (${methods}) vous sera envoyé par email pour confirmer votre place.</p>${lines}
+    </div>`;
+  }
+}
+
 // État du wizard
 const bkState = {
   step: 1,
@@ -21653,7 +21645,7 @@ function bkBuildRecap() {
   } else {
     total = offerPrice + insurancePrice;
     totalLabel = `${(total / 100).toLocaleString('fr-FR')} €`;
-    dueLabel = `${(total / 100).toLocaleString('fr-FR')} € · capture le jour de la session`;
+    dueLabel = `${(total / 100).toLocaleString('fr-FR')} € · à régler avant la session`;
   }
 
   // Label "tarif offre" — tarif fixe par offre
@@ -21697,7 +21689,7 @@ function bkBuildRecap() {
       <span class="bk-recap-total"><em>${totalLabel}</em></span>
     </div>
     <div class="bk-recap-line">
-      <span class="bk-recap-label">Mode paiement</span>
+      <span class="bk-recap-label">Montant dû</span>
       <span class="bk-recap-value amount">${dueLabel}</span>
     </div>
   `;
@@ -21845,19 +21837,8 @@ window.bkConfirmBooking = async function() {
         .eq('id', bkState.heritagePack.id);
     }
 
-    // Affichage page 5 confirmation
-    // ⚠️ COORDONNÉES BANCAIRES À COMPLÉTER — renseigner ici (une seule fois) l'IBAN/BIC/banque réels.
-    const OXV_RIB = {
-      iban: 'FR76 XXXX XXXX XXXX XXXX XXXX XXX',  // ⚠️ à compléter
-      bic:  'XXXXXXXX',                            // ⚠️ à compléter
-      bank: 'À compléter'                          // ⚠️ à compléter
-    };
-    const bkSetTxt = (id, v) => { const el = document.getElementById(id); if (el) el.textContent = v; };
-    bkSetTxt('bkRibIban', OXV_RIB.iban);
-    bkSetTxt('bkRibBic',  OXV_RIB.bic);
-    bkSetTxt('bkRibBank', OXV_RIB.bank);
-    bkSetTxt('bkRibRef', `OXV-${reg.id.slice(0, 8).toUpperCase()}`);
-    bkSetTxt('bkRibAmount', `${(priceDeposit / 100).toLocaleString('fr-FR')} €`);
+    // Affichage page 5 confirmation — état paiement piloté par OXV_PAYMENT (lien CB/Visa/PayPal/Apple Pay)
+    bkRenderPaymentConfirm(reg, priceDeposit, bkState.useHeritage ? 'heritage' : bkState.selectedOffer);
 
     track('complete_booking', { offer: bkState.useHeritage ? 'heritage' : bkState.selectedOffer, amount: Math.round((priceTotal || 0) / 100) });
     bkShowStep(5);
@@ -25482,7 +25463,7 @@ window.loadBilling = async function() {
   if (loading) loading.style.display = 'none';
   if (content) content.style.display = 'block';
 
-  // Référence virement : OXV- + 6 premiers chars du user_id en majuscule
+  // Référence dossier : OXV- + 6 premiers chars du user_id en majuscule
   const ref = document.getElementById('billRef');
   if (ref && userId) ref.textContent = 'OXV-' + userId.replace(/-/g,'').substring(0,6).toUpperCase();
 
@@ -29093,13 +29074,13 @@ window.adminUnprivatizeSession = async function() {
 /* === Phase C : Validation paiement manuel + email auto === */
 
 /**
- * Marque un paiement comme reçu (validation manuelle après réception du virement).
+ * Marque un paiement comme reçu (validation manuelle après réception du paiement).
  * - Passe le payment en 'succeeded'
  * - Confirme la registration (status = 'confirmed')
  * - Email de confirmation envoyé côté serveur (trigger DB → Edge Function Resend)
  */
 window.adminMarkPaymentReceived = async function(registrationId, paymentId) {
-  if (!confirm('Confirmer que le virement a bien été reçu pour cette inscription ?\n\nL\'inscription sera confirmée et un email envoyé au pilote.')) return;
+  if (!confirm('Confirmer que le paiement a bien été reçu pour cette inscription ?\n\nL\'inscription sera confirmée et un email envoyé au pilote.')) return;
 
   const adminId = window.OXVApi.user.profile?.id;
 

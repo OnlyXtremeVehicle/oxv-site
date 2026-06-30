@@ -1,19 +1,18 @@
 # PR-COMP-10 — Gate de mise en production (go-live)
 
-> Surface : 🌐 site + 🗄️ Supabase. Date : 2026-06-30. **Statut : ⏳ gate ouvert — 1 bloqueur P0 à lever avant prod.**
+> Surface : 🌐 site + 🗄️ Supabase. Date : 2026-06-30. **Statut : ✅ aucun bloqueur P0 site — shippable honnêtement ; paiement réel = activation différée.**
 
 Checklist transverse de mise en ligne. Vérifications **réelles** (advisors Supabase, RLS, code), pas déclaratives.
 
 ---
 
-## 🔴 P0 — BLOQUEURS (à lever AVANT de merger en production)
+## ✅ P0 — Paiement (ex-bloqueur RIB) : RÉSOLU
 
-### 1. Coordonnées bancaires (RIB) — paiement par virement non fonctionnel
-Le paiement OXV se fait **par virement**. L'IBAN/BIC affichés en fin de réservation sont des **placeholders** :
-- `index.html` → objet `OXV_RIB` (≈ ligne 21850) : `FR76 XXXX…`, BIC `XXXXXXXX`, banque `À compléter`.
-- Deux blocs RIB statiques supplémentaires (≈ lignes 16053 et 17723) affichent aussi `IBAN`/`BIC` à renseigner.
-
-**Action** : renseigner l'IBAN / BIC / nom de banque réels (une seule source : l'objet `OXV_RIB`, puis répercuter sur les 2 blocs statiques). **Sans cela, aucun client ne peut payer.**
+Décision produit : paiement par **lien hébergé** (CB / Visa / PayPal / Apple Pay), plus de virement final.
+- Le **faux RIB est entièrement retiré** (booking, espace pilote, admin). Cf [PR-SITE — Paiement par lien](PR_SITE_PAYMENT_LINK.md).
+- État actuel **honnête** : « réservation enregistrée, un lien de paiement sécurisé vous sera envoyé ». Aucune fausse coordonnée bancaire affichée → **le site est shippable en l'état**.
+- **Activation du paiement réel = différée, non bloquante** : basculer `OXV_PAYMENT.mode='link'` + `linkUrl` une fois le prestataire en place (+ Edge Function `create-payment-link` + webhook, backend).
+- ⚠️ **CGV** : finaliser le **nom/juridiction du prestataire de paiement** une fois le PSP choisi (placeholder « prestataire PCI-DSS » en attendant).
 
 ---
 
@@ -64,6 +63,8 @@ Advisors : **1 ERROR + 81 WARN**. Analyse :
 ---
 
 ## Verdict du gate
-**Le site est prêt à passer en production dès que le RIB réel est renseigné (P0).** Tout le reste est soit livré et vérifié, soit non bloquant (contenu/assets/design) ou explicitement en pause (connexions app). Sécurité auditée : pas de fuite PII, pas de privilège escaladable sur les fonctions sensibles.
+**Le site est prêt à passer en production : aucun bloqueur P0 côté site.** Plus aucune fausse coordonnée bancaire ; messaging paiement honnête (« lien à venir »). Le reste est livré et vérifié, ou non bloquant (contenu/assets/design), ou en pause (connexions app). Sécurité auditée : pas de fuite PII, pas de privilège escaladable sur les fonctions sensibles.
 
-**Procédure de mise en prod** : compléter `OXV_RIB` → commit → merger la PR vers `main` → Vercel déploie `oxvehicle.fr` (rollback 1 clic conservé sur Vercel).
+**Activation du paiement (différée, non bloquante)** : `OXV_PAYMENT.mode='link'` + `linkUrl` (+ Edge Function `create-payment-link`/webhook côté backend) + finaliser le nom du PSP dans les CGV.
+
+**Procédure de mise en prod** : merger la PR vers `main` → Vercel déploie `oxvehicle.fr` (rollback 1 clic conservé sur Vercel).
