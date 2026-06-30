@@ -16132,17 +16132,17 @@ textarea:focus-visible {
               <span id="progQdiScore">82</span><span class="max">/100</span>
             </div>
             <div class="prog-qdi-level">
-              <span id="progQdiLevel">Argent</span>
-              <span class="badge"><span id="progQdiBadge">🥈 ARGENT</span></span>
+              <span id="progQdiLevel">Confirmé</span>
+              <span class="badge"><span id="progQdiBadge">EXEMPLE</span></span>
             </div>
             <div class="prog-qdi-sub">
-              <strong>+5 pts</strong> depuis votre dernière session · pilotage en progression constante
+              <strong>Exemple</strong> de lecture personnelle · vos données réelles apparaîtront après votre première session
             </div>
 
             <!-- Progress vers le prochain niveau -->
             <div class="prog-next-level">
               <div class="prog-next-level-label">
-                <span>Prochain palier : OR (≥ 85)</span>
+                <span>Prochain palier (≥ 85)</span>
                 <span class="pts">3 pts restants</span>
               </div>
               <div class="prog-progress-bar">
@@ -25847,12 +25847,13 @@ function oxvMarginScore(v) {
 }
 // Palier OXV à partir du score
 function oxvScoreLevel(s) {
-  if (s == null) return { name: 'À découvrir', badge: 'NIVEAU 0' };
-  if (s >= 95) return { name: 'Elite', badge: '👑 ELITE' };
-  if (s >= 85) return { name: 'Or', badge: '🥇 OR' };
-  if (s >= 70) return { name: 'Argent', badge: '🥈 ARGENT' };
-  if (s >= 50) return { name: 'Bronze', badge: '🥉 BRONZE' };
-  return { name: 'Novice', badge: 'NOVICE' };
+  // Doctrine OXV : lecture personnelle, pas de classement, pas de médailles/badges/emoji.
+  if (s == null) return { name: 'À découvrir', badge: 'À DÉCOUVRIR' };
+  if (s >= 95) return { name: 'Maîtrise', badge: 'MAÎTRISE' };
+  if (s >= 85) return { name: 'Avancé', badge: 'AVANCÉ' };
+  if (s >= 70) return { name: 'Confirmé', badge: 'CONFIRMÉ' };
+  if (s >= 50) return { name: 'En progression', badge: 'EN PROGRESSION' };
+  return { name: 'En découverte', badge: 'EN DÉCOUVERTE' };
 }
 
 function showEmptyQDI(firstName, qs, qsAll) {
@@ -25864,7 +25865,7 @@ function showEmptyQDI(firstName, qs, qsAll) {
 
   if (qdiScore) qdiScore.textContent = '—';
   if (qdiLevel) qdiLevel.textContent = 'À découvrir';
-  if (qdiBadge) qdiBadge.textContent = 'NIVEAU 0';
+  if (qdiBadge) qdiBadge.textContent = 'À DÉCOUVRIR';
 
   const sub = qs('.prog-qdi-sub');
   if (sub) {
@@ -25936,8 +25937,8 @@ function renderMarginData(analyses, firstName, qs, qsAll) {
     const remaining = next - score;
     const label = qs('.prog-next-level-label');
     if (label) {
-      const nm = next === 100 ? 'MAX' : next === 95 ? 'ELITE' : next === 85 ? 'OR' : next === 70 ? 'ARGENT' : 'BRONZE';
-      label.innerHTML = `<span>Prochain palier : ${nm} (≥ ${next})</span><span class="pts">${remaining > 0 ? remaining + ' pts restants' : '✓ Atteint'}</span>`;
+      const nm = next === 100 ? 'MAÎTRISE' : next === 95 ? 'MAÎTRISE' : next === 85 ? 'AVANCÉ' : next === 70 ? 'CONFIRMÉ' : 'EN PROGRESSION';
+      label.innerHTML = `<span>Prochain palier : ${nm} (≥ ${next})</span><span class="pts">${remaining > 0 ? remaining + ' pts restants' : 'Atteint'}</span>`;
     }
     const fill = qs('.prog-progress-fill');
     if (fill) fill.style.width = `${Math.min((score / next) * 100, 100)}%`;
