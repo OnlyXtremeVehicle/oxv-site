@@ -21573,7 +21573,7 @@ window.closeCornerDetail = function() {
    ============================================================ */
 
 // Tableau de données paiements — alimenté par Supabase dans loadAdminPaiements()
-window.MOCK_PAYMENTS = [];
+window.OXV_PAYMENTS = [];
 
 window.loadAdminPaiements = async function() {
   // Initialiser la date du jour dans le modal
@@ -21624,7 +21624,7 @@ window.loadAdminPaiements = async function() {
 
       if (data && data.length > 0) {
         // Conversion au format affichage (amount divisé par 100 = centimes → €)
-        window.MOCK_PAYMENTS = data.map(p => {
+        window.OXV_PAYMENTS = data.map(p => {
           const u = p.users || {};
           const r = p.registrations || {};
           const s = r.sessions || {};
@@ -21652,12 +21652,13 @@ window.loadAdminPaiements = async function() {
             paymentMethod: p.payment_method,
             stripeId: p.stripe_payment_intent_id,
             invoiceUrl: p.invoice_pdf_url || p.invoice_url,
-            _id: p.id  // UUID interne
+            _id: p.id,  // UUID interne
+            _registrationId: p.registration_id
           };
         });
         console.log(`[Admin Paiements] ${data.length} paiements chargés (table réelle)`);
       } else {
-        window.MOCK_PAYMENTS = [];
+        window.OXV_PAYMENTS = [];
         console.log('[Admin Paiements] Aucun paiement en base');
       }
       
@@ -21666,7 +21667,7 @@ window.loadAdminPaiements = async function() {
       
     } catch (e) {
       console.warn('[Admin Paiements] Exception:', e);
-      window.MOCK_PAYMENTS = [];
+      window.OXV_PAYMENTS = [];
     }
   }
 
@@ -21709,14 +21710,14 @@ window.paymentUpdateKPIs = function() {
   const now = new Date();
   const monthStart = new Date(now.getFullYear(), now.getMonth(), 1);
   
-  const validatedThisMonth = window.MOCK_PAYMENTS.filter(p => {
+  const validatedThisMonth = window.OXV_PAYMENTS.filter(p => {
     if (p.status !== 'validated') return false;
     const date = p.validatedAt ? new Date(p.validatedAt) : new Date(p.date);
     return date >= monthStart;
   });
   
-  const pending = window.MOCK_PAYMENTS.filter(p => p.status === 'pending');
-  const refunds = window.MOCK_PAYMENTS.filter(p => p.status === 'refunded');
+  const pending = window.OXV_PAYMENTS.filter(p => p.status === 'pending');
+  const refunds = window.OXV_PAYMENTS.filter(p => p.status === 'refunded');
   
   const caMonth = validatedThisMonth.reduce((sum, p) => sum + p.amount, 0);
   const pendingAmount = pending.reduce((sum, p) => sum + p.amount, 0);
@@ -21736,7 +21737,7 @@ window.paymentRenderToValidate = function() {
   const container = document.getElementById('paymentsToValidate');
   if (!container) return;
   
-  const pending = window.MOCK_PAYMENTS.filter(p => p.status === 'pending').sort((a, b) => new Date(a.dueDate) - new Date(b.dueDate));
+  const pending = window.OXV_PAYMENTS.filter(p => p.status === 'pending').sort((a, b) => new Date(a.dueDate) - new Date(b.dueDate));
   
   if (pending.length === 0) {
     container.innerHTML = '<div style="text-align:center;padding:32px;font-family:var(--sans);font-size:14px;color:var(--cream-mute);">✓ Aucun paiement en attente. Tout est à jour.</div>';
@@ -21786,7 +21787,7 @@ window.paymentRenderHistory = function() {
   const filterStatus = document.getElementById('payFilterStatus')?.value || 'all';
   const filterPeriod = document.getElementById('payFilterPeriod')?.value || 'month';
   
-  let filtered = [...window.MOCK_PAYMENTS];
+  let filtered = [...window.OXV_PAYMENTS];
   
   // Filtre statut
   if (filterStatus !== 'all') {
@@ -21842,7 +21843,7 @@ window.paymentRenderHistory = function() {
 };
 
 window.paymentOpenValidateModal = function(paymentId) {
-  const payment = window.MOCK_PAYMENTS.find(p => p.id === paymentId);
+  const payment = window.OXV_PAYMENTS.find(p => p.id === paymentId);
   if (!payment) return;
   
   const modal = document.getElementById('paymentValidateModal');
@@ -21898,7 +21899,7 @@ window.paymentConfirmValidate = async function() {
     return;
   }
   
-  const payment = window.MOCK_PAYMENTS.find(p => p.id === paymentId);
+  const payment = window.OXV_PAYMENTS.find(p => p.id === paymentId);
   if (!payment) return;
   
   // Update Supabase avec les VRAIES colonnes (paid_at, status='paid')
@@ -21907,20 +21908,29 @@ window.paymentConfirmValidate = async function() {
       const { error } = await supabase
         .from('payments')
         .update({
-          status: 'paid',  // enum payment_status
+          status: 'succeeded',  // enum payment_status valide ('paid' n'existe pas)
           paid_at: new Date(date).toISOString(),
-          metadata: { 
+          metadata: {
             admin_note: note || null,
             validated_by_admin: window.OXVApi.user.profile?.id,
             validated_at_local: new Date().toISOString()
           }
         })
         .eq('id', payment._id);
-      
+
       if (error) {
         console.warn('[Validation paiement] Erreur Supabase:', error);
         toast(`Erreur : ${error.message}`, 'warn');
         return;
+      }
+
+      // Cohérence : confirme aussi l'inscription liée (comme adminMarkPaymentReceived)
+      if (payment._registrationId) {
+        const { error: rErr } = await supabase
+          .from('registrations')
+          .update({ status: 'confirmed' })
+          .eq('id', payment._registrationId);
+        if (rErr) console.warn('[Validation paiement] confirmation inscription:', rErr);
       }
       
       // Log dans admin_audit
@@ -21967,14 +21977,14 @@ window.paymentConfirmValidate = async function() {
 };
 
 window.paymentSendReminder = function(paymentId) {
-  const payment = window.MOCK_PAYMENTS.find(p => p.id === paymentId);
+  const payment = window.OXV_PAYMENTS.find(p => p.id === paymentId);
   if (!payment) return;
   toast(`✉ Email de rappel envoyé à ${payment.pilot}`, 'ok');
 };
 
 window.paymentExportCSV = function() {
   const headers = ['Reference', 'Pilote', 'Email', 'Session', 'Montant', 'Statut', 'Date'];
-  const rows = window.MOCK_PAYMENTS.map(p => [p.id, p.pilot, p.pilotEmail, p.session, p.amount, p.status, p.date]);
+  const rows = window.OXV_PAYMENTS.map(p => [p.id, p.pilot, p.pilotEmail, p.session, p.amount, p.status, p.date]);
   
   const csv = [headers, ...rows].map(row => row.map(cell => `"${cell}"`).join(',')).join('\n');
   const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
@@ -28347,13 +28357,14 @@ window.adminMarkPaymentReceived = async function(registrationId, paymentId) {
 
   const adminId = window.OXVApi.user.profile?.id;
 
-  // Met à jour le paiement
+  // Met à jour le paiement (pas de colonne validated_by : on range l'admin dans metadata,
+  // cohérent avec paymentConfirmValidate)
   const { data: pay, error: pErr } = await supabase
     .from('payments')
     .update({
       status: 'succeeded',
       paid_at: new Date().toISOString(),
-      validated_by: adminId
+      metadata: { validated_by_admin: adminId, validated_at_local: new Date().toISOString() }
     })
     .eq('id', paymentId)
     .select()
@@ -28361,12 +28372,11 @@ window.adminMarkPaymentReceived = async function(registrationId, paymentId) {
 
   if (pErr) { toast('Erreur validation paiement', 'warn'); return; }
 
-  // Confirme la registration
+  // Confirme la registration (pas de colonne confirmed_at en base)
   const { data: reg, error: rErr } = await supabase
     .from('registrations')
     .update({
-      status: 'confirmed',
-      confirmed_at: new Date().toISOString()
+      status: 'confirmed'
     })
     .eq('id', registrationId)
     .select(`
