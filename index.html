@@ -16175,34 +16175,34 @@ textarea:focus-visible {
         <div class="prog-reco-grid">
           
           <div class="bento prog-reco-card">
-            <div class="prog-reco-tag priority">⚠ Priorité</div>
-            <h4 class="prog-reco-title">Améliorer le freinage</h4>
+            <div class="prog-reco-tag priority">○ Plus de marge</div>
+            <h4 class="prog-reco-title">Freinage</h4>
             <p class="prog-reco-text">
-              Score à 72/100 (dimension la plus faible). Travaillez la progressivité du freinage et le point de relâche. <strong style="color: var(--cream);">+8 pts QDI possibles.</strong>
+              72/100 — la dimension où la trace varie le plus. La progressivité et le point de relâche ressortent comme les axes à plus forte marge. <strong style="color: var(--cream);">Un exemple de lecture, pas une consigne.</strong>
             </p>
           </div>
 
           <div class="bento prog-reco-card">
-            <div class="prog-reco-tag priority">⚠ Priorité</div>
-            <h4 class="prog-reco-title">Trajectoire en T3-T4</h4>
+            <div class="prog-reco-tag priority">○ Plus de marge</div>
+            <h4 class="prog-reco-title">Enchaînement T3-T4</h4>
             <p class="prog-reco-text">
-              Tracé non optimal dans l'enchaînement gauche-droite. Visualisez les points de corde avant la prochaine session.
+              Dans la liaison gauche-droite, les points de corde apparaissent irréguliers d'un tour à l'autre. La trace le montre — à vous d'en faire ce que vous voulez.
             </p>
           </div>
 
           <div class="bento prog-reco-card">
-            <div class="prog-reco-tag maintain">✓ Maintenir</div>
-            <h4 class="prog-reco-title">Excellente régularité</h4>
+            <div class="prog-reco-tag maintain">● Point fort</div>
+            <h4 class="prog-reco-title">Régularité</h4>
             <p class="prog-reco-text">
-              90/100. Votre constance entre les tours est remarquable. Continuez sur cette voie pour préserver votre niveau Argent.
+              90/100. Votre constance entre les tours est l'un de vos points les plus nets — un repère stable de votre pilotage.
             </p>
           </div>
 
           <div class="bento prog-reco-card">
-            <div class="prog-reco-tag maintain">✓ Maintenir</div>
-            <h4 class="prog-reco-title">Fluidité élégante</h4>
+            <div class="prog-reco-tag maintain">● Point fort</div>
+            <h4 class="prog-reco-title">Fluidité</h4>
             <p class="prog-reco-text">
-              88/100. Très belle gestion des transitions. Vous pilotez "rond", c'est la signature du pilote rapide.
+              88/100. Les transitions sont très fluides — la signature d'un pilotage "rond".
             </p>
           </div>
 
@@ -17422,7 +17422,7 @@ textarea:focus-visible {
 
 <!-- ============================================================
      PAGES ADMIN — Paiements / Médias / Emails / Stats / Sécurité
-     Pages opérationnelles (stub avec coming-soon élégant)
+     Pages opérationnelles (implémentées et branchées Supabase)
      ============================================================ -->
 
 <!-- ============ ADMIN : PAIEMENTS ============ -->
@@ -17893,10 +17893,10 @@ textarea:focus-visible {
       <div class="bento" style="padding:24px;margin-top:24px;">
         <h3 class="prog-evolution-title" style="margin-bottom:14px;">Comment ça marche</h3>
         <p style="font-family:var(--sans);font-size:14px;color:var(--cream-mute);line-height:1.7;margin:0 0 12px;">
-          Les articles sont enregistrés <strong style="color:var(--cream);">dans ce navigateur</strong> (localStorage). Ils alimentent directement la page <button class="link-inline" onclick="goTo('actualites')" style="background:none;border:none;color:var(--oxv-red);cursor:pointer;padding:0;font:inherit;">Actualités</button> publique, avec filtres par catégorie.
+          Les articles sont enregistrés <strong style="color:var(--cream);">dans la base OXV</strong> (Supabase) et partagés entre tous les administrateurs. Ils alimentent directement la page <button class="link-inline" onclick="goTo('actualites')" style="background:none;border:none;color:var(--oxv-red);cursor:pointer;padding:0;font:inherit;">Actualités</button> publique, avec filtres par catégorie.
         </p>
         <p style="font-family:var(--sans);font-size:14px;color:var(--cream-mute);line-height:1.7;margin:0;">
-          <strong style="color:var(--cream);">Statuts :</strong> « Publié » apparaît sur la grille Actualités, « Brouillon » reste masqué du public. « Dépublier » retire un article de la grille sans le supprimer. Le calendrier éditorial regroupe les articles par mois selon leur date. Le bouton <strong style="color:var(--cream);">✉ Newsletter</strong> prépare la diffusion Brevo (point d'intégration prêt côté code, à brancher sur l'API). Pour une diffusion multi-postes permanente, une table Supabase dédiée pourra être branchée — la structure de données est déjà prête.
+          <strong style="color:var(--cream);">Statuts :</strong> « Publié » apparaît sur la grille Actualités, « Brouillon » reste masqué du public. « Dépublier » retire un article de la grille sans le supprimer. Le calendrier éditorial regroupe les articles par mois selon leur date. Le bouton <strong style="color:var(--cream);">✉ Newsletter</strong> prépare la diffusion Brevo (point d'intégration prêt côté code, à brancher sur l'API).
         </p>
       </div>
     </main>
@@ -19942,7 +19942,7 @@ window.addEventListener('popstate', () => oxvRouteFromLocation());
 
 
 /* ============================================================
-   ACTUALITÉS — couche données (localStorage) + rendu dynamique
+   ACTUALITÉS — couche données (Supabase + cache mémoire) + rendu dynamique
    ─────────────────────────────────────────────────────────────
    Les articles sont stockés côté navigateur. Le seed ci-dessous
    alimente la première visite ; l'admin peut ensuite créer,
@@ -20333,7 +20333,7 @@ window.openArticle = async function(id, opts) {
 };
 
 /* ============================================================
-   ADMIN — Gestion des articles (CRUD localStorage)
+   ADMIN — Gestion des articles (CRUD Supabase)
    ============================================================ */
 let adminArticleEditingId = null;
 
@@ -22811,7 +22811,7 @@ window.submitContact = async function() {
 };
 
 /* === AUTH FUNCTIONS (signup, login, forgot, verify) === */
-/* TODO Supabase : remplacer les setTimeout par les vrais appels Supabase Auth */
+/* Auth réelle via Supabase Auth (signup, login, forgot, reset, magic link). */
 
 window.checkPasswordStrength = function() {
   const pwd = document.getElementById('su-pwd');
@@ -28398,7 +28398,7 @@ window.adminUnprivatizeSession = async function() {
  * Marque un paiement comme reçu (validation manuelle après réception du virement).
  * - Passe le payment en 'succeeded'
  * - Confirme la registration (status = 'confirmed')
- * - Prépare email de confirmation (placeholder Resend)
+ * - Email de confirmation envoyé côté serveur (trigger DB → Edge Function Resend)
  */
 window.adminMarkPaymentReceived = async function(registrationId, paymentId) {
   if (!confirm('Confirmer que le virement a bien été reçu pour cette inscription ?\n\nL\'inscription sera confirmée et un email envoyé au pilote.')) return;
