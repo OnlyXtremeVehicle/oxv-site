@@ -13230,17 +13230,16 @@ textarea:focus-visible {
     <div class="home-hero-content">
       <div class="wrap">
         <h1 class="home-hero-manifesto reveal">
-          <span class="line-1">La <em>sécurité</em>, d'abord.</span>
-          <span class="line-2">Le <em>développement</em>, toujours.</span>
-          <span class="line-3">La <em>sensation</em>, enfin.</span>
+          <span class="line-1">L'expérience circuit</span>
+          <span class="line-2">augmentée.</span>
         </h1>
         <p class="home-hero-tagline reveal">
-          Cercle privé. Circuit Beltoise, Haute Saintonge. Vingt pilotes, pas vingt-et-un.
+          Roulez. Gardez la trace. Comprenez votre session.
         </p>
 
         <div class="home-hero-actions reveal">
-          <button class="btn btn-primary btn-lg" onclick="ctaPrimaryGo()"><span>Réserver une session</span></button>
-          <button class="btn btn-lg" onclick="goTo('calendrier')"><span>Voir le calendrier</span></button>
+          <button class="btn btn-primary btn-lg" onclick="ctaPrimaryGo()"><span>Demander une place</span></button>
+          <button class="btn btn-lg" onclick="(document.querySelector('.home-hero')?.nextElementSibling || document.body).scrollIntoView({behavior:'smooth'})"><span>Découvrir l'expérience</span></button>
         </div>
       </div>
     </div>
