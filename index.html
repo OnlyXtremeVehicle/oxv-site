@@ -21901,27 +21901,35 @@ window.loadAdminMedias = async function() {
     const today = new Date().toISOString().split('T')[0];
 
     // Sessions passées (20 dernières)
+    // NB : private_client_name n'est plus lisible en direct par authenticated
+    // (colonne masquée au niveau grant). On la lit via la RPC SECURITY DEFINER
+    // get_session_private_client(), gardée par is_admin(), uniquement pour les
+    // sessions privées (cf. PR-SITE-01).
     const { data: sessions, error: sErr } = await supabase
       .from('sessions')
-      .select('id, date, season_type, is_private, private_client_name')
+      .select('id, date, season_type, is_private')
       .lt('date', today)
       .order('date', { ascending: false })
       .limit(20);
 
     if (sErr) { console.warn('[Admin Médias]', sErr); return; }
 
-    // Pour chaque session : nb médias, nb publiés, nb pilotes inscrits
+    // Pour chaque session : nb médias, nb publiés, nb pilotes inscrits (+ PII si privée)
     const rows = await Promise.all((sessions || []).map(async s => {
-      const [mRes, rRes] = await Promise.all([
+      const [mRes, rRes, privRes] = await Promise.all([
         supabase.from('media').select('id, media_type, visible_to_user').eq('session_id', s.id),
         supabase.from('registrations').select('id', { count: 'exact', head: true })
-          .eq('session_id', s.id).neq('status', 'cancelled')
+          .eq('session_id', s.id).neq('status', 'cancelled'),
+        s.is_private
+          ? supabase.rpc('get_session_private_client', { p_session_id: s.id })
+          : Promise.resolve({ data: null })
       ]);
       return {
         ...s,
         media_count:      mRes.data?.length || 0,
         published_count:  mRes.data?.filter(m => m.visible_to_user).length || 0,
-        pilots_count:     rRes.count || 0
+        pilots_count:     rRes.count || 0,
+        private_client_name: privRes.data?.[0]?.private_client_name || null
       };
     }));
 
@@ -28339,7 +28347,7 @@ window.loadPublicCalendar = async function() {
     // Récupère sessions futures, non annulées, non archivées, non privatisées
     const today = new Date().toISOString().split('T')[0];
     const { data: sessions, error } = await supabase
-      .from('sessions')
+      .from('sessions_public')
       .select('*')
       .gte('date', today)
       .not('status', 'in', '(cancelled,archived)')
