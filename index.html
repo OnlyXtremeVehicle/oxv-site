@@ -14625,6 +14625,62 @@ textarea:focus-visible {
         <button class="btn btn-primary" onclick="ctaPrimaryGo()"><span>Réserver une session</span></button>
       </div>
 
+      <!-- ============ LISTE D'ATTENTE (PR-COMP-01) ============ -->
+      <div class="reveal" style="margin-top:48px;border-top:1px solid var(--bento-border);padding-top:48px;">
+        <div class="kicker">— Liste d'attente</div>
+        <h2 class="section-title" style="margin-top:18px;margin-bottom:10px;">Pas encore la <em>bonne date</em> ?</h2>
+        <p style="font-family:var(--sans);font-size:16px;line-height:1.7;color:var(--cream-mute);max-width:640px;margin:0 0 28px;">
+          Laissez-nous vos coordonnées : nous vous prévenons en priorité dès l'ouverture des prochaines dates correspondant à votre intérêt. Sans engagement.
+        </p>
+        <div class="form-grid" style="max-width:840px;">
+          <div class="form-row">
+            <label>Prénom</label>
+            <input type="text" id="wl-first" placeholder="Prénom" />
+          </div>
+          <div class="form-row">
+            <label>Nom</label>
+            <input type="text" id="wl-last" placeholder="Nom" />
+          </div>
+          <div class="form-row">
+            <label>Email</label>
+            <input type="email" id="wl-email" placeholder="email@exemple.fr" />
+          </div>
+          <div class="form-row">
+            <label>Téléphone (facultatif)</label>
+            <input type="tel" id="wl-phone" placeholder="06 12 34 56 78" />
+          </div>
+          <div class="form-row">
+            <label>Je veux être prévenu pour</label>
+            <select id="wl-pref">
+              <option>Access (demi-journée)</option>
+              <option>Signature (journée complète)</option>
+              <option>Heritage (saison)</option>
+              <option>Corporate (entreprise)</option>
+              <option>Le lancement de l'application OXV</option>
+            </select>
+          </div>
+          <div class="form-row">
+            <label>Département</label>
+            <input type="text" id="wl-dept" placeholder="Ex. 17, 33, 75…" />
+          </div>
+          <div class="form-row full">
+            <label>Votre véhicule (facultatif)</label>
+            <input type="text" id="wl-vehicle" placeholder="Ex. Porsche Cayman GT4, Alpine A110…" />
+          </div>
+          <div class="form-row full">
+            <div class="consent" id="wl-news" onclick="toggleConsent('wl-news')">
+              <div class="ck"></div>
+              <div class="text">
+                J'accepte de recevoir les actualités et l'ouverture des dates OXV par email. Je peux me désinscrire à tout moment (voir la <a onclick="event.stopPropagation(); goTo('privacy')">politique de confidentialité</a>).
+              </div>
+            </div>
+          </div>
+          <div class="form-row full" style="display:flex;flex-direction:row;justify-content:flex-end;">
+            <button class="btn btn-primary btn-lg" onclick="submitWaitlist()"><span>Rejoindre la liste d'attente</span></button>
+          </div>
+        </div>
+      </div>
+
     </div>
   </section>
 
@@ -17783,6 +17839,7 @@ textarea:focus-visible {
               <option value="contact">Contact</option>
               <option value="corporate">Corporate</option>
               <option value="founding">Founding</option>
+              <option value="event_waitlist">Liste d'attente</option>
             </select>
           </div>
         </div>
@@ -22935,6 +22992,67 @@ window.submitContact = async function() {
   }
 };
 
+/* === LISTE D'ATTENTE (PR-COMP-01) — insert réel dans contact_messages (source=event_waitlist) === */
+window.submitWaitlist = async function() {
+  const first = document.getElementById('wl-first');
+  const last  = document.getElementById('wl-last');
+  const email = document.getElementById('wl-email');
+  const phone = document.getElementById('wl-phone');
+  const pref  = document.getElementById('wl-pref');
+  const dept  = document.getElementById('wl-dept');
+  const vehicle = document.getElementById('wl-vehicle');
+  const news  = document.getElementById('wl-news');
+
+  if (!email || !email.value.trim()) { toast('Email requis pour la liste d\'attente', 'warn'); return; }
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.value.trim())) { toast('Adresse email invalide', 'warn'); return; }
+
+  const btn = document.querySelector('#page-calendrier .btn-primary.btn-lg');
+  const btnLabelEl = btn ? (btn.querySelector('span') || btn) : null;
+  const btnLabel = btnLabelEl ? btnLabelEl.textContent : '';
+  if (btn) btn.style.pointerEvents = 'none';
+  if (btnLabelEl) btnLabelEl.textContent = 'Enregistrement…';
+
+  const preference = pref ? pref.value : '';
+  const recap = [
+    `Intérêt : ${preference || '—'}`,
+    `Département : ${dept?.value.trim() || '—'}`,
+    `Véhicule : ${vehicle?.value.trim() || '—'}`,
+    `Newsletter : ${news && news.classList.contains('checked') ? 'oui' : 'non'}`
+  ].join('\n');
+
+  const payload = {
+    first_name: first?.value.trim() || 'Liste',
+    last_name:  last?.value.trim() || 'attente',
+    email:      email.value.trim(),
+    phone:      phone?.value.trim() || null,
+    subject:    `Liste d'attente · ${preference}`,
+    message:    recap,
+    source:     'event_waitlist',
+    metadata: {
+      preference,
+      departement: dept?.value.trim() || null,
+      vehicule: vehicle?.value.trim() || null,
+      newsletter: !!(news && news.classList.contains('checked'))
+    }
+  };
+
+  try {
+    if (typeof supabase === 'undefined') throw new Error('Client Supabase indisponible');
+    const { error } = await supabase.from('contact_messages').insert(payload);
+    if (error) throw error;
+    track('join_waitlist', { preference });
+    toast('Vous êtes sur la liste · on vous prévient en priorité', 'ok');
+    ['wl-first','wl-last','wl-email','wl-phone','wl-dept','wl-vehicle'].forEach(id => { const el = document.getElementById(id); if (el) el.value = ''; });
+    if (news) news.classList.remove('checked');
+  } catch (e) {
+    console.warn('[Waitlist] Échec enregistrement:', e);
+    toast('Inscription impossible · réessayez ou écrivez à contact@oxvehicle.fr', 'error');
+  } finally {
+    if (btn) btn.style.pointerEvents = '';
+    if (btnLabelEl) btnLabelEl.textContent = btnLabel;
+  }
+};
+
 /* === AUTH FUNCTIONS (signup, login, forgot, verify) === */
 /* Auth réelle via Supabase Auth (signup, login, forgot, reset, magic link). */
 
@@ -25601,7 +25719,8 @@ window.refreshDemandesBadge = async function() {
 window.OXV_INBOX = [];
 const INBOX_SOURCE_LABEL = {
   contact_form: 'Contact', corporate_form: 'Corporate', 'corporate-form': 'Corporate',
-  founding_form: 'Founding', 'founding-form': 'Founding', press: 'Presse', privacy: 'Privacy'
+  founding_form: 'Founding', 'founding-form': 'Founding', press: 'Presse', privacy: 'Privacy',
+  event_waitlist: 'Liste d\'attente'
 };
 const INBOX_STATUS = {
   new:      { label: 'Nouveau', cls: 'red' },
@@ -25668,6 +25787,7 @@ window.inboxRender = function() {
     if (fSource === 'corporate' && src.indexOf('corporate') !== 0) return false;
     if (fSource === 'contact' && src !== 'contact_form') return false;
     if (fSource === 'founding' && src.indexOf('founding') !== 0) return false;
+    if (fSource === 'event_waitlist' && src !== 'event_waitlist') return false;
     return true;
   });
   if (!rows.length) { tbody.innerHTML = '<tr><td colspan="6" style="padding:18px;color:var(--cream-mute);font-family:var(--sans);">Aucun message.</td></tr>'; return; }
