@@ -17841,6 +17841,7 @@ textarea:focus-visible {
               <option value="founding">Founding</option>
               <option value="event_waitlist">Liste d'attente</option>
               <option value="partner_form">Partenaire</option>
+              <option value="press">Presse</option>
             </select>
           </div>
         </div>
@@ -19496,6 +19497,67 @@ textarea:focus-visible {
 
 
 <!-- ============ PARTENAIRES (PR-COMP-04) ============ -->
+<div class="page" id="page-presse">
+  <section class="page-hero">
+    <div class="wrap">
+      <div class="page-hero-eyebrow">N° ⬡ · Presse &amp; médias</div>
+      <h1 class="page-hero-title">OXV<br/>pour la <em>presse</em>.</h1>
+      <p class="page-hero-lede">
+        Vous écrivez sur l'automobile, le sport, l'expérience client ou l'innovation ? OXV ouvre un cadre rare : des sessions confidentielles, une doctrine claire, une approche premium de la donnée pilote. Demandez le dossier — on vous répond vite.
+      </p>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="wrap" style="max-width:1000px;">
+      <h2 class="section-title" style="font-size:32px;margin-bottom:8px;">OXV <em>en bref</em>.</h2>
+      <p style="font-family:var(--sans);font-size:15px;line-height:1.7;color:var(--cream-mute);max-width:640px;margin:0 0 24px;">Les faits essentiels, vérifiés, pour vos sujets.</p>
+      <div class="reveal" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:16px;margin-bottom:48px;">
+        <div class="bento" style="padding:24px;"><div style="font-family:var(--display);font-size:10px;letter-spacing:0.2em;text-transform:uppercase;color:var(--gold);margin-bottom:8px;">Le lieu</div><p style="font-family:var(--sans);font-size:14px;line-height:1.6;color:var(--cream-mute);margin:0;">Circuit de Haute Saintonge, tracé Beltoise (Nouvelle-Aquitaine).</p></div>
+        <div class="bento" style="padding:24px;"><div style="font-family:var(--display);font-size:10px;letter-spacing:0.2em;text-transform:uppercase;color:var(--gold);margin-bottom:8px;">Le format</div><p style="font-family:var(--sans);font-size:14px;line-height:1.6;color:var(--cream-mute);margin:0;">Vingt pilotes maximum par session. Pas de classement public, pas de compétition sauvage.</p></div>
+        <div class="bento" style="padding:24px;"><div style="font-family:var(--display);font-size:10px;letter-spacing:0.2em;text-transform:uppercase;color:var(--gold);margin-bottom:8px;">La doctrine</div><p style="font-family:var(--sans);font-size:14px;line-height:1.6;color:var(--cream-mute);margin:0;">Silence total en roulage, lecture des données après la session : un miroir, jamais un coach qui donne des ordres.</p></div>
+        <div class="bento" style="padding:24px;"><div style="font-family:var(--display);font-size:10px;letter-spacing:0.2em;text-transform:uppercase;color:var(--gold);margin-bottom:8px;">La donnée</div><p style="font-family:var(--sans);font-size:14px;line-height:1.6;color:var(--cream-mute);margin:0;">Données pilote chiffrées, hébergées en UE, jamais revendues. App compagnon en opt-in.</p></div>
+      </div>
+
+      <div class="bento" style="padding:28px;margin-bottom:48px;border-color:var(--gold);">
+        <div style="font-family:var(--display);font-size:11px;letter-spacing:0.2em;text-transform:uppercase;color:var(--gold);margin-bottom:10px;">Kit média sur demande</div>
+        <p style="font-family:var(--sans);font-size:14px;line-height:1.7;color:var(--cream-mute);margin:0;">Logos haute définition, photothèque, dossier de présentation et mise en relation avec un porte-parole : disponibles sur demande via le formulaire ci-dessous. Précisez votre média, votre angle et votre échéance — nous adaptons l'envoi.</p>
+      </div>
+
+      <h2 class="section-title" style="font-size:32px;margin-bottom:8px;">Contact <em>presse</em>.</h2>
+      <p style="font-family:var(--sans);font-size:15px;line-height:1.7;color:var(--cream-mute);max-width:640px;margin:0 0 24px;">Une demande d'interview, de visuels, de tournage sur circuit ou d'information ? Écrivez-nous.</p>
+      <div class="form-grid" style="max-width:840px;">
+        <div class="form-row"><label>Média / rédaction</label><input type="text" id="pr-outlet" placeholder="Nom du média" /></div>
+        <div class="form-row"><label>Journaliste</label><input type="text" id="pr-name" placeholder="Prénom Nom" /></div>
+        <div class="form-row"><label>Email</label><input type="email" id="pr-email" placeholder="email@media.fr" /></div>
+        <div class="form-row"><label>Téléphone (facultatif)</label><input type="tel" id="pr-phone" placeholder="06 12 34 56 78" /></div>
+        <div class="form-row"><label>Échéance (facultatif)</label><input type="date" id="pr-deadline" /></div>
+        <div class="form-row"><label>Type de demande</label>
+          <select id="pr-type">
+            <option>Dossier / kit média</option>
+            <option>Interview / porte-parole</option>
+            <option>Visuels / photothèque</option>
+            <option>Tournage / reportage sur circuit</option>
+            <option>Autre</option>
+          </select>
+        </div>
+        <div class="form-row full"><label>Votre sujet / angle</label><textarea id="pr-msg" rows="4" placeholder="Décrivez votre sujet, l'angle envisagé, le support et le calendrier…"></textarea></div>
+        <div class="form-row full">
+          <div class="consent" id="pr-rgpd" onclick="toggleConsent('pr-rgpd')">
+            <div class="ck"></div>
+            <div class="text">J'accepte que OXV traite ces données pour répondre à ma demande presse, conformément à la <a onclick="event.stopPropagation(); goTo('privacy')">politique de confidentialité</a>.<span class="badge">obligatoire</span></div>
+          </div>
+        </div>
+        <div class="form-row full" style="display:flex;flex-direction:row;justify-content:flex-end;">
+          <button class="btn btn-primary btn-lg" onclick="submitPress()"><span>Envoyer ma demande</span></button>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+<!-- /presse -->
+
+
 <div class="page" id="page-partenaires">
   <section class="page-hero">
     <div class="wrap">
@@ -19577,6 +19639,7 @@ textarea:focus-visible {
             <li><button onclick="goTo('securite')">Sécurité &amp; cadre</button></li>
             <li><button onclick="goTo('corporate')">Corporate</button></li>
             <li><button onclick="goTo('partenaires')">Partenaires</button></li>
+            <li><button onclick="goTo('presse')">Presse</button></li>
             <li><button onclick="goTo('about')">À propos</button></li>
             <li><button onclick="goTo('actualites')">Actualités</button></li>
             <li><button onclick="goTo('contact')">Contact</button></li>
@@ -20161,6 +20224,9 @@ const OXV_PAGE_SEO = {
   calendrier:  { title: 'Calendrier de la saison 2027 · OXV', description: 'Le calendrier des sessions OXV au Circuit de Haute Saintonge. Lundis demi-journée, vendredis journée complète. Vingt pilotes maximum.' },
   circuit:     { title: 'Le circuit de Haute Saintonge — tracé Beltoise · OXV', description: 'Dessiné en 2009 par Jean-Pierre Beltoise. 3,8 km, quinze virages, aucune chicane artificielle. Le tracé que pilote OXV.' },
   corporate:   { title: 'OXV Corporate — privatisation du tracé Beltoise', description: 'Privatisez le Circuit de Haute Saintonge. Deux formats (Standard 13 000 € HT, Signature 15 000 € HT), trois scénarios : comité de direction, concession, lancement produit.' },
+  securite:    { title: 'Sécurité & cadre · OXV', description: 'Le cadre de sécurité OXV : briefing obligatoire, documents vérifiés, silence total en roulage, lecture des données après la session, vingt pilotes maximum. Et la place exacte de la donnée.' },
+  partenaires: { title: 'Partenaires — rejoindre l\'écosystème OXV', description: 'Garage, photographe, hôtel, transport, assurance, concession : proposez un partenariat à OXV et accédez à une audience de pilotes exigeants au Circuit de Haute Saintonge.' },
+  presse:      { title: 'Presse & médias · OXV', description: 'Espace presse OXV : faits clés vérifiés, kit média sur demande et contact journaliste. Track days confidentiels sur le tracé Beltoise, doctrine de données premium.' },
   about:       { title: 'À propos — le manifeste OXV', description: 'Pourquoi OXV existe. La sécurité d\'abord, le développement toujours, la sensation enfin. Vingt pilotes par session, jamais plus.' },
   actualites:  { title: 'Actualités — le journal de la saison · OXV', description: 'Annonces, coulisses, technique et presse. Le journal de la première saison OXV au Circuit de Haute Saintonge.' },
   contact:     { title: 'Contact · OXV', description: 'Contactez OXV pour une session, une privatisation corporate ou toute question sur le track day au Circuit de Haute Saintonge.' },
@@ -23278,6 +23344,73 @@ window.submitPartner = async function() {
   }
 };
 
+/* === PRESSE (PR-COMP-03) — demande presse réelle dans contact_messages (source=press) === */
+window.submitPress = async function() {
+  const cb = document.getElementById('pr-rgpd');
+  const outlet = document.getElementById('pr-outlet');
+  const name = document.getElementById('pr-name');
+  const email = document.getElementById('pr-email');
+  const phone = document.getElementById('pr-phone');
+  const deadline = document.getElementById('pr-deadline');
+  const type = document.getElementById('pr-type');
+  const msg = document.getElementById('pr-msg');
+
+  if (!cb || !cb.classList.contains('checked')) { toast('Acceptation RGPD requise', 'warn'); return; }
+  if (!outlet.value.trim() || !name.value.trim() || !email.value.trim()) { toast('Média, journaliste et email sont requis', 'warn'); return; }
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.value.trim())) { toast('Adresse email invalide', 'warn'); return; }
+
+  const btn = document.querySelector('#page-presse .btn-primary.btn-lg');
+  const btnLabelEl = btn ? (btn.querySelector('span') || btn) : null;
+  const btnLabel = btnLabelEl ? btnLabelEl.textContent : '';
+  if (btn) btn.style.pointerEvents = 'none';
+  if (btnLabelEl) btnLabelEl.textContent = 'Envoi en cours…';
+
+  const reqType = type ? type.value : '';
+  const due = deadline?.value || '';
+  const recap = [
+    `Média : ${outlet.value.trim()}`,
+    `Demande : ${reqType}`,
+    `Échéance : ${due || '—'}`,
+    `Téléphone : ${phone?.value.trim() || '—'}`,
+    msg?.value.trim() ? `\nSujet / angle :\n${msg.value.trim()}` : ''
+  ].filter(Boolean).join('\n');
+
+  const payload = {
+    first_name: name.value.trim().split(' ')[0] || name.value.trim(),
+    last_name:  name.value.trim().split(' ').slice(1).join(' ') || '—',
+    email:      email.value.trim(),
+    phone:      phone?.value.trim() || null,
+    subject:    `Presse · ${reqType} · ${outlet.value.trim()}`,
+    message:    recap,
+    source:     'press',
+    metadata: {
+      media_outlet: outlet.value.trim(),
+      request_type: reqType,
+      deadline: due || null,
+      details: msg?.value.trim() || null
+    }
+  };
+
+  try {
+    if (typeof supabase === 'undefined') throw new Error('Client Supabase indisponible');
+    const { error } = await supabase.from('contact_messages').insert(payload);
+    if (error) throw error;
+    track('submit_press', { request_type: reqType });
+    toast('Demande presse envoyée · nous revenons vers vous', 'ok');
+    ['pr-outlet','pr-name','pr-email','pr-phone','pr-deadline','pr-msg'].forEach(id => { const el = document.getElementById(id); if (el) el.value = ''; });
+    if (type) type.selectedIndex = 0;
+    cb.classList.remove('checked');
+  } catch (e) {
+    console.warn('[Presse] Échec enregistrement, fallback mailto:', e);
+    const body = `${recap}\n\nContact : ${name.value.trim()} <${email.value.trim()}>`;
+    toast('Connexion impossible · votre logiciel mail s’ouvre pour finaliser', 'warn');
+    window.location.href = `mailto:contact@oxvehicle.fr?subject=${encodeURIComponent('Presse · ' + outlet.value.trim())}&body=${encodeURIComponent(body)}`;
+  } finally {
+    if (btn) btn.style.pointerEvents = '';
+    if (btnLabelEl) btnLabelEl.textContent = btnLabel;
+  }
+};
+
 /* === AUTH FUNCTIONS (signup, login, forgot, verify) === */
 /* Auth réelle via Supabase Auth (signup, login, forgot, reset, magic link). */
 
@@ -26023,6 +26156,7 @@ window.inboxRender = function() {
     if (fSource === 'founding' && src.indexOf('founding') !== 0) return false;
     if (fSource === 'event_waitlist' && src !== 'event_waitlist') return false;
     if (fSource === 'partner_form' && src !== 'partner_form') return false;
+    if (fSource === 'press' && src !== 'press') return false;
     return true;
   });
   if (!rows.length) { tbody.innerHTML = '<tr><td colspan="6" style="padding:18px;color:var(--cream-mute);font-family:var(--sans);">Aucun message.</td></tr>'; return; }
