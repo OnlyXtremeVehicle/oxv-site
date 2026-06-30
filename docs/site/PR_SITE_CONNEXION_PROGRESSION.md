@@ -27,15 +27,21 @@ La page violait la doctrine app écrite (« pas de badges, pas d'emoji, pas de c
 - **Remplacé** par une lecture **personnelle** neutre : *À découvrir · En découverte · En progression · Confirmé · Avancé · Maîtrise* (sans emoji, sans podium). Le QDI reste un score personnel (déjà cadré « pas de classement » côté home).
 - Hero par défaut marqué **« EXEMPLE »** (aperçu illustratif, pas de fausse donnée présentée comme réelle).
 
-## 5. Reste à faire (additif, non bloquant — utile quand l'app produira des données)
-Aligné sur la spec app, à brancher quand des données réelles existeront (actuellement 0 télémétrie) :
-- **KPI « Sessions effectuées »** depuis `registrations` (`status='attended'`) au lieu du nombre d'analyses.
-- **« Mes dernières sessions »** + **records personnels** depuis `telemetry_sessions` (lap_count, best_lap_seconds, max_speed_kmh) + jointure `weather_snapshots`.
-- **CTA app + deep links** `oxvcoach://bilan/{id}` (section 6 de la spec) — quand l'app sera publiée.
-- **Clarifier `events`/`event_registrations`** avec l'équipe app : non utilisés par la connexion (la spec s'appuie sur `sessions`/`registrations`) → à déprécier ou à documenter comme domaine app distinct. Cf [audit connexions](PR_SITE_22-27_AUDIT_CONNEXIONS.md).
+## 5. Branché « avant la sortie de l'app » (livré)
+Lectures réelles + UI câblées, prêtes à s'allumer dès que l'app produira des données (aujourd'hui 0 télémétrie → états vides honnêtes) :
+- **KPI « Sessions effectuées »** = `registrations.status='attended'` (vraie donnée site), à la place du nombre d'analyses.
+- **Bloc « Sessions enregistrées par l'app »** : lit `telemetry_sessions` (8 dernières), affiche par session date · circuit · tours · meilleur tour, + récap **records personnels** (tours bouclés, meilleur tour, vitesse max — pas de classement). État vide honnête avant la sortie de l'app.
+- **Deep links** `oxvcoach://bilan/{id}` par session (« Ouvrir dans l'app ») — inertes avant publication, fonctionnels au lancement. L'encart « OXV Trace arrive » (printemps 2027) reste la promo store.
+- `oxvFmtLap()` (format m:ss.mmm), `renderTelemetrySessions()` ; `node --check` du module : OK.
 
-## 6. Vérification
-- 0 médaille emoji résiduelle, 0 palier podium ; nouveaux libellés présents ; `loadProgression` lit `app_session_analyses`.
+## 6. Reste (hors périmètre site / décision app)
+- **Clarifier `events`/`event_registrations`** avec l'équipe app : non utilisés par la connexion (la spec s'appuie sur `sessions`/`registrations`) → à déprécier ou à documenter comme domaine app distinct. Cf [audit connexions](PR_SITE_22-27_AUDIT_CONNEXIONS.md).
+- Marge moyenne V2, graphique long terme : déjà couverts par le moteur QDI (`app_session_analyses`) existant.
+- Deep links opérationnels : dépend de la publication de l'app + du schéma d'URL `oxvcoach://`.
+
+## 7. Vérification
+- 0 médaille emoji résiduelle, 0 palier podium ; nouveaux libellés présents.
+- `loadProgression` lit `app_session_analyses` + `telemetry_sessions` + `registrations` (attended) ; `renderTelemetrySessions` + conteneurs présents ; `node --check` du module applicatif : OK.
 - Aucune modification de schéma ; lecture seule ; RLS inchangée.
 
-**Verdict : ✅ connexion progression vérifiée + conforme doctrine.** Le gros de la Phase 2 (lecture des données app) était déjà en place ; cette PR la rend doctrine-compliant et documente l'architecture désormais tranchée + le reste additif.
+**Verdict : ✅ connexion progression doctrine-compliant + tout le pré-lancement branché.** Côté site, la Phase 2 est prête : dès que l'app produira de la télémétrie, la page « Ma progression » s'allume sans intervention. Reste un point app (statut de `events`/`event_registrations`).

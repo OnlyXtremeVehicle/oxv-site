@@ -16344,6 +16344,19 @@ textarea:focus-visible {
         </div>
 
         <!-- ╔══════════════════════════════════════════════════════╗
+             ║   SESSIONS ENREGISTRÉES PAR L'APP (télémétrie)        ║
+             ╚══════════════════════════════════════════════════════╝ -->
+        <div class="account-section-title" style="font-family: var(--display); font-style: italic; font-weight: 700; font-size: 14px; letter-spacing: 0.22em; text-transform: uppercase; color: var(--gold); margin: 8px 0 16px;">
+          — Sessions enregistrées par l'app
+        </div>
+        <div class="bento" style="padding:24px;margin-bottom:24px;">
+          <div id="progTelemetryStats"></div>
+          <div id="progTelemetryList">
+            <p style="font-family:var(--sans);font-size:14px;line-height:1.6;color:var(--cream-mute);margin:0;">Vos sessions enregistrées par l'application <strong style="color:var(--cream);">OXV Trace</strong> apparaîtront ici dès la sortie de l'app : tours, meilleur temps et lien pour explorer chaque session.</p>
+          </div>
+        </div>
+
+        <!-- ╔══════════════════════════════════════════════════════╗
              ║   APP NATIVE PROMO                                    ║
              ╚══════════════════════════════════════════════════════╝ -->
         <div class="bento prog-app-promo">
@@ -25797,6 +25810,29 @@ window.loadProgression = async function() {
   const userId = window.OXVApi.user.profile?.id;
   if (!userId) return;
 
+  // ── Connexion app (pré-lancement) : données réelles indépendantes du moteur QDI ──
+  // KPI « Sessions effectuées » = inscriptions réellement honorées (registrations.status='attended').
+  try {
+    const { count: attendedCount } = await supabase
+      .from('registrations')
+      .select('id', { count: 'exact', head: true })
+      .eq('user_id', userId)
+      .eq('status', 'attended');
+    const sn = qs('.prog-sessions-num');
+    if (sn) sn.textContent = String(attendedCount || 0).padStart(2, '0');
+  } catch (e) { /* table absente : on garde l'aperçu */ }
+
+  // Sessions enregistrées par l'app (télémétrie) — vides avant la sortie de l'app, s'allument ensuite.
+  try {
+    const { data: telem } = await supabase
+      .from('telemetry_sessions')
+      .select('id, circuit_name, started_at, lap_count, best_lap_seconds, max_speed_kmh, status')
+      .eq('user_id', userId)
+      .order('started_at', { ascending: false })
+      .limit(8);
+    renderTelemetrySessions(telem || []);
+  } catch (e) { renderTelemetrySessions([]); }
+
   try {
     // 1. Prénom du pilote (pour les messages)
     let firstName = '';
@@ -25819,9 +25855,7 @@ window.loadProgression = async function() {
       return; // garde le mockup
     }
 
-    // Compteur de sessions analysées
-    const sessionsNum = qs('.prog-sessions-num');
-    if (sessionsNum) sessionsNum.textContent = String((analyses && analyses.length) || 0).padStart(2, '0');
+    // (KPI « Sessions effectuées » alimenté plus haut depuis registrations.status='attended')
 
     // Aucune analyse → invitation
     if (!analyses || analyses.length === 0) { showEmptyQDI(firstName, qs, qsAll); return; }
@@ -25836,6 +25870,47 @@ window.loadProgression = async function() {
     console.warn('[Progression] Exception:', e);
   }
 };
+
+// Sessions enregistrées par l'app (télémétrie) — rendu lecture seule, prêt avant la sortie de l'app.
+function oxvFmtLap(sec) {
+  if (sec == null || !isFinite(Number(sec))) return '—';
+  const s = Number(sec);
+  const m = Math.floor(s / 60);
+  const r = s - m * 60;
+  return `${m}:${r.toFixed(3).padStart(6, '0')}`;
+}
+function renderTelemetrySessions(sessions) {
+  const list = document.getElementById('progTelemetryList');
+  const stats = document.getElementById('progTelemetryStats');
+  if (!list) return;
+  const done = (sessions || []).filter(s => (s.status || 'completed') === 'completed');
+  if (!done.length) {
+    if (stats) stats.innerHTML = '';
+    list.innerHTML = `<p style="font-family:var(--sans);font-size:14px;line-height:1.6;color:var(--cream-mute);margin:0;">Vos sessions enregistrées par l'application <strong style="color:var(--cream);">OXV Trace</strong> apparaîtront ici après votre première journée. Chaque session affichera vos tours, votre meilleur temps et un lien pour l'explorer dans l'app.</p>`;
+    return;
+  }
+  if (stats) {
+    const totalLaps = done.reduce((n, s) => n + (s.lap_count || 0), 0);
+    const bestLap = done.reduce((b, s) => (s.best_lap_seconds != null && (b == null || s.best_lap_seconds < b)) ? s.best_lap_seconds : b, null);
+    const maxSpeed = done.reduce((b, s) => (s.max_speed_kmh != null && (b == null || s.max_speed_kmh > b)) ? s.max_speed_kmh : b, null);
+    stats.innerHTML = `<div style="display:flex;gap:28px;flex-wrap:wrap;margin-bottom:18px;">
+      <div><div style="font-family:var(--display);font-size:24px;color:var(--cream);">${totalLaps}</div><div style="font-family:var(--mono);font-size:10px;letter-spacing:0.15em;text-transform:uppercase;color:var(--cream-mute);">Tours bouclés</div></div>
+      <div><div style="font-family:var(--display);font-size:24px;color:var(--cream);">${oxvFmtLap(bestLap)}</div><div style="font-family:var(--mono);font-size:10px;letter-spacing:0.15em;text-transform:uppercase;color:var(--cream-mute);">Meilleur tour</div></div>
+      <div><div style="font-family:var(--display);font-size:24px;color:var(--cream);">${maxSpeed != null ? Math.round(maxSpeed) + ' km/h' : '—'}</div><div style="font-family:var(--mono);font-size:10px;letter-spacing:0.15em;text-transform:uppercase;color:var(--cream-mute);">Vitesse max</div></div>
+    </div>`;
+  }
+  list.innerHTML = done.map(s => {
+    const d = s.started_at ? new Date(s.started_at).toLocaleDateString('fr-FR', { day: '2-digit', month: 'short', year: 'numeric' }) : '—';
+    const circuit = escapeHtml(s.circuit_name || 'Circuit');
+    return `<div style="display:flex;justify-content:space-between;align-items:center;gap:12px;padding:12px 0;border-top:1px solid var(--bento-border);">
+      <div>
+        <div style="font-family:var(--sans);font-size:14px;color:var(--cream);">${d} · ${circuit}</div>
+        <div style="font-family:var(--mono);font-size:11px;color:var(--cream-mute);">${s.lap_count || 0} tours · Meilleur ${oxvFmtLap(s.best_lap_seconds)}</div>
+      </div>
+      <a href="oxvcoach://bilan/${encodeURIComponent(s.id)}" style="font-family:var(--mono);font-size:11px;letter-spacing:0.1em;text-transform:uppercase;color:var(--gold);text-decoration:none;white-space:nowrap;">Ouvrir dans l'app →</a>
+    </div>`;
+  }).join('');
+}
 
 // Normalise une marge en score 0–100 (gère échelle 0–1 ou 0–100)
 function oxvMarginScore(v) {
