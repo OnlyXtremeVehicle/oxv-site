@@ -22604,33 +22604,33 @@ window.submitContact = async function() {
   if (!emailOk) { toast('Adresse email invalide', 'warn'); return; }
 
   const btn = document.querySelector('#page-contact .btn-primary');
-  if (btn) btn.style.pointerEvents = 'none';
+  const btnLabel = btn ? btn.textContent : '';
+  if (btn) { btn.style.pointerEvents = 'none'; btn.textContent = 'Envoi en cours…'; }
 
   const payload = {
     first_name: first.value.trim(),
     last_name:  last.value.trim(),
     email:      email.value.trim(),
     subject:    subj ? subj.value : 'Question générale',
-    message:    msg.value.trim()
+    message:    msg.value.trim(),
+    source:     'contact_form'
   };
 
   try {
-    if (typeof supabase !== 'undefined') {
-      const { error } = await supabase.from('contact_messages').insert(payload);
-      if (error) {
-        // Table absente → on ne bloque pas l'utilisateur, on log pour l'admin
-        console.warn('[Contact] Erreur Supabase (table contact_messages ?):', error);
-      }
-    }
-  } catch (e) {
-    console.warn('[Contact] Exception:', e);
-  } finally {
-    if (btn) btn.style.pointerEvents = '';
-  }
+    if (typeof supabase === 'undefined') throw new Error('Client Supabase indisponible');
+    const { error } = await supabase.from('contact_messages').insert(payload);
+    if (error) throw error;
 
-  toast('Message envoyé · réponse sous 48h ouvrées', 'ok');
-  ['ct-first','ct-last','ct-email','ct-msg'].forEach(id => { const el = document.getElementById(id); if (el) el.value = ''; });
-  cb.classList.remove('checked');
+    // Succès affiché UNIQUEMENT après insert réussi (aucun faux succès)
+    toast('Message envoyé · réponse sous 48h ouvrées', 'ok');
+    ['ct-first','ct-last','ct-email','ct-msg'].forEach(id => { const el = document.getElementById(id); if (el) el.value = ''; });
+    cb.classList.remove('checked');
+  } catch (e) {
+    console.warn('[Contact] Échec enregistrement:', e);
+    toast('Envoi impossible · réessayez ou écrivez à contact@oxvehicle.fr', 'error');
+  } finally {
+    if (btn) { btn.style.pointerEvents = ''; btn.textContent = btnLabel; }
+  }
 };
 
 /* === AUTH FUNCTIONS (signup, login, forgot, verify) === */
