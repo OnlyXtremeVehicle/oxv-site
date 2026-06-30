@@ -19334,8 +19334,8 @@ window.OXVApi = {
         .order('date', { ascending: true });
       if (error) { console.warn(error); return []; }
       return data;
-    },
-    book: async (data) => ({ ok: true, depositUrl: '#stripe' }) // TODO étape 4
+    }
+    /* `book` (stub Stripe mort) retiré — la réservation passe par bkConfirmBooking. — PR-SITE-06 */
   },
   telemetry: {
     connect: async () => {/* TODO BLE pairing */},
@@ -21116,6 +21116,21 @@ window.bkConfirmBooking = async function() {
     // price_deposit = price_total dans la nouvelle politique (paiement intégral)
     const priceDeposit = priceTotal;
 
+    // Garde-fou anti double-inscription (UX). Le filet de sécurité réel est la
+    // contrainte unique partielle DB (user_id, session_id) WHERE status <> 'cancelled'.
+    const { data: dup } = await supabase
+      .from('registrations')
+      .select('id')
+      .eq('user_id', userId)
+      .eq('session_id', bkState.selectedSession.id)
+      .neq('status', 'cancelled')
+      .maybeSingle();
+    if (dup) {
+      btn.innerHTML = orig; btn.disabled = false;
+      toast('Vous êtes déjà inscrit à cette session.', 'warn');
+      return;
+    }
+
     // Création de la registration
     const regData = {
       user_id: userId,
@@ -21135,9 +21150,17 @@ window.bkConfirmBooking = async function() {
       .select()
       .single();
 
-    if (regErr) throw regErr;
+    if (regErr) {
+      // Violation de la contrainte unique (déjà inscrit) → message clair, pas d'erreur brute
+      if (regErr.code === '23505') {
+        btn.innerHTML = orig; btn.disabled = false;
+        toast('Vous êtes déjà inscrit à cette session.', 'warn');
+        return;
+      }
+      throw regErr;
+    }
 
-    // Création du paiement (en attente)
+    // Création du paiement (en attente) — référence OXV persistée
     if (priceTotal > 0) {
       await supabase.from('payments').insert({
         user_id: userId,
@@ -21145,7 +21168,8 @@ window.bkConfirmBooking = async function() {
         amount: priceDeposit,
         currency: 'EUR',
         payment_method: bkState.selectedPayment,
-        status: 'pending'
+        status: 'pending',
+        reference: `OXV-${reg.id.slice(0, 8).toUpperCase()}`
       });
     }
 
@@ -21158,8 +21182,18 @@ window.bkConfirmBooking = async function() {
     }
 
     // Affichage page 5 confirmation
-    document.getElementById('bkRibRef').textContent = `OXV-${reg.id.slice(0, 8).toUpperCase()}`;
-    document.getElementById('bkRibAmount').textContent = `${(priceDeposit / 100).toLocaleString('fr-FR')} €`;
+    // ⚠️ COORDONNÉES BANCAIRES À COMPLÉTER — renseigner ici (une seule fois) l'IBAN/BIC/banque réels.
+    const OXV_RIB = {
+      iban: 'FR76 XXXX XXXX XXXX XXXX XXXX XXX',  // ⚠️ à compléter
+      bic:  'XXXXXXXX',                            // ⚠️ à compléter
+      bank: 'À compléter'                          // ⚠️ à compléter
+    };
+    const bkSetTxt = (id, v) => { const el = document.getElementById(id); if (el) el.textContent = v; };
+    bkSetTxt('bkRibIban', OXV_RIB.iban);
+    bkSetTxt('bkRibBic',  OXV_RIB.bic);
+    bkSetTxt('bkRibBank', OXV_RIB.bank);
+    bkSetTxt('bkRibRef', `OXV-${reg.id.slice(0, 8).toUpperCase()}`);
+    bkSetTxt('bkRibAmount', `${(priceDeposit / 100).toLocaleString('fr-FR')} €`);
 
     bkShowStep(5);
 
