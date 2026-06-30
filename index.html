@@ -13434,7 +13434,7 @@ textarea:focus-visible {
             <li>Priorité de réservation · ouverture J-7 avant les non-membres</li>
             <li>Application OXV premium illimitée toute l'année</li>
             <li>Historique complet de votre data circuit</li>
-            <li>Coaching IA pré-session · comparatif tours inter-sessions</li>
+            <li>Débrief IA post-session (opt-in) · comparatif tours inter-sessions</li>
             <li>Invitation aux 2-3 événements clubs annuels exclusifs</li>
             <li>Accès anticipé au calendrier saison N+1</li>
           </ul>
@@ -13451,6 +13451,21 @@ textarea:focus-visible {
           </div>
         </article>
 
+      </div>
+
+      <!-- Non inclus (toutes offres) + Corporate — PR-SITE-14 -->
+      <div class="reveal" style="max-width:920px;margin:28px auto 0;display:grid;gap:16px;">
+        <div class="bento" style="padding:20px 24px;border-radius:0;border-left:3px solid var(--bento-border);">
+          <div style="font-family:var(--display);font-size:10px;letter-spacing:0.2em;text-transform:uppercase;color:var(--cream-mute);margin-bottom:8px;">Non inclus dans toutes les offres</div>
+          <p style="font-family:var(--sans);font-size:14px;line-height:1.6;color:var(--cream-mute);margin:0;">Le véhicule, l'équipement pilote homologué (casque, combinaison selon le règlement du circuit) et l'assurance dommages de votre propre véhicule. La responsabilité civile de l'organisateur est, elle, incluse.</p>
+        </div>
+        <div class="bento" style="padding:20px 24px;border-radius:0;border-left:3px solid var(--gold);display:flex;justify-content:space-between;align-items:center;gap:20px;flex-wrap:wrap;">
+          <div style="flex:1;min-width:240px;">
+            <div style="font-family:var(--display);font-style:italic;font-weight:700;font-size:16px;color:var(--cream);margin-bottom:4px;">Corporate — privatisation &amp; événements</div>
+            <p style="font-family:var(--sans);font-size:14px;line-height:1.6;color:var(--cream-mute);margin:0;">Journée privatisée, séminaire client, lancement produit ou incentive sur circuit. Format sur mesure, sur devis.</p>
+          </div>
+          <button class="btn btn-sm" onclick="goTo('corporate')"><span>Découvrir Corporate →</span></button>
+        </div>
       </div>
 
       <!-- Comparator -->
@@ -13568,6 +13583,38 @@ textarea:focus-visible {
           </div>
         </div>
         <p class="how-signature">C'est ça, OXV.</p>
+      </div>
+
+      <!-- ============ FAQ (PR-SITE-15) ============ -->
+      <div class="reveal" style="margin-top:64px;">
+        <div class="kicker">N° 02.3 · Questions fréquentes</div>
+        <h2 class="section-title" style="margin-top:18px;margin-bottom:28px;">Vos questions, <em>nos réponses</em>.</h2>
+        <div class="founding-faq" style="max-width:840px;">
+          <div class="founding-faq-item">
+            <div class="founding-faq-q">Quel niveau faut-il pour rouler ?</div>
+            <p class="founding-faq-a">Aucune licence de compétition n'est exigée. Les sessions sont ouvertes aussi bien aux pilotes confirmés qu'aux passionnés roulant pour la première fois sur circuit : le briefing est obligatoire, l'open pitlane et la présence active OXV vous permettent de rouler à votre rythme, en sécurité. OXV est un miroir, pas une compétition — vous progressez contre vous-même, pas contre les autres.</p>
+          </div>
+          <div class="founding-faq-item">
+            <div class="founding-faq-q">Quelle voiture puis-je amener ?</div>
+            <p class="founding-faq-a">Votre voiture personnelle, dès lors qu'elle passe le contrôle technique de pré-inscription (état général, freins, pneus, niveaux) et respecte la limite sonore du circuit. La location d'un véhicule de piste est possible via nos partenaires — demandez-nous.</p>
+          </div>
+          <div class="founding-faq-item">
+            <div class="founding-faq-q">Suis-je assuré ? Et mon véhicule ?</div>
+            <p class="founding-faq-a">La responsabilité civile de l'organisateur est incluse. En revanche, les dommages à votre propre véhicule ne sont pas couverts par cette RC : une assurance « dommages circuit » dédiée est vivement recommandée (nos partenaires peuvent vous orienter). Le port d'un équipement homologué est requis selon le règlement du circuit.</p>
+          </div>
+          <div class="founding-faq-item">
+            <div class="founding-faq-q">Que deviennent mes données ?</div>
+            <p class="founding-faq-a">Vos données (identité, documents, télémétrie) sont chiffrées, hébergées en Europe et accessibles dans votre seul espace pilote. Elles ne sont jamais vendues ni partagées avec un autre pilote. La télémétrie sert uniquement à votre restitution pédagogique ; vous pouvez l'exporter et demander sa suppression à tout moment.</p>
+          </div>
+          <div class="founding-faq-item">
+            <div class="founding-faq-q">Comment se passe le paiement ?</div>
+            <p class="founding-faq-a">Vous pré-inscrivez votre place en ligne, sans paiement immédiat pendant la phase de lancement. Votre place est confirmée à réception du règlement par virement (coordonnées et référence fournies dans votre espace pilote). Le paiement par carte bancaire (Stripe) sera activé prochainement.</p>
+          </div>
+          <div class="founding-faq-item">
+            <div class="founding-faq-q">Quelle est la politique d'annulation ?</div>
+            <p class="founding-faq-a">Annulation à plus de 7 jours de la session : remboursement intégral. À moins de 7 jours : la place n'est pas remboursée. Si OXV doit annuler (météo dangereuse, force majeure), vous êtes intégralement remboursé ou reporté sur une autre date, à votre choix.</p>
+          </div>
+        </div>
       </div>
     </div>
   </section>
