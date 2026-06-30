@@ -16388,6 +16388,10 @@ textarea:focus-visible {
 
         <div class="admin-nav-section">— Communication</div>
 
+        <button class="admin-nav-item" onclick="goToAdmin('admin-inbox')">
+          <span>Boîte de réception</span>
+          <span class="badge-count" id="navBadgeInbox" style="display:none;">0</span>
+        </button>
         <button class="admin-nav-item" onclick="goToAdmin('admin-medias')">
           <span>Médias</span>
         </button>
@@ -16446,6 +16450,12 @@ textarea:focus-visible {
           <span class="admin-nav-btn-icon">€</span>
           <span class="admin-nav-btn-label">Paiements</span>
           <span class="admin-nav-btn-sub">Validation · virements · historique</span>
+        </button>
+
+        <button class="admin-nav-btn" onclick="goToAdmin('admin-inbox')">
+          <span class="admin-nav-btn-icon">✉</span>
+          <span class="admin-nav-btn-label">Boîte de réception</span>
+          <span class="admin-nav-btn-sub">Contact · corporate · founding</span>
         </button>
 
         <button class="admin-nav-btn" onclick="goToAdmin('admin-medias')">
@@ -16585,6 +16595,10 @@ textarea:focus-visible {
 
         <div class="admin-nav-section">— Communication</div>
 
+        <button class="admin-nav-item" onclick="goToAdmin('admin-inbox')">
+          <span>Boîte de réception</span>
+          <span class="badge-count" id="navBadgeInbox" style="display:none;">0</span>
+        </button>
         <button class="admin-nav-item" onclick="goToAdmin('admin-medias')">
           <span>Médias</span>
         </button>
@@ -16733,6 +16747,10 @@ textarea:focus-visible {
 
         <div class="admin-nav-section">— Communication</div>
 
+        <button class="admin-nav-item" onclick="goToAdmin('admin-inbox')">
+          <span>Boîte de réception</span>
+          <span class="badge-count" id="navBadgeInbox" style="display:none;">0</span>
+        </button>
         <button class="admin-nav-item" onclick="goToAdmin('admin-medias')">
           <span>Médias</span>
         </button>
@@ -16845,6 +16863,10 @@ textarea:focus-visible {
           <span>Paiements</span>
         </button>
         <div class="admin-nav-section">— Communication</div>
+        <button class="admin-nav-item" onclick="goToAdmin('admin-inbox')">
+          <span>Boîte de réception</span>
+          <span class="badge-count" id="navBadgeInbox" style="display:none;">0</span>
+        </button>
         <button class="admin-nav-item" onclick="goToAdmin('admin-medias')">
           <span>Médias</span>
         </button>
@@ -17036,6 +17058,10 @@ textarea:focus-visible {
           <span>Paiements</span>
         </button>
         <div class="admin-nav-section">— Communication</div>
+        <button class="admin-nav-item" onclick="goToAdmin('admin-inbox')">
+          <span>Boîte de réception</span>
+          <span class="badge-count" id="navBadgeInbox" style="display:none;">0</span>
+        </button>
         <button class="admin-nav-item" onclick="goToAdmin('admin-medias')">
           <span>Médias</span>
         </button>
@@ -17243,6 +17269,10 @@ textarea:focus-visible {
           <span>Paiements</span>
         </button>
         <div class="admin-nav-section">— Communication</div>
+        <button class="admin-nav-item" onclick="goToAdmin('admin-inbox')">
+          <span>Boîte de réception</span>
+          <span class="badge-count" id="navBadgeInbox" style="display:none;">0</span>
+        </button>
         <button class="admin-nav-item" onclick="goToAdmin('admin-medias')">
           <span>Médias</span>
         </button>
@@ -17361,6 +17391,7 @@ textarea:focus-visible {
         <button class="admin-nav-item active" onclick="goToAdmin('admin-paiements')"><span>Paiements</span><span class="arr">→</span></button>
         <div class="admin-nav-divider"></div>
         <div class="admin-nav-section">— Communication</div>
+        <button class="admin-nav-item" onclick="goToAdmin('admin-inbox')"><span>Boîte de réception</span><span class="badge-count" id="navBadgeInbox" style="display:none;">0</span></button>
         <button class="admin-nav-item" onclick="goToAdmin('admin-medias')"><span>Médias</span><span class="arr">→</span></button>
         <button class="admin-nav-item" onclick="goToAdmin('admin-articles')"><span>Articles</span><span class="arr">→</span></button>
         <button class="admin-nav-item" onclick="goToAdmin('admin-emails')"><span>Emails</span><span class="arr">→</span></button>
@@ -17527,6 +17558,125 @@ textarea:focus-visible {
 </div>
 
 
+<!-- ============ ADMIN : BOÎTE DE RÉCEPTION (PR-SITE-07) ============ -->
+<div class="page" id="page-admin-inbox">
+  <div class="admin-layout">
+    <aside class="admin-sidebar">
+      <div class="admin-sidebar-eyebrow">— Espace admin</div>
+      <div class="admin-sidebar-name acct-name-sync">Pilote <em>OXV</em></div>
+      <div class="admin-sidebar-email acct-email-sync">—</div>
+      <nav class="admin-nav">
+        <button class="admin-nav-item" onclick="goToAdmin('admin')"><span>Tableau de bord</span><span class="arr">→</span></button>
+        <button class="admin-nav-item" onclick="goToAdmin('admin-pilotes')"><span>Pilotes</span><span class="arr">→</span></button>
+        <button class="admin-nav-item" onclick="goToAdmin('admin-sessions')"><span>Sessions</span><span class="arr">→</span></button>
+        <button class="admin-nav-item" onclick="goToAdmin('admin-paiements')"><span>Paiements</span><span class="arr">→</span></button>
+        <div class="admin-nav-divider"></div>
+        <div class="admin-nav-section">— Communication</div>
+        <button class="admin-nav-item active" onclick="goToAdmin('admin-inbox')"><span>Boîte de réception</span><span class="badge-count" id="navBadgeInbox" style="display:none;">0</span></button>
+        <button class="admin-nav-item" onclick="goToAdmin('admin-medias')"><span>Médias</span><span class="arr">→</span></button>
+        <button class="admin-nav-item" onclick="goToAdmin('admin-articles')"><span>Articles</span><span class="arr">→</span></button>
+        <button class="admin-nav-item" onclick="goToAdmin('admin-emails')"><span>Emails</span><span class="arr">→</span></button>
+        <div class="admin-nav-divider"></div>
+        <div class="admin-nav-section">— Pilotage</div>
+        <button class="admin-nav-item" onclick="goToAdmin('admin-stats')"><span>Statistiques</span><span class="arr">→</span></button>
+        <button class="admin-nav-item" onclick="goToAdmin('admin-securite')"><span>Sécurité &amp; 2FA</span><span class="arr">→</span></button>
+        <div class="admin-nav-divider"></div>
+        <button class="admin-nav-item" onclick="goTo('compte')"><span>← Retour espace pilote</span><span class="arr">→</span></button>
+        <button class="admin-nav-item" onclick="logoutUser()"><span>Se déconnecter</span><span class="arr">→</span></button>
+      </nav>
+    </aside>
+    <main class="admin-main">
+      <div class="admin-header">
+        <div class="admin-header-eyebrow">N° ⌬ · Admin · Messagerie</div>
+        <h1 class="admin-header-title">Boîte de <em>réception</em>.</h1>
+        <p class="admin-header-sub">Contact, corporate, founding · statuts, notes internes, suivi des demandes.</p>
+      </div>
+
+      <div class="admin-kpis" style="display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:32px;">
+        <div class="bento" style="padding:24px;border-color:rgba(230,57,70,0.25);">
+          <div class="prog-pillar-weight">Non lus</div>
+          <div class="metric-large" id="inboxKpiNew" style="margin-top:8px;color:var(--red);">0</div>
+        </div>
+        <div class="bento" style="padding:24px;">
+          <div class="prog-pillar-weight">Corporate</div>
+          <div class="metric-large" id="inboxKpiCorp" style="margin-top:8px;">0</div>
+        </div>
+        <div class="bento" style="padding:24px;">
+          <div class="prog-pillar-weight">Répondus</div>
+          <div class="metric-large" id="inboxKpiReplied" style="margin-top:8px;color:var(--green-perf);">0</div>
+        </div>
+        <div class="bento" style="padding:24px;">
+          <div class="prog-pillar-weight">Total</div>
+          <div class="metric-large" id="inboxKpiTotal" style="margin-top:8px;color:var(--cream-mute);">0</div>
+        </div>
+      </div>
+
+      <div class="bento" style="padding:32px;margin-bottom:24px;">
+        <div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:20px;flex-wrap:wrap;gap:12px;">
+          <h3 class="prog-evolution-title">Messages</h3>
+          <div style="display:flex;gap:8px;flex-wrap:wrap;">
+            <select class="form-row" id="inboxFilterStatus" onchange="inboxRender();" style="background:rgba(0,0,0,0.4);border:1px solid var(--bento-border);color:var(--cream);font-family:var(--sans);font-size:12px;padding:8px 12px;border-radius:6px;">
+              <option value="all">Tous statuts</option>
+              <option value="new">Nouveaux</option>
+              <option value="read">Lus</option>
+              <option value="replied">Répondus</option>
+              <option value="spam">Spam</option>
+              <option value="archived">Archivés</option>
+            </select>
+            <select class="form-row" id="inboxFilterSource" onchange="inboxRender();" style="background:rgba(0,0,0,0.4);border:1px solid var(--bento-border);color:var(--cream);font-family:var(--sans);font-size:12px;padding:8px 12px;border-radius:6px;">
+              <option value="all">Toutes sources</option>
+              <option value="contact">Contact</option>
+              <option value="corporate">Corporate</option>
+              <option value="founding">Founding</option>
+            </select>
+          </div>
+        </div>
+        <div style="overflow-x:auto;">
+          <table style="width:100%;border-collapse:collapse;font-family:var(--sans);font-size:13px;">
+            <thead>
+              <tr style="border-bottom:1px solid var(--bento-border);">
+                <th style="text-align:left;padding:10px 12px;font-family:var(--display);font-size:10px;letter-spacing:0.22em;text-transform:uppercase;color:var(--cream-mute);font-weight:400;">Expéditeur</th>
+                <th style="text-align:left;padding:10px 12px;font-family:var(--display);font-size:10px;letter-spacing:0.22em;text-transform:uppercase;color:var(--cream-mute);font-weight:400;">Source</th>
+                <th style="text-align:left;padding:10px 12px;font-family:var(--display);font-size:10px;letter-spacing:0.22em;text-transform:uppercase;color:var(--cream-mute);font-weight:400;">Sujet</th>
+                <th style="text-align:center;padding:10px 12px;font-family:var(--display);font-size:10px;letter-spacing:0.22em;text-transform:uppercase;color:var(--cream-mute);font-weight:400;">Statut</th>
+                <th style="text-align:left;padding:10px 12px;font-family:var(--display);font-size:10px;letter-spacing:0.22em;text-transform:uppercase;color:var(--cream-mute);font-weight:400;">Date</th>
+                <th style="padding:10px 12px;"></th>
+              </tr>
+            </thead>
+            <tbody id="inboxBody">
+              <tr><td colspan="6" style="padding:18px;color:var(--cream-mute);font-family:var(--sans);">Chargement…</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </main>
+  </div>
+</div>
+<!-- /admin-inbox -->
+
+<!-- ============ MODAL : LECTURE MESSAGE ============ -->
+<div class="vmodal" id="inboxModal">
+  <div class="vmodal-card">
+    <button class="vmodal-close" onclick="inboxCloseModal()">×</button>
+    <div class="vmodal-eyebrow">— Message reçu</div>
+    <h2 class="vmodal-title" id="inboxModalTitle">Message</h2>
+    <div id="inboxModalMeta" style="font-family:var(--sans);font-size:13px;color:var(--cream);margin-bottom:16px;"></div>
+    <div id="inboxModalBody" style="font-family:var(--sans);font-size:14px;color:var(--cream-mute);line-height:1.6;background:rgba(0,0,0,0.3);border:1px solid var(--bento-border);border-radius:8px;padding:16px;"></div>
+    <div id="inboxModalExtra"></div>
+    <div class="form-row full" style="margin-top:16px;">
+      <label>Note interne</label>
+      <textarea id="inboxModalNote" rows="2" placeholder="Note privée admin…" style="background:rgba(0,0,0,0.4);border:1px solid var(--bento-border);color:var(--cream);padding:10px 14px;border-radius:6px;width:100%;font-family:var(--sans);"></textarea>
+    </div>
+    <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:16px;">
+      <button class="btn btn-primary" onclick="inboxReply()"><span>✉ Répondre</span></button>
+      <button class="btn btn-sm" onclick="inboxSaveNote()"><span>Enregistrer la note</span></button>
+      <button class="btn btn-sm" onclick="inboxStatusCurrent('replied')"><span>✓ Répondu</span></button>
+      <button class="btn btn-sm" onclick="inboxStatusCurrent('archived')"><span>Archiver</span></button>
+      <button class="btn btn-sm" onclick="inboxStatusCurrent('spam')"><span>Spam</span></button>
+    </div>
+  </div>
+</div>
+
 <!-- ============ ADMIN : MÉDIAS ============ -->
 <div class="page" id="page-admin-medias">
   <div class="admin-layout">
@@ -17540,6 +17690,7 @@ textarea:focus-visible {
         <button class="admin-nav-item" onclick="goToAdmin('admin-paiements')"><span>Paiements</span><span class="arr">→</span></button>
         <div class="admin-nav-divider"></div>
         <div class="admin-nav-section">— Communication</div>
+        <button class="admin-nav-item" onclick="goToAdmin('admin-inbox')"><span>Boîte de réception</span><span class="badge-count" id="navBadgeInbox" style="display:none;">0</span></button>
         <button class="admin-nav-item active" onclick="goToAdmin('admin-medias')"><span>Médias</span><span class="arr">→</span></button>
         <button class="admin-nav-item" onclick="goToAdmin('admin-articles')"><span>Articles</span><span class="arr">→</span></button>
         <button class="admin-nav-item" onclick="goToAdmin('admin-emails')"><span>Emails</span><span class="arr">→</span></button>
@@ -17585,6 +17736,7 @@ textarea:focus-visible {
         <button class="admin-nav-item" onclick="goToAdmin('admin-paiements')"><span>Paiements</span><span class="arr">→</span></button>
         <div class="admin-nav-divider"></div>
         <div class="admin-nav-section">— Communication</div>
+        <button class="admin-nav-item" onclick="goToAdmin('admin-inbox')"><span>Boîte de réception</span><span class="badge-count" id="navBadgeInbox" style="display:none;">0</span></button>
         <button class="admin-nav-item" onclick="goToAdmin('admin-medias')"><span>Médias</span><span class="arr">→</span></button>
         <button class="admin-nav-item active" onclick="goToAdmin('admin-articles')"><span>Articles</span><span class="arr">→</span></button>
         <button class="admin-nav-item" onclick="goToAdmin('admin-emails')"><span>Emails</span><span class="arr">→</span></button>
@@ -17718,6 +17870,7 @@ textarea:focus-visible {
         <button class="admin-nav-item" onclick="goToAdmin('admin-paiements')"><span>Paiements</span><span class="arr">→</span></button>
         <div class="admin-nav-divider"></div>
         <div class="admin-nav-section">— Communication</div>
+        <button class="admin-nav-item" onclick="goToAdmin('admin-inbox')"><span>Boîte de réception</span><span class="badge-count" id="navBadgeInbox" style="display:none;">0</span></button>
         <button class="admin-nav-item" onclick="goToAdmin('admin-medias')"><span>Médias</span><span class="arr">→</span></button>
         <button class="admin-nav-item active" onclick="goToAdmin('admin-emails')"><span>Emails</span><span class="arr">→</span></button>
         <div class="admin-nav-divider"></div>
@@ -17809,6 +17962,7 @@ textarea:focus-visible {
         <button class="admin-nav-item" onclick="goToAdmin('admin-paiements')"><span>Paiements</span><span class="arr">→</span></button>
         <div class="admin-nav-divider"></div>
         <div class="admin-nav-section">— Communication</div>
+        <button class="admin-nav-item" onclick="goToAdmin('admin-inbox')"><span>Boîte de réception</span><span class="badge-count" id="navBadgeInbox" style="display:none;">0</span></button>
         <button class="admin-nav-item" onclick="goToAdmin('admin-medias')"><span>Médias</span><span class="arr">→</span></button>
         <button class="admin-nav-item" onclick="goToAdmin('admin-articles')"><span>Articles</span><span class="arr">→</span></button>
         <button class="admin-nav-item" onclick="goToAdmin('admin-emails')"><span>Emails</span><span class="arr">→</span></button>
@@ -17904,6 +18058,7 @@ textarea:focus-visible {
         <button class="admin-nav-item" onclick="goToAdmin('admin-paiements')"><span>Paiements</span><span class="arr">→</span></button>
         <div class="admin-nav-divider"></div>
         <div class="admin-nav-section">— Communication</div>
+        <button class="admin-nav-item" onclick="goToAdmin('admin-inbox')"><span>Boîte de réception</span><span class="badge-count" id="navBadgeInbox" style="display:none;">0</span></button>
         <button class="admin-nav-item" onclick="goToAdmin('admin-medias')"><span>Médias</span><span class="arr">→</span></button>
         <button class="admin-nav-item" onclick="goToAdmin('admin-articles')"><span>Articles</span><span class="arr">→</span></button>
         <button class="admin-nav-item" onclick="goToAdmin('admin-emails')"><span>Emails</span><span class="arr">→</span></button>
@@ -19486,7 +19641,7 @@ window.goTo = function(page, opts) {
   // Pages protégées (pilote) : nécessitent une connexion
   const protectedPages = ['compte', 'compte-profil', 'compte-vehicules', 'compte-documents', 'compte-sessions', 'compte-progression', 'compte-heritage', 'compte-paiements', 'compte-preferences'];
   // Pages admin : nécessitent une connexion + role=admin
-  const adminPages = ['admin', 'admin-pilotes', 'admin-pilote-detail', 'admin-sessions', 'admin-paiements', 'admin-medias', 'admin-articles', 'admin-emails', 'admin-stats', 'admin-securite', 'admin-demandes'];
+  const adminPages = ['admin', 'admin-pilotes', 'admin-pilote-detail', 'admin-sessions', 'admin-paiements', 'admin-inbox', 'admin-medias', 'admin-articles', 'admin-emails', 'admin-stats', 'admin-securite', 'admin-demandes'];
   const isProtected = protectedPages.includes(page) || adminPages.includes(page);
 
   if (isProtected && !window.OXVApi.user.isLoggedIn) {
@@ -25225,6 +25380,8 @@ window.goToAdmin = async function(page) {
   setTimeout(() => {
     if (page === 'admin-paiements' && typeof window.loadAdminPaiements === 'function') {
       window.loadAdminPaiements();
+    } else if (page === 'admin-inbox' && typeof window.loadAdminInbox === 'function') {
+      window.loadAdminInbox();
     } else if (page === 'admin-medias' && typeof window.loadAdminMedias === 'function') {
       window.loadAdminMedias();
     } else if (page === 'admin-emails' && typeof window.loadAdminEmails === 'function') {
@@ -25255,6 +25412,150 @@ window.refreshDemandesBadge = async function() {
   } catch (_) { /* table peut-être pas encore créée */ }
 };
 
+/* ===================== ADMIN — BOÎTE DE RÉCEPTION (PR-SITE-07) =====================
+   Lit public.contact_messages (contact, corporate, founding…), gère les statuts
+   new/read/replied/spam/archived, notes internes (metadata.admin_notes), badge non-lus. */
+window.OXV_INBOX = [];
+const INBOX_SOURCE_LABEL = {
+  contact_form: 'Contact', corporate_form: 'Corporate', 'corporate-form': 'Corporate',
+  founding_form: 'Founding', 'founding-form': 'Founding', press: 'Presse', privacy: 'Privacy'
+};
+const INBOX_STATUS = {
+  new:      { label: 'Nouveau', cls: 'red' },
+  read:     { label: 'Lu', cls: '' },
+  replied:  { label: 'Répondu', cls: 'green' },
+  spam:     { label: 'Spam', cls: 'gold' },
+  archived: { label: 'Archivé', cls: '' }
+};
+
+window.refreshInboxBadge = async function() {
+  try {
+    const { count } = await supabase
+      .from('contact_messages')
+      .select('id', { count: 'exact', head: true })
+      .eq('status', 'new');
+    const n = count || 0;
+    document.querySelectorAll('#navBadgeInbox').forEach(b => {
+      if (!b) return;
+      if (n > 0) { b.textContent = n; b.style.display = ''; } else b.style.display = 'none';
+    });
+  } catch (_) { /* table peut-être absente */ }
+};
+
+window.loadAdminInbox = async function() {
+  if (!window.OXVApi?.user?.isLoggedIn || typeof supabase === 'undefined') return;
+  const tbody = document.getElementById('inboxBody');
+  if (tbody) tbody.innerHTML = '<tr><td colspan="6" style="padding:18px;color:var(--cream-mute);font-family:var(--sans);">Chargement…</td></tr>';
+  try {
+    const { data, error } = await supabase
+      .from('contact_messages')
+      .select('id, first_name, last_name, email, phone, subject, message, source, status, read_at, replied_at, metadata, created_at')
+      .order('created_at', { ascending: false })
+      .limit(200);
+    if (error) {
+      console.warn('[Admin Inbox]', error);
+      if (tbody) tbody.innerHTML = '<tr><td colspan="6" style="padding:18px;color:var(--red);font-family:var(--sans);">Erreur de chargement.</td></tr>';
+      return;
+    }
+    window.OXV_INBOX = data || [];
+    inboxUpdateKpis();
+    inboxRender();
+    refreshInboxBadge();
+  } catch (e) { console.warn('[Admin Inbox] Exception', e); }
+};
+
+function inboxUpdateKpis() {
+  const all = window.OXV_INBOX || [];
+  const cnt = (f) => all.filter(f).length;
+  const set = (id, v) => { const el = document.getElementById(id); if (el) el.textContent = v; };
+  set('inboxKpiNew', cnt(m => m.status === 'new'));
+  set('inboxKpiCorp', cnt(m => (m.source || '').indexOf('corporate') === 0));
+  set('inboxKpiReplied', cnt(m => m.status === 'replied'));
+  set('inboxKpiTotal', all.length);
+}
+
+window.inboxRender = function() {
+  const tbody = document.getElementById('inboxBody');
+  if (!tbody) return;
+  const fStatus = (document.getElementById('inboxFilterStatus') || {}).value || 'all';
+  const fSource = (document.getElementById('inboxFilterSource') || {}).value || 'all';
+  const rows = (window.OXV_INBOX || []).filter(m => {
+    if (fStatus !== 'all' && m.status !== fStatus) return false;
+    const src = m.source || '';
+    if (fSource === 'corporate' && src.indexOf('corporate') !== 0) return false;
+    if (fSource === 'contact' && src !== 'contact_form') return false;
+    if (fSource === 'founding' && src.indexOf('founding') !== 0) return false;
+    return true;
+  });
+  if (!rows.length) { tbody.innerHTML = '<tr><td colspan="6" style="padding:18px;color:var(--cream-mute);font-family:var(--sans);">Aucun message.</td></tr>'; return; }
+  tbody.innerHTML = rows.map(m => {
+    const st = INBOX_STATUS[m.status] || { label: m.status || '—', cls: '' };
+    const src = INBOX_SOURCE_LABEL[m.source] || (m.source || '—');
+    const name = escapeHtml(`${m.first_name || ''} ${m.last_name || ''}`.trim() || '—');
+    const date = m.created_at ? new Date(m.created_at).toLocaleDateString('fr-FR', { day: '2-digit', month: 'short', year: 'numeric' }) : '—';
+    const unread = m.status === 'new';
+    return `<tr style="border-bottom:1px solid var(--bento-border);${unread ? 'background:rgba(230,57,70,0.05);' : ''}">
+      <td style="padding:10px 12px;">${unread ? '<span class="status-dot ko"></span> ' : ''}${name}<div style="font-size:11px;color:var(--cream-mute);">${escapeHtml(m.email || '')}</div></td>
+      <td style="padding:10px 12px;"><span class="tag-inline">${escapeHtml(src)}</span></td>
+      <td style="padding:10px 12px;color:var(--cream-mute);max-width:280px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${escapeHtml(m.subject || '—')}</td>
+      <td style="padding:10px 12px;text-align:center;"><span class="tag-inline ${st.cls}">${st.label}</span></td>
+      <td style="padding:10px 12px;color:var(--cream-mute);white-space:nowrap;">${date}</td>
+      <td style="padding:10px 12px;text-align:right;"><button class="btn btn-sm" onclick="inboxOpen('${m.id}')"><span>Ouvrir</span></button></td>
+    </tr>`;
+  }).join('');
+};
+
+window.inboxOpen = function(id) {
+  const m = (window.OXV_INBOX || []).find(x => x.id === id);
+  if (!m) return;
+  window._inboxCurrent = m;
+  const meta = m.metadata || {};
+  const set = (elid, v) => { const el = document.getElementById(elid); if (el) el.innerHTML = v; };
+  const metaRows = Object.entries(meta)
+    .filter(([k]) => ['admin_notes', 'ack_sent_at'].indexOf(k) === -1)
+    .map(([k, v]) => `<div style="display:flex;justify-content:space-between;gap:12px;padding:5px 0;border-top:1px solid var(--bento-border);"><span style="color:var(--cream-mute);">${escapeHtml(k)}</span><span style="text-align:right;color:var(--cream);">${escapeHtml(String(v))}</span></div>`)
+    .join('');
+  set('inboxModalTitle', escapeHtml(m.subject || 'Message'));
+  set('inboxModalMeta', `<strong>${escapeHtml(`${m.first_name || ''} ${m.last_name || ''}`.trim() || '—')}</strong> · <a href="mailto:${escapeHtml(m.email || '')}" style="color:var(--gold);">${escapeHtml(m.email || '')}</a>${m.phone ? (' · ' + escapeHtml(m.phone)) : ''}`);
+  set('inboxModalBody', (escapeHtml(m.message || '')).replace(/\n/g, '<br>'));
+  set('inboxModalExtra', metaRows ? `<div style="margin-top:14px;font-size:12px;">${metaRows}</div>` : '');
+  const noteEl = document.getElementById('inboxModalNote'); if (noteEl) noteEl.value = meta.admin_notes || '';
+  document.getElementById('inboxModal').classList.add('open');
+  if (m.status === 'new') inboxSetStatus(id, 'read', { silent: true });
+};
+window.inboxCloseModal = function() { const el = document.getElementById('inboxModal'); if (el) el.classList.remove('open'); };
+
+window.inboxReply = function() {
+  const m = window._inboxCurrent; if (!m || !m.email) return;
+  window.location.href = `mailto:${m.email}?subject=${encodeURIComponent('Re: ' + (m.subject || 'Votre message — OXV'))}`;
+};
+
+window.inboxSetStatus = async function(id, status, opts) {
+  opts = opts || {};
+  const patch = { status };
+  if (status === 'read') { patch.read_at = new Date().toISOString(); patch.read_by = window.OXVApi.user.profile?.id || null; }
+  if (status === 'replied') { patch.replied_at = new Date().toISOString(); }
+  const { error } = await supabase.from('contact_messages').update(patch).eq('id', id);
+  if (error) { toast(`Erreur : ${error.message}`, 'warn'); return; }
+  const m = (window.OXV_INBOX || []).find(x => x.id === id); if (m) Object.assign(m, patch);
+  if (!opts.silent) { toast('Statut mis à jour', 'ok'); inboxCloseModal(); }
+  inboxUpdateKpis(); inboxRender(); refreshInboxBadge();
+};
+
+window.inboxStatusCurrent = function(status) {
+  if (!window._inboxCurrent) return;
+  inboxSetStatus(window._inboxCurrent.id, status);
+};
+
+window.inboxSaveNote = async function() {
+  const m = window._inboxCurrent; if (!m) return;
+  const note = (document.getElementById('inboxModalNote') || {}).value || '';
+  const meta = Object.assign({}, m.metadata || {}, { admin_notes: note });
+  const { error } = await supabase.from('contact_messages').update({ metadata: meta }).eq('id', m.id);
+  if (error) { toast(`Erreur : ${error.message}`, 'warn'); return; }
+  m.metadata = meta; toast('Note enregistrée', 'ok');
+};
+
 window.loadAdminDashboard = async function() {
   if (!window.OXVApi.user.isLoggedIn) return;
   const isAdmin = await isCurrentUserAdmin();
@@ -25265,6 +25566,7 @@ window.loadAdminDashboard = async function() {
   }
 
   refreshDemandesBadge();
+  refreshInboxBadge();
 
   // Greeting
   const userId = window.OXVApi.user.profile?.id;
