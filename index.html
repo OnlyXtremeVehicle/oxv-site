@@ -19497,6 +19497,61 @@ textarea:focus-visible {
 
 
 <!-- ============ PARTENAIRES (PR-COMP-04) ============ -->
+<div class="page" id="page-apres-journee">
+  <section class="page-hero">
+    <div class="wrap">
+      <div class="page-hero-eyebrow">N° ⬡ · Après votre journée</div>
+      <h1 class="page-hero-title">La journée finit.<br/>La <em>trace</em> reste.</h1>
+      <p class="page-hero-lede">
+        Chez OXV, rouler n'est qu'un début. Ce que vous emportez — vos données, vos médias, votre lecture de la session — continue de vivre bien après le drapeau à damier. Voici ce qui vous attend, jour après jour.
+      </p>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="wrap" style="max-width:860px;">
+      <div class="reveal" style="display:flex;flex-direction:column;gap:16px;">
+
+        <div class="bento" style="padding:24px;display:flex;gap:20px;align-items:flex-start;">
+          <div style="font-family:var(--display);font-size:13px;letter-spacing:0.15em;color:var(--gold);min-width:64px;padding-top:2px;">J+0</div>
+          <div><div style="font-family:var(--display);font-size:16px;color:var(--cream);margin-bottom:6px;">Le soir même — premiers médias</div><p style="font-family:var(--sans);font-size:14px;line-height:1.65;color:var(--cream-mute);margin:0;">Les premières photos de votre session arrivent. Vous repartez avec une image, pas seulement un souvenir.</p></div>
+        </div>
+
+        <div class="bento" style="padding:24px;display:flex;gap:20px;align-items:flex-start;">
+          <div style="font-family:var(--display);font-size:13px;letter-spacing:0.15em;color:var(--gold);min-width:64px;padding-top:2px;">J+2</div>
+          <div><div style="font-family:var(--display);font-size:16px;color:var(--cream);margin-bottom:6px;">Votre trace du jour</div><p style="font-family:var(--sans);font-size:14px;line-height:1.65;color:var(--cream-mute);margin:0;">Télémétrie haute fréquence, tours, vitesses et trajectoires — disponibles dans l'app OXV. Vos données, chiffrées, hébergées en UE, jamais revendues.</p></div>
+        </div>
+
+        <div class="bento" style="padding:24px;display:flex;gap:20px;align-items:flex-start;">
+          <div style="font-family:var(--display);font-size:13px;letter-spacing:0.15em;color:var(--gold);min-width:64px;padding-top:2px;">J+3</div>
+          <div><div style="font-family:var(--display);font-size:16px;color:var(--cream);margin-bottom:6px;">Le bilan de session</div><p style="font-family:var(--sans);font-size:14px;line-height:1.65;color:var(--cream-mute);margin:0;">Une lecture objective de votre journée. Un miroir, pas un jugement : aucune note, aucun classement public. Vous voyez ce qui s'est passé, vous décidez de la suite.</p></div>
+        </div>
+
+        <div class="bento" style="padding:24px;display:flex;gap:20px;align-items:flex-start;border-color:var(--gold);">
+          <div style="font-family:var(--display);font-size:13px;letter-spacing:0.15em;color:var(--gold);min-width:64px;padding-top:2px;">J+7</div>
+          <div><div style="font-family:var(--display);font-size:16px;color:var(--cream);margin-bottom:6px;">Le rapport Signature <span style="font-family:var(--sans);font-size:10px;letter-spacing:0.1em;text-transform:uppercase;color:var(--gold);">offres Signature &amp; Heritage</span></div><p style="font-family:var(--sans);font-size:14px;line-height:1.65;color:var(--cream-mute);margin:0;">Une analyse détaillée de votre roulage et des pistes de travail — formulées comme des observations, jamais comme des ordres. À vous d'en faire ce que vous voulez.</p></div>
+        </div>
+
+        <div class="bento" style="padding:24px;display:flex;gap:20px;align-items:flex-start;">
+          <div style="font-family:var(--display);font-size:13px;letter-spacing:0.15em;color:var(--gold);min-width:64px;padding-top:2px;">Saison</div>
+          <div><div style="font-family:var(--display);font-size:16px;color:var(--cream);margin-bottom:6px;">Votre carnet, votre progression</div><p style="font-family:var(--sans);font-size:14px;line-height:1.65;color:var(--cream-mute);margin:0;">Chaque session s'ajoute à votre carnet OXV. Au fil de la saison, votre trace se construit — la vôtre, à votre rythme, sans comparaison imposée.</p></div>
+        </div>
+
+      </div>
+
+      <div class="bento" style="padding:28px;margin-top:32px;text-align:center;">
+        <p style="font-family:var(--sans);font-size:15px;line-height:1.7;color:var(--cream-mute);margin:0 0 18px;">Tout vit dans l'<strong style="color:var(--cream);">app OXV</strong>, en opt-in. Découvrez comment la donnée prolonge l'expérience — ou réservez votre première session.</p>
+        <div style="display:flex;gap:10px;flex-wrap:wrap;justify-content:center;">
+          <button class="btn btn-primary btn-lg" onclick="ctaPrimaryGo()"><span>Réserver une session</span></button>
+          <button class="btn btn-lg" onclick="goTo('securite')"><span>Sécurité &amp; données</span></button>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+<!-- /apres-journee -->
+
+
 <div class="page" id="page-presse">
   <section class="page-hero">
     <div class="wrap">
@@ -19636,6 +19691,7 @@ textarea:focus-visible {
           <ul>
             <li><button onclick="goTo('offers')">Les offres</button></li>
             <li><button onclick="goTo('circuit')">Le circuit</button></li>
+            <li><button onclick="goTo('apres-journee')">Après la journée</button></li>
             <li><button onclick="goTo('securite')">Sécurité &amp; cadre</button></li>
             <li><button onclick="goTo('corporate')">Corporate</button></li>
             <li><button onclick="goTo('partenaires')">Partenaires</button></li>
@@ -20225,6 +20281,7 @@ const OXV_PAGE_SEO = {
   circuit:     { title: 'Le circuit de Haute Saintonge — tracé Beltoise · OXV', description: 'Dessiné en 2009 par Jean-Pierre Beltoise. 3,8 km, quinze virages, aucune chicane artificielle. Le tracé que pilote OXV.' },
   corporate:   { title: 'OXV Corporate — privatisation du tracé Beltoise', description: 'Privatisez le Circuit de Haute Saintonge. Deux formats (Standard 13 000 € HT, Signature 15 000 € HT), trois scénarios : comité de direction, concession, lancement produit.' },
   securite:    { title: 'Sécurité & cadre · OXV', description: 'Le cadre de sécurité OXV : briefing obligatoire, documents vérifiés, silence total en roulage, lecture des données après la session, vingt pilotes maximum. Et la place exacte de la donnée.' },
+  'apres-journee': { title: 'Après votre journée — la trace OXV', description: 'Ce que vous emportez après une session OXV : médias dès le soir, télémétrie dans l\'app, bilan de session, rapport Signature et carnet de saison. Un miroir, jamais un classement.' },
   partenaires: { title: 'Partenaires — rejoindre l\'écosystème OXV', description: 'Garage, photographe, hôtel, transport, assurance, concession : proposez un partenariat à OXV et accédez à une audience de pilotes exigeants au Circuit de Haute Saintonge.' },
   presse:      { title: 'Presse & médias · OXV', description: 'Espace presse OXV : faits clés vérifiés, kit média sur demande et contact journaliste. Track days confidentiels sur le tracé Beltoise, doctrine de données premium.' },
   about:       { title: 'À propos — le manifeste OXV', description: 'Pourquoi OXV existe. La sécurité d\'abord, le développement toujours, la sensation enfin. Vingt pilotes par session, jamais plus.' },
