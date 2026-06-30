@@ -22222,7 +22222,8 @@ window.submitCorporate = async function() {
       event_type:       format,
       guest_count:      guests || null,
       preferred_period: dates || null,
-      free_text:        message || null
+      free_text:        message || null,
+      crm: { lead_status: 'lead', priority: 'normal' }
     }
   };
 
@@ -23518,7 +23519,8 @@ window.submitContact = async function() {
     email:      email.value.trim(),
     subject:    subj ? subj.value : 'Question générale',
     message:    msg.value.trim(),
-    source:     'contact_form'
+    source:     'contact_form',
+    metadata:   { crm: { lead_status: 'lead', priority: 'normal' } }
   };
 
   try {
@@ -23577,6 +23579,7 @@ window.submitWaitlist = async function() {
     message:    recap,
     source:     'event_waitlist',
     metadata: {
+      crm: { lead_status: 'lead', priority: 'normal' },
       preference,
       departement: dept?.value.trim() || null,
       vehicule: vehicle?.value.trim() || null,
@@ -23640,6 +23643,7 @@ window.submitPartner = async function() {
     message:    recap,
     source:     'partner_form',
     metadata: {
+      crm: { lead_status: 'lead', priority: 'normal' },
       company: company.value.trim(),
       partner_type: partnerType,
       zone: zone?.value.trim() || null,
@@ -23707,6 +23711,7 @@ window.submitPress = async function() {
     message:    recap,
     source:     'press',
     metadata: {
+      crm: { lead_status: 'lead', priority: 'normal' },
       media_outlet: outlet.value.trim(),
       request_type: reqType,
       deadline: due || null,
