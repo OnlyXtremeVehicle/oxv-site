@@ -122,6 +122,9 @@
 }
 </script>
 
+<!-- Vercel Web Analytics : shim de file d'attente (le script /_vercel/insights est chargé en fin de <head>). RGPD-friendly, sans cookie. -->
+<script>window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };</script>
+
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Syncopate:wght@400;700&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
@@ -19773,7 +19776,20 @@ function onAuthChange() {
 /* CTA principal : route selon l'état de connexion.
    - Connecté  → tunnel de réservation (booking)
    - Visiteur  → demande d'inscription (candidature) */
+/* === ANALYTICS — couche tool-agnostique (PR-SITE-17) ===
+   Alimente Vercel Web Analytics (window.va), Plausible et dataLayer/GTM si présents.
+   N'échoue jamais : l'analytics ne doit pas casser l'UX. */
+window.track = function(event, props) {
+  try {
+    const payload = props || {};
+    if (typeof window.va === 'function') window.va('event', { name: event, ...payload });
+    if (typeof window.plausible === 'function') window.plausible(event, { props: payload });
+    (window.dataLayer = window.dataLayer || []).push({ event, ...payload });
+  } catch (_) { /* no-op */ }
+};
+
 window.ctaPrimaryGo = function() {
+  track('click_booking', { source: 'cta_primary' });
   if (window.OXVApi?.user?.isLoggedIn) {
     goTo('booking');
   } else {
@@ -19811,6 +19827,7 @@ window.goTo = function(page, opts) {
   document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
   const target = document.getElementById('page-' + page);
   if (target) target.classList.add('active');
+  if (page === 'offers') track('view_offer');
   window.scrollTo({ top: 0, behavior: 'instant' });
 
   // Init / reinit Three.js scenes for current page
@@ -20766,6 +20783,7 @@ const bkState = {
 };
 
 window.bkOpen = async function() {
+  track('start_booking');
   // Affiche le wizard, charge les données
   if (!window.OXVApi.user.isLoggedIn) {
     document.getElementById('bookingGate').style.display = 'flex';
@@ -21502,6 +21520,7 @@ window.bkConfirmBooking = async function() {
     bkSetTxt('bkRibRef', `OXV-${reg.id.slice(0, 8).toUpperCase()}`);
     bkSetTxt('bkRibAmount', `${(priceDeposit / 100).toLocaleString('fr-FR')} €`);
 
+    track('complete_booking', { offer: bkState.useHeritage ? 'heritage' : bkState.selectedOffer, amount: Math.round((priceTotal || 0) / 100) });
     bkShowStep(5);
 
     // Email de confirmation : envoyé côté serveur par le trigger DB
@@ -21608,6 +21627,7 @@ window.submitCorporate = async function() {
     if (error) throw error;
 
     // Succès affiché UNIQUEMENT après insert réussi (aucun faux succès)
+    track('submit_corporate', { company });
     toast('Demande envoyée · devis sous 5 jours ouvrés', 'ok');
     ['cf-company','cf-sector','cf-name','cf-role','cf-email','cf-phone','cf-guests','cf-dates','cf-msg'].forEach(id => {
       const el = document.getElementById(id); if (el) el.value = '';
@@ -22902,6 +22922,7 @@ window.submitContact = async function() {
     if (error) throw error;
 
     // Succès affiché UNIQUEMENT après insert réussi (aucun faux succès)
+    track('submit_contact');
     toast('Message envoyé · réponse sous 48h ouvrées', 'ok');
     ['ct-first','ct-last','ct-email','ct-msg'].forEach(id => { const el = document.getElementById(id); if (el) el.value = ''; });
     cb.classList.remove('checked');
