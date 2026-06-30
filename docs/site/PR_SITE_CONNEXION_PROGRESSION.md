@@ -19,7 +19,7 @@ Le doc app `docs/architecture/08_CONNEXION_PROGRESSION_SITE_APP.md` fixe l'archi
 - **Lien = `user_id`**. **Aucune migration de schéma** nécessaire ; RLS `auth.uid() = user_id` protège déjà.
 
 ## 3. Ce qui est DÉJÀ câblé (vérifié)
-`loadProgression()` (espace pilote → « Ma progression ») **lit réellement `app_session_analyses`** du modèle app : score QDI (`margin_global`), marges pilote/véhicule/zone, évolution multi-sessions, débrief coach réel (`next_focus_phrase`, `debrief_text`), états **vide** et **en attente** honnêtes. La connexion fonctionne ; elle s'allumera dès que l'app produira des analyses.
+`loadProgression()` (espace pilote → « Ma progression ») **lit réellement `app_session_analyses`** du modèle app : score QDI (`margin_global`), marges pilote/véhicule/zone, évolution multi-sessions, débrief coach réel (`next_focus_phrase`, `debrief_text`), états **vide** et **en attente** honnêtes. La connexion fonctionne **et il y a déjà des données réelles** (audit 2026-06-30 : `telemetry_sessions`=16, `app_session_analyses`=12) — la page n'est donc pas un simple état vide. Le KPI « Sessions effectuées » (= `registrations.attended`) reste à 0 tant que le check-in app n'a pas eu lieu.
 
 ## 4. Livré dans cette PR — conformité doctrine
 La page violait la doctrine app écrite (« pas de badges, pas d'emoji, pas de classement, pas de gamification ») :
@@ -28,7 +28,7 @@ La page violait la doctrine app écrite (« pas de badges, pas d'emoji, pas de c
 - Hero par défaut marqué **« EXEMPLE »** (aperçu illustratif, pas de fausse donnée présentée comme réelle).
 
 ## 5. Branché « avant la sortie de l'app » (livré)
-Lectures réelles + UI câblées, prêtes à s'allumer dès que l'app produira des données (aujourd'hui 0 télémétrie → états vides honnêtes) :
+Lectures réelles + UI câblées (données déjà présentes : 16 `telemetry_sessions`, 12 `app_session_analyses` ; `registrations.attended`=0 en attente du check-in app) :
 - **KPI « Sessions effectuées »** = `registrations.status='attended'` (vraie donnée site), à la place du nombre d'analyses.
 - **Bloc « Sessions enregistrées par l'app »** : lit `telemetry_sessions` (8 dernières), affiche par session date · circuit · tours · meilleur tour, + récap **records personnels** (tours bouclés, meilleur tour, vitesse max — pas de classement). État vide honnête avant la sortie de l'app.
 - **Deep links** `oxvcoach://bilan/{id}` par session (« Ouvrir dans l'app ») — inertes avant publication, fonctionnels au lancement. L'encart « OXV Trace arrive » (printemps 2027) reste la promo store.

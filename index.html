@@ -18977,7 +18977,8 @@ textarea:focus-visible {
           <strong>Vercel Inc.</strong> — hébergement web (US, transfert encadré par les Clauses Contractuelles Types).<br/>
           <strong>Amazon Web Services Paris</strong> — infrastructure base de données (UE).<br/>
           Prestataire de paiement sécurisé (PCI-DSS) — paiement.<br/>
-          <strong>Brevo (ex-Sendinblue)</strong> — emails transactionnels (UE).<br/>
+          <strong>Resend</strong> — envoi des emails transactionnels (US, transfert encadré par les Clauses Contractuelles Types).<br/>
+          <strong>Brevo (ex-Sendinblue)</strong> — diffusion de la newsletter, avec votre consentement (UE).<br/>
           <strong>Position Assurance</strong> — souscription RC circuit (UE).<br/>
           <strong>RaceBox</strong> — fournisseur du dispositif de télémétrie (UE).
         </p>
@@ -30190,23 +30191,25 @@ window.submitFoundingForm = async function() {
   };
 
   try {
-    if (typeof supabase !== 'undefined') {
-      const { error } = await supabase.from('contact_messages').insert(payload);
-      if (error) console.warn('[Founding] Insert error:', error);
-    }
+    if (typeof supabase === 'undefined') throw new Error('Client Supabase indisponible');
+    const { error } = await supabase.from('contact_messages').insert(payload);
+    if (error) throw error;
+    if (typeof track === 'function') track('submit_founding');
+    toast('Candidature envoyée · nous reviendrons vers vous sous 72h', 'ok');
+    ['fndFirstName','fndLastName','fndEmail','fndVehicle','fndMessage'].forEach(id => {
+      const el = document.getElementById(id);
+      if (el) el.value = '';
+    });
+    if (consent) consent.checked = false;
+    window.loadFounding();
   } catch (e) {
-    console.warn('[Founding] Exception:', e);
+    console.warn('[Founding] Échec enregistrement, fallback mailto:', e);
+    const body = `${payload.message}\n\nContact : ${firstName} ${lastName} <${email}>`;
+    toast('Connexion impossible · votre logiciel mail s’ouvre pour finaliser', 'warn');
+    window.location.href = `mailto:contact@oxvehicle.fr?subject=${encodeURIComponent('Candidature Founding Members — ' + firstName + ' ' + lastName)}&body=${encodeURIComponent(body)}`;
   } finally {
     if (btn) btn.style.pointerEvents = '';
   }
-
-  toast('Candidature envoyée · nous reviendrons vers vous sous 72h', 'ok');
-  ['fndFirstName','fndLastName','fndEmail','fndVehicle','fndMessage'].forEach(id => {
-    const el = document.getElementById(id);
-    if (el) el.value = '';
-  });
-  if (consent) consent.checked = false;
-  window.loadFounding();
 };
 
 /* ============================================================
