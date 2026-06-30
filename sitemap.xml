@@ -6,6 +6,7 @@
   <url><loc>https://www.oxvehicle.fr/circuit</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
   <url><loc>https://www.oxvehicle.fr/securite</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
   <url><loc>https://www.oxvehicle.fr/apres-journee</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://www.oxvehicle.fr/preuves</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
   <url><loc>https://www.oxvehicle.fr/corporate</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
   <url><loc>https://www.oxvehicle.fr/partenaires</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
   <url><loc>https://www.oxvehicle.fr/presse</loc><changefreq>monthly</changefreq><priority>0.4</priority></url>
