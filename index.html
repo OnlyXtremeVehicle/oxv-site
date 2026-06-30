@@ -21273,34 +21273,10 @@ window.toggleConsent = function(id) {
 };
 
 
-/* Faux upload utilisé dans le formulaire B2B (placeholder) */
-window.fakeUpload = function(btn) {
-  const orig = btn.innerHTML;
-  btn.innerHTML = '<span>⟳ Upload…</span>';
-  btn.disabled = true;
-  setTimeout(() => {
-    btn.innerHTML = '<span>✓ Fichier reçu</span>';
-    btn.disabled = false;
-  }, 800);
-};
+/* (Code mort retiré : fakeUpload + submitB2B utilisaient des ids corp-* inexistants
+   et n'étaient câblés à aucun formulaire. Le corporate réel passe par submitCorporate. — PR-SITE-04) */
 
-
-window.submitB2B = function() {
-  const cb = document.getElementById('corp-rgpd');
-  const company = document.getElementById('corp-company');
-  const name = document.getElementById('corp-name');
-  const email = document.getElementById('corp-email');
-  if (!cb || !cb.classList.contains('checked')) { toast('Acceptation RGPD requise', 'warn'); return; }
-  if (!company.value || !name.value || !email.value) { toast('Société, nom et email sont requis', 'warn'); return; }
-  toast('Demande envoyée · réponse sous 48h ouvrées', 'ok');
-  ['corp-company','corp-sector','corp-name','corp-role','corp-email','corp-phone','corp-guests','corp-dates','corp-msg'].forEach(id => { const el = document.getElementById(id); if (el) el.value = ''; });
-  ['corp-format','corp-level'].forEach(id => { const el = document.getElementById(id); if (el) el.selectedIndex = 0; });
-  const services = document.getElementById('corp-services');
-  if (services) Array.from(services.options).forEach(o => o.selected = false);
-  cb.classList.remove('checked');
-};
-
-/* === FORMULAIRE CORPORATE — Envoi Supabase === */
+/* === FORMULAIRE CORPORATE — Envoi Supabase (contact_messages, source=corporate_form) === */
 window.submitCorporate = async function() {
   const company = document.getElementById('cf-company').value.trim();
   const sector  = document.getElementById('cf-sector').value.trim();
@@ -21324,40 +21300,62 @@ window.submitCorporate = async function() {
   }
 
   const btn = document.querySelector('#corpForm .btn-primary');
+  const btnLabelEl = btn ? (btn.querySelector('span') || btn) : null;
+  const btnLabel = btnLabelEl ? btnLabelEl.textContent : '';
   if (btn) btn.style.pointerEvents = 'none';
+  if (btnLabelEl) btnLabelEl.textContent = 'Envoi en cours…';
 
-  const msgBody = [
+  // Récapitulatif lisible (colonne message NOT NULL) + données atomiques en metadata (CRM)
+  const recap = [
     `Société : ${company}`, `Secteur : ${sector || '—'}`, `Fonction : ${role || '—'}`,
     `Téléphone : ${phone || '—'}`, `Format : ${format}`,
     `Invités : ${guests || '—'}`, `Date envisagée : ${dates || '—'}`,
     message ? `\nDétails :\n${message}` : ''
   ].filter(Boolean).join('\n');
 
-  try {
-    if (typeof supabase !== 'undefined') {
-      const { error } = await supabase.from('contact_messages').insert({
-        first_name: name.split(' ')[0] || name,
-        last_name:  name.split(' ').slice(1).join(' ') || '—',
-        email,
-        subject:   `Demande corporate · ${company}`,
-        message:   msgBody,
-        source:    'corporate-form'
-      });
-      if (error) console.warn('[Corporate] Insert error:', error);
+  const payload = {
+    first_name: name.split(' ')[0] || name,
+    last_name:  name.split(' ').slice(1).join(' ') || '—',
+    email,
+    phone:      phone || null,
+    subject:    `Demande corporate · ${company}`,
+    message:    recap,
+    source:     'corporate_form',
+    metadata: {
+      company,
+      sector:           sector || null,
+      role:             role || null,
+      event_type:       format,
+      guest_count:      guests || null,
+      preferred_period: dates || null,
+      free_text:        message || null
     }
+  };
+
+  try {
+    if (typeof supabase === 'undefined') throw new Error('Client Supabase indisponible');
+    const { error } = await supabase.from('contact_messages').insert(payload);
+    if (error) throw error;
+
+    // Succès affiché UNIQUEMENT après insert réussi (aucun faux succès)
+    toast('Demande envoyée · devis sous 5 jours ouvrés', 'ok');
+    ['cf-company','cf-sector','cf-name','cf-role','cf-email','cf-phone','cf-guests','cf-dates','cf-msg'].forEach(id => {
+      const el = document.getElementById(id); if (el) el.value = '';
+    });
+    const sel = document.getElementById('cf-format');
+    if (sel) sel.selectedIndex = 0;
+    document.getElementById('cf-rgpd').checked = false;
   } catch (e) {
-    console.warn('[Corporate] Exception:', e);
+    console.warn('[Corporate] Échec enregistrement, fallback mailto:', e);
+    // Fallback mailto propre : le lead n'est jamais perdu si Supabase échoue
+    const body = `${recap}\n\nContact : ${name} <${email}>`;
+    const mailto = `mailto:corporate@oxvehicle.fr?subject=${encodeURIComponent('Demande corporate · ' + company)}&body=${encodeURIComponent(body)}`;
+    toast('Connexion impossible · votre logiciel mail s’ouvre pour finaliser', 'warn');
+    window.location.href = mailto;
   } finally {
     if (btn) btn.style.pointerEvents = '';
+    if (btnLabelEl) btnLabelEl.textContent = btnLabel;
   }
-
-  toast('Demande envoyée · devis sous 5 jours ouvrés', 'ok');
-  ['cf-company','cf-sector','cf-name','cf-role','cf-email','cf-phone','cf-guests','cf-dates','cf-msg'].forEach(id => {
-    const el = document.getElementById(id); if (el) el.value = '';
-  });
-  const sel = document.getElementById('cf-format');
-  if (sel) sel.selectedIndex = 0;
-  document.getElementById('cf-rgpd').checked = false;
 };
 
 /* ============================================================
@@ -22604,8 +22602,10 @@ window.submitContact = async function() {
   if (!emailOk) { toast('Adresse email invalide', 'warn'); return; }
 
   const btn = document.querySelector('#page-contact .btn-primary');
-  const btnLabel = btn ? btn.textContent : '';
-  if (btn) { btn.style.pointerEvents = 'none'; btn.textContent = 'Envoi en cours…'; }
+  const btnLabelEl = btn ? (btn.querySelector('span') || btn) : null;
+  const btnLabel = btnLabelEl ? btnLabelEl.textContent : '';
+  if (btn) btn.style.pointerEvents = 'none';
+  if (btnLabelEl) btnLabelEl.textContent = 'Envoi en cours…';
 
   const payload = {
     first_name: first.value.trim(),
@@ -22629,7 +22629,8 @@ window.submitContact = async function() {
     console.warn('[Contact] Échec enregistrement:', e);
     toast('Envoi impossible · réessayez ou écrivez à contact@oxvehicle.fr', 'error');
   } finally {
-    if (btn) { btn.style.pointerEvents = ''; btn.textContent = btnLabel; }
+    if (btn) btn.style.pointerEvents = '';
+    if (btnLabelEl) btnLabelEl.textContent = btnLabel;
   }
 };
 
