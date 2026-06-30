@@ -127,7 +127,7 @@
 
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-<link href="https://fonts.googleapis.com/css2?family=Syncopate:wght@400;700&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Syncopate:wght@400;700&family=Inter:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
 
 <script type="importmap">
 {
@@ -174,10 +174,10 @@
   --night:        #050505;   /* Noir Abysse — fond principal */
   --night-deep:   #000000;
   --night-soft:   #0E0E0E;
-  --night-card:   #121212;   /* Carbone Verre — surfaces Bento */
+  --night-card:   #0B0D10;   /* Anthracite (DA V3) — cartes / surfaces Bento */
 
   /* Compat ancienne variable "cream" → maintenant Blanc Pur */
-  --cream:        #F8F9FA;   /* Blanc Pur — titres et data */
+  --cream:        #F5F2EA;   /* Blanc cassé (DA V3) — titres et texte */
   --cream-soft:   #E5E5E5;
   --cream-mute:   #A1A1AA;   /* Gris Titane — secondaire */
   --cream-faint:  rgba(248, 249, 250, 0.50);
@@ -208,11 +208,20 @@
   --ok:           #4ADE80;   /* Vert pour OK */
   --ko:           #E63946;   /* Rouge pour KO */
 
-  /* ─── Variables marque OXV ─── */
-  --oxv-red:      #C8102E;   /* Rouge insigne — Access, Signature, Promotion */
-  --oxv-gold:     #C4A459;   /* Or Heritage strict */
+  /* ─── Variables marque OXV (alignées DA V3) ─── */
+  --oxv-red:      #D80F1F;   /* Rouge OXV (DA V3) — CTA, état actif, signature */
+  --oxv-gold:     #C9A24A;   /* Or data (DA V3) — signal premium rare */
   --oxv-night:    #0A0A0A;   /* Fond marque */
-  --oxv-cream:    #F8F9FA;   /* Texte marque */
+  --oxv-cream:    #F5F2EA;   /* Texte marque — blanc cassé */
+
+  /* ─── Charte DA V3 « Premium Racing Minimal » (tokens canoniques) ─── */
+  --carbon:       #050505;   /* Noir carbone — fond / hero / sections premium */
+  --anthracite:   #0B0D10;   /* Cartes, blocs, nav au scroll */
+  --acier:        #1A1D22;   /* Séparateurs, fonds secondaires */
+  --offwhite:     #F5F2EA;   /* Titres et textes clairs */
+  --red-oxv:      #D80F1F;   /* Rouge OXV — CTA / marque (jamais fonds massifs/graph data) */
+  --blue-data:    #4A8CFF;   /* Bleu data — app / Data Lab / trace (jamais CTA commercial) */
+  --gold-data:    #C9A24A;   /* Or data — premium rare, valeur data (jamais décoratif) */
 
   /* Bento Box (glassmorphism) */
   --bento-bg:        rgba(18, 18, 18, 0.7);
@@ -229,8 +238,8 @@
      ou la classe .syncopate */
   --serif:   'Georgia', 'Times New Roman', serif;
   --sans:    'Inter', -apple-system, BlinkMacSystemFont, 'Helvetica Neue', sans-serif;
-  --mono:    'JetBrains Mono', 'SF Mono', Menlo, monospace;
-  --display: 'Syncopate', 'Inter', sans-serif;          /* Titres + chiffres géants */
+  --mono:    'IBM Plex Mono', 'JetBrains Mono', 'SF Mono', Menlo, monospace;   /* Data / prix / KPI (DA V3) */
+  --display: 'Space Grotesk', 'Inter Tight', 'Inter', sans-serif;             /* Titres premium (DA V3) */
 
   /* ─── Easing officiels charte ─── */
   --ease:      cubic-bezier(0.25, 0.46, 0.45, 0.94);   /* Standard */
