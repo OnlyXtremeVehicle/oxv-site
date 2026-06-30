@@ -21975,7 +21975,7 @@ window.bkConfirmBooking = async function() {
       if (missingDocs.length > 0) {
         const list = missingDocs.join(' et ');
         toast(`Document manquant : ${list}. Redirection vers vos documents…`, 'warn');
-        setTimeout(() => goToAccount('documents'), 1500);
+        setTimeout(() => goToAccount('compte-documents'), 1500);
         return;
       }
     }
