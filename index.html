@@ -17564,6 +17564,28 @@ textarea:focus-visible {
 </div>
 <!-- /admin-session-detail -->
 
+<!-- ============ MODAL : ÉDITION SESSION (PR-SITE-09) ============ -->
+<div class="vmodal" id="adminSessionEditModal">
+  <div class="vmodal-card">
+    <button class="vmodal-close" onclick="adminCloseSessionEdit()">×</button>
+    <div class="vmodal-eyebrow">— Édition session</div>
+    <h2 class="vmodal-title">Modifier la <em>session</em>.</h2>
+    <div class="form-grid" style="margin-top:16px;">
+      <div class="form-row"><label>Date</label><input type="date" id="ase-date" /></div>
+      <div class="form-row"><label>Heure de début</label><input type="time" id="ase-start" /></div>
+      <div class="form-row"><label>Heure de fin</label><input type="time" id="ase-end" /></div>
+      <div class="form-row"><label>Capacité totale</label><input type="number" id="ase-cap" min="0" max="40" /></div>
+      <div class="form-row"><label>Capacité Access</label><input type="number" id="ase-cap-access" min="0" max="40" /></div>
+      <div class="form-row"><label>Capacité Signature</label><input type="number" id="ase-cap-sig" min="0" max="40" /></div>
+      <div class="form-row full"><label>Notes internes</label><textarea id="ase-notes" rows="3" style="background:rgba(0,0,0,0.4);border:1px solid var(--bento-border);color:var(--cream);padding:10px 14px;border-radius:6px;width:100%;font-family:var(--sans);"></textarea></div>
+    </div>
+    <div style="display:flex;gap:8px;justify-content:flex-end;margin-top:16px;">
+      <button class="btn btn-sm" onclick="adminCloseSessionEdit()"><span>Annuler</span></button>
+      <button class="btn btn-primary" onclick="adminSaveSession()"><span>Enregistrer</span></button>
+    </div>
+  </div>
+</div>
+
 
 <!-- /admin-session-detail -->
 
@@ -29105,6 +29127,53 @@ window.loadAdminSessionDetail = async function() {
   renderAdminSDRegs(currentAdminSessionRegs);
 };
 
+/* Édition fine d'une session (PR-SITE-09) — admin uniquement (RLS is_admin sur sessions). */
+window.adminOpenSessionEdit = function() {
+  const s = currentAdminSessionData;
+  if (!s) return;
+  const set = (id, v) => { const el = document.getElementById(id); if (el) el.value = (v == null ? '' : v); };
+  set('ase-date', s.date || '');
+  set('ase-start', s.start_time ? String(s.start_time).slice(0, 5) : '');
+  set('ase-end', s.end_time ? String(s.end_time).slice(0, 5) : '');
+  set('ase-cap', s.max_capacity);
+  set('ase-cap-access', s.capacity_access);
+  set('ase-cap-sig', s.capacity_signature);
+  set('ase-notes', s.notes || '');
+  const m = document.getElementById('adminSessionEditModal'); if (m) m.classList.add('open');
+};
+window.adminCloseSessionEdit = function() { const m = document.getElementById('adminSessionEditModal'); if (m) m.classList.remove('open'); };
+window.adminSaveSession = async function() {
+  const id = window._currentAdminSessionId;
+  if (!id) return;
+  const val = (eid) => { const el = document.getElementById(eid); return el ? el.value : ''; };
+  const numOrNull = (v) => { const n = parseInt(v, 10); return isNaN(n) ? null : n; };
+  const date = val('ase-date');
+  if (!date) { toast('La date est requise', 'warn'); return; }
+  const patch = {
+    date,
+    start_time: val('ase-start') || null,
+    end_time: val('ase-end') || null,
+    max_capacity: numOrNull(val('ase-cap')),
+    capacity_access: numOrNull(val('ase-cap-access')),
+    capacity_signature: numOrNull(val('ase-cap-sig')),
+    notes: val('ase-notes').trim() || null
+  };
+  const btn = document.querySelector('#adminSessionEditModal .btn-primary');
+  if (btn) btn.style.pointerEvents = 'none';
+  try {
+    const { error } = await supabase.from('sessions').update(patch).eq('id', id);
+    if (error) throw error;
+    toast('Session mise à jour', 'ok');
+    adminCloseSessionEdit();
+    loadAdminSessionDetail();
+  } catch (e) {
+    console.warn('[Admin session] update:', e);
+    toast(`Erreur : ${e.message || 'mise à jour impossible'}`, 'warn');
+  } finally {
+    if (btn) btn.style.pointerEvents = '';
+  }
+};
+
 function renderAdminSDHeader(s) {
   const date = new Date(s.date);
   const days = ['Dimanche', 'Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi', 'Samedi'];
@@ -29144,6 +29213,8 @@ function renderAdminSDHeader(s) {
   // Actions admin
   const actionsEl = document.getElementById('adminSDActions');
   const actions = [];
+
+  actions.push(`<button class="admin-action-btn" onclick="adminOpenSessionEdit()">Éditer</button>`);
 
   if (!isPast && s.status !== 'cancelled') {
     if (s.status !== 'confirmed') {
