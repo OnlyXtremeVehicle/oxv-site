@@ -64,6 +64,63 @@
   "publisher": { "@type": "Organization", "name": "OXV", "logo": { "@type": "ImageObject", "url": "https://www.oxvehicle.fr/brand/favicon-192.png" } }
 }
 </script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  "name": "OXV — Only Xtreme Vehicle",
+  "legalName": "OXV",
+  "url": "https://www.oxvehicle.fr/",
+  "logo": "https://www.oxvehicle.fr/brand/favicon-512.png",
+  "email": "contact@oxvehicle.fr",
+  "areaServed": "FR",
+  "contactPoint": {
+    "@type": "ContactPoint",
+    "email": "contact@oxvehicle.fr",
+    "contactType": "customer service",
+    "availableLanguage": ["French"]
+  }
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Product",
+  "name": "OXV — Track day sur le tracé Beltoise",
+  "description": "Track days confidentiels plafonnés à vingt pilotes au Circuit de Haute Saintonge : pilotage, télémétrie, coaching et média.",
+  "brand": { "@type": "Brand", "name": "OXV" },
+  "url": "https://www.oxvehicle.fr/#offers",
+  "offers": [
+    { "@type": "Offer", "name": "Access", "description": "Demi-journée le lundi · 20 pilotes max", "price": "390", "priceCurrency": "EUR", "availability": "https://schema.org/InStock", "url": "https://www.oxvehicle.fr/#offers" },
+    { "@type": "Offer", "name": "Signature", "description": "Journée complète le vendredi · télémétrie 25 Hz · coaching · média · déjeuner gastronomique", "price": "690", "priceCurrency": "EUR", "availability": "https://schema.org/InStock", "url": "https://www.oxvehicle.fr/#offers" },
+    { "@type": "Offer", "name": "Heritage", "description": "4 sessions Signature au choix sur la saison · priorité de réservation", "price": "2490", "priceCurrency": "EUR", "availability": "https://schema.org/InStock", "url": "https://www.oxvehicle.fr/#offers" }
+  ]
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    { "@type": "Question", "name": "Quel niveau faut-il pour rouler ?", "acceptedAnswer": { "@type": "Answer", "text": "Aucune licence de compétition n'est exigée. Les sessions sont ouvertes aux pilotes confirmés comme aux passionnés roulant pour la première fois sur circuit : briefing obligatoire, open pitlane et présence active OXV permettent de rouler à son rythme, en sécurité." } },
+    { "@type": "Question", "name": "Quelle voiture puis-je amener ?", "acceptedAnswer": { "@type": "Answer", "text": "Votre voiture personnelle, dès lors qu'elle passe le contrôle technique de pré-inscription (état général, freins, pneus, niveaux) et respecte la limite sonore du circuit. La location d'un véhicule de piste est possible via nos partenaires." } },
+    { "@type": "Question", "name": "Suis-je assuré ? Et mon véhicule ?", "acceptedAnswer": { "@type": "Answer", "text": "La responsabilité civile de l'organisateur est incluse. Les dommages à votre propre véhicule ne sont pas couverts par cette RC : une assurance dommages circuit dédiée est vivement recommandée. Le port d'un équipement homologué est requis." } },
+    { "@type": "Question", "name": "Que deviennent mes données ?", "acceptedAnswer": { "@type": "Answer", "text": "Vos données (identité, documents, télémétrie) sont chiffrées, hébergées en Europe et accessibles dans votre seul espace pilote. Elles ne sont jamais vendues ni partagées avec un autre pilote, et vous pouvez les exporter ou demander leur suppression." } },
+    { "@type": "Question", "name": "Comment se passe le paiement ?", "acceptedAnswer": { "@type": "Answer", "text": "Vous pré-inscrivez votre place en ligne sans paiement immédiat pendant la phase de lancement. Votre place est confirmée à réception du règlement par virement (coordonnées et référence dans votre espace pilote). Le paiement par carte arrive prochainement." } },
+    { "@type": "Question", "name": "Quelle est la politique d'annulation ?", "acceptedAnswer": { "@type": "Answer", "text": "Annulation à plus de 7 jours de la session : remboursement intégral. À moins de 7 jours : aucun remboursement. Si OXV doit annuler (météo, force majeure), vous êtes intégralement remboursé ou reporté, à votre choix." } }
+  ]
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    { "@type": "ListItem", "position": 1, "name": "Accueil", "item": "https://www.oxvehicle.fr/" },
+    { "@type": "ListItem", "position": 2, "name": "Les offres", "item": "https://www.oxvehicle.fr/#offers" }
+  ]
+}
+</script>
 
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -15701,7 +15758,7 @@ textarea:focus-visible {
         <div class="account-header-eyebrow">N° ⌬.4 · Sessions</div>
         <h1 class="account-header-title">Mes <em>sessions</em>.</h1>
         <p class="account-header-sub">
-          Toutes vos journées de roulage, à venir et passées. Annulation possible jusqu'à J-14 (remboursement intégral) selon nos CGV.
+          Toutes vos journées de roulage, à venir et passées. Selon nos CGV : remboursement intégral à plus de 7 jours de la session, aucun remboursement à moins de 7 jours.
         </p>
       </div>
 
@@ -24723,7 +24780,7 @@ function formatSessionDate(iso) {
 }
 
 window.cancelRegistration = async function(regId, label) {
-  if (!confirm(`Annuler votre inscription pour ${label} ? Selon nos CGV, le remboursement dépend du délai (intégral si J-14, 50% si J-14 à J-7, 10% si moins de J-7).`)) return;
+  if (!confirm(`Annuler votre inscription pour ${label} ? Selon nos CGV : remboursement intégral à plus de 7 jours de la session, aucun remboursement à moins de 7 jours.`)) return;
 
   const userId = window.OXVApi.user.profile?.id;
   const { error } = await supabase
