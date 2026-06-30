@@ -1,10 +1,11 @@
-# OXV — Roadmap maître consolidée (V1 + V1.1 + V2)
+# OXV — Roadmap maître consolidée (V1 + V1.1 + V2 + V2.1)
 
-> Document d'orchestration unique pour les 3 dossiers :
+> Document d'orchestration unique pour les 4 dossiers :
 > - **V1** Plan d'action (fiabilisation) — PR-SITE-01 → 20
 > - **V1.1** Connexions site ↔ app + média — PR-SITE-21 → 31
 > - **V2** Refonte esthétique premium — PR-DESIGN-01 → 12
-> Date : 2026-06-30. Branche de travail : `claude/focused-lalande-d05140`.
+> - **V2.1** Compléments stratégiques (lancement, leads, preuves, CRM) — PR-COMP-01 → 10
+> Date : 2026-06-30. Branche de travail : `claude/focused-lalande-d05140`. **Total : 53 PR.**
 
 ## Principe directeur (commun aux 3 dossiers)
 > Le site **vend** l'expérience. L'app **prolonge** la trace. L'admin **livre** les médias. Le client **retrouve** son histoire dans l'app.
@@ -53,6 +54,7 @@ Chaque PR touche une ou plusieurs surfaces. C'est **déterminant** pour savoir c
 | PR-SITE-23 | Pass OXV dérivé de `registration` (QR, check-in, statuts) | 🗄️📱 |
 | PR-SITE-24 | Sessions site ↔ Events app (unifier les calendriers) | 🗄️📱 |
 | **PR-SITE-27** | **Flux média admin site → app client (prioritaire)** | 🌐🗄️📱 |
+| PR-COMP-08 | Politique média (droits, visibilités, retrait) — cadre de PR-27 | 🌐🗄️ |
 
 ### 🛠️ Phase 3 — Administration (P1)
 | PR | Objet | Surface |
@@ -64,8 +66,9 @@ Chaque PR touche une ou plusieurs surfaces. C'est **déterminant** pour savoir c
 | PR-SITE-26 | Paiement synchronisé dans le Pass app | 🗄️📱 |
 | PR-SITE-28 | Admin bridge : réservation validée → participant event app | 🗄️📱 |
 | PR-SITE-29 | Emails site + notifications app (silence en roulage) | 🗄️📱 |
+| PR-COMP-07 | CRM statuts leads (`lead_source/status/priority/owner/next_action_at`) — enrichit l'inbox PR-07 | 🌐🗄️ |
 
-### 📈 Phase 4 — Conversion & contenu (P1/P2)
+### 📈 Phase 4 — Conversion, contenu & lancement commercial (P1/P2)
 | PR | Objet | Surface |
 |---|---|---|
 | PR-SITE-13 | Page App OXV Trace (Pass, Trace, Data Lab, Carnet, Saison) | 🌐 |
@@ -77,6 +80,13 @@ Chaque PR touche une ou plusieurs surfaces. C'est **déterminant** pour savoir c
 | PR-SITE-17 | Analytics conversion (6 événements clés) | 🌐 |
 | PR-SITE-30 | Support/contact unifié (lier message ↔ user_id) | 🗄️📱 |
 | PR-SITE-31 | Analytics cross-platform (site → réservation → app) | 🌐🗄️📱 |
+| PR-COMP-01 | Plan de lancement + **liste d'attente** (`waitlist_entries`) | 🌐🗄️ |
+| PR-COMP-04 | Page **Partenaires** (distincts du Corporate) + `partner_form` | 🌐🗄️ |
+| PR-COMP-05 | Système de **preuves** (photos, témoignages, ex. Pass/Trace) | 🌐 |
+| PR-COMP-02 | Page **Sécurité & Cadre** (briefing, docs, silence roulage) | 🌐 |
+| PR-COMP-09 | Page **« Après votre journée OXV »** (valeur finale tangible) | 🌐 |
+| PR-COMP-03 | Page **Presse / Kit média** + `press_form` | 🌐🗄️ |
+| PR-COMP-06 | Stratégie **contenu SEO** (articles prioritaires + CTA) | 🌐 |
 
 ### 🎨 Phase 5 — Refonte esthétique premium (V2)
 | PR | Objet | Prio |
@@ -102,6 +112,13 @@ Chaque PR touche une ou plusieurs surfaces. C'est **déterminant** pour savoir c
 | PR-SITE-18 | Inventaire & retrait des mocks/faux succès |
 | PR-SITE-19 | Découpage progressif d'`index.html` (config, client, services, pages, CSS) |
 | PR-SITE-20 | Décision architecture future (rester custom vs Astro/Next/Vite) |
+
+### 🚦 Capstone — Gate production (P0, transverse)
+| PR | Objet |
+|---|---|
+| PR-COMP-10 | **Checklist go-live** : sécurité, commercial, admin, média, site↔app, SEO, mobile, perf. Bloque la mise en ligne « sérieuse » tant que non validée. |
+
+> **Overlay commercial (V2.1 §1) — plan de lancement en 5 temps**, à dérouler une fois le socle prêt : pré-lancement (waitlist + teaser) → lancement pilote (1ʳᵉ session test) → lancement contenu (preuves : shooting, OXV Moment, témoignages) → lancement B2B (corporate) → lancement partenaires (écosystème). Ce n'est pas une phase de dev mais une cadence go-to-market qui consomme les PR COMP-01/04/05.
 
 ---
 
@@ -160,4 +177,4 @@ Pour **chaque** PR, je déroule la même boucle traçable :
 - ✅ PR-SITE-01, PR-SITE-02 livrées (2 commits + 1 migration prod)
 - 🔜 Prochaine : **Phase 1 — PR-SITE-03 (Contact réel)**
 
-Total programme : **43 PR** (20 + 11 + 12). Phases 0→1 = socle ; 2 = écosystème ; 3-4 = exploitation/conversion ; 5 = premium ; 6 = dette technique.
+Total programme : **53 PR** (20 + 11 + 12 + 10). Phases 0→1 = socle ; 2 = écosystème ; 3-4 = exploitation/conversion/lancement ; 5 = premium ; 6 = dette technique ; capstone = gate go-live (COMP-10).
