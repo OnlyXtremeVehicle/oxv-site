@@ -21163,8 +21163,9 @@ window.bkConfirmBooking = async function() {
 
     bkShowStep(5);
 
-    // Email post-réservation (placeholder — branchement Resend en étape 8)
-    triggerBookingEmail(reg, bkState.selectedSession, bkState.selectedOffer, priceTotal);
+    // Email de confirmation : envoyé côté serveur par le trigger DB
+    // `trg_registration_emails` (Edge Function send-booking-confirmation). Plus
+    // d'appel client (auth par secret partagé serveur uniquement). — PR-SITE-05
 
     btn.innerHTML = orig;
     btn.disabled = false;
@@ -21176,82 +21177,10 @@ window.bkConfirmBooking = async function() {
   }
 };
 
-/**
- * Email post-réservation : envoie un récapitulatif au pilote avec :
- *  - Confirmation de l'inscription
- *  - Coordonnées bancaires pour le virement + référence
- *  - Liste des éléments à vérifier avant la session (bruit, équipements, etc.)
- *  - Lien vers la page de spécifications techniques
- *
- * V1 : log uniquement (les emails seront branchés via Resend en étape 8).
- * Les données sont déjà stockées dans Supabase, donc l'envoi peut être
- * déclenché plus tard par un job batch ou un trigger DB.
- */
-async function triggerBookingEmail(reg, session, offerKey, totalAmount) {
-  const userId = window.OXVApi.user.profile?.id;
-  if (!userId) return;
-
-  // Récupère les infos pilote pour personnaliser
-  const { data: profile } = await supabase
-    .from('users')
-    .select('first_name, last_name, email')
-    .eq('id', userId)
-    .single();
-
-  if (!profile) return;
-
-  const offerLabel = BK_OFFERS[offerKey]?.name || offerKey;
-  const dateStr = new Date(session.date).toLocaleDateString('fr-FR', {
-    weekday: 'long', day: 'numeric', month: 'long', year: 'numeric'
-  });
-  const ref = `OXV-${reg.id.slice(0, 8).toUpperCase()}`;
-
-  // Contenu de l'email (sera utilisé par Resend en étape 8)
-  const emailPayload = {
-    to: profile.email,
-    subject: `Réservation OXV confirmée · ${dateStr}`,
-    type: 'booking_confirmation',
-    data: {
-      first_name: profile.first_name || '',
-      booking_ref: ref,
-      session_date: dateStr,
-      offer_label: offerLabel,
-      amount_eur: (totalAmount / 100).toFixed(2),
-      payment_due_date: new Date(new Date(session.date).getTime() - 7*24*3600*1000).toLocaleDateString('fr-FR'),
-      checklist_items: [
-        'Vérifier que votre véhicule respecte la norme bruit (≤ 98 dB +3) — voir Porsche GT3 RS comme maximum admissible',
-        'Préparer vos équipements pilote selon votre véhicule (casque jet/intégral, crochet de remorque, etc.)',
-        'Présenter à l\'arrivée : permis de conduire valide, attestation d\'assurance circuit, carte grise du véhicule',
-        'Effectuer le virement avec la référence ' + ref + ' au plus tard 7 jours avant la session',
-        'Lire la page Spécifications techniques pour valider la conformité de votre véhicule'
-      ],
-      specs_url: window.location.origin + '/#specs-techniques',
-      cancellation_policy: 'Annulation à plus de 7 jours : remboursement intégral. Moins de 7 jours : aucun remboursement. Annulation OXV (météo, force majeure) : remboursement intégral garanti.'
-    }
-  };
-
-  // Appel Edge Function send-confirmation-email
-  try {
-    const { data: { session: authSession } } = await supabase.auth.getSession();
-    if (authSession?.access_token) {
-      const fnUrl = `${SUPABASE_URL}/functions/v1/send-confirmation-email`;
-      const res = await fetch(fnUrl, {
-        method: 'POST',
-        headers: {
-          'Authorization': `Bearer ${authSession.access_token}`,
-          'Content-Type': 'application/json',
-          'apikey': SUPABASE_ANON_KEY
-        },
-        body: JSON.stringify({ registration_id: reg.id })
-      });
-      if (!res.ok) {
-        console.warn('[OXV Email] Edge Function error:', await res.text());
-      }
-    }
-  } catch (emailErr) {
-    console.warn('[OXV Email] Exception:', emailErr);
-  }
-}
+/* Email post-réservation : déplacé côté serveur (PR-SITE-05).
+   Le trigger DB `trg_registration_emails` appelle l'Edge Function
+   send-booking-confirmation (auth par secret partagé, idempotent via
+   registrations.confirmation_email_sent_at). Plus d'envoi depuis le client. */
 
 
 // Hook quand on change d'étape : load des données nécessaires
@@ -28011,24 +27940,11 @@ window.adminCancelSession = async function() {
     .eq('session_id', sessionId)
     .neq('status', 'cancelled');
 
-  // Email placeholder pour chaque pilote (Resend en étape 8)
-  currentAdminSessionRegs.forEach(r => {
-    if (r.status !== 'cancelled' && r.users?.email) {
-      console.log('[OXV Email queued]', {
-        to: r.users.email,
-        subject: 'Session OXV annulée — remboursement intégral',
-        type: 'session_cancelled_by_oxv',
-        data: {
-          first_name: r.users.first_name || '',
-          session_date: formatDate(currentAdminSessionData.date),
-          reason: reason,
-          amount_to_refund: ((r.price_total || 0) / 100).toFixed(2)
-        }
-      });
-    }
-  });
+  // TODO (PR-SITE-05+) : email d'annulation pilote via trigger DB + Edge Function
+  // dédiée (send-session-cancelled). Non implémenté à ce jour — on n'affiche donc
+  // PAS de fausse notification « pilotes notifiés ».
 
-  toast('Session annulée · pilotes notifiés', 'ok');
+  toast('Session annulée · inscriptions annulées', 'ok');
   loadAdminSessionDetail();
 };
 
@@ -28126,49 +28042,13 @@ window.adminMarkPaymentReceived = async function(registrationId, paymentId) {
 
   if (rErr) { toast('Erreur confirmation inscription', 'warn'); return; }
 
-  // Email de confirmation (placeholder Resend, étape 8)
-  triggerPaymentConfirmedEmail(reg, pay);
+  // Email de confirmation paiement : envoyé côté serveur par le trigger DB
+  // `trg_payment_confirmed_email` (Edge Function send-payment-confirmed) à la
+  // transition paid_at NULL -> NOT NULL. Idempotent. Plus d'appel client. — PR-SITE-05
 
-  toast('Paiement validé · pilote confirmé · email envoyé', 'ok');
+  toast('Paiement validé · inscription confirmée', 'ok');
   loadAdminSessionDetail();
 };
-
-/**
- * Email de confirmation de paiement reçu.
- * V1 : log uniquement. Branchement réel via Resend en étape 8.
- */
-function triggerPaymentConfirmedEmail(reg, payment) {
-  if (!reg?.users?.email) return;
-
-  const sessionDate = reg.sessions?.date
-    ? new Date(reg.sessions.date).toLocaleDateString('fr-FR', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' })
-    : '—';
-
-  const offerLabels = { access: 'Access', signature: 'Signature', promotion: 'Promotion', heritage: 'Heritage' };
-  const ref = `OXV-${reg.id.slice(0, 8).toUpperCase()}`;
-
-  const emailPayload = {
-    to: reg.users.email,
-    subject: `Paiement reçu · Votre inscription est confirmée — ${sessionDate}`,
-    type: 'payment_confirmed',
-    data: {
-      first_name: reg.users.first_name || '',
-      booking_ref: ref,
-      session_date: sessionDate,
-      offer_label: offerLabels[reg.offer_type] || reg.offer_type,
-      amount_paid: ((payment.amount || 0) / 100).toFixed(2),
-      payment_method: payment.payment_method || 'bank_transfer',
-      checklist_items: [
-        'Vérifier la conformité bruit de votre véhicule (≤ 98 dB +3)',
-        'Préparer les équipements pilote selon votre véhicule',
-        'Présenter à l\'arrivée : permis, attestation assurance circuit, carte grise',
-        'Arrivée recommandée 30 min avant le briefing'
-      ]
-    }
-  };
-
-  console.log('[OXV Email queued]', emailPayload);
-}
 
 
 /**
