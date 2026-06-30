@@ -17840,6 +17840,7 @@ textarea:focus-visible {
               <option value="corporate">Corporate</option>
               <option value="founding">Founding</option>
               <option value="event_waitlist">Liste d'attente</option>
+              <option value="partner_form">Partenaire</option>
             </select>
           </div>
         </div>
@@ -19464,6 +19465,65 @@ textarea:focus-visible {
 <!-- /securite -->
 
 
+<!-- ============ PARTENAIRES (PR-COMP-04) ============ -->
+<div class="page" id="page-partenaires">
+  <section class="page-hero">
+    <div class="wrap">
+      <div class="page-hero-eyebrow">N° ⬡ · Partenaires</div>
+      <h1 class="page-hero-title">Construisons<br/>l'<em>écosystème</em> OXV.</h1>
+      <p class="page-hero-lede">
+        Le Corporate <strong style="color:var(--cream);">achète</strong> une expérience. Le partenaire, lui, <strong style="color:var(--cream);">apporte</strong> une offre, un service ou une présence à l'écosystème OXV — et bénéficie de notre audience de pilotes exigeants. Si vous voulez en faire partie, parlons-en.
+      </p>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="wrap" style="max-width:1000px;">
+      <div class="reveal" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px;margin-bottom:48px;">
+        <div class="bento" style="padding:24px;"><div style="font-family:var(--display);font-size:10px;letter-spacing:0.2em;text-transform:uppercase;color:var(--gold);margin-bottom:8px;">Garage / préparateur</div><p style="font-family:var(--sans);font-size:14px;line-height:1.6;color:var(--cream-mute);margin:0;">Service technique, crédibilité auto, leads pilotes qualifiés.</p></div>
+        <div class="bento" style="padding:24px;"><div style="font-family:var(--display);font-size:10px;letter-spacing:0.2em;text-transform:uppercase;color:var(--gold);margin-bottom:8px;">Photographe / vidéaste</div><p style="font-family:var(--sans);font-size:14px;line-height:1.6;color:var(--cream-mute);margin:0;">Production média premium pour les sessions et les livrables clients.</p></div>
+        <div class="bento" style="padding:24px;"><div style="font-family:var(--display);font-size:10px;letter-spacing:0.2em;text-transform:uppercase;color:var(--gold);margin-bottom:8px;">Hôtel / restaurant</div><p style="font-family:var(--sans);font-size:14px;line-height:1.6;color:var(--cream-mute);margin:0;">Pack expérience et accueil autour des journées de roulage.</p></div>
+        <div class="bento" style="padding:24px;"><div style="font-family:var(--display);font-size:10px;letter-spacing:0.2em;text-transform:uppercase;color:var(--gold);margin-bottom:8px;">Transport / stockage</div><p style="font-family:var(--sans);font-size:14px;line-height:1.6;color:var(--cream-mute);margin:0;">Logistique véhicules ou matériel autour du circuit.</p></div>
+        <div class="bento" style="padding:24px;"><div style="font-family:var(--display);font-size:10px;letter-spacing:0.2em;text-transform:uppercase;color:var(--gold);margin-bottom:8px;">Assurance / équipementier</div><p style="font-family:var(--sans);font-size:14px;line-height:1.6;color:var(--cream-mute);margin:0;">Confiance et services associés (assurance circuit, équipement pilote).</p></div>
+        <div class="bento" style="padding:24px;"><div style="font-family:var(--display);font-size:10px;letter-spacing:0.2em;text-transform:uppercase;color:var(--gold);margin-bottom:8px;">Concession</div><p style="font-family:var(--sans);font-size:14px;line-height:1.6;color:var(--cream-mute);margin:0;">Événements clients et opérations B2B sur circuit.</p></div>
+      </div>
+
+      <h2 class="section-title" style="font-size:32px;margin-bottom:8px;">Devenir <em>partenaire</em>.</h2>
+      <p style="font-family:var(--sans);font-size:15px;line-height:1.7;color:var(--cream-mute);max-width:640px;margin:0 0 24px;">Décrivez votre activité : nous revenons vers vous pour étudier une collaboration.</p>
+      <div class="form-grid" style="max-width:840px;">
+        <div class="form-row"><label>Société</label><input type="text" id="pt-company" placeholder="Nom de la structure" /></div>
+        <div class="form-row"><label>Type de partenaire</label>
+          <select id="pt-type">
+            <option>Garage / préparateur</option>
+            <option>Photographe / vidéaste</option>
+            <option>Hôtel / restaurant</option>
+            <option>Transport / stockage</option>
+            <option>Assurance / équipementier</option>
+            <option>Concession</option>
+            <option>Autre</option>
+          </select>
+        </div>
+        <div class="form-row"><label>Contact</label><input type="text" id="pt-name" placeholder="Prénom Nom" /></div>
+        <div class="form-row"><label>Email</label><input type="email" id="pt-email" placeholder="email@exemple.fr" /></div>
+        <div class="form-row"><label>Téléphone (facultatif)</label><input type="tel" id="pt-phone" placeholder="06 12 34 56 78" /></div>
+        <div class="form-row"><label>Zone / rayon d'action</label><input type="text" id="pt-zone" placeholder="Ex. Nouvelle-Aquitaine, national…" /></div>
+        <div class="form-row full"><label>Votre offre / spécialité</label><textarea id="pt-msg" rows="4" placeholder="Activité, marques, services proposés, ce que vous aimeriez apporter à OXV…"></textarea></div>
+        <div class="form-row full">
+          <div class="consent" id="pt-rgpd" onclick="toggleConsent('pt-rgpd')">
+            <div class="ck"></div>
+            <div class="text">J'accepte que OXV traite ces données pour étudier un partenariat, conformément à la <a onclick="event.stopPropagation(); goTo('privacy')">politique de confidentialité</a>.<span class="badge">obligatoire</span></div>
+          </div>
+        </div>
+        <div class="form-row full" style="display:flex;flex-direction:row;justify-content:flex-end;">
+          <button class="btn btn-primary btn-lg" onclick="submitPartner()"><span>Proposer un partenariat</span></button>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+<!-- /partenaires -->
+
+
 <!-- ============ FOOTER ============ -->
 <footer>
   <div class="foot-rule" aria-hidden="true"></div>
@@ -19486,6 +19546,7 @@ textarea:focus-visible {
             <li><button onclick="goTo('circuit')">Le circuit</button></li>
             <li><button onclick="goTo('securite')">Sécurité &amp; cadre</button></li>
             <li><button onclick="goTo('corporate')">Corporate</button></li>
+            <li><button onclick="goTo('partenaires')">Partenaires</button></li>
             <li><button onclick="goTo('about')">À propos</button></li>
             <li><button onclick="goTo('actualites')">Actualités</button></li>
             <li><button onclick="goTo('contact')">Contact</button></li>
@@ -23121,6 +23182,72 @@ window.submitWaitlist = async function() {
   }
 };
 
+/* === PARTENAIRES (PR-COMP-04) — insert réel dans contact_messages (source=partner_form) === */
+window.submitPartner = async function() {
+  const cb = document.getElementById('pt-rgpd');
+  const company = document.getElementById('pt-company');
+  const type = document.getElementById('pt-type');
+  const name = document.getElementById('pt-name');
+  const email = document.getElementById('pt-email');
+  const phone = document.getElementById('pt-phone');
+  const zone = document.getElementById('pt-zone');
+  const msg = document.getElementById('pt-msg');
+
+  if (!cb || !cb.classList.contains('checked')) { toast('Acceptation RGPD requise', 'warn'); return; }
+  if (!company.value.trim() || !name.value.trim() || !email.value.trim()) { toast('Société, contact et email sont requis', 'warn'); return; }
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.value.trim())) { toast('Adresse email invalide', 'warn'); return; }
+
+  const btn = document.querySelector('#page-partenaires .btn-primary.btn-lg');
+  const btnLabelEl = btn ? (btn.querySelector('span') || btn) : null;
+  const btnLabel = btnLabelEl ? btnLabelEl.textContent : '';
+  if (btn) btn.style.pointerEvents = 'none';
+  if (btnLabelEl) btnLabelEl.textContent = 'Envoi en cours…';
+
+  const partnerType = type ? type.value : '';
+  const recap = [
+    `Société : ${company.value.trim()}`,
+    `Type : ${partnerType}`,
+    `Zone : ${zone?.value.trim() || '—'}`,
+    `Téléphone : ${phone?.value.trim() || '—'}`,
+    msg?.value.trim() ? `\nOffre / spécialité :\n${msg.value.trim()}` : ''
+  ].filter(Boolean).join('\n');
+
+  const payload = {
+    first_name: name.value.trim().split(' ')[0] || name.value.trim(),
+    last_name:  name.value.trim().split(' ').slice(1).join(' ') || '—',
+    email:      email.value.trim(),
+    phone:      phone?.value.trim() || null,
+    subject:    `Partenaire · ${partnerType} · ${company.value.trim()}`,
+    message:    recap,
+    source:     'partner_form',
+    metadata: {
+      company: company.value.trim(),
+      partner_type: partnerType,
+      zone: zone?.value.trim() || null,
+      details: msg?.value.trim() || null
+    }
+  };
+
+  try {
+    if (typeof supabase === 'undefined') throw new Error('Client Supabase indisponible');
+    const { error } = await supabase.from('contact_messages').insert(payload);
+    if (error) throw error;
+    track('submit_partner', { partner_type: partnerType });
+    toast('Proposition envoyée · nous revenons vers vous', 'ok');
+    ['pt-company','pt-name','pt-email','pt-phone','pt-zone','pt-msg'].forEach(id => { const el = document.getElementById(id); if (el) el.value = ''; });
+    if (type) type.selectedIndex = 0;
+    cb.classList.remove('checked');
+  } catch (e) {
+    console.warn('[Partenaire] Échec enregistrement, fallback mailto:', e);
+    const body = `${recap}\n\nContact : ${name.value.trim()} <${email.value.trim()}>`;
+    toast('Connexion impossible · votre logiciel mail s’ouvre pour finaliser', 'warn');
+    window.location.href = `mailto:contact@oxvehicle.fr?subject=${encodeURIComponent('Partenaire · ' + company.value.trim())}&body=${encodeURIComponent(body)}`;
+  } finally {
+    if (btn) btn.style.pointerEvents = '';
+    if (btnLabelEl) btnLabelEl.textContent = btnLabel;
+  }
+};
+
 /* === AUTH FUNCTIONS (signup, login, forgot, verify) === */
 /* Auth réelle via Supabase Auth (signup, login, forgot, reset, magic link). */
 
@@ -25788,7 +25915,7 @@ window.OXV_INBOX = [];
 const INBOX_SOURCE_LABEL = {
   contact_form: 'Contact', corporate_form: 'Corporate', 'corporate-form': 'Corporate',
   founding_form: 'Founding', 'founding-form': 'Founding', press: 'Presse', privacy: 'Privacy',
-  event_waitlist: 'Liste d\'attente'
+  event_waitlist: 'Liste d\'attente', partner_form: 'Partenaire'
 };
 const INBOX_STATUS = {
   new:      { label: 'Nouveau', cls: 'red' },
@@ -25856,6 +25983,7 @@ window.inboxRender = function() {
     if (fSource === 'contact' && src !== 'contact_form') return false;
     if (fSource === 'founding' && src.indexOf('founding') !== 0) return false;
     if (fSource === 'event_waitlist' && src !== 'event_waitlist') return false;
+    if (fSource === 'partner_form' && src !== 'partner_form') return false;
     return true;
   });
   if (!rows.length) { tbody.innerHTML = '<tr><td colspan="6" style="padding:18px;color:var(--cream-mute);font-family:var(--sans);">Aucun message.</td></tr>'; return; }
