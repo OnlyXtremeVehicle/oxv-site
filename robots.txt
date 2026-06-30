@@ -12,6 +12,8 @@ Disallow: /compte-preferences
 Disallow: /admin
 Disallow: /admin-pilotes
 Disallow: /admin-pilote-detail
+Disallow: /admin-inbox
+Disallow: /admin-demandes
 Disallow: /admin-sessions
 Disallow: /admin-session-detail
 Disallow: /admin-paiements

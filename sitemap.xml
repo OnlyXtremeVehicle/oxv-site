@@ -4,8 +4,16 @@
   <url><loc>https://www.oxvehicle.fr/offers</loc><changefreq>monthly</changefreq><priority>0.9</priority></url>
   <url><loc>https://www.oxvehicle.fr/calendrier</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
   <url><loc>https://www.oxvehicle.fr/circuit</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://www.oxvehicle.fr/securite</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://www.oxvehicle.fr/apres-journee</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://www.oxvehicle.fr/preuves</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
   <url><loc>https://www.oxvehicle.fr/corporate</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://www.oxvehicle.fr/partenaires</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
+  <url><loc>https://www.oxvehicle.fr/presse</loc><changefreq>monthly</changefreq><priority>0.4</priority></url>
   <url><loc>https://www.oxvehicle.fr/about</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://www.oxvehicle.fr/founding</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://www.oxvehicle.fr/coach</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
+  <url><loc>https://www.oxvehicle.fr/plateau</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
   <url><loc>https://www.oxvehicle.fr/actualites</loc><changefreq>weekly</changefreq><priority>0.7</priority></url>
   <url><loc>https://www.oxvehicle.fr/contact</loc><changefreq>yearly</changefreq><priority>0.5</priority></url>
   <url><loc>https://www.oxvehicle.fr/booking</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
@@ -15,6 +23,12 @@
   <url><loc>https://www.oxvehicle.fr/actualites/qdi</loc><changefreq>yearly</changefreq><priority>0.5</priority></url>
   <url><loc>https://www.oxvehicle.fr/actualites/heritage</loc><changefreq>yearly</changefreq><priority>0.5</priority></url>
   <url><loc>https://www.oxvehicle.fr/actualites/corporate</loc><changefreq>yearly</changefreq><priority>0.5</priority></url>
+  <url><loc>https://www.oxvehicle.fr/actualites/premiere-fois-circuit</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://www.oxvehicle.fr/actualites/equipement-papiers-rouler-circuit</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://www.oxvehicle.fr/actualites/track-day-ou-stage-pilotage</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://www.oxvehicle.fr/actualites/progresser-pilotage-telemetrie</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://www.oxvehicle.fr/actualites/assurance-circuit-rc-piste</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://www.oxvehicle.fr/actualites/journee-circuit-entreprise</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
   <url><loc>https://www.oxvehicle.fr/mentions</loc><changefreq>yearly</changefreq><priority>0.2</priority></url>
   <url><loc>https://www.oxvehicle.fr/cgv</loc><changefreq>yearly</changefreq><priority>0.2</priority></url>
   <url><loc>https://www.oxvehicle.fr/cgu</loc><changefreq>yearly</changefreq><priority>0.2</priority></url>
