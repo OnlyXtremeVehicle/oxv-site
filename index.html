@@ -13100,6 +13100,118 @@ textarea:focus-visible {
 .plateau-empty { text-align: center; padding: 48px; color: var(--cream-mute); font-size: 14px; border: 1px dashed rgba(255,255,255,0.1); border-radius: 12px; }
 @media (max-width: 600px) { .plateau-principles { grid-template-columns: 1fr; } .plateau-members-grid { grid-template-columns: repeat(2, 1fr); } }
 
+/* ════════════════════════════════════════════════════════════════
+   COUCHE DA V3 — REFONTE PROFONDE « Premium Racing Minimal »
+   Nouveau langage typographique : grands titres sobres (sentence case,
+   tracking serré), fin de l'italique-majuscules hérité. Cartes plates,
+   CTA modernes, hero agrandi, mockup app. Cascade : cette couche gagne.
+   ════════════════════════════════════════════════════════════════ */
+
+/* — 1. Grands titres : sobres, serrés, sans italique ni majuscules — */
+.hero-headline, .section-title, .page-hero-title, .home-hero-manifesto,
+.home-journey-title, .home-ecosystem-title, .home-data-title, .home-rituels-title,
+.home-final-headline, .home-final-cta-headline, .corp-headline, .corp-sc-title,
+.founding-title, .founding-form-title, .coach-title, .offer-name,
+.home-journey-card-name, .manifesto-quote, .how-signature, .prose h2,
+.date-name, .circuit-pull, .tp-corner-detail-title,
+.wizard-step-title, .booking-step-title, .prog-app-title, .home-ecosystem-pillar-name,
+#page-mentions h1, #page-cgv h1, #page-cgu h1, #page-privacy h1,
+#page-mentions h2, #page-cgv h2, #page-cgu h2, #page-privacy h2 {
+  font-style: normal;
+  text-transform: none;
+  letter-spacing: -0.02em;
+  font-weight: 600;
+}
+.hero-headline em, .section-title em, .page-hero-title em, .home-hero-manifesto em,
+.home-journey-title em, .home-ecosystem-title em, .home-data-title em, .home-rituels-title em,
+.home-final-headline em, .home-final-cta-headline em, .corp-headline em, .corp-sc-title em,
+.founding-title em, .founding-form-title em, .coach-title em, .offer-name em,
+.home-journey-card-name em, .manifesto-quote em, .how-signature em, .prose h2 em,
+.wizard-step-title em, .booking-step-title em, .prog-app-title em {
+  font-style: normal;
+}
+.section-title em, .page-hero-title em, .home-journey-title em, .home-ecosystem-title em,
+.home-data-title em, .home-rituels-title em, .home-final-headline em, .home-final-cta-headline em,
+.corp-headline em, .founding-title em, .coach-title em, .manifesto-quote em, .how-signature em {
+  color: inherit; /* titres monochromes — l'or n'est jamais décoratif (DA V3) */
+}
+
+/* — 1b. Kickers & eyebrows : mono rouge OXV (l'or n'est jamais décoratif) — */
+.kicker, .page-hero-eyebrow, .home-hero-eyebrow {
+  font-family: var(--mono);
+  color: var(--red-oxv);
+  letter-spacing: 0.24em;
+}
+
+/* — 2. Chiffres & KPI : droits, précis — */
+.metric-giant, .metric-large, .circuit-fact-value, .corp-stat-val, .corp-stat-bento-num,
+.founding-counter-num, .coach-price, .home-final-proof-num,
+.prog-qdi-score, .prog-sessions-num, .prog-pillar-score {
+  font-style: normal;
+  letter-spacing: -0.02em;
+}
+
+/* — 3. Hero : plein écran, titre géant — */
+.home-hero-manifesto {
+  font-size: clamp(52px, 9vw, 128px);
+  line-height: 1.0;
+  letter-spacing: -0.03em;
+}
+.home-hero-tagline { font-size: clamp(16px, 1.6vw, 20px); }
+.page-hero-title { letter-spacing: -0.03em; }
+
+/* — 4. CTA modernes : sobres, lisibles (fin du mono-uppercase) — */
+.btn {
+  font-family: var(--sans);
+  font-size: 14px;
+  font-weight: 500;
+  letter-spacing: 0.01em;
+  text-transform: none;
+}
+.btn-sm { font-size: 13px; }
+.btn-lg { font-size: 15px; padding: 18px 34px; }
+
+/* — 5. Cartes plates premium (fin du glassmorphism lourd) — */
+.bento {
+  background: var(--anthracite);
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+}
+.bento:hover { background: #10131A; }
+
+/* — 6. Mockup téléphone OXV Trace (pur CSS, bleu data) — */
+.oxv-phone {
+  width: min(290px, 78vw);
+  aspect-ratio: 9 / 18.5;
+  background: #0B0D10;
+  border: 1px solid #23262C;
+  border-radius: 40px;
+  padding: 12px;
+  margin: 0 auto;
+  box-shadow: 0 30px 90px rgba(0,0,0,0.55);
+}
+.oxv-phone-screen {
+  background: #07080A;
+  border-radius: 30px;
+  height: 100%;
+  padding: 22px 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 13px;
+  overflow: hidden;
+}
+.oxv-ph-head { display: flex; justify-content: space-between; font-family: var(--mono); font-size: 10px; letter-spacing: 0.18em; color: var(--cream-faint); }
+.oxv-ph-label { font-family: var(--mono); font-size: 10px; letter-spacing: 0.22em; text-transform: uppercase; color: var(--blue-data); margin-top: 8px; }
+.oxv-ph-big { font-family: var(--mono); font-size: 40px; font-weight: 600; color: var(--offwhite); letter-spacing: -0.02em; line-height: 1; }
+.oxv-ph-sub { font-family: var(--sans); font-size: 12px; color: var(--cream-mute); }
+.oxv-ph-bars { display: flex; align-items: flex-end; gap: 6px; height: 74px; margin: 10px 0 2px; }
+.oxv-ph-bars span { flex: 1; background: rgba(74,140,255,0.28); border-top: 2px solid var(--blue-data); border-radius: 3px 3px 0 0; }
+.oxv-ph-row { display: flex; justify-content: space-between; font-family: var(--mono); font-size: 12px; color: var(--cream-mute); border-top: 1px solid rgba(255,255,255,0.06); padding-top: 9px; }
+.oxv-ph-row b { color: var(--offwhite); font-weight: 500; }
+.oxv-ph-note { margin-top: auto; font-family: var(--sans); font-size: 11px; line-height: 1.5; color: var(--cream-faint); }
+.oxv-app-hero { display: grid; grid-template-columns: 1fr; gap: 44px; align-items: center; }
+@media (min-width: 900px) { .oxv-app-hero { grid-template-columns: 1.1fr 0.9fr; } }
+
 </style>
 <!-- Vercel Analytics -->
 <script defer src="/_vercel/insights/script.js"></script>
@@ -13547,6 +13659,21 @@ textarea:focus-visible {
         <p class="reveal" style="font-family:var(--sans);font-size:16px;line-height:1.7;color:var(--cream-mute);">
           OXV Trace est un <strong style="color:var(--cream);">miroir, pas un coach</strong>. Pendant que vous roulez, l'app reste <strong style="color:var(--cream);">silencieuse</strong> — aucune alerte, aucun HUD, aucune consigne. Après la session, elle vous restitue votre journée : votre trace, vos données, votre progression. La piste est à vous. Les décisions aussi.
         </p>
+      </div>
+
+      <div class="reveal" style="margin:0 auto 48px;">
+        <div class="oxv-phone" aria-hidden="true">
+          <div class="oxv-phone-screen">
+            <div class="oxv-ph-head"><span>OXV TRACE</span><span>J+0</span></div>
+            <div class="oxv-ph-label">Trace du jour</div>
+            <div class="oxv-ph-big">1:42.318</div>
+            <div class="oxv-ph-sub">Meilleur tour · tracé Beltoise</div>
+            <div class="oxv-ph-bars"><span style="height:38%"></span><span style="height:52%"></span><span style="height:47%"></span><span style="height:66%"></span><span style="height:58%"></span><span style="height:74%"></span><span style="height:70%"></span></div>
+            <div class="oxv-ph-row"><span>Tours</span><b>18</b></div>
+            <div class="oxv-ph-row"><span>Vitesse max</span><b>187 km/h</b></div>
+            <div class="oxv-ph-note">Aperçu illustratif — vos données réelles après votre première session.</div>
+          </div>
+        </div>
       </div>
 
       <div class="reveal" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px;">
@@ -19963,8 +20090,26 @@ textarea:focus-visible {
 
   <section class="section">
     <div class="wrap" style="max-width:1080px;">
-      <h2 class="section-title" style="font-size:32px;margin-bottom:8px;">Ce que l'app <em>contient</em>.</h2>
-      <p style="font-family:var(--sans);font-size:15px;line-height:1.7;color:var(--cream-mute);max-width:640px;margin:0 0 28px;">Sept espaces, un seul principe : restituer votre journée sans jamais la juger.</p>
+      <div class="oxv-app-hero" style="margin-bottom:56px;">
+        <div>
+          <h2 class="section-title" style="font-size:clamp(32px,4vw,46px);margin-bottom:16px;">Ce que l'app contient.</h2>
+          <p style="font-family:var(--sans);font-size:16px;line-height:1.75;color:var(--cream-mute);max-width:520px;margin:0 0 22px;">Sept espaces, un seul principe : restituer votre journée sans jamais la juger. Silencieuse en roulage. Précise après.</p>
+          <p style="font-family:var(--mono);font-size:12px;letter-spacing:0.14em;text-transform:uppercase;color:var(--blue-data);margin:0;">iOS &amp; Android · printemps 2027</p>
+        </div>
+        <div class="oxv-phone" aria-hidden="true">
+          <div class="oxv-phone-screen">
+            <div class="oxv-ph-head"><span>OXV TRACE</span><span>J+0</span></div>
+            <div class="oxv-ph-label">Trace du jour</div>
+            <div class="oxv-ph-big">1:42.318</div>
+            <div class="oxv-ph-sub">Meilleur tour · tracé Beltoise</div>
+            <div class="oxv-ph-bars"><span style="height:38%"></span><span style="height:52%"></span><span style="height:47%"></span><span style="height:66%"></span><span style="height:58%"></span><span style="height:74%"></span><span style="height:70%"></span></div>
+            <div class="oxv-ph-row"><span>Tours</span><b>18</b></div>
+            <div class="oxv-ph-row"><span>Vitesse max</span><b>187 km/h</b></div>
+            <div class="oxv-ph-row"><span>Régularité</span><b>±0.42 s</b></div>
+            <div class="oxv-ph-note">Aperçu illustratif — vos données réelles s'affichent après votre première session.</div>
+          </div>
+        </div>
+      </div>
       <div class="reveal" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px;margin-bottom:48px;">
         <div class="bento" style="padding:26px;">
           <div style="font-family:var(--mono);font-size:10px;letter-spacing:0.22em;text-transform:uppercase;color:var(--blue-data);margin-bottom:10px;">Pass OXV</div>
