@@ -13176,20 +13176,15 @@ textarea:focus-visible {
     <svg class="brand-insignia" aria-hidden="true" focusable="false"><use href="#oxv-insignia"/></svg>
   </a>
   <div class="nav-links">
-    <a class="nav-link" onclick="goTo('home')">Accueil</a>
     <a class="nav-link" onclick="goTo('offers')">Les offres</a>
-    <a class="nav-link" onclick="goTo('calendrier')">Calendrier</a>
     <a class="nav-link" onclick="goTo('circuit')">Le circuit</a>
+    <a class="nav-link" onclick="goTo('application')">L'application</a>
     <a class="nav-link" onclick="goTo('corporate')">Corporate</a>
-    <a class="nav-link" onclick="goTo('coach')">Coach</a>
-    <a class="nav-link" onclick="goTo('about')">À propos</a>
     <a class="nav-link" onclick="goTo('actualites')">Actualités</a>
-    <a class="nav-link" onclick="goTo('contact')">Contact</a>
-    <a class="nav-link priv" data-cta="reserve" onclick="ctaPrimaryGo()">Réserver</a>
   </div>
   <div class="nav-actions">
     <button class="btn btn-ghost btn-sm" onclick="goTo('login')" id="navAuth">Se connecter</button>
-    <button class="btn btn-primary btn-sm" id="navCtaJoin" onclick="ctaPrimaryGo()">Rejoindre le cercle</button>
+    <button class="btn btn-primary btn-sm" id="navCtaJoin" onclick="ctaPrimaryGo()">Demander une place</button>
     <button class="burger" onclick="document.getElementById('mobMenu').classList.add('open')" aria-label="Menu">
       <i></i><i></i><i></i>
     </button>
@@ -13205,6 +13200,8 @@ textarea:focus-visible {
     <a class="mob-link" onclick="goTo('offers'); closeMob()">Les offres</a>
     <a class="mob-link" onclick="goTo('calendrier'); closeMob()">Calendrier</a>
     <a class="mob-link" onclick="goTo('circuit'); closeMob()">Le circuit</a>
+    <a class="mob-link" onclick="goTo('application'); closeMob()">L'application</a>
+    <a class="mob-link" onclick="goTo('apres-journee'); closeMob()">Votre journée</a>
     <a class="mob-link" onclick="goTo('corporate'); closeMob()">Corporate</a>
     <a class="mob-link" onclick="goTo('about'); closeMob()">À propos</a>
     <a class="mob-link" onclick="goTo('actualites'); closeMob()">Actualités</a>
@@ -13222,7 +13219,7 @@ textarea:focus-visible {
   </div>
   <div class="mob-actions">
     <button class="btn btn-ghost" onclick="goTo('login'); closeMob()">Se connecter</button>
-    <button class="btn btn-primary" id="mobCtaJoin" onclick="ctaPrimaryGo(); closeMob()">Rejoindre le cercle</button>
+    <button class="btn btn-primary" id="mobCtaJoin" onclick="ctaPrimaryGo(); closeMob()">Demander une place</button>
   </div>
 </div>
 
@@ -13298,6 +13295,43 @@ textarea:focus-visible {
 
 
   <!-- ============================================================
+       SECTION — L'EXPÉRIENCE OXV : AVANT / PENDANT / APRÈS (DA V3)
+       ============================================================ -->
+  <section class="home-experience" style="padding:clamp(80px,10vw,130px) 0;background:var(--carbon);border-top:1px solid var(--cream-line);">
+    <div class="wrap">
+      <div style="max-width:720px;margin:0 auto 52px;text-align:center;">
+        <div class="kicker reveal">N° 01 · L'expérience</div>
+        <h2 class="reveal" style="font-family:var(--display);font-weight:600;font-size:clamp(28px,4vw,44px);line-height:1.08;letter-spacing:-0.01em;color:var(--offwhite);margin:14px 0 18px;">
+          Une journée circuit<br/>ne devrait pas <em style="font-style:normal;color:var(--gold-data);">disparaître</em>.
+        </h2>
+        <p class="reveal" style="font-family:var(--sans);font-size:16px;line-height:1.7;color:var(--cream-mute);margin:0;">
+          OXV transforme votre roulage en Trace : média, data, bilan, carnet et progression. Le parcours reste simple.
+        </p>
+      </div>
+      <div class="reveal" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:16px;">
+        <div class="bento" style="padding:28px;">
+          <div style="font-family:var(--mono);font-size:10px;letter-spacing:0.24em;text-transform:uppercase;color:var(--cream-mute);margin-bottom:12px;">Avant</div>
+          <div style="font-family:var(--display);font-weight:600;font-size:19px;color:var(--offwhite);margin-bottom:10px;">La journée est préparée.</div>
+          <p style="font-family:var(--sans);font-size:14px;line-height:1.65;color:var(--cream-mute);margin:0;">Pass OXV, documents vérifiés, véhicule contrôlé, briefing. Vous arrivez serein.</p>
+        </div>
+        <div class="bento" style="padding:28px;border-color:rgba(74,140,255,0.22);">
+          <div style="font-family:var(--mono);font-size:10px;letter-spacing:0.24em;text-transform:uppercase;color:var(--blue-data);margin-bottom:12px;">Pendant</div>
+          <div style="font-family:var(--display);font-weight:600;font-size:19px;color:var(--offwhite);margin-bottom:10px;">L'app se tait. OXV observe.</div>
+          <p style="font-family:var(--sans);font-size:14px;line-height:1.65;color:var(--cream-mute);margin:0;">Roulage, silence total, capture des données et des images. La piste est à vous.</p>
+        </div>
+        <div class="bento" style="padding:28px;">
+          <div style="font-family:var(--mono);font-size:10px;letter-spacing:0.24em;text-transform:uppercase;color:var(--cream-mute);margin-bottom:12px;">Après</div>
+          <div style="font-family:var(--display);font-weight:600;font-size:19px;color:var(--offwhite);margin-bottom:10px;">La session devient lisible.</div>
+          <p style="font-family:var(--sans);font-size:14px;line-height:1.65;color:var(--cream-mute);margin:0;">Trace du jour, Data Lab, médias livrés, lecture avec le coach si vous le souhaitez.</p>
+        </div>
+      </div>
+      <div class="reveal" style="text-align:center;margin-top:36px;">
+        <button class="btn" onclick="goTo('apres-journee')"><span>Voir le fonctionnement →</span></button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================
        SECTION 1 — LE PARCOURS (3 OFFRES)
        ============================================================ -->
   <section class="home-journey">
@@ -13305,7 +13339,7 @@ textarea:focus-visible {
     <div class="wrap">
 
       <div class="home-journey-intro">
-        <div class="kicker reveal">N° 01 · Le parcours</div>
+        <div class="kicker reveal">N° 02 · Les offres</div>
         <h2 class="home-journey-title reveal">
           Trois offres.<br/>
           Une <em>exigence</em>.
@@ -13376,42 +13410,7 @@ textarea:focus-visible {
   <!-- ============================================================
        INTERLUDE — LOGOTYPE OXV
        ============================================================ -->
-  <!-- ============================================================
-       SECTION — L'EXPÉRIENCE OXV : AVANT / PENDANT / APRÈS (DA V3)
-       ============================================================ -->
-  <section class="home-experience" style="padding:clamp(80px,10vw,130px) 0;background:var(--carbon);border-top:1px solid var(--cream-line);">
-    <div class="wrap">
-      <div style="max-width:720px;margin:0 auto 52px;text-align:center;">
-        <div class="kicker reveal">N° 02 · L'expérience</div>
-        <h2 class="reveal" style="font-family:var(--display);font-weight:600;font-size:clamp(28px,4vw,44px);line-height:1.08;letter-spacing:-0.01em;color:var(--offwhite);margin:14px 0 18px;">
-          Une journée circuit<br/>ne devrait pas <em style="font-style:normal;color:var(--gold-data);">disparaître</em>.
-        </h2>
-        <p class="reveal" style="font-family:var(--sans);font-size:16px;line-height:1.7;color:var(--cream-mute);margin:0;">
-          OXV transforme votre roulage en Trace : média, data, bilan, carnet et progression. Le parcours reste simple.
-        </p>
-      </div>
-      <div class="reveal" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:16px;">
-        <div class="bento" style="padding:28px;">
-          <div style="font-family:var(--mono);font-size:10px;letter-spacing:0.24em;text-transform:uppercase;color:var(--cream-mute);margin-bottom:12px;">Avant</div>
-          <div style="font-family:var(--display);font-weight:600;font-size:19px;color:var(--offwhite);margin-bottom:10px;">La journée est préparée.</div>
-          <p style="font-family:var(--sans);font-size:14px;line-height:1.65;color:var(--cream-mute);margin:0;">Pass OXV, documents vérifiés, véhicule contrôlé, briefing. Vous arrivez serein.</p>
-        </div>
-        <div class="bento" style="padding:28px;border-color:rgba(74,140,255,0.22);">
-          <div style="font-family:var(--mono);font-size:10px;letter-spacing:0.24em;text-transform:uppercase;color:var(--blue-data);margin-bottom:12px;">Pendant</div>
-          <div style="font-family:var(--display);font-weight:600;font-size:19px;color:var(--offwhite);margin-bottom:10px;">L'app se tait. OXV observe.</div>
-          <p style="font-family:var(--sans);font-size:14px;line-height:1.65;color:var(--cream-mute);margin:0;">Roulage, silence total, capture des données et des images. La piste est à vous.</p>
-        </div>
-        <div class="bento" style="padding:28px;">
-          <div style="font-family:var(--mono);font-size:10px;letter-spacing:0.24em;text-transform:uppercase;color:var(--cream-mute);margin-bottom:12px;">Après</div>
-          <div style="font-family:var(--display);font-weight:600;font-size:19px;color:var(--offwhite);margin-bottom:10px;">La session devient lisible.</div>
-          <p style="font-family:var(--sans);font-size:14px;line-height:1.65;color:var(--cream-mute);margin:0;">Trace du jour, Data Lab, médias livrés, lecture avec le coach si vous le souhaitez.</p>
-        </div>
-      </div>
-      <div class="reveal" style="text-align:center;margin-top:36px;">
-        <button class="btn" onclick="goTo('apres-journee')"><span>Voir le fonctionnement →</span></button>
-      </div>
-    </div>
-  </section>
+  
 
   <section class="home-brand-interlude">
     <div class="home-brand-interlude-inner reveal">
@@ -13419,153 +13418,11 @@ textarea:focus-visible {
     </div>
   </section>
 
-  <!-- ============================================================
-       SECTION 3 — L'ÉCOSYSTÈME OXV
-       ============================================================ -->
-  <section class="home-ecosystem">
-    <div class="wrap">
-      <div class="home-ecosystem-intro">
-        <div class="kicker reveal">N° 03 · L'écosystème</div>
-        <h2 class="home-ecosystem-title reveal">
-          Quatre piliers.<br/>
-          Une <em>expérience</em> complète.
-        </h2>
-        <p class="home-ecosystem-lede reveal">
-          OXV n'est pas un organisateur de roulages. C'est une plateforme intégrée — du circuit à l'image, de la donnée à la communauté.
-        </p>
-      </div>
+  
 
-      <div class="home-ecosystem-grid">
+  
 
-        <div class="home-ecosystem-pillar reveal">
-          <div class="home-ecosystem-pillar-num">01 · Club</div>
-          <div class="home-ecosystem-pillar-name">La communauté</div>
-          <p class="home-ecosystem-pillar-text">
-            Pilotes, échanges, rencontres au paddock. Priorité de réservation pour les membres Heritage. Une progression partagée — jamais un classement public.
-          </p>
-        </div>
-
-        <div class="home-ecosystem-pillar reveal">
-          <div class="home-ecosystem-pillar-num">02 · Tech</div>
-          <div class="home-ecosystem-pillar-name">La donnée</div>
-          <p class="home-ecosystem-pillar-text">
-            GPS 25 Hz, QDI, comparatif tour-par-tour. L'application OXV agrège chaque session pour révéler votre progression sur le tracé Beltoise.
-          </p>
-        </div>
-
-        <div class="home-ecosystem-pillar reveal">
-          <div class="home-ecosystem-pillar-num">03 · Média</div>
-          <div class="home-ecosystem-pillar-name">L'image</div>
-          <p class="home-ecosystem-pillar-text">
-            Banque photo paddock, vidéo onboard dédiée, reportage post-session. Chaque virage mérite d'être conservé — les livrables sont prêts sous sept jours.
-          </p>
-        </div>
-
-        <div class="home-ecosystem-pillar reveal">
-          <div class="home-ecosystem-pillar-num">04 · Auto</div>
-          <div class="home-ecosystem-pillar-name">L'univers</div>
-          <p class="home-ecosystem-pillar-text">
-            Sélection de véhicules adaptés à la piste, partenaires préparateurs conseillers. OXV accompagne aussi votre choix de machine.
-          </p>
-        </div>
-
-      </div>
-    </div>
-  </section>
-
-  <!-- ============================================================
-       SECTION 3b — BILAN DATA PÉDAGOGIQUE
-       ============================================================ -->
-  <section class="home-data">
-    <div class="wrap">
-      <div class="home-data-intro">
-        <div class="kicker reveal">N° 04 · La donnée</div>
-        <h2 class="home-data-title reveal">
-          Cinq dimensions.<br/>
-          Une <em>progression</em> mesurable.
-        </h2>
-        <p class="home-data-lede reveal">OXV ne mesure pas la vitesse — il mesure la maîtrise. Le QDI (Quality Driving Index) décompose chaque session en cinq axes objectifs. Pas de classement. Une lecture personnelle de votre pilotage.</p>
-      </div>
-      <div class="home-data-grid">
-        <div class="home-data-pillar trajectory reveal">
-          <div class="home-data-pillar-dot"></div>
-          <div class="home-data-pillar-name">Trajectoire</div>
-          <p class="home-data-pillar-text">Précision des lignes, points de corde, gestion des zones de freinage.</p>
-        </div>
-        <div class="home-data-pillar fluidity reveal">
-          <div class="home-data-pillar-dot"></div>
-          <div class="home-data-pillar-name">Fluidité</div>
-          <p class="home-data-pillar-text">Régularité des inputs volant, absence de corrections brusques, transitions.</p>
-        </div>
-        <div class="home-data-pillar braking reveal">
-          <div class="home-data-pillar-dot"></div>
-          <div class="home-data-pillar-name">Freinage</div>
-          <p class="home-data-pillar-text">Points d'attaque, progressivité, modulation, relâche au corde.</p>
-        </div>
-        <div class="home-data-pillar acceleration reveal">
-          <div class="home-data-pillar-dot"></div>
-          <div class="home-data-pillar-name">Accélération</div>
-          <p class="home-data-pillar-text">Progressivité à la remise des gaz, anticipation, traction en sortie.</p>
-        </div>
-        <div class="home-data-pillar regularity reveal">
-          <div class="home-data-pillar-dot"></div>
-          <div class="home-data-pillar-name">Régularité</div>
-          <p class="home-data-pillar-text">Écart-type entre vos tours, stabilité de performance sur la durée.</p>
-        </div>
-      </div>
-      <div class="home-data-cta reveal">
-        <button class="btn btn-secondary" onclick="goTo('offers')"><span>Découvrir les offres →</span></button>
-      </div>
-    </div>
-  </section>
-
-  <!-- ============================================================
-       SECTION 3c — RITUELS AUDIO J-7/J-2/J-1
-       ============================================================ -->
-  <section class="home-rituels">
-    <div class="wrap">
-      <div class="home-rituels-intro">
-        <div class="kicker reveal">N° 05 · La préparation</div>
-        <h2 class="home-rituels-title reveal">
-          Trois rituels.<br/>
-          Vous arrivez <em>préparé</em>.
-        </h2>
-        <p class="home-rituels-lede reveal">À J-7, J-2, J-1 — OXV vous envoie un contenu audio dédié. Confirmation de session, briefing du tracé, météo et derniers mots. Vous ne découvrez pas le circuit le jour J.</p>
-      </div>
-      <div class="home-rituels-timeline">
-        <div class="home-rituel reveal">
-          <div class="home-rituel-day">J — 7</div>
-          <div class="home-rituel-title">Confirmation</div>
-          <p class="home-rituel-text">Votre inscription est confirmée. Votre dossier pilote, la liste des participants, la playlist OXV de la session — tout est dans votre boîte.</p>
-          <div class="home-rituel-player" aria-label="Aperçu audio – démo visuelle">
-            <div class="home-rituel-play" aria-hidden="true"><svg viewBox="0 0 10 10"><polygon points="2,1 9,5 2,9"/></svg></div>
-            <div class="home-rituel-wave" aria-hidden="true"><span style="height:8px"></span><span style="height:14px"></span><span style="height:6px"></span><span style="height:18px"></span><span style="height:10px"></span><span style="height:16px"></span><span style="height:8px"></span><span style="height:12px"></span><span style="height:20px"></span><span style="height:7px"></span><span style="height:15px"></span><span style="height:9px"></span><span style="height:18px"></span><span style="height:11px"></span><span style="height:14px"></span></div>
-            <div class="home-rituel-duration">3 min</div>
-          </div>
-        </div>
-        <div class="home-rituel reveal">
-          <div class="home-rituel-day">J — 2</div>
-          <div class="home-rituel-title">Briefing tracé</div>
-          <p class="home-rituel-text">Le tracé Beltoise virage par virage. Les points clés, les pièges, les zones d'amélioration identifiées sur vos sessions précédentes.</p>
-          <div class="home-rituel-player" aria-label="Aperçu audio – démo visuelle">
-            <div class="home-rituel-play" aria-hidden="true"><svg viewBox="0 0 10 10"><polygon points="2,1 9,5 2,9"/></svg></div>
-            <div class="home-rituel-wave" aria-hidden="true"><span style="height:12px"></span><span style="height:7px"></span><span style="height:20px"></span><span style="height:14px"></span><span style="height:9px"></span><span style="height:18px"></span><span style="height:6px"></span><span style="height:16px"></span><span style="height:10px"></span><span style="height:20px"></span><span style="height:13px"></span><span style="height:8px"></span><span style="height:17px"></span><span style="height:11px"></span><span style="height:15px"></span></div>
-            <div class="home-rituel-duration">14 min</div>
-          </div>
-        </div>
-        <div class="home-rituel reveal">
-          <div class="home-rituel-day">J — 1</div>
-          <div class="home-rituel-title">Dernier mot</div>
-          <p class="home-rituel-text">Météo, état de la piste, rappels techniques. Ce que vous devez savoir avant de partir. Une minute, pas plus.</p>
-          <div class="home-rituel-player" aria-label="Aperçu audio – démo visuelle">
-            <div class="home-rituel-play" aria-hidden="true"><svg viewBox="0 0 10 10"><polygon points="2,1 9,5 2,9"/></svg></div>
-            <div class="home-rituel-wave" aria-hidden="true"><span style="height:16px"></span><span style="height:10px"></span><span style="height:8px"></span><span style="height:19px"></span><span style="height:12px"></span><span style="height:7px"></span><span style="height:15px"></span><span style="height:20px"></span><span style="height:9px"></span><span style="height:14px"></span><span style="height:18px"></span><span style="height:11px"></span><span style="height:7px"></span><span style="height:16px"></span><span style="height:13px"></span></div>
-            <div class="home-rituel-duration">1 min</div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
+  
 
   <!-- ============================================================
        SECTION 3d — APPLICATION OXV TRACE (PR-SITE-13)
@@ -13573,7 +13430,7 @@ textarea:focus-visible {
   <section class="home-app" style="padding:110px 0;border-top:1px solid var(--bento-border);">
     <div class="wrap">
       <div style="max-width:720px;margin:0 auto 48px;text-align:center;">
-        <div class="kicker reveal">N° 06 · L'application</div>
+        <div class="kicker reveal">N° 03 · L'application</div>
         <h2 class="reveal" style="font-family:var(--display);font-weight:600;font-size:clamp(28px,4vw,44px);line-height:1.1;color:var(--cream);margin:14px 0 18px;">
           OXV Trace.<br/>L'app qui <em style="color:var(--gold);">prolonge</em> la journée.
         </h2>
@@ -13639,7 +13496,7 @@ textarea:focus-visible {
   <section class="home-media" style="padding:clamp(80px,10vw,130px) 0;background:var(--carbon);border-top:1px solid var(--cream-line);">
     <div class="wrap">
       <div style="max-width:720px;margin:0 auto 52px;text-align:center;">
-        <div class="kicker reveal">N° 07 · Le média</div>
+        <div class="kicker reveal">N° 04 · Le média</div>
         <h2 class="reveal" style="font-family:var(--display);font-weight:600;font-size:clamp(28px,4vw,44px);line-height:1.08;letter-spacing:-0.01em;color:var(--offwhite);margin:14px 0 18px;">
           Vos médias sont <em style="font-style:normal;color:var(--gold-data);">livrés</em><br/>dans votre espace OXV.
         </h2>
@@ -13676,6 +13533,21 @@ textarea:focus-visible {
   </section>
 
   <!-- ============================================================
+       SECTION — LA CONFIANCE (DA V3 §18)
+       ============================================================ -->
+  <section class="home-confiance" style="padding:clamp(70px,9vw,110px) 0;background:var(--carbon);border-top:1px solid var(--cream-line);">
+    <div class="wrap" style="max-width:840px;text-align:center;">
+      <div class="kicker reveal">N° 05 · La confiance</div>
+      <h2 class="reveal" style="font-family:var(--display);font-weight:600;font-size:clamp(30px,4.4vw,52px);line-height:1.06;letter-spacing:-0.02em;color:var(--offwhite);margin:14px 0 20px;">OXV observe.<br/>Le coach accompagne.<br/>Vous décidez.</h2>
+      <p class="reveal" style="font-family:var(--sans);font-size:15px;line-height:1.75;color:var(--cream-mute);max-width:560px;margin:0 auto 26px;">Pas de consigne en piste. Pas de classement public. Pas de données partagées sans votre accord.</p>
+      <div class="reveal" style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap;">
+        <button class="btn" onclick="goTo('securite')"><span>Lire le cadre →</span></button>
+        <button class="btn" onclick="goTo('preuves')"><span>Nos garanties →</span></button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================
        SECTION 4 — LA PROMESSE & CTA FINAL
        ============================================================ -->
   <section class="home-final">
@@ -13691,7 +13563,7 @@ textarea:focus-visible {
     <div class="wrap">
 
       <div class="home-final-content reveal">
-        <div class="kicker">N° 08 · La promesse</div>
+        <div class="kicker">N° 06 · La promesse</div>
         <h2 class="home-final-headline">
           Vingt pilotes.<br/>
           Votre format, <em>votre rythme</em>.<br/>
@@ -14837,6 +14709,60 @@ textarea:focus-visible {
             <p>La saison 2027 est la première saison OXV. Les pré-inscriptions sont ouvertes. Les pilotes qui s'engagent maintenant construisent avec nous ce que sera OXV dans cinq ans.</p>
             <p>Trois offres — Access, Signature, Heritage — pour trois façons d'entrer dans l'écosystème. Une seule exigence : celle de bien faire.</p>
           </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+<!-- ============================================================
+       SECTION 3 — L'ÉCOSYSTÈME OXV
+       ============================================================ -->
+  <section class="home-ecosystem">
+    <div class="wrap">
+      <div class="home-ecosystem-intro">
+        <div class="kicker reveal">L'écosystème OXV</div>
+        <h2 class="home-ecosystem-title reveal">
+          Quatre piliers.<br/>
+          Une <em>expérience</em> complète.
+        </h2>
+        <p class="home-ecosystem-lede reveal">
+          OXV n'est pas un organisateur de roulages. C'est une plateforme intégrée — du circuit à l'image, de la donnée à la communauté.
+        </p>
+      </div>
+
+      <div class="home-ecosystem-grid">
+
+        <div class="home-ecosystem-pillar reveal">
+          <div class="home-ecosystem-pillar-num">01 · Club</div>
+          <div class="home-ecosystem-pillar-name">La communauté</div>
+          <p class="home-ecosystem-pillar-text">
+            Pilotes, échanges, rencontres au paddock. Priorité de réservation pour les membres Heritage. Une progression partagée — jamais un classement public.
+          </p>
+        </div>
+
+        <div class="home-ecosystem-pillar reveal">
+          <div class="home-ecosystem-pillar-num">02 · Tech</div>
+          <div class="home-ecosystem-pillar-name">La donnée</div>
+          <p class="home-ecosystem-pillar-text">
+            GPS 25 Hz, QDI, comparatif tour-par-tour. L'application OXV agrège chaque session pour révéler votre progression sur le tracé Beltoise.
+          </p>
+        </div>
+
+        <div class="home-ecosystem-pillar reveal">
+          <div class="home-ecosystem-pillar-num">03 · Média</div>
+          <div class="home-ecosystem-pillar-name">L'image</div>
+          <p class="home-ecosystem-pillar-text">
+            Banque photo paddock, vidéo onboard dédiée, reportage post-session. Chaque virage mérite d'être conservé — les livrables sont prêts sous sept jours.
+          </p>
+        </div>
+
+        <div class="home-ecosystem-pillar reveal">
+          <div class="home-ecosystem-pillar-num">04 · Auto</div>
+          <div class="home-ecosystem-pillar-name">L'univers</div>
+          <p class="home-ecosystem-pillar-text">
+            Sélection de véhicules adaptés à la piste, partenaires préparateurs conseillers. OXV accompagne aussi votre choix de machine.
+          </p>
         </div>
 
       </div>
@@ -20081,6 +20007,52 @@ textarea:focus-visible {
       </div>
     </div>
   </section>
+<!-- ============================================================
+       SECTION 3b — BILAN DATA PÉDAGOGIQUE
+       ============================================================ -->
+  <section class="home-data">
+    <div class="wrap">
+      <div class="home-data-intro">
+        <div class="kicker reveal">Le QDI · cinq dimensions</div>
+        <h2 class="home-data-title reveal">
+          Cinq dimensions.<br/>
+          Une <em>progression</em> mesurable.
+        </h2>
+        <p class="home-data-lede reveal">OXV ne mesure pas la vitesse — il mesure la maîtrise. Le QDI (Quality Driving Index) décompose chaque session en cinq axes objectifs. Pas de classement. Une lecture personnelle de votre pilotage.</p>
+      </div>
+      <div class="home-data-grid">
+        <div class="home-data-pillar trajectory reveal">
+          <div class="home-data-pillar-dot"></div>
+          <div class="home-data-pillar-name">Trajectoire</div>
+          <p class="home-data-pillar-text">Précision des lignes, points de corde, gestion des zones de freinage.</p>
+        </div>
+        <div class="home-data-pillar fluidity reveal">
+          <div class="home-data-pillar-dot"></div>
+          <div class="home-data-pillar-name">Fluidité</div>
+          <p class="home-data-pillar-text">Régularité des inputs volant, absence de corrections brusques, transitions.</p>
+        </div>
+        <div class="home-data-pillar braking reveal">
+          <div class="home-data-pillar-dot"></div>
+          <div class="home-data-pillar-name">Freinage</div>
+          <p class="home-data-pillar-text">Points d'attaque, progressivité, modulation, relâche au corde.</p>
+        </div>
+        <div class="home-data-pillar acceleration reveal">
+          <div class="home-data-pillar-dot"></div>
+          <div class="home-data-pillar-name">Accélération</div>
+          <p class="home-data-pillar-text">Progressivité à la remise des gaz, anticipation, traction en sortie.</p>
+        </div>
+        <div class="home-data-pillar regularity reveal">
+          <div class="home-data-pillar-dot"></div>
+          <div class="home-data-pillar-name">Régularité</div>
+          <p class="home-data-pillar-text">Écart-type entre vos tours, stabilité de performance sur la durée.</p>
+        </div>
+      </div>
+      <div class="home-data-cta reveal">
+        <button class="btn btn-secondary" onclick="goTo('offers')"><span>Découvrir les offres →</span></button>
+      </div>
+    </div>
+  </section>
+
 </div>
 <!-- /application -->
 
@@ -20137,11 +20109,59 @@ textarea:focus-visible {
 <div class="page" id="page-apres-journee">
   <section class="page-hero">
     <div class="wrap">
-      <div class="page-hero-eyebrow">N° ⬡ · Après votre journée</div>
-      <h1 class="page-hero-title">La journée finit.<br/>La <em>trace</em> reste.</h1>
+      <div class="page-hero-eyebrow">N° ⬡ · Votre journée</div>
+      <h1 class="page-hero-title">Votre journée,<br/>au <em>complet</em>.</h1>
       <p class="page-hero-lede">
-        Chez OXV, rouler n'est qu'un début. Ce que vous emportez — vos données, vos médias, votre lecture de la session — continue de vivre bien après le drapeau à damier. Voici ce qui vous attend, jour après jour.
+        De J-7 au rapport final : la préparation avant le roulage, et tout ce que vous emportez après — données, médias, lecture de session. Rien ne se perd.
       </p>
+    </div>
+  </section>
+
+<!-- ============================================================
+       SECTION 3c — RITUELS AUDIO J-7/J-2/J-1
+       ============================================================ -->
+  <section class="home-rituels">
+    <div class="wrap">
+      <div class="home-rituels-intro">
+        <div class="kicker reveal">Avant la journée · trois rituels</div>
+        <h2 class="home-rituels-title reveal">
+          Trois rituels.<br/>
+          Vous arrivez <em>préparé</em>.
+        </h2>
+        <p class="home-rituels-lede reveal">À J-7, J-2, J-1 — OXV vous envoie un contenu audio dédié. Confirmation de session, briefing du tracé, météo et derniers mots. Vous ne découvrez pas le circuit le jour J.</p>
+      </div>
+      <div class="home-rituels-timeline">
+        <div class="home-rituel reveal">
+          <div class="home-rituel-day">J — 7</div>
+          <div class="home-rituel-title">Confirmation</div>
+          <p class="home-rituel-text">Votre inscription est confirmée. Votre dossier pilote, la liste des participants, la playlist OXV de la session — tout est dans votre boîte.</p>
+          <div class="home-rituel-player" aria-label="Aperçu audio – démo visuelle">
+            <div class="home-rituel-play" aria-hidden="true"><svg viewBox="0 0 10 10"><polygon points="2,1 9,5 2,9"/></svg></div>
+            <div class="home-rituel-wave" aria-hidden="true"><span style="height:8px"></span><span style="height:14px"></span><span style="height:6px"></span><span style="height:18px"></span><span style="height:10px"></span><span style="height:16px"></span><span style="height:8px"></span><span style="height:12px"></span><span style="height:20px"></span><span style="height:7px"></span><span style="height:15px"></span><span style="height:9px"></span><span style="height:18px"></span><span style="height:11px"></span><span style="height:14px"></span></div>
+            <div class="home-rituel-duration">3 min</div>
+          </div>
+        </div>
+        <div class="home-rituel reveal">
+          <div class="home-rituel-day">J — 2</div>
+          <div class="home-rituel-title">Briefing tracé</div>
+          <p class="home-rituel-text">Le tracé Beltoise virage par virage. Les points clés, les pièges, les zones d'amélioration identifiées sur vos sessions précédentes.</p>
+          <div class="home-rituel-player" aria-label="Aperçu audio – démo visuelle">
+            <div class="home-rituel-play" aria-hidden="true"><svg viewBox="0 0 10 10"><polygon points="2,1 9,5 2,9"/></svg></div>
+            <div class="home-rituel-wave" aria-hidden="true"><span style="height:12px"></span><span style="height:7px"></span><span style="height:20px"></span><span style="height:14px"></span><span style="height:9px"></span><span style="height:18px"></span><span style="height:6px"></span><span style="height:16px"></span><span style="height:10px"></span><span style="height:20px"></span><span style="height:13px"></span><span style="height:8px"></span><span style="height:17px"></span><span style="height:11px"></span><span style="height:15px"></span></div>
+            <div class="home-rituel-duration">14 min</div>
+          </div>
+        </div>
+        <div class="home-rituel reveal">
+          <div class="home-rituel-day">J — 1</div>
+          <div class="home-rituel-title">Dernier mot</div>
+          <p class="home-rituel-text">Météo, état de la piste, rappels techniques. Ce que vous devez savoir avant de partir. Une minute, pas plus.</p>
+          <div class="home-rituel-player" aria-label="Aperçu audio – démo visuelle">
+            <div class="home-rituel-play" aria-hidden="true"><svg viewBox="0 0 10 10"><polygon points="2,1 9,5 2,9"/></svg></div>
+            <div class="home-rituel-wave" aria-hidden="true"><span style="height:16px"></span><span style="height:10px"></span><span style="height:8px"></span><span style="height:19px"></span><span style="height:12px"></span><span style="height:7px"></span><span style="height:15px"></span><span style="height:20px"></span><span style="height:9px"></span><span style="height:14px"></span><span style="height:18px"></span><span style="height:11px"></span><span style="height:7px"></span><span style="height:16px"></span><span style="height:13px"></span></div>
+            <div class="home-rituel-duration">1 min</div>
+          </div>
+        </div>
+      </div>
     </div>
   </section>
 
@@ -20327,7 +20347,7 @@ textarea:focus-visible {
           <ul>
             <li><button onclick="goTo('offers')">Les offres</button></li>
             <li><button onclick="goTo('circuit')">Le circuit</button></li>
-            <li><button onclick="goTo('apres-journee')">Après la journée</button></li>
+            <li><button onclick="goTo('apres-journee')">Votre journée</button></li>
             <li><button onclick="goTo('preuves')">Preuves &amp; garanties</button></li>
             <li><button onclick="goTo('securite')">Sécurité &amp; cadre</button></li>
             <li><button onclick="goTo('corporate')">Corporate</button></li>
@@ -20736,9 +20756,9 @@ function onAuthChange() {
 
   // Bascule des CTA d'adhésion : non connecté = "Rejoindre le cercle", membre = "Réserver une session"
   const navJoin = document.getElementById('navCtaJoin');
-  if (navJoin) navJoin.textContent = logged ? 'Réserver une session' : 'Rejoindre le cercle';
+  if (navJoin) navJoin.textContent = logged ? 'Réserver une session' : 'Demander une place';
   const mobJoin = document.getElementById('mobCtaJoin');
-  if (mobJoin) mobJoin.textContent = logged ? 'Réserver une session' : 'Rejoindre le cercle';
+  if (mobJoin) mobJoin.textContent = logged ? 'Réserver une session' : 'Demander une place';
 
   // Lien admin "Demandes" : visible seulement si admin (badge mis à jour par loadAdminDemandes)
   document.querySelectorAll('[data-nav="demandes"]').forEach(el => {
@@ -20927,7 +20947,7 @@ const OXV_PAGE_SEO = {
   circuit:     { title: 'Le circuit de Haute Saintonge — tracé Beltoise · OXV', description: 'Dessiné en 2009 par Jean-Pierre Beltoise. 2,2 km, une dizaine de virages, aucune chicane artificielle. Le tracé que pilote OXV.' },
   corporate:   { title: 'OXV Corporate — privatisation du tracé Beltoise', description: 'Privatisez le Circuit de Haute Saintonge. Deux formats sur devis, trois scénarios : comité de direction, concession, lancement produit.' },
   securite:    { title: 'Sécurité & cadre · OXV', description: 'Le cadre de sécurité OXV : briefing obligatoire, documents vérifiés, silence total en roulage, lecture des données après la session, vingt pilotes maximum. Et la place exacte de la donnée.' },
-  'apres-journee': { title: 'Après votre journée — la trace OXV', description: 'Ce que vous emportez après une session OXV : médias dès le soir, télémétrie dans l\'app, bilan de session, rapport Signature et carnet de saison. Un miroir, jamais un classement.' },
+  'apres-journee': { title: 'Votre journée OXV — avant, pendant, après', description: 'De J-7 au rapport final : rituels de préparation, roulage silencieux, puis médias dès le soir, télémétrie dans l\'app, bilan de session, rapport Signature et carnet de saison. Un miroir, jamais un classement.' },
   preuves:     { title: 'Preuves & garanties — pourquoi faire confiance à OXV', description: 'Des preuves vérifiables, pas des promesses : circuit Beltoise réel, cadre de sécurité opposable, données chiffrées en UE, conditions claires, écosystème transparent. Et ce qu\'OXV ne fera jamais.' },
   application: { title: 'OXV Trace — l\'application track day data & média', description: 'Pass OXV, Trace du jour, Data Lab 25 Hz, médias livrés, carnet de piste, coach opt-in, saison. Silencieuse en roulage, précise après. iOS & Android, printemps 2027.' },
   partenaires: { title: 'Partenaires — rejoindre l\'écosystème OXV', description: 'Garage, photographe, hôtel, transport, assurance, concession : proposez un partenariat à OXV et accédez à une audience de pilotes exigeants au Circuit de Haute Saintonge.' },
