@@ -214,6 +214,13 @@
   --oxv-night:    #0A0A0A;   /* Fond marque */
   --oxv-cream:    #F5F2EA;   /* Texte marque — blanc cassé */
 
+  /* ─── Correctif compat : variables historiques référencées mais jamais définies ─── */
+  --obsidian:      #050505;                    /* fond section data (était indéfini → transparent) */
+  --void:          #000000;                    /* fond rituels + fill play (était indéfini) */
+  --cream-glow:    rgba(245, 242, 234, 0.35);  /* dégradé ligne (était indéfini → gradient invalide) */
+  --copper-bright: #FFD49B;                    /* hover lien compte */
+  --red-warn:      #E63946;                    /* tag bounce admin emails */
+
   /* ─── Charte DA V3 « Premium Racing Minimal » (tokens canoniques) ─── */
   --carbon:       #050505;   /* Noir carbone — fond / hero / sections premium */
   --anthracite:   #0B0D10;   /* Cartes, blocs, nav au scroll */
@@ -310,9 +317,7 @@ body {
 
 /* Utilitaires Syncopate (charte officielle) */
 .syncopate {
-  font-family: var(--display);
-  font-style: italic;
-  font-weight: 700;
+  font-family:var(--display);font-weight:600;
   letter-spacing: 0.05em;
   text-transform: uppercase;
 }
@@ -334,9 +339,7 @@ body {
 }
 
 .metric-giant {
-  font-family: var(--display);
-  font-style: italic;
-  font-weight: 700;
+  font-family:var(--display);font-weight:600;
   font-size: clamp(56px, 10vw, 96px);
   letter-spacing: 0.05em;
   line-height: 1;
@@ -344,9 +347,7 @@ body {
 }
 
 .metric-large {
-  font-family: var(--display);
-  font-style: italic;
-  font-weight: 700;
+  font-family:var(--display);font-weight:600;
   font-size: clamp(32px, 5vw, 48px);
   letter-spacing: 0.05em;
   line-height: 1;
@@ -1703,9 +1704,7 @@ h1, h2, h3, h4, h5 {
   border: 1px solid rgba(255, 183, 3, 0.3);
 }
 .tp-corner-detail-title {
-  font-family: var(--display);
-  font-style: italic;
-  font-weight: 700;
+  font-family:var(--display);font-weight:600;
   font-size: clamp(18px, 2.2vw, 24px);
   letter-spacing: 0.03em;
   text-transform: uppercase;
@@ -2286,9 +2285,7 @@ footer {
   margin-bottom: 16px;
 }
 .how-step-title {
-  font-family: var(--display);
-  font-style: italic;
-  font-weight: 700;
+  font-family:var(--display);font-weight:600;
   font-size: 18px;
   letter-spacing: 0.02em;
   color: var(--cream);
@@ -2303,9 +2300,7 @@ footer {
   margin: 0;
 }
 .how-signature {
-  font-family: var(--display);
-  font-style: italic;
-  font-weight: 700;
+  font-family:var(--display);font-weight:600;
   font-size: clamp(22px, 3vw, 34px);
   letter-spacing: 0.02em;
   color: var(--cream);
@@ -3512,9 +3507,7 @@ footer {
 /* ── Médias pilote ─────────────────────────────────────────── */
 .media-session-group { margin-bottom: 34px; }
 .media-session-date {
-  font-family: var(--display);
-  font-style: italic;
-  font-weight: 700;
+  font-family:var(--display);font-weight:600;
   font-size: 15px;
   letter-spacing: 0.04em;
   color: var(--cream);
@@ -3612,9 +3605,7 @@ footer {
 }
 .amr:hover, .amr.open { border-color: rgba(255,183,3,.35); }
 .amr-date {
-  font-family: var(--display);
-  font-style: italic;
-  font-weight: 700;
+  font-family:var(--display);font-weight:600;
   font-size: 15px;
   letter-spacing: .04em;
   color: var(--cream);
@@ -3838,9 +3829,7 @@ footer {
   margin-bottom: 18px;
 }
 .founding-title {
-  font-family: var(--display);
-  font-style: italic;
-  font-weight: 700;
+  font-family:var(--display);font-weight:600;
   font-size: clamp(36px, 5vw, 60px);
   color: var(--cream);
   line-height: 1.1;
@@ -3865,9 +3854,7 @@ footer {
   margin-bottom: 60px;
 }
 .founding-counter-num {
-  font-family: var(--display);
-  font-style: italic;
-  font-weight: 700;
+  font-family:var(--display);font-weight:600;
   font-size: 42px;
   color: var(--gold);
   line-height: 1;
@@ -3905,9 +3892,7 @@ footer {
   padding-top: 3px;
 }
 .founding-avantage-title {
-  font-family: var(--display);
-  font-style: italic;
-  font-weight: 700;
+  font-family:var(--display);font-weight:600;
   font-size: 15px;
   color: var(--cream);
   margin-bottom: 6px;
@@ -3924,9 +3909,7 @@ footer {
   margin-bottom: 60px;
 }
 .founding-form-title {
-  font-family: var(--display);
-  font-style: italic;
-  font-weight: 700;
+  font-family:var(--display);font-weight:600;
   font-size: 26px;
   color: var(--cream);
   margin-bottom: 8px;
@@ -3950,9 +3933,7 @@ footer {
   padding: 20px 0;
 }
 .founding-faq-q {
-  font-family: var(--display);
-  font-style: italic;
-  font-weight: 700;
+  font-family:var(--display);font-weight:600;
   font-size: 16px;
   color: var(--cream);
   margin-bottom: 10px;
@@ -3976,9 +3957,7 @@ footer {
   margin-bottom: 18px;
 }
 .coach-title {
-  font-family: var(--display);
-  font-style: italic;
-  font-weight: 700;
+  font-family:var(--display);font-weight:600;
   font-size: clamp(36px, 5vw, 60px);
   color: var(--cream);
   line-height: 1.1;
@@ -4002,9 +3981,7 @@ footer {
   flex-wrap: wrap;
 }
 .coach-price {
-  font-family: var(--display);
-  font-style: italic;
-  font-weight: 700;
+  font-family:var(--display);font-weight:600;
   font-size: 56px;
   color: var(--gold);
   line-height: 1;
@@ -4038,9 +4015,7 @@ footer {
   margin-bottom: 12px;
 }
 .coach-inclus-title {
-  font-family: var(--display);
-  font-style: italic;
-  font-weight: 700;
+  font-family:var(--display);font-weight:600;
   font-size: 15px;
   color: var(--cream);
   margin-bottom: 8px;
@@ -7719,9 +7694,7 @@ footer {
 }
 
 .home-hero-manifesto {
-  font-family: var(--display);
-  font-style: italic;
-  font-weight: 300;
+  font-family:var(--display);font-weight:600;
   font-size: clamp(40px, 7vw, 84px);
   line-height: 1.1;
   letter-spacing: 0.03em;
@@ -7842,9 +7815,7 @@ footer {
   justify-content: center;
 }
 .home-journey-title {
-  font-family: var(--display);
-  font-style: italic;
-  font-weight: 700;
+  font-family:var(--display);font-weight:600;
   font-size: clamp(32px, 4.5vw, 56px);
   line-height: 1.15;
   letter-spacing: 0.03em;
@@ -7957,9 +7928,7 @@ footer {
   color: var(--gold);
 }
 .home-journey-card-name {
-  font-family: var(--display);
-  font-style: italic;
-  font-weight: 700;
+  font-family:var(--display);font-weight:600;
   font-size: 26px;
   letter-spacing: 0.06em;
   line-height: 1;
@@ -8074,9 +8043,7 @@ footer {
   justify-content: center;
 }
 .home-final-headline {
-  font-family: var(--display);
-  font-style: italic;
-  font-weight: 700;
+  font-family:var(--display);font-weight:600;
   font-size: clamp(32px, 5vw, 64px);
   line-height: 1.1;
   letter-spacing: 0.03em;
@@ -8128,9 +8095,7 @@ footer {
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
 }
 .home-final-proof-num {
-  font-family: var(--display);
-  font-style: italic;
-  font-weight: 700;
+  font-family:var(--display);font-weight:600;
   font-size: clamp(56px, 8vw, 96px);
   line-height: 1;
   letter-spacing: 0.04em;
@@ -8157,9 +8122,7 @@ footer {
   margin: 0 auto;
 }
 .home-final-cta-headline {
-  font-family: var(--display);
-  font-style: italic;
-  font-weight: 700;
+  font-family:var(--display);font-weight:600;
   font-size: clamp(26px, 3.5vw, 40px);
   line-height: 1.2;
   letter-spacing: 0.04em;
@@ -9807,9 +9770,7 @@ label {
 #page-cgv h1,
 #page-cgu h1,
 #page-privacy h1 {
-  font-family: var(--display);
-  font-style: italic;
-  font-weight: 700;
+  font-family:var(--display);font-weight:600;
   font-size: clamp(36px, 5vw, 64px);
   letter-spacing: 0.04em;
   text-transform: uppercase;
@@ -9821,9 +9782,7 @@ label {
 #page-cgv h2,
 #page-cgu h2,
 #page-privacy h2 {
-  font-family: var(--display);
-  font-style: italic;
-  font-weight: 700;
+  font-family:var(--display);font-weight:600;
   font-size: clamp(20px, 2.5vw, 28px);
   letter-spacing: 0.04em;
   text-transform: uppercase;
@@ -9884,9 +9843,7 @@ label {
 
 .wizard-step-title,
 .booking-step-title {
-  font-family: var(--display);
-  font-style: italic;
-  font-weight: 700;
+  font-family:var(--display);font-weight:600;
   font-size: clamp(24px, 3vw, 36px);
   letter-spacing: 0.04em;
   text-transform: uppercase;
@@ -9898,9 +9855,7 @@ label {
 
 #page-specs-techniques h2,
 #page-specs-techniques h3 {
-  font-family: var(--display);
-  font-style: italic;
-  font-weight: 700;
+  font-family:var(--display);font-weight:600;
   letter-spacing: 0.04em;
   text-transform: uppercase;
   color: var(--cream);
@@ -9979,9 +9934,7 @@ label {
 [id^="page-compte"] h2,
 [id^="page-admin"] h2,
 [id^="page-booking"] h2 {
-  font-family: var(--display);
-  font-style: italic;
-  font-weight: 700;
+  font-family:var(--display);font-weight:600;
   font-size: clamp(22px, 2.5vw, 32px);
   letter-spacing: 0.04em;
   text-transform: uppercase;
@@ -9991,9 +9944,7 @@ label {
 [id^="page-compte"] h3,
 [id^="page-admin"] h3,
 [id^="page-booking"] h3 {
-  font-family: var(--display);
-  font-style: italic;
-  font-weight: 700;
+  font-family:var(--display);font-weight:600;
   font-size: 18px;
   letter-spacing: 0.04em;
   text-transform: uppercase;
@@ -10318,9 +10269,7 @@ h1 em, h2 em, h3 em, h4 em, h5 em {
 .alert-error::before,
 .form-error::before {
   content: '!';
-  font-family: var(--display);
-  font-style: italic;
-  font-weight: 700;
+  font-family:var(--display);font-weight:600;
   font-size: 14px;
   width: 22px;
   height: 22px;
@@ -10479,9 +10428,7 @@ button[type="submit"].loading::after {
   font-size: 15px;
 }
 .email-template-body h2 {
-  font-family: var(--display);
-  font-style: italic;
-  font-weight: 700;
+  font-family:var(--display);font-weight:600;
   font-size: 22px;
   letter-spacing: 0.04em;
   text-transform: uppercase;
@@ -10801,9 +10748,7 @@ button[type="submit"].loading::after {
 }
 .loading-state-title,
 .empty-state-title {
-  font-family: var(--display);
-  font-style: italic;
-  font-weight: 700;
+  font-family:var(--display);font-weight:600;
   font-size: 18px;
   letter-spacing: 0.04em;
   text-transform: uppercase;
@@ -11154,9 +11099,7 @@ a.btn {
   line-height: 1;
 }
 .corp-uc-title {
-  font-family: var(--display);
-  font-style: italic;
-  font-weight: 700;
+  font-family:var(--display);font-weight:600;
   font-size: 17px;
   letter-spacing: 0.04em;
   text-transform: uppercase;
@@ -11188,9 +11131,7 @@ a.btn {
   text-align: center;
 }
 .corp-stat-bento-num {
-  font-family: var(--display);
-  font-style: italic;
-  font-weight: 700;
+  font-family:var(--display);font-weight:600;
   font-size: clamp(48px, 7vw, 72px);
   line-height: 1;
   color: var(--gold);
@@ -11386,9 +11327,7 @@ a.btn {
   50% { opacity: 0.4; }
 }
 .prog-qdi-score {
-  font-family: var(--display);
-  font-style: italic;
-  font-weight: 700;
+  font-family:var(--display);font-weight:600;
   font-size: clamp(96px, 14vw, 160px);
   line-height: 0.95;
   letter-spacing: 0.02em;
@@ -11405,9 +11344,7 @@ a.btn {
   letter-spacing: 0.05em;
 }
 .prog-qdi-level {
-  font-family: var(--display);
-  font-style: italic;
-  font-weight: 700;
+  font-family:var(--display);font-weight:600;
   font-size: 22px;
   letter-spacing: 0.06em;
   text-transform: uppercase;
@@ -11479,9 +11416,7 @@ a.btn {
   padding: 32px 28px;
 }
 .prog-sessions-num {
-  font-family: var(--display);
-  font-style: italic;
-  font-weight: 700;
+  font-family:var(--display);font-weight:600;
   font-size: 56px;
   line-height: 1;
   color: var(--gold);
@@ -11537,9 +11472,7 @@ a.btn {
   display: flex;
   align-items: center;
   justify-content: center;
-  font-family: var(--display);
-  font-style: italic;
-  font-weight: 700;
+  font-family:var(--display);font-weight:600;
   font-size: 22px;
   letter-spacing: 0.04em;
   background: rgba(255, 255, 255, 0.03);
@@ -11582,9 +11515,7 @@ a.btn {
   gap: 12px;
 }
 .prog-pillar-name {
-  font-family: var(--display);
-  font-style: italic;
-  font-weight: 700;
+  font-family:var(--display);font-weight:600;
   font-size: 15px;
   letter-spacing: 0.04em;
   text-transform: uppercase;
@@ -11617,9 +11548,7 @@ a.btn {
 .prog-pillar.regularity .prog-pillar-fill { background: var(--qdi-regularity); box-shadow: 0 0 12px rgba(192, 132, 252, 0.4); }
 
 .prog-pillar-score {
-  font-family: var(--display);
-  font-style: italic;
-  font-weight: 700;
+  font-family:var(--display);font-weight:600;
   font-size: 32px;
   letter-spacing: 0.04em;
   line-height: 1;
@@ -11663,9 +11592,7 @@ a.btn {
   gap: 12px;
 }
 .prog-evolution-title {
-  font-family: var(--display);
-  font-style: italic;
-  font-weight: 700;
+  font-family:var(--display);font-weight:600;
   font-size: 16px;
   letter-spacing: 0.04em;
   text-transform: uppercase;
@@ -11701,9 +11628,7 @@ a.btn {
   position: relative;
 }
 .prog-chart-bar-value {
-  font-family: var(--display);
-  font-style: italic;
-  font-weight: 700;
+  font-family:var(--display);font-weight:600;
   font-size: 13px;
   letter-spacing: 0.04em;
   color: var(--cream);
@@ -11769,9 +11694,7 @@ a.btn {
   border: 1px solid rgba(74, 222, 128, 0.25);
 }
 .prog-reco-title {
-  font-family: var(--display);
-  font-style: italic;
-  font-weight: 700;
+  font-family:var(--display);font-weight:600;
   font-size: 16px;
   letter-spacing: 0.04em;
   text-transform: uppercase;
@@ -11813,9 +11736,7 @@ a.btn {
   position: relative;
 }
 .prog-app-title {
-  font-family: var(--display);
-  font-style: italic;
-  font-weight: 700;
+  font-family:var(--display);font-weight:600;
   font-size: clamp(22px, 3vw, 30px);
   letter-spacing: 0.04em;
   text-transform: uppercase;
@@ -13653,7 +13574,7 @@ textarea:focus-visible {
     <div class="wrap">
       <div style="max-width:720px;margin:0 auto 48px;text-align:center;">
         <div class="kicker reveal">N° 06 · L'application</div>
-        <h2 class="reveal" style="font-family:var(--display);font-style:italic;font-weight:700;font-size:clamp(28px,4vw,44px);line-height:1.1;color:var(--cream);margin:14px 0 18px;">
+        <h2 class="reveal" style="font-family:var(--display);font-weight:600;font-size:clamp(28px,4vw,44px);line-height:1.1;color:var(--cream);margin:14px 0 18px;">
           OXV Trace.<br/>L'app qui <em style="color:var(--gold);">prolonge</em> la journée.
         </h2>
         <p class="reveal" style="font-family:var(--sans);font-size:16px;line-height:1.7;color:var(--cream-mute);">
@@ -13943,7 +13864,7 @@ textarea:focus-visible {
         </div>
         <div class="bento" style="padding:20px 24px;border-radius:0;border-left:3px solid var(--gold);display:flex;justify-content:space-between;align-items:center;gap:20px;flex-wrap:wrap;">
           <div style="flex:1;min-width:240px;">
-            <div style="font-family:var(--display);font-style:italic;font-weight:700;font-size:16px;color:var(--cream);margin-bottom:4px;">Corporate — privatisation &amp; événements</div>
+            <div style="font-family:var(--display);font-weight:600;font-size:16px;color:var(--cream);margin-bottom:4px;">Corporate — privatisation &amp; événements</div>
             <p style="font-family:var(--sans);font-size:14px;line-height:1.6;color:var(--cream-mute);margin:0;">Journée privatisée, séminaire client, lancement produit ou incentive sur circuit. Format sur mesure, sur devis.</p>
           </div>
           <button class="btn btn-sm" onclick="goTo('corporate')"><span>Découvrir Corporate →</span></button>
@@ -16510,7 +16431,7 @@ textarea:focus-visible {
         <!-- ╔══════════════════════════════════════════════════════╗
              ║   MODALITÉS DE PAIEMENT                               ║
              ╚══════════════════════════════════════════════════════╝ -->
-        <div class="account-section-title" style="font-family: var(--display); font-style: italic; font-weight: 700; font-size: 14px; letter-spacing: 0.22em; text-transform: uppercase; color: var(--gold); margin-bottom: 16px;" id="paymentSection">
+        <div class="account-section-title" style="font-family:var(--display);font-weight:600; font-size: 14px; letter-spacing: 0.22em; text-transform: uppercase; color: var(--gold); margin-bottom: 16px;" id="paymentSection">
           — Comment effectuer le règlement
         </div>
 
@@ -16518,7 +16439,7 @@ textarea:focus-visible {
           <div style="display:flex;align-items:flex-start;gap:14px;">
             <span style="font-size:20px;">🔒</span>
             <div style="flex:1;">
-              <h4 style="font-family:var(--display);font-style:italic;font-weight:700;font-size:15px;letter-spacing:0.04em;text-transform:uppercase;color:var(--cream);margin:0 0 10px;">Paiement en ligne sécurisé</h4>
+              <h4 style="font-family:var(--display);font-weight:600;font-size:15px;letter-spacing:0.04em;text-transform:uppercase;color:var(--cream);margin:0 0 10px;">Paiement en ligne sécurisé</h4>
               <p style="font-family:var(--sans);font-size:14px;line-height:1.65;color:var(--cream-mute);margin:0;">Le règlement s'effectue via un <strong style="color:var(--cream);">lien de paiement sécurisé</strong> (CB, Visa, PayPal, Apple Pay) envoyé par email à la confirmation de votre place. <strong style="color:var(--cream);">Aucune coordonnée bancaire à saisir ici.</strong></p>
             </div>
           </div>
@@ -16536,7 +16457,7 @@ textarea:focus-visible {
         <!-- ╔══════════════════════════════════════════════════════╗
              ║   HISTORIQUE DES RÈGLEMENTS                           ║
              ╚══════════════════════════════════════════════════════╝ -->
-        <div class="account-section-title" style="font-family: var(--display); font-style: italic; font-weight: 700; font-size: 14px; letter-spacing: 0.22em; text-transform: uppercase; color: var(--gold); margin-bottom: 16px;">
+        <div class="account-section-title" style="font-family:var(--display);font-weight:600; font-size: 14px; letter-spacing: 0.22em; text-transform: uppercase; color: var(--gold); margin-bottom: 16px;">
           — Historique des règlements
         </div>
 
@@ -16659,7 +16580,7 @@ textarea:focus-visible {
         <!-- ╔══════════════════════════════════════════════════════╗
              ║   5 PILIERS QDI                                       ║
              ╚══════════════════════════════════════════════════════╝ -->
-        <div class="account-section-title" style="font-family: var(--display); font-style: italic; font-weight: 700; font-size: 14px; letter-spacing: 0.22em; text-transform: uppercase; color: var(--gold); margin-bottom: 16px;">
+        <div class="account-section-title" style="font-family:var(--display);font-weight:600; font-size: 14px; letter-spacing: 0.22em; text-transform: uppercase; color: var(--gold); margin-bottom: 16px;">
           — Détail des 5 dimensions
         </div>
 
@@ -16795,7 +16716,7 @@ textarea:focus-visible {
         <!-- ╔══════════════════════════════════════════════════════╗
              ║   RECOMMANDATIONS COACH IA                            ║
              ╚══════════════════════════════════════════════════════╝ -->
-        <div class="account-section-title" style="font-family: var(--display); font-style: italic; font-weight: 700; font-size: 14px; letter-spacing: 0.22em; text-transform: uppercase; color: var(--gold); margin-bottom: 16px;">
+        <div class="account-section-title" style="font-family:var(--display);font-weight:600; font-size: 14px; letter-spacing: 0.22em; text-transform: uppercase; color: var(--gold); margin-bottom: 16px;">
           — Lecture de votre session
         </div>
 
@@ -16838,7 +16759,7 @@ textarea:focus-visible {
         <!-- ╔══════════════════════════════════════════════════════╗
              ║   SESSIONS ENREGISTRÉES PAR L'APP (télémétrie)        ║
              ╚══════════════════════════════════════════════════════╝ -->
-        <div class="account-section-title" style="font-family: var(--display); font-style: italic; font-weight: 700; font-size: 14px; letter-spacing: 0.22em; text-transform: uppercase; color: var(--gold); margin: 8px 0 16px;">
+        <div class="account-section-title" style="font-family:var(--display);font-weight:600; font-size: 14px; letter-spacing: 0.22em; text-transform: uppercase; color: var(--gold); margin: 8px 0 16px;">
           — Sessions enregistrées par l'app
         </div>
         <div class="bento" style="padding:24px;margin-bottom:24px;">
@@ -18878,7 +18799,7 @@ textarea:focus-visible {
         <div style="display:flex;justify-content:space-between;align-items:start;gap:24px;flex-wrap:wrap;">
           <div style="flex:1;min-width:280px;">
             <div class="prog-pillar-weight" style="margin-bottom:14px;">— Authentification à deux facteurs</div>
-            <h3 style="font-family:var(--display);font-style:italic;font-weight:700;font-size:20px;letter-spacing:0.04em;text-transform:uppercase;color:var(--cream);margin:0 0 14px;">2FA TOTP</h3>
+            <h3 style="font-family:var(--display);font-weight:600;font-size:20px;letter-spacing:0.04em;text-transform:uppercase;color:var(--cream);margin:0 0 14px;">2FA TOTP</h3>
             <p style="font-family:var(--sans);font-size:14px;color:var(--cream-mute);line-height:1.65;margin:0;">
               Activez la 2FA pour protéger l'accès à l'espace admin. Application recommandée : <strong style="color:var(--cream);">Google Authenticator</strong> ou <strong style="color:var(--cream);">1Password</strong>.
             </p>
@@ -19718,7 +19639,7 @@ textarea:focus-visible {
       <div class="founding-counter">
         <span class="founding-counter-num" id="foundingCount">—</span>
         <div>
-          <div style="font-family:var(--display);font-style:italic;font-weight:700;font-size:18px;color:var(--cream-mute);">/ 30 Founding Members</div>
+          <div style="font-family:var(--display);font-weight:600;font-size:18px;color:var(--cream-mute);">/ 30 Founding Members</div>
           <div class="founding-counter-label" id="foundingCountLabel">ont déjà rejoint le cercle</div>
         </div>
       </div>
@@ -23276,7 +23197,7 @@ window.paymentRenderToValidate = function() {
         <span class="status-dot ${isOverdue ? 'pending' : 'pending'}" style="background:${isOverdue ? 'var(--red)' : 'var(--gold)'};box-shadow:0 0 8px ${isOverdue ? 'var(--red)' : 'var(--gold)'};"></span>
         <div style="min-width:0;">
           <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;">
-            <div style="font-family:var(--display);font-style:italic;font-weight:700;font-size:14px;letter-spacing:0.04em;color:var(--cream);">${safePilot}</div>
+            <div style="font-family:var(--display);font-weight:600;font-size:14px;letter-spacing:0.04em;color:var(--cream);">${safePilot}</div>
             ${urgencyTag}
           </div>
           <div style="font-family:var(--sans);font-size:12px;color:var(--cream-mute);margin-top:4px;">
@@ -23284,7 +23205,7 @@ window.paymentRenderToValidate = function() {
             Échéance : ${new Date(p.dueDate).toLocaleDateString('fr-FR', {day:'numeric', month:'long', year:'numeric'})}
           </div>
         </div>
-        <div style="font-family:var(--display);font-style:italic;font-weight:700;font-size:20px;color:var(--cream);">${safeAmount} €</div>
+        <div style="font-family:var(--display);font-weight:600;font-size:20px;color:var(--cream);">${safeAmount} €</div>
         <button class="btn btn-primary btn-sm" onclick="paymentOpenValidateModal('${safeId}');"><span>✓ Valider</span></button>
         <button class="btn btn-sm" onclick="paymentSendReminder('${safeId}');" title="Renvoyer email"><span>✉</span></button>
       </div>
@@ -23342,7 +23263,7 @@ window.paymentRenderHistory = function() {
         <td style="padding:14px 12px;font-family:var(--mono);font-size:11px;color:var(--gold);">${safeRowId}</td>
         <td style="padding:14px 12px;color:var(--cream);">${safeRowPilot}</td>
         <td style="padding:14px 12px;color:var(--cream-mute);font-size:12px;">${safeRowSession}</td>
-        <td style="padding:14px 12px;text-align:right;font-family:var(--display);font-style:italic;font-weight:700;color:var(--cream);">${safeRowAmount} €</td>
+        <td style="padding:14px 12px;text-align:right;font-family:var(--display);font-weight:600;color:var(--cream);">${safeRowAmount} €</td>
         <td style="padding:14px 12px;text-align:center;">${statusBadge}</td>
         <td style="padding:14px 12px;color:var(--cream-mute);font-size:12px;font-family:var(--mono);">${new Date(p.date).toLocaleDateString('fr-FR')}</td>
         <td style="padding:14px 12px;text-align:right;">
@@ -23379,7 +23300,7 @@ window.paymentOpenValidateModal = function(paymentId) {
         </div>
         <div>
           <div style="font-family:var(--display);font-size:10px;letter-spacing:0.2em;text-transform:uppercase;color:var(--cream-mute);margin-bottom:4px;">Montant</div>
-          <div style="font-family:var(--display);font-style:italic;font-weight:700;font-size:22px;color:var(--gold);">${payment.amount},00 €</div>
+          <div style="font-family:var(--display);font-weight:600;font-size:22px;color:var(--gold);">${payment.amount},00 €</div>
         </div>
       </div>
     `;
@@ -23584,7 +23505,7 @@ window.loadAdminMedias = async function() {
       ].map(k => `
         <div class="bento" style="padding:20px 24px;">
           <div style="font-family:var(--mono);font-size:9px;letter-spacing:.18em;text-transform:uppercase;color:var(--cream-mute);margin-bottom:8px;">${k.label}</div>
-          <div style="font-family:var(--display);font-style:italic;font-weight:700;font-size:28px;color:var(--gold);">${k.val}</div>
+          <div style="font-family:var(--display);font-weight:600;font-size:28px;color:var(--gold);">${k.val}</div>
           <div style="font-family:var(--mono);font-size:9px;color:var(--cream-mute);margin-top:4px;">${k.sub}</div>
         </div>`).join('');
     }
@@ -28080,7 +28001,7 @@ async function emkLoadTemplates() {
     el.style.cssText = 'display:flex;justify-content:space-between;align-items:center;gap:12px;padding:14px 16px;background:rgba(0,0,0,0.3);border-radius:8px;border:1px solid var(--bento-border);';
     el.innerHTML =
       '<div style="flex:1;min-width:0;">' +
-        '<div style="font-family:var(--display);font-style:italic;font-weight:700;font-size:14px;letter-spacing:0.04em;color:var(--cream);">' + escapeHtml(cat.label) + '</div>' +
+        '<div style="font-family:var(--display);font-weight:600;font-size:14px;letter-spacing:0.04em;color:var(--cream);">' + escapeHtml(cat.label) + '</div>' +
         '<div style="font-family:var(--sans);font-size:12px;color:var(--cream-mute);margin-top:4px;">' + escapeHtml(cat.desc) + '</div>' +
       '</div>' +
       '<div style="display:flex;gap:8px;align-items:center;flex-shrink:0;">' + tag +
