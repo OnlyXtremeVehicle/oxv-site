@@ -25,3 +25,22 @@
 - **Contraintes respectées** : aucun prix modifié, aucun formulaire/booking/admin/auth touché, routeur SPA intact, aucune promesse prescriptive.
 - Les favicons PNG sont des monogrammes générés (fallback propre) — à remplacer par des exports définitifs de l'insigne quand disponibles ; `favicon.svg` (prioritaire pour les navigateurs modernes) est déjà le vrai insigne.
 - Visuels hero = images stock existantes ; à remplacer après le premier shooting réel (DA §20 shot list).
+
+---
+
+## Addendum — refonte profonde + réorganisation « grandes marques » (2026-07-01)
+
+Suite au retour utilisateur (« pas juste la couleur et les polices »), deux passes supplémentaires :
+
+### Refonte profonde du langage visuel (`a758181`)
+- Fin de l'italique-majuscules sur ~35 familles de grands titres + 59 titres inline → sentence case, tracking -0.02em, poids 600, titres monochromes.
+- Kickers/eyebrows : or → **mono rouge OXV**. CTA : mono-uppercase → sans 14-15px/500. Cartes : glassmorphism → anthracite plat. Hero jusqu'à 128px. **Mockups téléphone OXV Trace** (pur CSS, bleu data) home + page application.
+
+### Réorganisation structurelle (`cd4e55a`)
+- **Home resserrée au récit DA §18** : Hero → Expérience → Offres → App → Média → **Confiance (nouveau)** → CTA final.
+- Sections deep-dive relogées : QDI/data → page **application** · rituels J-7/J-2/J-1 → page **« Votre journée »** (ex Après-journée, retitrée, couvre avant+après, SEO/footer alignés) · écosystème → page **à-propos**.
+- **Nav épurée** : 10 → 5 liens (Offres · Circuit · Application · Corporate · Actualités), **un seul CTA** « Demander une place » (JS de bascule connecté/déconnecté aligné) ; burger mobile enrichi (Application, Votre journée).
+
+### Compatibilité vérifiée (à chaque étape)
+- **5 variables CSS jamais définies corrigées** (`--obsidian` = fond section data transparent en prod !, `--void`, `--cream-glow`, `--copper-bright`, `--red-warn`).
+- 62/62 sections · 0 nav cassée · sections déplacées vérifiées dans les bonnes pages · 0 var indéfinie · 6/6 JSON-LD · hooks JS intacts (aucun sur les sections déplacées, `heroClock`/`navCtaJoin`/`updateCalGate` préservés) · `node --check` OK.
