@@ -1,6 +1,6 @@
 # PR-HUB-02 — Check-up d'éligibilité pré-circuit
 
-> Surface : 🌐 site + 🗄️ DB (+ ⏰ relances). Date : 2026-07-01. **Statut : socle DB ✅ livré et vérifié · UI admin/client + relances = suite immédiate.** Checklist validée fondateur (Q4) : validation ADMIN après chaque réservation.
+> Surface : 🌐 site + 🗄️ DB + ⏰ relances. Date : 2026-07-01. **Statut : ✅ LIVRÉE de bout en bout.** Checklist validée fondateur (Q4) : validation ADMIN après chaque réservation.
 
 ## 1. Audit (vérifié live)
 - ✅ `documents` couvre déjà **permis** (`driving_license`), **CNI** (`id_card`), **assurance circuit** (`insurance_track`) avec statuts + validation admin + emails (PR-SITE-10) → réutilisés tels quels.
@@ -15,15 +15,15 @@
 - **Vue `registration_eligibility`** (security invoker) : agrégat **GO** (tout ok/na) / **NO_GO** (≥1 refus) / **EN_ATTENTE** — lisible par le pilote (les siens), l'admin (tout) **et l'app** (même base, RLS identique).
 - **RLS testée 4/4** : anon = 0 · propriétaire non-admin = ses 9 items seulement · admin = tout · **client ne peut PAS s'auto-valider** (UPDATE → 0 ligne). Fonctions seed/sync non exécutables par les clients.
 
-## 3. Suite immédiate (même PR)
-1. **UI admin** (détail session) : colonne Éligibilité par inscrit (badge GO/EN ATTENTE/NO-GO) + modale checklist 9 items (OK / Refus / N.A. + note) → écrit `eligibility_items` (policy admin).
-2. **UI client** (compte-sessions) : badge par réservation + liste des pièces manquantes + CTA « Compléter mes documents ».
-3. **Relances J-14/J-7/J-2** : Edge Function `eligibility-reminders` + pg_cron quotidien — email des items manquants si statut ≠ GO, idempotent via `email_log`.
+## 3. UI & relances livrées
+- **Admin** (détail session) : colonne **Éligibilité** (badge GO/ATTENTE/NO-GO + compteur `ok/total`, cliquable) → **modale 9 points** : OK / Refus (motif obligatoire, visible en interne) / N.A. / remise en attente ; traçabilité `validated_by/at` ; badge rafraîchi en direct. Une décision manuelle prime sur la synchro documents.
+- **Client** (compte-sessions) : **bandeau check-up** par réservation à venir — statut lisible (« GO — vous êtes prêt à rouler »), points manquants nommés, CTA « Compléter mes documents ». Lecture seule (RLS).
+- **Relances** : Edge Function `eligibility-reminders` v1 (J-14/J-7/J-2, une seule relance par jalon via `email_log`, mention honnête « l'accès piste ne peut être garanti sans dossier complet ») + **job pg_cron quotidien 06:00 UTC actif** (vérifié `cron.job`). Test réel : HTTP 200 `checked:0 sent:0` (aucun jalon ce jour — aucun email involontaire).
 
 ## 4. Critères d'acceptation
 - [x] Checklist 9 items par réservation, créée automatiquement (+ backfill).
 - [x] Items documentaires branchés sur `documents` (aucune double saisie).
 - [x] Statut agrégé GO/EN ATTENTE/NO-GO calculé, RLS stricte, exposé à l'app.
-- [ ] Admin : validation par item depuis le détail session.
-- [ ] Client : bandeau statut + pièces manquantes.
-- [ ] Relances automatiques J-14/J-7/J-2.
+- [x] Admin : validation par item depuis le détail session (badge + modale).
+- [x] Client : bandeau statut + pièces manquantes + CTA documents.
+- [x] Relances automatiques J-14/J-7/J-2 (cron actif, fonction testée, idempotente).
