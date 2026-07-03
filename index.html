@@ -16839,6 +16839,23 @@ textarea:focus-visible {
       </div>
 
       <div class="pref-section">
+        <div class="pref-section-title">Application OXV</div>
+        <div class="pref-row">
+          <div class="pref-row-info">
+            <div class="pref-row-title">Connecter l'app</div>
+            <div class="pref-row-desc">Générez un code de connexion à saisir dans l'app OXV : valable 10 minutes, à usage unique. L'app sort au printemps 2027 — votre compte est déjà prêt.</div>
+            <div id="pairCodeBox" style="display:none;margin-top:12px;">
+              <div style="display:flex;align-items:center;gap:14px;flex-wrap:wrap;">
+                <code id="pairCodeValue" style="font-family:var(--mono);font-size:26px;letter-spacing:0.18em;color:var(--offwhite);background:rgba(0,0,0,0.4);border:1px solid var(--bento-border);padding:10px 16px;border-radius:8px;"></code>
+                <span id="pairCodeTimer" style="font-family:var(--mono);font-size:12px;color:var(--cream-mute);"></span>
+              </div>
+            </div>
+          </div>
+          <button class="btn btn-sm" id="pairCodeBtn" onclick="generatePairingCode()"><span>Générer mon code</span></button>
+        </div>
+      </div>
+
+      <div class="pref-section">
         <div class="pref-section-title">Mes données (RGPD)</div>
 
         <div class="pref-row">
@@ -26979,6 +26996,43 @@ window.loadPreferences = async function() {
   } else {
     if (notDeleting) notDeleting.style.display = 'block';
     if (deleting) deleting.style.display = 'none';
+  }
+};
+
+/* Appairage app (PR-HUB-04) — génère un code de connexion via l'Edge Function pair-app.
+   Le JWT de session est attaché automatiquement par supabase.functions.invoke. */
+window.generatePairingCode = async function() {
+  if (!window.OXVApi?.user?.isLoggedIn) { toast('Connexion requise', 'warn'); return; }
+  const btn = document.getElementById('pairCodeBtn');
+  const label = btn ? (btn.querySelector('span') || btn) : null;
+  const prev = label ? label.textContent : '';
+  if (btn) btn.style.pointerEvents = 'none';
+  if (label) label.textContent = 'Génération…';
+  try {
+    const { data, error } = await supabase.functions.invoke('pair-app', { body: { action: 'generate' } });
+    if (error) throw error;
+    if (!data || !data.code) throw new Error((data && data.error) || 'réponse invalide');
+    const val = document.getElementById('pairCodeValue');
+    if (val) val.textContent = data.code.replace(/(.{4})(.{4})/, '$1 $2');
+    const box = document.getElementById('pairCodeBox');
+    if (box) box.style.display = '';
+    if (window._pairTimer) clearInterval(window._pairTimer);
+    const end = new Date(data.expires_at).getTime();
+    const tick = () => {
+      const el = document.getElementById('pairCodeTimer'); if (!el) return;
+      const left = Math.max(0, Math.floor((end - Date.now()) / 1000));
+      const m = Math.floor(left / 60), s = String(left % 60).padStart(2, '0');
+      el.textContent = left > 0 ? `expire dans ${m}:${s}` : 'code expiré — générez-en un nouveau';
+      if (left <= 0) clearInterval(window._pairTimer);
+    };
+    tick(); window._pairTimer = setInterval(tick, 1000);
+    if (typeof track === 'function') track('generate_pairing_code');
+  } catch (e) {
+    console.warn('[Pairing]', e);
+    toast('Génération impossible · réessayez dans un instant', 'warn');
+  } finally {
+    if (btn) btn.style.pointerEvents = '';
+    if (label) label.textContent = prev;
   }
 };
 
