@@ -18722,10 +18722,48 @@ textarea:focus-visible {
         </div>
       </div>
 
-      <div class="bento" style="padding:24px;text-align:center;">
-        <p style="font-family:var(--sans);font-size:13px;color:var(--cream-mute);margin:0;line-height:1.6;">
-          Statistiques en lecture seule basées sur la BDD Supabase. <strong style="color:var(--cream);">Export CSV disponible</strong> sur demande via le tableau de bord.
-        </p>
+      <!-- ============ BILAN COMMERCIAL (PR-HUB-09) ============ -->
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:16px;margin-bottom:24px;">
+        <div class="bento" style="padding:24px;">
+          <h3 class="prog-evolution-title" style="margin-bottom:14px;">— Chiffre d'affaires</h3>
+          <div style="display:flex;gap:28px;flex-wrap:wrap;">
+            <div><div id="bilanCaOk" style="font-family:var(--mono);font-size:26px;color:var(--green-perf);">—</div><div style="font-family:var(--mono);font-size:10px;letter-spacing:0.15em;text-transform:uppercase;color:var(--cream-mute);">Encaissé</div></div>
+            <div><div id="bilanCaPending" style="font-family:var(--mono);font-size:26px;color:var(--gold-data);">—</div><div style="font-family:var(--mono);font-size:10px;letter-spacing:0.15em;text-transform:uppercase;color:var(--cream-mute);">En attente</div></div>
+            <div><div id="bilanFactures" style="font-family:var(--mono);font-size:26px;color:var(--offwhite);">—</div><div style="font-family:var(--mono);font-size:10px;letter-spacing:0.15em;text-transform:uppercase;color:var(--cream-mute);">Factures émises</div></div>
+          </div>
+        </div>
+        <div class="bento" style="padding:24px;">
+          <h3 class="prog-evolution-title" style="margin-bottom:14px;">— Pipeline CRM</h3>
+          <div id="bilanCrm" style="display:flex;gap:8px;flex-wrap:wrap;">
+            <span style="font-family:var(--sans);font-size:12px;color:var(--cream-mute);">Chargement…</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="bento" style="padding:24px;margin-bottom:24px;">
+        <h3 class="prog-evolution-title" style="margin-bottom:14px;">— Remplissage des prochaines sessions</h3>
+        <div id="bilanRemplissage" style="display:flex;flex-direction:column;gap:12px;">
+          <span style="font-family:var(--sans);font-size:12px;color:var(--cream-mute);">Chargement…</span>
+        </div>
+      </div>
+
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:16px;margin-bottom:24px;">
+        <div class="bento" style="padding:24px;">
+          <h3 class="prog-evolution-title" style="margin-bottom:10px;">— Export compta (micro-entreprise)</h3>
+          <p style="font-family:var(--sans);font-size:12px;color:var(--cream-mute);margin:0 0 14px;line-height:1.5;">Paiements + factures/avoirs de la période, en CSV (compatible Excel).</p>
+          <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap;">
+            <input type="month" id="bilanExportMonth" style="background:rgba(0,0,0,0.4);border:1px solid var(--bento-border);color:var(--cream);padding:9px 12px;border-radius:6px;font-family:var(--mono);" />
+            <button class="btn btn-sm" onclick="exportComptaCsv()"><span>Exporter le CSV</span></button>
+          </div>
+        </div>
+        <div class="bento" style="padding:24px;">
+          <h3 class="prog-evolution-title" style="margin-bottom:10px;">— À venir</h3>
+          <p style="font-family:var(--sans);font-size:12px;color:var(--cream-mute);margin:0;line-height:1.7;">
+            <strong style="color:var(--cream);">NPS moyen</strong> : disponible avec les retours clients post-session (PR-HUB-07).<br/>
+            <strong style="color:var(--cream);">Parrainages actifs</strong> : disponible avec le module parrainage (PR-HUB-03).<br/>
+            <strong style="color:var(--cream);">Conversion visite → réservation</strong> : via Vercel Analytics (événements déjà émis).
+          </p>
+        </div>
       </div>
     </main>
   </div>
@@ -23931,10 +23969,102 @@ window.loadAdminStats = async function() {
     
     // Calculer la répartition des offres depuis registrations
     await loadAdminStatsOfferDistribution();
+
+    // Bilan commercial (PR-HUB-09)
+    loadAdminBilan();
     
     console.log(`[Admin Stats] ${data.active_pilotes} pilotes actifs, CA mois: ${data.revenue_this_month}€, ${data.upcoming_sessions} sessions à venir`);
   } catch (e) {
     console.warn('[Admin Stats] Exception:', e);
+  }
+};
+
+/* ===================== BILAN ADMIN (PR-HUB-09) =====================
+   CA encaissé/en attente, factures, pipeline CRM, remplissage sessions.
+   Lecture via RLS admin — aucune écriture. */
+const CRM_BILAN_LABELS = { lead: 'Lead', contacted: 'Contacté', qualified: 'Qualifié', proposal: 'Proposition', won: 'Gagné', lost: 'Perdu' };
+const eurFmt = c => (c / 100).toLocaleString('fr-FR', { maximumFractionDigits: 0 }) + ' €';
+
+window.loadAdminBilan = async function() {
+  try {
+    // Pré-remplit le sélecteur d'export sur le mois courant
+    const mEl = document.getElementById('bilanExportMonth');
+    if (mEl && !mEl.value) mEl.value = new Date().toISOString().slice(0, 7);
+    // CA + factures
+    const [{ data: pays }, { count: nbInv }] = await Promise.all([
+      supabase.from('payments').select('amount, status'),
+      supabase.from('invoices').select('id', { count: 'exact', head: true })
+    ]);
+    const ok = (pays || []).filter(p => p.status === 'succeeded').reduce((s, p) => s + (p.amount || 0), 0);
+    const pend = (pays || []).filter(p => p.status === 'pending').reduce((s, p) => s + (p.amount || 0), 0);
+    const set = (id, v) => { const el = document.getElementById(id); if (el) el.textContent = v; };
+    set('bilanCaOk', eurFmt(ok)); set('bilanCaPending', eurFmt(pend)); set('bilanFactures', String(nbInv ?? 0));
+
+    // Pipeline CRM (metadata.crm.lead_status des leads)
+    const { data: leads } = await supabase.from('contact_messages').select('metadata');
+    const counts = {};
+    (leads || []).forEach(l => { const s = l.metadata?.crm?.lead_status; if (s) counts[s] = (counts[s] || 0) + 1; });
+    const crmEl = document.getElementById('bilanCrm');
+    if (crmEl) {
+      const keys = Object.keys(CRM_BILAN_LABELS).filter(k => counts[k]);
+      crmEl.innerHTML = keys.length
+        ? keys.map(k => `<span class="tag-inline ${k === 'won' ? 'green' : k === 'lost' ? 'red' : ''}" style="font-size:12px;">${CRM_BILAN_LABELS[k]} · ${counts[k]}</span>`).join('')
+        : '<span style="font-family:var(--sans);font-size:12px;color:var(--cream-mute);">Aucun lead qualifié pour le moment.</span>';
+    }
+
+    // Remplissage des 8 prochaines sessions
+    const today = new Date().toISOString().split('T')[0];
+    const [{ data: sess }, { data: regs }] = await Promise.all([
+      supabase.from('sessions').select('id, date, max_capacity, status, is_private').gte('date', today).neq('status', 'cancelled').order('date').limit(8),
+      supabase.from('registrations').select('session_id, status').neq('status', 'cancelled')
+    ]);
+    const perSession = {};
+    (regs || []).forEach(r => { perSession[r.session_id] = (perSession[r.session_id] || 0) + 1; });
+    const rEl = document.getElementById('bilanRemplissage');
+    if (rEl) {
+      rEl.innerHTML = (sess || []).length ? (sess || []).map(s => {
+        const n = perSession[s.id] || 0, cap = s.max_capacity || 20;
+        const pct = Math.min(100, Math.round((n / cap) * 100));
+        const d = new Date(s.date).toLocaleDateString('fr-FR', { weekday: 'short', day: 'numeric', month: 'short', year: 'numeric' });
+        return `<div>
+          <div style="display:flex;justify-content:space-between;font-family:var(--mono);font-size:11px;margin-bottom:5px;">
+            <span style="color:var(--cream);">${d}${s.is_private ? ' · privatisée' : ''}</span>
+            <span style="color:${pct >= 100 ? 'var(--green-perf)' : 'var(--cream-mute)'};">${n}/${cap}</span>
+          </div>
+          <div class="prog-pillar-bar"><div class="prog-pillar-fill" style="width:${pct}%;background:${pct >= 100 ? 'var(--green-perf)' : 'var(--gold-data)'};"></div></div>
+        </div>`;
+      }).join('') : '<span style="font-family:var(--sans);font-size:12px;color:var(--cream-mute);">Aucune session à venir.</span>';
+    }
+  } catch (e) { console.warn('[Bilan]', e); }
+};
+
+/* Export CSV compta : paiements + factures/avoirs de la période (séparateur ; + BOM Excel). */
+window.exportComptaCsv = async function() {
+  const m = (document.getElementById('bilanExportMonth') || {}).value;
+  if (!m) { toast('Choisissez un mois', 'warn'); return; }
+  const start = m + '-01';
+  const end = new Date(new Date(start).getFullYear(), new Date(start).getMonth() + 1, 1).toISOString().slice(0, 10);
+  try {
+    const [{ data: pays, error: e1 }, { data: invs, error: e2 }] = await Promise.all([
+      supabase.from('payments').select('created_at, amount, status, reference, users:user_id(first_name,last_name)').gte('created_at', start).lt('created_at', end).order('created_at'),
+      supabase.from('invoices').select('number, type, issued_at, amount_total, customer').gte('issued_at', start).lt('issued_at', end).order('issued_at')
+    ]);
+    if (e1 || e2) throw (e1 || e2);
+    const esc = v => '"' + String(v ?? '').replace(/"/g, '""') + '"';
+    const rows = [['type', 'numero_reference', 'date', 'client', 'montant_eur', 'statut'].join(';')];
+    (invs || []).forEach(i => rows.push([i.type === 'credit_note' ? 'avoir' : 'facture', i.number, i.issued_at, esc(i.customer?.name || ''), (i.amount_total / 100).toFixed(2).replace('.', ','), 'emise'].join(';')));
+    (pays || []).forEach(p => rows.push(['paiement', p.reference || '', String(p.created_at).slice(0, 10), esc(`${p.users?.first_name || ''} ${p.users?.last_name || ''}`.trim()), (p.amount / 100).toFixed(2).replace('.', ','), p.status].join(';')));
+    if (rows.length === 1) { toast('Aucune donnée sur cette période', 'warn'); return; }
+    const blob = new Blob(['﻿' + rows.join('\r\n')], { type: 'text/csv;charset=utf-8' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url; a.download = `oxv-compta-${m}.csv`;
+    document.body.appendChild(a); a.click(); a.remove();
+    setTimeout(() => URL.revokeObjectURL(url), 4000);
+    toast(`Export ${m} : ${rows.length - 1} lignes`, 'ok');
+  } catch (e) {
+    console.warn('[Export compta]', e);
+    toast('Export impossible · réessayez', 'warn');
   }
 };
 
