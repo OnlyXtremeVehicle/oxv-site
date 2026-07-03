@@ -126,7 +126,9 @@ Positionnement dans les phases existantes selon dépendances (§5 du prompt maî
 | **PR-HUB-05** | Espace Coach : rôle `coach` (RLS stricte, jamais le financier), planning, élèves + éligibilité, comptes-rendus factuels (doctrine Mirror) visibles client/app ; admin coachs + licences 750 € | P1 | 4 Exploitation | HUB-02 (éligibilité affichée) |
 | **PR-HUB-07** | Retours clients : email J+1 (Resend), note/NPS/verbatim/autorisation, `session_feedback`, vue admin, alimente Preuves | P1 | 5 Croissance | sessions réelles |
 | **PR-HUB-06** | Partenaires étendu : page vendeuse + espace partenaire léger (rôle `partner`, kit marque, stats), pipeline admin | P1 | 5 Croissance | COMP-04 ✅ |
-| **PR-HUB-03** | Parrainage : `referral_codes`/`referrals`, code au signup/booking, anti-abus (récompense après paiement validé) | P1 | 5 Croissance | récompense à valider (Q5) + PSP |
+| **PR-HUB-03** | Parrainage **(re-spécifié 2026-07-01)** : pas de réduction — code parrain = **fast-track** (dispense validation admin) + entrée dans un **groupe social** + **hiérarchie** selon nb de filleuls (`referral_codes`/`referrals`/groupes/niveaux) | P1 | 5 Croissance | niveaux/avantages à préciser (Q5-bis) |
+| **PR-HUB-11** | **QDI assumé** : méthodologie 5 branches documentée avec vraies références + **visibilité publique opt-in par pilote** (`community_visibility`) | P1 | 4 Exploitation | décision Q3 ✅ |
+| **PR-HUB-12** | **Offre app Mirror sur le site** : vendre l'abonnement dès la phase 1 — pilote 15 €/mois ou 150 €/an · coach 750 €/saison · partenaire B2B (avantages dédiés) | P1 | 4 Exploitation | prix/avantages partenaire (Q10-bis) ; paiement réel : PSP après SIRET |
 | **PR-HUB-08** | SEO & **GEO** : blog Supabase (finir PR-SITE-12 + Brevo), schema.org complet (+`Event`, `LocalBusiness`), **`llms.txt`**, FAQ exhaustive, NAP, calendrier 10 articles | P1 | 5 Croissance | rien |
 | **PR-HUB-10** | Site vendeur : ≈ **fait** (design V2 12/12) — reste merge prod + Lighthouse ≥ 90 + visuels réels post-shooting | P0 | 6 Design | décision merge (Q9) |
 
