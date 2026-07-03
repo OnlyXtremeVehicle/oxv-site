@@ -16710,6 +16710,19 @@ textarea:focus-visible {
         <!-- ╔══════════════════════════════════════════════════════╗
              ║   APP NATIVE PROMO                                    ║
              ╚══════════════════════════════════════════════════════╝ -->
+        <!-- Mon coach (PR-HUB-05) — visible seulement si une relation active existe -->
+        <div class="bento" id="monCoachCard" style="display:none;padding:26px;margin-bottom:24px;border-color:rgba(74,140,255,0.22);">
+          <div style="font-family:var(--mono);font-size:10px;letter-spacing:0.22em;text-transform:uppercase;color:var(--blue-data);margin-bottom:12px;">Mon coach</div>
+          <div style="display:flex;align-items:center;gap:16px;flex-wrap:wrap;">
+            <img id="monCoachPhoto" src="" alt="" style="display:none;width:56px;height:56px;border-radius:50%;object-fit:cover;border:1px solid var(--bento-border);" />
+            <div style="flex:1;min-width:200px;">
+              <div id="monCoachName" style="font-family:var(--display);font-weight:600;font-size:17px;color:var(--offwhite);">—</div>
+              <div id="monCoachHeadline" style="font-family:var(--sans);font-size:13px;color:var(--cream-mute);margin-top:3px;"></div>
+            </div>
+            <span style="font-family:var(--sans);font-size:12px;color:var(--cream-mute);">Échanges et débriefs dans l'app OXV Mirror.</span>
+          </div>
+        </div>
+
         <div class="bento prog-app-promo">
           <div class="prog-app-tag">⬇ Prochainement</div>
           <h3 class="prog-app-title">L'application <em>OXV Mirror</em> arrive</h3>
@@ -17111,6 +17124,20 @@ textarea:focus-visible {
         </div>
 
         <div id="adminUpcomingSessions" class="admin-todo-list">
+          <div class="admin-empty">
+            <div class="admin-empty-icon">○</div>
+            <div class="admin-empty-text">Chargement…</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Coachs partenaires (PR-HUB-05) -->
+      <div class="admin-section">
+        <div class="admin-section-head">
+          <div class="admin-section-title">Coachs partenaires</div>
+          <span style="font-family:var(--mono);font-size:10px;color:var(--cream-mute);">Licence 750 € / saison · facturable via le module factures</span>
+        </div>
+        <div id="adminCoachRows" class="admin-todo-list">
           <div class="admin-empty">
             <div class="admin-empty-icon">○</div>
             <div class="admin-empty-text">Chargement…</div>
@@ -19876,6 +19903,15 @@ textarea:focus-visible {
       </div>
     </div>
 
+    <!-- Nos coachs partenaires (PR-HUB-05) — profils publiés, lus en direct -->
+    <div style="margin:56px 0;">
+      <h2 class="section-title" style="font-size:clamp(26px,3.5vw,38px);margin-bottom:10px;">Nos coachs partenaires.</h2>
+      <p style="font-family:var(--sans);font-size:14px;line-height:1.7;color:var(--cream-mute);max-width:620px;margin:0 0 24px;">Des coachs diplômés, indépendants, qui travaillent avec l'outil OXV. Chaque profil est publié par le coach lui-même.</p>
+      <div id="coachVitrineGrid" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px;">
+        <p style="font-family:var(--sans);font-size:13px;color:var(--cream-mute);margin:0;">Les profils des premiers coachs partenaires apparaîtront ici dès leur publication.</p>
+      </div>
+    </div>
+
     <!-- Cadre légal -->
     <div class="coach-legal">
       <div class="coach-legal-title">— Cadre légal · Transparence</div>
@@ -20995,6 +21031,9 @@ window.goTo = function(page, opts) {
   }
   if (page === 'plateau') {
     setTimeout(() => { if (typeof window.loadPlateau === 'function') window.loadPlateau(); }, 150);
+  }
+  if (page === 'coach') {
+    setTimeout(() => { if (typeof window.loadCoachVitrine === 'function') window.loadCoachVitrine(); }, 150);
   }
 
   // Synchronisation URL (History API) + meta SEO
@@ -26839,6 +26878,9 @@ window.loadProgression = async function() {
     renderTelemetrySessions(telem || []);
   } catch (e) { renderTelemetrySessions([]); }
 
+  // Mon coach (PR-HUB-05)
+  if (typeof loadMonCoach === 'function') loadMonCoach();
+
   try {
     // 1. Prénom du pilote (pour les messages)
     let firstName = '';
@@ -27257,6 +27299,106 @@ window.downloadInvoice = async function(path, number) {
     console.warn('[Factures] download', e);
     toast('Téléchargement impossible · réessayez', 'warn');
   }
+};
+
+/* ===================== ESPACE COACH (PR-HUB-05) =====================
+   Le site se branche sur l'écosystème coach EXISTANT de l'app (coach_profiles,
+   coach_pilots, coach_reviews) — aucun modèle parallèle. RLS déjà en place :
+   profils publiés lisibles par tous, relation lisible par le pilote, admin tout. */
+
+window.loadCoachVitrine = async function() {
+  const grid = document.getElementById('coachVitrineGrid');
+  if (!grid || typeof supabase === 'undefined') return;
+  try {
+    const { data: profiles, error } = await supabase.from('coach_profiles')
+      .select('coach_id, headline, bio, specialties, palmares, photo_url, season_price_eur, instagram_url, youtube_url, website_url')
+      .eq('is_published', true).limit(12);
+    if (error || !profiles || !profiles.length) return; // état vide honnête conservé
+    // Note moyenne (lisible connecté uniquement — dégradation propre en anonyme)
+    let ratings = {};
+    try {
+      const { data: revs } = await supabase.from('coach_reviews').select('coach_id, rating');
+      (revs || []).forEach(r => { (ratings[r.coach_id] = ratings[r.coach_id] || []).push(r.rating); });
+    } catch (e) {}
+    grid.innerHTML = profiles.map(p => {
+      const rs = ratings[p.coach_id];
+      const avg = rs && rs.length ? (rs.reduce((a, b) => a + b, 0) / rs.length).toFixed(1) : null;
+      const specs = Array.isArray(p.specialties) ? p.specialties.slice(0, 3).join(' · ') : (p.specialties || '');
+      const links = [
+        p.instagram_url ? `<a href="${escapeHtml(p.instagram_url)}" target="_blank" rel="noopener" style="color:var(--cream-mute);font-family:var(--mono);font-size:10px;">Instagram</a>` : '',
+        p.youtube_url ? `<a href="${escapeHtml(p.youtube_url)}" target="_blank" rel="noopener" style="color:var(--cream-mute);font-family:var(--mono);font-size:10px;">YouTube</a>` : '',
+        p.website_url ? `<a href="${escapeHtml(p.website_url)}" target="_blank" rel="noopener" style="color:var(--cream-mute);font-family:var(--mono);font-size:10px;">Site</a>` : ''
+      ].filter(Boolean).join(' · ');
+      return `<div class="bento" style="padding:24px;">
+        <div style="display:flex;align-items:center;gap:14px;margin-bottom:12px;">
+          ${p.photo_url ? `<img src="${escapeHtml(p.photo_url)}" alt="" loading="lazy" style="width:52px;height:52px;border-radius:50%;object-fit:cover;border:1px solid var(--bento-border);" />` : ''}
+          <div>
+            <div style="font-family:var(--display);font-weight:600;font-size:16px;color:var(--offwhite);">${escapeHtml(p.headline || 'Coach OXV')}</div>
+            ${avg ? `<div style="font-family:var(--mono);font-size:11px;color:var(--gold-data);">${avg}/5 · ${ratings[p.coach_id].length} avis</div>` : ''}
+          </div>
+        </div>
+        ${specs ? `<div style="font-family:var(--mono);font-size:10px;letter-spacing:0.12em;text-transform:uppercase;color:var(--blue-data);margin-bottom:8px;">${escapeHtml(specs)}</div>` : ''}
+        ${p.bio ? `<p style="font-family:var(--sans);font-size:13px;line-height:1.6;color:var(--cream-mute);margin:0 0 10px;">${escapeHtml(String(p.bio).slice(0, 180))}${String(p.bio).length > 180 ? '…' : ''}</p>` : ''}
+        ${p.palmares ? `<p style="font-family:var(--sans);font-size:12px;line-height:1.5;color:var(--cream-faint);margin:0 0 10px;">${escapeHtml(String(p.palmares).slice(0, 120))}</p>` : ''}
+        <div style="display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;">
+          ${p.season_price_eur ? `<span style="font-family:var(--mono);font-size:13px;color:var(--gold-data);">${Number(p.season_price_eur).toLocaleString('fr-FR')} € / saison</span>` : '<span></span>'}
+          ${links ? `<span>${links}</span>` : ''}
+        </div>
+      </div>`;
+    }).join('');
+  } catch (e) { console.warn('[Coachs vitrine]', e); }
+};
+
+window.loadMonCoach = async function() {
+  if (!window.OXVApi?.user?.isLoggedIn) return;
+  const card = document.getElementById('monCoachCard');
+  if (!card) return;
+  try {
+    const uid = window.OXVApi.user.profile?.id;
+    const { data: rel } = await supabase.from('coach_pilots')
+      .select('coach_id, status, active').eq('pilot_id', uid).eq('active', true).limit(1);
+    if (!rel || !rel.length) return;
+    const { data: prof } = await supabase.from('coach_profiles')
+      .select('headline, photo_url').eq('coach_id', rel[0].coach_id).maybeSingle();
+    const nameEl = document.getElementById('monCoachName');
+    const headEl = document.getElementById('monCoachHeadline');
+    const photoEl = document.getElementById('monCoachPhoto');
+    if (nameEl) nameEl.textContent = prof?.headline || 'Votre coach OXV';
+    if (headEl) headEl.textContent = prof?.headline ? '' : 'Profil en cours de publication';
+    if (photoEl && prof?.photo_url) { photoEl.src = prof.photo_url; photoEl.style.display = ''; }
+    card.style.display = '';
+  } catch (e) { console.warn('[Mon coach]', e); }
+};
+
+window.loadAdminCoaches = async function() {
+  const box = document.getElementById('adminCoachRows');
+  if (!box) return;
+  try {
+    const [{ data: coaches }, { data: profiles }, { data: rels }] = await Promise.all([
+      supabase.from('users').select('id, first_name, last_name, email').eq('role', 'coach'),
+      supabase.from('coach_profiles').select('coach_id, is_published, season_price_eur'),
+      supabase.from('coach_pilots').select('coach_id, active')
+    ]);
+    if (!coaches || !coaches.length) {
+      box.innerHTML = '<div class="admin-empty"><div class="admin-empty-icon">○</div><div class="admin-empty-text">Aucun coach partenaire pour le moment. Les candidatures arrivent via la page Coach.</div></div>';
+      return;
+    }
+    const profByCoach = {}; (profiles || []).forEach(p => profByCoach[p.coach_id] = p);
+    const nbEleves = {}; (rels || []).forEach(r => { if (r.active) nbEleves[r.coach_id] = (nbEleves[r.coach_id] || 0) + 1; });
+    box.innerHTML = coaches.map(c => {
+      const p = profByCoach[c.id];
+      const pub = p ? (p.is_published ? '<span class="tag-inline green">Profil publié</span>' : '<span class="tag-inline gold">Profil brouillon</span>') : '<span class="tag-inline">Sans profil</span>';
+      return `<div style="display:flex;align-items:center;justify-content:space-between;gap:10px;padding:12px 14px;border-top:1px solid var(--bento-border);flex-wrap:wrap;">
+        <div>
+          <div style="font-family:var(--sans);font-size:14px;color:var(--cream);">${escapeHtml(`${c.first_name || ''} ${c.last_name || ''}`.trim() || c.email)}</div>
+          <div style="font-family:var(--mono);font-size:11px;color:var(--cream-mute);">${nbEleves[c.id] || 0} élève(s) actif(s)</div>
+        </div>
+        <div style="display:flex;align-items:center;gap:10px;">${pub}
+          <button class="admin-table-action" onclick="goToAdminPilote('${c.id}')">Fiche</button>
+        </div>
+      </div>`;
+    }).join('');
+  } catch (e) { console.warn('[Admin coachs]', e); }
 };
 
 /* Appairage app (PR-HUB-04) — génère un code de connexion via l'Edge Function pair-app.
@@ -27706,6 +27848,7 @@ window.loadAdminDashboard = async function() {
 
   refreshDemandesBadge();
   refreshInboxBadge();
+  if (typeof loadAdminCoaches === 'function') loadAdminCoaches();
 
   // Greeting
   const userId = window.OXVApi.user.profile?.id;
