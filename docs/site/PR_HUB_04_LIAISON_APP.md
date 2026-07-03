@@ -1,6 +1,6 @@
 # PR-HUB-04 — Liaison compte site ↔ app Mirror (audit + plan)
 
-> Surface : 🌐 site + 🗄️ DB + 📄 doc d'intégration app. Date : 2026-07-01. **Statut : audit ✅ / plan validé en interne / implémentation en cours.** Première PR-HUB (aucune dépendance fondateur).
+> Surface : 🌐 site + 🗄️ DB + 📄 doc d'intégration app. Date : 2026-07-01. **Statut : ✅ LIVRÉE** (migration + Edge Function déployée + UI compte + doc app). Première PR-HUB.
 
 ## 1. Audit de l'existant (vérifié live)
 
@@ -33,7 +33,13 @@ RLS : owner SELECT ses propres codes (affichage) ; **aucun INSERT/UPDATE client*
 Code 8 car. alphabet 32 symboles ≈ 1,1×10¹² combinaisons, fenêtre 10 min, usage unique, invalidation des précédents, rate-limit naturel (JWT requis pour générer) + verrou : 5 tentatives de redeem/min/IP via table de comptage. Jamais de code en clair dans les logs.
 
 ## 4. Critères d'acceptation
-- [ ] Un client connecté génère un code visible dans son espace, expirant à 10 min.
-- [ ] `redeem` avec code valide → token de session app ; code réutilisé/expiré → erreur propre.
-- [ ] RLS testée (anon/authenticated/autre user : aucun accès croisé).
-- [ ] Doc d'intégration app livrée.
+- [x] Un client connecté génère un code visible dans son espace, expirant à 10 min (UI préférences : `#pairCodeBtn/Box/Value/Timer` + compte à rebours ; `supabase.functions.invoke` attache le JWT).
+- [x] `redeem` code invalide/expiré → erreur propre (**testé en réel** : 400 `invalid_or_expired`) ; `generate` sans JWT → 401 (**testé en réel**). Redeem d'un code valide → `token_hash` magiclink (chemin vérifiable seulement depuis l'app — cf doc).
+- [x] RLS testée en base (**4/4** : anon = 0 · autre user = 0 · propriétaire = 1 · INSERT client refusé par RLS). Ligne de test supprimée.
+- [x] Doc d'intégration app livrée : [INTEGRATION_APP_PAIRING.md](INTEGRATION_APP_PAIRING.md).
+
+## 5. Livré
+- Migration `app_pairing_codes_hub04` (tables `app_pairing_codes` + `app_pairing_redeem_attempts`, RLS, index unique code actif).
+- Edge Function **`pair-app` v1** déployée (`generate` JWT requis / `redeem` rate-limité 10/min/IP hashée, consommation atomique, magiclink `token_hash`).
+- UI « Application OXV → Connecter l'app » dans Compte → Préférences (états honnêtes, code formaté `XXXX XXXX`, minuteur).
+- Reste côté app (autre dépôt) : écran de saisie + `verifyOtp` (doc fournie).
