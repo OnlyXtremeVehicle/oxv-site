@@ -17914,6 +17914,7 @@ textarea:focus-visible {
                   <th>Pilote</th>
                   <th>Offre</th>
                   <th>Statut</th>
+                  <th>Éligibilité</th>
                   <th>Paiement</th>
                   <th>Montant</th>
                   <th>Inscrit le</th>
@@ -17955,6 +17956,18 @@ textarea:focus-visible {
       <button class="btn btn-sm" onclick="adminCloseSessionEdit()"><span>Annuler</span></button>
       <button class="btn btn-primary" onclick="adminSaveSession()"><span>Enregistrer</span></button>
     </div>
+  </div>
+</div>
+
+<!-- ============ MODAL : ÉLIGIBILITÉ PILOTE (PR-HUB-02) ============ -->
+<div class="vmodal" id="eligibilityModal">
+  <div class="vmodal-card" style="max-width:640px;">
+    <button class="vmodal-close" onclick="document.getElementById('eligibilityModal').classList.remove('open')">×</button>
+    <div class="vmodal-eyebrow">— Check-up d'éligibilité</div>
+    <h2 class="vmodal-title" id="eligModalTitle">Éligibilité</h2>
+    <div id="eligModalStatus" style="font-family:var(--mono);font-size:12px;margin-bottom:16px;"></div>
+    <div id="eligModalItems" style="display:flex;flex-direction:column;gap:8px;"></div>
+    <p style="font-family:var(--sans);font-size:11px;color:var(--cream-faint);margin:16px 0 0;line-height:1.5;">Permis, pièce d'identité et assurance circuit suivent automatiquement la validation des documents — une décision manuelle prise ici prime. « Refus » demande un motif (visible en interne).</p>
   </div>
 </div>
 
@@ -26083,6 +26096,44 @@ window.deleteDocument = async function(docId, label) {
    ESPACE PILOTE — SESSIONS (lecture des inscriptions)
    ============================================================ */
 
+/* Bandeau éligibilité côté pilote (PR-HUB-02) — lecture seule, RLS = ses items. */
+async function renderClientEligibility(upcoming, containerEl) {
+  try {
+    const ids = (upcoming || []).map(r => r.id);
+    if (!ids.length || !containerEl) return;
+    const [{ data: aggs }, { data: items }] = await Promise.all([
+      supabase.from('registration_eligibility').select('registration_id, eligibility_status, ok_count, total_count').in('registration_id', ids),
+      supabase.from('eligibility_items').select('registration_id, item_key, status').in('registration_id', ids).in('status', ['pending','refused'])
+    ]);
+    if (!aggs || !aggs.length) return;
+    const byReg = {};
+    (items || []).forEach(i => { (byReg[i.registration_id] = byReg[i.registration_id] || []).push(i); });
+    const html = aggs.map(a => {
+      const reg = upcoming.find(r => r.id === a.registration_id);
+      const dateLbl = reg?.sessions?.date ? new Date(reg.sessions.date).toLocaleDateString('fr-FR', { day: 'numeric', month: 'long', year: 'numeric' }) : '';
+      const miss = (byReg[a.registration_id] || []);
+      const missLbl = miss.map(m => (ELIG_LABELS[m.item_key] || m.item_key) + (m.status === 'refused' ? ' (refusé)' : '')).join(' · ');
+      const theme = a.eligibility_status === 'GO'
+        ? { col: 'var(--green-perf)', border: 'rgba(74,222,128,0.35)', lbl: 'GO — vous êtes prêt à rouler' }
+        : a.eligibility_status === 'NO_GO'
+        ? { col: 'var(--red)', border: 'rgba(230,57,70,0.35)', lbl: 'NO-GO — un point est refusé' }
+        : { col: 'var(--gold-data)', border: 'rgba(201,162,74,0.35)', lbl: 'EN ATTENTE — check-up incomplet' };
+      const col = theme.col, lbl = theme.lbl;
+      return `<div style="border:1px solid ${theme.border};border-radius:10px;padding:14px 18px;margin-bottom:12px;background:var(--anthracite);">
+        <div style="display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;">
+          <div>
+            <div style="font-family:var(--mono);font-size:11px;letter-spacing:0.14em;color:${col};margin-bottom:4px;">CHECK-UP · ${a.ok_count}/${a.total_count}${dateLbl ? ' · session du ' + dateLbl : ''}</div>
+            <div style="font-family:var(--sans);font-size:14px;color:var(--cream);">${lbl}</div>
+            ${missLbl ? `<div style="font-family:var(--sans);font-size:12px;color:var(--cream-mute);margin-top:6px;">À compléter : ${missLbl}</div>` : ''}
+          </div>
+          ${a.eligibility_status !== 'GO' ? `<button class="btn btn-sm" onclick="goToAccount('compte-documents')"><span>Compléter mes documents</span></button>` : ''}
+        </div>
+      </div>`;
+    }).join('');
+    containerEl.insertAdjacentHTML('afterbegin', html);
+  } catch (e) { console.warn('[Éligibilité client]', e); }
+}
+
 // Map des offres (centralisée pour cohérence)
 const OFFER_LABELS = {
   access:    'Access',
@@ -26152,6 +26203,7 @@ window.loadMySessions = async function() {
   } else if (upcomingBlock && upcomingDiv) {
     upcomingBlock.style.display = 'block';
     upcomingDiv.innerHTML = renderSessionsTable(upcoming, /*isPast*/ false);
+    renderClientEligibility(upcoming, upcomingDiv); // PR-HUB-02 : bandeau GO/EN ATTENTE/NO-GO
   }
 
   // Affiche bloc past
@@ -30161,6 +30213,17 @@ window.loadAdminSessionDetail = async function() {
   currentAdminSessionData = sessionRes.data;
   currentAdminSessionRegs = regsRes.data || [];
 
+  // Éligibilité (PR-HUB-02) : agrégat GO/EN_ATTENTE/NO_GO par inscription
+  window._adminSDElig = {};
+  try {
+    const ids = currentAdminSessionRegs.map(r => r.id);
+    if (ids.length) {
+      const { data: elig } = await supabase.from('registration_eligibility')
+        .select('registration_id, eligibility_status, ok_count, total_count').in('registration_id', ids);
+      (elig || []).forEach(e => { window._adminSDElig[e.registration_id] = e; });
+    }
+  } catch (e) { console.warn('[Éligibilité]', e); }
+
   if (content) content.style.display = 'block';
 
   renderAdminSDHeader(currentAdminSessionData);
@@ -30310,6 +30373,75 @@ function renderAdminSDStats(s, regs) {
   }).join('');
 }
 
+/* ===================== ÉLIGIBILITÉ (PR-HUB-02) — validation admin ===================== */
+const ELIG_LABELS = {
+  permis: 'Permis de conduire', cni: 'Pièce d\'identité', assurance_circuit: 'Attestation assurance circuit',
+  controle_technique: 'Contrôle technique', pneus_freins: 'État pneus & freins', niveau_sonore: 'Niveau sonore',
+  casque: 'Casque', decharge: 'Décharge signée', briefing: 'Briefing sécurité'
+};
+const ELIG_ST = {
+  pending: { l: 'En attente', c: 'var(--gold-data)' },
+  ok:      { l: 'OK',        c: 'var(--green-perf)' },
+  refused: { l: 'Refusé',    c: 'var(--red)' },
+  na:      { l: 'N.A.',      c: 'var(--cream-mute)' }
+};
+
+window.eligOpenModal = async function(registrationId, pilotName) {
+  window._eligCurrentReg = registrationId;
+  const t = document.getElementById('eligModalTitle');
+  if (t) t.textContent = `Éligibilité — ${pilotName}`;
+  document.getElementById('eligibilityModal').classList.add('open');
+  await eligRenderModal();
+};
+
+async function eligRenderModal() {
+  const box = document.getElementById('eligModalItems');
+  const stEl = document.getElementById('eligModalStatus');
+  if (!box || !window._eligCurrentReg) return;
+  const { data: items, error } = await supabase.from('eligibility_items')
+    .select('id, item_key, status, note').eq('registration_id', window._eligCurrentReg);
+  if (error) { box.innerHTML = '<p style="color:var(--red);font-family:var(--sans);font-size:13px;">Erreur de chargement.</p>'; return; }
+  const order = Object.keys(ELIG_LABELS);
+  const sorted = (items || []).sort((a, b) => order.indexOf(a.item_key) - order.indexOf(b.item_key));
+  const okCount = sorted.filter(i => i.status === 'ok' || i.status === 'na').length;
+  const refused = sorted.filter(i => i.status === 'refused').length;
+  const agg = refused > 0 ? ['NO-GO', 'var(--red)'] : okCount === sorted.length ? ['GO', 'var(--green-perf)'] : ['EN ATTENTE', 'var(--gold-data)'];
+  if (stEl) stEl.innerHTML = `Statut : <strong style="color:${agg[1]};">${agg[0]}</strong> · ${okCount}/${sorted.length} points validés`;
+  box.innerHTML = sorted.map(i => {
+    const st = ELIG_ST[i.status] || ELIG_ST.pending;
+    const btn = (s, lbl) => `<button onclick="eligSetItem('${i.id}','${s}')" class="btn btn-sm" style="padding:5px 10px;font-size:11px;${i.status===s?'border-color:'+ELIG_ST[s].c+';color:'+ELIG_ST[s].c+';':''}"><span>${lbl}</span></button>`;
+    return `<div style="display:flex;align-items:center;justify-content:space-between;gap:10px;padding:10px 12px;border:1px solid var(--bento-border);border-radius:8px;flex-wrap:wrap;">
+      <div style="min-width:180px;">
+        <div style="font-family:var(--sans);font-size:13px;color:var(--cream);">${ELIG_LABELS[i.item_key] || i.item_key}</div>
+        <div style="font-family:var(--mono);font-size:10px;color:${st.c};">${st.l}${i.note ? ' · ' + escapeHtml(i.note) : ''}</div>
+      </div>
+      <div style="display:flex;gap:6px;">${btn('ok','OK')}${btn('refused','Refus')}${btn('na','N.A.')}${btn('pending','↺')}</div>
+    </div>`;
+  }).join('');
+}
+
+window.eligSetItem = async function(itemId, status) {
+  let note = null;
+  if (status === 'refused') {
+    note = prompt('Motif du refus (visible en interne) :') || null;
+    if (note === null) return; // annulé
+  }
+  const patch = { status, updated_at: new Date().toISOString() };
+  if (note !== null) patch.note = note;
+  if (status === 'pending') { patch.validated_by = null; patch.validated_at = null; patch.note = null; }
+  else { patch.validated_by = window.OXVApi?.user?.profile?.id || null; patch.validated_at = new Date().toISOString(); }
+  const { error } = await supabase.from('eligibility_items').update(patch).eq('id', itemId);
+  if (error) { toast(`Erreur : ${error.message}`, 'warn'); return; }
+  await eligRenderModal();
+  // rafraîchit le badge de la liste
+  try {
+    const { data: elig } = await supabase.from('registration_eligibility')
+      .select('registration_id, eligibility_status, ok_count, total_count')
+      .eq('registration_id', window._eligCurrentReg);
+    if (elig && elig[0]) { window._adminSDElig[window._eligCurrentReg] = elig[0]; renderAdminSDRegs(currentAdminSessionRegs); }
+  } catch (e) {}
+};
+
 function renderAdminSDRegs(regs) {
   const wrap = document.getElementById('adminSDRegsTableWrap');
   const tbody = document.getElementById('adminSDRegsTableBody');
@@ -30368,6 +30500,11 @@ function renderAdminSDRegs(regs) {
         actions.push(`<button class="admin-table-action" onclick="adminCancelRegistration('${r.id}')" style="border-color: rgba(196, 89, 89, 0.3); color: #E07878;">Annuler</button>`);
       }
 
+      const el = (window._adminSDElig || {})[r.id];
+      const eligBadge = el
+        ? `<button onclick="eligOpenModal('${r.id}','${escapeHtml(fullName)}')" style="cursor:pointer;background:none;border:1px solid ${el.eligibility_status==='GO'?'rgba(74,222,128,0.4)':el.eligibility_status==='NO_GO'?'rgba(230,57,70,0.5)':'rgba(201,162,74,0.4)'};color:${el.eligibility_status==='GO'?'var(--green-perf)':el.eligibility_status==='NO_GO'?'var(--red)':'var(--gold-data)'};font-family:var(--mono);font-size:10px;letter-spacing:0.08em;padding:5px 10px;border-radius:6px;white-space:nowrap;">${el.eligibility_status==='GO'?'GO':el.eligibility_status==='NO_GO'?'NO-GO':'ATTENTE'} · ${el.ok_count}/${el.total_count}</button>`
+        : '—';
+
       return `
         <tr>
           <td>
@@ -30376,6 +30513,7 @@ function renderAdminSDRegs(regs) {
           </td>
           <td>${offerLabels[r.offer_type] || r.offer_type}</td>
           <td><span class="admin-list-pill ${r.status}"><span class="dot"></span>${regStatusLabels[r.status] || r.status}</span></td>
+          <td>${eligBadge}</td>
           <td><span class="admin-list-pill ${payStatus}"><span class="dot"></span>${payLabel}</span></td>
           <td>${amount} €</td>
           <td>${formatDate(r.created_at)}</td>
