@@ -16381,6 +16381,18 @@ textarea:focus-visible {
         </div>
 
         <!-- ╔══════════════════════════════════════════════════════╗
+             ║   MES FACTURES (PR-HUB-01)                            ║
+             ╚══════════════════════════════════════════════════════╝ -->
+        <div class="account-section-title" style="font-family:var(--display);font-weight:600; font-size: 14px; letter-spacing: 0.22em; text-transform: uppercase; color: var(--gold); margin-bottom: 16px;">
+          — Mes factures
+        </div>
+        <div class="bento" style="padding:0;margin-bottom:24px;overflow:hidden;">
+          <div id="invoiceRows">
+            <div style="padding:32px;text-align:center;color:var(--cream-mute);font-family:var(--sans);font-size:13px;">Aucune facture pour le moment. Elles apparaissent ici automatiquement à la validation de votre paiement.</div>
+          </div>
+        </div>
+
+        <!-- ╔══════════════════════════════════════════════════════╗
              ║   HISTORIQUE DES RÈGLEMENTS                           ║
              ╚══════════════════════════════════════════════════════╝ -->
         <div class="account-section-title" style="font-family:var(--display);font-weight:600; font-size: 14px; letter-spacing: 0.22em; text-transform: uppercase; color: var(--gold); margin-bottom: 16px;">
@@ -16397,7 +16409,7 @@ textarea:focus-visible {
         <!-- INFO IMPORTANTE -->
         <div class="bento" style="padding:20px 24px;background:linear-gradient(90deg, rgba(255,183,3,0.04), rgba(18,18,18,0.7));border-left:3px solid var(--gold);">
           <p style="font-family:var(--sans);font-size:13px;color:var(--cream-mute);margin:0;line-height:1.6;">
-            <strong style="color:var(--cream);">À savoir :</strong> Vos factures comportant un numéro de TVA seront disponibles dès l'obtention du SIRET OXV (estimation : 2-3 semaines). Les paiements effectués avant cette date donneront lieu à une facture rétroactive.
+            <strong style="color:var(--cream);">À savoir :</strong> Votre facture est générée automatiquement à la validation du paiement et envoyée par email. Le SIRET OXV y figurera dès l'immatriculation ; les factures émises avant seront rééditées avec le numéro définitif. TVA non applicable, art. 293 B du CGI.
           </p>
         </div>
 
@@ -18080,6 +18092,10 @@ textarea:focus-visible {
 
       <!-- PAIEMENT OXV (lien sécurisé) -->
       <div class="bento" style="padding:24px;">
+        <h3 class="prog-evolution-title" style="margin-bottom:16px;">— Factures émises</h3>
+        <div id="adminInvoiceRows" style="margin-bottom:20px;">
+          <div style="padding:18px;color:var(--cream-mute);font-family:var(--sans);font-size:13px;">Aucune facture émise. Génération automatique à la validation d'un paiement.</div>
+        </div>
         <h3 class="prog-evolution-title" style="margin-bottom:16px;">— Paiement OXV</h3>
         <p style="font-family:var(--sans);font-size:14px;color:var(--cream-mute);margin:0;line-height:1.6;">Le paiement est géré par <strong style="color:var(--cream);">lien de paiement sécurisé</strong> (CB, Visa, PayPal, Apple Pay) envoyé aux pilotes. Aucune coordonnée bancaire à communiquer manuellement. Le lien s'active depuis la configuration <code style="font-family:var(--mono);color:var(--gold);">OXV_PAYMENT</code> (mode « link » + URL) une fois le prestataire de paiement en place.</p>
       </div>
@@ -20877,7 +20893,7 @@ window.goTo = function(page, opts) {
     setTimeout(() => loadHeritage(), 150);
   }
   if (page === 'compte-paiements') {
-    setTimeout(() => loadBilling(), 150);
+    setTimeout(() => { loadBilling(); if (typeof loadInvoices === 'function') loadInvoices(); }, 150);
   }
   if (page === 'compte-progression') {
     setTimeout(() => loadProgression(), 150);
@@ -26999,6 +27015,68 @@ window.loadPreferences = async function() {
   }
 };
 
+/* ===================== FACTURES (PR-HUB-01) =====================
+   Lecture RLS (le client ne voit que les siennes, l'admin tout) ; téléchargement
+   via storage.download sur le bucket privé 'invoices'. Génération = serveur. */
+function invRowHtml(inv, admin) {
+  const d = inv.issued_at ? new Date(inv.issued_at).toLocaleDateString('fr-FR', { day: '2-digit', month: 'short', year: 'numeric' }) : '—';
+  const amount = (inv.amount_total / 100).toLocaleString('fr-FR', { minimumFractionDigits: 2 }) + ' €';
+  const typ = inv.type === 'credit_note' ? '<span class="tag-inline red">Avoir</span>' : '<span class="tag-inline">Facture</span>';
+  return `<div style="display:flex;align-items:center;justify-content:space-between;gap:12px;padding:14px 20px;border-top:1px solid var(--bento-border);flex-wrap:wrap;">
+    <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap;">
+      <code style="font-family:var(--mono);font-size:13px;color:var(--offwhite);">${escapeHtml(inv.number)}</code>${typ}
+      <span style="font-family:var(--sans);font-size:12px;color:var(--cream-mute);">${d}</span>
+      ${admin && inv.customer && inv.customer.name ? `<span style="font-family:var(--sans);font-size:12px;color:var(--cream-mute);">· ${escapeHtml(inv.customer.name)}</span>` : ''}
+    </div>
+    <div style="display:flex;align-items:center;gap:14px;">
+      <span style="font-family:var(--mono);font-size:13px;color:var(--gold-data);">${amount}</span>
+      ${inv.pdf_path ? `<button class="btn btn-sm" onclick="downloadInvoice('${escapeHtml(inv.pdf_path)}','${escapeHtml(inv.number)}')"><span>PDF</span></button>` : ''}
+    </div>
+  </div>`;
+}
+
+window.loadInvoices = async function() {
+  if (!window.OXVApi?.user?.isLoggedIn) return;
+  const box = document.getElementById('invoiceRows');
+  if (!box) return;
+  try {
+    const { data, error } = await supabase.from('invoices')
+      .select('id, number, type, issued_at, amount_total, pdf_path')
+      .order('issued_at', { ascending: false }).limit(50);
+    if (error) { console.warn('[Factures]', error); return; }
+    if (!data || !data.length) return; // garde l'état vide honnête
+    box.innerHTML = data.map(i => invRowHtml(i, false)).join('');
+  } catch (e) { console.warn('[Factures]', e); }
+};
+
+window.loadAdminInvoices = async function() {
+  const box = document.getElementById('adminInvoiceRows');
+  if (!box) return;
+  try {
+    const { data, error } = await supabase.from('invoices')
+      .select('id, number, type, issued_at, amount_total, pdf_path, customer')
+      .order('created_at', { ascending: false }).limit(20);
+    if (error) { console.warn('[Admin factures]', error); return; }
+    if (!data || !data.length) return;
+    box.innerHTML = data.map(i => invRowHtml(i, true)).join('');
+  } catch (e) { console.warn('[Admin factures]', e); }
+};
+
+window.downloadInvoice = async function(path, number) {
+  try {
+    const { data, error } = await supabase.storage.from('invoices').download(path);
+    if (error) throw error;
+    const url = URL.createObjectURL(data);
+    const a = document.createElement('a');
+    a.href = url; a.download = `${number}.pdf`;
+    document.body.appendChild(a); a.click(); a.remove();
+    setTimeout(() => URL.revokeObjectURL(url), 4000);
+  } catch (e) {
+    console.warn('[Factures] download', e);
+    toast('Téléchargement impossible · réessayez', 'warn');
+  }
+};
+
 /* Appairage app (PR-HUB-04) — génère un code de connexion via l'Edge Function pair-app.
    Le JWT de session est attaché automatiquement par supabase.functions.invoke. */
 window.generatePairingCode = async function() {
@@ -27219,6 +27297,7 @@ window.goToAdmin = async function(page) {
   setTimeout(() => {
     if (page === 'admin-paiements' && typeof window.loadAdminPaiements === 'function') {
       window.loadAdminPaiements();
+      if (typeof window.loadAdminInvoices === 'function') window.loadAdminInvoices();
     } else if (page === 'admin-inbox' && typeof window.loadAdminInbox === 'function') {
       window.loadAdminInbox();
     } else if (page === 'admin-medias' && typeof window.loadAdminMedias === 'function') {
