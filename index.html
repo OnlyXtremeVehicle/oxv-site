@@ -24095,7 +24095,7 @@ function adminRenderPanel(sessionId, media, pilots) {
         <div class="amc-icon">${t.icon}</div>
         <div class="amc-body">
           <div class="amc-title">${escapeHtml(m.title || m.original_filename || t.label)}</div>
-          <div class="amc-url"><a href="${safeUrl}" target="_blank" rel="noopener" style="color:inherit;">${safeUrl}</a></div>
+          <div class="amc-url"><a href="#" onclick="event.preventDefault();openMediaUrl('${safeUrl}')" style="color:inherit;">${m.file_url && m.file_url.startsWith('storage:') ? '🔒 ' + escapeHtml(m.original_filename || 'fichier privé') : safeUrl}</a></div>
           <div class="amc-pilot">↳ ${pilotLabel} · ${t.label}</div>
         </div>
         <div class="amc-actions">
@@ -24129,7 +24129,11 @@ function adminRenderPanel(sessionId, media, pilots) {
         <input class="amp-input" id="amp-title-${sessionId}" placeholder="ex : Photos session 12 mai" />
       </div>
       <div class="amp-field full">
-        <label class="amp-label">Lien (URL complète)</label>
+        <label class="amp-label">Fichier (recommandé — nécessite un pilote ciblé)</label>
+        <input class="amp-input" id="amp-file-${sessionId}" type="file" accept="image/*,video/*,application/pdf" style="padding:8px;" />
+      </div>
+      <div class="amp-field full">
+        <label class="amp-label">…ou lien externe (URL complète)</label>
         <input class="amp-input" id="amp-url-${sessionId}" type="url" placeholder="https://…" />
       </div>
       <div class="amp-field full" style="margin-top:4px;">
@@ -24163,38 +24167,73 @@ window.adminDeleteMedia = async function(mediaId, sessionId) {
   loadAdminMedias();
 };
 
+/* PR-SITE-11 : upload RÉEL vers le bucket privé session-media (fichier) OU lien externe.
+   La policy storage lit par dossier pilote → un fichier uploadé exige un pilote ciblé. */
 window.adminSaveMedia = async function(sessionId) {
-  const url   = document.getElementById(`amp-url-${sessionId}`)?.value?.trim();
-  const title = document.getElementById(`amp-title-${sessionId}`)?.value?.trim();
-  const type  = document.getElementById(`amp-type-${sessionId}`)?.value || 'photo';
-  const pilot = document.getElementById(`amp-pilot-${sessionId}`)?.value || null;
+  const fileEl = document.getElementById(`amp-file-${sessionId}`);
+  const file   = fileEl?.files?.[0] || null;
+  const url    = document.getElementById(`amp-url-${sessionId}`)?.value?.trim();
+  const title  = document.getElementById(`amp-title-${sessionId}`)?.value?.trim();
+  const type   = document.getElementById(`amp-type-${sessionId}`)?.value || 'photo';
+  const pilot  = document.getElementById(`amp-pilot-${sessionId}`)?.value || null;
 
-  if (!url || !url.startsWith('http')) {
-    toast('URL invalide — doit commencer par https://', 'warn');
-    return;
-  }
-  if (!title) {
-    toast('Titre requis', 'warn');
-    return;
+  if (!title) { toast('Titre requis', 'warn'); return; }
+  if (!file && (!url || !url.startsWith('http'))) {
+    toast('Choisissez un fichier ou saisissez une URL https://', 'warn'); return;
   }
 
   const payload = {
     session_id:    sessionId,
     uploaded_by:   window.OXVApi?.user?.profile?.id,
     media_type:    type,
-    file_url:      url,
     title:         title,
     visible_to_user: false,
     published_at:  null
   };
   if (pilot) payload.user_id = pilot;
 
+  if (file) {
+    if (!pilot) { toast('Un fichier doit cibler un pilote (droits de lecture). Pour « tous les pilotes », utilisez un lien.', 'warn'); return; }
+    if (file.size > 100 * 1024 * 1024) { toast('Fichier trop lourd (100 Mo max)', 'warn'); return; }
+    const clean = file.name.replace(/[^a-zA-Z0-9._-]/g, '_').slice(0, 80);
+    const path = `${pilot}/${sessionId}/${Date.now()}_${clean}`;
+    toast('Envoi du fichier…', 'ok');
+    const { error: upErr } = await supabase.storage.from('session-media')
+      .upload(path, file, { contentType: file.type || 'application/octet-stream', upsert: false });
+    if (upErr) { toast(`Upload impossible : ${upErr.message}`, 'warn'); return; }
+    payload.file_url = 'storage:session-media/' + path;
+    payload.original_filename = file.name;
+    payload.file_size_kb = Math.round(file.size / 1024);
+  } else {
+    payload.file_url = url;
+  }
+
   const { error } = await supabase.from('media').insert(payload);
   if (error) { toast(`Erreur : ${error.message}`, 'warn'); return; }
 
   toast('✓ Média enregistré — cliquez « Publier » pour le rendre visible', 'ok');
+  if (fileEl) fileEl.value = '';
   await adminLoadPanel(sessionId);
   loadAdminMedias();
+};
+
+/* Résout un file_url : chemin storage privé → URL signée (1 h), sinon URL directe. */
+window.openMediaUrl = async function(fileUrl) {
+  try {
+    if (fileUrl && fileUrl.startsWith('storage:')) {
+      const rest = fileUrl.slice('storage:'.length);
+      const bucket = rest.split('/')[0];
+      const path = rest.slice(bucket.length + 1);
+      const { data, error } = await supabase.storage.from(bucket).createSignedUrl(path, 3600);
+      if (error) throw error;
+      window.open(data.signedUrl, '_blank', 'noopener');
+      return;
+    }
+    if (fileUrl) window.open(fileUrl, '_blank', 'noopener');
+  } catch (e) {
+    console.warn('[Média]', e);
+    toast('Ouverture impossible · vérifiez vos droits', 'warn');
+  }
 };
 
 /* ============================================================
@@ -26847,7 +26886,7 @@ function renderMediaCard(m) {
       <div class="media-card-body">
         <div class="media-card-title">${title}</div>
         <div class="media-card-meta">${escapeHtml(meta)}</div>
-        <a class="media-card-link" href="${escapeHtml(url)}" target="_blank" rel="noopener">${linkLabel}</a>
+        <a class="media-card-link" href="#" onclick="event.preventDefault();openMediaUrl('${escapeHtml(url)}')">${linkLabel}</a>
       </div>
     </div>`;
 }
