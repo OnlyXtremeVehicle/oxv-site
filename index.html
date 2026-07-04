@@ -657,20 +657,32 @@ h1, h2, h3, h4, h5 {
 }
 .mob.open { transform: translateY(0); }
 .mob-section { margin-bottom: 32px; }
-/* Desktop : le même menu devient un drawer latéral droit, condensé */
-@media (min-width: 1024px) {
-  .mob {
-    inset: 0 0 0 auto;
-    width: 440px;
-    transform: translateX(100%);
-    border-left: 1px solid var(--cream-line);
-    background: rgba(10, 10, 11, 0.98);
-    padding: 88px 44px 32px;
-  }
-  .mob.open { transform: translateX(0); }
-  .mob-link { font-size: 21px; padding: 5px 0; }
-  .mob-section { margin-bottom: 26px; }
+/* Menu visuel plein écran (façon grandes marques) — vignettes-images + colonnes compactes */
+.mob { background: rgba(5, 5, 5, 0.985); }
+.mob-visual { max-width: 1080px; margin: 0 auto; width: 100%; display: flex; flex-direction: column; gap: 32px; }
+.mob-featured { display: grid; grid-template-columns: 1fr; gap: 12px; }
+@media (min-width: 720px) { .mob-featured { grid-template-columns: 1fr 1fr; gap: 14px; } }
+.mob-tile {
+  position: relative; display: flex; flex-direction: column; justify-content: flex-end;
+  min-height: 150px; padding: 20px; border-radius: 12px; overflow: hidden; cursor: pointer;
+  border: 1px solid var(--cream-line); isolation: isolate;
 }
+@media (min-width: 720px) { .mob-tile { min-height: 200px; } }
+.mob-tile::before {
+  content: ''; position: absolute; inset: 0; z-index: -2;
+  background-image: var(--bg); background-size: cover; background-position: center;
+  transition: transform 0.6s var(--ease); filter: saturate(0.9) brightness(0.72);
+}
+.mob-tile::after { content: ''; position: absolute; inset: 0; z-index: -1; background: linear-gradient(180deg, rgba(5,5,5,0) 30%, rgba(5,5,5,0.85) 100%); }
+.mob-tile:hover::before { transform: scale(1.05); }
+.mob-tile-eyebrow { font-family: var(--mono); font-size: 9px; letter-spacing: 0.22em; text-transform: uppercase; color: var(--copper-glow); margin-bottom: 6px; }
+.mob-tile-title { font-family: var(--serif); font-style: italic; font-size: 26px; line-height: 1; color: var(--cream); }
+.mob-tile-sub { font-family: var(--sans); font-size: 12px; color: var(--cream-mute); margin-top: 5px; }
+.mob-more { display: grid; grid-template-columns: 1fr; gap: 24px; }
+@media (min-width: 560px) { .mob-more { grid-template-columns: repeat(3, 1fr); } }
+.mob-more-col a { display: block; font-family: var(--sans); font-size: 15px; padding: 6px 0; color: var(--cream); cursor: pointer; transition: color 0.2s; }
+.mob-more-col a:hover { color: var(--copper-glow); }
+@media (min-width: 1024px) { .mob { padding: 96px var(--gutter) 48px; } .mob-tile-title { font-size: 30px; } }
 .mob-label { font-family: var(--mono); font-size: 10px; letter-spacing: 0.22em; text-transform: uppercase; color: var(--copper-glow); margin-bottom: 14px; }
 .mob-link { display: block; font-family: var(--serif); font-size: 32px; font-weight: 300; padding: 8px 0; color: var(--cream); }
 .mob-link em { font-style: italic; color: var(--copper-glow); }
@@ -13308,37 +13320,53 @@ textarea:focus-visible {
 <!-- Mobile menu -->
 <div class="mob" id="mobMenu">
   <button class="modal-close" onclick="document.getElementById('mobMenu').classList.remove('open')">×</button>
-  <div class="mob-cols">
-  <div class="mob-section">
-    <div class="mob-label">Rouler</div>
-    <a class="mob-link" onclick="goTo('home'); closeMob()"><em>Accueil</em></a>
-    <a class="mob-link" onclick="goTo('offers'); closeMob()">Les offres</a>
-    <a class="mob-link" onclick="goTo('calendrier'); closeMob()">Calendrier</a>
-    <a class="mob-link" data-cta="reserve" onclick="ctaPrimaryGo(); closeMob()">Réserver</a>
-    <a class="mob-link" onclick="goTo('circuit'); closeMob()">Le circuit</a>
-  </div>
-  <div class="mob-section">
-    <div class="mob-label">Comprendre</div>
-    <a class="mob-link" onclick="goTo('application'); closeMob()">L'application</a>
-    <a class="mob-link" onclick="goTo('apres-journee'); closeMob()">Votre journée</a>
-    <a class="mob-link" onclick="goTo('securite'); closeMob()">Sécurité &amp; cadre</a>
-    <a class="mob-link" onclick="goTo('preuves'); closeMob()">Preuves &amp; garanties</a>
-  </div>
-  <div class="mob-section">
-    <div class="mob-label">Le cercle</div>
-    <a class="mob-link" onclick="goTo('founding'); closeMob()" style="color:var(--gold);">Founding Members</a>
-    <a class="mob-link" onclick="goTo('coach'); closeMob()">Coach partenaire</a>
-    <a class="mob-link" onclick="goTo('plateau'); closeMob()">Le plateau</a>
-  </div>
-  <div class="mob-section">
-    <div class="mob-label">OXV</div>
-    <a class="mob-link" onclick="goTo('corporate'); closeMob()">Corporate</a>
-    <a class="mob-link" onclick="goTo('partenaires'); closeMob()">Partenaires</a>
-    <a class="mob-link" onclick="goTo('presse'); closeMob()">Presse</a>
-    <a class="mob-link" onclick="goTo('about'); closeMob()">À propos</a>
-    <a class="mob-link" onclick="goTo('actualites'); closeMob()">Actualités</a>
-    <a class="mob-link" onclick="goTo('contact'); closeMob()">Contact</a>
-  </div>
+  <div class="mob-visual">
+    <div class="mob-featured">
+      <a class="mob-tile" onclick="goTo('offers'); closeMob()" style="--bg:url('img/offer-signature.webp')">
+        <span class="mob-tile-eyebrow">01 · Rouler</span>
+        <span class="mob-tile-title">Les offres</span>
+        <span class="mob-tile-sub">Access · Signature · Heritage</span>
+      </a>
+      <a class="mob-tile" onclick="goTo('circuit'); closeMob()" style="--bg:url('img/offer-access.webp')">
+        <span class="mob-tile-eyebrow">02 · Le lieu</span>
+        <span class="mob-tile-title">Le circuit</span>
+        <span class="mob-tile-sub">Tracé, données, accès</span>
+      </a>
+      <a class="mob-tile" onclick="goTo('application'); closeMob()" style="--bg:url('img/offer-heritage.webp')">
+        <span class="mob-tile-eyebrow">03 · Après la piste</span>
+        <span class="mob-tile-title">L'application</span>
+        <span class="mob-tile-sub">OXV Mirror · data &amp; médias</span>
+      </a>
+      <a class="mob-tile" onclick="goTo('corporate'); closeMob()" style="--bg:url('img/offer-signature.webp')">
+        <span class="mob-tile-eyebrow">04 · Entreprises</span>
+        <span class="mob-tile-title">Corporate</span>
+        <span class="mob-tile-sub">Privatisation sur mesure</span>
+      </a>
+    </div>
+    <div class="mob-more">
+      <div class="mob-more-col">
+        <div class="mob-label">Explorer</div>
+        <a onclick="goTo('calendrier'); closeMob()">Calendrier</a>
+        <a data-cta="reserve" onclick="ctaPrimaryGo(); closeMob()">Réserver une place</a>
+        <a onclick="goTo('apres-journee'); closeMob()">Votre journée</a>
+        <a onclick="goTo('securite'); closeMob()">Sécurité &amp; cadre</a>
+        <a onclick="goTo('preuves'); closeMob()">Preuves &amp; garanties</a>
+      </div>
+      <div class="mob-more-col">
+        <div class="mob-label">Le cercle</div>
+        <a onclick="goTo('founding'); closeMob()" style="color:var(--gold);">Founding Members</a>
+        <a onclick="goTo('coach'); closeMob()">Coach partenaire</a>
+        <a onclick="goTo('plateau'); closeMob()">Le plateau</a>
+      </div>
+      <div class="mob-more-col">
+        <div class="mob-label">OXV</div>
+        <a onclick="goTo('partenaires'); closeMob()">Partenaires</a>
+        <a onclick="goTo('presse'); closeMob()">Presse</a>
+        <a onclick="goTo('about'); closeMob()">À propos</a>
+        <a onclick="goTo('actualites'); closeMob()">Actualités</a>
+        <a onclick="goTo('contact'); closeMob()">Contact</a>
+      </div>
+    </div>
   </div>
   <div class="mob-actions">
     <button class="btn btn-ghost" id="mobAuth" onclick="goTo('login'); closeMob()">Se connecter</button>
