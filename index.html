@@ -18030,6 +18030,43 @@ textarea:focus-visible {
   </div>
 </div>
 
+<!-- ============ MODAL : MON RETOUR DE SESSION (PR-HUB-07) ============ -->
+<div class="vmodal" id="feedbackModal">
+  <div class="vmodal-card" style="max-width:560px;">
+    <button class="vmodal-close" onclick="document.getElementById('feedbackModal').classList.remove('open')">×</button>
+    <div class="vmodal-eyebrow">— Votre retour</div>
+    <h2 class="vmodal-title" id="fbModalTitle">Comment s'est passée votre journée ?</h2>
+    <div style="margin:14px 0;">
+      <div style="font-family:var(--sans);font-size:12px;color:var(--cream-mute);margin-bottom:8px;">Note globale</div>
+      <div id="fbStars" style="display:flex;gap:8px;">
+        <button class="btn btn-sm" onclick="fbSetRating(1)"><span>1</span></button>
+        <button class="btn btn-sm" onclick="fbSetRating(2)"><span>2</span></button>
+        <button class="btn btn-sm" onclick="fbSetRating(3)"><span>3</span></button>
+        <button class="btn btn-sm" onclick="fbSetRating(4)"><span>4</span></button>
+        <button class="btn btn-sm" onclick="fbSetRating(5)"><span>5</span></button>
+      </div>
+    </div>
+    <div style="margin:14px 0;">
+      <div style="font-family:var(--sans);font-size:12px;color:var(--cream-mute);margin-bottom:8px;">Recommanderiez-vous OXV ? (0 = pas du tout · 10 = absolument)</div>
+      <select id="fbNps" style="background:rgba(0,0,0,0.4);border:1px solid var(--bento-border);color:var(--cream);padding:9px 12px;border-radius:6px;font-family:var(--mono);">
+        <option value="">—</option>
+        <option>0</option><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option><option>6</option><option>7</option><option>8</option><option>9</option><option>10</option>
+      </select>
+    </div>
+    <div class="form-row full" style="margin:14px 0;">
+      <label>En un mot, votre journée ?</label>
+      <textarea id="fbComment" rows="3" placeholder="Ce qui vous a marqué, ce qu'on peut améliorer…" style="background:rgba(0,0,0,0.4);border:1px solid var(--bento-border);color:var(--cream);padding:10px 14px;border-radius:6px;width:100%;font-family:var(--sans);"></textarea>
+    </div>
+    <div class="consent" id="fbPublishOk" onclick="toggleConsent('fbPublishOk')" style="margin:14px 0;">
+      <div class="ck"></div>
+      <div class="text">J'autorise OXV à publier ce témoignage avec mon prénom sur la page Preuves. <span class="badge">optionnel</span></div>
+    </div>
+    <div style="display:flex;justify-content:flex-end;gap:8px;">
+      <button class="btn btn-primary" onclick="saveFeedback()"><span>Envoyer mon retour</span></button>
+    </div>
+  </div>
+</div>
+
 
 <!-- /admin-session-detail -->
 
@@ -18797,6 +18834,12 @@ textarea:focus-visible {
             <span style="font-family:var(--sans);font-size:12px;color:var(--cream-mute);">Chargement…</span>
           </div>
         </div>
+        <div class="bento" style="padding:24px;">
+          <h3 class="prog-evolution-title" style="margin-bottom:14px;">— Retours clients</h3>
+          <div id="bilanFeedback">
+            <span style="font-family:var(--sans);font-size:12px;color:var(--cream-mute);">Les retours arrivent après les premières sessions (email automatique J+1).</span>
+          </div>
+        </div>
       </div>
 
       <div class="bento" style="padding:24px;margin-bottom:24px;">
@@ -18818,7 +18861,6 @@ textarea:focus-visible {
         <div class="bento" style="padding:24px;">
           <h3 class="prog-evolution-title" style="margin-bottom:10px;">— À venir</h3>
           <p style="font-family:var(--sans);font-size:12px;color:var(--cream-mute);margin:0;line-height:1.7;">
-            <strong style="color:var(--cream);">NPS moyen</strong> : disponible avec les retours clients post-session (PR-HUB-07).<br/>
             <strong style="color:var(--cream);">Parrainages actifs</strong> : disponible avec le module parrainage (PR-HUB-03).<br/>
             <strong style="color:var(--cream);">Conversion visite → réservation</strong> : via Vercel Analytics (événements déjà émis).
           </p>
@@ -20315,8 +20357,9 @@ textarea:focus-visible {
         </ul>
       </div>
 
-      <h2 class="section-title" style="font-size:32px;margin-bottom:8px;">Ce qu'en <em>diront</em> les pilotes.</h2>
-      <div class="bento" style="padding:28px;text-align:center;">
+      <h2 class="section-title" style="font-size:32px;margin-bottom:8px;">Ce qu'en <em>disent</em> les pilotes.</h2>
+      <div id="testimonialsGrid" style="display:none;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px;margin-bottom:20px;"></div>
+      <div class="bento" id="testimonialsEmpty" style="padding:28px;text-align:center;">
         <p style="font-family:var(--sans);font-size:15px;line-height:1.7;color:var(--cream-mute);margin:0 0 18px;">2027 est notre première saison. Les retours pilotes et les images seront publiés <strong style="color:var(--cream);">ici, réels et vérifiables</strong> — jamais inventés. En attendant, jugez-nous sur ce qui est déjà vérifiable ci-dessus, et venez écrire la première page.</p>
         <div style="display:flex;gap:10px;flex-wrap:wrap;justify-content:center;">
           <button class="btn btn-primary btn-lg" onclick="ctaPrimaryGo()"><span>Réserver une session</span></button>
@@ -21140,6 +21183,9 @@ window.goTo = function(page, opts) {
   }
   if (page === 'coach') {
     setTimeout(() => { if (typeof window.loadCoachVitrine === 'function') window.loadCoachVitrine(); }, 150);
+  }
+  if (page === 'preuves') {
+    setTimeout(() => { if (typeof window.loadTestimonials === 'function') window.loadTestimonials(); }, 150);
   }
 
   // Synchronisation URL (History API) + meta SEO
@@ -24135,6 +24181,9 @@ window.loadAdminBilan = async function() {
     // Pré-remplit le sélecteur d'export sur le mois courant
     const mEl = document.getElementById('bilanExportMonth');
     if (mEl && !mEl.value) mEl.value = new Date().toISOString().slice(0, 7);
+
+    // Retours clients (PR-HUB-07)
+    loadAdminFeedback();
     // CA + factures
     const [{ data: pays }, { count: nbInv }] = await Promise.all([
       supabase.from('payments').select('amount, status'),
@@ -24181,6 +24230,41 @@ window.loadAdminBilan = async function() {
       }).join('') : '<span style="font-family:var(--sans);font-size:12px;color:var(--cream-mute);">Aucune session à venir.</span>';
     }
   } catch (e) { console.warn('[Bilan]', e); }
+};
+
+/* Retours clients côté admin (PR-HUB-07) : moyennes, alertes < 3, curation des témoignages. */
+window.loadAdminFeedback = async function() {
+  const box = document.getElementById('bilanFeedback');
+  if (!box) return;
+  try {
+    const { data: fbs, error } = await supabase.from('session_feedback')
+      .select('id, rating, nps, comment, publish_ok, published, created_at, users:user_id(first_name)')
+      .order('created_at', { ascending: false });
+    if (error || !fbs || !fbs.length) return; // état vide honnête conservé
+    const avg = a => a.length ? (a.reduce((s, v) => s + v, 0) / a.length) : null;
+    const avgR = avg(fbs.map(f => f.rating));
+    const npsVals = fbs.filter(f => f.nps != null).map(f => f.nps);
+    const avgN = avg(npsVals);
+    const alerts = fbs.filter(f => f.rating < 3);
+    const publishable = fbs.filter(f => f.publish_ok && f.comment);
+    box.innerHTML = `
+      <div style="display:flex;gap:22px;flex-wrap:wrap;margin-bottom:12px;">
+        <div><div style="font-family:var(--mono);font-size:22px;color:var(--gold-data);">${avgR.toFixed(1)}/5</div><div style="font-family:var(--mono);font-size:10px;letter-spacing:0.14em;text-transform:uppercase;color:var(--cream-mute);">Note · ${fbs.length} retour${fbs.length > 1 ? 's' : ''}</div></div>
+        ${avgN != null ? `<div><div style="font-family:var(--mono);font-size:22px;color:var(--offwhite);">${avgN.toFixed(1)}/10</div><div style="font-family:var(--mono);font-size:10px;letter-spacing:0.14em;text-transform:uppercase;color:var(--cream-mute);">NPS moyen</div></div>` : ''}
+        ${alerts.length ? `<div><div style="font-family:var(--mono);font-size:22px;color:var(--red);">${alerts.length}</div><div style="font-family:var(--mono);font-size:10px;letter-spacing:0.14em;text-transform:uppercase;color:var(--red);">Note(s) &lt; 3</div></div>` : ''}
+      </div>
+      ${publishable.length ? '<div style="font-family:var(--mono);font-size:10px;letter-spacing:0.14em;text-transform:uppercase;color:var(--cream-mute);margin-bottom:8px;">Témoignages autorisés</div>' + publishable.slice(0, 5).map(f => `
+        <div style="display:flex;justify-content:space-between;align-items:center;gap:10px;padding:8px 0;border-top:1px solid var(--bento-border);flex-wrap:wrap;">
+          <span style="font-family:var(--sans);font-size:12px;color:var(--cream-mute);max-width:70%;">${f.rating}/5 · ${escapeHtml(f.users?.first_name || 'Pilote')} — « ${escapeHtml(String(f.comment).slice(0, 70))}${String(f.comment).length > 70 ? '…' : ''} »</span>
+          <button class="admin-table-action ${f.published ? 'success' : ''}" onclick="adminTogglePublishFeedback('${f.id}', ${!f.published})">${f.published ? 'Publié ✓ · Retirer' : 'Publier'}</button>
+        </div>`).join('') : ''}`;
+  } catch (e) { console.warn('[Admin feedback]', e); }
+};
+window.adminTogglePublishFeedback = async function(id, published) {
+  const { error } = await supabase.from('session_feedback').update({ published }).eq('id', id);
+  if (error) { toast(`Erreur : ${error.message}`, 'warn'); return; }
+  toast(published ? 'Témoignage publié sur la page Preuves' : 'Témoignage retiré', 'ok');
+  loadAdminFeedback();
 };
 
 /* Export CSV compta : paiements + factures/avoirs de la période (séparateur ; + BOM Excel). */
@@ -26489,6 +26573,7 @@ window.loadMySessions = async function() {
   } else if (pastBlock && pastDiv) {
     pastBlock.style.display = 'block';
     pastDiv.innerHTML = renderSessionsTable(past, /*isPast*/ true);
+    renderFeedbackPrompts(past, pastDiv); // PR-HUB-07 : invitation à noter les journées effectuées
   }
 
   // Médias du pilote (photos, vidéos embarquées / drone)
@@ -27429,6 +27514,109 @@ window.loadCommunityVisibility = async function() {
     if (data) visReflect(data.community_visibility);
   } catch (e) {}
 };
+
+/* Témoignages publics (PR-HUB-07) — page Preuves, double accord pilote+admin. */
+window.loadTestimonials = async function() {
+  const grid = document.getElementById('testimonialsGrid');
+  if (!grid || typeof supabase === 'undefined') return;
+  try {
+    const { data, error } = await supabase.from('testimonials_public')
+      .select('display_name, rating, comment, session_date')
+      .order('session_date', { ascending: false }).limit(9);
+    if (error || !data || !data.length) return; // état vide honnête conservé
+    grid.innerHTML = data.map(t => `<div class="bento" style="padding:24px;">
+      <div style="font-family:var(--mono);font-size:12px;color:var(--gold-data);margin-bottom:10px;">${'★'.repeat(t.rating)}${'☆'.repeat(5 - t.rating)}</div>
+      <p style="font-family:var(--sans);font-size:14px;line-height:1.65;color:var(--cream);margin:0 0 12px;">« ${escapeHtml(t.comment)} »</p>
+      <div style="font-family:var(--mono);font-size:11px;color:var(--cream-mute);">${escapeHtml(t.display_name)} · ${t.session_date ? new Date(t.session_date).toLocaleDateString('fr-FR', { month: 'long', year: 'numeric' }) : ''}</div>
+    </div>`).join('');
+    grid.style.display = 'grid';
+    const empty = document.getElementById('testimonialsEmpty');
+    if (empty) empty.style.display = 'none';
+  } catch (e) { console.warn('[Témoignages]', e); }
+};
+
+/* ===================== RETOURS DE SESSION (PR-HUB-07) =====================
+   Le pilote note sa journée (résa EFFECTUÉE uniquement — RLS), autorise ou non la
+   publication ; l'admin cure ; le public ne voit que le double-accord (vue). */
+window._fbCurrent = { regId: null, rating: null, existingId: null };
+
+window.openFeedbackModal = function(regId, dateLbl, existing) {
+  window._fbCurrent = { regId, rating: existing?.rating || null, existingId: existing?.id || null };
+  const t = document.getElementById('fbModalTitle');
+  if (t) t.textContent = existing ? `Modifier mon retour — ${dateLbl}` : `Votre journée du ${dateLbl}`;
+  const nps = document.getElementById('fbNps'); if (nps) nps.value = existing?.nps ?? '';
+  const c = document.getElementById('fbComment'); if (c) c.value = existing?.comment || '';
+  const pub = document.getElementById('fbPublishOk');
+  if (pub) pub.classList.toggle('checked', !!existing?.publish_ok);
+  fbReflectStars();
+  document.getElementById('feedbackModal').classList.add('open');
+};
+window.fbSetRating = function(n) { window._fbCurrent.rating = n; fbReflectStars(); };
+function fbReflectStars() {
+  const btns = document.querySelectorAll('#fbStars .btn');
+  btns.forEach((b, i) => {
+    const on = window._fbCurrent.rating != null && i < window._fbCurrent.rating;
+    b.style.borderColor = on ? 'var(--gold-data)' : '';
+    b.style.color = on ? 'var(--gold-data)' : '';
+  });
+}
+window.saveFeedback = async function() {
+  const { regId, rating, existingId } = window._fbCurrent;
+  if (!regId) return;
+  if (!rating) { toast('Choisissez une note (1 à 5)', 'warn'); return; }
+  const npsV = (document.getElementById('fbNps') || {}).value;
+  const payload = {
+    rating,
+    nps: npsV === '' ? null : parseInt(npsV, 10),
+    comment: ((document.getElementById('fbComment') || {}).value || '').trim() || null,
+    publish_ok: !!document.getElementById('fbPublishOk')?.classList.contains('checked')
+  };
+  try {
+    let error;
+    if (existingId) {
+      ({ error } = await supabase.from('session_feedback').update(payload).eq('id', existingId));
+    } else {
+      const uid = window.OXVApi.user.profile?.id;
+      const { data: reg } = await supabase.from('registrations').select('session_id').eq('id', regId).maybeSingle();
+      ({ error } = await supabase.from('session_feedback').insert({ ...payload, registration_id: regId, user_id: uid, session_id: reg?.session_id }));
+    }
+    if (error) throw error;
+    if (typeof track === 'function') track('submit_feedback');
+    toast('Merci pour votre retour', 'ok');
+    document.getElementById('feedbackModal').classList.remove('open');
+    loadMySessions();
+  } catch (e) {
+    console.warn('[Feedback]', e);
+    toast('Enregistrement impossible · réessayez', 'warn');
+  }
+};
+
+/* Invites dans « Mes sessions » : chaque résa effectuée sans retour propose de noter. */
+async function renderFeedbackPrompts(past, containerEl) {
+  try {
+    const attended = (past || []).filter(r => r.status === 'attended');
+    if (!attended.length || !containerEl) return;
+    const ids = attended.map(r => r.id);
+    const { data: fbs } = await supabase.from('session_feedback')
+      .select('id, registration_id, rating, nps, comment, publish_ok').in('registration_id', ids);
+    const byReg = {}; (fbs || []).forEach(f => byReg[f.registration_id] = f);
+    const html = attended.map(r => {
+      const d = r.sessions?.date ? new Date(r.sessions.date).toLocaleDateString('fr-FR', { day: 'numeric', month: 'long', year: 'numeric' }) : '';
+      const fb = byReg[r.id];
+      const ex = fb ? JSON.stringify(fb).replace(/"/g, '&quot;') : 'null';
+      return fb
+        ? `<div style="display:flex;justify-content:space-between;align-items:center;gap:10px;border:1px solid var(--bento-border);border-radius:10px;padding:12px 16px;margin-bottom:10px;background:var(--anthracite);flex-wrap:wrap;">
+            <span style="font-family:var(--sans);font-size:13px;color:var(--cream-mute);">Votre retour du ${d} : <strong style="color:var(--gold-data);">${fb.rating}/5</strong>${fb.publish_ok ? ' · publication autorisée' : ''}</span>
+            <button class="btn btn-sm" onclick='openFeedbackModal("${r.id}","${d}",${ex})'><span>Modifier</span></button>
+          </div>`
+        : `<div style="display:flex;justify-content:space-between;align-items:center;gap:10px;border:1px solid rgba(201,162,74,0.35);border-radius:10px;padding:12px 16px;margin-bottom:10px;background:var(--anthracite);flex-wrap:wrap;">
+            <span style="font-family:var(--sans);font-size:13px;color:var(--cream);">Comment s'est passée votre journée du ${d} ?</span>
+            <button class="btn btn-primary btn-sm" onclick='openFeedbackModal("${r.id}","${d}",null)'><span>Donner mon avis</span></button>
+          </div>`;
+    }).join('');
+    containerEl.insertAdjacentHTML('afterbegin', html);
+  } catch (e) { console.warn('[Feedback prompts]', e); }
+}
 
 /* QDI du plateau (PR-HUB-11) — lecture vue publique opt-in, tri par RÉCENCE (jamais par score). */
 window.loadPlateauQdi = async function() {
