@@ -1,11 +1,12 @@
-# OXV — Roadmap maître consolidée (V1 + V1.1 + V2 + V2.1)
+# OXV — Roadmap maître consolidée (V1 + V1.1 + V2 + V2.1 + HUB)
 
-> Document d'orchestration unique pour les 4 dossiers :
-> - **V1** Plan d'action (fiabilisation) — PR-SITE-01 → 20
-> - **V1.1** Connexions site ↔ app + média — PR-SITE-21 → 31
-> - **V2** Refonte esthétique premium — PR-DESIGN-01 → 12
-> - **V2.1** Compléments stratégiques (lancement, leads, preuves, CRM) — PR-COMP-01 → 10
-> Date : 2026-06-30. Branche de travail : `claude/focused-lalande-d05140`. **Total : 53 PR.**
+> Document d'orchestration unique pour les 5 dossiers :
+> - **V1** Plan d'action (fiabilisation) — PR-SITE-01 → 20 · **✅ en prod (sauf 19/20)**
+> - **V1.1** Connexions site ↔ app + média — PR-SITE-21 → 31 · **site/DB ✅, écrans app 📱 restants**
+> - **V2** Refonte esthétique premium — PR-DESIGN-01 → 12 · **✅ livrée (DA V3, 12/12) sur `claude/design-v2`, merge à décider**
+> - **V2.1** Compléments stratégiques — PR-COMP-01 → 10 · **✅ en prod**
+> - **HUB** Prompt maître « site = base centrale » — **PR-HUB-01 → 10** (nouveaux, ci-dessous)
+> MàJ : 2026-07-01. Branche de travail : `claude/design-v2`. **Total : 63 PR.** État réel : `ETAT_DES_LIEUX_REPRISE.md`.
 
 ## Principe directeur (commun aux 3 dossiers)
 > Le site **vend** l'expérience. L'app **prolonge** la trace. L'admin **livre** les médias. Le client **retrouve** son histoire dans l'app.
@@ -113,6 +114,24 @@ Chaque PR touche une ou plusieurs surfaces. C'est **déterminant** pour savoir c
 | PR-SITE-19 | Découpage progressif d'`index.html` (config, client, services, pages, CSS) |
 | PR-SITE-20 | Décision architecture future (rester custom vs Astro/Next/Vite) |
 
+### 🏛️ Phase HUB — Le site devient la base centrale (prompt maître, 2026-07-01)
+Positionnement dans les phases existantes selon dépendances (§5 du prompt maître) :
+
+| PR | Objet | Prio | Phase d'accueil | Dépend de |
+|---|---|---|---|---|
+| **PR-HUB-04** | Liaison compte site ↔ app Mirror : code d'appairage court à durée limitée / QR / deep link, Edge Function, usage unique + doc d'intégration app | P0 | 2 Écosystème | rien (auth partagée ✅) |
+| **PR-HUB-02** | Check-up d'éligibilité pré-circuit : checklist par réservation (permis, CNI, assurance, véhicule, équipement, décharge, briefing), statut **GO/EN ATTENTE/NO-GO** client+admin+app, relances J-14/J-7/J-2 | P0 | 4 Exploitation | contenu checklist à valider (Q4) |
+| **PR-HUB-01** | Facturation : `invoices` séquentielles infalsifiables (`OXV-2027-0001`), snapshot, mentions micro-entreprise (« TVA non applicable, art. 293 B du CGI »), PDF via Edge Function, bucket privé, avoirs, email Resend | P0 | 4 Exploitation | SIRET (placeholder OK, Q1) |
+| **PR-HUB-09** | Bilan admin : CA encaissé/en attente, remplissage, pipeline CRM, conversion, NPS, parrainages + export CSV mensuel compta | P1 | 4 Exploitation | HUB-01 (CA facturé) |
+| **PR-HUB-05** | Espace Coach : rôle `coach` (RLS stricte, jamais le financier), planning, élèves + éligibilité, comptes-rendus factuels (doctrine Mirror) visibles client/app ; admin coachs + licences 750 € | P1 | 4 Exploitation | HUB-02 (éligibilité affichée) |
+| **PR-HUB-07** | Retours clients : email J+1 (Resend), note/NPS/verbatim/autorisation, `session_feedback`, vue admin, alimente Preuves | P1 | 5 Croissance | sessions réelles |
+| **PR-HUB-06** | Partenaires étendu : page vendeuse + espace partenaire léger (rôle `partner`, kit marque, stats), pipeline admin | P1 | 5 Croissance | COMP-04 ✅ |
+| **PR-HUB-03** | Parrainage **(re-spécifié 2026-07-01)** : pas de réduction — code parrain = **fast-track** (dispense validation admin) + entrée dans un **groupe social** + **hiérarchie** selon nb de filleuls (`referral_codes`/`referrals`/groupes/niveaux) | P1 | 5 Croissance | niveaux/avantages à préciser (Q5-bis) |
+| **PR-HUB-11** | **QDI assumé** : méthodologie 5 branches documentée avec vraies références + **visibilité publique opt-in par pilote** (`community_visibility`) | P1 | 4 Exploitation | décision Q3 ✅ |
+| **PR-HUB-12** | **Offre app Mirror sur le site** : vendre l'abonnement dès la phase 1 — pilote 15 €/mois ou 150 €/an · coach 750 €/saison · partenaire B2B (avantages dédiés) | P1 | 4 Exploitation | prix/avantages partenaire (Q10-bis) ; paiement réel : PSP après SIRET |
+| **PR-HUB-08** | SEO & **GEO** : blog Supabase (finir PR-SITE-12 + Brevo), schema.org complet (+`Event`, `LocalBusiness`), **`llms.txt`**, FAQ exhaustive, NAP, calendrier 10 articles | P1 | 5 Croissance | rien |
+| **PR-HUB-10** | Site vendeur : ≈ **fait** (design V2 12/12) — reste merge prod + Lighthouse ≥ 90 + visuels réels post-shooting | P0 | 6 Design | décision merge (Q9) |
+
 ### 🚦 Capstone — Gate production (P0, transverse)
 | PR | Objet |
 |---|---|
@@ -171,10 +190,12 @@ Pour **chaque** PR, je déroule la même boucle traçable :
 
 ---
 
-## 6. État d'avancement
+## 6. État d'avancement (MàJ 2026-07-01)
 
-- ✅ Audits : `AUDIT_GLOBAL_V1.md`, `PR_SITE_01_AUDIT_PII.md`, `PR_SITE_02_AUDIT_RLS.md`
-- ✅ PR-SITE-01, PR-SITE-02 livrées (2 commits + 1 migration prod)
-- 🔜 Prochaine : **Phase 1 — PR-SITE-03 (Contact réel)**
+- ✅ **En production (oxvehicle.fr)** : Phases 0-4 complètes + COMP-01→10 + gate COMP-10 (0 bloqueur P0).
+- ✅ **Design V2 (DA V3) 12/12** sur `claude/design-v2` — merge prod à décider.
+- 📱 Restant côté app (autre dépôt) : écrans 22/23/26/27/28/29 + migration A1 events.
+- 🔜 **Prochaine : PR-HUB-04 (liaison app)**, puis HUB-02 + HUB-01 (les 2 critiques opérationnelles), selon réponses au bloc de questions fondateur (`ETAT_DES_LIEUX_REPRISE.md` §4).
+- ⏭️ Dette : PR-SITE-19 (découpage) / PR-SITE-20 (ADR architecture) — étape 7 du prompt maître.
 
-Total programme : **53 PR** (20 + 11 + 12 + 10). Phases 0→1 = socle ; 2 = écosystème ; 3-4 = exploitation/conversion/lancement ; 5 = premium ; 6 = dette technique ; capstone = gate go-live (COMP-10).
+Total programme : **63 PR** (20 + 11 + 12 + 10 + 10).

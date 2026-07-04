@@ -16,14 +16,14 @@
 - **Migration A1** (dépréciation events) : code app `eventsService`/`adminAnalytics`/`dataExport`/`b2bReport` → `sessions`/`registrations` ; repoint FK `b2b_event_reports`/`event_partners`/`telemetry_sessions.event_id` → `sessions.id` ; drop `event_registrations` + `events` (greenfield, 0 donnée). Cf [PR_SITE_DEPRECATE_EVENTS](PR_SITE_DEPRECATE_EVENTS.md).
 - Recâblage écrans app (Pass/réservations/QR/galerie) sur le modèle canonique ; confirmer RLS own-row `registrations`/`payments` (authenticated).
 - Produire check-in (→ `registrations.attended`) pour allumer le KPI ; deep links `oxvcoach://` (handler + association de domaine) ; `send-session-cancelled` (email annulation).
-- **Durcissement P2** (defense-in-depth) : REVOKE/réduire les GRANT EXECUTE des fonctions SECURITY DEFINER, retirer le listing public des buckets `coach-media`/`partner-media`, consolider `oxv_is_admin()`→`is_admin()`.
+- **Durcissement P2** (defense-in-depth) : **audit livré 2026-07-04** → [SECURITE_P2_GRANTS_AUDIT.md](SECURITE_P2_GRANTS_AUDIT.md) (36 fonctions anon-exécutables catégorisées, migration prête, en attente d'accord fondateur + regard app) ; listing public buckets `coach-media`/`partner-media` et consolidation `oxv_is_admin()`→`is_admin()` à coordonner avec l'équipe app.
 - Convergence médias (galerie app ↔ `media`) + COMP-08 (politique média).
-- Hygiène perf DB (586 lints : rls_initplan, policies permissives multiples, FK non indexées, index inutilisés) — post-lancement.
+- Hygiène perf DB : **FK non indexées ✅ faites 2026-07-04** (65 index, migration `fk_indexes_perf_p2`, 0 restante) ; reste rls_initplan, policies permissives multiples, index inutilisés — post-lancement.
 
 ## 👤 En attente de toi (input/asset/décision)
 - **Identité légale** (SIRET / forme sociale / TVA) dans les mentions — dès l'immatriculation.
 - **COMP-05 Page Preuves** : photos, témoignages, captures Pass/Trace réels.
-- **COMP-06** : rédaction des articles SEO prioritaires (cadre livré) + brancher newsletter Brevo (stub).
+- **COMP-06** : rédaction des articles SEO prioritaires (cadre livré). Newsletter Brevo : **chaîne réelle livrée 2026-07-04** ([PR_SITE_12_NEWSLETTER_BREVO.md](PR_SITE_12_NEWSLETTER_BREVO.md)) — il ne manque que ta clé API Brevo + id de liste.
 - **Activation paiement** : choix PSP + lien + nom dans CGV.
 - **Micro-question B2B** : invité = compte `users` (→ `registrations`) ou invité sans compte (→ `session_guests`).
 
