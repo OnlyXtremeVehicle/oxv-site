@@ -5,13 +5,13 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
 <meta name="theme-color" content="#0A0A0A" />
 <!-- OXV Brand Icons -->
-<link rel="icon" type="image/svg+xml" href="/brand/favicon.svg">
-<link rel="icon" type="image/png" sizes="32x32" href="/brand/favicon-32.png">
-<link rel="icon" type="image/png" sizes="16x16" href="/brand/favicon-16.png">
-<link rel="icon" type="image/png" sizes="192x192" href="/brand/favicon-192.png">
-<link rel="apple-touch-icon" sizes="180x180" href="/brand/apple-touch-icon.png">
-<link rel="shortcut icon" href="/brand/favicon.ico">
-<meta name="description" content="OXV organise des track days confidentiels sur le tracé Beltoise au Circuit de Haute Saintonge. Vingt pilotes par session, télémétrie, coaching, média. Saison 2027." />
+<link rel="icon" type="image/svg+xml" href="/brand/favicon.svg?v=2">
+<link rel="icon" type="image/png" sizes="32x32" href="/brand/favicon-32.png?v=2">
+<link rel="icon" type="image/png" sizes="16x16" href="/brand/favicon-16.png?v=2">
+<link rel="icon" type="image/png" sizes="192x192" href="/brand/favicon-192.png?v=2">
+<link rel="apple-touch-icon" sizes="180x180" href="/brand/apple-touch-icon.png?v=2">
+<link rel="shortcut icon" href="/brand/favicon.ico?v=2">
+<meta name="description" content="OXV organise des track days confidentiels sur le tracé Beltoise au Circuit de Haute Saintonge. Vingt pilotes par session, télémétrie, médias livrés dans l'app. Saison 2027." />
 <meta name="robots" content="index, follow" />
 <link rel="canonical" href="https://www.oxvehicle.fr/" />
 <meta property="og:title" content="OXV — Track day signature · Circuit de Haute Saintonge" />
@@ -33033,7 +33033,10 @@ window.loadPlateau = async function() {
 function initFoundingBandeau() {
   const bandeau = document.getElementById('foundingBandeau');
   if (!bandeau) return;
-  bandeau.style.display = 'flex';
+  // Réservé aux visiteurs : masqué si déjà connecté (onAuthChange le régit ensuite).
+  const logged = !!(window.OXVApi && window.OXVApi.user && window.OXVApi.user.isLoggedIn);
+  bandeau.style.display = logged ? 'none' : 'flex';
+  if (logged) return;
   /* Bandeau statique sobre par défaut : aucune incitation chiffrée si le compteur n'est pas disponible. */
   if (typeof supabase !== 'undefined') {
     supabase.rpc('oxv_founding_count')
