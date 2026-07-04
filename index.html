@@ -16864,6 +16864,21 @@ textarea:focus-visible {
       </div>
 
       <div class="pref-section">
+        <div class="pref-section-title">Visibilité de mon QDI</div>
+        <div class="pref-row">
+          <div class="pref-row-info">
+            <div class="pref-row-title">Qui peut voir mon QDI ?</div>
+            <div class="pref-row-desc">Votre Quality Driving Index peut apparaître sur la page Plateau. C'est vous qui décidez : invisible, visible sans votre nom, ou visible avec votre nom. Jamais de classement — un affichage, pas un podium.</div>
+            <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:12px;">
+              <button class="btn btn-sm" id="visBtn-private" onclick="setCommunityVisibility('private')"><span>Privé</span></button>
+              <button class="btn btn-sm" id="visBtn-anonymous_only" onclick="setCommunityVisibility('anonymous_only')"><span>Anonyme</span></button>
+              <button class="btn btn-sm" id="visBtn-nominative" onclick="setCommunityVisibility('nominative')"><span>Avec mon nom</span></button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="pref-section">
         <div class="pref-section-title">Application OXV</div>
         <div class="pref-row">
           <div class="pref-row-info">
@@ -19969,6 +19984,15 @@ textarea:focus-visible {
           <div class="plateau-empty">Les membres apparaîtront ici à l'ouverture de la saison 2027.</div>
         </div>
       </div>
+
+      <!-- QDI du plateau (PR-HUB-11) — affichage opt-in, par récence, JAMAIS trié par score -->
+      <div style="margin-top: 64px;">
+        <div class="plateau-members-label">Le QDI du plateau</div>
+        <p style="font-family:var(--sans);font-size:13px;line-height:1.65;color:var(--cream-mute);max-width:620px;margin:8px 0 18px;">Chaque pilote choisit si son Quality Driving Index est visible — anonymement, avec son nom, ou pas du tout. Affichage par dernière session, <strong style="color:var(--cream);">jamais un classement</strong>.</p>
+        <div id="plateauQdi" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:12px;">
+          <div class="plateau-empty">Les QDI partagés apparaîtront ici après les premières sessions.</div>
+        </div>
+      </div>
     </div>
   </section>
 </div>
@@ -20167,6 +20191,17 @@ textarea:focus-visible {
           <p class="home-data-pillar-text">Écart-type entre vos tours, stabilité de performance sur la durée.</p>
         </div>
       </div>
+      <!-- Méthodologie & références (PR-HUB-11) — le QDI s'assume -->
+      <div class="bento reveal" style="padding:28px;margin-top:40px;max-width:860px;margin-left:auto;margin-right:auto;">
+        <div style="font-family:var(--mono);font-size:10px;letter-spacing:0.22em;text-transform:uppercase;color:var(--blue-data);margin-bottom:12px;">Méthodologie &amp; références</div>
+        <p style="font-family:var(--sans);font-size:14px;line-height:1.7;color:var(--cream-mute);margin:0 0 14px;">
+          Le QDI n'est pas une note magique : chaque dimension repose sur des mesures télémétriques établies de l'analyse de pilotage — cercle de friction pour le freinage et l'accélération, régularité des entrées volant pour la fluidité, écart-type des temps au tour pour la régularité. Le calcul est <strong style="color:var(--cream);">versionné</strong> (chaque analyse porte sa version d'algorithme) et vos données brutes restent <strong style="color:var(--cream);">exportables</strong> pour vérification.
+        </p>
+        <p style="font-family:var(--sans);font-size:12px;line-height:1.7;color:var(--cream-faint);margin:0;">
+          Références : Milliken &amp; Milliken, <em>Race Car Vehicle Dynamics</em> (SAE International, 1995) · Segers, <em>Analysis Techniques for Racecar Data Acquisition</em> (SAE, 2ᵉ éd., 2014) · Bentley, <em>Speed Secrets</em> (1998) · Taruffi, <em>The Technique of Motor Racing</em> (1958). Le QDI mesure la maîtrise, pas la vitesse — et n'établit aucun classement.
+        </p>
+      </div>
+
       <div class="home-data-cta reveal">
         <button class="btn btn-secondary" onclick="goTo('offers')"><span>Découvrir les offres →</span></button>
       </div>
@@ -20986,7 +21021,7 @@ window.goTo = function(page, opts) {
     setTimeout(() => loadProgression(), 150);
   }
   if (page === 'compte-preferences') {
-    setTimeout(() => loadPreferences(), 150);
+    setTimeout(() => { loadPreferences(); if (typeof loadCommunityVisibility === 'function') loadCommunityVisibility(); }, 150);
   }
 
   // Pages admin
@@ -21030,7 +21065,10 @@ window.goTo = function(page, opts) {
     setTimeout(() => { if (typeof window.loadFounding === 'function') window.loadFounding(); }, 150);
   }
   if (page === 'plateau') {
-    setTimeout(() => { if (typeof window.loadPlateau === 'function') window.loadPlateau(); }, 150);
+    setTimeout(() => {
+      if (typeof window.loadPlateau === 'function') window.loadPlateau();
+      if (typeof window.loadPlateauQdi === 'function') window.loadPlateauQdi();
+    }, 150);
   }
   if (page === 'coach') {
     setTimeout(() => { if (typeof window.loadCoachVitrine === 'function') window.loadCoachVitrine(); }, 150);
@@ -27299,6 +27337,53 @@ window.downloadInvoice = async function(path, number) {
     console.warn('[Factures] download', e);
     toast('Téléchargement impossible · réessayez', 'warn');
   }
+};
+
+/* ===================== VISIBILITÉ QDI (PR-HUB-11) ===================== */
+function visReflect(v) {
+  ['private','anonymous_only','nominative'].forEach(k => {
+    const b = document.getElementById('visBtn-' + k);
+    if (b) { b.style.borderColor = (k === v) ? 'var(--blue-data)' : ''; b.style.color = (k === v) ? 'var(--blue-data)' : ''; }
+  });
+}
+window.setCommunityVisibility = async function(v) {
+  if (!window.OXVApi?.user?.isLoggedIn) return;
+  const uid = window.OXVApi.user.profile?.id;
+  const { error } = await supabase.from('users').update({ community_visibility: v }).eq('id', uid);
+  if (error) { toast(`Erreur : ${error.message}`, 'warn'); return; }
+  visReflect(v);
+  toast(v === 'private' ? 'QDI privé' : v === 'nominative' ? 'QDI visible avec votre nom' : 'QDI visible en anonyme', 'ok');
+};
+window.loadCommunityVisibility = async function() {
+  if (!window.OXVApi?.user?.isLoggedIn) return;
+  try {
+    const { data } = await supabase.from('users').select('community_visibility').eq('id', window.OXVApi.user.profile?.id).maybeSingle();
+    if (data) visReflect(data.community_visibility);
+  } catch (e) {}
+};
+
+/* QDI du plateau (PR-HUB-11) — lecture vue publique opt-in, tri par RÉCENCE (jamais par score). */
+window.loadPlateauQdi = async function() {
+  const grid = document.getElementById('plateauQdi');
+  if (!grid || typeof supabase === 'undefined') return;
+  try {
+    const { data, error } = await supabase.from('qdi_public')
+      .select('display_name, nominative, margin_global, margin_zone, computed_at, sessions_count')
+      .order('computed_at', { ascending: false }).limit(24);
+    if (error || !data || !data.length) return; // état vide honnête conservé
+    const zoneLbl = z => z === 'green' ? 'Confortable' : z === 'orange' ? 'À explorer' : z === 'red' ? 'Terrain serré' : '';
+    grid.innerHTML = data.map(r => {
+      const score = (typeof oxvMarginScore === 'function') ? oxvMarginScore(r.margin_global) : Math.round(r.margin_global);
+      const d = r.computed_at ? new Date(r.computed_at).toLocaleDateString('fr-FR', { day: 'numeric', month: 'short' }) : '';
+      return `<div class="bento" style="padding:18px;">
+        <div style="display:flex;justify-content:space-between;align-items:baseline;gap:8px;">
+          <span style="font-family:var(--sans);font-size:13px;color:${r.nominative ? 'var(--offwhite)' : 'var(--cream-mute)'};">${escapeHtml(r.display_name)}</span>
+          <span style="font-family:var(--mono);font-size:22px;color:var(--gold-data);">${score == null ? '—' : score}<span style="font-size:11px;color:var(--cream-faint);">/100</span></span>
+        </div>
+        <div style="font-family:var(--mono);font-size:10px;color:var(--cream-faint);margin-top:6px;">${zoneLbl(r.margin_zone)}${r.sessions_count ? ' · ' + r.sessions_count + ' session' + (r.sessions_count > 1 ? 's' : '') : ''}${d ? ' · ' + d : ''}</div>
+      </div>`;
+    }).join('');
+  } catch (e) { console.warn('[QDI plateau]', e); }
 };
 
 /* ===================== ESPACE COACH (PR-HUB-05) =====================
