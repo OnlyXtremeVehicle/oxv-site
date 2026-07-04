@@ -15254,10 +15254,10 @@ textarea:focus-visible {
               <p><a href="mailto:corporate@oxvehicle.fr">corporate@oxvehicle.fr</a></p>
 
               <h3>Presse</h3>
-              <p><a href="mailto:presse@oxvehicle.fr">presse@oxvehicle.fr</a></p>
+              <p><a href="mailto:contact@oxvehicle.fr">contact@oxvehicle.fr</a></p>
 
               <h3>Données personnelles</h3>
-              <p><a href="mailto:privacy@oxvehicle.fr">privacy@oxvehicle.fr</a></p>
+              <p><a href="mailto:contact@oxvehicle.fr">contact@oxvehicle.fr</a></p>
             </div>
           </div>
         </div>
@@ -19773,7 +19773,7 @@ textarea:focus-visible {
     <div class="wrap">
       <div class="page-hero-eyebrow">Légal · Vie privée</div>
       <h1 class="page-hero-title">Politique de <em>confidentialité</em>.</h1>
-      <p class="page-hero-lede">Conforme au Règlement Général sur la Protection des Données (RGPD). Pour toute question : <a style="color: var(--copper-glow); border-bottom: 1px solid;" href="mailto:privacy@oxvehicle.fr">privacy@oxvehicle.fr</a>.</p>
+      <p class="page-hero-lede">Conforme au Règlement Général sur la Protection des Données (RGPD). Pour toute question : <a style="color: var(--copper-glow); border-bottom: 1px solid;" href="mailto:contact@oxvehicle.fr">contact@oxvehicle.fr</a>.</p>
     </div>
   </section>
   <section class="section">
@@ -19781,7 +19781,7 @@ textarea:focus-visible {
       <div class="prose">
 
         <h2>Responsable du traitement</h2>
-        <p><strong>OXV — Only Xtreme Vehicle</strong>, Le Petit Châtaignier, 17360 La Génétouze. Délégué à la protection des données : <a href="mailto:privacy@oxvehicle.fr">privacy@oxvehicle.fr</a>.</p>
+        <p><strong>OXV — Only Xtreme Vehicle</strong>, Le Petit Châtaignier, 17360 La Génétouze. Délégué à la protection des données : <a href="mailto:contact@oxvehicle.fr">contact@oxvehicle.fr</a>.</p>
 
         <h2>Données collectées et finalités</h2>
 
@@ -19834,7 +19834,7 @@ textarea:focus-visible {
           <li><strong>Opposition</strong> au traitement (notamment marketing et droit à l'image).</li>
           <li><strong>Retrait du consentement</strong> à tout moment (sans effet rétroactif).</li>
         </ul>
-        <p>Pour exercer vos droits : <a href="mailto:privacy@oxvehicle.fr">privacy@oxvehicle.fr</a>. Délai de réponse : 1 mois maximum.</p>
+        <p>Pour exercer vos droits : <a href="mailto:contact@oxvehicle.fr">contact@oxvehicle.fr</a>. Délai de réponse : 1 mois maximum.</p>
         <p>En cas de difficulté, vous pouvez introduire une réclamation auprès de la <strong>CNIL</strong> (3 place de Fontenoy, 75007 Paris, <a href="https://www.cnil.fr">www.cnil.fr</a>).</p>
 
         <h2>Cookies</h2>
@@ -23530,7 +23530,7 @@ window.submitCorporate = async function() {
     console.warn('[Corporate] Échec enregistrement, fallback mailto:', e);
     // Fallback mailto propre : le lead n'est jamais perdu si Supabase échoue
     const body = `${recap}\n\nContact : ${name} <${email}>`;
-    const mailto = `mailto:contact@oxvehicle.fr?subject=${encodeURIComponent('Demande corporate · ' + company)}&body=${encodeURIComponent(body)}`;
+    const mailto = `mailto:corporate@oxvehicle.fr?subject=${encodeURIComponent('Demande corporate · ' + company)}&body=${encodeURIComponent(body)}`;
     toast('Connexion impossible · votre logiciel mail s’ouvre pour finaliser', 'warn');
     window.location.href = mailto;
   } finally {
@@ -25444,15 +25444,10 @@ window.submitDemande = async function() {
     return;
   }
 
-  // Succès : accusés de réception (best-effort, n'empêche pas la candidature)
-  try {
-    supabase.functions.invoke('send-email', {
-      body: { template: 'candidature_recue', recipient: email, data: { first_name: first, email } }
-    });
-    supabase.functions.invoke('send-email', {
-      body: { template: 'candidature_recue_interne', data: { first_name: first, last_name: last, email, phone, city: v('dmd-city'), role: type } }
-    });
-  } catch (e) { console.warn('[demande] email accusé:', e); }
+  // Accusé de réception : géré côté SERVEUR par le trigger DB trg_application_ack
+  // (Edge send-application-ack, idempotent via ack_sent_at — approuvé fondateur
+  // 2026-07-04). Anciens invokes 'send-email' retirés : fonction inexistante,
+  // appels morts depuis l'origine.
   // Succès : message + retour accueil
   toast('✓ Candidature envoyée — nous revenons vers vous', 'ok');
   // Réinitialise les champs
