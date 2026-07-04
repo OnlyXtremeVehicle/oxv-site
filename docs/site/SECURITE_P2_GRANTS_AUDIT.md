@@ -1,6 +1,6 @@
 # Sécurité P2 — Audit des GRANT EXECUTE sur les fonctions SECURITY DEFINER
 
-> Date : 2026-07-04. Audit live : **36 fonctions** SECURITY DEFINER du schéma `public` sont exécutables par `anon` (surface non authentifiée). Catégorisation ci-dessous. **Rien n'a été appliqué** : c'est une modification de la base partagée site+app → accord fondateur requis (et idéalement un coup d'œil équipe app).
+> Date : 2026-07-04. Audit live : **36 fonctions** SECURITY DEFINER du schéma `public` exécutables par `anon`. **✅ APPLIQUÉ le 2026-07-04 sur « oui » fondateur** (migration `definer_grants_hardening_p2_ab`) : catégories A+B révoquées, vérifié 36 → 14 fonctions anon-exécutables restantes (= C conservées par conception + D à traiter avec l'équipe app). Policy `contact_messages` également durcie (`contact_messages_insert_hardening_site30`, usurpation bloquée testée).
 
 ## Catégorie A — Révocation anon+authenticated SANS risque (15 fonctions trigger)
 Les fonctions trigger s'exécutent comme propriétaire de la table quand le trigger se déclenche ; le GRANT EXECUTE du rôle appelant n'y joue aucun rôle. Les révoquer ne change rien au fonctionnement, mais ferme un appel RPC direct inutile.
