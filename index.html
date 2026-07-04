@@ -21121,6 +21121,11 @@ window.addEventListener('pageshow', async (e) => {
   }
 });
 
+/* PR-SITE-30 — id du compte connecté (null si visiteur), pour lier les messages entrants au CRM */
+window.oxvCurrentUserId = function() {
+  try { return window.OXVApi?.user?.session?.user?.id || null; } catch (_) { return null; }
+};
+
 function onAuthChange() {
   const logged = window.OXVApi.user.isLoggedIn;
   const navAuth = document.getElementById('navAuth');
@@ -23318,6 +23323,7 @@ window.submitCorporate = async function() {
     subject:    `Demande corporate · ${company}`,
     message:    recap,
     source:     'corporate_form',
+    user_id:    oxvCurrentUserId(),
     metadata: {
       company,
       sector:           sector || null,
@@ -24804,6 +24810,7 @@ window.submitContact = async function() {
     subject:    subj ? subj.value : 'Question générale',
     message:    msg.value.trim(),
     source:     'contact_form',
+    user_id:    oxvCurrentUserId(),
     metadata:   { crm: { lead_status: 'lead', priority: 'normal' } }
   };
 
@@ -24862,6 +24869,7 @@ window.submitWaitlist = async function() {
     subject:    `Liste d'attente · ${preference}`,
     message:    recap,
     source:     'event_waitlist',
+    user_id:    oxvCurrentUserId(),
     metadata: {
       crm: { lead_status: 'lead', priority: 'normal' },
       preference,
@@ -24926,6 +24934,7 @@ window.submitPartner = async function() {
     subject:    `Partenaire · ${partnerType} · ${company.value.trim()}`,
     message:    recap,
     source:     'partner_form',
+    user_id:    oxvCurrentUserId(),
     metadata: {
       crm: { lead_status: 'lead', priority: 'normal' },
       company: company.value.trim(),
@@ -24994,6 +25003,7 @@ window.submitPress = async function() {
     subject:    `Presse · ${reqType} · ${outlet.value.trim()}`,
     message:    recap,
     source:     'press',
+    user_id:    oxvCurrentUserId(),
     metadata: {
       crm: { lead_status: 'lead', priority: 'normal' },
       media_outlet: outlet.value.trim(),
@@ -28423,7 +28433,7 @@ window.loadAdminInbox = async function() {
   try {
     const { data, error } = await supabase
       .from('contact_messages')
-      .select('id, first_name, last_name, email, phone, subject, message, source, status, read_at, replied_at, metadata, created_at')
+      .select('id, first_name, last_name, email, phone, subject, message, source, status, read_at, replied_at, metadata, created_at, user_id')
       .order('created_at', { ascending: false })
       .limit(200);
     if (error) {
@@ -28476,7 +28486,7 @@ window.inboxRender = function() {
     const date = m.created_at ? new Date(m.created_at).toLocaleDateString('fr-FR', { day: '2-digit', month: 'short', year: 'numeric' }) : '—';
     const unread = m.status === 'new';
     return `<tr style="border-bottom:1px solid var(--bento-border);${unread ? 'background:rgba(230,57,70,0.05);' : ''}">
-      <td style="padding:10px 12px;">${unread ? '<span class="status-dot ko"></span> ' : ''}${prio}${name}<div style="font-size:11px;color:var(--cream-mute);">${escapeHtml(m.email || '')}</div></td>
+      <td style="padding:10px 12px;">${unread ? '<span class="status-dot ko"></span> ' : ''}${prio}${name}<div style="font-size:11px;color:var(--cream-mute);">${escapeHtml(m.email || '')}${m.user_id ? ' <span class="tag-inline green" style="font-size:10px;">Compte</span>' : ''}</div></td>
       <td style="padding:10px 12px;"><span class="tag-inline">${escapeHtml(src)}</span></td>
       <td style="padding:10px 12px;color:var(--cream-mute);max-width:280px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${escapeHtml(m.subject || '—')}</td>
       <td style="padding:10px 12px;text-align:center;"><span class="tag-inline ${st.cls}">${st.label}</span>${crmBadge}</td>
@@ -28502,7 +28512,7 @@ window.inboxOpen = function(id) {
   setVal('inboxCrmPriority', crm.priority || 'normal');
   setVal('inboxCrmNext', crm.next_action);
   set('inboxModalTitle', escapeHtml(m.subject || 'Message'));
-  set('inboxModalMeta', `<strong>${escapeHtml(`${m.first_name || ''} ${m.last_name || ''}`.trim() || '—')}</strong> · <a href="mailto:${escapeHtml(m.email || '')}" style="color:var(--gold);">${escapeHtml(m.email || '')}</a>${m.phone ? (' · ' + escapeHtml(m.phone)) : ''}`);
+  set('inboxModalMeta', `<strong>${escapeHtml(`${m.first_name || ''} ${m.last_name || ''}`.trim() || '—')}</strong> · <a href="mailto:${escapeHtml(m.email || '')}" style="color:var(--gold);">${escapeHtml(m.email || '')}</a>${m.phone ? (' · ' + escapeHtml(m.phone)) : ''}${m.user_id ? ' · <span class="tag-inline green" style="font-size:10px;">Compte client lié</span>' : ''}`);
   set('inboxModalBody', (escapeHtml(m.message || '')).replace(/\n/g, '<br>'));
   set('inboxModalExtra', metaRows ? `<div style="margin-top:14px;font-size:12px;">${metaRows}</div>` : '');
   const noteEl = document.getElementById('inboxModalNote'); if (noteEl) noteEl.value = meta.admin_notes || '';
@@ -32538,7 +32548,8 @@ window.submitFoundingForm = async function() {
     email:      email,
     subject:    'Candidature Founding Members',
     message:    (vehicle ? `Véhicule : ${vehicle}\n\n` : '') + (message || '—'),
-    source:     'founding-form'
+    source:     'founding-form',
+    user_id:    oxvCurrentUserId()
   };
 
   try {
