@@ -18630,7 +18630,7 @@ textarea:focus-visible {
           Les articles sont enregistrés <strong style="color:var(--cream);">dans la base OXV</strong> (Supabase) et partagés entre tous les administrateurs. Ils alimentent directement la page <button class="link-inline" onclick="goTo('actualites')" style="background:none;border:none;color:var(--oxv-red);cursor:pointer;padding:0;font:inherit;">Actualités</button> publique, avec filtres par catégorie.
         </p>
         <p style="font-family:var(--sans);font-size:14px;color:var(--cream-mute);line-height:1.7;margin:0;">
-          <strong style="color:var(--cream);">Statuts :</strong> « Publié » apparaît sur la grille Actualités, « Brouillon » reste masqué du public. « Dépublier » retire un article de la grille sans le supprimer. Le calendrier éditorial regroupe les articles par mois selon leur date. Le bouton <strong style="color:var(--cream);">✉ Newsletter</strong> prépare la diffusion Brevo (point d'intégration prêt côté code, à brancher sur l'API).
+          <strong style="color:var(--cream);">Statuts :</strong> « Publié » apparaît sur la grille Actualités, « Brouillon » reste masqué du public. « Dépublier » retire un article de la grille sans le supprimer. Le calendrier éditorial regroupe les articles par mois selon leur date. Le bouton <strong style="color:var(--cream);">✉ Newsletter</strong> diffuse l'article en campagne Brevo à la liste d'abonnés — une seule diffusion par article (confirmation pour re-diffuser). Tant que la clé API Brevo n'est pas configurée, rien n'est envoyé et le bouton l'indique honnêtement.
         </p>
       </div>
     </main>
@@ -22240,20 +22240,28 @@ window.adminArticleNewsletter = function(id) {
   oxvNewsletterPush(a);
 };
 
-/* Point d'intégration newsletter OXV (Brevo / Sendinblue).
-   Lorsqu'une clé API + liste Brevo seront disponibles côté backend,
-   remplacer le corps de cette fonction par un appel à l'endpoint
-   serverless (/api/newsletter) qui crée et envoie la campagne.
-   Payload prêt : titre, chapô, lien profond vers l'article. */
-function oxvNewsletterPush(a) {
-  const payload = {
-    subject: String(a.title || '').replace(/\*/g, ''),
-    preview: a.lead || '',
-    category: a.category || '',
-    url: (location.origin || '') + '/#actu-' + a.id
-  };
-  console.log('[OXV] Newsletter (Brevo) — payload prêt à diffuser :', payload);
-  toast('Article ajouté à la file newsletter (Brevo à brancher)', 'success');
+/* Diffusion newsletter via l'Edge Function newsletter-push (Brevo).
+   Le serveur relit l'article en base, vérifie l'admin, journalise dans email_log
+   (une diffusion par article, force pour re-diffuser). Tant que la clé API Brevo
+   n'est pas configurée côté serveur : réponse brevo_not_configured, aucun envoi. */
+async function oxvNewsletterPush(a, force) {
+  try {
+    const { data, error } = await supabase.functions.invoke('newsletter-push', { body: { article_id: a.id, force: !!force } });
+    if (error) throw error;
+    if (data && data.ok) { toast(`Newsletter envoyée · campagne Brevo #${data.campaign_id}`, 'success'); return; }
+    const code = data && data.code;
+    if (code === 'brevo_not_configured') { toast('Brevo pas encore branché (clé API à configurer) · aucun envoi', 'warn'); return; }
+    if (code === 'already_sent') {
+      const when = data.sent_at ? new Date(data.sent_at).toLocaleDateString('fr-FR') : '';
+      if (window.confirm(`Cet article a déjà été diffusé${when ? ' le ' + when : ''}. Renvoyer une nouvelle campagne à toute la liste ?`)) return oxvNewsletterPush(a, true);
+      return;
+    }
+    if (code === 'article_not_published') { toast("Publiez l'article avant de le diffuser", 'warn'); return; }
+    throw new Error(code || 'réponse inattendue');
+  } catch (e) {
+    console.warn('[Newsletter] push:', e);
+    toast('Diffusion impossible · réessayez', 'error');
+  }
 }
 
 function adminArticleShowForm() {
