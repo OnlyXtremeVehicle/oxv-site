@@ -17177,6 +17177,20 @@ textarea:focus-visible {
         </div>
       </div>
 
+      <!-- Partenaires signés (PR-HUB-06) -->
+      <div class="admin-section">
+        <div class="admin-section-head">
+          <div class="admin-section-title">Partenaires signés</div>
+          <button class="admin-section-action" onclick="goToAdmin('admin-inbox')">Prospects (inbox CRM) →</button>
+        </div>
+        <div id="adminPartnerRows" class="admin-todo-list">
+          <div class="admin-empty">
+            <div class="admin-empty-icon">○</div>
+            <div class="admin-empty-text">Chargement…</div>
+          </div>
+        </div>
+      </div>
+
     </main>
 
   </div>
@@ -20475,6 +20489,52 @@ textarea:focus-visible {
 <!-- /apres-journee -->
 
 
+<div class="page" id="page-partenaire-espace">
+  <section class="page-hero">
+    <div class="wrap">
+      <div class="page-hero-eyebrow">N° ⬡ · Espace partenaire</div>
+      <h1 class="page-hero-title">Votre espace<br/><em>partenaire</em>.</h1>
+      <p class="page-hero-lede">Votre fiche, vos contacts entrants, le kit de marque et le calendrier des sessions publiques — l'essentiel, sans détour.</p>
+    </div>
+  </section>
+  <section class="section">
+    <div class="wrap" style="max-width:1000px;">
+      <div id="partnerSpaceGuard" style="display:none;" class="bento">
+        <p style="font-family:var(--sans);font-size:14px;color:var(--cream-mute);margin:0;padding:8px;">Cet espace est réservé aux partenaires signés. <button class="link-inline" onclick="goTo('partenaires')" style="background:none;border:none;color:var(--oxv-red);cursor:pointer;padding:0;font:inherit;">Proposer un partenariat →</button></p>
+      </div>
+      <div id="partnerSpaceContent" style="display:none;">
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:16px;margin-bottom:24px;">
+          <div class="bento" style="padding:26px;">
+            <div style="font-family:var(--mono);font-size:10px;letter-spacing:0.22em;text-transform:uppercase;color:var(--gold-data);margin-bottom:12px;">Ma fiche</div>
+            <div id="partnerSpaceFiche" style="font-family:var(--sans);font-size:14px;line-height:1.7;color:var(--cream-mute);">Chargement…</div>
+          </div>
+          <div class="bento" style="padding:26px;">
+            <div style="font-family:var(--mono);font-size:10px;letter-spacing:0.22em;text-transform:uppercase;color:var(--blue-data);margin-bottom:12px;">Contacts reçus</div>
+            <div id="partnerSpaceLeads" style="font-family:var(--sans);font-size:14px;line-height:1.7;color:var(--cream-mute);">Chargement…</div>
+          </div>
+        </div>
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:16px;">
+          <div class="bento" style="padding:26px;">
+            <div style="font-family:var(--mono);font-size:10px;letter-spacing:0.22em;text-transform:uppercase;color:var(--cream-mute);margin-bottom:12px;">Kit de marque</div>
+            <p style="font-family:var(--sans);font-size:13px;line-height:1.65;color:var(--cream-mute);margin:0 0 14px;">Insigne et visuel officiels. Usage : fond sombre, zone de protection, jamais déformé ni recoloré. Toute utilisation publique est validée avec OXV.</p>
+            <div style="display:flex;gap:10px;flex-wrap:wrap;">
+              <a class="btn btn-sm" href="/brand/insignia.svg" download><span>Insigne SVG</span></a>
+              <a class="btn btn-sm" href="/brand/og-cover.png" download><span>Visuel OG</span></a>
+            </div>
+          </div>
+          <div class="bento" style="padding:26px;">
+            <div style="font-family:var(--mono);font-size:10px;letter-spacing:0.22em;text-transform:uppercase;color:var(--cream-mute);margin-bottom:12px;">Prochaines sessions publiques</div>
+            <div id="partnerSpaceSessions" style="font-family:var(--mono);font-size:12px;line-height:2;color:var(--cream-mute);">Chargement…</div>
+          </div>
+        </div>
+        <p style="font-family:var(--sans);font-size:12px;color:var(--cream-faint);margin:20px 0 0;line-height:1.6;">Statistiques de visibilité détaillées : disponibles après le lancement public. Vous n'avez jamais accès aux médias privés des pilotes — c'est une garantie OXV.</p>
+      </div>
+    </div>
+  </section>
+</div>
+<!-- /partenaire-espace -->
+
+
 <div class="page" id="page-presse">
   <section class="page-hero">
     <div class="wrap">
@@ -20558,6 +20618,16 @@ textarea:focus-visible {
         <div class="bento" style="padding:24px;"><div style="font-family:var(--display);font-size:10px;letter-spacing:0.2em;text-transform:uppercase;color:var(--gold);margin-bottom:8px;">Concession</div><p style="font-family:var(--sans);font-size:14px;line-height:1.6;color:var(--cream-mute);margin:0;">Événements clients et opérations B2B sur circuit.</p></div>
       </div>
 
+      <!-- Annuaire des partenaires (PR-HUB-06) — fiches publiées, lues en direct -->
+      <div id="partnersDirectoryWrap" style="display:none;margin-bottom:48px;">
+        <h2 class="section-title" style="font-size:32px;margin-bottom:8px;">Ils font partie de l'écosystème.</h2>
+        <p style="font-family:var(--sans);font-size:15px;line-height:1.7;color:var(--cream-mute);max-width:640px;margin:0 0 24px;">Les partenaires officiels OXV, publiés au fil des signatures.</p>
+        <div id="partnersDirectory" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:14px;"></div>
+      </div>
+
+      <div style="display:flex;justify-content:flex-end;margin-bottom:8px;">
+        <button class="btn btn-sm" onclick="goTo('partenaire-espace')"><span>Déjà partenaire ? Mon espace →</span></button>
+      </div>
       <h2 class="section-title" style="font-size:32px;margin-bottom:8px;">Devenir <em>partenaire</em>.</h2>
       <p style="font-family:var(--sans);font-size:15px;line-height:1.7;color:var(--cream-mute);max-width:640px;margin:0 0 24px;">Décrivez votre activité : nous revenons vers vous pour étudier une collaboration.</p>
       <div class="form-grid" style="max-width:840px;">
@@ -21187,6 +21257,12 @@ window.goTo = function(page, opts) {
   if (page === 'preuves') {
     setTimeout(() => { if (typeof window.loadTestimonials === 'function') window.loadTestimonials(); }, 150);
   }
+  if (page === 'partenaires') {
+    setTimeout(() => { if (typeof window.loadPartnersDirectory === 'function') window.loadPartnersDirectory(); }, 150);
+  }
+  if (page === 'partenaire-espace') {
+    setTimeout(() => { if (typeof window.loadPartnerSpace === 'function') window.loadPartnerSpace(); }, 150);
+  }
 
   // Synchronisation URL (History API) + meta SEO
   if (!opts.fromPop) oxvSyncUrl(page, opts);
@@ -21212,7 +21288,7 @@ const OXV_NOINDEX_PAGES = ['login', 'signup', 'forgot-password', 'reset-password
   'compte', 'compte-profil', 'compte-vehicules', 'compte-documents', 'compte-sessions',
   'compte-progression', 'compte-heritage', 'compte-paiements', 'compte-preferences',
   'admin', 'admin-pilotes', 'admin-pilote-detail', 'admin-sessions', 'admin-session-detail',
-  'admin-paiements', 'admin-medias', 'admin-articles', 'admin-emails', 'admin-stats', 'admin-securite', 'admin-demandes', 'demande'];
+  'admin-paiements', 'admin-medias', 'admin-articles', 'admin-emails', 'admin-stats', 'admin-securite', 'admin-demandes', 'demande', 'partenaire-espace'];
 
 // Titre + description par page publique
 const OXV_PAGE_SEO = {
@@ -27492,6 +27568,98 @@ window.downloadInvoice = async function(path, number) {
   }
 };
 
+/* ===================== PARTENAIRES (PR-HUB-06) =====================
+   Branché sur l'écosystème app existant (partners / partner_leads) — zéro table nouvelle.
+   RLS : annuaire publié lisible par tous, le partenaire gère SA fiche (owner_id), admin tout. */
+const PARTNER_TYPE_LBL = { garage: 'Garage / préparateur', photographer: 'Photographe / vidéaste', hotel: 'Hôtel / restaurant', transport: 'Transport / stockage', insurance: 'Assurance / équipementier', dealer: 'Concession' };
+
+window.loadPartnersDirectory = async function() {
+  const wrap = document.getElementById('partnersDirectoryWrap');
+  const grid = document.getElementById('partnersDirectory');
+  if (!grid || typeof supabase === 'undefined') return;
+  try {
+    const { data, error } = await supabase.from('partners')
+      .select('name, partner_type, description, logo_url, city, region, url, is_premium, is_official_partner')
+      .eq('is_published', true).limit(24);
+    if (error || !data || !data.length) return; // section masquée tant que vide
+    grid.innerHTML = data.map(p => `<div class="bento" style="padding:22px;${p.is_premium ? 'border-color:rgba(201,162,74,0.4);' : ''}">
+      <div style="display:flex;align-items:center;gap:12px;margin-bottom:10px;">
+        ${p.logo_url ? `<img src="${escapeHtml(p.logo_url)}" alt="" loading="lazy" style="width:42px;height:42px;border-radius:8px;object-fit:contain;background:rgba(255,255,255,0.04);" />` : ''}
+        <div>
+          <div style="font-family:var(--display);font-weight:600;font-size:15px;color:var(--offwhite);">${escapeHtml(p.name)}</div>
+          <div style="font-family:var(--mono);font-size:10px;letter-spacing:0.1em;color:var(--cream-mute);">${escapeHtml(PARTNER_TYPE_LBL[p.partner_type] || p.partner_type || '')}${p.city ? ' · ' + escapeHtml(p.city) : ''}</div>
+        </div>
+      </div>
+      ${p.description ? `<p style="font-family:var(--sans);font-size:12px;line-height:1.6;color:var(--cream-mute);margin:0 0 8px;">${escapeHtml(String(p.description).slice(0, 110))}</p>` : ''}
+      <div style="display:flex;justify-content:space-between;align-items:center;">
+        ${p.is_official_partner ? '<span class="tag-inline gold" style="font-size:10px;">Partenaire officiel</span>' : '<span></span>'}
+        ${p.url ? `<a href="${escapeHtml(p.url)}" target="_blank" rel="noopener" style="font-family:var(--mono);font-size:10px;color:var(--cream-mute);">Site →</a>` : ''}
+      </div>
+    </div>`).join('');
+    if (wrap) wrap.style.display = '';
+  } catch (e) { console.warn('[Annuaire partenaires]', e); }
+};
+
+window.loadPartnerSpace = async function() {
+  const guard = document.getElementById('partnerSpaceGuard');
+  const content = document.getElementById('partnerSpaceContent');
+  if (!guard || !content) return;
+  if (!window.OXVApi?.user?.isLoggedIn) { toast('Connexion requise', 'warn'); goTo('login'); return; }
+  try {
+    const uid = window.OXVApi.user.profile?.id;
+    const { data: mine } = await supabase.from('partners')
+      .select('id, name, partner_type, city, is_published, is_premium').eq('owner_id', uid);
+    if (!mine || !mine.length) { guard.style.display = ''; content.style.display = 'none'; return; }
+    guard.style.display = 'none'; content.style.display = '';
+    const p = mine[0];
+    const fiche = document.getElementById('partnerSpaceFiche');
+    if (fiche) fiche.innerHTML = `<strong style="color:var(--offwhite);">${escapeHtml(p.name)}</strong><br/>
+      ${escapeHtml(PARTNER_TYPE_LBL[p.partner_type] || p.partner_type || '')}${p.city ? ' · ' + escapeHtml(p.city) : ''}<br/>
+      ${p.is_published ? '<span class="tag-inline green">Publiée sur l\'annuaire</span>' : '<span class="tag-inline gold">Non publiée — contactez OXV</span>'}${p.is_premium ? ' <span class="tag-inline gold">Premium</span>' : ''}`;
+    // Contacts entrants (RLS : le partenaire ne voit que les siens, avec consentement)
+    const leadsEl = document.getElementById('partnerSpaceLeads');
+    try {
+      const { data: leads } = await supabase.from('partner_leads')
+        .select('id, status, channel, created_at').eq('partner_id', p.id)
+        .order('created_at', { ascending: false }).limit(10);
+      if (leadsEl) leadsEl.innerHTML = (leads && leads.length)
+        ? `<strong style="color:var(--offwhite);">${leads.length}</strong> contact(s) récent(s)<br/>` +
+          leads.slice(0, 5).map(l => `<span style="font-family:var(--mono);font-size:11px;">${new Date(l.created_at).toLocaleDateString('fr-FR')} · ${escapeHtml(l.status || 'nouveau')}</span>`).join('<br/>')
+        : 'Aucun contact pour le moment. Les pilotes vous trouvent via l\'annuaire et l\'app.';
+    } catch (e) { if (leadsEl) leadsEl.textContent = 'Aucun contact pour le moment.'; }
+    // Sessions publiques à venir
+    const sesEl = document.getElementById('partnerSpaceSessions');
+    try {
+      const today = new Date().toISOString().split('T')[0];
+      const { data: sess } = await supabase.from('sessions_public')
+        .select('date, status').gte('date', today).order('date').limit(6);
+      if (sesEl) sesEl.innerHTML = (sess && sess.length)
+        ? sess.map(s => new Date(s.date).toLocaleDateString('fr-FR', { weekday: 'short', day: 'numeric', month: 'short', year: 'numeric' })).join('<br/>')
+        : 'Calendrier en préparation.';
+    } catch (e) { if (sesEl) sesEl.textContent = 'Calendrier en préparation.'; }
+  } catch (e) { console.warn('[Espace partenaire]', e); }
+};
+
+window.loadAdminPartners = async function() {
+  const box = document.getElementById('adminPartnerRows');
+  if (!box) return;
+  try {
+    const { data: parts } = await supabase.from('partners')
+      .select('id, name, partner_type, city, is_published, is_premium, owner_id');
+    if (!parts || !parts.length) {
+      box.innerHTML = '<div class="admin-empty"><div class="admin-empty-icon">○</div><div class="admin-empty-text">Aucun partenaire signé. Les prospects arrivent dans l\'inbox CRM (source Partenaire).</div></div>';
+      return;
+    }
+    box.innerHTML = parts.map(p => `<div style="display:flex;align-items:center;justify-content:space-between;gap:10px;padding:12px 14px;border-top:1px solid var(--bento-border);flex-wrap:wrap;">
+      <div>
+        <div style="font-family:var(--sans);font-size:14px;color:var(--cream);">${escapeHtml(p.name)}</div>
+        <div style="font-family:var(--mono);font-size:11px;color:var(--cream-mute);">${escapeHtml(PARTNER_TYPE_LBL[p.partner_type] || p.partner_type || '')}${p.city ? ' · ' + escapeHtml(p.city) : ''}${p.owner_id ? '' : ' · sans compte lié'}</div>
+      </div>
+      <div style="display:flex;gap:8px;">${p.is_published ? '<span class="tag-inline green">Publié</span>' : '<span class="tag-inline gold">Brouillon</span>'}${p.is_premium ? '<span class="tag-inline gold">Premium</span>' : ''}</div>
+    </div>`).join('');
+  } catch (e) { console.warn('[Admin partenaires]', e); }
+};
+
 /* ===================== VISIBILITÉ QDI (PR-HUB-11) ===================== */
 function visReflect(v) {
   ['private','anonymous_only','nominative'].forEach(k => {
@@ -28190,6 +28358,7 @@ window.loadAdminDashboard = async function() {
   refreshDemandesBadge();
   refreshInboxBadge();
   if (typeof loadAdminCoaches === 'function') loadAdminCoaches();
+  if (typeof loadAdminPartners === 'function') loadAdminPartners();
 
   // Greeting
   const userId = window.OXVApi.user.profile?.id;
