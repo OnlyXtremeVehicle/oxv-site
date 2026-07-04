@@ -8682,7 +8682,8 @@ textarea.form-input {
 
 
 /* === Calendrier public === */
-#cal-month-filters .admin-filter {
+#cal-month-filters .admin-filter,
+#cal-offer-filters .admin-filter {
   background: rgba(18, 18, 20, 0.4);
   border: 1px solid var(--cream-line);
   color: var(--cream-mute);
@@ -8694,11 +8695,13 @@ textarea.form-input {
   cursor: pointer;
   transition: all 0.3s;
 }
-#cal-month-filters .admin-filter:hover {
+#cal-month-filters .admin-filter:hover,
+#cal-offer-filters .admin-filter:hover {
   border-color: var(--copper);
   color: var(--copper-glow);
 }
-#cal-month-filters .admin-filter.active {
+#cal-month-filters .admin-filter.active,
+#cal-offer-filters .admin-filter.active {
   background: rgba(184, 115, 51, 0.08);
   border-color: var(--copper);
   color: var(--copper-glow);
@@ -8711,6 +8714,14 @@ textarea.form-input {
 #cal-month-filters .admin-filter.active .count {
   color: var(--copper-glow);
 }
+
+/* Lot F — jauge de remplissage factuelle, export agenda, badge inscrit */
+.cal-gauge { height: 3px; background: rgba(255, 255, 255, 0.08); border-radius: 2px; overflow: hidden; margin-top: 10px; }
+.cal-gauge span { display: block; height: 100%; background: var(--gold); transition: width 0.4s var(--ease); }
+.cal-card.full .cal-gauge span { background: var(--red); }
+.cal-ics { display: inline-block; margin-top: 12px; font-family: var(--mono); font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--cream-mute); cursor: pointer; }
+.cal-ics:hover { color: var(--gold); }
+.cal-card-mine { margin-top: 8px; font-family: var(--mono); font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--gold); }
 
 .cal-grid {
   display: grid;
@@ -9251,10 +9262,12 @@ textarea.form-input {
   .cal-cta-sub {
     font-size: 13px !important;
   }
-  #cal-month-filters {
+  #cal-month-filters,
+  #cal-offer-filters {
     gap: 6px !important;
   }
-  #cal-month-filters .admin-filter {
+  #cal-month-filters .admin-filter,
+  #cal-offer-filters .admin-filter {
     padding: 8px 12px !important;
     font-size: 9px !important;
     letter-spacing: 0.18em !important;
@@ -14989,6 +15002,12 @@ textarea:focus-visible {
   <section class="section">
     <div class="wrap" style="max-width: 1080px;">
 
+      <!-- Filtres par offre (Lot F, Q2) -->
+      <div id="cal-offer-filters" style="display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 12px;">
+        <button class="admin-filter active" data-offer="all" onclick="setPublicCalOffer('all', this)">Toutes les offres</button>
+        <button class="admin-filter" data-offer="access" onclick="setPublicCalOffer('access', this)">Access · lundi</button>
+        <button class="admin-filter" data-offer="signature" onclick="setPublicCalOffer('signature', this)">Signature · vendredi</button>
+      </div>
       <!-- Filtres par mois -->
       <div id="cal-month-filters" style="display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 32px;">
         <!-- Boutons mois injectés par JS -->
@@ -22689,21 +22708,22 @@ async function bkLoadDatesForOffer() {
     return;
   }
 
-  // Compte les inscriptions pour calculer les places restantes
+  // Places restantes : vue d'agrégats publique session_availability (aucune PII).
+  // Remplace le comptage direct sur registrations, faussé par la RLS (chaque pilote
+  // ne voyait que ses propres inscriptions).
   const sessionIds = filteredSessions.map(s => s.id);
-  const { data: regs } = await supabase
-    .from('registrations')
-    .select('session_id, offer_type, status')
-    .in('session_id', sessionIds)
-    .neq('status', 'cancelled');
+  const { data: avail } = await supabase
+    .from('session_availability')
+    .select('*')
+    .in('session_id', sessionIds);
 
   const regsBySession = {};
-  (regs || []).forEach(r => {
-    if (!regsBySession[r.session_id]) {
-      regsBySession[r.session_id] = { access: 0, signature: 0, promotion: 0, heritage: 0, total: 0 };
-    }
-    regsBySession[r.session_id][r.offer_type] = (regsBySession[r.session_id][r.offer_type] || 0) + 1;
-    regsBySession[r.session_id].total++;
+  (avail || []).forEach(a => {
+    regsBySession[a.session_id] = {
+      access: a.taken_access || 0, signature: a.taken_signature || 0,
+      promotion: a.taken_promotion || 0, heritage: a.taken_heritage || 0,
+      total: a.taken_total || 0
+    };
   });
 
   bkState.sessions = filteredSessions;
@@ -26811,6 +26831,7 @@ window.loadMySessions = async function() {
     .select(`
       id, offer_type, status, price_total, insurance_option,
       created_at, cancelled_at,
+      vehicles:vehicle_id (brand, model),
       sessions (id, date, start_time, end_time, season_type)
     `)
     .eq('user_id', userId)
@@ -26978,6 +26999,11 @@ function renderMediaCard(m) {
 }
 
 function renderSessionsTable(rows, isPast) {
+  // Véhicule engagé sur la réservation (Lot F, Q1) — vide si non renseigné
+  const regVeh = r => {
+    const v = r.vehicles;
+    return v ? `${v.brand || ''} ${v.model || ''}`.trim() : '';
+  };
   // Version desktop (table)
   const tableRows = rows.map(reg => {
     const date = formatSessionDate(reg.sessions.date);
@@ -27002,7 +27028,7 @@ function renderSessionsTable(rows, isPast) {
     return `
       <tr>
         <td class="date">${date.replace(' · ', '<em>')}</em></td>
-        <td class="offer">${offerLabel}</td>
+        <td class="offer">${offerLabel}${regVeh(reg) ? `<div style="font-size:11px;color:var(--cream-mute);margin-top:2px;">${escapeHtml(regVeh(reg))}</div>` : ''}</td>
         <td><span class="session-status ${statusKey}">${statusLabel}</span></td>
         <td class="price">${price}</td>
         <td><div class="session-actions">${actions}</div></td>
@@ -27041,6 +27067,7 @@ function renderSessionsTable(rows, isPast) {
         </div>
         <div class="session-card-mobile-meta">
           <div class="session-card-mobile-meta-row"><span>Offre</span><strong>${offerLabel}</strong></div>
+          ${regVeh(reg) ? `<div class="session-card-mobile-meta-row"><span>Véhicule</span><strong>${escapeHtml(regVeh(reg))}</strong></div>` : ''}
           <div class="session-card-mobile-meta-row"><span>Prix</span><strong>${price}</strong></div>
         </div>
         <div class="session-actions">${actions}</div>
@@ -32008,6 +32035,7 @@ window.exportSessionList = function() {
 
 let publicCalSessions = [];
 let publicCalCurrentMonth = 'all';
+let publicCalCurrentOffer = 'all';
 
 window.loadPublicCalendar = async function() {
   const loading = document.getElementById('cal-loading');
@@ -32081,19 +32109,34 @@ window.loadPublicCalendar = async function() {
       return;
     }
 
-  // Comptage des inscriptions
+  // Comptage des inscriptions — vue d'agrégats publique (fiable quel que soit le rôle)
   const sessionIds = sessions.map(s => s.id);
   let regsBySession = {};
   if (sessionIds.length > 0) {
-    const { data: regs } = await supabase
-      .from('registrations')
-      .select('session_id')
-      .in('session_id', sessionIds)
-      .neq('status', 'cancelled');
-    (regs || []).forEach(r => {
-      regsBySession[r.session_id] = (regsBySession[r.session_id] || 0) + 1;
-    });
+    const { data: avail } = await supabase
+      .from('session_availability')
+      .select('session_id, taken_total')
+      .in('session_id', sessionIds);
+    (avail || []).forEach(a => { regsBySession[a.session_id] = a.taken_total || 0; });
   }
+
+  // Mes inscriptions (RLS : uniquement les miennes) — badge « Inscrit · véhicule » (Lot F, Q1)
+  let myRegs = {};
+  try {
+    const uid = window.OXVApi?.user?.session?.user?.id;
+    if (uid && sessionIds.length > 0) {
+      const { data: mine } = await supabase
+        .from('registrations')
+        .select('session_id, vehicles:vehicle_id (brand, model)')
+        .eq('user_id', uid)
+        .in('session_id', sessionIds)
+        .neq('status', 'cancelled');
+      (mine || []).forEach(r => {
+        const v = r.vehicles;
+        myRegs[r.session_id] = v ? `${v.brand || ''} ${v.model || ''}`.trim() : '';
+      });
+    }
+  } catch (_) { /* badge facultatif */ }
 
   // Filtre extra : exclure tout B2B (sécurité au cas où is_private n'est pas en BDD)
   const visibleSessions = (sessions || []).filter(s => {
@@ -32106,7 +32149,8 @@ window.loadPublicCalendar = async function() {
       ...s,
       _registered: regsBySession[s.id] || 0,
       _capacity: s.max_capacity || 20,
-      _isFull: (regsBySession[s.id] || 0) >= (s.max_capacity || 20)
+      _isFull: (regsBySession[s.id] || 0) >= (s.max_capacity || 20),
+      _mine: (s.id in myRegs) ? myRegs[s.id] : null
     }));
 
     if (loading) loading.style.display = 'none';
@@ -32177,18 +32221,26 @@ window.setPublicCalFilter = function(monthKey, btn) {
   applyPublicCalFilter();
 };
 
+window.setPublicCalOffer = function(offerKey, btn) {
+  publicCalCurrentOffer = offerKey;
+  document.querySelectorAll('#cal-offer-filters .admin-filter').forEach(b => b.classList.remove('active'));
+  if (btn) btn.classList.add('active');
+  applyPublicCalFilter();
+};
+
 function applyPublicCalFilter() {
   const grid = document.getElementById('cal-grid');
   const empty = document.getElementById('cal-empty');
   if (!grid) return;
 
-  const filtered = publicCalCurrentMonth === 'all'
-    ? publicCalSessions
-    : publicCalSessions.filter(s => {
-        const d = new Date(s.date);
-        const key = `${d.getFullYear()}-${String(d.getMonth()).padStart(2, '0')}`;
-        return key === publicCalCurrentMonth;
-      });
+  const filtered = publicCalSessions.filter(s => {
+    if (publicCalCurrentOffer === 'access' && s.format !== 'half_day') return false;
+    if (publicCalCurrentOffer === 'signature' && s.format !== 'full_day') return false;
+    if (publicCalCurrentMonth === 'all') return true;
+    const d = new Date(s.date);
+    const key = `${d.getFullYear()}-${String(d.getMonth()).padStart(2, '0')}`;
+    return key === publicCalCurrentMonth;
+  });
 
   if (filtered.length === 0) {
     grid.style.display = 'none';
@@ -32209,24 +32261,36 @@ function applyPublicCalFilter() {
     const monthLabel = months[date.getMonth()];
     const yearLabel = date.getFullYear();
     const isHalfDay = s.format === 'half_day';
-    const formatLabel = isHalfDay ? 'Demi-journée' : 'Journée complète';
+    const offerMain = isHalfDay ? 'Access' : 'Signature';
+    const formatLabel = isHalfDay ? 'demi-journée' : 'journée complète';
     const horaires = isHalfDay ? '13h00 — 17h30' : '09h00 — 17h30';
     const fullClass = s._isFull ? ' full' : '';
+    const remaining = Math.max(0, s._capacity - s._registered);
+    const pct = Math.min(100, Math.round((s._registered / (s._capacity || 20)) * 100));
     const placesValue = s._isFull
       ? `<span class="full-pill">Complet</span>`
-      : `${s._capacity - s._registered} / ${s._capacity}`;
+      : (remaining <= 5
+        ? `<span style="color:var(--gold);">Dernières places · ${remaining}</span>`
+        : `${remaining} places restantes`);
     const offerPills = isHalfDay
       ? `<span class="cal-card-offer-pill access">Access</span>`
       : `<span class="cal-card-offer-pill signature">Signature</span><span class="cal-card-offer-pill heritage">Heritage</span>`;
+    const isMine = s._mine !== null && s._mine !== undefined;
+    const mineBadge = isMine
+      ? `<div class="cal-card-mine">Inscrit${s._mine ? ' · ' + escapeHtml(s._mine) : ''}</div>` : '';
+    const cardAction = isMine ? "goToAccount('compte-sessions')" : (s._isFull ? '' : "goTo('booking')");
+    const ctaText = isMine ? 'Votre session' : (s._isFull ? 'Session complète' : 'Réserver');
+    const ctaArrow = (isMine || !s._isFull) ? '<span class="cal-card-cta-arrow">→</span>' : '';
 
     return `
-      <button class="cal-card${fullClass}" onclick="${s._isFull ? '' : `goTo('booking')`}" type="button">
-        <div class="cal-card-eyebrow">${formatLabel}</div>
+      <button class="cal-card${fullClass}" onclick="${cardAction}" type="button">
+        <div class="cal-card-eyebrow">${offerMain} — ${formatLabel}</div>
 
         <div class="cal-card-date">${dateNum} <em>${monthLabel}</em></div>
         <div class="cal-card-day">${dayLabel} · ${yearLabel}</div>
 
         <div class="cal-card-offers">${offerPills}</div>
+        ${mineBadge}
 
         <div class="cal-card-info">
           <div class="cal-card-info-row">
@@ -32237,17 +32301,49 @@ function applyPublicCalFilter() {
             <span class="cal-card-info-label">Places</span>
             <span class="cal-card-info-value">${placesValue}</span>
           </div>
+          <div class="cal-gauge" aria-hidden="true"><span style="width:${pct}%"></span></div>
         </div>
 
+        <span class="cal-ics" role="button" tabindex="0" onclick="event.stopPropagation();oxvCalIcs('${s.id}')">+ Ajouter à mon agenda</span>
+
         <div class="cal-card-cta">
-          <span class="cal-card-cta-text">${s._isFull ? 'Session complète' : 'Réserver'}</span>
-          ${s._isFull ? '' : '<span class="cal-card-cta-arrow">→</span>'}
+          <span class="cal-card-cta-text">${ctaText}</span>
+          ${ctaArrow}
         </div>
       </button>
     `;
   }).join('');
 }
 
+
+/* Lot F (Q3) — export agenda .ics d'une session du calendrier public */
+window.oxvCalIcs = function(sessionId) {
+  const s = (publicCalSessions || []).find(x => String(x.id) === String(sessionId));
+  if (!s) return;
+  const isHalf = s.format === 'half_day';
+  const pad = t => String(t || '').slice(0, 5).replace(':', '') + '00';
+  const start = pad(s.start_time || (isHalf ? '13:00' : '09:00'));
+  const end = pad(s.end_time || '17:30');
+  const d = String(s.date).replace(/-/g, '');
+  const label = isHalf ? 'Access — demi-journée' : 'Signature — journée complète';
+  const ics = [
+    'BEGIN:VCALENDAR', 'VERSION:2.0', 'PRODID:-//OXV//Calendrier//FR', 'BEGIN:VEVENT',
+    `UID:oxv-session-${s.id}@oxvehicle.fr`,
+    `DTSTART;TZID=Europe/Paris:${d}T${start}`,
+    `DTEND;TZID=Europe/Paris:${d}T${end}`,
+    `SUMMARY:OXV — Session ${label}`,
+    'LOCATION:Circuit de Haute Saintonge\\, 17360 La Génétouze',
+    'DESCRIPTION:Détails et réservation : https://www.oxvehicle.fr/calendrier',
+    'END:VEVENT', 'END:VCALENDAR'
+  ].join('\r\n');
+  const blob = new Blob([ics], { type: 'text/calendar;charset=utf-8' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url; a.download = `oxv-session-${s.date}.ics`;
+  document.body.appendChild(a); a.click(); a.remove();
+  setTimeout(() => URL.revokeObjectURL(url), 4000);
+  if (typeof track === 'function') track('cal_ics_download');
+};
 
 /* === COOKIE BANNER === */
 window.cookieAccept = function(level) {
