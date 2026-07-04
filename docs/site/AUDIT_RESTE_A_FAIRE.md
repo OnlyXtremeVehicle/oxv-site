@@ -1,5 +1,7 @@
 # Audit complet — reste à faire (vérifié code + base, 2026-06-30)
 
+> **GO-LIVE 2026-07-04** : PR #3 (design V3 + HUB + mission PROMPT COMPLET), #4 (hotfix boot) et #5 (visuels) mergées — **oxvehicle.fr sert la version complète (vérifié sur le HTML servi)**. Livré aussi ce jour : accusé candidature (trigger + edge), module admin-emails branché (table `email_templates` créée, surcharges actives sur contact_recu / corporate_recu / candidature_recue), adresses email réelles uniquement (contact@ + corporate@), sécurité P2 A+B appliquée, 65 index FK, vue session_availability.
+
 > Audit fan-out (5 dimensions) vérifié contre `index.html`, `docs/site/`, et la base live `fouvuqkdxarjpjbqnsjq`. **Verdict : le site peut passer en prod — aucun bloqueur P0.** Le P0 historique (faux RIB) est levé ; `OXV_PAYMENT.mode='pending'` (paiement par lien non actif) → tous les manques liés au lien sont hors chemin actif.
 
 ## ✅ Corrigé suite à l'audit (avant-prod, livré ici)

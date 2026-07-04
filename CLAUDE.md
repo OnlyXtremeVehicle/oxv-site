@@ -7,7 +7,7 @@ Guide permanent pour toute session Claude Code sur ce repo. À lire intégraleme
 - **Site = un seul fichier** : `index.html` (~1,3 Mo). HTML + CSS + JS vanilla + Three.js. Router single-page maison (`.page` / `.page.active`, fonctions `goTo()`, `goToAdmin()`, `goToDemande()`).
 - **Pas de framework. Pas de build.** N'introduisez ni React, ni bundler, ni découpage en modules sans instruction explicite de Gabin.
 - **Déploiement** : Vercel, auto-deploy sur push `main`. Domaine : `oxvehicle.fr`.
-- **Backend** : Supabase, projet `fouvuqkdxarjpjbqnsjq` (Frankfurt, EU). Edge functions existantes : `validate-inscription` (flux approbation/rejet admin + invite Auth + email Resend), `send-email` (6 templates, surcharge éditoriale via table `email_templates`).
+- **Backend** : Supabase, projet `fouvuqkdxarjpjbqnsjq` (Frankfurt, EU). Edge functions du site (état 2026-07-04) : `validate-inscription` (approbation/rejet admin + invite Auth + email Resend), `send-contact-ack` + `send-application-ack` (accusés automatiques, surcharge éditoriale via table `email_templates` — module admin-emails ; clés branchées : `contact_recu`, `corporate_recu`, `candidature_recue`), `notify-admin-lead`, `send-booking-confirmation`, `send-payment-confirmed`, `send-document-status`, `generate-invoice`, `pair-app`, `eligibility-reminders`, `feedback-request`, `newsletter-push` (dormante sans clé Brevo). NB : la fonction `send-email` mentionnée dans les anciennes versions de ce document n'a jamais été déployée.
 - **Email** : Resend, domaine `oxvehicle.fr` vérifié, expéditeur `contact@oxvehicle.fr`.
 - **Admins Supabase** : philippe.bitaube, julie.huet, gabinfillat.
 
@@ -28,7 +28,7 @@ OXV est une plateforme multi-circuit basée à Bordeaux. **Le Circuit de Haute-S
 - Ne jamais inventer d'autres circuits partenaires : les emplacements non confirmés s'affichent « Sélection en cours ».
 
 ### 2.3 Vocabulaire gelé
-- **QDI** : ~136 occurrences sur le site. Vocabulaire figé (QDI, marges, 7-segments). **Aucun renommage** avant données réelles de roulage. (Le QDI est abandonné côté app pilote — cela ne concerne pas le site pour l'instant.)
+- **QDI** : 64 occurrences sur le site (recompte réel du 2026-07-04 — l'ancien « ~136 » datait d'une version antérieure). Vocabulaire figé (QDI, marges, 7-segments). **Aucun renommage** avant données réelles de roulage. (Le QDI est abandonné côté app pilote — cela ne concerne pas le site pour l'instant.)
 - **Couleurs piliers QDI intouchables** : Trajectoire `#60A5FA` · Fluidité `#FFB703` · Freinage `#E63946` · Accélération `#4ADE80` · Régularité `#C084FC`. Ce sont des couleurs de DONNÉE, jamais de fond.
 - **Faucon** : totem strictement interne. Jamais dans le contenu client (pas de « Falcon Eye », « Dive Mode », etc.). Vocabulaire HUD autorisé : Cap, Trajectoire, Anticipation, Visée, Plongée.
 

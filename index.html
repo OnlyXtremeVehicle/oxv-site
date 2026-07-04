@@ -29363,12 +29363,13 @@ window.loadAdminPilotes = async function() {
 
 // Catalogue de référence (libellés + variables) — sert si la table est vide
 window.EMK_CATALOG = [
-  { key: 'candidature_recue',         label: 'Candidature reçue (candidat)',    desc: 'Au dépôt du formulaire de candidature', vars: ['first_name'] },
-  { key: 'candidature_recue_interne', label: 'Candidature reçue (interne)',     desc: 'Notification vers contact@oxvehicle.fr', vars: ['first_name','last_name','email','phone','city','role'] },
-  { key: 'inscription_acceptee',      label: 'Candidature acceptée (candidat)', desc: 'Validation admin · contient le lien mot de passe', vars: ['first_name','action_link','role'] },
-  { key: 'inscription_refusee',       label: 'Candidature refusée (candidat)',  desc: 'Validation admin', vars: ['first_name'] },
-  { key: 'corporate_recu',            label: 'Corporate reçu (prospect)',       desc: 'Au dépôt du formulaire corporate', vars: ['first_name'] },
-  { key: 'corporate_recu_interne',    label: 'Corporate reçu (interne)',        desc: 'Notification vers contact@oxvehicle.fr', vars: ['company','first_name','email','phone','format','message'] },
+  { key: 'contact_recu',              label: 'Message reçu (tout contact)',     desc: 'ACTIF — accusé automatique de tout message entrant (contact, liste d\'attente, partenaire, presse). Activez le template pour remplacer le texte par défaut.', vars: ['first_name','reference','subject'] },
+  { key: 'corporate_recu',            label: 'Corporate reçu (prospect)',       desc: 'ACTIF — accusé des demandes corporate (prioritaire sur « Message reçu » pour cette source)', vars: ['first_name','reference','subject'] },
+  { key: 'candidature_recue',         label: 'Candidature reçue (candidat)',    desc: 'ACTIF — accusé automatique au dépôt de candidature', vars: ['first_name','reference'] },
+  { key: 'inscription_acceptee',      label: 'Candidature acceptée (candidat)', desc: 'Préparation — envoi géré par validate-inscription, non branché sur ce kit', vars: ['first_name','action_link','role'] },
+  { key: 'inscription_refusee',       label: 'Candidature refusée (candidat)',  desc: 'Préparation — envoi géré par validate-inscription, non branché sur ce kit', vars: ['first_name'] },
+  { key: 'candidature_recue_interne', label: 'Candidature reçue (interne)',     desc: 'Préparation — notification interne gérée par notify-admin-lead, non branchée', vars: ['first_name','last_name','email','phone','city','role'] },
+  { key: 'corporate_recu_interne',    label: 'Corporate reçu (interne)',        desc: 'Préparation — notification interne gérée par notify-admin-lead, non branchée', vars: ['company','first_name','email','phone','format','message'] },
 ];
 window._emkTemplates = {}; // key -> ligne email_templates (si existante)
 
