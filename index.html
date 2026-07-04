@@ -127,7 +127,7 @@
 
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,500;1,600;1,700&display=swap" rel="stylesheet" />
 
 <script type="importmap">
 {
@@ -243,7 +243,7 @@
      sur l'ensemble du site (170+ usages existants).
      Pour les titres en Syncopate italique, utiliser --display 
      ou la classe .syncopate */
-  --serif:   'Georgia', 'Times New Roman', serif;
+  --serif:   'Cormorant Garamond', Georgia, 'Times New Roman', serif;   /* Titres Goodwood (Lot H) */
   --sans:    'Inter', -apple-system, BlinkMacSystemFont, 'Helvetica Neue', sans-serif;
   --mono:    'IBM Plex Mono', 'JetBrains Mono', 'SF Mono', Menlo, monospace;   /* Data / prix / KPI (DA V3) */
   --display: 'Space Grotesk', 'Inter Tight', 'Inter', sans-serif;             /* Titres premium (DA V3) */
@@ -13165,6 +13165,23 @@ textarea:focus-visible {
 .oxv-ph-note { margin-top: auto; font-family: var(--sans); font-size: 11px; line-height: 1.5; color: var(--cream-faint); }
 .oxv-app-hero { display: grid; grid-template-columns: 1fr; gap: 44px; align-items: center; }
 @media (min-width: 900px) { .oxv-app-hero { grid-template-columns: 1.1fr 0.9fr; } }
+
+/* — Lot H · Direction typographique « Goodwood » (arbitrage fondateur 2026-07-04) —
+   Titres en serif italique racé (Cormorant Garamond) ; eyebrows, labels, data (mono)
+   et boutons inchangés. Casse naturelle : fin de l'uppercase sur les grands titres.
+   Tailles responsives existantes conservées (aucun font-size redéfini ici). */
+.home-hero-manifesto,
+.page-hero-title,
+.section-title,
+.section-heading {
+  font-family: var(--serif);
+  font-style: italic;
+  font-weight: 600;
+  text-transform: none;
+  letter-spacing: 0;
+}
+.home-hero-manifesto { letter-spacing: -0.015em; }
+.page-hero-title em, .section-title em, .section-heading em { font-weight: 600; }
 
 </style>
 <!-- JSON-LD : LocalBusiness / lieu (PR-HUB-08 GEO) -->
