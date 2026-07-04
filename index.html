@@ -13134,6 +13134,23 @@ textarea:focus-visible {
 @media (min-width: 900px) { .oxv-app-hero { grid-template-columns: 1.1fr 0.9fr; } }
 
 </style>
+<!-- JSON-LD : abonnement OXV Mirror (PR-HUB-12) — précommande, dispo printemps 2027 -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Product",
+  "name": "OXV Mirror",
+  "description": "Application track day OXV : Pass, Trace du jour, Data Lab télémétrie 25 Hz, médias livrés, carnet de piste. Silencieuse en roulage, précise après. iOS & Android, lancement printemps 2027.",
+  "brand": { "@type": "Organization", "name": "OXV" },
+  "url": "https://www.oxvehicle.fr/application",
+  "offers": [
+    { "@type": "Offer", "name": "Mirror Pilote — mensuel", "price": "15.00", "priceCurrency": "EUR", "availability": "https://schema.org/PreOrder", "url": "https://www.oxvehicle.fr/application" },
+    { "@type": "Offer", "name": "Mirror Pilote — annuel", "price": "150.00", "priceCurrency": "EUR", "availability": "https://schema.org/PreOrder", "url": "https://www.oxvehicle.fr/application" },
+    { "@type": "Offer", "name": "Licence Coach — saison", "price": "750.00", "priceCurrency": "EUR", "availability": "https://schema.org/PreOrder", "url": "https://www.oxvehicle.fr/application" }
+  ]
+}
+</script>
+
 <!-- Vercel Analytics -->
 <script defer src="/_vercel/insights/script.js"></script>
 </head>
@@ -20142,6 +20159,57 @@ textarea:focus-visible {
         </ul>
       </div>
 
+      <!-- ============ ABONNEMENT MIRROR (PR-HUB-12) ============ -->
+      <h2 class="section-title" style="font-size:clamp(28px,3.8vw,42px);margin:56px 0 10px;">L'abonnement Mirror.</h2>
+      <p style="font-family:var(--sans);font-size:15px;line-height:1.7;color:var(--cream-mute);max-width:640px;margin:0 0 8px;">Trois usages, trois formules. Ouverture des souscriptions au lancement de l'app — <strong style="color:var(--cream);">printemps 2027</strong>.</p>
+      <p style="font-family:var(--mono);font-size:11px;letter-spacing:0.12em;color:var(--cream-faint);margin:0 0 26px;">Paiement en ligne sécurisé activé au lancement · sans engagement au-delà de la période choisie</p>
+
+      <div class="reveal" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px;margin-bottom:48px;">
+        <div class="bento" style="padding:28px;border-color:var(--red-oxv);position:relative;">
+          <div style="position:absolute;top:-10px;left:20px;background:var(--red-oxv);color:#fff;font-family:var(--mono);font-size:9px;letter-spacing:0.14em;text-transform:uppercase;padding:4px 10px;border-radius:5px;">Pilote</div>
+          <div style="font-family:var(--display);font-weight:600;font-size:19px;color:var(--offwhite);margin:8px 0 6px;">Mirror Pilote</div>
+          <div style="font-family:var(--mono);font-size:26px;color:var(--offwhite);margin-bottom:2px;">15 €<span style="font-size:13px;color:var(--cream-mute);"> /mois</span></div>
+          <div style="font-family:var(--mono);font-size:12px;color:var(--gold-data);margin-bottom:14px;">ou 150 € /an — deux mois offerts</div>
+          <ul style="font-family:var(--sans);font-size:13px;line-height:1.9;color:var(--cream-mute);margin:0 0 18px;padding-left:18px;">
+            <li>Pass OXV &amp; check-in</li>
+            <li>Trace du jour après chaque session</li>
+            <li>Data Lab — télémétrie 25 Hz complète</li>
+            <li>Médias livrés dans votre espace</li>
+            <li>Carnet de piste &amp; saison</li>
+          </ul>
+          <button class="btn btn-primary" style="width:100%;" onclick="goTo('calendrier')"><span>Rejoindre la liste de lancement</span></button>
+        </div>
+
+        <div class="bento" style="padding:28px;">
+          <div style="font-family:var(--mono);font-size:9px;letter-spacing:0.14em;text-transform:uppercase;color:var(--blue-data);margin-bottom:8px;">Coach</div>
+          <div style="font-family:var(--display);font-weight:600;font-size:19px;color:var(--offwhite);margin:0 0 6px;">Licence Coach</div>
+          <div style="font-family:var(--mono);font-size:26px;color:var(--offwhite);margin-bottom:2px;">750 €<span style="font-size:13px;color:var(--cream-mute);"> /saison</span></div>
+          <div style="font-family:var(--mono);font-size:12px;color:var(--gold-data);margin-bottom:14px;">Licence Fondateur 2027</div>
+          <ul style="font-family:var(--sans);font-size:13px;line-height:1.9;color:var(--cream-mute);margin:0 0 18px;padding-left:18px;">
+            <li>Outil de lecture multi-pilotes</li>
+            <li>Données élèves — sur consentement RGPD</li>
+            <li>Profil publié sur la vitrine coachs</li>
+            <li>Mise en relation avec les membres</li>
+            <li>Accès circuit à tarif dégressif</li>
+          </ul>
+          <button class="btn" style="width:100%;" onclick="goToDemande('coach')"><span>Candidater comme coach</span></button>
+        </div>
+
+        <div class="bento" style="padding:28px;">
+          <div style="font-family:var(--mono);font-size:9px;letter-spacing:0.14em;text-transform:uppercase;color:var(--gold-data);margin-bottom:8px;">Partenaire B2B</div>
+          <div style="font-family:var(--display);font-weight:600;font-size:19px;color:var(--offwhite);margin:0 0 6px;">Mirror Partenaire</div>
+          <div style="font-family:var(--mono);font-size:26px;color:var(--offwhite);margin-bottom:2px;">Sur mesure</div>
+          <div style="font-family:var(--mono);font-size:12px;color:var(--cream-faint);margin-bottom:14px;">selon le format de partenariat</div>
+          <ul style="font-family:var(--sans);font-size:13px;line-height:1.9;color:var(--cream-mute);margin:0 0 18px;padding-left:18px;">
+            <li>Visibilité auprès des pilotes OXV</li>
+            <li>Présence dans l'écosystème app</li>
+            <li>Médias &amp; reporting selon accord</li>
+            <li>Événements dédiés possibles</li>
+          </ul>
+          <button class="btn" style="width:100%;" onclick="goTo('partenaires')"><span>Proposer un partenariat</span></button>
+        </div>
+      </div>
+
       <div class="bento" style="padding:28px;text-align:center;">
         <p style="font-family:var(--sans);font-size:15px;line-height:1.7;color:var(--cream-mute);margin:0 0 18px;">L'app s'active avec votre première session. Réservez votre place — la trace suivra.</p>
         <div style="display:flex;gap:10px;flex-wrap:wrap;justify-content:center;">
@@ -21110,7 +21178,7 @@ const OXV_PAGE_SEO = {
   securite:    { title: 'Sécurité & cadre · OXV', description: 'Le cadre de sécurité OXV : briefing obligatoire, documents vérifiés, silence total en roulage, lecture des données après la session, vingt pilotes maximum. Et la place exacte de la donnée.' },
   'apres-journee': { title: 'Votre journée OXV — avant, pendant, après', description: 'De J-7 au rapport final : rituels de préparation, roulage silencieux, puis médias dès le soir, télémétrie dans l\'app, bilan de session, rapport Signature et carnet de saison. Un miroir, jamais un classement.' },
   preuves:     { title: 'Preuves & garanties — pourquoi faire confiance à OXV', description: 'Des preuves vérifiables, pas des promesses : circuit Beltoise réel, cadre de sécurité opposable, données chiffrées en UE, conditions claires, écosystème transparent. Et ce qu\'OXV ne fera jamais.' },
-  application: { title: 'OXV Mirror — l\'application track day data & média', description: 'Pass OXV, Trace du jour, Data Lab 25 Hz, médias livrés, carnet de piste, coach opt-in, saison. Silencieuse en roulage, précise après. iOS & Android, printemps 2027.' },
+  application: { title: 'OXV Mirror — l\'application track day data & média', description: 'Pass OXV, Trace du jour, Data Lab 25 Hz, médias livrés, carnet de piste, coach opt-in. Abonnement pilote 15 €/mois ou 150 €/an, licence coach 750 €/saison. iOS & Android, printemps 2027.' },
   partenaires: { title: 'Partenaires — rejoindre l\'écosystème OXV', description: 'Garage, photographe, hôtel, transport, assurance, concession : proposez un partenariat à OXV et accédez à une audience de pilotes exigeants au Circuit de Haute Saintonge.' },
   presse:      { title: 'Presse & médias · OXV', description: 'Espace presse OXV : faits clés vérifiés, kit média sur demande et contact journaliste. Track days confidentiels sur le tracé Beltoise, doctrine de données premium.' },
   about:       { title: 'À propos — le manifeste OXV', description: 'Pourquoi OXV existe. La sécurité d\'abord, le développement toujours, la sensation enfin. Vingt pilotes par session, jamais plus.' },
