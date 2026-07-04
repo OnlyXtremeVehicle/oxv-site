@@ -11657,7 +11657,7 @@ a.btn {
   color: var(--gold);
 }
 
-/* Recommandations */
+/* Lecture de session */
 .prog-reco-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -14097,14 +14097,14 @@ textarea:focus-visible {
                     stroke-linecap="round"/>
               
               <!-- ============================================================
-                   PINGS COACHING — Points stratégiques par virage
-                   Chaque ping = zone de coaching avec recommandation
+                   PINGS DATA — Points de lecture par virage
+                   Chaque ping = zone de lecture télémétrique (restitution factuelle)
                    ============================================================ -->
               
               <g class="tp-pings">
                 
                 <!-- PING T1 — Épingle droite (point de freinage) -->
-                <g class="tp-ping" data-corner="T1" data-name="T1 — Épingle de Beltoise" data-type="braking" data-tip="Freinage tardif puissant. Point de corde tardif. Sortie large pour optimiser la ligne droite suivante." onclick="showCornerDetail('T1')">
+                <g class="tp-ping" data-corner="T1" data-name="T1 — Épingle de Beltoise" data-type="braking" data-tip="Premier freinage appuyé du tour, en bout de ligne droite. La décélération la plus forte du tracé se mesure ici." onclick="showCornerDetail('T1')">
                   <circle cx="940" cy="195" r="22" fill="rgba(255, 201, 60, 0.12)" class="tp-ping-halo"/>
                   <circle cx="940" cy="195" r="12" fill="rgba(255, 201, 60, 0.35)" class="tp-ping-pulse">
                     <animate attributeName="r" values="10;16;10" dur="2.5s" repeatCount="indefinite"/>
@@ -14115,7 +14115,7 @@ textarea:focus-visible {
                 </g>
                 
                 <!-- PING T2 — Courbe rapide à droite -->
-                <g class="tp-ping" data-corner="T2" data-name="T2 — Rapide à droite" data-type="speed" data-tip="Virage rapide. Maintenir la vitesse. Trajectoire extérieure-extérieure. Pas de freinage." onclick="showCornerDetail('T2')">
+                <g class="tp-ping" data-corner="T2" data-name="T2 — Rapide à droite" data-type="speed" data-tip="Courbe rapide négociée sans freinage. La vitesse de passage s'y lit directement dans la donnée." onclick="showCornerDetail('T2')">
                   <circle cx="675" cy="228" r="22" fill="rgba(74, 222, 128, 0.12)" class="tp-ping-halo"/>
                   <circle cx="675" cy="228" r="12" fill="rgba(74, 222, 128, 0.35)" class="tp-ping-pulse">
                     <animate attributeName="r" values="10;16;10" dur="2.5s" begin="0.4s" repeatCount="indefinite"/>
@@ -14126,7 +14126,7 @@ textarea:focus-visible {
                 </g>
                 
                 <!-- PING T3 — S technique gauche -->
-                <g class="tp-ping" data-corner="T3" data-name="T3 — Gauche technique" data-type="precision" data-tip="Patience à l'entrée. Tournez tard. Corde longue pour préparer le S suivant." onclick="showCornerDetail('T3')">
+                <g class="tp-ping" data-corner="T3" data-name="T3 — Gauche technique" data-type="precision" data-tip="Gauche technique en entrée de section sinueuse. La répétabilité du point de corde s'y lit tour après tour." onclick="showCornerDetail('T3')">
                   <circle cx="585" cy="345" r="22" fill="rgba(230, 57, 70, 0.12)" class="tp-ping-halo"/>
                   <circle cx="585" cy="345" r="12" fill="rgba(230, 57, 70, 0.35)" class="tp-ping-pulse">
                     <animate attributeName="r" values="10;16;10" dur="2.5s" begin="0.8s" repeatCount="indefinite"/>
@@ -14137,7 +14137,7 @@ textarea:focus-visible {
                 </g>
                 
                 <!-- PING T4 — S technique droite -->
-                <g class="tp-ping" data-corner="T4" data-name="T4 — Réaccélération" data-type="acceleration" data-tip="Sortie de T3 vers T4. Réaccélération progressive. Visualisez le point de corde de T5." onclick="showCornerDetail('T4')">
+                <g class="tp-ping" data-corner="T4" data-name="T4 — Réaccélération" data-type="acceleration" data-tip="Zone de réaccélération entre T3 et T5. La progressivité de la remise des gaz s'y mesure." onclick="showCornerDetail('T4')">
                   <circle cx="688" cy="427" r="22" fill="rgba(74, 222, 128, 0.12)" class="tp-ping-halo"/>
                   <circle cx="688" cy="427" r="12" fill="rgba(74, 222, 128, 0.35)" class="tp-ping-pulse">
                     <animate attributeName="r" values="10;16;10" dur="2.5s" begin="1.2s" repeatCount="indefinite"/>
@@ -14148,7 +14148,7 @@ textarea:focus-visible {
                 </g>
                 
                 <!-- PING T5 — Virage moyen à droite -->
-                <g class="tp-ping" data-corner="T5" data-name="T5 — Courbe moyenne" data-type="fluidity" data-tip="Liaison vers l'épingle. Maintenez l'accélération. Trajectoire extérieure pour rester sur les gaz." onclick="showCornerDetail('T5')">
+                <g class="tp-ping" data-corner="T5" data-name="T5 — Courbe moyenne" data-type="fluidity" data-tip="Courbe de liaison vers l'épingle. La continuité de l'accélération s'y lit dans la trace longitudinale." onclick="showCornerDetail('T5')">
                   <circle cx="838" cy="415" r="22" fill="rgba(255, 183, 3, 0.12)" class="tp-ping-halo"/>
                   <circle cx="838" cy="415" r="12" fill="rgba(255, 183, 3, 0.35)" class="tp-ping-pulse">
                     <animate attributeName="r" values="10;16;10" dur="2.5s" begin="1.6s" repeatCount="indefinite"/>
@@ -14159,7 +14159,7 @@ textarea:focus-visible {
                 </g>
                 
                 <!-- PING T6 — Épingle de Saintonge -->
-                <g class="tp-ping" data-corner="T6" data-name="T6 — Épingle Saintonge" data-type="braking" data-tip="Freinage très tardif. Trajectoire intérieure puis large à la sortie. Préparation T7 lointain." onclick="showCornerDetail('T6')">
+                <g class="tp-ping" data-corner="T6" data-name="T6 — Épingle Saintonge" data-type="braking" data-tip="Épingle serrée, second freinage fort du tour. L'enchaînement T6-T7 est la séquence la plus dense du tracé." onclick="showCornerDetail('T6')">
                   <circle cx="722" cy="498" r="22" fill="rgba(255, 201, 60, 0.12)" class="tp-ping-halo"/>
                   <circle cx="722" cy="498" r="12" fill="rgba(255, 201, 60, 0.35)" class="tp-ping-pulse">
                     <animate attributeName="r" values="10;16;10" dur="2.5s" begin="2.0s" repeatCount="indefinite"/>
@@ -14170,7 +14170,7 @@ textarea:focus-visible {
                 </g>
                 
                 <!-- PING T7 — Épingle Beltoise gauche (la grande) -->
-                <g class="tp-ping" data-corner="T7" data-name="T7 — Épingle Beltoise" data-type="precision" data-tip="LE virage clé du circuit. Freinage puissant et long. Très tard sur les freins. Sortie large vers la ligne droite des stands." onclick="showCornerDetail('T7')">
+                <g class="tp-ping" data-corner="T7" data-name="T7 — Épingle Beltoise" data-type="precision" data-tip="Virage signature du tracé, avant la ligne droite des stands. La position au point de corde se lit dans la vitesse mesurée ensuite." onclick="showCornerDetail('T7')">
                   <circle cx="57" cy="180" r="22" fill="rgba(230, 57, 70, 0.12)" class="tp-ping-halo"/>
                   <circle cx="57" cy="180" r="12" fill="rgba(230, 57, 70, 0.35)" class="tp-ping-pulse">
                     <animate attributeName="r" values="10;18;10" dur="2.5s" begin="2.4s" repeatCount="indefinite"/>
@@ -16691,7 +16691,7 @@ textarea:focus-visible {
         </div>
 
         <!-- ╔══════════════════════════════════════════════════════╗
-             ║   RECOMMANDATIONS COACH IA                            ║
+             ║   LECTURE DE VOTRE SESSION                            ║
              ╚══════════════════════════════════════════════════════╝ -->
         <div class="account-section-title" style="font-family:var(--display);font-weight:600; font-size: 14px; letter-spacing: 0.22em; text-transform: uppercase; color: var(--gold); margin-bottom: 16px;">
           — Lecture de votre session
@@ -21373,13 +21373,13 @@ const OXV_PAGE_SEO = {
   contact:     { title: 'Contact · OXV', description: 'Contactez OXV pour une session, une privatisation corporate ou toute question sur le track day au Circuit de Haute Saintonge.' },
   booking:     { title: 'Réserver une session · OXV', description: 'Pré-inscription en ligne aux sessions OXV de la saison 2027. Access, Signature ou Heritage sur le tracé Beltoise.' },
   founding:    { title: 'Founding Members — Rejoindre le cercle OXV', description: 'Postulez au programme Founding Members OXV : accès prioritaire, tarif fondateur et participation active à la construction du cercle. Trente places, pas trente-et-une.' },
-  coach:       { title: 'OXV Coach — devenir coach partenaire · Licence Fondateur 2027', description: 'Coach diplômé BPJEPS : rejoignez le cercle des coachs partenaires OXV. Licence Fondateur 750 € la saison, outil de données multi-pilotes, accès circuit à tarif dégressif et mise en relation avec les membres.' },
+  coach:       { title: 'Devenir coach partenaire OXV · Licence Fondateur 2027', description: 'Coach diplômé BPJEPS : rejoignez le cercle des coachs partenaires OXV. Licence Fondateur 750 € la saison, outil de données multi-pilotes, accès circuit à tarif dégressif et mise en relation avec les membres.' },
   about:       { title: 'À propos — le manifeste OXV', description: 'Pourquoi OXV existe. La sécurité d\'abord, le développement toujours, la sensation enfin. Vingt pilotes par session, jamais plus.' },
   actualites:  { title: 'Actualités — le journal de la saison · OXV', description: 'Annonces, coulisses, technique et presse. Le journal de la première saison OXV au Circuit de Haute Saintonge.' },
   contact:     { title: 'Contact · OXV', description: 'Contactez OXV pour une session, une privatisation corporate ou toute question sur le track day au Circuit de Haute Saintonge.' },
   booking:     { title: 'Réserver une session · OXV', description: 'Pré-inscription en ligne aux sessions OXV de la saison 2027. Access, Signature ou Heritage sur le tracé Beltoise.' },
   founding:    { title: 'Founding Members — Rejoindre le cercle OXV', description: 'Postulez au programme Founding Members OXV : accès prioritaire, tarif fondateur et participation active à la construction du cercle. Trente places, pas trente-et-une.' },
-  coach:       { title: 'OXV Coach — devenir coach partenaire · Licence Fondateur 2027', description: 'Coach diplômé BPJEPS : rejoignez le cercle des coachs partenaires OXV. Licence Fondateur 750 € la saison, outil de données multi-pilotes, accès circuit à tarif dégressif et mise en relation avec les membres.' },
+  coach:       { title: 'Devenir coach partenaire OXV · Licence Fondateur 2027', description: 'Coach diplômé BPJEPS : rejoignez le cercle des coachs partenaires OXV. Licence Fondateur 750 € la saison, outil de données multi-pilotes, accès circuit à tarif dégressif et mise en relation avec les membres.' },
   plateau:     { title: 'Le plateau — la communauté OXV · Saison 2027', description: 'Le plateau OXV : vingt pilotes, quatre principes, un cercle. Découvrez la communauté active et les membres de la saison en cours au Circuit de Haute Saintonge.' },
   mentions:    { title: 'Mentions légales · OXV', description: 'Mentions légales du site OXV — Only Xtreme Vehicle.' },
   cgv:         { title: 'Conditions générales de vente · OXV', description: 'Conditions générales de vente OXV : offres, paiements, annulations.' },
@@ -23391,44 +23391,44 @@ window.showCornerDetail = function(cornerId) {
     T1: {
       name: 'T1 — Épingle de Beltoise',
       type: 'braking',
-      tag: '🔵 Freinage tardif',
-      tip: 'Premier point de freinage majeur après la longue ligne droite. Freinage tardif et puissant, entrée tardive, point de corde retardé pour ouvrir une trajectoire de sortie large. La sortie conditionne la vitesse jusqu\'à T2.',
+      tag: 'Freinage appuyé',
+      tip: 'Premier point de freinage majeur, en bout de longue ligne droite : la décélération la plus forte du tour s\'y mesure. La vitesse de sortie conditionne toute la portion jusqu\'à T2 — c\'est ce que la donnée montre, tour après tour.',
     },
     T2: {
       name: 'T2 — Rapide à droite',
       type: 'speed',
-      tag: '🟢 Vitesse',
-      tip: 'Courbe rapide à droite. On ne freine pas, on porte la vitesse. Trajectoire extérieure-extérieure pour préserver l\'élan. Erreur classique : entrée trop fermée qui fait perdre 5 km/h en sortie.',
+      tag: 'Vitesse de passage',
+      tip: 'Courbe rapide à droite, négociée sans freinage. La télémétrie y lit la vitesse de passage et la ligne empruntée : quelques mètres d\'écart à l\'entrée se mesurent en km/h à la sortie.',
     },
     T3: {
       name: 'T3 — Gauche technique',
       type: 'precision',
-      tag: '🔴 Précision trajectoire',
-      tip: 'Patience à l\'entrée. Tournez tard et roulez sur la corde longtemps. Préparez immédiatement l\'enchaînement vers T4. Le QDI Trajectoire se joue ici.',
+      tag: 'Précision trajectoire',
+      tip: 'Gauche technique qui ouvre la section sinueuse. Le placement au point de corde et sa répétabilité d\'un tour à l\'autre s\'y lisent directement — la zone la plus sensible pour la branche Trajectoire du QDI.',
     },
     T4: {
       name: 'T4 — Réaccélération',
       type: 'acceleration',
-      tag: '🟢 Sortie + remise gaz',
-      tip: 'Sortie de T3 et réaccélération progressive. Visualisez le point de corde de T5 avant même d\'y arriver. Remise des gaz fluide, pas brutale.',
+      tag: 'Réaccélération',
+      tip: 'Zone de réaccélération entre T3 et T5. La trace longitudinale y montre la progressivité de la remise des gaz et la continuité de l\'accélération.',
     },
     T5: {
       name: 'T5 — Courbe moyenne',
       type: 'fluidity',
-      tag: '🟡 Fluidité',
-      tip: 'Liaison vers l\'épingle T6. Maintenez l\'accélération sans à-coup. Trajectoire extérieure pour rester sur les gaz le plus longtemps possible.',
+      tag: 'Fluidité',
+      tip: 'Courbe moyenne de liaison vers l\'épingle T6. La continuité de l\'accélération et la régularité de la ligne s\'y lisent tour après tour.',
     },
     T6: {
       name: 'T6 — Épingle Saintonge',
       type: 'braking',
-      tag: '🔵 Freinage très tardif',
-      tip: 'Épingle serrée à droite. Freinage très tardif, trajectoire d\'attaque intérieure puis sortie large. Préparez T7 dès la sortie de T6 — c\'est la séquence clé du circuit.',
+      tag: 'Freinage fort',
+      tip: 'Épingle serrée à droite : second freinage fort du tour. L\'enchaînement immédiat vers T7 en fait la séquence la plus dense du tracé — les écarts s\'y cumulent d\'un virage à l\'autre.',
     },
     T7: {
       name: 'T7 — Épingle Beltoise',
       type: 'precision',
-      tag: '🔴 LE virage clé',
-      tip: 'LE virage signature du circuit. Freinage puissant ET long. La position du véhicule au point de corde détermine TOUTE votre ligne droite des stands. Une erreur ici = 2 secondes perdues sur le tour.',
+      tag: 'Virage signature',
+      tip: 'Le virage signature du tracé, juste avant la ligne droite des stands. La position du véhicule au point de corde se lit directement dans la vitesse mesurée sur toute la ligne droite suivante.',
     },
   };
   
@@ -27416,7 +27416,7 @@ function showEmptyQDI(firstName, qs, qsAll) {
   qsAll('.prog-pillar-fill').forEach(el => el.style.width = '0%');
   qsAll('.prog-pillar-score').forEach(el => el.textContent = '—');
 
-  // Cacher les recommandations et l'évolution
+  // Cacher la lecture de session et l'évolution
   const recoGrid = qs('.prog-reco-grid');
   const evolution = qs('.prog-evolution');
   if (recoGrid) recoGrid.style.display = 'none';
@@ -27499,7 +27499,7 @@ function renderMarginData(analyses, firstName, qs, qsAll) {
   // Piliers détaillés : depuis margin_breakdown si exploitable, sinon masqués
   renderMarginPillars(latest, qs, qsAll);
 
-  // Évolution + recommandations coach (texte réel)
+  // Évolution + débrief du coach humain (texte réel, restitué tel quel)
   renderMarginEvolution(analyses, qs, qsAll);
   renderMarginReco(latest, qs);
 
@@ -27580,7 +27580,7 @@ function renderMarginEvolution(analyses, qs, qsAll) {
   }
 }
 
-// Recommandations : on affiche le débrief coach réel (next_focus_phrase, debrief_text)
+// Débrief du coach humain : next_focus_phrase + debrief_text, restitués tels quels
 function renderMarginReco(latest, qs) {
   qs = qs || (s => document.querySelector(s));
   const grid = qs('.prog-reco-grid');
