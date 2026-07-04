@@ -1196,18 +1196,24 @@ h1, h2, h3, h4, h5 {
   border-color: var(--red-oxv);
   background: linear-gradient(180deg, var(--night-card) 0%, rgba(216, 15, 31, 0.06) 100%);
 }
-.offer.offer-featured::after {
-  content: 'SIGNATURE';
+/* Badge d'offre = vrai élément DOM (ex-::after, en collision avec la ligne dorée
+   de survol .offer::after définie plus bas — cause du glitch au survol de Signature) */
+.offer-badge {
   position: absolute;
   top: 18px; right: 18px;
   font-family: var(--mono);
   font-size: 8px;
   letter-spacing: 0.3em;
+  text-transform: uppercase;
   color: #ffffff;
   padding: 4px 10px;
   border: 1px solid var(--red-oxv);
   background: var(--red-oxv);
 }
+/* Emplacements photo par offre (ratio fixe, lazy) — activer : classe has-media + src */
+.offer-media { display: none; margin: 0 0 24px; }
+.offer-media.has-media { display: block; }
+.offer-media img { width: 100%; aspect-ratio: 16 / 10; object-fit: cover; border-radius: 8px; display: block; }
 
 /* === CIRCUIT PORTRAIT === */
 .circuit-frame {
@@ -13663,6 +13669,7 @@ textarea:focus-visible {
       <div class="offers reveal-stagger">
 
         <article class="offer">
+          <figure class="offer-media"><img loading="lazy" decoding="async" alt="Access — demi-journée piste du lundi" /></figure>
           <div class="offer-tier">N° 01 · Access</div>
           <h3 class="offer-name">Access<em>La piste, sans filtre</em></h3>
           <p class="offer-tagline">
@@ -13694,10 +13701,12 @@ textarea:focus-visible {
         </article>
 
         <article class="offer offer-featured">
+          <span class="offer-badge">Signature</span>
+          <figure class="offer-media"><img loading="lazy" decoding="async" alt="Signature — journée complète du vendredi" /></figure>
           <div class="offer-tier">N° 02 · Signature</div>
           <h3 class="offer-name">Signature<em>L'expérience complète</em></h3>
           <p class="offer-tagline">
-            Journée pleine le vendredi. Pilotage, télémétrie, coaching, hospitalité gastronomique, captation média. Tout est compris, rien à ajouter.
+            Journée pleine le vendredi. Pilotage, télémétrie, restitution data, hospitalité gastronomique, captation média. Tout est compris, rien à ajouter.
           </p>
           <ul class="offer-meta">
             <li><span>Format</span> Vendredi · journée complète 9h-17h</li>
@@ -13729,6 +13738,7 @@ textarea:focus-visible {
         </article>
 
         <article class="offer offer--heritage">
+          <figure class="offer-media"><img loading="lazy" decoding="async" alt="Heritage — pack saison 4 sessions Signature" /></figure>
           <div class="offer-tier">N° 03 · Heritage</div>
           <div class="offer-heritage-insignia" aria-hidden="true">
             <svg class="oxv-insignia oxv-insignia--lg oxv-insignia--gold"><use href="#oxv-insignia"/></svg>
@@ -13748,7 +13758,7 @@ textarea:focus-visible {
             <li>Priorité de réservation · ouverture J-7 avant les non-membres</li>
             <li>Application OXV premium illimitée toute l'année</li>
             <li>Historique complet de votre data circuit</li>
-            <li>Débrief IA post-session (opt-in) · comparatif tours inter-sessions</li>
+            <li>Bilan de session factuel · comparatif tours inter-sessions</li>
             <li>Invitation aux 2-3 événements clubs annuels exclusifs</li>
             <li>Accès anticipé au calendrier saison N+1</li>
           </ul>
