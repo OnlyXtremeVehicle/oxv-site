@@ -643,7 +643,8 @@ h1, h2, h3, h4, h5 {
   gap: 5px; padding: 8px;
   cursor: pointer;
 }
-@media (min-width: 1024px) { .burger { display: none; } }
+/* Le burger reste visible sur desktop : il ouvre le menu complet (drawer latéral) */
+@media (min-width: 1024px) { .burger { margin-left: 6px; } }
 .burger i { display: block; width: 18px; height: 1px; background: var(--cream); transition: transform 0.4s; }
 
 .mob {
@@ -656,6 +657,20 @@ h1, h2, h3, h4, h5 {
 }
 .mob.open { transform: translateY(0); }
 .mob-section { margin-bottom: 32px; }
+/* Desktop : le même menu devient un drawer latéral droit, condensé */
+@media (min-width: 1024px) {
+  .mob {
+    inset: 0 0 0 auto;
+    width: 440px;
+    transform: translateX(100%);
+    border-left: 1px solid var(--cream-line);
+    background: rgba(10, 10, 11, 0.98);
+    padding: 88px 44px 32px;
+  }
+  .mob.open { transform: translateX(0); }
+  .mob-link { font-size: 21px; padding: 5px 0; }
+  .mob-section { margin-bottom: 26px; }
+}
 .mob-label { font-family: var(--mono); font-size: 10px; letter-spacing: 0.22em; text-transform: uppercase; color: var(--copper-glow); margin-bottom: 14px; }
 .mob-link { display: block; font-family: var(--serif); font-size: 32px; font-weight: 300; padding: 8px 0; color: var(--cream); }
 .mob-link em { font-style: italic; color: var(--copper-glow); }
@@ -13166,6 +13181,16 @@ textarea:focus-visible {
 .oxv-app-hero { display: grid; grid-template-columns: 1fr; gap: 44px; align-items: center; }
 @media (min-width: 900px) { .oxv-app-hero { grid-template-columns: 1.1fr 0.9fr; } }
 
+/* — Corporate · scénarios visuels (retour fondateur : moins de texte, plus d'image) — */
+.corp-scenario--visual { padding: 0; overflow: hidden; }
+.corp-scenario--visual .corp-scenario-img { aspect-ratio: 16 / 9; overflow: hidden; }
+.corp-scenario--visual .corp-scenario-img img { width: 100%; height: 100%; object-fit: cover; display: block; filter: saturate(0.92); transition: transform 0.5s var(--ease); }
+.corp-scenario--visual:hover .corp-scenario-img img { transform: scale(1.03); }
+.corp-scenario--visual .corp-scenario-title { padding: 18px 20px 6px; margin: 0; }
+.corp-scenario--visual .corp-scenario-text { padding: 0 20px; margin: 0 0 14px; }
+.corp-scenario-tags { display: flex; flex-wrap: wrap; gap: 6px; padding: 0 20px 20px; }
+.corp-scenario-tags span { font-family: var(--mono); font-size: 9px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--cream-mute); border: 1px solid var(--cream-line); padding: 4px 8px; border-radius: 4px; }
+
 /* — Lot H · Direction typographique « Goodwood » (arbitrage fondateur 2026-07-04) —
    Titres en serif italique racé (Cormorant Garamond) ; eyebrows, labels, data (mono)
    et boutons inchangés. Casse naturelle : fin de l'uppercase sur les grands titres.
@@ -13283,31 +13308,40 @@ textarea:focus-visible {
 <!-- Mobile menu -->
 <div class="mob" id="mobMenu">
   <button class="modal-close" onclick="document.getElementById('mobMenu').classList.remove('open')">×</button>
+  <div class="mob-cols">
   <div class="mob-section">
-    <div class="mob-label">Découvrir</div>
+    <div class="mob-label">Rouler</div>
     <a class="mob-link" onclick="goTo('home'); closeMob()"><em>Accueil</em></a>
     <a class="mob-link" onclick="goTo('offers'); closeMob()">Les offres</a>
     <a class="mob-link" onclick="goTo('calendrier'); closeMob()">Calendrier</a>
+    <a class="mob-link" data-cta="reserve" onclick="ctaPrimaryGo(); closeMob()">Réserver</a>
     <a class="mob-link" onclick="goTo('circuit'); closeMob()">Le circuit</a>
+  </div>
+  <div class="mob-section">
+    <div class="mob-label">Comprendre</div>
     <a class="mob-link" onclick="goTo('application'); closeMob()">L'application</a>
     <a class="mob-link" onclick="goTo('apres-journee'); closeMob()">Votre journée</a>
-    <a class="mob-link" onclick="goTo('corporate'); closeMob()">Corporate</a>
-    <a class="mob-link" onclick="goTo('about'); closeMob()">À propos</a>
-    <a class="mob-link" onclick="goTo('actualites'); closeMob()">Actualités</a>
-    <a class="mob-link" onclick="goTo('contact'); closeMob()">Contact</a>
+    <a class="mob-link" onclick="goTo('securite'); closeMob()">Sécurité &amp; cadre</a>
+    <a class="mob-link" onclick="goTo('preuves'); closeMob()">Preuves &amp; garanties</a>
   </div>
   <div class="mob-section">
     <div class="mob-label">Le cercle</div>
-    <a class="mob-link" onclick="goTo('founding'); closeMob()" style="color:var(--gold);">⌬ Founding Members</a>
+    <a class="mob-link" onclick="goTo('founding'); closeMob()" style="color:var(--gold);">Founding Members</a>
     <a class="mob-link" onclick="goTo('coach'); closeMob()">Coach partenaire</a>
     <a class="mob-link" onclick="goTo('plateau'); closeMob()">Le plateau</a>
   </div>
   <div class="mob-section">
-    <div class="mob-label">Espace pilote</div>
-    <a class="mob-link" data-cta="reserve" onclick="ctaPrimaryGo(); closeMob()">Réserver</a>
+    <div class="mob-label">OXV</div>
+    <a class="mob-link" onclick="goTo('corporate'); closeMob()">Corporate</a>
+    <a class="mob-link" onclick="goTo('partenaires'); closeMob()">Partenaires</a>
+    <a class="mob-link" onclick="goTo('presse'); closeMob()">Presse</a>
+    <a class="mob-link" onclick="goTo('about'); closeMob()">À propos</a>
+    <a class="mob-link" onclick="goTo('actualites'); closeMob()">Actualités</a>
+    <a class="mob-link" onclick="goTo('contact'); closeMob()">Contact</a>
+  </div>
   </div>
   <div class="mob-actions">
-    <button class="btn btn-ghost" onclick="goTo('login'); closeMob()">Se connecter</button>
+    <button class="btn btn-ghost" id="mobAuth" onclick="goTo('login'); closeMob()">Se connecter</button>
     <button class="btn btn-primary" id="mobCtaJoin" onclick="ctaPrimaryGo(); closeMob()">Demander une place</button>
   </div>
 </div>
@@ -14648,22 +14682,25 @@ textarea:focus-visible {
 
         <div class="corp-scenarios-grid">
 
-          <div class="corp-scenario">
-            <div class="corp-scenario-icon">⌘</div>
+          <div class="corp-scenario corp-scenario--visual">
+            <div class="corp-scenario-img"><img src="img/offer-heritage.webp" alt="" loading="lazy" decoding="async" /></div>
             <h3 class="corp-scenario-title">Comité de direction</h3>
-            <p class="corp-scenario-text">12 à 20 dirigeants. Restitution data collective en fin de session, accès coach partenaire en option. Un moment de cohésion qui se mesure en données réelles.</p>
+            <p class="corp-scenario-text">Une cohésion qui se mesure en données réelles.</p>
+            <div class="corp-scenario-tags"><span>12–20 dirigeants</span><span>Restitution data</span><span>Coach en option</span></div>
           </div>
 
-          <div class="corp-scenario">
-            <div class="corp-scenario-icon">◊</div>
+          <div class="corp-scenario corp-scenario--visual">
+            <div class="corp-scenario-img"><img src="img/offer-signature.webp" alt="" loading="lazy" decoding="async" /></div>
             <h3 class="corp-scenario-title">Concessionnaire premium</h3>
-            <p class="corp-scenario-text">Journée clients sélectionnés, essais dynamiques sur piste privatisée. Captation média, branding discret sur place. Une expérience que vos clients ne trouvent nulle part ailleurs.</p>
+            <p class="corp-scenario-text">Vos clients essaient, sur piste privatisée.</p>
+            <div class="corp-scenario-tags"><span>Essais dynamiques</span><span>Captation média</span><span>Branding discret</span></div>
           </div>
 
-          <div class="corp-scenario">
-            <div class="corp-scenario-icon">◉</div>
-            <h3 class="corp-scenario-title">Lancement produit & presse</h3>
-            <p class="corp-scenario-text">Marque automobile, journalistes et influenceurs. Conditions de prise de vue maîtrisées, livrables photo et vidéo sous 7 jours. Le produit mis en valeur dans son élément.</p>
+          <div class="corp-scenario corp-scenario--visual">
+            <div class="corp-scenario-img"><img src="img/offer-access.webp" alt="" loading="lazy" decoding="async" /></div>
+            <h3 class="corp-scenario-title">Lancement produit &amp; presse</h3>
+            <p class="corp-scenario-text">Le produit mis en valeur dans son élément.</p>
+            <div class="corp-scenario-tags"><span>Prises de vue maîtrisées</span><span>Livrables sous 7 jours</span></div>
           </div>
 
         </div>
@@ -15855,6 +15892,9 @@ textarea:focus-visible {
         <button class="account-nav-item" onclick="goToAccount('compte-sessions')">
           <span>Mes sessions</span><span class="arr">→</span>
         </button>
+        <button class="account-nav-item" onclick="goToAccount('compte-medias')">
+          <span>Mes médias</span><span class="arr">→</span>
+        </button>
         <button class="account-nav-item" onclick="goToAccount('compte-progression')">
           <span>Ma progression</span><span class="arr">→</span>
         </button>
@@ -15909,6 +15949,12 @@ textarea:focus-visible {
           <span class="account-nav-btn-icon">◷</span>
           <span class="account-nav-btn-label">Mes sessions</span>
           <span class="account-nav-btn-sub">Historique · sessions à venir</span>
+        </button>
+
+        <button class="account-nav-btn" onclick="goToAccount('compte-medias')">
+          <span class="account-nav-btn-icon">▤</span>
+          <span class="account-nav-btn-label">Mes médias</span>
+          <span class="account-nav-btn-sub">Photos · vidéos de vos sessions</span>
         </button>
 
         <button class="account-nav-btn" onclick="goToAccount('compte-progression')">
@@ -16199,6 +16245,7 @@ textarea:focus-visible {
         <button class="account-nav-item active" onclick="goToAccount('compte-vehicules')"><span>Mes véhicules</span><span class="arr">→</span></button>
         <button class="account-nav-item" onclick="goToAccount('compte-documents')"><span>Mes documents</span><span class="arr">→</span></button>
         <button class="account-nav-item" onclick="goToAccount('compte-sessions')"><span>Mes sessions</span><span class="arr">→</span></button>
+        <button class="account-nav-item" onclick="goToAccount('compte-medias')"><span>Mes médias</span><span class="arr">→</span></button>
         <button class="account-nav-item" onclick="goToAccount('compte-progression')"><span>Ma progression</span><span class="arr">→</span></button>
         <button class="account-nav-item" onclick="goToAccount('compte-heritage')"><span>Mon Heritage</span><span class="arr">→</span></button>
         <button class="account-nav-item" onclick="goToAccount('compte-paiements')"><span>Mes paiements</span><span class="arr">→</span></button>
@@ -16268,6 +16315,7 @@ textarea:focus-visible {
         <button class="account-nav-item" onclick="goToAccount('compte-vehicules')"><span>Mes véhicules</span><span class="arr">→</span></button>
         <button class="account-nav-item active" onclick="goToAccount('compte-documents')"><span>Mes documents</span><span class="arr">→</span></button>
         <button class="account-nav-item" onclick="goToAccount('compte-sessions')"><span>Mes sessions</span><span class="arr">→</span></button>
+        <button class="account-nav-item" onclick="goToAccount('compte-medias')"><span>Mes médias</span><span class="arr">→</span></button>
         <button class="account-nav-item" onclick="goToAccount('compte-progression')"><span>Ma progression</span><span class="arr">→</span></button>
         <button class="account-nav-item" onclick="goToAccount('compte-heritage')"><span>Mon Heritage</span><span class="arr">→</span></button>
         <button class="account-nav-item" onclick="goToAccount('compte-paiements')"><span>Mes paiements</span><span class="arr">→</span></button>
@@ -16323,6 +16371,7 @@ textarea:focus-visible {
         <button class="account-nav-item" onclick="goToAccount('compte-vehicules')"><span>Mes véhicules</span><span class="arr">→</span></button>
         <button class="account-nav-item" onclick="goToAccount('compte-documents')"><span>Mes documents</span><span class="arr">→</span></button>
         <button class="account-nav-item active" onclick="goToAccount('compte-sessions')"><span>Mes sessions</span><span class="arr">→</span></button>
+        <button class="account-nav-item" onclick="goToAccount('compte-medias')"><span>Mes médias</span><span class="arr">→</span></button>
         <button class="account-nav-item" onclick="goToAccount('compte-progression')"><span>Ma progression</span><span class="arr">→</span></button>
         <button class="account-nav-item" onclick="goToAccount('compte-heritage')"><span>Mon Heritage</span><span class="arr">→</span></button>
         <button class="account-nav-item" onclick="goToAccount('compte-paiements')"><span>Mes paiements</span><span class="arr">→</span></button>
@@ -16379,6 +16428,39 @@ textarea:focus-visible {
 </div>
 <!-- /compte-sessions -->
 
+<!-- ============ COMPTE — MES MÉDIAS ============ -->
+<div class="page" id="page-compte-medias">
+  <div class="account-layout">
+    <aside class="account-sidebar">
+      <div class="account-sidebar-eyebrow">— Espace pilote</div>
+      <nav class="account-nav">
+        <button class="account-nav-item" onclick="goToAccount('compte')"><span>Tableau de bord</span><span class="arr">→</span></button>
+        <button class="account-nav-item" onclick="goToAccount('compte-sessions')"><span>Mes sessions</span><span class="arr">→</span></button>
+        <button class="account-nav-item active" onclick="goToAccount('compte-medias')"><span>Mes médias</span><span class="arr">→</span></button>
+        <button class="account-nav-item" onclick="goToAccount('compte-progression')"><span>Ma progression</span><span class="arr">→</span></button>
+        <button class="account-nav-item" onclick="goToAccount('compte-paiements')"><span>Mes paiements</span><span class="arr">→</span></button>
+        <button class="account-nav-item" onclick="goToAccount('compte-preferences')"><span>Préférences</span><span class="arr">→</span></button>
+        <button class="account-nav-item" onclick="logoutUser()"><span>Se déconnecter</span><span class="arr">→</span></button>
+      </nav>
+    </aside>
+    <main class="account-main">
+      <div class="account-header">
+        <div class="account-header-eyebrow">N° ⌬ · Mes médias</div>
+        <h1 class="account-header-title">Vos <em>images</em>.</h1>
+        <p class="account-header-sub">Photos et vidéos de vos sessions, livrées par OXV. Disponibles ici et dans l'application.</p>
+      </div>
+      <div class="session-block" id="mediasPageBlock" style="display:none;">
+        <div id="mediasPage"></div>
+      </div>
+      <div class="account-empty" id="mediasPageBlockEmpty" style="display:block;">
+        <div class="account-empty-icon">▤</div>
+        <p class="account-empty-text">Vos médias apparaîtront ici après votre première session — photos paddock, vidéos embarquées, chaque fichier reste téléchargeable.</p>
+      </div>
+    </main>
+  </div>
+</div>
+<!-- /compte-medias -->
+
 
 <!-- ============ COMPTE : MON HERITAGE ============ -->
 <div class="page" id="page-compte-heritage">
@@ -16401,6 +16483,7 @@ textarea:focus-visible {
         <button class="account-nav-item" onclick="goToAccount('compte-vehicules')"><span>Mes véhicules</span><span class="arr">→</span></button>
         <button class="account-nav-item" onclick="goToAccount('compte-documents')"><span>Mes documents</span><span class="arr">→</span></button>
         <button class="account-nav-item" onclick="goToAccount('compte-sessions')"><span>Mes sessions</span><span class="arr">→</span></button>
+        <button class="account-nav-item" onclick="goToAccount('compte-medias')"><span>Mes médias</span><span class="arr">→</span></button>
         <button class="account-nav-item" onclick="goToAccount('compte-progression')"><span>Ma progression</span><span class="arr">→</span></button>
         <button class="account-nav-item active" onclick="goToAccount('compte-heritage')"><span>Mon Heritage</span><span class="arr">→</span></button>
         <button class="account-nav-item" onclick="goToAccount('compte-paiements')"><span>Mes paiements</span><span class="arr">→</span></button>
@@ -16487,6 +16570,7 @@ textarea:focus-visible {
         <button class="account-nav-item" onclick="goToAccount('compte-vehicules')"><span>Mes véhicules</span><span class="arr">→</span></button>
         <button class="account-nav-item" onclick="goToAccount('compte-documents')"><span>Mes documents</span><span class="arr">→</span></button>
         <button class="account-nav-item" onclick="goToAccount('compte-sessions')"><span>Mes sessions</span><span class="arr">→</span></button>
+        <button class="account-nav-item" onclick="goToAccount('compte-medias')"><span>Mes médias</span><span class="arr">→</span></button>
         <button class="account-nav-item" onclick="goToAccount('compte-progression')"><span>Ma progression</span><span class="arr">→</span></button>
         <button class="account-nav-item" onclick="goToAccount('compte-heritage')"><span>Mon Heritage</span><span class="arr">→</span></button>
         <button class="account-nav-item active" onclick="goToAccount('compte-paiements')"><span>Mes paiements</span><span class="arr">→</span></button>
@@ -16634,6 +16718,7 @@ textarea:focus-visible {
         <button class="account-nav-item" onclick="goToAccount('compte-vehicules')"><span>Mes véhicules</span><span class="arr">→</span></button>
         <button class="account-nav-item" onclick="goToAccount('compte-documents')"><span>Mes documents</span><span class="arr">→</span></button>
         <button class="account-nav-item" onclick="goToAccount('compte-sessions')"><span>Mes sessions</span><span class="arr">→</span></button>
+        <button class="account-nav-item" onclick="goToAccount('compte-medias')"><span>Mes médias</span><span class="arr">→</span></button>
         <button class="account-nav-item active" onclick="goToAccount('compte-progression')"><span>Ma progression</span><span class="arr">→</span></button>
         <button class="account-nav-item" onclick="goToAccount('compte-heritage')"><span>Mon Heritage</span><span class="arr">→</span></button>
         <button class="account-nav-item" onclick="goToAccount('compte-paiements')"><span>Mes paiements</span><span class="arr">→</span></button>
@@ -16963,6 +17048,7 @@ textarea:focus-visible {
         <button class="account-nav-item" onclick="goToAccount('compte-vehicules')"><span>Mes véhicules</span><span class="arr">→</span></button>
         <button class="account-nav-item" onclick="goToAccount('compte-documents')"><span>Mes documents</span><span class="arr">→</span></button>
         <button class="account-nav-item" onclick="goToAccount('compte-sessions')"><span>Mes sessions</span><span class="arr">→</span></button>
+        <button class="account-nav-item" onclick="goToAccount('compte-medias')"><span>Mes médias</span><span class="arr">→</span></button>
         <button class="account-nav-item" onclick="goToAccount('compte-progression')"><span>Ma progression</span><span class="arr">→</span></button>
         <button class="account-nav-item" onclick="goToAccount('compte-heritage')"><span>Mon Heritage</span><span class="arr">→</span></button>
         <button class="account-nav-item" onclick="goToAccount('compte-paiements')"><span>Mes paiements</span><span class="arr">→</span></button>
@@ -20435,7 +20521,7 @@ textarea:focus-visible {
       <p style="font-family:var(--mono);font-size:11px;letter-spacing:0.12em;color:var(--cream-faint);margin:0 0 26px;">Paiement en ligne sécurisé activé au lancement · sans engagement au-delà de la période choisie</p>
 
       <div class="reveal" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px;margin-bottom:48px;">
-        <div class="bento" style="padding:28px;border-color:var(--red-oxv);position:relative;">
+        <div class="bento" style="padding:28px;border-color:var(--red-oxv);position:relative;overflow:visible;">
           <div style="position:absolute;top:-10px;left:20px;background:var(--red-oxv);color:#fff;font-family:var(--mono);font-size:9px;letter-spacing:0.14em;text-transform:uppercase;padding:4px 10px;border-radius:5px;">Pilote</div>
           <div style="font-family:var(--display);font-weight:600;font-size:19px;color:var(--offwhite);margin:8px 0 6px;">Mirror Pilote</div>
           <div style="font-family:var(--mono);font-size:26px;color:var(--offwhite);margin-bottom:2px;">15 €<span style="font-size:13px;color:var(--cream-mute);"> /mois</span></div>
@@ -21225,6 +21311,13 @@ supabase.auth.onAuthStateChange((event, session) => {
       const currentPage = document.querySelector('.page.active')?.id;
       if (currentPage === 'page-login' || currentPage === 'page-verify-email' || !currentPage) {
         goTo('compte');
+        // Première connexion de la session : inviter à découvrir l'espace
+        try {
+          if (!sessionStorage.getItem('oxvWelcomed')) {
+            sessionStorage.setItem('oxvWelcomed', '1');
+            setTimeout(() => toast('Bienvenue · explorez votre espace : sessions, documents, paiements, médias', 'ok'), 900);
+          }
+        } catch (_) {}
       }
     }
   } else if (event === 'PASSWORD_RECOVERY') {
@@ -21284,11 +21377,11 @@ window.oxvCurrentUserId = function() {
 
 function onAuthChange() {
   const logged = window.OXVApi.user.isLoggedIn;
+  const profile = window.OXVApi.user.profile;
+  const firstName = profile?.user_metadata?.first_name || profile?.email?.split('@')[0] || 'Pilote';
   const navAuth = document.getElementById('navAuth');
   if (navAuth) {
     if (logged) {
-      const profile = window.OXVApi.user.profile;
-      const firstName = profile?.user_metadata?.first_name || profile?.email?.split('@')[0] || 'Pilote';
       navAuth.textContent = firstName;
       // Au clic : aller au tableau de bord (la déconnexion est dans la sidebar du compte)
       navAuth.onclick = function() { goTo('compte'); };
@@ -21297,6 +21390,19 @@ function onAuthChange() {
       navAuth.onclick = function() { goTo('login'); };
     }
   }
+
+  // Menu panel : même bascule que le header (connecté -> Mon compte)
+  const mobAuth = document.getElementById('mobAuth');
+  if (mobAuth) {
+    mobAuth.textContent = logged ? ('Mon compte · ' + firstName) : 'Se connecter';
+    mobAuth.onclick = logged
+      ? function() { goTo('compte'); closeMob(); }
+      : function() { goTo('login'); closeMob(); };
+  }
+
+  // Bandeau « Rejoindre le cercle » : réservé aux visiteurs, masqué une fois connecté
+  const fb = document.getElementById('foundingBandeau');
+  if (fb) fb.style.display = logged ? 'none' : 'flex';
 
 
   ['booking'].forEach(p => {
@@ -21412,6 +21518,9 @@ window.goTo = function(page, opts) {
   if (page === 'compte-sessions') {
     setTimeout(() => loadMySessions(), 150);
   }
+  if (page === 'compte-medias') {
+    setTimeout(() => loadPilotMedia('mediasPageBlock', 'mediasPage'), 150);
+  }
   if (page === 'compte-heritage') {
     setTimeout(() => loadHeritage(), 150);
   }
@@ -21507,7 +21616,7 @@ const OXV_OG_IMAGE = OXV_BASE_URL + '/brand/og-cover.png';
 // Pages non indexables (espace pilote, admin, authentification)
 const OXV_NOINDEX_PAGES = ['login', 'signup', 'forgot-password', 'reset-password', 'verify-email',
   'compte', 'compte-profil', 'compte-vehicules', 'compte-documents', 'compte-sessions',
-  'compte-progression', 'compte-heritage', 'compte-paiements', 'compte-preferences',
+  'compte-medias', 'compte-progression', 'compte-heritage', 'compte-paiements', 'compte-preferences',
   'admin', 'admin-pilotes', 'admin-pilote-detail', 'admin-sessions', 'admin-session-detail',
   'admin-paiements', 'admin-medias', 'admin-articles', 'admin-emails', 'admin-stats', 'admin-securite', 'admin-demandes', 'demande', 'partenaire-espace'];
 
@@ -26977,9 +27086,11 @@ window.oxvScrollToMedia = function() {
  * La RLS Supabase ne renvoie que les médias visible_to_user=true des
  * sessions auxquelles le pilote a participé. Mêmes données que l'app mobile.
  */
-window.loadPilotMedia = async function() {
-  const block = document.getElementById('sessionsMediaBlock');
-  const container = document.getElementById('sessionsMedia');
+window.loadPilotMedia = async function(blockId, containerId) {
+  // Sert deux écrans : la section médias de « Mes sessions » (défaut) et la page « Mes médias »
+  const block = document.getElementById(blockId || 'sessionsMediaBlock');
+  const container = document.getElementById(containerId || 'sessionsMedia');
+  const emptyEl = document.getElementById((blockId || 'sessionsMediaBlock') + 'Empty');
   if (!block || !container) return;
 
   const userId = window.OXVApi?.user?.profile?.id;
@@ -26995,13 +27106,18 @@ window.loadPilotMedia = async function() {
     // Table absente ou RLS : on masque proprement, pas d'erreur visible
     if (error.code !== '42P01') console.warn('[Médias] Erreur:', error);
     block.style.display = 'none';
+    if (emptyEl) emptyEl.style.display = 'block';
     return;
   }
 
   if (!data || data.length === 0) {
     block.style.display = 'none';
+    if (emptyEl) emptyEl.style.display = 'block';
     return;
   }
+
+  block.style.display = '';
+  if (emptyEl) emptyEl.style.display = 'none';
 
   // Regroupement par session (clé = session_id), tri des groupes par date décroissante
   const groups = new Map();
@@ -27576,6 +27692,16 @@ function showEmptyQDI(firstName, qs, qsAll) {
     const name = firstName ? `, ${escapeHtml(firstName)}` : '';
     sub.innerHTML = `<strong>Bienvenue${name}.</strong> Roulez avec OXV et activez l'abonnement OXV Mirror pour découvrir votre QDI.`;
   }
+
+  // Aucune donnée réelle : on masque les blocs de démonstration (piliers, évolution,
+  // lecture de session) et leurs titres — rien de fictif ne s'affiche au pilote.
+  ['.prog-pillars', '.prog-evolution', '.prog-reco-grid'].forEach(sel => {
+    const el = qs(sel);
+    if (!el) return;
+    el.style.display = 'none';
+    const prev = el.previousElementSibling;
+    if (prev && prev.classList && prev.classList.contains('account-section-title')) prev.style.display = 'none';
+  });
 
   // Réinitialiser les piliers à 0
   qsAll('.prog-pillar-fill').forEach(el => el.style.width = '0%');
