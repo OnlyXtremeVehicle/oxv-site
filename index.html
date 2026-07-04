@@ -14684,6 +14684,22 @@ textarea:focus-visible {
         </div>
       </div>
 
+      <!-- Garanties & déroulé — bande de preuve avant le formulaire (Lot G, Q4) -->
+      <div class="reveal" style="max-width:920px;margin:0 auto 56px;display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:16px;">
+        <div class="bento" style="padding:22px 24px;border-left:3px solid var(--gold);">
+          <div style="font-family:var(--display);font-size:10px;letter-spacing:0.2em;text-transform:uppercase;color:var(--gold);margin-bottom:8px;">Sécurité &amp; encadrement</div>
+          <p style="font-family:var(--sans);font-size:13px;line-height:1.6;color:var(--cream-mute);margin:0;">Briefing obligatoire, direction de piste, responsabilité civile organisateur incluse.</p>
+        </div>
+        <div class="bento" style="padding:22px 24px;border-left:3px solid var(--gold);">
+          <div style="font-family:var(--display);font-size:10px;letter-spacing:0.2em;text-transform:uppercase;color:var(--gold);margin-bottom:8px;">Clé en main</div>
+          <p style="font-family:var(--sans);font-size:13px;line-height:1.6;color:var(--cream-mute);margin:0;">Accueil, roulage encadré, restauration traiteur, captation média : un seul interlocuteur OXV.</p>
+        </div>
+        <div class="bento" style="padding:22px 24px;border-left:3px solid var(--gold);">
+          <div style="font-family:var(--display);font-size:10px;letter-spacing:0.2em;text-transform:uppercase;color:var(--gold);margin-bottom:8px;">Exclusivité</div>
+          <p style="font-family:var(--sans);font-size:13px;line-height:1.6;color:var(--cream-mute);margin:0;">Circuit privatisé pour votre événement. Vingt pilotes maximum en piste, jamais plus.</p>
+        </div>
+      </div>
+
       <!-- FORMULAIRE — Demande de devis -->
       <div class="reveal" style="max-width: 720px; margin: 0 auto;">
         <div class="kicker" style="margin-bottom: 24px;">N° 04.2 · Demande de devis</div>
@@ -14739,12 +14755,40 @@ textarea:focus-visible {
 
           <div class="corp-form-row">
             <div class="corp-form-field">
-              <label for="cf-guests">Nombre d'invités</label>
-              <input type="text" id="cf-guests" name="guests" placeholder="Ex. 18 pilotes" />
+              <label for="cf-guests">Effectif approximatif<span class="req">*</span></label>
+              <input type="text" id="cf-guests" name="guests" required placeholder="Ex. 15-20 personnes" />
             </div>
             <div class="corp-form-field">
               <label for="cf-dates">Date envisagée</label>
               <input type="text" id="cf-dates" name="dates" placeholder="Ex. semaine du 18 mai" />
+            </div>
+          </div>
+
+          <div class="corp-form-row">
+            <div class="corp-form-field">
+              <label for="cf-circuit">Lieu</label>
+              <select id="cf-circuit" name="circuit">
+                <option>Circuit de Haute Saintonge</option>
+                <option>Autre lieu — à étudier</option>
+              </select>
+            </div>
+            <div class="corp-form-field">
+              <label for="cf-budget">Budget indicatif</label>
+              <select id="cf-budget" name="budget">
+                <option value="">À définir</option>
+                <option>Moins de 10 000 €</option>
+                <option>10 000 – 20 000 €</option>
+                <option>Plus de 20 000 €</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="corp-form-field">
+            <label>Vos besoins</label>
+            <div style="display:flex;gap:18px;flex-wrap:wrap;padding-top:6px;">
+              <label class="corp-form-check"><input type="checkbox" id="cf-need-resto" /><span>Restauration traiteur</span></label>
+              <label class="corp-form-check"><input type="checkbox" id="cf-need-media" /><span>Captation photo &amp; vidéo</span></label>
+              <label class="corp-form-check"><input type="checkbox" id="cf-need-brand" /><span>Branding &amp; signalétique</span></label>
             </div>
           </div>
 
@@ -14766,7 +14810,7 @@ textarea:focus-visible {
 
           <p class="corp-form-info">
             Votre demande est transmise directement à l'équipe OXV.<br/>
-            Devis HT sous 5 jours ouvrés.
+            Première réponse sous 48 h ouvrées · devis personnalisé HT.
           </p>
 
         </form>
@@ -23383,10 +23427,17 @@ window.submitCorporate = async function() {
   const format  = document.getElementById('cf-format').value;
   const guests  = document.getElementById('cf-guests').value.trim();
   const dates   = document.getElementById('cf-dates').value.trim();
+  const circuit = document.getElementById('cf-circuit')?.value || '';
+  const budget  = document.getElementById('cf-budget')?.value || '';
+  const needs   = [
+    ['cf-need-resto', 'Restauration traiteur'],
+    ['cf-need-media', 'Captation photo & vidéo'],
+    ['cf-need-brand', 'Branding & signalétique']
+  ].filter(([id]) => document.getElementById(id)?.checked).map(([, lbl]) => lbl);
   const message = document.getElementById('cf-msg').value.trim();
   const rgpd    = document.getElementById('cf-rgpd').checked;
 
-  if (!company || !name || !email || !format || !rgpd) {
+  if (!company || !name || !email || !format || !guests || !rgpd) {
     toast('Veuillez remplir tous les champs obligatoires (*)', 'warn');
     return;
   }
@@ -23405,7 +23456,9 @@ window.submitCorporate = async function() {
   const recap = [
     `Société : ${company}`, `Secteur : ${sector || '—'}`, `Fonction : ${role || '—'}`,
     `Téléphone : ${phone || '—'}`, `Format : ${format}`,
-    `Invités : ${guests || '—'}`, `Date envisagée : ${dates || '—'}`,
+    `Effectif : ${guests || '—'}`, `Date envisagée : ${dates || '—'}`,
+    `Lieu : ${circuit || '—'}`, `Budget indicatif : ${budget || 'à définir'}`,
+    `Besoins : ${needs.length ? needs.join(', ') : '—'}`,
     message ? `\nDétails :\n${message}` : ''
   ].filter(Boolean).join('\n');
 
@@ -23425,6 +23478,9 @@ window.submitCorporate = async function() {
       event_type:       format,
       guest_count:      guests || null,
       preferred_period: dates || null,
+      circuit:          circuit || null,
+      budget_range:     budget || null,
+      needs:            needs.length ? needs : null,
       free_text:        message || null,
       crm: { lead_status: 'lead', priority: 'normal' }
     }
@@ -23435,30 +23491,29 @@ window.submitCorporate = async function() {
     const { error } = await supabase.from('contact_messages').insert(payload);
     if (error) throw error;
 
-    // Accusés de réception corporate (best-effort, après insert réussi)
-    try {
-      supabase.functions.invoke('send-email', {
-        body: { template: 'corporate_recu', recipient: email, data: { first_name: name.split(' ')[0] || name, email } }
-      });
-      supabase.functions.invoke('send-email', {
-        body: { template: 'corporate_recu_interne', data: { company, first_name: name, email, phone, format, message: recap } }
-      });
-    } catch (e) { console.warn('[Corporate] email accusé:', e); }
+    // Accusé de réception + alerte admin : gérés côté SERVEUR par les triggers DB
+    // trg_contact_message_ack (Edge send-contact-ack, idempotent, annonce 48 h ouvrées)
+    // et trg_corporate_lead_admin (notify-admin-lead). Aucun envoi depuis le client.
+    // (Anciens invokes 'send-email' retirés : fonction inexistante, appels morts.)
 
     // Succès affiché UNIQUEMENT après insert réussi (aucun faux succès)
     track('submit_corporate', { company });
-    toast('Demande envoyée · devis sous 5 jours ouvrés', 'ok');
+    toast('Demande envoyée · première réponse sous 48 h ouvrées', 'ok');
     ['cf-company','cf-sector','cf-name','cf-role','cf-email','cf-phone','cf-guests','cf-dates','cf-msg'].forEach(id => {
       const el = document.getElementById(id); if (el) el.value = '';
     });
-    const sel = document.getElementById('cf-format');
-    if (sel) sel.selectedIndex = 0;
+    ['cf-format','cf-circuit','cf-budget'].forEach(id => {
+      const el = document.getElementById(id); if (el) el.selectedIndex = 0;
+    });
+    ['cf-need-resto','cf-need-media','cf-need-brand'].forEach(id => {
+      const el = document.getElementById(id); if (el) el.checked = false;
+    });
     document.getElementById('cf-rgpd').checked = false;
   } catch (e) {
     console.warn('[Corporate] Échec enregistrement, fallback mailto:', e);
     // Fallback mailto propre : le lead n'est jamais perdu si Supabase échoue
     const body = `${recap}\n\nContact : ${name} <${email}>`;
-    const mailto = `mailto:corporate@oxvehicle.fr?subject=${encodeURIComponent('Demande corporate · ' + company)}&body=${encodeURIComponent(body)}`;
+    const mailto = `mailto:contact@oxvehicle.fr?subject=${encodeURIComponent('Demande corporate · ' + company)}&body=${encodeURIComponent(body)}`;
     toast('Connexion impossible · votre logiciel mail s’ouvre pour finaliser', 'warn');
     window.location.href = mailto;
   } finally {
