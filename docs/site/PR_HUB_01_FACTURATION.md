@@ -17,6 +17,9 @@
 2. **Trigger `trg_payment_invoice`** (actif, vérifié) : `payments.status → succeeded` → pg_net → facture auto. Exception-safe, dormant sans secrets vault.
 3. **UI compte** : section « Mes factures » (`#invoiceRows`) — numéro, type, date, montant, bouton **PDF** (`storage.download`, RLS owner). État vide honnête. Note « À savoir » mise à jour (SIRET dès immatriculation, réédition).
 4. **UI admin** : « Factures émises » (`#adminInvoiceRows`, 20 dernières, avec nom client) sur admin-paiements.
+5. **Boutons admin (finition 2026-07-04)** :
+   - Historique paiements : **« ↓ PDF »** ouvre la vraie facture (storage privé ou ancienne URL) — remplace l'ancien toast cul-de-sac « Disponible avec SIRET » ; **« Facturer »** apparaît sur un paiement validé **sans** facture (rattrapage historique/trigger) → Edge Function idempotente, JWT admin vérifié serveur.
+   - Factures émises : **« Avoir »** sur chaque facture → motif obligatoire, garde anti-doublon (avertit si un avoir existe déjà), même série de numérotation, email client joint.
 
 ## 4. Vérifications effectuées
 - Numérotation : `OXV-2026-0001`→`0002` puis reset (aucun numéro réel brûlé) ; `authenticated` sans EXECUTE ✅ ; `service_role` avec ✅.
@@ -31,4 +34,4 @@
 - [x] Bucket privé + policy lecture owner/admin.
 - [x] PDF généré serveur, stocké, téléchargeable depuis le compte (chaîne déployée ; **rendu PDF final à contrôler à la 1ʳᵉ validation réelle — test fondateur : admin → valider un paiement → vérifier email + PDF**).
 - [x] Email automatique à la validation du paiement (trigger actif + Resend joint).
-- [x] Avoirs supportés (fonction) — bouton admin d'avoir : à ajouter au premier besoin réel.
+- [x] Avoirs supportés (fonction) — **bouton admin « Avoir » livré (2026-07-04)** + bouton « Facturer » de rattrapage.

@@ -23733,7 +23733,9 @@ window.paymentRenderHistory = function() {
         <td style="padding:14px 12px;text-align:center;">${statusBadge}</td>
         <td style="padding:14px 12px;color:var(--cream-mute);font-size:12px;font-family:var(--mono);">${new Date(p.date).toLocaleDateString('fr-FR')}</td>
         <td style="padding:14px 12px;text-align:right;">
-          ${p.status === 'validated' ? `<button class="btn btn-sm" onclick="toast('Facture PDF · Disponible avec SIRET','warn');"><span>↓ PDF</span></button>` : ''}
+          ${p.status === 'validated' ? (p.invoiceUrl
+            ? `<button class="btn btn-sm" onclick="adminOpenPaymentInvoice('${escapeHtml(p.invoiceUrl)}');"><span>↓ PDF</span></button>`
+            : `<button class="btn btn-sm" onclick="adminGenerateInvoice('${p._id}');" title="Générer la facture (numérotée, archivée, envoyée par email)"><span>Facturer</span></button>`) : ''}
           ${p.status === 'pending' ? `<button class="btn btn-sm" onclick="paymentOpenValidateModal('${p.id}');"><span>Valider</span></button>` : ''}
         </td>
       </tr>
@@ -27660,6 +27662,7 @@ function invRowHtml(inv, admin) {
     <div style="display:flex;align-items:center;gap:14px;">
       <span style="font-family:var(--mono);font-size:13px;color:var(--gold-data);">${amount}</span>
       ${inv.pdf_path ? `<button class="btn btn-sm" onclick="downloadInvoice('${escapeHtml(inv.pdf_path)}','${escapeHtml(inv.number)}')"><span>PDF</span></button>` : ''}
+      ${admin && inv.type !== 'credit_note' ? `<button class="btn btn-sm" onclick="adminCreateCreditNote('${inv.id}','${escapeHtml(inv.number)}')" title="Créer un avoir sur cette facture"><span>Avoir</span></button>` : ''}
     </div>
   </div>`;
 }
@@ -27703,6 +27706,51 @@ window.downloadInvoice = async function(path, number) {
   } catch (e) {
     console.warn('[Factures] download', e);
     toast('Téléchargement impossible · réessayez', 'warn');
+  }
+};
+
+/* Ouvre la facture liée à un paiement : chemin storage (bucket privé) ou ancienne URL externe */
+window.adminOpenPaymentInvoice = function(pathOrUrl) {
+  if (!pathOrUrl) return;
+  if (/^https?:\/\//i.test(pathOrUrl)) { window.open(pathOrUrl, '_blank', 'noopener'); return; }
+  const number = (pathOrUrl.split('/').pop() || 'facture').replace(/\.pdf$/i, '');
+  downloadInvoice(pathOrUrl, number);
+};
+
+/* PR-HUB-01 (finition) — bouton admin « Facturer » : facture manquante sur un paiement validé.
+   L'Edge Function est idempotente (renvoie l'existante) et authentifie le JWT admin côté serveur. */
+window.adminGenerateInvoice = async function(paymentId) {
+  if (!paymentId) return;
+  if (!window.confirm('Générer la facture de ce paiement ? Elle sera numérotée, archivée et envoyée par email au client.')) return;
+  try {
+    const { data, error } = await supabase.functions.invoke('generate-invoice', { body: { payment_id: paymentId } });
+    if (error) throw error;
+    if (data && data.error) throw new Error(data.error);
+    toast(`Facture ${data.number} ${data.existing ? 'déjà existante · rattachée' : 'générée'}${data.email_sent ? ' · envoyée par email' : ''}`, 'ok');
+    if (typeof loadAdminPaiements === 'function') await loadAdminPaiements();
+    if (typeof loadAdminInvoices === 'function') loadAdminInvoices();
+  } catch (e) {
+    console.warn('[Factures] génération:', e);
+    toast('Génération impossible · réessayez ou vérifiez le paiement', 'error');
+  }
+};
+
+/* PR-HUB-01 (finition) — bouton admin « Avoir » : avoir intégral sur une facture (motif obligatoire) */
+window.adminCreateCreditNote = async function(invoiceId, number) {
+  const reason = window.prompt(`Motif de l'avoir sur ${number} (obligatoire) :`);
+  if (reason === null) return;
+  if (!reason.trim()) { toast('Motif obligatoire pour créer un avoir', 'warn'); return; }
+  try {
+    const { data: existing } = await supabase.from('invoices').select('number').eq('credit_note_for', invoiceId).limit(1);
+    if (existing && existing.length && !window.confirm(`Un avoir ${existing[0].number} existe déjà sur ${number}. En créer un second ?`)) return;
+    const { data, error } = await supabase.functions.invoke('generate-invoice', { body: { credit_note_for: invoiceId, reason: reason.trim() } });
+    if (error) throw error;
+    if (data && data.error) throw new Error(data.error);
+    toast(`Avoir ${data.number} créé${data.email_sent ? ' · envoyé par email' : ''}`, 'ok');
+    if (typeof loadAdminInvoices === 'function') loadAdminInvoices();
+  } catch (e) {
+    console.warn('[Factures] avoir:', e);
+    toast('Création de l\'avoir impossible · réessayez', 'error');
   }
 };
 
