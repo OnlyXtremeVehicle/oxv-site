@@ -15413,8 +15413,8 @@ textarea:focus-visible {
         <!-- BLOC ADHÉSION (tous) -->
         <div class="dmd-block-label" style="margin-top:6px;">— Adhésion au cercle</div>
         <div class="form-row">
-          <label>Parrainé par un membre ? <span style="opacity:.6;font-weight:400;">(facultatif)</span></label>
-          <input type="text" id="dmd-referral" placeholder="Nom du membre, le cas échéant" />
+          <label>Parrainé par un membre ? <span style="opacity:.6;font-weight:400;">(facultatif — votre candidature passe en priorité)</span></label>
+          <input type="text" id="dmd-referral" placeholder="Code parrain (OXV-…) ou nom du membre" />
         </div>
         <div class="form-row">
           <label id="dmd-motivation-label">Pourquoi OXV ? <span style="opacity:.6;font-weight:400;">(facultatif)</span></label>
@@ -16931,6 +16931,34 @@ textarea:focus-visible {
             </div>
           </div>
           <button class="btn btn-sm" id="pairCodeBtn" onclick="generatePairingCode()"><span>Générer mon code</span></button>
+        </div>
+      </div>
+
+      <div class="pref-section">
+        <div class="pref-section-title">Mon écurie &amp; parrainage</div>
+        <div class="pref-row">
+          <div class="pref-row-info" style="width:100%;">
+            <div class="pref-row-title">Parrainez, construisez votre écurie</div>
+            <div class="pref-row-desc">Pas de réduction chez OXV : le parrainage construit une <strong style="color:var(--cream);">écurie</strong>. Vos filleuls rejoignent votre groupe, leur candidature passe en <strong style="color:var(--cream);">fast-track</strong>, et l'écurie grandit — <span style="font-family:var(--mono);font-size:11px;">5 membres : priorité de réservation collective · 10 : box dédié un jour de session · 20 : écurie nommée sur le plateau</span>. Seuls les filleuls ayant validé leur première session comptent.</div>
+            <div id="crewCodeBox" style="margin-top:14px;display:flex;align-items:center;gap:12px;flex-wrap:wrap;">
+              <button class="btn btn-sm" id="crewCodeBtn" onclick="getMyReferralCode()"><span>Afficher mon code parrain</span></button>
+              <code id="crewCodeValue" style="display:none;font-family:var(--mono);font-size:18px;letter-spacing:0.1em;color:var(--offwhite);background:rgba(0,0,0,0.4);border:1px solid var(--bento-border);padding:8px 14px;border-radius:8px;"></code>
+            </div>
+            <div id="crewStatusBox" style="margin-top:16px;font-family:var(--sans);font-size:13px;line-height:1.7;color:var(--cream-mute);">Chargement de votre écurie…</div>
+            <div id="crewJoinBox" style="display:none;margin-top:12px;">
+              <div style="display:flex;gap:10px;flex-wrap:wrap;align-items:center;">
+                <input type="text" id="crewJoinCode" placeholder="Code parrain (OXV-…)" style="background:rgba(0,0,0,0.4);border:1px solid var(--bento-border);color:var(--cream);padding:9px 12px;border-radius:6px;font-family:var(--mono);text-transform:uppercase;" />
+                <button class="btn btn-sm" onclick="redeemReferral()"><span>Rejoindre une écurie</span></button>
+              </div>
+            </div>
+            <div id="crewNameBox" style="display:none;margin-top:12px;">
+              <div style="display:flex;gap:10px;flex-wrap:wrap;align-items:center;">
+                <input type="text" id="crewNameInput" placeholder="Nom de votre écurie" maxlength="40" style="background:rgba(0,0,0,0.4);border:1px solid var(--bento-border);color:var(--cream);padding:9px 12px;border-radius:6px;font-family:var(--sans);" />
+                <button class="btn btn-sm" onclick="nameMyCrew()"><span>Nommer l'écurie</span></button>
+              </div>
+              <p style="font-family:var(--sans);font-size:11px;color:var(--cream-faint);margin:8px 0 0;">Le nom apparaît publiquement sur le Plateau au palier 20 membres validés.</p>
+            </div>
+          </div>
         </div>
       </div>
 
@@ -20088,6 +20116,15 @@ textarea:focus-visible {
           <div class="plateau-empty">Les QDI partagés apparaîtront ici après les premières sessions.</div>
         </div>
       </div>
+
+      <!-- Les écuries (PR-HUB-03) — nommées au palier 20 membres validés -->
+      <div style="margin-top: 64px;">
+        <div class="plateau-members-label">Les écuries</div>
+        <p style="font-family:var(--sans);font-size:13px;line-height:1.65;color:var(--cream-mute);max-width:620px;margin:8px 0 18px;">Le parrainage construit des écuries. Une écurie apparaît ici, avec son nom, à partir de <strong style="color:var(--cream);">20 membres validés</strong>.</p>
+        <div id="plateauCrews" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:12px;">
+          <div class="plateau-empty">Aucune écurie n'a encore atteint le palier. La première écrira l'histoire.</div>
+        </div>
+      </div>
     </div>
   </section>
 </div>
@@ -21224,7 +21261,7 @@ window.goTo = function(page, opts) {
     setTimeout(() => loadProgression(), 150);
   }
   if (page === 'compte-preferences') {
-    setTimeout(() => { loadPreferences(); if (typeof loadCommunityVisibility === 'function') loadCommunityVisibility(); }, 150);
+    setTimeout(() => { loadPreferences(); if (typeof loadCommunityVisibility === 'function') loadCommunityVisibility(); if (typeof loadCrewCard === 'function') loadCrewCard(); }, 150);
   }
 
   // Pages admin
@@ -21271,6 +21308,7 @@ window.goTo = function(page, opts) {
     setTimeout(() => {
       if (typeof window.loadPlateau === 'function') window.loadPlateau();
       if (typeof window.loadPlateauQdi === 'function') window.loadPlateauQdi();
+      if (typeof window.loadPlateauCrews === 'function') window.loadPlateauCrews();
     }, 150);
   }
   if (page === 'coach') {
@@ -27711,6 +27749,91 @@ window.loadAdminPartners = async function() {
   } catch (e) { console.warn('[Admin partenaires]', e); }
 };
 
+/* ===================== ÉCURIES & PARRAINAGE (PR-HUB-03) =====================
+   Option C fondateur : pas de réduction — le parrainage construit une écurie.
+   Paliers par taille (membres validés) : 5 priorité collective · 10 box · 20 nommée plateau.
+   Toute écriture passe par des fonctions SECURITY DEFINER (anti-abus serveur). */
+
+window.getMyReferralCode = async function() {
+  try {
+    const { data, error } = await supabase.rpc('oxv_get_my_referral_code');
+    if (error) throw error;
+    const el = document.getElementById('crewCodeValue');
+    const btn = document.getElementById('crewCodeBtn');
+    if (el) { el.textContent = data; el.style.display = ''; }
+    if (btn) btn.style.display = 'none';
+  } catch (e) { console.warn('[Parrainage]', e); toast('Impossible de générer le code', 'warn'); }
+};
+
+window.redeemReferral = async function() {
+  const code = ((document.getElementById('crewJoinCode') || {}).value || '').trim();
+  if (!code) { toast('Saisissez un code parrain', 'warn'); return; }
+  try {
+    const { data, error } = await supabase.rpc('oxv_redeem_referral', { p_code: code });
+    if (error) throw error;
+    if (!data?.ok) {
+      const msgs = { code_invalide: 'Code inconnu', auto_parrainage_interdit: 'Impossible d\'utiliser votre propre code', deja_dans_une_ecurie: 'Vous êtes déjà dans une écurie' };
+      toast(msgs[data?.error] || 'Code refusé', 'warn'); return;
+    }
+    toast('Bienvenue dans l\'écurie', 'ok');
+    if (typeof track === 'function') track('join_crew');
+    loadCrewCard();
+  } catch (e) { console.warn('[Parrainage]', e); toast('Erreur · réessayez', 'warn'); }
+};
+
+window.nameMyCrew = async function() {
+  const name = ((document.getElementById('crewNameInput') || {}).value || '').trim();
+  if (name.length < 3) { toast('Nom trop court (3 caractères min.)', 'warn'); return; }
+  try {
+    const { data, error } = await supabase.rpc('oxv_name_my_crew', { p_name: name });
+    if (error) throw error;
+    if (!data?.ok) { toast(data?.error === 'pas_capitaine' ? 'Réservé au capitaine' : 'Nom invalide', 'warn'); return; }
+    toast('Écurie nommée', 'ok');
+    loadCrewCard();
+  } catch (e) { toast('Erreur · réessayez', 'warn'); }
+};
+
+window.loadCrewCard = async function() {
+  const status = document.getElementById('crewStatusBox');
+  const joinBox = document.getElementById('crewJoinBox');
+  const nameBox = document.getElementById('crewNameBox');
+  if (!status || !window.OXVApi?.user?.isLoggedIn) return;
+  try {
+    const uid = window.OXVApi.user.profile?.id;
+    const { data: members } = await supabase.from('crew_members')
+      .select('crew_id, user_id, role, referral_validated');
+    if (!members || !members.length) {
+      status.innerHTML = 'Vous n\'êtes dans aucune écurie. Parrainez un pilote (votre code ci-dessus) pour créer la vôtre — ou rejoignez celle d\'un parrain :';
+      if (joinBox) joinBox.style.display = '';
+      if (nameBox) nameBox.style.display = 'none';
+      return;
+    }
+    if (joinBox) joinBox.style.display = 'none';
+    const me = members.find(m => m.user_id === uid);
+    const validated = members.filter(m => m.referral_validated || m.role === 'captain').length;
+    const { data: crews } = await supabase.from('crews').select('name, captain_id');
+    const crew = crews && crews[0];
+    const nextPalier = validated < 5 ? 5 : validated < 10 ? 10 : validated < 20 ? 20 : null;
+    const paliers = `<span style="font-family:var(--mono);font-size:11px;color:${validated >= 5 ? 'var(--green-perf)' : 'var(--cream-faint)'};">5 priorité collective</span> · <span style="font-family:var(--mono);font-size:11px;color:${validated >= 10 ? 'var(--green-perf)' : 'var(--cream-faint)'};">10 box dédié</span> · <span style="font-family:var(--mono);font-size:11px;color:${validated >= 20 ? 'var(--green-perf)' : 'var(--cream-faint)'};">20 nommée plateau</span>`;
+    status.innerHTML = `<strong style="color:var(--offwhite);">${crew?.name ? escapeHtml(crew.name) : 'Votre écurie (sans nom)'}</strong> · ${members.length} membre${members.length > 1 ? 's' : ''} dont <strong style="color:var(--gold-data);">${validated} validé${validated > 1 ? 's' : ''}</strong>${me?.role === 'captain' ? ' · vous êtes capitaine' : ''}<br/>${paliers}${nextPalier ? `<br/><span style="font-size:12px;">Prochain palier : ${nextPalier} membres validés (${nextPalier - validated} restant${nextPalier - validated > 1 ? 's' : ''})</span>` : ''}`;
+    if (nameBox) nameBox.style.display = (me?.role === 'captain' && !crew?.name) ? '' : 'none';
+  } catch (e) { console.warn('[Écurie]', e); }
+};
+
+/* Écuries publiques (plateau, palier 20). */
+window.loadPlateauCrews = async function() {
+  const grid = document.getElementById('plateauCrews');
+  if (!grid || typeof supabase === 'undefined') return;
+  try {
+    const { data } = await supabase.from('crews_public').select('name, validated_members, created_at').order('created_at');
+    if (!data || !data.length) return;
+    grid.innerHTML = data.map(c => `<div class="bento" style="padding:18px;">
+      <div style="font-family:var(--display);font-weight:600;font-size:16px;color:var(--offwhite);">${escapeHtml(c.name)}</div>
+      <div style="font-family:var(--mono);font-size:11px;color:var(--gold-data);margin-top:6px;">${c.validated_members} membres validés</div>
+    </div>`).join('');
+  } catch (e) {}
+};
+
 /* ===================== VISIBILITÉ QDI (PR-HUB-11) ===================== */
 function visReflect(v) {
   ['private','anonymous_only','nominative'].forEach(k => {
@@ -28808,6 +28931,7 @@ function renderDemandeCard(d) {
           <div class="dmc-meta">Candidature du ${dateStr}</div>
         </div>
         <div class="dmc-badges">
+          ${d.referral ? '<span class="dmc-badge" style="background:rgba(216,15,31,0.14);color:#F09595;">⚡ Parrainé · fast-track</span>' : ''}
           <span class="dmc-badge ${d.type_demande}">${escapeHtml(DMD_TYPE_LABEL[d.type_demande] || d.type_demande)}</span>
           <span class="dmc-badge st-${d.statut}">${d.statut === 'en_attente' ? 'En attente' : d.statut === 'acceptee' ? 'Acceptée' : 'Refusée'}</span>
         </div>
