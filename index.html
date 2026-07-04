@@ -13134,6 +13134,28 @@ textarea:focus-visible {
 @media (min-width: 900px) { .oxv-app-hero { grid-template-columns: 1.1fr 0.9fr; } }
 
 </style>
+<!-- JSON-LD : LocalBusiness / lieu (PR-HUB-08 GEO) -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "SportsActivityLocation",
+  "name": "OXV — Track days au Circuit de Haute Saintonge",
+  "description": "Track days premium sur le tracé Beltoise : 20 pilotes maximum par session, télémétrie 25 Hz, médias livrés via l'app OXV Mirror.",
+  "url": "https://www.oxvehicle.fr",
+  "email": "contact@oxvehicle.fr",
+  "address": {
+    "@type": "PostalAddress",
+    "streetAddress": "Circuit de Haute Saintonge",
+    "postalCode": "17360",
+    "addressLocality": "La Génétouze",
+    "addressRegion": "Nouvelle-Aquitaine",
+    "addressCountry": "FR"
+  },
+  "geo": { "@type": "GeoCoordinates", "latitude": 45.4025, "longitude": -0.156944 },
+  "sameAs": ["https://www.oxvehicle.fr/circuit"]
+}
+</script>
+
 <!-- JSON-LD : abonnement OXV Mirror (PR-HUB-12) — précommande, dispo printemps 2027 -->
 <script type="application/ld+json">
 {
@@ -21381,6 +21403,35 @@ function oxvUpdateSEO(page, opts) {
   oxvSetCanonical(url);
   oxvSetMeta('name', 'robots', OXV_NOINDEX_PAGES.includes(page) ? 'noindex, nofollow' : 'index, follow');
   oxvSetArticleJsonLd(isArticle ? opts.article : null, url);
+}
+
+/* SEO (PR-HUB-08) : sessions à venir en schema.org Event (ItemList), injecté dynamiquement.
+   Source : sessions_public (anon-safe, PR-01) — la donnée est publique, seule l'UI est voilée. */
+function oxvSetEventsJsonLd(sessions) {
+  let el = document.getElementById('ld-events');
+  if (!sessions || !sessions.length) { if (el) el.remove(); return; }
+  if (!el) { el = document.createElement('script'); el.type = 'application/ld+json'; el.id = 'ld-events'; document.head.appendChild(el); }
+  const place = {
+    '@type': 'Place', name: 'Circuit de Haute Saintonge — tracé Beltoise',
+    address: { '@type': 'PostalAddress', postalCode: '17360', addressLocality: 'La Génétouze', addressRegion: 'Nouvelle-Aquitaine', addressCountry: 'FR' }
+  };
+  el.textContent = JSON.stringify({
+    '@context': 'https://schema.org', '@type': 'ItemList',
+    itemListElement: sessions.slice(0, 10).map((s, i) => ({
+      '@type': 'ListItem', position: i + 1,
+      item: {
+        '@type': 'SportsEvent',
+        name: 'Track day OXV — session du ' + s.date,
+        startDate: s.date + (s.start_time ? 'T' + String(s.start_time).slice(0, 5) : ''),
+        eventStatus: 'https://schema.org/EventScheduled',
+        eventAttendanceMode: 'https://schema.org/OfflineEventAttendanceMode',
+        location: place,
+        organizer: { '@type': 'Organization', name: 'OXV', url: 'https://www.oxvehicle.fr' },
+        offers: { '@type': 'AggregateOffer', lowPrice: '390', highPrice: '690', priceCurrency: 'EUR', availability: 'https://schema.org/PreOrder', url: 'https://www.oxvehicle.fr/calendrier' },
+        url: 'https://www.oxvehicle.fr/calendrier'
+      }
+    }))
+  });
 }
 
 function oxvSetArticleJsonLd(article, url) {
@@ -31671,6 +31722,16 @@ window.loadPublicCalendar = async function() {
   if (loading) loading.style.display = 'block';
   if (grid) grid.style.display = 'none';
   if (empty) empty.style.display = 'none';
+
+  // SEO (PR-HUB-08) : événements structurés pour les moteurs — indépendant du voile membres
+  try {
+    if (typeof supabase !== 'undefined' && supabase) {
+      const todaySeo = new Date().toISOString().split('T')[0];
+      supabase.from('sessions_public').select('date, start_time')
+        .gte('date', todaySeo).order('date').limit(10)
+        .then(({ data }) => { try { oxvSetEventsJsonLd(data || []); } catch (e) {} });
+    }
+  } catch (e) {}
 
   // Calendrier réservé aux membres : si l'utilisateur n'est pas connecté,
   // on n'interroge pas la base — on affiche directement le voile d'accès.
