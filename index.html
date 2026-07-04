@@ -174,7 +174,7 @@
   --night:        #050505;   /* Noir Abysse — fond principal */
   --night-deep:   #000000;
   --night-soft:   #0E0E0E;
-  --night-card:   #0B0D10;   /* Anthracite (DA V3) — cartes / surfaces Bento */
+  --night-card:   #0E0E10;   /* Anthracite (DA V3) — cartes / surfaces Bento */
 
   /* Compat ancienne variable "cream" → maintenant Blanc Pur */
   --cream:        #F5F2EA;   /* Blanc cassé (DA V3) — titres et texte */
@@ -223,7 +223,7 @@
 
   /* ─── Charte DA V3 « Premium Racing Minimal » (tokens canoniques) ─── */
   --carbon:       #050505;   /* Noir carbone — fond / hero / sections premium */
-  --anthracite:   #0B0D10;   /* Cartes, blocs, nav au scroll */
+  --anthracite:   #0E0E10;   /* Cartes, blocs, nav au scroll */
   --acier:        #1A1D22;   /* Séparateurs, fonds secondaires */
   --offwhite:     #F5F2EA;   /* Titres et textes clairs */
   --red-oxv:      #D80F1F;   /* Rouge OXV — CTA / marque (jamais fonds massifs/graph data) */
@@ -231,8 +231,8 @@
   --gold-data:    #C9A24A;   /* Or data — premium rare, valeur data (jamais décoratif) */
 
   /* Bento Box (glassmorphism) */
-  --bento-bg:        rgba(11, 13, 16, 0.72);
-  --bento-bg-hover:  rgba(20, 23, 28, 0.88);
+  --bento-bg:        rgba(14, 14, 16, 0.72);
+  --bento-bg-hover:  rgba(24, 24, 27, 0.88);
   --bento-border:    rgba(255, 255, 255, 0.05);
   --bento-border-h:  rgba(255, 255, 255, 0.15);
   --bento-radius:    12px;
@@ -591,7 +591,7 @@ h1, h2, h3, h4, h5 {
 }
 .nav.scrolled {
   padding: 14px var(--gutter);
-  background: rgba(11, 13, 16, 0.94);
+  background: rgba(14, 14, 16, 0.94);
   backdrop-filter: blur(18px) saturate(140%);
   -webkit-backdrop-filter: blur(18px) saturate(140%);
   border-bottom: 1px solid var(--cream-line);
@@ -681,7 +681,7 @@ h1, h2, h3, h4, h5 {
   inset: 0;
   background:
     radial-gradient(ellipse at 70% 30%, rgba(184, 115, 51, 0.18) 0%, transparent 50%),
-    radial-gradient(ellipse at 20% 80%, rgba(19, 28, 45, 0.8) 0%, transparent 50%),
+    radial-gradient(ellipse at 20% 80%, rgba(10, 10, 11, 0.8) 0%, transparent 50%),
     linear-gradient(180deg, var(--night) 0%, var(--night-deep) 100%);
 }
 #heroCanvas {
@@ -694,7 +694,7 @@ h1, h2, h3, h4, h5 {
 }
 .hero-vignette {
   position: absolute; inset: 0;
-  background: radial-gradient(ellipse at center, transparent 30%, rgba(6, 11, 20, 0.7) 100%);
+  background: radial-gradient(ellipse at center, transparent 30%, rgba(10, 10, 11, 0.7) 100%);
   pointer-events: none;
 }
 
@@ -1315,7 +1315,7 @@ h1, h2, h3, h4, h5 {
 
 .track-pass {
   position: relative;
-  background: linear-gradient(180deg, #0A0F1E 0%, #060B1A 100%);
+  background: linear-gradient(180deg, #121214 0%, #0A0A0B 100%);
   border: 1px solid rgba(255, 183, 3, 0.2);
   border-radius: 4px;
   padding: 48px 56px;
@@ -4948,7 +4948,7 @@ footer {
   grid-template-columns: 1fr;
   min-height: calc(100vh - 80px);
   padding-top: 80px;
-  background: #050810;
+  background: #050505;
 }
 @media (min-width: 920px) {
   .admin-layout {
@@ -4957,7 +4957,7 @@ footer {
 }
 
 .admin-sidebar {
-  background: #02050C;
+  background: #0A0A0B;
   padding: 28px 24px;
   border-right: 1px solid rgba(239, 230, 210, 0.06);
   border-bottom: 1px solid rgba(239, 230, 210, 0.06);
@@ -6032,7 +6032,7 @@ footer {
 }
 .admin-notes-textarea {
   width: 100%;
-  background: rgba(2, 5, 12, 0.5);
+  background: rgba(5, 5, 5, 0.5);
   border: 1px solid rgba(239, 230, 210, 0.1);
   color: var(--cream);
   padding: 12px 14px;
@@ -6474,7 +6474,7 @@ footer {
   flex-direction: column;
   gap: 8px;
   padding: 12px 14px;
-  background: rgba(2, 5, 12, 0.4);
+  background: rgba(5, 5, 5, 0.4);
   border: 1px solid rgba(239, 230, 210, 0.04);
 }
 .admin-cap-row {
@@ -8158,7 +8158,7 @@ footer {
 .modal-overlay {
   position: fixed;
   inset: 0;
-  background: rgba(2, 5, 12, 0.85);
+  background: rgba(5, 5, 5, 0.85);
   backdrop-filter: blur(8px);
   -webkit-backdrop-filter: blur(8px);
   z-index: 200;
@@ -9458,11 +9458,11 @@ textarea.form-input {
   .home-hero-bg {
     background:
       radial-gradient(ellipse at top, rgba(184, 115, 51, 0.18) 0%, transparent 50%),
-      linear-gradient(180deg, #060B14 0%, #02050C 100%);
+      linear-gradient(180deg, #0E0E10 0%, #050505 100%);
   }
   .home-hero-overlay {
     background:
-      linear-gradient(180deg, rgba(2, 5, 12, 0.4) 0%, rgba(2, 5, 12, 0.6) 100%) !important;
+      linear-gradient(180deg, rgba(5, 5, 5, 0.4) 0%, rgba(5, 5, 5, 0.6) 100%) !important;
   }
 
   /* === Same pour la section finale === */
@@ -9472,7 +9472,7 @@ textarea.form-input {
   .home-final-bg {
     background:
       radial-gradient(ellipse at center, rgba(184, 115, 51, 0.08) 0%, transparent 60%),
-      linear-gradient(180deg, #060B14 0%, #02050C 100%);
+      linear-gradient(180deg, #0E0E10 0%, #050505 100%);
   }
 }
 
@@ -13098,13 +13098,13 @@ textarea:focus-visible {
   backdrop-filter: none;
   -webkit-backdrop-filter: none;
 }
-.bento:hover { background: #10131A; }
+.bento:hover { background: #18181B; }
 
 /* — 6. Mockup téléphone OXV Mirror (pur CSS, bleu data) — */
 .oxv-phone {
   width: min(290px, 78vw);
   aspect-ratio: 9 / 18.5;
-  background: #0B0D10;
+  background: #0E0E10;
   border: 1px solid #23262C;
   border-radius: 40px;
   padding: 12px;
