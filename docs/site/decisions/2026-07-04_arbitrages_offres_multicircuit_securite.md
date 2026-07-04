@@ -21,6 +21,10 @@ Le tableau livré fait foi : prix 390/690/2 490 € TTC · télémétrie **compl
 - **Lot H (typo/photos)** : direction **« Goodwood »** — titres en Cormorant Garamond italique, casse naturelle ; labels/data/boutons inchangés. 3 sujets photo validés, **génération IA en attendant le shooting** (jamais sur la page Preuves, jamais légendé « Beltoise »).
 - **Lot I (grille coach)** : grille −5/−10/−15 % **supprimée** → paliers d'avantages **non tarifaires cumulables** (visibilité annuaire/app → priorité de réservation → invitations événements). Cohérence avec « parrainage sans réduction ».
 
+## 3 ter. QDI = abonnement app (arbitrage du soir, option « strict abonnement »)
+« Le QDI sera disponible pour tous ceux ayant souscrit à l'abonnement de l'app. »
+→ **Le QDI (rapports sous 48 h compris) est un bénéfice de l'abonnement OXV Mirror**, plus une promesse des offres circuit. Conséquence assumée (signalée avant application) : un client Signature sans abonnement n'a pas de rapport QDI. Heritage garde le différenciateur : 1 an d'app inclus = QDI compris. Site aligné (comparateur, cartes, teasers, process, booking, articles, SEO, llms.txt) ; télémétrie complète et banque média restent livrées à TOUS les pilotes. Remplace la ligne QDI de l'arbitrage D.4 (§2.4 ci-dessus). Brief app mis à jour (gating `is_subscription_current`).
+
 ## 4. Sécurité (les deux « oui »)
 1. **Policy `contact_messages`** durcie : `with check (user_id is null or user_id = auth.uid())` — usurpation testée et bloquée (42501), cas nominaux OK (migration `contact_messages_insert_hardening_site30`).
 2. **Revokes catégories A+B** appliqués (migration `definer_grants_hardening_p2_ab`) : 15 fonctions trigger fermées à tous les rôles clients + 7 fonctions `my_*` fermées à `anon`. Vérifié : 36 → **14 fonctions definer exécutables par anon** (les catégories C/D conservées volontairement, cf audit). Triggers actifs, `authenticated` conservé sur les `my_*`.
