@@ -3,7 +3,7 @@
 > OXV est une plateforme de track days premium basée à Bordeaux. Sa première saison (2027) se déroule au Circuit de Haute Saintonge (tracé Beltoise, 2,2 km, La Génétouze, Charente-Maritime, Nouvelle-Aquitaine), premier circuit partenaire — d'autres emplacements sont en cours de sélection. Vingt pilotes maximum par session, jamais plus. Chaque journée est prolongée par l'application OXV Mirror : télémétrie 25 Hz, médias livrés, bilan de session.
 
 ## Faits clés (vérifiés)
-- Lieu : Circuit de Haute Saintonge, tracé dessiné par Jean-Pierre Beltoise (2009), 17360 La Génétouze, France. Piste de 2,2 km, sept virages.
+- Lieu : Circuit de Haute Saintonge, tracé dessiné par Jean-Pierre Beltoise (2009), 17360 La Génétouze, France. Piste de 2,2 km, tracé technique et vallonné, sans chicane artificielle.
 - Format : 20 pilotes maximum par session. Briefing sécurité obligatoire. Pas de classement public.
 - Offres circuit : Access 390 € TTC (demi-journée, lundi, télémétrie complète + banque média dans l'app) · Signature 690 € TTC (journée complète, vendredi, télémétrie + banque média + déjeuner traiteur) · Heritage 2 490 € TTC (pack saison : 4 sessions Signature, priorité de réservation, un an d'app OXV Mirror inclus).
 - Corporate / entreprises : privatisation du circuit sur devis.
