@@ -13445,10 +13445,21 @@ textarea:focus-visible {
   </section>
 
 
+  <!-- Bandeau de chiffres clés — crédibilité immédiate sous le hero -->
+  <section style="padding:clamp(40px,6vw,64px) 0;background:var(--carbon);border-top:1px solid var(--cream-line);">
+    <div class="wrap">
+      <div class="corp-stats-bento reveal" style="margin:0 auto;">
+        <div class="bento corp-stat-bento"><div class="corp-stat-bento-num"><em>20</em></div><div class="corp-stat-bento-label">Pilotes maximum par session</div></div>
+        <div class="bento corp-stat-bento"><div class="corp-stat-bento-num"><em>25</em><span style="font-size:0.4em;"> Hz</span></div><div class="corp-stat-bento-label">Télémétrie GPS enregistrée</div></div>
+        <div class="bento corp-stat-bento"><div class="corp-stat-bento-num"><em>2027</em></div><div class="corp-stat-bento-label">Première saison OXV</div></div>
+      </div>
+    </div>
+  </section>
+
   <!-- ============================================================
        SECTION — L'EXPÉRIENCE OXV : AVANT / PENDANT / APRÈS (DA V3)
        ============================================================ -->
-  <section class="home-experience" style="padding:clamp(80px,10vw,130px) 0;background:var(--carbon);border-top:1px solid var(--cream-line);">
+  <section class="home-experience" style="padding:clamp(80px,10vw,130px) 0;background:var(--carbon);border-top:none;">
     <div class="wrap">
       <div style="max-width:720px;margin:0 auto 52px;text-align:center;">
         <div class="kicker reveal">N° 01 · L'expérience</div>
@@ -13590,19 +13601,11 @@ textarea:focus-visible {
         </p>
       </div>
 
-      <div class="reveal" style="margin:0 auto 48px;">
-        <div class="oxv-phone" aria-hidden="true">
-          <div class="oxv-phone-screen">
-            <div class="oxv-ph-head"><span>OXV MIRROR</span><span>J+0</span></div>
-            <div class="oxv-ph-label">Trace du jour</div>
-            <div class="oxv-ph-big">1:42.318</div>
-            <div class="oxv-ph-sub">Meilleur tour · tracé Beltoise</div>
-            <div class="oxv-ph-bars"><span style="height:38%"></span><span style="height:52%"></span><span style="height:47%"></span><span style="height:66%"></span><span style="height:58%"></span><span style="height:74%"></span><span style="height:70%"></span></div>
-            <div class="oxv-ph-row"><span>Tours</span><b>18</b></div>
-            <div class="oxv-ph-row"><span>Vitesse max</span><b>187 km/h</b></div>
-            <div class="oxv-ph-note">Aperçu illustratif — vos données réelles après votre première session.</div>
-          </div>
-        </div>
+      <div class="reveal" style="max-width:780px;margin:0 auto 48px;">
+        <figure style="margin:0;border-radius:16px;overflow:hidden;border:1px solid var(--bento-border);box-shadow:0 30px 90px rgba(0,0,0,0.55);">
+          <img src="img/menu-app.webp" alt="Application OXV Mirror — tableau de bord de télémétrie : trace du circuit, courbes de vitesse et de régularité après la session" loading="lazy" decoding="async" style="width:100%;display:block;" />
+        </figure>
+        <p style="font-family:var(--mono);font-size:11px;color:var(--cream-faint);text-align:center;margin:12px 0 0;letter-spacing:0.04em;">Aperçu illustratif — vos données réelles après votre première session équipée.</p>
       </div>
 
       <div class="reveal" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px;">
