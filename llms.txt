@@ -1,6 +1,6 @@
 # OXV — Only Xtreme Vehicle
 
-> OXV organise des track days premium au Circuit de Haute Saintonge (tracé Beltoise, 2,2 km, La Génétouze, Charente-Maritime, Nouvelle-Aquitaine). Vingt pilotes maximum par session, jamais plus. Chaque journée est prolongée par l'application OXV Mirror : télémétrie 25 Hz, médias livrés, bilan de session. Première saison : 2027.
+> OXV est une plateforme de track days premium basée à Bordeaux. Sa première saison (2027) se déroule au Circuit de Haute Saintonge (tracé Beltoise, 2,2 km, La Génétouze, Charente-Maritime, Nouvelle-Aquitaine), premier circuit partenaire — d'autres emplacements sont en cours de sélection. Vingt pilotes maximum par session, jamais plus. Chaque journée est prolongée par l'application OXV Mirror : télémétrie 25 Hz, médias livrés, bilan de session.
 
 ## Faits clés (vérifiés)
 - Lieu : Circuit de Haute Saintonge, tracé dessiné par Jean-Pierre Beltoise (2009), 17360 La Génétouze, France. Piste de 2,2 km, une dizaine de virages.
