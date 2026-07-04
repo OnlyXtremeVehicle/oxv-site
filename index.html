@@ -2267,6 +2267,20 @@ footer {
   .compare-scroll-wrap { margin: 0 -16px; padding: 0 16px 8px; }
 }
 
+/* Lot E — mobile : cartes empilées par offre (remplace le défilement horizontal) */
+.compare-cards { display: none; }
+@media (max-width: 760px) {
+  .compare-scroll-wrap { display: none; }
+  .compare-cards { display: grid; gap: 16px; }
+  .compare-card { background: var(--bento-bg); border: 1px solid var(--bento-border); border-radius: var(--bento-radius); padding: 22px 20px; }
+  .compare-card.featured { border-color: var(--red-oxv); }
+  .compare-card-head { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; font-family: var(--serif); font-style: italic; font-size: 18px; color: var(--cream); margin-bottom: 12px; }
+  .compare-card-head span { font-family: var(--mono); font-size: 13px; font-style: normal; color: var(--gold-data); white-space: nowrap; }
+  .compare-card ul { list-style: none; margin: 0; padding: 0; }
+  .compare-card li { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; padding: 8px 0; border-top: 1px solid var(--cream-line); font-family: var(--sans); font-size: 13px; line-height: 1.5; color: var(--cream); text-align: right; }
+  .compare-card li span { color: var(--cream-mute); text-align: left; flex-shrink: 0; }
+}
+
 /* === COMMENT ÇA MARCHE === */
 .how { margin-top: 96px; }
 .how-grid {
@@ -13803,71 +13817,116 @@ textarea:focus-visible {
           <div class="compare-cell head featured"><span class="compare-tier-name">Signature</span></div>
           <div class="compare-cell head"><span class="compare-tier-name">Heritage</span></div>
 
-          <div class="compare-cell label">Tarif TTC</div>
-          <div class="compare-cell">390 €</div>
-          <div class="compare-cell featured">690 €</div>
-          <div class="compare-cell">2 490 €</div>
+          <div class="compare-cell label">Prix par pilote</div>
+          <div class="compare-cell">390 € TTC</div>
+          <div class="compare-cell featured">690 € TTC</div>
+          <div class="compare-cell">2 490 € TTC · 4 sessions</div>
 
-          <div class="compare-cell label">Format</div>
+          <div class="compare-cell label">Temps de piste</div>
           <div class="compare-cell">Demi-journée · lundi</div>
-          <div class="compare-cell featured">Journée · vendredi</div>
-          <div class="compare-cell">4 sessions Signature</div>
+          <div class="compare-cell featured">Journée complète · vendredi</div>
+          <div class="compare-cell">4 journées complètes</div>
 
-          <div class="compare-cell label">Capacité max</div>
-          <div class="compare-cell">20 pilotes</div>
-          <div class="compare-cell featured">20 pilotes</div>
-          <div class="compare-cell">20 · prioritaire</div>
+          <div class="compare-cell label">Pilotes sur la piste</div>
+          <div class="compare-cell">20 max</div>
+          <div class="compare-cell featured">20 max</div>
+          <div class="compare-cell">20 max · prioritaire</div>
 
-          <div class="compare-cell label">Coaching partenaire (option)</div>
-          <div class="compare-cell dot-no">○</div>
-          <div class="compare-cell featured dot-yes">●</div>
-          <div class="compare-cell dot-yes">●</div>
+          <div class="compare-cell label">Vos données de roulage</div>
+          <div class="compare-cell">Complètes</div>
+          <div class="compare-cell featured">Complètes</div>
+          <div class="compare-cell">Complètes + bilan d'évolution</div>
 
-          <div class="compare-cell label">Télémétrie GPS 25 Hz</div>
-          <div class="compare-cell">Basique</div>
-          <div class="compare-cell featured dot-yes">●</div>
-          <div class="compare-cell dot-yes">●</div>
-
-          <div class="compare-cell label">Rapport QDI complet</div>
+          <div class="compare-cell label">Votre bilan (rapport QDI)</div>
           <div class="compare-cell">Simplifié</div>
-          <div class="compare-cell featured dot-yes">●</div>
-          <div class="compare-cell dot-yes">●</div>
+          <div class="compare-cell featured">Simplifié</div>
+          <div class="compare-cell">Simplifié</div>
 
-          <div class="compare-cell label">Reportage photo dédié</div>
-          <div class="compare-cell">3-5 clichés</div>
-          <div class="compare-cell featured">10-15 clichés</div>
-          <div class="compare-cell dot-yes">●</div>
+          <div class="compare-cell label">Photos &amp; vidéos de votre journée</div>
+          <div class="compare-cell">Banque photo &amp; vidéo livrée dans l'app</div>
+          <div class="compare-cell featured">Banque photo &amp; vidéo livrée dans l'app</div>
+          <div class="compare-cell">Banque photo &amp; vidéo livrée dans l'app</div>
 
-          <div class="compare-cell label">Vidéo onboard + drone</div>
-          <div class="compare-cell dot-no">○</div>
-          <div class="compare-cell featured dot-yes">●</div>
-          <div class="compare-cell dot-yes">●</div>
+          <div class="compare-cell label">Repas</div>
+          <div class="compare-cell">Café d'accueil</div>
+          <div class="compare-cell featured">Déjeuner traiteur</div>
+          <div class="compare-cell">Déjeuner traiteur</div>
 
-          <div class="compare-cell label">Déjeuner gastronomique</div>
-          <div class="compare-cell dot-no">○</div>
-          <div class="compare-cell featured dot-yes">●</div>
-          <div class="compare-cell dot-yes">●</div>
+          <div class="compare-cell label">Coach partenaire (option)</div>
+          <div class="compare-cell">Disponible</div>
+          <div class="compare-cell featured">Disponible</div>
+          <div class="compare-cell">Disponible</div>
 
-          <div class="compare-cell label">App OXV premium illimitée</div>
-          <div class="compare-cell">Session</div>
-          <div class="compare-cell featured">Session</div>
-          <div class="compare-cell dot-yes">● Annuel</div>
+          <div class="compare-cell label">App OXV Mirror</div>
+          <div class="compare-cell">Abonnement 15 €/mois</div>
+          <div class="compare-cell featured">Abonnement 15 €/mois</div>
+          <div class="compare-cell">Abonnement 15 €/mois</div>
 
-          <div class="compare-cell label">Priorité réservation</div>
-          <div class="compare-cell dot-no">○</div>
-          <div class="compare-cell featured dot-no">○</div>
-          <div class="compare-cell dot-yes">● J-7</div>
+          <div class="compare-cell label">Réservation</div>
+          <div class="compare-cell">Ouverture publique</div>
+          <div class="compare-cell featured">Ouverture publique</div>
+          <div class="compare-cell">Prioritaire</div>
 
-          <div class="compare-cell label">Événements clubs</div>
-          <div class="compare-cell dot-no">○</div>
-          <div class="compare-cell featured dot-no">○</div>
-          <div class="compare-cell dot-yes">●</div>
+          <div class="compare-cell label">Événements club</div>
+          <div class="compare-cell">Événements partenaires dans l'app</div>
+          <div class="compare-cell featured">Événements partenaires dans l'app</div>
+          <div class="compare-cell">Journée d'ouverture de saison</div>
 
-          <div class="compare-cell label">Accès anticipé saison N+1</div>
-          <div class="compare-cell dot-no">○</div>
-          <div class="compare-cell featured dot-no">○</div>
-          <div class="compare-cell dot-yes">●</div>
+          <div class="compare-cell label">Saison suivante</div>
+          <div class="compare-cell dot-no">—</div>
+          <div class="compare-cell featured dot-no">—</div>
+          <div class="compare-cell">Accès anticipé</div>
         </div></div><!-- /compare-scroll-wrap -->
+
+        <!-- Mobile : cartes empilées (même contenu que la grille) -->
+        <div class="compare-cards">
+          <div class="compare-card">
+            <div class="compare-card-head">Access <span>390 € TTC</span></div>
+            <ul>
+              <li><span>Temps de piste</span>Demi-journée · lundi</li>
+              <li><span>Pilotes sur la piste</span>20 max</li>
+              <li><span>Données de roulage</span>Complètes</li>
+              <li><span>Bilan (rapport QDI)</span>Simplifié</li>
+              <li><span>Photos &amp; vidéos</span>Banque livrée dans l'app</li>
+              <li><span>Repas</span>Café d'accueil</li>
+              <li><span>Coach partenaire</span>Disponible en option</li>
+              <li><span>App OXV Mirror</span>Abonnement 15 €/mois</li>
+              <li><span>Réservation</span>Ouverture publique</li>
+              <li><span>Événements club</span>Partenaires dans l'app</li>
+            </ul>
+          </div>
+          <div class="compare-card featured">
+            <div class="compare-card-head">Signature <span>690 € TTC</span></div>
+            <ul>
+              <li><span>Temps de piste</span>Journée complète · vendredi</li>
+              <li><span>Pilotes sur la piste</span>20 max</li>
+              <li><span>Données de roulage</span>Complètes</li>
+              <li><span>Bilan (rapport QDI)</span>Simplifié</li>
+              <li><span>Photos &amp; vidéos</span>Banque livrée dans l'app</li>
+              <li><span>Repas</span>Déjeuner traiteur</li>
+              <li><span>Coach partenaire</span>Disponible en option</li>
+              <li><span>App OXV Mirror</span>Abonnement 15 €/mois</li>
+              <li><span>Réservation</span>Ouverture publique</li>
+              <li><span>Événements club</span>Partenaires dans l'app</li>
+            </ul>
+          </div>
+          <div class="compare-card">
+            <div class="compare-card-head">Heritage <span>2 490 € TTC · 4 sessions</span></div>
+            <ul>
+              <li><span>Temps de piste</span>4 journées complètes</li>
+              <li><span>Pilotes sur la piste</span>20 max · prioritaire</li>
+              <li><span>Données de roulage</span>Complètes + bilan d'évolution</li>
+              <li><span>Bilan (rapport QDI)</span>Simplifié</li>
+              <li><span>Photos &amp; vidéos</span>Banque livrée dans l'app</li>
+              <li><span>Repas</span>Déjeuner traiteur</li>
+              <li><span>Coach partenaire</span>Disponible en option</li>
+              <li><span>App OXV Mirror</span>Abonnement 15 €/mois</li>
+              <li><span>Réservation</span>Prioritaire</li>
+              <li><span>Événements club</span>Journée d'ouverture de saison</li>
+              <li><span>Saison suivante</span>Accès anticipé</li>
+            </ul>
+          </div>
+        </div>
       </div>
 
       <!-- Comment ça marche -->
