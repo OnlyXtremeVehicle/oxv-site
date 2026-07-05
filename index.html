@@ -1044,7 +1044,7 @@ h1, h2, h3, h4, h5 {
 
 .offer {
   position: relative;
-  padding: 48px 28px 40px;
+  padding: 52px 36px 44px;   /* v2 : le contenu ne se tasse plus contre le filet (audit) */
   background: var(--bento-bg);
   backdrop-filter: var(--bento-blur);
   -webkit-backdrop-filter: var(--bento-blur);
@@ -7895,8 +7895,8 @@ footer {
   gap: 18px;
   margin-bottom: 48px;
 }
-@media (min-width: 720px) { .home-journey-grid { grid-template-columns: 1fr 1fr; gap: 16px; } }
-@media (min-width: 1080px) { .home-journey-grid { grid-template-columns: repeat(4, 1fr); gap: 16px; } }
+@media (min-width: 720px) { .home-journey-grid { grid-template-columns: 1fr 1fr; gap: clamp(20px, 1.6vw, 28px); } }
+@media (min-width: 1080px) { .home-journey-grid { grid-template-columns: repeat(4, 1fr); gap: clamp(20px, 1.6vw, 28px); } }
 @media (min-width: 1080px) { .home-journey-grid--3 { grid-template-columns: repeat(3, 1fr); gap: 20px; } }
 
 /* === BENTO BOX CARDS — Charte Executive Dashboard === */
