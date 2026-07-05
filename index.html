@@ -13242,6 +13242,23 @@ textarea:focus-visible {
 .home-qdi-name { font-family: var(--display); font-size: 12px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; }
 .home-qdi-desc { font-family: var(--sans); font-size: 12px; line-height: 1.55; color: var(--cream-mute); margin-top: 9px; }
 
+/* Bande « trace » — immersion data SANS photo : ligne de télémétrie animée */
+.home-trace { position: relative; min-height: 82vh; display: flex; align-items: center; overflow: hidden; border-top: 1px solid var(--cream-line); background: radial-gradient(130% 95% at 50% 42%, #14110b 0%, var(--carbon) 52%, #050505 100%); }
+.home-trace-glow { position: absolute; inset: 0; z-index: 0; pointer-events: none; background: radial-gradient(48% 60% at 72% 54%, rgba(216,15,31,0.12) 0%, transparent 62%), radial-gradient(44% 56% at 24% 62%, rgba(201,162,74,0.09) 0%, transparent 62%); }
+.home-trace-svg { position: absolute; inset: 0; width: 100%; height: 100%; z-index: 0; }
+.home-trace-line { fill: none; stroke: url(#homeTraceGrad); stroke-width: 2.5; stroke-linecap: round; filter: drop-shadow(0 0 7px rgba(201,162,74,0.35)); stroke-dasharray: 15 11; animation: homeTraceFlow 8s linear infinite; }
+.home-trace-line.faint { stroke: rgba(245,242,234,0.09); stroke-width: 1.5; stroke-dasharray: none; filter: none; animation: none; }
+@keyframes homeTraceFlow { to { stroke-dashoffset: -260; } }
+.home-trace-dot { fill: var(--gold-data); filter: drop-shadow(0 0 9px rgba(201,162,74,0.95)); }
+.home-trace-content { position: relative; z-index: 1; padding-left: var(--gutter); padding-right: var(--gutter); }
+@media (prefers-reduced-motion: reduce) { .home-trace-line { animation: none; } .home-trace-dot { display: none; } }
+
+/* Bande « credo » — statement doctrine sur insigne en filigrane (sans photo) */
+.home-creed { position: relative; min-height: 78vh; display: flex; align-items: center; text-align: center; overflow: hidden; border-top: 1px solid var(--cream-line); background: radial-gradient(125% 100% at 50% 28%, #0e0d0f 0%, var(--carbon) 54%, #050505 100%); }
+.home-creed-mark { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; z-index: 0; pointer-events: none; }
+.home-creed-mark svg { width: min(64vw, 600px); height: min(64vw, 600px); color: var(--red-oxv); fill: currentColor; opacity: 0.055; }
+.home-creed-inner { position: relative; z-index: 1; max-width: 920px; margin: 0 auto; padding: 0 var(--gutter); }
+
 /* — Lot H · Direction typographique « Goodwood » (arbitrage fondateur 2026-07-04) —
    Titres en serif italique racé (Cormorant Garamond) ; eyebrows, labels, data (mono)
    et boutons inchangés. Casse naturelle : fin de l'uppercase sur les grands titres.
@@ -13506,7 +13523,7 @@ textarea:focus-visible {
           Une journée circuit<br/>ne devrait pas <em style="font-style:normal;color:var(--gold-data);">disparaître</em>.
         </h2>
         <p class="reveal" style="font-family:var(--sans);font-size:16px;line-height:1.7;color:var(--cream-mute);margin:0;">
-          OXV transforme votre roulage en Trace : média, data, bilan, carnet et progression. Le parcours reste simple.
+          Ailleurs, une journée de piste finit au parking. Chez OXV, elle continue — vos images, vos données, votre progression. Réunies, sans effort de votre part.
         </p>
       </div>
       <div class="reveal" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:16px;">
@@ -13609,15 +13626,27 @@ textarea:focus-visible {
 
 
   <!-- ============================================================
-       BANDE IMMERSIVE — LE CIRCUIT (refonte accueil)
+       BANDE « TRACE » — immersion data animée, sans photo (refonte accueil)
        ============================================================ -->
-  <section class="home-edito">
-    <div class="home-edito-bg"><img src="img/menu-circuit.webp" alt="Vue aérienne d'un circuit sinueux dans la campagne au lever du jour" loading="lazy" decoding="async" /></div>
-    <div class="home-edito-inner reveal">
-      <div class="home-edito-eyebrow">Le circuit</div>
-      <h2 class="home-edito-title">Un tracé qui <em>révèle</em>.</h2>
-      <p class="home-edito-lede">Pas le plus rapide. L'un des plus honnêtes. Un circuit technique et vallonné qui s'apprend session après session — et qui rend chaque progrès lisible.</p>
-      <button class="btn btn-lg" onclick="goTo('circuit')"><span>Découvrir le circuit</span></button>
+  <section class="home-trace">
+    <div class="home-trace-glow"></div>
+    <svg class="home-trace-svg" viewBox="0 0 1200 500" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+      <defs>
+        <linearGradient id="homeTraceGrad" x1="0" y1="0" x2="1" y2="0">
+          <stop offset="0" stop-color="#D80F1F"/>
+          <stop offset="0.5" stop-color="#C9A24A"/>
+          <stop offset="1" stop-color="#D80F1F"/>
+        </linearGradient>
+      </defs>
+      <path class="home-trace-line faint" d="M -40 384 C 130 384 190 262 350 262 S 520 412 690 392 S 872 224 1052 256 S 1200 360 1264 342" />
+      <path id="homeTracePath" class="home-trace-line" d="M -40 330 C 130 330 190 170 350 170 S 520 350 690 330 S 872 132 1052 176 S 1200 300 1264 276" />
+      <circle class="home-trace-dot" r="5"><animateMotion dur="8s" repeatCount="indefinite"><mpath href="#homeTracePath"/></animateMotion></circle>
+    </svg>
+    <div class="wrap home-trace-content reveal" style="max-width:960px;">
+      <div class="home-edito-eyebrow" style="color:var(--gold);">La trace</div>
+      <h2 class="home-edito-title" style="color:var(--offwhite);max-width:18ch;">Le roulage s'efface.<br/>La <em>trace</em> reste.</h2>
+      <p class="home-edito-lede" style="color:var(--cream-mute);">Chaque tour devient une donnée : vos vitesses, vos trajectoires, votre régularité. Silencieuse en piste, l'application vous rend votre session après le roulage — lisible, et à vous seul.</p>
+      <button class="btn btn-lg" onclick="goTo('application')"><span>Découvrir l'application</span></button>
     </div>
   </section>
 
@@ -13649,7 +13678,7 @@ textarea:focus-visible {
           OXV Mirror.<br/>L'app qui <em style="color:var(--gold);">prolonge</em> la journée.
         </h2>
         <p class="reveal" style="font-family:var(--sans);font-size:16px;line-height:1.7;color:var(--cream-mute);">
-          OXV Mirror est un <strong style="color:var(--cream);">miroir, pas un coach</strong>. Pendant que vous roulez, l'app reste <strong style="color:var(--cream);">silencieuse</strong> — aucune alerte, aucun HUD, aucune consigne. Après la session, elle vous restitue votre journée : votre trace, vos données, votre progression. La piste est à vous. Les décisions aussi.
+          Sept espaces, une seule règle : <strong style="color:var(--cream);">l'app restitue, elle ne juge jamais</strong>. Le Pass qui vous fait entrer, la Trace au bout du roulage, le Data Lab pour aller au fond, vos médias, votre carnet. Un miroir — vous gardez les décisions.
         </p>
       </div>
 
@@ -13764,12 +13793,12 @@ textarea:focus-visible {
   <!-- ============================================================
        SECTION — LA CONFIANCE (DA V3 §18)
        ============================================================ -->
-  <section class="home-edito" style="align-items:center;min-height:82vh;">
-    <div class="home-edito-bg"><img src="img/offer-access.webp" alt="Pit lane au lever du jour, un pilote seul, casque à la main" loading="lazy" decoding="async" /></div>
-    <div class="home-edito-inner reveal" style="text-align:center;padding-bottom:0;max-width:920px;">
-      <div class="home-edito-eyebrow" style="margin-left:auto;margin-right:auto;">N° 05 · La confiance</div>
-      <h2 class="home-edito-title" style="max-width:none;margin-left:auto;margin-right:auto;font-size:clamp(34px,5.4vw,76px);">OXV observe.<br/>Le coach accompagne.<br/>Vous <em>décidez</em>.</h2>
-      <p class="home-edito-lede" style="margin-left:auto;margin-right:auto;">Pas de consigne en piste. Pas de classement public. Pas de données partagées sans votre accord.</p>
+  <section class="home-creed">
+    <div class="home-creed-mark" aria-hidden="true"><svg viewBox="0 0 1500 1500"><use href="#oxv-insignia"/></svg></div>
+    <div class="home-creed-inner reveal">
+      <div class="home-edito-eyebrow" style="color:var(--gold);margin-left:auto;margin-right:auto;">N° 05 · La confiance</div>
+      <h2 class="home-edito-title" style="color:var(--offwhite);max-width:none;margin-left:auto;margin-right:auto;font-size:clamp(34px,5.4vw,76px);">OXV observe.<br/>Le coach accompagne.<br/>Vous <em>décidez</em>.</h2>
+      <p class="home-edito-lede" style="color:var(--cream-mute);margin-left:auto;margin-right:auto;">Pas de consigne en piste. Pas de classement public. Pas de données partagées sans votre accord.</p>
       <div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap;">
         <button class="btn btn-lg" onclick="goTo('securite')"><span>Lire le cadre</span></button>
         <button class="btn btn-lg" onclick="goTo('preuves')"><span>Nos garanties</span></button>
