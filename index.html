@@ -2144,8 +2144,12 @@ footer {
 }
 
 /* === REVEAL ANIMS === */
-.reveal { opacity: 0; transform: translateY(28px); transition: opacity 1s var(--ease-out), transform 1s var(--ease-out); }
-.reveal.in { opacity: 1; transform: translateY(0); }
+.reveal { opacity: 0; transform: translateY(44px) scale(0.985); transition: opacity 1.05s var(--ease-out), transform 1.2s var(--ease-out); will-change: opacity, transform; }
+.reveal.in { opacity: 1; transform: none; }
+@media (prefers-reduced-motion: reduce) { .reveal { transition: none; transform: none; } }
+/* Parallaxe : conteneurs de fond en overflow pour absorber le déplacement */
+.home-hero-bg, .home-final-bg { overflow: hidden; }
+[data-parallax] { will-change: transform; }
 .reveal-stagger > * { opacity: 0; transform: translateY(28px); transition: opacity 0.8s var(--ease-out), transform 0.8s var(--ease-out); }
 .reveal-stagger.in > *:nth-child(1) { transition-delay: 0.05s; opacity: 1; transform: translateY(0); }
 .reveal-stagger.in > *:nth-child(2) { transition-delay: 0.18s; opacity: 1; transform: translateY(0); }
@@ -11120,13 +11124,14 @@ a.btn {
   display: block !important;
 }
 
-/* HOTFIX 8 : Reveal-stagger items also forced visible after load */
-@media (prefers-reduced-motion: no-preference) {
-  body.loaded .reveal,
-  body.loaded .reveal-stagger > * {
-    opacity: 1;
-    transform: translateY(0);
-  }
+/* Reveals désormais pilotés par le scroll (setupReveal + IntersectionObserver).
+   L'ancien « body.loaded .reveal { opacity:1 } » forçait tout visible dès le
+   chargement -> tuait toute animation d'entrée (site figé). Retiré.
+   Sécurité : reduced-motion révèle tout (géré en JS et en CSS ci-dessous),
+   et le site étant une SPA (sans JS, l'écran de boot reste), aucun risque de
+   page blanche. */
+@media (prefers-reduced-motion: reduce) {
+  .reveal, .reveal-stagger > * { opacity: 1 !important; transform: none !important; }
 }
 
 /* ============================================================
@@ -13443,6 +13448,7 @@ textarea:focus-visible {
       <img class="home-hero-img"
            src="img/offer-signature.webp"
            alt="GT en appui en sortie de virage, lumière rasante"
+           data-parallax="0.10"
            loading="eager"
            fetchpriority="high" />
       <div class="home-hero-overlay"></div>
@@ -13505,8 +13511,8 @@ textarea:focus-visible {
   <section style="padding:clamp(40px,6vw,64px) 0;background:var(--carbon);border-top:1px solid var(--cream-line);">
     <div class="wrap">
       <div class="corp-stats-bento reveal" style="margin:0 auto;">
-        <div class="bento corp-stat-bento"><div class="corp-stat-bento-num"><em>20</em></div><div class="corp-stat-bento-label">Pilotes maximum par session</div></div>
-        <div class="bento corp-stat-bento"><div class="corp-stat-bento-num"><em>25</em><span style="font-size:0.4em;"> Hz</span></div><div class="corp-stat-bento-label">Télémétrie GPS enregistrée</div></div>
+        <div class="bento corp-stat-bento"><div class="corp-stat-bento-num"><em data-count="20">20</em></div><div class="corp-stat-bento-label">Pilotes maximum par session</div></div>
+        <div class="bento corp-stat-bento"><div class="corp-stat-bento-num"><em data-count="25">25</em><span style="font-size:0.4em;"> Hz</span></div><div class="corp-stat-bento-label">Télémétrie GPS enregistrée</div></div>
         <div class="bento corp-stat-bento"><div class="corp-stat-bento-num"><em>2027</em></div><div class="corp-stat-bento-label">Première saison OXV</div></div>
       </div>
     </div>
@@ -13815,6 +13821,7 @@ textarea:focus-visible {
     <div class="home-final-bg">
       <img src="img/offer-signature.webp"
            alt="GT en appui sur circuit, lumière rasante"
+           data-parallax="0.16"
            loading="lazy" decoding="async" />
       <div class="home-final-overlay"></div>
     </div>
@@ -21640,6 +21647,8 @@ window.goTo = function(page, opts) {
   if (target) target.classList.add('active');
   if (page === 'offers') track('view_offer');
   window.scrollTo({ top: 0, behavior: 'instant' });
+  // Révèle les animations d'entrée de la nouvelle page (SPA), au-dessus de la ligne de flottaison
+  if (window.__oxvRevealNear) requestAnimationFrame(() => window.__oxvRevealNear());
 
   // Init / reinit Three.js scenes for current page
   setTimeout(() => {
@@ -32735,20 +32744,95 @@ function tickClock() {
 setInterval(tickClock, 1000);
 tickClock();
 
-/* === REVEAL === */
+/* === REVEAL (piloté par l'événement scroll — robuste, sans dépendre de la
+   hauteur de viewport de l'observer). Chaque .reveal s'anime quand il approche
+   le viewport ; les éléments des pages cachées (display:none) sont ignorés. === */
 function setupReveal() {
-  const obs = new IntersectionObserver(entries => {
-    entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('in'); });
-  }, { threshold: 0.12 });
-  document.querySelectorAll('.reveal:not(.in), .reveal-stagger:not(.in)').forEach(el => obs.observe(el));
-
-  // Filet de sécurité : si l'observer ne déclenche pas dans les 2 secondes,
-  // on force tous les éléments .reveal à devenir visibles (évite les pages "invisibles")
-  setTimeout(() => {
+  const reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (reduce) {
+    document.querySelectorAll('.reveal, .reveal-stagger').forEach(el => el.classList.add('in'));
+    return;
+  }
+  const vh = () => window.innerHeight || document.documentElement.clientHeight || 800;
+  const revealNear = () => {
+    const h = vh();
     document.querySelectorAll('.reveal:not(.in), .reveal-stagger:not(.in)').forEach(el => {
-      el.classList.add('in');
+      if (!el.offsetParent) return;               // page cachée -> on ignore
+      const r = el.getBoundingClientRect();
+      if (r.height > 0 && r.top < h * 0.92 && r.bottom > -40) el.classList.add('in');
     });
-  }, 2000);
+  };
+  window.__oxvRevealNear = revealNear;            // rappelé par goTo au changement de page
+  requestAnimationFrame(revealNear);
+  // Appels échelonnés : le layout se stabilise après le boot ; garantit que le
+  // premier écran se révèle même si le tout premier rAF précède la mise en page.
+  [250, 700, 1500].forEach(ms => setTimeout(revealNear, ms));
+  window.addEventListener('load', () => requestAnimationFrame(revealNear));
+  let t = false;
+  window.addEventListener('scroll', () => {
+    if (t) return; t = true;
+    requestAnimationFrame(() => { revealNear(); t = false; });
+  }, { passive: true });
+  window.addEventListener('resize', () => requestAnimationFrame(revealNear), { passive: true });
+  // Enrichissement : IntersectionObserver (viewport réel, fiable en vrai navigateur)
+  if ('IntersectionObserver' in window) {
+    const obs = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); obs.unobserve(e.target); } }), { threshold: 0.12, rootMargin: '0px 0px -6% 0px' });
+    document.querySelectorAll('.reveal:not(.in), .reveal-stagger:not(.in)').forEach(el => obs.observe(el));
+  }
+  // Garde anti-catastrophe : si scroll ET observer échouaient (navigateur cassé),
+  // la PAGE ACTIVE se révèle entièrement après 5 s -> jamais de contenu invisible.
+  // Les autres pages gardent leur animation d'entrée (révélées à la navigation).
+  setTimeout(() => {
+    const active = document.querySelector('.page.active');
+    if (active) active.querySelectorAll('.reveal:not(.in), .reveal-stagger:not(.in)').forEach(el => el.classList.add('in'));
+  }, 5000);
+}
+
+/* === MOUVEMENT — parallaxe des fonds + compteurs animés (façon site auto) === */
+function setupMotion() {
+  const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  // Parallaxe : les images de fond bougent plus lentement que le scroll (profondeur)
+  const pEls = Array.prototype.slice.call(document.querySelectorAll('[data-parallax]'));
+  if (pEls.length && !reduce) {
+    let ticking = false;
+    const apply = () => {
+      const vh = window.innerHeight || document.documentElement.clientHeight || 800;
+      pEls.forEach(el => {
+        const r = el.getBoundingClientRect();
+        if (r.bottom > -80 && r.top < vh + 80) {
+          const speed = parseFloat(el.dataset.parallax) || 0.14;
+          const offset = (r.top + r.height / 2 - vh / 2) * speed;
+          el.style.transform = 'translate3d(0,' + (-offset).toFixed(1) + 'px,0) scale(1.16)';
+        }
+      });
+      ticking = false;
+    };
+    window.addEventListener('scroll', () => { if (!ticking) { requestAnimationFrame(apply); ticking = true; } }, { passive: true });
+    window.addEventListener('resize', apply, { passive: true });
+    apply();
+  }
+
+  // Compteurs : les chiffres montent de 0 à leur valeur en entrant à l'écran
+  const counters = document.querySelectorAll('[data-count]');
+  if (counters.length) {
+    const cObs = new IntersectionObserver(entries => {
+      entries.forEach(e => {
+        if (!e.isIntersecting) return;
+        const el = e.target; cObs.unobserve(el);
+        const target = parseInt(el.dataset.count, 10);
+        if (reduce || !target) { el.textContent = String(target || el.textContent); return; }
+        const dur = 1300, start = performance.now();
+        const tick = t => {
+          const p = Math.min(1, (t - start) / dur);
+          el.textContent = String(Math.round(target * (1 - Math.pow(1 - p, 3))));
+          if (p < 1) requestAnimationFrame(tick);
+        };
+        requestAnimationFrame(tick);
+      });
+    }, { threshold: 0.55 });
+    counters.forEach(c => cObs.observe(c));
+  }
 }
 
 /* ============================================================
@@ -33210,16 +33294,14 @@ window.addEventListener('DOMContentLoaded', () => {
   safe('initCircuit3D', () => initCircuit3D('circuit3d'));
   safe('buildSlots', () => buildSlots());
   safe('setupReveal', () => setupReveal());
+  safe('setupMotion', () => setupMotion());
   safe('onAuthChange', () => onAuthChange());
   safe('updateSummary', () => updateSummary());
 
-  // HOTFIX : Forcer la visibilité des éléments .reveal après le load
-  setTimeout(() => {
-    document.body.classList.add('loaded');
-    document.querySelectorAll('.reveal, .reveal-stagger').forEach(el => {
-      el.classList.add('in');
-    });
-  }, 100);
+  // body.loaded conservé (états de chargement CSS). Le force-visible des .reveal
+  // est RETIRÉ : les reveals sont désormais pilotés par le scroll (setupReveal),
+  // sinon toute animation d'entrée était tuée (site figé).
+  setTimeout(() => { document.body.classList.add('loaded'); }, 100);
 
   // HOTFIX BOUTON : Flush la queue d'appels en attente
   // (au cas où des onclick auraient été déclenchés avant le chargement du module)
