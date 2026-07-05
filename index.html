@@ -444,7 +444,7 @@ h1, h2, h3, h4, h5 {
   line-height: 1.15;
 }
 
-.serif { font-family: var(--serif); }
+.serif { font-family: var(--display); }
 .mono  { font-family: var(--mono); font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase; }
 .italic { font-style: italic; }
 
@@ -676,7 +676,7 @@ h1, h2, h3, h4, h5 {
 .mob-tile::after { content: ''; position: absolute; inset: 0; z-index: -1; background: linear-gradient(180deg, rgba(5,5,5,0) 30%, rgba(5,5,5,0.85) 100%); }
 .mob-tile:hover::before { transform: scale(1.05); }
 .mob-tile-eyebrow { font-family: var(--mono); font-size: 9px; letter-spacing: 0.22em; text-transform: uppercase; color: var(--copper-glow); margin-bottom: 6px; }
-.mob-tile-title { font-family: var(--serif); font-style: italic; font-size: 26px; line-height: 1; color: var(--cream); }
+.mob-tile-title { font-family: var(--display); font-style: italic; font-size: 26px; line-height: 1; color: var(--cream); }
 .mob-tile-sub { font-family: var(--sans); font-size: 12px; color: var(--cream-mute); margin-top: 5px; }
 .mob-more { display: grid; grid-template-columns: 1fr; gap: 24px; }
 @media (min-width: 560px) { .mob-more { grid-template-columns: repeat(3, 1fr); } }
@@ -684,7 +684,7 @@ h1, h2, h3, h4, h5 {
 .mob-more-col a:hover { color: var(--copper-glow); }
 @media (min-width: 1024px) { .mob { padding: 96px var(--gutter) 48px; } .mob-tile-title { font-size: 30px; } }
 .mob-label { font-family: var(--mono); font-size: 10px; letter-spacing: 0.22em; text-transform: uppercase; color: var(--copper-glow); margin-bottom: 14px; }
-.mob-link { display: block; font-family: var(--serif); font-size: 32px; font-weight: 300; padding: 8px 0; color: var(--cream); }
+.mob-link { display: block; font-family: var(--display); font-size: 32px; font-weight: 300; padding: 8px 0; color: var(--cream); }
 .mob-link em { font-style: italic; color: var(--copper-glow); }
 .mob-actions { margin-top: auto; display: flex; gap: 8px; flex-wrap: wrap; padding-top: 24px; border-top: 1px solid var(--cream-line); }
 
@@ -952,14 +952,14 @@ h1, h2, h3, h4, h5 {
   .signature:first-child { border-left: 0; }
 }
 .signature-num {
-  font-family: var(--serif);
+  font-family: var(--display);
   font-size: 14px;
   font-style: italic;
   color: var(--copper-glow);
   margin-bottom: 28px;
 }
 .signature-title {
-  font-family: var(--serif);
+  font-family: var(--display);
   font-size: 28px;
   font-weight: 400;
   letter-spacing: -0.02em;
@@ -978,7 +978,7 @@ h1, h2, h3, h4, h5 {
   border-top: 1px solid var(--cream-line);
 }
 .signature-stat-big {
-  font-family: var(--serif);
+  font-family: var(--display);
   font-weight: 200;
   font-size: clamp(38px, 4vw, 56px);
   letter-spacing: -0.025em;
@@ -1277,7 +1277,7 @@ h1, h2, h3, h4, h5 {
 .circuit-overlay-br { bottom: 18px; right: 18px; }
 .circuit-overlay-tl strong, .circuit-overlay-tr strong, .circuit-overlay-bl strong, .circuit-overlay-br strong {
   display: block;
-  font-family: var(--serif);
+  font-family: var(--display);
   font-size: 22px;
   font-weight: 400;
   font-style: italic;
@@ -2033,7 +2033,7 @@ h1, h2, h3, h4, h5 {
   position: relative;
 }
 .final-cta-text {
-  font-family: var(--serif);
+  font-family: var(--display);
   font-size: clamp(40px, 6vw, 84px);
   font-weight: 300;
   font-style: italic;
@@ -2045,7 +2045,7 @@ h1, h2, h3, h4, h5 {
 }
 .final-cta-text em { font-style: italic; color: var(--copper-glow); }
 .final-cta-sub {
-  font-family: var(--serif);
+  font-family: var(--display);
   font-size: 17px;
   font-style: italic;
   color: var(--cream-mute);
@@ -2229,7 +2229,7 @@ footer {
 }
 .prose h2 em { font-style: italic; color: var(--copper-glow); }
 .prose h3 {
-  font-family: var(--serif);
+  font-family: var(--display);
   font-size: 22px;
   font-weight: 400;
   margin: 32px 0 12px;
@@ -2285,7 +2285,7 @@ footer {
 .compare-cell.featured { background: rgba(184, 115, 51, 0.05); color: var(--cream); }
 .compare-cell.dot-yes { color: var(--copper-glow); font-size: 16px; justify-content: center; }
 .compare-cell.dot-no { color: var(--cream-faint); font-size: 16px; justify-content: center; }
-.compare-tier-name { font-family: var(--serif); font-size: 18px; font-weight: 400; font-style: italic; color: var(--cream); }
+.compare-tier-name { font-family: var(--display); font-size: 18px; font-weight: 400; font-style: italic; color: var(--cream); }
 
 .compare-scroll-wrap {
   overflow-x: auto;
@@ -2305,7 +2305,7 @@ footer {
   .compare-cards { display: grid; gap: 16px; }
   .compare-card { background: var(--bento-bg); border: 1px solid var(--bento-border); border-radius: var(--bento-radius); padding: 22px 20px; }
   .compare-card.featured { border-color: var(--red-oxv); }
-  .compare-card-head { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; font-family: var(--serif); font-style: italic; font-size: 18px; color: var(--cream); margin-bottom: 12px; }
+  .compare-card-head { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; font-family: var(--display); font-style: italic; font-size: 18px; color: var(--cream); margin-bottom: 12px; }
   .compare-card-head span { font-family: var(--mono); font-size: 13px; font-style: normal; color: var(--gold-data); white-space: nowrap; }
   .compare-card ul { list-style: none; margin: 0; padding: 0; }
   .compare-card li { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; padding: 8px 0; border-top: 1px solid var(--cream-line); font-family: var(--sans); font-size: 13px; line-height: 1.5; color: var(--cream); text-align: right; }
@@ -2415,7 +2415,7 @@ footer {
 }
 .gate-inner { max-width: 520px; position: relative; }
 .gate-mark {
-  font-family: var(--serif);
+  font-family: var(--display);
   font-size: 64px;
   font-style: italic;
   color: var(--copper-glow);
@@ -2438,7 +2438,7 @@ footer {
   margin-bottom: 18px;
 }
 .gate-title {
-  font-family: var(--serif);
+  font-family: var(--display);
   font-size: clamp(36px, 4.5vw, 56px);
   font-weight: 300;
   letter-spacing: -0.03em;
@@ -2447,7 +2447,7 @@ footer {
 }
 .gate-title em { font-style: italic; color: var(--copper-glow); }
 .gate-text {
-  font-family: var(--serif);
+  font-family: var(--display);
   font-size: 17px;
   font-weight: 300;
   font-style: italic;
@@ -2506,7 +2506,7 @@ footer {
   background: var(--copper);
 }
 .auth-side-title {
-  font-family: var(--serif);
+  font-family: var(--display);
   font-weight: 200;
   font-size: clamp(38px, 4.5vw, 64px);
   line-height: 0.96;
@@ -2515,7 +2515,7 @@ footer {
 }
 .auth-side-title em { font-style: italic; color: var(--copper-glow); }
 .auth-side-text {
-  font-family: var(--serif);
+  font-family: var(--display);
   font-style: italic;
   font-weight: 300;
   font-size: 18px;
@@ -2568,7 +2568,7 @@ footer {
   margin-bottom: 20px;
 }
 .auth-card-title {
-  font-family: var(--serif);
+  font-family: var(--display);
   font-weight: 300;
   font-size: 36px;
   line-height: 1.05;
@@ -2577,7 +2577,7 @@ footer {
 }
 .auth-card-title em { font-style: italic; color: var(--copper-glow); }
 .auth-card-sub {
-  font-family: var(--serif);
+  font-family: var(--display);
   font-style: italic;
   font-size: 16px;
   font-weight: 300;
@@ -2793,7 +2793,7 @@ footer {
   display: flex;
   align-items: center;
   justify-content: center;
-  font-family: var(--serif);
+  font-family: var(--display);
   font-style: italic;
   font-size: 28px;
   color: var(--copper-glow);
@@ -2801,7 +2801,7 @@ footer {
 .auth-status-icon.success { border-color: var(--copper-glow); }
 .auth-status-icon.error { border-color: #C45959; color: #C45959; }
 .auth-status-title {
-  font-family: var(--serif);
+  font-family: var(--display);
   font-weight: 300;
   font-size: 32px;
   line-height: 1.1;
@@ -2810,7 +2810,7 @@ footer {
 }
 .auth-status-title em { font-style: italic; color: var(--copper-glow); }
 .auth-status-text {
-  font-family: var(--serif);
+  font-family: var(--display);
   font-style: italic;
   font-size: 17px;
   font-weight: 300;
@@ -2861,7 +2861,7 @@ footer {
   margin-bottom: 14px;
 }
 .account-sidebar-name {
-  font-family: var(--serif);
+  font-family: var(--display);
   font-weight: 300;
   font-size: 26px;
   line-height: 1.15;
@@ -2974,7 +2974,7 @@ footer {
   background: var(--copper);
 }
 .account-header-title {
-  font-family: var(--serif);
+  font-family: var(--display);
   font-weight: 300;
   font-size: clamp(36px, 4.5vw, 56px);
   letter-spacing: -0.025em;
@@ -2983,7 +2983,7 @@ footer {
 }
 .account-header-title em { font-style: italic; color: var(--copper-glow); }
 .account-header-sub {
-  font-family: var(--serif);
+  font-family: var(--display);
   font-style: italic;
   font-weight: 300;
   font-size: 17px;
@@ -3020,7 +3020,7 @@ footer {
   color: var(--cream-faint);
 }
 .account-card-value {
-  font-family: var(--serif);
+  font-family: var(--display);
   font-weight: 300;
   font-size: 36px;
   letter-spacing: -0.02em;
@@ -3034,7 +3034,7 @@ footer {
   margin-left: 4px;
 }
 .account-card-text {
-  font-family: var(--serif);
+  font-family: var(--display);
   font-style: italic;
   font-size: 14px;
   color: var(--cream-mute);
@@ -3078,7 +3078,7 @@ footer {
   gap: 14px;
 }
 .account-section-title {
-  font-family: var(--serif);
+  font-family: var(--display);
   font-weight: 300;
   font-size: 28px;
   letter-spacing: -0.02em;
@@ -3102,14 +3102,14 @@ footer {
   background: var(--night-deep);
 }
 .account-empty-icon {
-  font-family: var(--serif);
+  font-family: var(--display);
   font-style: italic;
   font-size: 32px;
   color: var(--cream-faint);
   margin-bottom: 14px;
 }
 .account-empty-text {
-  font-family: var(--serif);
+  font-family: var(--display);
   font-style: italic;
   font-size: 16px;
   color: var(--cream-mute);
@@ -3200,7 +3200,7 @@ footer {
   object-fit: cover;
 }
 .vehicle-card-photo .placeholder {
-  font-family: var(--serif);
+  font-family: var(--display);
   font-style: italic;
   font-size: 16px;
   color: var(--cream-faint);
@@ -3221,7 +3221,7 @@ footer {
   color: var(--copper-glow);
 }
 .vehicle-card-name {
-  font-family: var(--serif);
+  font-family: var(--display);
   font-weight: 300;
   font-size: 24px;
   letter-spacing: -0.015em;
@@ -3298,7 +3298,7 @@ footer {
   color: var(--cream-mute);
   font-size: 24px;
   cursor: pointer;
-  font-family: var(--serif);
+  font-family: var(--display);
   line-height: 1;
   width: 32px;
   height: 32px;
@@ -3316,7 +3316,7 @@ footer {
   margin-bottom: 14px;
 }
 .vmodal-title {
-  font-family: var(--serif);
+  font-family: var(--display);
   font-weight: 300;
   font-size: 32px;
   letter-spacing: -0.02em;
@@ -3384,7 +3384,7 @@ footer {
   display: flex;
   align-items: center;
   justify-content: center;
-  font-family: var(--serif);
+  font-family: var(--display);
   font-size: 16px;
   line-height: 1;
   z-index: 5;
@@ -3435,7 +3435,7 @@ footer {
   display: flex;
   align-items: center;
   justify-content: center;
-  font-family: var(--serif);
+  font-family: var(--display);
   font-style: italic;
   font-size: 24px;
   color: var(--copper-glow);
@@ -3455,7 +3455,7 @@ footer {
   color: var(--copper-glow);
 }
 .doc-name {
-  font-family: var(--serif);
+  font-family: var(--display);
   font-weight: 300;
   font-size: 22px;
   letter-spacing: -0.015em;
@@ -3511,7 +3511,7 @@ footer {
   padding: 10px 14px;
   background: rgba(196, 89, 89, 0.08);
   border-left: 2px solid #C45959;
-  font-family: var(--serif);
+  font-family: var(--display);
   font-style: italic;
   font-size: 14px;
   color: #E07878;
@@ -4152,7 +4152,7 @@ footer {
   border-bottom: 1px solid var(--cream-edge);
 }
 .session-table td.date {
-  font-family: var(--serif);
+  font-family: var(--display);
   font-weight: 300;
   font-size: 18px;
   color: var(--cream);
@@ -4169,13 +4169,13 @@ footer {
   margin-top: 4px;
 }
 .session-table td.offer {
-  font-family: var(--serif);
+  font-family: var(--display);
   font-style: italic;
   font-size: 16px;
   color: var(--copper-glow);
 }
 .session-table td.price {
-  font-family: var(--serif);
+  font-family: var(--display);
   font-weight: 300;
   font-size: 17px;
   color: var(--cream);
@@ -4238,7 +4238,7 @@ footer {
   border-bottom: 1px solid var(--cream-line);
 }
 .session-card-mobile .date {
-  font-family: var(--serif);
+  font-family: var(--display);
   font-weight: 300;
   font-size: 22px;
   letter-spacing: -0.01em;
@@ -4294,7 +4294,7 @@ footer {
   position: absolute;
   top: -10px;
   right: -20px;
-  font-family: var(--serif);
+  font-family: var(--display);
   font-style: italic;
   font-weight: 200;
   font-size: 140px;
@@ -4312,7 +4312,7 @@ footer {
   margin-bottom: 18px;
 }
 .heritage-hero-counter {
-  font-family: var(--serif);
+  font-family: var(--display);
   font-weight: 200;
   font-size: clamp(72px, 10vw, 120px);
   letter-spacing: -0.04em;
@@ -4333,7 +4333,7 @@ footer {
   font-weight: 300;
 }
 .heritage-hero-text {
-  font-family: var(--serif);
+  font-family: var(--display);
   font-style: italic;
   font-size: 18px;
   font-weight: 300;
@@ -4402,7 +4402,7 @@ footer {
   margin-bottom: 18px;
 }
 .bill-card-amount {
-  font-family: var(--serif);
+  font-family: var(--display);
   font-weight: 200;
   font-size: clamp(48px, 7vw, 72px);
   letter-spacing: -0.03em;
@@ -4419,7 +4419,7 @@ footer {
   letter-spacing: -0.01em;
 }
 .bill-card-sub {
-  font-family: var(--serif);
+  font-family: var(--display);
   font-style: italic;
   font-size: 16px;
   color: var(--cream-mute);
@@ -4468,7 +4468,7 @@ footer {
   margin-bottom: 6px;
 }
 .bill-due-amount {
-  font-family: var(--serif);
+  font-family: var(--display);
   font-weight: 300;
   font-size: 32px;
   color: var(--cream);
@@ -4477,7 +4477,7 @@ footer {
   margin-bottom: 6px;
 }
 .bill-due-detail {
-  font-family: var(--serif);
+  font-family: var(--display);
   font-style: italic;
   font-size: 14px;
   color: var(--cream-mute);
@@ -4510,7 +4510,7 @@ footer {
 }
 .bill-action-info { flex: 1; min-width: 0; }
 .bill-action-title {
-  font-family: var(--serif);
+  font-family: var(--display);
   font-size: 16px;
   color: var(--cream);
   letter-spacing: -0.01em;
@@ -4524,7 +4524,7 @@ footer {
   color: var(--cream-mute);
 }
 .bill-action-arrow {
-  font-family: var(--serif);
+  font-family: var(--display);
   font-style: italic;
   color: var(--copper-glow);
   font-size: 22px;
@@ -4569,12 +4569,12 @@ footer {
 }
 .bill-history-table tr:last-child td { border-bottom: 0; }
 .bill-history-table .date-col {
-  font-family: var(--serif);
+  font-family: var(--display);
   font-size: 14px;
   color: var(--cream);
 }
 .bill-history-table .amount-col {
-  font-family: var(--serif);
+  font-family: var(--display);
   font-size: 16px;
   color: var(--cream);
   text-align: right;
@@ -4618,7 +4618,7 @@ footer {
   margin-bottom: 8px;
 }
 .bill-method-info-detail {
-  font-family: var(--serif);
+  font-family: var(--display);
   font-style: italic;
   font-size: 13px;
   color: var(--cream-mute);
@@ -4636,14 +4636,14 @@ footer {
   margin-bottom: 28px;
 }
 .bill-empty-icon {
-  font-family: var(--serif);
+  font-family: var(--display);
   font-style: italic;
   font-size: 28px;
   color: var(--cream-faint);
   margin-bottom: 12px;
 }
 .bill-empty-text {
-  font-family: var(--serif);
+  font-family: var(--display);
   font-style: italic;
   font-size: 15px;
   color: var(--cream-mute);
@@ -4677,7 +4677,7 @@ footer {
   margin-bottom: 16px;
 }
 .roadmap-hero-counter {
-  font-family: var(--serif);
+  font-family: var(--display);
   font-weight: 200;
   font-size: clamp(56px, 8vw, 88px);
   letter-spacing: -0.03em;
@@ -4693,7 +4693,7 @@ footer {
   font-weight: 300;
 }
 .roadmap-hero-text {
-  font-family: var(--serif);
+  font-family: var(--display);
   font-style: italic;
   font-size: 17px;
   color: var(--cream-mute);
@@ -4787,7 +4787,7 @@ footer {
   color: var(--copper-glow);
 }
 .roadmap-step-name {
-  font-family: var(--serif);
+  font-family: var(--display);
   font-weight: 300;
   font-size: 30px;
   letter-spacing: -0.02em;
@@ -4825,7 +4825,7 @@ footer {
 }
 
 .roadmap-step-tagline {
-  font-family: var(--serif);
+  font-family: var(--display);
   font-style: italic;
   font-size: 16px;
   color: var(--cream-mute);
@@ -4873,7 +4873,7 @@ footer {
   margin-bottom: 14px;
 }
 .roadmap-info-text {
-  font-family: var(--serif);
+  font-family: var(--display);
   font-style: italic;
   font-size: 14px;
   color: var(--cream-mute);
@@ -4919,7 +4919,7 @@ footer {
 
 .pref-row-info { flex: 1; }
 .pref-row-title {
-  font-family: var(--serif);
+  font-family: var(--display);
   font-weight: 400;
   font-size: 16px;
   color: var(--cream);
@@ -4927,7 +4927,7 @@ footer {
   margin-bottom: 4px;
 }
 .pref-row-desc {
-  font-family: var(--serif);
+  font-family: var(--display);
   font-style: italic;
   font-size: 14px;
   font-weight: 300;
@@ -4982,7 +4982,7 @@ footer {
   border-left: 2px solid #C45959;
   padding: 14px 18px;
   margin-top: 18px;
-  font-family: var(--serif);
+  font-family: var(--display);
   font-style: italic;
   font-size: 14px;
   color: #E07878;
@@ -5033,7 +5033,7 @@ footer {
   border-bottom: 1px solid rgba(239, 230, 210, 0.08);
 }
 .admin-brand-mark {
-  font-family: var(--serif);
+  font-family: var(--display);
   font-style: italic;
   font-size: 22px;
   color: var(--copper-glow);
@@ -5158,7 +5158,7 @@ footer {
   background: var(--copper);
 }
 .admin-header-title {
-  font-family: var(--serif);
+  font-family: var(--display);
   font-weight: 300;
   font-size: clamp(28px, 3.2vw, 40px);
   letter-spacing: -0.025em;
@@ -5203,7 +5203,7 @@ footer {
   color: var(--cream-faint);
 }
 .admin-kpi-value {
-  font-family: var(--serif);
+  font-family: var(--display);
   font-weight: 300;
   font-size: 36px;
   letter-spacing: -0.02em;
@@ -5315,7 +5315,7 @@ footer {
   min-width: 0;
 }
 .admin-todo-title {
-  font-family: var(--serif);
+  font-family: var(--display);
   font-weight: 400;
   font-size: 15px;
   color: var(--cream);
@@ -5330,7 +5330,7 @@ footer {
   color: var(--cream-mute);
 }
 .admin-todo-arrow {
-  font-family: var(--serif);
+  font-family: var(--display);
   font-style: italic;
   color: var(--copper-glow);
   font-size: 18px;
@@ -5365,7 +5365,7 @@ footer {
   font-size: 14px;
   flex-shrink: 0;
 }
-.dmc-name { font-family: var(--serif); font-size: 19px; color: var(--cream); margin: 0; }
+.dmc-name { font-family: var(--display); font-size: 19px; color: var(--cream); margin: 0; }
 .dmc-meta { font-family: var(--sans); font-size: 12.5px; color: var(--cream-mute); margin-top: 2px; }
 .dmc-badges { display: flex; gap: 6px; margin-left: auto; flex-wrap: wrap; align-items: center; }
 .dmc-badge {
@@ -5427,14 +5427,14 @@ footer {
   background: rgba(18, 18, 20, 0.3);
 }
 .admin-empty-icon {
-  font-family: var(--serif);
+  font-family: var(--display);
   font-style: italic;
   font-size: 24px;
   color: var(--cream-faint);
   margin-bottom: 10px;
 }
 .admin-empty-text {
-  font-family: var(--serif);
+  font-family: var(--display);
   font-style: italic;
   font-size: 14px;
   color: var(--cream-mute);
@@ -5477,7 +5477,7 @@ footer {
   top: 50%;
   transform: translateY(-50%);
   color: var(--cream-faint);
-  font-family: var(--serif);
+  font-family: var(--display);
   font-size: 16px;
 }
 
@@ -5556,7 +5556,7 @@ footer {
 .admin-table tr:last-child td { border-bottom: 0; }
 
 .admin-table .pilot-name {
-  font-family: var(--serif);
+  font-family: var(--display);
   font-size: 14px;
   color: var(--cream);
   letter-spacing: -0.01em;
@@ -5597,7 +5597,7 @@ footer {
   width: 16px;
   height: 16px;
   border: 1px solid var(--copper);
-  font-family: var(--serif);
+  font-family: var(--display);
   font-size: 10px;
   font-style: italic;
   color: var(--copper-glow);
@@ -5652,7 +5652,7 @@ footer {
   border-bottom: 1px solid rgba(239, 230, 210, 0.06);
 }
 .admin-pilote-card-name {
-  font-family: var(--serif);
+  font-family: var(--display);
   font-weight: 400;
   font-size: 16px;
   color: var(--cream);
@@ -5749,7 +5749,7 @@ footer {
   color: var(--cream-faint);
 }
 .admin-pilot-name {
-  font-family: var(--serif);
+  font-family: var(--display);
   font-weight: 300;
   font-size: clamp(28px, 3vw, 36px);
   letter-spacing: -0.02em;
@@ -5863,7 +5863,7 @@ footer {
   color: var(--cream-faint);
 }
 .admin-field-value {
-  font-family: var(--serif);
+  font-family: var(--display);
   font-size: 16px;
   color: var(--cream);
   letter-spacing: -0.01em;
@@ -5899,7 +5899,7 @@ footer {
   display: flex;
   align-items: center;
   justify-content: center;
-  font-family: var(--serif);
+  font-family: var(--display);
   font-style: italic;
   font-size: 22px;
   color: var(--copper-glow);
@@ -5912,7 +5912,7 @@ footer {
   gap: 6px;
 }
 .admin-doc-title {
-  font-family: var(--serif);
+  font-family: var(--display);
   font-weight: 400;
   font-size: 18px;
   color: var(--cream);
@@ -5956,7 +5956,7 @@ footer {
   padding: 10px 14px;
   background: rgba(196, 89, 89, 0.08);
   border-left: 2px solid #C45959;
-  font-family: var(--serif);
+  font-family: var(--display);
   font-style: italic;
   font-size: 13px;
   color: #E07878;
@@ -6035,7 +6035,7 @@ footer {
 }
 .admin-vehicle-photo img { width: 100%; height: 100%; object-fit: cover; }
 .admin-vehicle-photo .placeholder {
-  font-family: var(--serif);
+  font-family: var(--display);
   font-style: italic;
   color: var(--cream-faint);
   font-size: 14px;
@@ -6044,7 +6044,7 @@ footer {
   padding: 18px 20px;
 }
 .admin-vehicle-name {
-  font-family: var(--serif);
+  font-family: var(--display);
   font-weight: 400;
   font-size: 18px;
   color: var(--cream);
@@ -6075,7 +6075,7 @@ footer {
   margin-bottom: 14px;
 }
 .admin-notes-sub {
-  font-family: var(--serif);
+  font-family: var(--display);
   font-style: italic;
   font-size: 13px;
   color: var(--cream-faint);
@@ -6148,7 +6148,7 @@ footer {
   margin-bottom: 8px;
 }
 .admin-sd-title {
-  font-family: var(--serif);
+  font-family: var(--display);
   font-weight: 300;
   font-size: clamp(28px, 3.2vw, 40px);
   letter-spacing: -0.02em;
@@ -6205,7 +6205,7 @@ footer {
   text-transform: uppercase;
 }
 .admin-sd-banner-text strong {
-  font-family: var(--serif);
+  font-family: var(--display);
   font-style: italic;
   font-weight: 300;
   font-size: 14px;
@@ -6239,7 +6239,7 @@ footer {
   color: var(--cream-faint);
 }
 .admin-sd-stat-value {
-  font-family: var(--serif);
+  font-family: var(--display);
   font-weight: 300;
   font-size: 32px;
   letter-spacing: -0.02em;
@@ -6326,7 +6326,7 @@ footer {
 .admin-sd-table tr:hover td { background: rgba(184, 115, 51, 0.04); }
 
 .admin-sd-pilot-name {
-  font-family: var(--serif);
+  font-family: var(--display);
   font-size: 14px;
   color: var(--cream);
   letter-spacing: -0.01em;
@@ -6380,7 +6380,7 @@ footer {
 
 /* Compatibilité noms de classes utilisés dans renderAdminSDRegs */
 .admin-regs-pilot {
-  font-family: var(--serif);
+  font-family: var(--display);
   font-size: 14px;
   color: var(--cream);
   letter-spacing: -0.01em;
@@ -6489,7 +6489,7 @@ footer {
   color: #C9A24A;
 }
 .admin-session-card-title {
-  font-family: var(--serif);
+  font-family: var(--display);
   font-weight: 300;
   font-size: 22px;
   letter-spacing: -0.02em;
@@ -6604,7 +6604,7 @@ footer {
   margin-bottom: 8px;
 }
 .admin-sd-date {
-  font-family: var(--serif);
+  font-family: var(--display);
   font-weight: 300;
   font-size: clamp(28px, 3.5vw, 42px);
   letter-spacing: -0.02em;
@@ -6654,7 +6654,7 @@ footer {
   margin-bottom: 8px;
 }
 .admin-sd-stat-value {
-  font-family: var(--serif);
+  font-family: var(--display);
   font-weight: 300;
   font-size: 28px;
   letter-spacing: -0.02em;
@@ -6711,7 +6711,7 @@ footer {
 .admin-regs-table tr:hover td { background: rgba(184, 115, 51, 0.03); }
 
 .admin-regs-pilot {
-  font-family: var(--serif);
+  font-family: var(--display);
   font-size: 14px;
   color: var(--cream);
   letter-spacing: -0.01em;
@@ -6788,12 +6788,12 @@ footer {
   background: rgba(18, 18, 20, 0.6);
 }
 .admin-list-table td.date-cell {
-  font-family: var(--serif);
+  font-family: var(--display);
   font-size: 14px;
   color: var(--cream);
 }
 .admin-list-table td.amount-cell {
-  font-family: var(--serif);
+  font-family: var(--display);
   font-size: 14px;
   color: var(--cream);
   white-space: nowrap;
@@ -6860,7 +6860,7 @@ footer {
   text-transform: uppercase;
 }
 .admin-heritage-counter {
-  font-family: var(--serif);
+  font-family: var(--display);
   font-weight: 200;
   font-size: 56px;
   letter-spacing: -0.03em;
@@ -6933,7 +6933,7 @@ footer {
   margin-bottom: 8px;
 }
 .admin-suspension-text {
-  font-family: var(--serif);
+  font-family: var(--display);
   font-style: italic;
   font-size: 14px;
   color: var(--cream);
@@ -7021,7 +7021,7 @@ footer {
 }
 .consent .text {
   flex: 1;
-  font-family: var(--serif);
+  font-family: var(--display);
   font-size: 14px;
   line-height: 1.5;
   color: var(--cream-mute);
@@ -7087,7 +7087,7 @@ footer {
   color: var(--cream-mute);
 }
 .bk-progress-step .num {
-  font-family: var(--serif);
+  font-family: var(--display);
   font-style: italic;
   font-weight: 200;
   font-size: 22px;
@@ -7120,7 +7120,7 @@ footer {
   background: var(--copper);
 }
 .bk-step-title {
-  font-family: var(--serif);
+  font-family: var(--display);
   font-weight: 300;
   font-size: clamp(34px, 4.5vw, 52px);
   line-height: 1.05;
@@ -7129,7 +7129,7 @@ footer {
 }
 .bk-step-title em { font-style: italic; color: var(--copper-glow); }
 .bk-step-sub {
-  font-family: var(--serif);
+  font-family: var(--display);
   font-style: italic;
   font-size: 17px;
   font-weight: 300;
@@ -7183,7 +7183,7 @@ footer {
 }
 .bk-date-day.low { color: #C9A24A; }
 .bk-date-main {
-  font-family: var(--serif);
+  font-family: var(--display);
   font-weight: 300;
   font-size: 18px;
   letter-spacing: -0.01em;
@@ -7255,7 +7255,7 @@ footer {
   vertical-align: middle;
 }
 .bk-offer-name {
-  font-family: var(--serif);
+  font-family: var(--display);
   font-weight: 300;
   font-size: 28px;
   letter-spacing: -0.02em;
@@ -7263,14 +7263,14 @@ footer {
 }
 .bk-offer-name em { font-style: italic; color: var(--copper-glow); }
 .bk-offer-desc {
-  font-family: var(--serif);
+  font-family: var(--display);
   font-style: italic;
   font-size: 14px;
   color: var(--cream-mute);
   line-height: 1.5;
 }
 .bk-offer-price {
-  font-family: var(--serif);
+  font-family: var(--display);
   font-weight: 300;
   font-size: 24px;
   color: var(--copper-glow);
@@ -7311,7 +7311,7 @@ footer {
   margin-bottom: 6px;
 }
 .bk-heritage-text {
-  font-family: var(--serif);
+  font-family: var(--display);
   font-style: italic;
   font-size: 15px;
   color: var(--cream);
@@ -7354,7 +7354,7 @@ footer {
 .bk-vehicle-thumb img { width: 100%; height: 100%; object-fit: cover; }
 .bk-vehicle-info { flex: 1; min-width: 0; }
 .bk-vehicle-name {
-  font-family: var(--serif);
+  font-family: var(--display);
   font-size: 16px;
   color: var(--cream);
   letter-spacing: -0.01em;
@@ -7396,7 +7396,7 @@ footer {
   color: var(--cream-mute);
 }
 .bk-recap-value {
-  font-family: var(--serif);
+  font-family: var(--display);
   font-size: 16px;
   color: var(--cream);
   letter-spacing: -0.01em;
@@ -7407,7 +7407,7 @@ footer {
   color: var(--copper-glow);
 }
 .bk-recap-total {
-  font-family: var(--serif);
+  font-family: var(--display);
   font-weight: 300;
   font-size: 32px;
   color: var(--cream);
@@ -7449,14 +7449,14 @@ footer {
   display: flex;
   align-items: center;
   justify-content: center;
-  font-family: var(--serif);
+  font-family: var(--display);
   font-style: italic;
   color: var(--copper-glow);
   flex-shrink: 0;
 }
 .bk-payment-info { flex: 1; }
 .bk-payment-name {
-  font-family: var(--serif);
+  font-family: var(--display);
   font-size: 16px;
   color: var(--cream);
 }
@@ -7489,7 +7489,7 @@ footer {
   display: flex;
   align-items: center;
   justify-content: center;
-  font-family: var(--serif);
+  font-family: var(--display);
   font-style: italic;
   font-size: 32px;
   color: var(--copper-glow);
@@ -7532,7 +7532,7 @@ footer {
   border-left: 2px solid #C9A24A;
   padding: 14px 18px;
   margin: 16px 0;
-  font-family: var(--serif);
+  font-family: var(--display);
   font-style: italic;
   font-size: 14px;
   color: #D9C285;
@@ -7570,7 +7570,7 @@ footer {
 }
 .bk-safety-toggle:hover { background: rgba(196, 164, 89, 0.06); }
 .bk-safety-toggle .arrow {
-  font-family: var(--serif);
+  font-family: var(--display);
   font-style: italic;
   font-size: 18px;
   transition: transform 0.3s;
@@ -7601,7 +7601,7 @@ footer {
   margin-bottom: 12px;
 }
 .bk-safety-text {
-  font-family: var(--serif);
+  font-family: var(--display);
   font-size: 14px;
   color: var(--cream);
   line-height: 1.6;
@@ -7634,7 +7634,7 @@ footer {
 .bk-safety-cell.ok .bk-safety-cell-title { color: var(--copper-glow); }
 .bk-safety-cell.no .bk-safety-cell-title { color: #E07878; }
 .bk-safety-cell-list {
-  font-family: var(--serif);
+  font-family: var(--display);
   font-size: 13px;
   color: var(--cream);
   line-height: 1.5;
@@ -8253,7 +8253,7 @@ footer {
   margin-bottom: 12px;
 }
 .modal-title {
-  font-family: var(--serif);
+  font-family: var(--display);
   font-weight: 200;
   font-size: 32px;
   line-height: 1;
@@ -8335,7 +8335,7 @@ footer {
 textarea.form-input {
   resize: vertical;
   min-height: 60px;
-  font-family: var(--serif);
+  font-family: var(--display);
 }
 .form-radios, .form-checkboxes {
   display: flex;
@@ -8366,7 +8366,7 @@ textarea.form-input {
   color: var(--cream);
 }
 .form-hint {
-  font-family: var(--serif);
+  font-family: var(--display);
   font-style: italic;
   font-size: 12px;
   color: var(--cream-faint);
@@ -8502,7 +8502,7 @@ textarea.form-input {
   margin-bottom: 8px;
 }
 .bk-req-text {
-  font-family: var(--serif);
+  font-family: var(--display);
   font-size: 14px;
   line-height: 1.6;
   color: var(--cream-mute);
@@ -8574,7 +8574,7 @@ textarea.form-input {
   font-weight: 500;
 }
 .bk-condition-desc {
-  font-family: var(--serif);
+  font-family: var(--display);
   font-size: 13px;
   line-height: 1.55;
   color: var(--cream-mute);
@@ -8613,7 +8613,7 @@ textarea.form-input {
   padding: 4px 8px;
 }
 .bk-offer-locked-msg {
-  font-family: var(--serif);
+  font-family: var(--display);
   font-style: italic;
   font-size: 12px;
   color: #C45959;
@@ -8655,7 +8655,7 @@ textarea.form-input {
   margin-bottom: 8px;
 }
 .admin-action-bar-text {
-  font-family: var(--serif);
+  font-family: var(--display);
   font-style: italic;
   font-size: 14px;
   color: var(--cream-mute);
@@ -8813,7 +8813,7 @@ textarea.form-input {
   margin-bottom: 12px;
 }
 .cal-gate-title {
-  font-family: var(--serif);
+  font-family: var(--display);
   font-size: 22px;
   color: var(--cream);
   line-height: 1.25;
@@ -8888,7 +8888,7 @@ textarea.form-input {
 }
 
 .cal-card-date {
-  font-family: var(--serif);
+  font-family: var(--display);
   font-weight: 200;
   font-size: 36px;
   line-height: 1;
@@ -8948,7 +8948,7 @@ textarea.form-input {
   color: var(--copper-glow);
 }
 .cal-card-cta-arrow {
-  font-family: var(--serif);
+  font-family: var(--display);
   font-style: italic;
   font-size: 18px;
   color: var(--copper-glow);
@@ -8957,7 +8957,7 @@ textarea.form-input {
 .cal-empty {
   text-align: center;
   padding: 80px 20px;
-  font-family: var(--serif);
+  font-family: var(--display);
   font-style: italic;
   font-size: 16px;
   color: var(--cream-mute);
@@ -9009,7 +9009,7 @@ textarea.form-input {
   margin-bottom: 12px;
 }
 .cal-cta-title {
-  font-family: var(--serif);
+  font-family: var(--display);
   font-weight: 300;
   font-size: clamp(24px, 3vw, 32px);
   letter-spacing: -0.02em;
@@ -9019,7 +9019,7 @@ textarea.form-input {
 }
 .cal-cta-title em { font-style: italic; color: var(--copper-glow); }
 .cal-cta-sub {
-  font-family: var(--serif);
+  font-family: var(--display);
   font-style: italic;
   font-size: 14px;
   color: var(--cream-mute);
@@ -9573,7 +9573,7 @@ textarea.form-input {
   display: none;
 }
 .cookie.show { display: block; animation: pageIn 0.5s var(--ease-out); }
-.cookie h4 { font-family: var(--serif); font-size: 18px; margin-bottom: 8px; }
+.cookie h4 { font-family: var(--display); font-size: 18px; margin-bottom: 8px; }
 .cookie p { font-size: 13px; color: var(--cream-mute); margin-bottom: 16px; line-height: 1.55; }
 .cookie-actions { display: flex; gap: 8px; flex-wrap: wrap; }
 
@@ -12277,7 +12277,7 @@ textarea:focus-visible {
 
 .account-nav-btn-icon,
 .admin-nav-btn-icon {
-  font-family: var(--serif);
+  font-family: var(--display);
   font-style: italic;
   font-size: 18px;
   color: var(--copper-glow);
@@ -12400,7 +12400,7 @@ textarea:focus-visible {
 .home-ecosystem-intro { max-width: 640px; margin-bottom: 64px; }
 .home-ecosystem-intro .kicker { margin-bottom: 20px; }
 .home-ecosystem-title {
-  font-family: var(--serif);
+  font-family: var(--display);
   font-size: clamp(28px, 4vw, 44px);
   font-weight: 400;
   line-height: 1.15;
@@ -12436,7 +12436,7 @@ textarea:focus-visible {
   margin-bottom: 20px;
 }
 .home-ecosystem-pillar-name {
-  font-family: var(--serif);
+  font-family: var(--display);
   font-size: 22px;
   font-weight: 400;
   color: var(--cream);
@@ -12464,7 +12464,7 @@ textarea:focus-visible {
   margin-bottom: 16px;
 }
 .about-block-title {
-  font-family: var(--serif);
+  font-family: var(--display);
   font-size: clamp(22px, 3vw, 32px);
   font-weight: 400;
   color: var(--cream);
@@ -12492,7 +12492,7 @@ textarea:focus-visible {
   padding: 36px 28px;
 }
 .about-value-num {
-  font-family: var(--serif);
+  font-family: var(--display);
   font-size: 40px;
   font-weight: 400;
   color: var(--oxv-red);
@@ -12500,7 +12500,7 @@ textarea:focus-visible {
   font-style: italic;
 }
 .about-value-title {
-  font-family: var(--serif);
+  font-family: var(--display);
   font-size: 20px;
   font-weight: 400;
   color: var(--cream);
@@ -12509,7 +12509,7 @@ textarea:focus-visible {
 .about-value-text { font-size: 13px; color: var(--cream-mute); line-height: 1.6; }
 .about-cta { padding: 80px 0; text-align: center; }
 .about-cta-headline {
-  font-family: var(--serif);
+  font-family: var(--display);
   font-size: clamp(24px, 3.5vw, 40px);
   font-weight: 400;
   color: var(--cream);
@@ -12547,7 +12547,7 @@ textarea:focus-visible {
 .corp-format.signature-level .corp-format-badge { color: var(--oxv-gold); }
 .corp-format:not(.signature-level) .corp-format-badge { color: var(--oxv-red); }
 .corp-format-name {
-  font-family: var(--serif);
+  font-family: var(--display);
   font-size: 28px;
   font-weight: 400;
   color: var(--cream);
@@ -12605,7 +12605,7 @@ textarea:focus-visible {
   color: var(--oxv-red);
 }
 .corp-scenario-title {
-  font-family: var(--serif);
+  font-family: var(--display);
   font-size: 18px;
   font-weight: 400;
   color: var(--cream);
@@ -12627,7 +12627,7 @@ textarea:focus-visible {
 }
 @media (min-width: 900px) { .circuit-annee-grid { grid-template-columns: 1fr 1fr; gap: 64px; } }
 .circuit-annee-block-title {
-  font-family: var(--serif);
+  font-family: var(--display);
   font-size: 20px;
   font-weight: 400;
   color: var(--cream);
@@ -12685,7 +12685,7 @@ textarea:focus-visible {
 }
 .actu-card-cat { color: var(--oxv-red); }
 .actu-card-title {
-  font-family: var(--serif);
+  font-family: var(--display);
   font-size: 21px;
   font-weight: 400;
   line-height: 1.25;
@@ -12732,7 +12732,7 @@ textarea:focus-visible {
 }
 .article-meta .cat { color: var(--oxv-red); }
 .article-title {
-  font-family: var(--serif);
+  font-family: var(--display);
   font-size: clamp(28px, 5vw, 48px);
   font-weight: 400;
   line-height: 1.12;
@@ -12741,7 +12741,7 @@ textarea:focus-visible {
 }
 .article-title em { font-style: italic; }
 .article-lead {
-  font-family: var(--serif);
+  font-family: var(--display);
   font-size: clamp(18px, 2.4vw, 22px);
   font-style: italic;
   line-height: 1.5;
@@ -12753,7 +12753,7 @@ textarea:focus-visible {
 .article-body { font-size: 16px; line-height: 1.8; color: var(--cream-mute); }
 .article-body p { margin-bottom: 22px; }
 .article-body h2 {
-  font-family: var(--serif);
+  font-family: var(--display);
   font-size: 26px;
   font-weight: 400;
   color: var(--cream);
@@ -12766,7 +12766,7 @@ textarea:focus-visible {
   margin: 36px 0;
   padding: 4px 0 4px 28px;
   border-left: 2px solid var(--oxv-red);
-  font-family: var(--serif);
+  font-family: var(--display);
   font-style: italic;
   font-size: 21px;
   line-height: 1.45;
@@ -12873,7 +12873,7 @@ textarea:focus-visible {
 .admin-article-row-meta .cat { color: var(--oxv-red); }
 .admin-article-row-meta .feat { color: var(--oxv-gold); }
 .admin-article-row-title {
-  font-family: var(--serif);
+  font-family: var(--display);
   font-size: 17px;
   color: var(--cream);
   line-height: 1.3;
@@ -12953,7 +12953,7 @@ textarea:focus-visible {
   flex-shrink: 0;
 }
 .edito-item-title {
-  font-family: var(--serif);
+  font-family: var(--display);
   font-size: 14px;
   color: var(--cream-soft);
   flex-grow: 1;
@@ -13103,6 +13103,7 @@ textarea:focus-visible {
 .wizard-step-title, .booking-step-title, .prog-app-title, .home-ecosystem-pillar-name,
 #page-mentions h1, #page-cgv h1, #page-cgu h1, #page-privacy h1,
 #page-mentions h2, #page-cgv h2, #page-cgu h2, #page-privacy h2 {
+  font-family: var(--display);   /* direction v2 : grotesque technique sur TOUS les titres */
   font-style: normal;
   text-transform: none;
   letter-spacing: -0.02em;
@@ -13219,7 +13220,7 @@ textarea:focus-visible {
 .home-edito-bg::after { content: ''; position: absolute; inset: 0; background: linear-gradient(180deg, rgba(5,5,5,0.62) 0%, rgba(5,5,5,0.12) 38%, rgba(5,5,5,0.55) 72%, rgba(5,5,5,0.94) 100%); }
 .home-edito-inner { position: relative; z-index: 1; width: 100%; padding: 0 var(--gutter) clamp(52px,7vw,104px); max-width: 1400px; margin: 0 auto; }
 .home-edito-eyebrow { font-family: var(--mono); font-size: 11px; letter-spacing: 0.28em; text-transform: uppercase; color: var(--gold); margin-bottom: 18px; }
-.home-edito-title { font-family: var(--serif); font-style: italic; font-weight: 600; font-size: clamp(42px,7.2vw,104px); line-height: 0.97; letter-spacing: -0.01em; color: #fff; max-width: 15ch; margin: 0 0 22px; }
+.home-edito-title { font-family: var(--display); font-style: italic; font-weight: 600; font-size: clamp(42px,7.2vw,104px); line-height: 0.97; letter-spacing: -0.01em; color: #fff; max-width: 15ch; margin: 0 0 22px; }
 .home-edito-title em { font-style: italic; color: var(--gold); }
 .home-edito-lede { font-family: var(--sans); font-size: clamp(15px,1.35vw,18px); line-height: 1.65; color: rgba(245,242,234,0.82); max-width: 48ch; margin: 0 0 30px; }
 
@@ -13230,7 +13231,7 @@ textarea:focus-visible {
 .home-feature-media img { width: 100%; height: 100%; object-fit: cover; display: block; }
 .home-feature-body { padding: clamp(52px,7vw,112px) clamp(28px,5vw,88px); display: flex; flex-direction: column; justify-content: center; background: var(--carbon); }
 .home-feature-eyebrow { font-family: var(--mono); font-size: 10px; letter-spacing: 0.26em; text-transform: uppercase; color: var(--gold); margin-bottom: 16px; }
-.home-feature-title { font-family: var(--serif); font-style: italic; font-weight: 600; font-size: clamp(30px,3.6vw,54px); line-height: 1.02; color: var(--offwhite); margin: 0 0 20px; }
+.home-feature-title { font-family: var(--display); font-style: italic; font-weight: 600; font-size: clamp(30px,3.6vw,54px); line-height: 1.02; color: var(--offwhite); margin: 0 0 20px; }
 .home-feature-title em { font-style: italic; color: var(--gold); }
 .home-feature-text { font-family: var(--sans); font-size: 16px; line-height: 1.72; color: var(--cream-mute); margin: 0 0 26px; max-width: 44ch; }
 .home-feature-list { list-style: none; margin: 0 0 28px; padding: 0; }
@@ -13264,22 +13265,65 @@ textarea:focus-visible {
 .home-creed-mark svg { width: min(64vw, 600px); height: min(64vw, 600px); color: var(--red-oxv); fill: currentColor; opacity: 0.055; }
 .home-creed-inner { position: relative; z-index: 1; max-width: 920px; margin: 0 auto; padding: 0 var(--gutter); }
 
-/* — Lot H · Direction typographique « Goodwood » (arbitrage fondateur 2026-07-04) —
-   Titres en serif italique racé (Cormorant Garamond) ; eyebrows, labels, data (mono)
-   et boutons inchangés. Casse naturelle : fin de l'uppercase sur les grands titres.
+/* — Direction typographique v2 « Circuit » (remplace Goodwood/Lot H) —
+   Réf. fondateur : Porsche / Ferrari. Grands titres en grotesque technique
+   (Space Grotesk = var --display), UPRIGHT (jamais d'italique), casse naturelle,
+   chasse resserrée. La signature d'accent devient le mot doré droit, plus l'italique
+   serif. Data/eyebrows (mono) et boutons inchangés. Réversible : ce bloc + le
+   remplacement var(--serif)→var(--display) suffisent à revenir en arrière.
    Tailles responsives existantes conservées (aucun font-size redéfini ici). */
 .home-hero-manifesto,
 .page-hero-title,
 .section-title,
 .section-heading {
-  font-family: var(--serif);
-  font-style: italic;
+  font-family: var(--display);
+  font-style: normal;
   font-weight: 600;
   text-transform: none;
-  letter-spacing: 0;
+  letter-spacing: -0.025em;
 }
-.home-hero-manifesto { letter-spacing: -0.015em; }
-.page-hero-title em, .section-title em, .section-heading em { font-weight: 600; }
+.home-hero-manifesto { letter-spacing: -0.035em; }
+.page-hero-title { letter-spacing: -0.03em; }
+.page-hero-title em, .section-title em, .section-heading em { font-weight: 600; font-style: normal; }
+
+/* Neutralisation de l'italique résiduelle sur les titres display hors bloc 13097
+   (bandes home, écrans compte/auth, comparateur, nav mobile). Le grotesque n'a pas
+   d'italique dessinée : on force l'upright pour éviter l'oblique synthétique.
+   Les couleurs d'accent (or/cuivre) déjà posées par règle sont conservées. */
+.home-edito-title, .home-edito-title em,
+.home-feature-title, .home-feature-title em,
+.signature-title, .signature-title em,
+.final-cta-text, .final-cta-text em,
+.gate-title, .gate-title em,
+.auth-side-title, .auth-side-title em,
+.auth-card-title, .auth-card-title em,
+.auth-status-title, .auth-status-title em,
+.account-sidebar-name, .account-sidebar-name em,
+.account-header-title, .account-header-title em,
+.account-section-title, .account-section-title em,
+.compare-tier-name, .compare-card-head, .compare-card-head em,
+.mob-tile-title, .mob-link, .mob-link em,
+.date-name, .date-name em {
+  font-style: normal;
+  letter-spacing: -0.02em;
+}
+/* Éléments éditoriaux visibles basculés du serif italique (chiffres, ledes, sous-titres) :
+   upright explicite pour robustesse cross-browser, indépendamment de font-synthesis. */
+.signature-num, .about-value-num, .home-journey-card-number, .num,
+.article-lead, .heritage-hero-text, .auth-side-text, .auth-card-sub,
+.account-header-sub, .account-card-text, .cal-cta-sub, .cal-empty,
+.bk-step-sub, .bk-warning, .gate-text, .pref-row-desc, .deletion-warning,
+.admin-empty-text, .admin-notes-sub, .admin-suspension-text, .admin-action-bar-text {
+  font-style: normal;
+}
+
+/* Aucune italique synthétique (direction v2). Space Grotesk, Inter et IBM Plex Mono
+   n'embarquent pas de fonte italique dédiée : toute demande d'italique était rendue
+   en oblique synthétique (chiffres, ledes, sous-titres, états vides basculés du serif).
+   On coupe la synthèse d'oblique → rendu upright, net, façon Porsche/Ferrari.
+   Exception : le corps d'article (.prose) garde l'emphase <em> historique. */
+body { font-synthesis-style: none; }
+.prose { font-synthesis-style: auto; }
 
 </style>
 <!-- JSON-LD : LocalBusiness / lieu (PR-HUB-08 GEO) -->
@@ -13738,7 +13782,7 @@ textarea:focus-visible {
     <div class="wrap">
       <div style="max-width:720px;margin:0 auto;text-align:center;">
         <div class="kicker reveal">La donnée</div>
-        <h2 class="reveal" style="font-family:var(--serif);font-style:italic;font-weight:600;font-size:clamp(30px,4.4vw,52px);line-height:1.04;color:var(--offwhite);margin:14px 0 16px;">Cinq dimensions.<br/>Une lecture <em style="color:var(--gold);">honnête</em>.</h2>
+        <h2 class="reveal" style="font-family:var(--display);font-style:normal;font-weight:600;font-size:clamp(30px,4.4vw,52px);line-height:1.04;letter-spacing:-0.025em;color:var(--offwhite);margin:14px 0 16px;">Cinq dimensions.<br/>Une lecture <em style="color:var(--gold);">honnête</em>.</h2>
         <p class="reveal" style="font-family:var(--sans);font-size:16px;line-height:1.7;color:var(--cream-mute);margin:0;">Le Quality Driving Index mesure la maîtrise, jamais la vitesse. Cinq dimensions, calculées après la session — disponibles pour les abonnés OXV Mirror. Jamais un classement entre pilotes.</p>
       </div>
       <div class="home-qdi-row reveal">
@@ -18022,7 +18066,7 @@ textarea:focus-visible {
           <div class="admin-notes-sub" id="apProgressionSub">—</div>
           <div id="apProgressionGrid" style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-top: 14px;"></div>
           <div class="admin-notes-actions" style="margin-top: 18px;">
-            <span style="font-style: italic; color: var(--cream-faint); font-family: var(--serif); font-size: 13px; text-transform: none; letter-spacing: 0;">
+            <span style="font-style: italic; color: var(--cream-faint); font-family: var(--display); font-size: 13px; text-transform: none; letter-spacing: 0;">
               Override possible pour cas spéciaux (parrainage, presse, pilote pro).
             </span>
           </div>
@@ -18411,7 +18455,7 @@ textarea:focus-visible {
             <button class="admin-sd-section-action" onclick="exportSessionList()">📋 Imprimer la liste</button>
           </div>
 
-          <div id="adminSDRegsEmpty" style="display:none; padding: 24px; text-align: center; color: var(--cream-mute); font-family: var(--serif); font-style: italic; font-size: 14px;">
+          <div id="adminSDRegsEmpty" style="display:none; padding: 24px; text-align: center; color: var(--cream-mute); font-family: var(--display); font-style: italic; font-size: 14px;">
             Aucun pilote inscrit pour le moment.
           </div>
 
@@ -19424,7 +19468,7 @@ textarea:focus-visible {
     <div class="vmodal-eyebrow">— Rejeter le document</div>
     <h2 class="vmodal-title">Motif du <em>rejet</em>.</h2>
 
-    <p style="font-family: var(--serif); font-style: italic; font-size: 15px; color: var(--cream-mute); line-height: 1.5; margin-bottom: 20px;">
+    <p style="font-family: var(--display); font-style: italic; font-size: 15px; color: var(--cream-mute); line-height: 1.5; margin-bottom: 20px;">
       Le pilote recevra ce message et pourra renvoyer un nouveau document. Soyez précise et respectueuse.
     </p>
 
@@ -19448,7 +19492,7 @@ textarea:focus-visible {
     <div class="vmodal-eyebrow">— Suspension de compte</div>
     <h2 class="vmodal-title">Suspendre le <em>compte</em>.</h2>
 
-    <p style="font-family: var(--serif); font-style: italic; font-size: 15px; color: var(--cream-mute); line-height: 1.5; margin-bottom: 20px;">
+    <p style="font-family: var(--display); font-style: italic; font-size: 15px; color: var(--cream-mute); line-height: 1.5; margin-bottom: 20px;">
       Le pilote ne pourra plus se connecter tant que le compte est suspendu. Toutes ses données sont conservées. La suspension est <strong style="color: var(--cream);">réversible à tout moment</strong>.
     </p>
 
@@ -20180,7 +20224,7 @@ textarea:focus-visible {
 
       <div style="background: rgba(18, 18, 20, 0.4); border: 1px solid var(--copper); padding: 32px; text-align: center;">
         <div style="font-family: var(--mono); font-size: 10px; letter-spacing: 0.32em; text-transform: uppercase; color: var(--copper-glow); margin-bottom: 14px;">— Vérification préalable</div>
-        <p style="font-family: var(--serif); font-style: italic; font-size: 16px; color: var(--cream); margin-bottom: 20px;">
+        <p style="font-family: var(--display); font-style: italic; font-size: 16px; color: var(--cream); margin-bottom: 20px;">
           Le moindre doute. Une question. Contactez-nous avant de réserver.
         </p>
         <a href="mailto:contact@oxvehicle.fr" class="btn btn-primary"><span>contact@oxvehicle.fr</span></a>
