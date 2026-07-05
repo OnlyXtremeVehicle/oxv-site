@@ -127,7 +127,7 @@
 
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,500;1,600;1,700&display=swap" rel="stylesheet" />
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
 
 <script type="importmap">
 {
@@ -180,8 +180,8 @@
   --cream:        #F5F2EA;   /* Blanc cassé (DA V3) — titres et texte */
   --cream-soft:   #E5E5E5;
   --cream-mute:   #A1A1AA;   /* Gris Titane — secondaire */
-  --cream-faint:  rgba(248, 249, 250, 0.50);
-  --cream-line:   rgba(255, 255, 255, 0.05);   /* Bento border */
+  --cream-faint:  rgba(248, 249, 250, 0.62);   /* v2 : texte tertiaire un peu plus lisible (audit) */
+  --cream-line:   rgba(255, 255, 255, 0.09);   /* v2 : filets visibles, structurent les cartes (audit Porsche) */
   --cream-edge:   rgba(255, 255, 255, 0.15);   /* Bento border hover */
 
   /* Compat ancienne variable "copper" → maintenant Or Doré */
@@ -233,9 +233,9 @@
   /* Bento Box (glassmorphism) */
   --bento-bg:        rgba(14, 14, 16, 0.72);
   --bento-bg-hover:  rgba(24, 24, 27, 0.88);
-  --bento-border:    rgba(255, 255, 255, 0.05);
-  --bento-border-h:  rgba(255, 255, 255, 0.15);
-  --bento-radius:    12px;
+  --bento-border:    rgba(255, 255, 255, 0.09);
+  --bento-border-h:  rgba(255, 255, 255, 0.18);
+  --bento-radius:    6px;
   --bento-blur:      blur(16px);
 
   /* ─── Typographie ─── */
@@ -490,11 +490,11 @@ h1, h2, h3, h4, h5 {
   text-transform: uppercase;
   border: 1px solid var(--cream-edge);
   background: transparent;
-  border-radius: 8px;
+  border-radius: 3px;   /* v2 : plaque technique, pas pilule (audit) */
   color: var(--cream);
   cursor: pointer;
   position: relative;
-  transition: all 0.4s var(--ease);
+  transition: color 0.25s var(--ease), border-color 0.25s var(--ease);
   overflow: hidden;
   white-space: nowrap;
   user-select: none;
@@ -504,8 +504,8 @@ h1, h2, h3, h4, h5 {
   position: absolute;
   inset: 0;
   background: var(--cream);
-  transform: translateY(101%);
-  transition: transform 0.4s var(--ease);
+  opacity: 0;   /* v2 : fondu d'état sobre au lieu du remplissage glissant + lévitation (audit) */
+  transition: opacity 0.25s var(--ease);
   z-index: 0;
   pointer-events: none;
 }
@@ -514,9 +514,8 @@ h1, h2, h3, h4, h5 {
 .btn:hover {
   color: var(--night);
   border-color: var(--cream);
-  transform: translateY(-1px);
 }
-.btn:hover::before { transform: translateY(0); }
+.btn:hover::before { opacity: 1; }
 
 .btn-primary {
   background: var(--red-oxv);
@@ -554,8 +553,8 @@ h1, h2, h3, h4, h5 {
 
 .btn-ghost { background: transparent; }
 
-.btn-sm { padding: 11px 20px; font-size: 10px; border-radius: 6px; }
-.btn-lg { padding: 20px 36px; font-size: 12px; border-radius: 8px; }
+.btn-sm { padding: 11px 20px; font-size: 10px; border-radius: 2px; }
+.btn-lg { padding: 20px 36px; font-size: 12px; border-radius: 3px; }
 
 .btn-link {
   font-family: var(--display);
@@ -888,7 +887,7 @@ h1, h2, h3, h4, h5 {
   font-style: normal;
   line-height: 1.65;
   color: var(--cream-mute);
-  max-width: 520px;
+  max-width: 46ch;   /* v2 : colonne de lecture taillée (mesure), plus « px » arbitraire */
 }
 
 /* === MANIFESTE (philosophie) === */
@@ -2152,11 +2151,11 @@ footer {
 [data-parallax] { will-change: transform; }
 .reveal-stagger > * { opacity: 0; transform: translateY(28px); transition: opacity 0.8s var(--ease-out), transform 0.8s var(--ease-out); }
 .reveal-stagger.in > *:nth-child(1) { transition-delay: 0.05s; opacity: 1; transform: translateY(0); }
-.reveal-stagger.in > *:nth-child(2) { transition-delay: 0.18s; opacity: 1; transform: translateY(0); }
-.reveal-stagger.in > *:nth-child(3) { transition-delay: 0.31s; opacity: 1; transform: translateY(0); }
-.reveal-stagger.in > *:nth-child(4) { transition-delay: 0.44s; opacity: 1; transform: translateY(0); }
-.reveal-stagger.in > *:nth-child(5) { transition-delay: 0.57s; opacity: 1; transform: translateY(0); }
-.reveal-stagger.in > *:nth-child(6) { transition-delay: 0.7s; opacity: 1; transform: translateY(0); }
+.reveal-stagger.in > *:nth-child(2) { transition-delay: 0.14s; opacity: 1; transform: translateY(0); }
+.reveal-stagger.in > *:nth-child(3) { transition-delay: 0.23s; opacity: 1; transform: translateY(0); }
+.reveal-stagger.in > *:nth-child(4) { transition-delay: 0.32s; opacity: 1; transform: translateY(0); }
+.reveal-stagger.in > *:nth-child(5) { transition-delay: 0.41s; opacity: 1; transform: translateY(0); }
+.reveal-stagger.in > *:nth-child(6) { transition-delay: 0.5s; opacity: 1; transform: translateY(0); }
 
 /* === PAGES (router single-page) === */
 .page { display: none; }
@@ -13249,10 +13248,10 @@ textarea:focus-visible {
 .home-qdi-desc { font-family: var(--sans); font-size: 12px; line-height: 1.55; color: var(--cream-mute); margin-top: 9px; }
 
 /* Bande « trace » — immersion data SANS photo : ligne de télémétrie animée */
-.home-trace { position: relative; min-height: 82vh; display: flex; align-items: center; overflow: hidden; border-top: 1px solid var(--cream-line); background: radial-gradient(130% 95% at 50% 42%, #14110b 0%, var(--carbon) 52%, #050505 100%); }
+.home-trace { position: relative; min-height: 88vh; display: flex; align-items: center; overflow: hidden; border-top: 1px solid var(--cream-line); background: radial-gradient(130% 95% at 50% 42%, #14110b 0%, var(--carbon) 52%, #050505 100%); }
 .home-trace-glow { position: absolute; inset: 0; z-index: 0; pointer-events: none; background: radial-gradient(48% 60% at 72% 54%, rgba(216,15,31,0.12) 0%, transparent 62%), radial-gradient(44% 56% at 24% 62%, rgba(201,162,74,0.09) 0%, transparent 62%); }
 .home-trace-svg { position: absolute; inset: 0; width: 100%; height: 100%; z-index: 0; }
-.home-trace-line { fill: none; stroke: url(#homeTraceGrad); stroke-width: 2.5; stroke-linecap: round; filter: drop-shadow(0 0 7px rgba(201,162,74,0.35)); stroke-dasharray: 15 11; animation: homeTraceFlow 8s linear infinite; }
+.home-trace-line { fill: none; stroke: url(#homeTraceGrad); stroke-width: 2.5; stroke-linecap: round; filter: drop-shadow(0 0 7px rgba(201,162,74,0.35)); stroke-dasharray: 42 18; animation: homeTraceFlow 8s linear infinite; }
 .home-trace-line.faint { stroke: rgba(245,242,234,0.09); stroke-width: 1.5; stroke-dasharray: none; filter: none; animation: none; }
 @keyframes homeTraceFlow { to { stroke-dashoffset: -260; } }
 .home-trace-dot { fill: var(--gold-data); filter: drop-shadow(0 0 9px rgba(201,162,74,0.95)); }
@@ -13260,7 +13259,7 @@ textarea:focus-visible {
 @media (prefers-reduced-motion: reduce) { .home-trace-line { animation: none; } .home-trace-dot { display: none; } }
 
 /* Bande « credo » — statement doctrine sur insigne en filigrane (sans photo) */
-.home-creed { position: relative; min-height: 78vh; display: flex; align-items: center; text-align: center; overflow: hidden; border-top: 1px solid var(--cream-line); background: radial-gradient(125% 100% at 50% 28%, #0e0d0f 0%, var(--carbon) 54%, #050505 100%); }
+.home-creed { position: relative; min-height: 88vh; display: flex; align-items: center; text-align: center; overflow: hidden; border-top: 1px solid var(--cream-line); background: radial-gradient(125% 100% at 50% 28%, #0e0d0f 0%, var(--carbon) 54%, #050505 100%); }
 .home-creed-mark { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; z-index: 0; pointer-events: none; }
 .home-creed-mark svg { width: min(64vw, 600px); height: min(64vw, 600px); color: var(--red-oxv); fill: currentColor; opacity: 0.055; }
 .home-creed-inner { position: relative; z-index: 1; max-width: 920px; margin: 0 auto; padding: 0 var(--gutter); }
@@ -32864,7 +32863,7 @@ function setupMotion() {
         if (r.bottom > -80 && r.top < vh + 80) {
           const speed = parseFloat(el.dataset.parallax) || 0.14;
           const offset = (r.top + r.height / 2 - vh / 2) * speed;
-          el.style.transform = 'translate3d(0,' + (-offset).toFixed(1) + 'px,0) scale(1.16)';
+          el.style.transform = 'translate3d(0,' + (-offset).toFixed(1) + 'px,0) scale(1.08)';
         }
       });
       ticking = false;
@@ -32883,10 +32882,10 @@ function setupMotion() {
         const el = e.target; cObs.unobserve(el);
         const target = parseInt(el.dataset.count, 10);
         if (reduce || !target) { el.textContent = String(target || el.textContent); return; }
-        const dur = 1300, start = performance.now();
+        const dur = 1600, start = performance.now();
         const tick = t => {
           const p = Math.min(1, (t - start) / dur);
-          el.textContent = String(Math.round(target * (1 - Math.pow(1 - p, 3))));
+          el.textContent = String(Math.round(target * (1 - Math.pow(1 - p, 4))));
           if (p < 1) requestAnimationFrame(tick);
         };
         requestAnimationFrame(tick);
