@@ -190,7 +190,7 @@
   --copper-deep:  #C68B00;
 
   /* Accents officiels */
-  --gold:         #FFB703;   /* Or Doré */
+  --gold:         #C9A24A;   /* Or sobre (choix fondateur 2026-07-05) : or décoratif rare ; le vif #FFB703 reste réservé aux données/QDI via --qdi-fluidity */
   --red:          #E63946;   /* Rouge Adrénaline */
   --blue-tech:    #60A5FA;   /* Bleu technique (= bleu pilier Trajectoire, non utilisé) */
   --green-perf:   #4ADE80;   /* Vert performance (accélération) */
@@ -13107,7 +13107,7 @@ textarea:focus-visible {
   font-style: normal;
   text-transform: none;
   letter-spacing: -0.025em;
-  font-weight: 600;
+  font-weight: 500;   /* hiérarchie v2 : sections fines (500) ; hero/page-hero repassent à 700 plus bas */
 }
 .hero-headline em, .section-title em, .page-hero-title em, .home-hero-manifesto em,
 .home-journey-title em, .home-ecosystem-title em, .home-data-title em, .home-rituels-title em,
@@ -13220,7 +13220,7 @@ textarea:focus-visible {
 .home-edito-bg::after { content: ''; position: absolute; inset: 0; background: linear-gradient(180deg, rgba(5,5,5,0.62) 0%, rgba(5,5,5,0.12) 38%, rgba(5,5,5,0.55) 72%, rgba(5,5,5,0.94) 100%); }
 .home-edito-inner { position: relative; z-index: 1; width: 100%; padding: 0 var(--gutter) clamp(52px,7vw,104px); max-width: 1400px; margin: 0 auto; }
 .home-edito-eyebrow { font-family: var(--mono); font-size: 11px; letter-spacing: 0.28em; text-transform: uppercase; color: var(--gold); margin-bottom: 18px; }
-.home-edito-title { font-family: var(--display); font-style: normal; font-weight: 600; font-size: clamp(42px,7.2vw,104px); line-height: 0.97; letter-spacing: -0.025em; color: #fff; max-width: 15ch; margin: 0 0 22px; }
+.home-edito-title { font-family: var(--display); font-style: normal; font-weight: 700; font-size: clamp(42px,7.2vw,104px); line-height: 0.97; letter-spacing: -0.025em; color: #fff; max-width: 15ch; margin: 0 0 22px; }
 .home-edito-title em { font-style: italic; color: var(--gold); }
 .home-edito-lede { font-family: var(--sans); font-size: clamp(15px,1.35vw,18px); line-height: 1.65; color: rgba(245,242,234,0.82); max-width: 48ch; margin: 0 0 30px; }
 
@@ -13231,7 +13231,7 @@ textarea:focus-visible {
 .home-feature-media img { width: 100%; height: 100%; object-fit: cover; display: block; }
 .home-feature-body { padding: clamp(52px,7vw,112px) clamp(28px,5vw,88px); display: flex; flex-direction: column; justify-content: center; background: var(--carbon); }
 .home-feature-eyebrow { font-family: var(--mono); font-size: 10px; letter-spacing: 0.26em; text-transform: uppercase; color: var(--gold); margin-bottom: 16px; }
-.home-feature-title { font-family: var(--display); font-style: normal; font-weight: 600; font-size: clamp(30px,3.6vw,54px); line-height: 1.02; letter-spacing: -0.025em; color: var(--offwhite); margin: 0 0 20px; }
+.home-feature-title { font-family: var(--display); font-style: normal; font-weight: 500; font-size: clamp(30px,3.6vw,54px); line-height: 1.02; letter-spacing: -0.025em; color: var(--offwhite); margin: 0 0 20px; }
 .home-feature-title em { font-style: italic; color: var(--gold); }
 .home-feature-text { font-family: var(--sans); font-size: 16px; line-height: 1.72; color: var(--cream-mute); margin: 0 0 26px; max-width: 44ch; }
 .home-feature-list { list-style: none; margin: 0 0 28px; padding: 0; }
@@ -13278,13 +13278,14 @@ textarea:focus-visible {
 .section-heading {
   font-family: var(--display);
   font-style: normal;
-  font-weight: 600;
   text-transform: none;
   letter-spacing: -0.025em;
 }
+/* Hiérarchie de graisse (choix fondateur 2026-07-05) : hero affirmé, sections aérées. */
+.home-hero-manifesto, .page-hero-title { font-weight: 700; }
+.section-title, .section-heading { font-weight: 500; }
 .home-hero-manifesto { letter-spacing: -0.025em; }
 .page-hero-title { letter-spacing: -0.025em; }
-.page-hero-title em, .section-title em, .section-heading em { font-weight: 600; font-style: normal; }
 
 /* Neutralisation de l'italique résiduelle sur les titres display hors bloc 13097
    (bandes home, écrans compte/auth, comparateur, nav mobile). Le grotesque n'a pas
@@ -13324,6 +13325,22 @@ textarea:focus-visible {
    Exception : le corps d'article (.prose) garde l'emphase <em> historique. */
 body { font-synthesis-style: none; }
 .prose { font-synthesis-style: auto; }
+
+/* — Accent des titres = poids, jamais couleur (choix fondateur 2026-07-05) —
+   Le mot mis en avant (<em>) devient monochrome, porté par la graisse : sections en 500 →
+   accent 700 (contraste net) ; titres hero déjà en 700 → accent au même poids (Space Grotesk
+   plafonne à 700), mais toujours monochrome. Les données / le QDI ne sont pas des <em>. */
+.home-hero-manifesto em, .page-hero-title em, .section-title em, .section-heading em,
+.home-edito-title em, .home-feature-title em, .home-journey-title em, .home-ecosystem-title em,
+.home-data-title em, .home-final-headline em, .home-final-cta-headline em, .home-rituels-title em,
+.corp-headline em, .corp-sc-title em, .founding-title em, .coach-title em, .offer-name em,
+.manifesto-quote em, .how-signature em, .how-step-title em, .prose h2 em,
+.tp-title em, .tp-info-value em, .circuit-fact-value em, .circuit-pull em, .date-name em,
+.home-journey-card-name em, .home-ecosystem-pillar-name em {
+  color: inherit;
+  font-weight: 700;
+  font-style: normal;
+}
 
 </style>
 <!-- JSON-LD : LocalBusiness / lieu (PR-HUB-08 GEO) -->
