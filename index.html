@@ -13203,6 +13203,45 @@ textarea:focus-visible {
 .corp-scenario-tags { display: flex; flex-wrap: wrap; gap: 6px; padding: 0 20px 20px; }
 .corp-scenario-tags span { font-family: var(--mono); font-size: 9px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--cream-mute); border: 1px solid var(--cream-line); padding: 4px 8px; border-radius: 4px; }
 
+/* ═══════════════════════════════════════════════════════════════════
+   REFONTE ACCUEIL — bandes éditoriales immersives (style grandes marques)
+   Grandes images plein cadre + titres serif surdimensionnés (Goodwood).
+   ═══════════════════════════════════════════════════════════════════ */
+/* Bande plein cadre : image immersive + titre en overlay, ancré en bas */
+.home-edito { position: relative; min-height: 92vh; display: flex; align-items: flex-end; overflow: hidden; border-top: 1px solid var(--cream-line); }
+.home-edito-bg { position: absolute; inset: 0; z-index: 0; }
+.home-edito-bg img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.home-edito-bg::after { content: ''; position: absolute; inset: 0; background: linear-gradient(180deg, rgba(5,5,5,0.62) 0%, rgba(5,5,5,0.12) 38%, rgba(5,5,5,0.55) 72%, rgba(5,5,5,0.94) 100%); }
+.home-edito-inner { position: relative; z-index: 1; width: 100%; padding: 0 var(--gutter) clamp(52px,7vw,104px); max-width: 1400px; margin: 0 auto; }
+.home-edito-eyebrow { font-family: var(--mono); font-size: 11px; letter-spacing: 0.28em; text-transform: uppercase; color: var(--gold); margin-bottom: 18px; }
+.home-edito-title { font-family: var(--serif); font-style: italic; font-weight: 600; font-size: clamp(42px,7.2vw,104px); line-height: 0.97; letter-spacing: -0.01em; color: #fff; max-width: 15ch; margin: 0 0 22px; }
+.home-edito-title em { font-style: italic; color: var(--gold); }
+.home-edito-lede { font-family: var(--sans); font-size: clamp(15px,1.35vw,18px); line-height: 1.65; color: rgba(245,242,234,0.82); max-width: 48ch; margin: 0 0 30px; }
+
+/* Bande split : image + texte éditorial côte à côte (alterne avec .reverse) */
+.home-feature { display: grid; grid-template-columns: 1fr; align-items: stretch; border-top: 1px solid var(--cream-line); }
+@media (min-width: 900px) { .home-feature { grid-template-columns: 1fr 1fr; } .home-feature.reverse .home-feature-media { order: 2; } }
+.home-feature-media { position: relative; min-height: 340px; overflow: hidden; }
+.home-feature-media img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.home-feature-body { padding: clamp(52px,7vw,112px) clamp(28px,5vw,88px); display: flex; flex-direction: column; justify-content: center; background: var(--carbon); }
+.home-feature-eyebrow { font-family: var(--mono); font-size: 10px; letter-spacing: 0.26em; text-transform: uppercase; color: var(--gold); margin-bottom: 16px; }
+.home-feature-title { font-family: var(--serif); font-style: italic; font-weight: 600; font-size: clamp(30px,3.6vw,54px); line-height: 1.02; color: var(--offwhite); margin: 0 0 20px; }
+.home-feature-title em { font-style: italic; color: var(--gold); }
+.home-feature-text { font-family: var(--sans); font-size: 16px; line-height: 1.72; color: var(--cream-mute); margin: 0 0 26px; max-width: 44ch; }
+.home-feature-list { list-style: none; margin: 0 0 28px; padding: 0; }
+.home-feature-list li { position: relative; font-family: var(--sans); font-size: 14.5px; line-height: 1.5; color: var(--cream); padding: 9px 0 9px 22px; border-top: 1px solid var(--cream-line); }
+.home-feature-list li::before { content: ''; position: absolute; left: 0; top: 17px; width: 7px; height: 7px; border-radius: 50%; background: var(--gold); }
+
+/* Les cinq dimensions QDI — rangée de données (couleurs QDI intouchables) */
+.home-qdi { padding: clamp(76px,9vw,124px) 0; background: var(--carbon); border-top: 1px solid var(--cream-line); }
+.home-qdi-row { display: grid; grid-template-columns: repeat(2,1fr); gap: 1px; background: var(--cream-line); border: 1px solid var(--cream-line); border-radius: 14px; overflow: hidden; margin-top: 44px; }
+@media (min-width: 800px) { .home-qdi-row { grid-template-columns: repeat(5,1fr); } }
+.home-qdi-cell { background: var(--carbon); padding: 30px 18px; text-align: center; transition: background 0.3s; }
+.home-qdi-cell:hover { background: #0E0E10; }
+.home-qdi-dot { width: 12px; height: 12px; border-radius: 50%; margin: 0 auto 16px; }
+.home-qdi-name { font-family: var(--display); font-size: 12px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; }
+.home-qdi-desc { font-family: var(--sans); font-size: 12px; line-height: 1.55; color: var(--cream-mute); margin-top: 9px; }
+
 /* — Lot H · Direction typographique « Goodwood » (arbitrage fondateur 2026-07-04) —
    Titres en serif italique racé (Cormorant Garamond) ; eyebrows, labels, data (mono)
    et boutons inchangés. Casse naturelle : fin de l'uppercase sur les grands titres.
@@ -13570,9 +13609,22 @@ textarea:focus-visible {
 
 
   <!-- ============================================================
+       BANDE IMMERSIVE — LE CIRCUIT (refonte accueil)
+       ============================================================ -->
+  <section class="home-edito">
+    <div class="home-edito-bg"><img src="img/menu-circuit.webp" alt="Vue aérienne d'un circuit sinueux dans la campagne au lever du jour" loading="lazy" decoding="async" /></div>
+    <div class="home-edito-inner reveal">
+      <div class="home-edito-eyebrow">Le circuit</div>
+      <h2 class="home-edito-title">Un tracé qui <em>révèle</em>.</h2>
+      <p class="home-edito-lede">Pas le plus rapide. L'un des plus honnêtes. Un circuit technique et vallonné qui s'apprend session après session — et qui rend chaque progrès lisible.</p>
+      <button class="btn btn-lg" onclick="goTo('circuit')"><span>Découvrir le circuit</span></button>
+    </div>
+  </section>
+
+  <!-- ============================================================
        INTERLUDE — LOGOTYPE OXV
        ============================================================ -->
-  
+
 
   <section class="home-brand-interlude">
     <div class="home-brand-interlude-inner reveal">
@@ -13645,6 +13697,29 @@ textarea:focus-visible {
   </section>
 
   <!-- ============================================================
+       BANDE DATA — LES 5 DIMENSIONS DU QDI (refonte accueil)
+       ============================================================ -->
+  <section class="home-qdi">
+    <div class="wrap">
+      <div style="max-width:720px;margin:0 auto;text-align:center;">
+        <div class="kicker reveal">La donnée</div>
+        <h2 class="reveal" style="font-family:var(--serif);font-style:italic;font-weight:600;font-size:clamp(30px,4.4vw,52px);line-height:1.04;color:var(--offwhite);margin:14px 0 16px;">Cinq dimensions.<br/>Une lecture <em style="color:var(--gold);">honnête</em>.</h2>
+        <p class="reveal" style="font-family:var(--sans);font-size:16px;line-height:1.7;color:var(--cream-mute);margin:0;">Le Quality Driving Index mesure la maîtrise, jamais la vitesse. Cinq dimensions, calculées après la session — disponibles pour les abonnés OXV Mirror. Jamais un classement entre pilotes.</p>
+      </div>
+      <div class="home-qdi-row reveal">
+        <div class="home-qdi-cell"><div class="home-qdi-dot" style="background:var(--qdi-trajectory);box-shadow:0 0 10px rgba(96,165,250,0.5);"></div><div class="home-qdi-name" style="color:var(--qdi-trajectory);">Trajectoire</div><div class="home-qdi-desc">La répétabilité de vos lignes</div></div>
+        <div class="home-qdi-cell"><div class="home-qdi-dot" style="background:var(--qdi-fluidity);box-shadow:0 0 10px rgba(255,183,3,0.5);"></div><div class="home-qdi-name" style="color:var(--qdi-fluidity);">Fluidité</div><div class="home-qdi-desc">La douceur de vos transitions</div></div>
+        <div class="home-qdi-cell"><div class="home-qdi-dot" style="background:var(--qdi-braking);box-shadow:0 0 10px rgba(230,57,70,0.5);"></div><div class="home-qdi-name" style="color:var(--qdi-braking);">Freinage</div><div class="home-qdi-desc">Le point d'attaque et la dégressivité</div></div>
+        <div class="home-qdi-cell"><div class="home-qdi-dot" style="background:var(--qdi-acceleration);box-shadow:0 0 10px rgba(74,222,128,0.5);"></div><div class="home-qdi-name" style="color:var(--qdi-acceleration);">Accélération</div><div class="home-qdi-desc">La progressivité de la remise des gaz</div></div>
+        <div class="home-qdi-cell"><div class="home-qdi-dot" style="background:var(--qdi-regularity);box-shadow:0 0 10px rgba(192,132,252,0.5);"></div><div class="home-qdi-name" style="color:var(--qdi-regularity);">Régularité</div><div class="home-qdi-desc">La constance entre vos tours</div></div>
+      </div>
+      <div class="reveal" style="text-align:center;margin-top:32px;">
+        <button class="btn" onclick="goTo('application')"><span>Comment l'app lit votre roulage →</span></button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================
        SECTION — LE MÉDIA : FLUX ADMIN → APP (DA V3 §11)
        ============================================================ -->
   <section class="home-media" style="padding:clamp(80px,10vw,130px) 0;background:var(--carbon);border-top:1px solid var(--cream-line);">
@@ -13689,14 +13764,15 @@ textarea:focus-visible {
   <!-- ============================================================
        SECTION — LA CONFIANCE (DA V3 §18)
        ============================================================ -->
-  <section class="home-confiance" style="padding:clamp(70px,9vw,110px) 0;background:var(--carbon);border-top:1px solid var(--cream-line);">
-    <div class="wrap" style="max-width:840px;text-align:center;">
-      <div class="kicker reveal">N° 05 · La confiance</div>
-      <h2 class="reveal" style="font-family:var(--display);font-weight:600;font-size:clamp(30px,4.4vw,52px);line-height:1.06;letter-spacing:-0.02em;color:var(--offwhite);margin:14px 0 20px;">OXV observe.<br/>Le coach accompagne.<br/>Vous décidez.</h2>
-      <p class="reveal" style="font-family:var(--sans);font-size:15px;line-height:1.75;color:var(--cream-mute);max-width:560px;margin:0 auto 26px;">Pas de consigne en piste. Pas de classement public. Pas de données partagées sans votre accord.</p>
-      <div class="reveal" style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap;">
-        <button class="btn" onclick="goTo('securite')"><span>Lire le cadre →</span></button>
-        <button class="btn" onclick="goTo('preuves')"><span>Nos garanties →</span></button>
+  <section class="home-edito" style="align-items:center;min-height:82vh;">
+    <div class="home-edito-bg"><img src="img/offer-access.webp" alt="Pit lane au lever du jour, un pilote seul, casque à la main" loading="lazy" decoding="async" /></div>
+    <div class="home-edito-inner reveal" style="text-align:center;padding-bottom:0;max-width:920px;">
+      <div class="home-edito-eyebrow" style="margin-left:auto;margin-right:auto;">N° 05 · La confiance</div>
+      <h2 class="home-edito-title" style="max-width:none;margin-left:auto;margin-right:auto;font-size:clamp(34px,5.4vw,76px);">OXV observe.<br/>Le coach accompagne.<br/>Vous <em>décidez</em>.</h2>
+      <p class="home-edito-lede" style="margin-left:auto;margin-right:auto;">Pas de consigne en piste. Pas de classement public. Pas de données partagées sans votre accord.</p>
+      <div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap;">
+        <button class="btn btn-lg" onclick="goTo('securite')"><span>Lire le cadre</span></button>
+        <button class="btn btn-lg" onclick="goTo('preuves')"><span>Nos garanties</span></button>
       </div>
     </div>
   </section>
@@ -14492,12 +14568,12 @@ textarea:focus-visible {
             <div class="circuit-fact-value">2 200<em>m</em></div>
           </div>
           <div class="circuit-fact">
-            <div class="circuit-fact-label">Virages</div>
-            <div class="circuit-fact-value">7</div>
+            <div class="circuit-fact-label">Tracé</div>
+            <div class="circuit-fact-value">Technique</div>
           </div>
           <div class="circuit-fact">
-            <div class="circuit-fact-label">Lignes droites</div>
-            <div class="circuit-fact-value">650<em>m</em> ×2</div>
+            <div class="circuit-fact-label">Chicane</div>
+            <div class="circuit-fact-value">Aucune</div>
           </div>
           <div class="circuit-fact">
             <div class="circuit-fact-label">Homologation</div>
@@ -14623,7 +14699,7 @@ textarea:focus-visible {
         <div class="reveal">
           <div class="circuit-annee-block-title">Le tracé en chiffres</div>
           <div class="circuit-annee-block-text">
-            <p>2,2 km · sept virages · deux lignes droites de ~650 m.</p>
+            <p>2,2 km · tracé technique &amp; vallonné · sans chicane artificielle.</p>
             <p>Un tracé technique, sans chicane artificielle. Conçu pour révéler la progression — jamais pour punir l'erreur.</p>
           </div>
         </div>
@@ -20687,7 +20763,7 @@ textarea:focus-visible {
       <h2 class="section-title" style="font-size:32px;margin-bottom:8px;">Des <em>preuves</em>, pas des promesses.</h2>
       <p style="font-family:var(--sans);font-size:15px;line-height:1.7;color:var(--cream-mute);max-width:640px;margin:0 0 24px;">Six éléments concrets, vérifiables, qui fondent le sérieux d'OXV.</p>
       <div class="reveal" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px;margin-bottom:40px;">
-        <div class="bento" style="padding:24px;"><div style="font-family:var(--display);font-size:10px;letter-spacing:0.2em;text-transform:uppercase;color:var(--gold);margin-bottom:8px;">Un circuit réel, pas un slogan</div><p style="font-family:var(--sans);font-size:14px;line-height:1.6;color:var(--cream-mute);margin:0;">Le tracé Beltoise au Circuit de Haute Saintonge, dessiné par Jean-Pierre Beltoise en 2009, exploité par Julien Beltoise. 2,2 km, sept virages — <button class="link-inline" onclick="goTo('circuit')" style="background:none;border:none;color:var(--oxv-red);cursor:pointer;padding:0;font:inherit;">voir le circuit</button>.</p></div>
+        <div class="bento" style="padding:24px;"><div style="font-family:var(--display);font-size:10px;letter-spacing:0.2em;text-transform:uppercase;color:var(--gold);margin-bottom:8px;">Un circuit réel, pas un slogan</div><p style="font-family:var(--sans);font-size:14px;line-height:1.6;color:var(--cream-mute);margin:0;">Le tracé Beltoise au Circuit de Haute Saintonge, dessiné par Jean-Pierre Beltoise en 2009, exploité par Julien Beltoise. 2,2 km, tracé technique — <button class="link-inline" onclick="goTo('circuit')" style="background:none;border:none;color:var(--oxv-red);cursor:pointer;padding:0;font:inherit;">voir le circuit</button>.</p></div>
         <div class="bento" style="padding:24px;"><div style="font-family:var(--display);font-size:10px;letter-spacing:0.2em;text-transform:uppercase;color:var(--gold);margin-bottom:8px;">Un cadre de sécurité opposable</div><p style="font-family:var(--sans);font-size:14px;line-height:1.6;color:var(--cream-mute);margin:0;">Briefing obligatoire, documents vérifiés (permis, RC piste, contrôle technique), vingt pilotes maximum — <button class="link-inline" onclick="goTo('securite')" style="background:none;border:none;color:var(--oxv-red);cursor:pointer;padding:0;font:inherit;">sécurité &amp; cadre</button>.</p></div>
         <div class="bento" style="padding:24px;"><div style="font-family:var(--display);font-size:10px;letter-spacing:0.2em;text-transform:uppercase;color:var(--gold);margin-bottom:8px;">Vos données vous appartiennent</div><p style="font-family:var(--sans);font-size:14px;line-height:1.6;color:var(--cream-mute);margin:0;">Chiffrées, hébergées en Union européenne, jamais revendues. L'app compagnon est en opt-in : vous décidez.</p></div>
         <div class="bento" style="padding:24px;"><div style="font-family:var(--display);font-size:10px;letter-spacing:0.2em;text-transform:uppercase;color:var(--gold);margin-bottom:8px;">Des conditions claires</div><p style="font-family:var(--sans);font-size:14px;line-height:1.6;color:var(--cream-mute);margin:0;">Tarifs TTC affichés, annulation gratuite jusqu'à 7 jours avant, paiement en ligne sécurisé — <button class="link-inline" onclick="goTo('cgv')" style="background:none;border:none;color:var(--oxv-red);cursor:pointer;padding:0;font:inherit;">nos CGV</button>.</p></div>
@@ -21671,7 +21747,7 @@ const OXV_PAGE_SEO = {
   home:        { title: 'OXV — Track day signature · Circuit de Haute Saintonge', description: 'OXV organise des track days confidentiels sur le tracé Beltoise au Circuit de Haute Saintonge. Vingt pilotes par session, télémétrie, médias livrés dans l\'app. Saison 2027.' },
   offers:      { title: 'Les offres — Access, Signature, Heritage · OXV', description: 'Trois offres pour rouler sur le tracé Beltoise : Access (390 € TTC), Signature (690 € TTC) et Heritage (2 490 € TTC). Télémétrie 25 Hz, banque média dans l\'app, coach partenaire en option.' },
   calendrier:  { title: 'Calendrier de la saison 2027 · OXV', description: 'Le calendrier des sessions OXV au Circuit de Haute Saintonge. Lundis demi-journée, vendredis journée complète. Vingt pilotes maximum.' },
-  circuit:     { title: 'Le circuit de Haute Saintonge — tracé Beltoise · OXV', description: 'Dessiné en 2009 par Jean-Pierre Beltoise. 2,2 km, sept virages, aucune chicane artificielle. Le tracé que pilote OXV.' },
+  circuit:     { title: 'Le circuit de Haute Saintonge — tracé Beltoise · OXV', description: 'Dessiné en 2009 par Jean-Pierre Beltoise. 2,2 km, tracé technique, aucune chicane artificielle. Le tracé que pilote OXV.' },
   corporate:   { title: 'OXV Corporate — privatisation du tracé Beltoise', description: 'Privatisez le Circuit de Haute Saintonge. Deux formats sur devis, trois scénarios : comité de direction, concession, lancement produit.' },
   securite:    { title: 'Sécurité & cadre · OXV', description: 'Le cadre de sécurité OXV : briefing obligatoire, documents vérifiés, silence total en roulage, lecture des données après la session, vingt pilotes maximum. Et la place exacte de la donnée.' },
   'apres-journee': { title: 'Votre journée OXV — avant, pendant, après', description: 'De J-7 au rapport final : rituels de préparation, roulage silencieux, puis médias dès le soir, télémétrie dans l\'app, bilan de session, rapport Signature et carnet de saison. Un miroir, jamais un classement.' },
@@ -21880,7 +21956,7 @@ Cette phrase n'est pas un slogan. C'est l'ordre dans lequel nous prenons nos dé
     date: '2027-01-19',
     dateLabel: '19 janvier 2027',
     title: 'Beltoise, La Génétouze : *pourquoi ce circuit*.',
-    lead: "2,2 kilomètres, sept virages, aucune chicane artificielle. Le Circuit de Haute Saintonge n'est pas le plus rapide de France. Il est l'un des plus honnêtes. Voilà pourquoi OXV l'a choisi.",
+    lead: "2,2 kilomètres, tracé technique, aucune chicane artificielle. Le Circuit de Haute Saintonge n'est pas le plus rapide de France. Il est l'un des plus honnêtes. Voilà pourquoi OXV l'a choisi.",
     featured: false,
     ctaLabel: 'Voir le circuit →',
     ctaPage: 'circuit',
@@ -21898,7 +21974,7 @@ Pour un pilote qui cherche à progresser, c'est un terrain idéal. Chaque sessio
 
 - 2,2 km de piste
 - Une dizaine de virages
-- Deux lignes droites de ~650 m
+- De longues lignes droites, sans chicane artificielle
 - Paddock couvert de 1 200 m²
 - Aucune chicane artificielle
 
