@@ -472,7 +472,7 @@ h1, h2, h3, h4, h5 {
   content: '';
   width: 28px;
   height: 1px;
-  background: var(--gold);
+  background: var(--red-oxv);
   opacity: 0.8;
 }
 
@@ -870,15 +870,15 @@ h1, h2, h3, h4, h5 {
 }
 .section-title {
   font-family: var(--display);
-  font-style: italic;
+  font-style: normal;
   font-size: clamp(32px, 4.5vw, 64px);
-  font-weight: 700;
-  letter-spacing: 0.04em;
-  line-height: 1.1;
-  text-transform: uppercase;
+  font-weight: 600;
+  letter-spacing: -0.025em;
+  line-height: 1.05;
+  text-transform: none;
   color: var(--cream);
 }
-.section-title em { font-style: italic; color: var(--gold); }
+.section-title em { font-style: normal; color: var(--gold); }
 .section-title .small { font-size: 0.55em; opacity: 0.5; vertical-align: super; letter-spacing: 0.1em; }
 
 .section-lede {
@@ -903,7 +903,7 @@ h1, h2, h3, h4, h5 {
   font-weight: 700;
   line-height: 1.25;
   color: var(--cream);
-  letter-spacing: 0.04em;
+  letter-spacing: -0.02em;
   text-transform: uppercase;
   max-width: 24ch;
   margin: 0 auto;
@@ -1088,7 +1088,7 @@ h1, h2, h3, h4, h5 {
   font-style: italic;
   font-size: clamp(22px, 2.5vw, 30px);
   font-weight: 700;
-  letter-spacing: 0.04em;
+  letter-spacing: -0.02em;
   line-height: 1.1;
   text-transform: uppercase;
   margin-bottom: 14px;
@@ -1297,7 +1297,7 @@ h1, h2, h3, h4, h5 {
   font-style: italic;
   font-size: clamp(20px, 2vw, 28px);
   font-weight: 700;
-  letter-spacing: 0.04em;
+  letter-spacing: -0.02em;
   line-height: 1.3;
   text-transform: uppercase;
   color: var(--cream);
@@ -1332,7 +1332,7 @@ h1, h2, h3, h4, h5 {
   font-style: italic;
   font-size: 32px;
   font-weight: 700;
-  letter-spacing: 0.04em;
+  letter-spacing: -0.02em;
   color: var(--cream);
 }
 .circuit-fact-value em { font-style: italic; color: var(--gold); font-weight: 700; }
@@ -1398,19 +1398,19 @@ h1, h2, h3, h4, h5 {
   margin-bottom: 32px;
 }
 .tp-title {
-  font-family: 'Georgia', 'Cormorant Garamond', serif;
+  font-family: var(--display);
   font-size: clamp(28px, 4vw, 44px);
-  font-weight: 400;
-  font-style: italic;
-  letter-spacing: -0.01em;
+  font-weight: 600;
+  font-style: normal;
+  letter-spacing: -0.025em;
   color: var(--cream);
-  line-height: 1.1;
+  line-height: 1.05;
   margin-bottom: 14px;
 }
 .tp-title em {
-  font-style: italic;
+  font-style: normal;
   color: var(--gold);
-  font-weight: 400;
+  font-weight: 600;
 }
 .tp-subtitle {
   display: flex;
@@ -1472,14 +1472,14 @@ h1, h2, h3, h4, h5 {
   margin-bottom: 8px;
 }
 .tp-info-value {
-  font-family: 'Georgia', 'Cormorant Garamond', serif;
-  font-style: italic;
+  font-family: var(--display);
+  font-style: normal;
   font-size: 17px;
-  font-weight: 400;
+  font-weight: 500;
   color: var(--cream);
 }
 .tp-info-value em {
-  font-style: italic;
+  font-style: normal;
   color: var(--gold);
   font-size: 0.7em;
   margin-left: 4px;
@@ -1821,7 +1821,7 @@ h1, h2, h3, h4, h5 {
   font-style: italic;
   font-size: clamp(20px, 2.2vw, 28px);
   font-weight: 700;
-  letter-spacing: 0.04em;
+  letter-spacing: -0.02em;
   text-transform: uppercase;
   color: var(--cream);
 }
@@ -1896,7 +1896,7 @@ h1, h2, h3, h4, h5 {
   font-style: italic;
   font-size: clamp(32px, 4.5vw, 60px);
   font-weight: 700;
-  letter-spacing: 0.04em;
+  letter-spacing: -0.02em;
   line-height: 1.1;
   text-transform: uppercase;
   color: var(--cream);
@@ -1950,7 +1950,7 @@ h1, h2, h3, h4, h5 {
   font-style: italic;
   font-size: 24px;
   font-weight: 700;
-  letter-spacing: 0.04em;
+  letter-spacing: -0.02em;
   color: var(--cream);
 }
 .corp-stat-val em { color: var(--gold); }
@@ -1994,7 +1994,7 @@ h1, h2, h3, h4, h5 {
   font-style: italic;
   font-size: 22px;
   font-weight: 700;
-  letter-spacing: 0.04em;
+  letter-spacing: -0.02em;
   line-height: 1.15;
   text-transform: uppercase;
   color: var(--cream);
@@ -2183,11 +2183,11 @@ footer {
 .page-hero-eyebrow::before {
   content: '';
   width: 28px; height: 1px;
-  background: var(--gold);
+  background: var(--red-oxv);
 }
 .page-hero-title {
   font-family: var(--display);
-  font-style: italic;
+  font-style: normal;
   font-size: clamp(40px, 7vw, 100px);
   font-weight: 700;
   letter-spacing: 0.03em;
@@ -2219,15 +2219,15 @@ footer {
 }
 .prose h2 {
   font-family: var(--display);
-  font-style: italic;
+  font-style: normal;
   font-size: clamp(24px, 3vw, 36px);
-  font-weight: 700;
-  letter-spacing: 0.04em;
-  text-transform: uppercase;
+  font-weight: 600;
+  letter-spacing: -0.025em;
+  text-transform: none;
   margin: 48px 0 18px;
   color: var(--cream);
 }
-.prose h2 em { font-style: italic; color: var(--copper-glow); }
+.prose h2 em { font-style: normal; color: var(--copper-glow); }
 .prose h3 {
   font-family: var(--display);
   font-size: 22px;
@@ -2338,7 +2338,7 @@ footer {
 .how-step-title {
   font-family:var(--display);font-weight:600;
   font-size: 18px;
-  letter-spacing: 0.02em;
+  letter-spacing: -0.02em;
   color: var(--cream);
   margin: 0 0 12px;
 }
@@ -3560,7 +3560,7 @@ footer {
 .media-session-date {
   font-family:var(--display);font-weight:600;
   font-size: 15px;
-  letter-spacing: 0.04em;
+  letter-spacing: -0.02em;
   color: var(--cream);
   margin-bottom: 14px;
 }
@@ -8149,7 +8149,7 @@ footer {
   font-family:var(--display);font-weight:600;
   font-size: clamp(56px, 8vw, 96px);
   line-height: 1;
-  letter-spacing: 0.04em;
+  letter-spacing: -0.02em;
   color: var(--gold);
   margin-bottom: 14px;
 }
@@ -8176,7 +8176,7 @@ footer {
   font-family:var(--display);font-weight:600;
   font-size: clamp(26px, 3.5vw, 40px);
   line-height: 1.2;
-  letter-spacing: 0.04em;
+  letter-spacing: -0.02em;
   text-transform: uppercase;
   color: var(--cream);
   margin: 0 0 14px;
@@ -9836,7 +9836,7 @@ label {
 #page-privacy h1 {
   font-family:var(--display);font-weight:600;
   font-size: clamp(36px, 5vw, 64px);
-  letter-spacing: 0.04em;
+  letter-spacing: -0.02em;
   text-transform: uppercase;
   color: var(--cream);
   margin-bottom: 40px;
@@ -9848,7 +9848,7 @@ label {
 #page-privacy h2 {
   font-family:var(--display);font-weight:600;
   font-size: clamp(20px, 2.5vw, 28px);
-  letter-spacing: 0.04em;
+  letter-spacing: -0.02em;
   text-transform: uppercase;
   color: var(--gold);
   margin-top: 48px;
@@ -9909,7 +9909,7 @@ label {
 .booking-step-title {
   font-family:var(--display);font-weight:600;
   font-size: clamp(24px, 3vw, 36px);
-  letter-spacing: 0.04em;
+  letter-spacing: -0.02em;
   text-transform: uppercase;
   color: var(--cream);
   margin-bottom: 24px;
@@ -9920,7 +9920,7 @@ label {
 #page-specs-techniques h2,
 #page-specs-techniques h3 {
   font-family:var(--display);font-weight:600;
-  letter-spacing: 0.04em;
+  letter-spacing: -0.02em;
   text-transform: uppercase;
   color: var(--cream);
 }
@@ -9977,7 +9977,7 @@ label {
   font-family: var(--display) !important;
   font-style: italic !important;
   font-weight: 700 !important;
-  letter-spacing: 0.04em !important;
+  letter-spacing: -0.02em !important;
   color: var(--gold) !important;
 }
 
@@ -10000,7 +10000,7 @@ label {
 [id^="page-booking"] h2 {
   font-family:var(--display);font-weight:600;
   font-size: clamp(22px, 2.5vw, 32px);
-  letter-spacing: 0.04em;
+  letter-spacing: -0.02em;
   text-transform: uppercase;
   color: var(--cream);
 }
@@ -10010,7 +10010,7 @@ label {
 [id^="page-booking"] h3 {
   font-family:var(--display);font-weight:600;
   font-size: 18px;
-  letter-spacing: 0.04em;
+  letter-spacing: -0.02em;
   text-transform: uppercase;
   color: var(--gold);
 }
@@ -10494,7 +10494,7 @@ button[type="submit"].loading::after {
 .email-template-body h2 {
   font-family:var(--display);font-weight:600;
   font-size: 22px;
-  letter-spacing: 0.04em;
+  letter-spacing: -0.02em;
   text-transform: uppercase;
   color: var(--cream);
   margin: 0 0 24px;
@@ -10578,8 +10578,8 @@ button[type="submit"].loading::after {
   }
   .home-hero-manifesto {
     font-size: clamp(32px, 10vw, 48px) !important;
-    line-height: 1.1 !important;
-    letter-spacing: 0.02em !important;
+    line-height: 1.05 !important;
+    letter-spacing: -0.02em !important;
   }
   .home-hero-tagline {
     font-size: 14px !important;
@@ -10620,8 +10620,8 @@ button[type="submit"].loading::after {
   .home-final-headline,
   .corp-headline {
     font-size: clamp(28px, 8vw, 44px) !important;
-    line-height: 1.15 !important;
-    letter-spacing: 0.02em !important;
+    line-height: 1.1 !important;
+    letter-spacing: -0.02em !important;
   }
   
   /* Grid mobile : 1 colonne pour cards */
@@ -10814,7 +10814,7 @@ button[type="submit"].loading::after {
 .empty-state-title {
   font-family:var(--display);font-weight:600;
   font-size: 18px;
-  letter-spacing: 0.04em;
+  letter-spacing: -0.02em;
   text-transform: uppercase;
   color: var(--cream);
   margin-bottom: 12px;
@@ -11060,7 +11060,7 @@ a.btn {
 /* HOTFIX 3 : Titre offres - ne déborde plus, même sur mobile */
 .offer-name {
   font-size: clamp(18px, 4vw, 26px) !important;
-  letter-spacing: 0.02em !important;
+  letter-spacing: -0.02em !important;
   line-height: 1.15 !important;
   word-break: break-word !important;
   overflow-wrap: anywhere !important;
@@ -11112,7 +11112,7 @@ a.btn {
   /* Titre offres ULTRA compact sur très petits écrans */
   .offer-name {
     font-size: 18px !important;
-    letter-spacing: 0.01em !important;
+    letter-spacing: -0.02em !important;
   }
   .offer {
     padding: 36px 20px 32px !important;
@@ -11166,7 +11166,7 @@ a.btn {
 .corp-uc-title {
   font-family:var(--display);font-weight:600;
   font-size: 17px;
-  letter-spacing: 0.04em;
+  letter-spacing: -0.02em;
   text-transform: uppercase;
   color: var(--cream);
   margin: 0 0 12px;
@@ -11539,7 +11539,7 @@ a.btn {
   justify-content: center;
   font-family:var(--display);font-weight:600;
   font-size: 22px;
-  letter-spacing: 0.04em;
+  letter-spacing: -0.02em;
   background: rgba(255, 255, 255, 0.03);
 }
 .prog-pillar.trajectory .prog-pillar-icon {
@@ -11582,7 +11582,7 @@ a.btn {
 .prog-pillar-name {
   font-family:var(--display);font-weight:600;
   font-size: 15px;
-  letter-spacing: 0.04em;
+  letter-spacing: -0.02em;
   text-transform: uppercase;
   color: var(--cream);
 }
@@ -11615,7 +11615,7 @@ a.btn {
 .prog-pillar-score {
   font-family:var(--display);font-weight:600;
   font-size: 32px;
-  letter-spacing: 0.04em;
+  letter-spacing: -0.02em;
   line-height: 1;
   min-width: 64px;
   text-align: right;
@@ -11659,7 +11659,7 @@ a.btn {
 .prog-evolution-title {
   font-family:var(--display);font-weight:600;
   font-size: 16px;
-  letter-spacing: 0.04em;
+  letter-spacing: -0.02em;
   text-transform: uppercase;
   color: var(--cream);
 }
@@ -11695,7 +11695,7 @@ a.btn {
 .prog-chart-bar-value {
   font-family:var(--display);font-weight:600;
   font-size: 13px;
-  letter-spacing: 0.04em;
+  letter-spacing: -0.02em;
   color: var(--cream);
 }
 .prog-chart-bar-graph {
@@ -11761,7 +11761,7 @@ a.btn {
 .prog-reco-title {
   font-family:var(--display);font-weight:600;
   font-size: 16px;
-  letter-spacing: 0.04em;
+  letter-spacing: -0.02em;
   text-transform: uppercase;
   color: var(--cream);
   margin: 0 0 10px;
@@ -11803,7 +11803,7 @@ a.btn {
 .prog-app-title {
   font-family:var(--display);font-weight:600;
   font-size: clamp(22px, 3vw, 30px);
-  letter-spacing: 0.04em;
+  letter-spacing: -0.02em;
   text-transform: uppercase;
   color: var(--cream);
   margin-bottom: 14px;
@@ -12975,7 +12975,7 @@ textarea:focus-visible {
    ========================================== */
 .home-data { background: var(--obsidian); padding: 100px 0; }
 .home-data-intro { text-align: center; max-width: 640px; margin: 0 auto 60px; }
-.home-data-title { font-size: clamp(28px, 4vw, 48px); font-weight: 800; letter-spacing: -0.02em; margin-bottom: 16px; }
+.home-data-title { font-size: clamp(28px, 4vw, 48px); font-weight: 600; letter-spacing: -0.025em; margin-bottom: 16px; }
 
 /* ============================================================
    CHARTE OXV — Titre de section (référence réutilisable)
@@ -12999,9 +12999,9 @@ textarea:focus-visible {
 .section-heading {
   font-family: var(--display);
   font-size: clamp(28px, 4vw, 48px);
-  font-weight: 800;
-  letter-spacing: -0.02em;
-  line-height: 1.08;
+  font-weight: 600;
+  letter-spacing: -0.025em;
+  line-height: 1.05;
   color: var(--cream);
   margin: 0 0 16px;
 }
@@ -13106,7 +13106,7 @@ textarea:focus-visible {
   font-family: var(--display);   /* direction v2 : grotesque technique sur TOUS les titres */
   font-style: normal;
   text-transform: none;
-  letter-spacing: -0.02em;
+  letter-spacing: -0.025em;
   font-weight: 600;
 }
 .hero-headline em, .section-title em, .page-hero-title em, .home-hero-manifesto em,
@@ -13220,7 +13220,7 @@ textarea:focus-visible {
 .home-edito-bg::after { content: ''; position: absolute; inset: 0; background: linear-gradient(180deg, rgba(5,5,5,0.62) 0%, rgba(5,5,5,0.12) 38%, rgba(5,5,5,0.55) 72%, rgba(5,5,5,0.94) 100%); }
 .home-edito-inner { position: relative; z-index: 1; width: 100%; padding: 0 var(--gutter) clamp(52px,7vw,104px); max-width: 1400px; margin: 0 auto; }
 .home-edito-eyebrow { font-family: var(--mono); font-size: 11px; letter-spacing: 0.28em; text-transform: uppercase; color: var(--gold); margin-bottom: 18px; }
-.home-edito-title { font-family: var(--display); font-style: italic; font-weight: 600; font-size: clamp(42px,7.2vw,104px); line-height: 0.97; letter-spacing: -0.01em; color: #fff; max-width: 15ch; margin: 0 0 22px; }
+.home-edito-title { font-family: var(--display); font-style: normal; font-weight: 600; font-size: clamp(42px,7.2vw,104px); line-height: 0.97; letter-spacing: -0.025em; color: #fff; max-width: 15ch; margin: 0 0 22px; }
 .home-edito-title em { font-style: italic; color: var(--gold); }
 .home-edito-lede { font-family: var(--sans); font-size: clamp(15px,1.35vw,18px); line-height: 1.65; color: rgba(245,242,234,0.82); max-width: 48ch; margin: 0 0 30px; }
 
@@ -13231,7 +13231,7 @@ textarea:focus-visible {
 .home-feature-media img { width: 100%; height: 100%; object-fit: cover; display: block; }
 .home-feature-body { padding: clamp(52px,7vw,112px) clamp(28px,5vw,88px); display: flex; flex-direction: column; justify-content: center; background: var(--carbon); }
 .home-feature-eyebrow { font-family: var(--mono); font-size: 10px; letter-spacing: 0.26em; text-transform: uppercase; color: var(--gold); margin-bottom: 16px; }
-.home-feature-title { font-family: var(--display); font-style: italic; font-weight: 600; font-size: clamp(30px,3.6vw,54px); line-height: 1.02; color: var(--offwhite); margin: 0 0 20px; }
+.home-feature-title { font-family: var(--display); font-style: normal; font-weight: 600; font-size: clamp(30px,3.6vw,54px); line-height: 1.02; letter-spacing: -0.025em; color: var(--offwhite); margin: 0 0 20px; }
 .home-feature-title em { font-style: italic; color: var(--gold); }
 .home-feature-text { font-family: var(--sans); font-size: 16px; line-height: 1.72; color: var(--cream-mute); margin: 0 0 26px; max-width: 44ch; }
 .home-feature-list { list-style: none; margin: 0 0 28px; padding: 0; }
@@ -13282,8 +13282,8 @@ textarea:focus-visible {
   text-transform: none;
   letter-spacing: -0.025em;
 }
-.home-hero-manifesto { letter-spacing: -0.035em; }
-.page-hero-title { letter-spacing: -0.03em; }
+.home-hero-manifesto { letter-spacing: -0.025em; }
+.page-hero-title { letter-spacing: -0.025em; }
 .page-hero-title em, .section-title em, .section-heading em { font-weight: 600; font-style: normal; }
 
 /* Neutralisation de l'italique résiduelle sur les titres display hors bloc 13097
