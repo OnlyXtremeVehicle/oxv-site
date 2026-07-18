@@ -13642,6 +13642,7 @@ body.pav-tv .nav, body.pav-tv footer, body.pav-tv .cookie, body.pav-tv .founding
   #page-demande .auth-wrap { grid-template-columns: 320px 1fr; gap: 64px; max-width: 1360px; align-items: start; }
   #page-demande .auth-side { position: sticky; top: 110px; align-self: start; padding-right: 44px; }
   #page-demande .auth-card { max-width: none; }
+  #page-demande .auth-form { max-width: none; } /* le plafond 460px comprimait les champs en quart de largeur */
   #page-demande .dmd-seg { grid-template-columns: repeat(4, 1fr); }
   #page-demande .dmd-step.active,
   #page-demande .dmd-block.show {
@@ -13657,7 +13658,45 @@ body.pav-tv .nav, body.pav-tv footer, body.pav-tv .cookie, body.pav-tv .founding
   #page-demande .dmd-block-label,
   #page-demande .dmd-note,
   #page-demande .form-row:has(textarea) { grid-column: 1 / -1; }
+  /* Les paires .form-grid (Prénom|Nom, Téléphone|Email, Marque|Modèle…) occupent
+     toute la ligne : sans cela elles seraient comprimées en quart de largeur
+     dans la grille 2 colonnes de l'étape. */
+  #page-demande .dmd-step.active > .form-grid,
+  #page-demande .dmd-block.show > .form-grid { grid-column: 1 / -1; }
 }
+
+/* ============================================================
+   ESPACE COACH VALORISANT + fiche publique (fondateur 2026-07-19)
+   ============================================================ */
+.ce-avatar {
+  width: 92px; height: 92px; border-radius: 50%; flex-shrink: 0;
+  background: var(--anthracite) center/cover no-repeat;
+  border: 2px solid var(--cream-line);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 34px; color: var(--cream-faint); cursor: pointer;
+  transition: border-color 0.25s;
+}
+.ce-avatar:hover { border-color: var(--gold-data); }
+.ce-stat { font-family: var(--mono); font-size: 26px; font-weight: 700; color: var(--offwhite); line-height: 1.1; }
+.ce-stat-lbl { font-family: var(--mono); font-size: 9px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--cream-mute); margin-top: 6px; }
+.ce-media-item { position: relative; border: 1px solid var(--bento-border); border-radius: 3px; overflow: hidden; aspect-ratio: 16/10; background: var(--anthracite); }
+.ce-media-item img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.ce-media-item .ce-media-tag { position: absolute; left: 6px; bottom: 6px; font-family: var(--mono); font-size: 8px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--offwhite); background: rgba(5,5,5,0.75); padding: 2px 6px; border-radius: 2px; }
+.ce-media-item .ce-media-del { position: absolute; top: 4px; right: 4px; width: 22px; height: 22px; border: none; border-radius: 2px; background: rgba(5,5,5,0.8); color: var(--offwhite); cursor: pointer; font-size: 12px; line-height: 1; }
+/* Fiche coach publique — modale plein écran sobre */
+.coach-fiche-modal { position: fixed; inset: 0; z-index: 1400; background: rgba(5,5,5,0.88); display: none; align-items: flex-start; justify-content: center; overflow-y: auto; padding: 4vh 16px 6vh; }
+.coach-fiche-modal.open { display: flex; }
+.coach-fiche-card { width: 100%; max-width: 860px; background: var(--anthracite); border: 1px solid var(--cream-line); border-radius: 6px; padding: clamp(24px, 4vw, 44px); position: relative; }
+.coach-fiche-close { position: absolute; top: 16px; right: 16px; width: 38px; height: 38px; border: 1px solid var(--cream-line); border-radius: 3px; background: transparent; color: var(--offwhite); font-size: 16px; cursor: pointer; }
+.coach-fiche-head { display: flex; gap: 22px; align-items: center; flex-wrap: wrap; margin-bottom: 20px; }
+.coach-fiche-head img { width: 96px; height: 96px; border-radius: 50%; object-fit: cover; border: 2px solid var(--cream-line); }
+.coach-fiche-name { font-family: var(--display); font-weight: 700; font-size: clamp(22px, 3vw, 32px); color: var(--offwhite); letter-spacing: -0.02em; }
+.coach-fiche-headline { font-family: var(--mono); font-size: 12px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--gold-data); margin-top: 6px; }
+.coach-fiche-sec { font-family: var(--mono); font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--cream-mute); margin: 22px 0 10px; display: flex; align-items: center; gap: 12px; }
+.coach-fiche-sec::after { content: ""; flex: 1; height: 1px; background: var(--cream-line); }
+.coach-fiche-txt { font-family: var(--sans); font-size: 14.5px; line-height: 1.7; color: var(--cream-mute); white-space: pre-line; }
+.coach-fiche-medias { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 12px; }
+.coach-fiche-medias iframe, .coach-fiche-medias img { width: 100%; aspect-ratio: 16/9; border: 1px solid var(--bento-border); border-radius: 3px; display: block; object-fit: cover; background: #000; }
 
 </style>
 <!-- JSON-LD : LocalBusiness / lieu (PR-HUB-08 GEO) -->
@@ -15984,35 +16023,38 @@ body.pav-tv .nav, body.pav-tv footer, body.pav-tv .cookie, body.pav-tv .founding
 
       <div class="auth-form">
 
-        <!-- ÉTAPE 1 : Identité -->
+        <!-- ÉTAPE 1 : Identité (retravaillée 2026-07-19 : fin des placeholders
+             en doublon des libellés, hiérarchie Identité / Contact alignée sur
+             les blocs de l'étape 2) -->
         <div class="dmd-step active" data-step="1">
-        <!-- BLOC IDENTITÉ (tous) -->
+        <div class="dmd-block-label" style="border-top:none;padding-top:0;margin-top:4px;">— Identité</div>
         <div class="form-grid" style="grid-template-columns: 1fr 1fr; gap: 14px;">
           <div class="form-row">
             <label>Prénom</label>
-            <input type="text" id="dmd-first" placeholder="Prénom" autocomplete="given-name" />
+            <input type="text" id="dmd-first" autocomplete="given-name" />
           </div>
           <div class="form-row">
             <label>Nom</label>
-            <input type="text" id="dmd-last" placeholder="Nom" autocomplete="family-name" />
+            <input type="text" id="dmd-last" autocomplete="family-name" />
           </div>
         </div>
+        <div class="form-row">
+          <label>Date de naissance <span style="opacity:.6;font-weight:400;">(facultatif)</span></label>
+          <input type="date" id="dmd-birth" autocomplete="bday" />
+        </div>
+        <div class="dmd-block-label">— Contact</div>
         <div class="form-grid" style="grid-template-columns: 1fr 1fr; gap: 14px;">
           <div class="form-row">
-            <label>Date de naissance</label>
-            <input type="date" id="dmd-birth" autocomplete="bday" />
+            <label>Téléphone</label>
+            <input type="tel" id="dmd-phone" placeholder="06 12 34 56 78" autocomplete="tel" />
           </div>
           <div class="form-row">
-            <label>Téléphone</label>
-            <input type="tel" id="dmd-phone" placeholder="+33 6 ..." autocomplete="tel" />
+            <label>Email</label>
+            <input type="email" id="dmd-email" placeholder="prenom.nom@email.fr" autocomplete="email" />
           </div>
         </div>
         <div class="form-row">
-          <label>Email</label>
-          <input type="email" id="dmd-email" placeholder="prenom.nom@email.fr" autocomplete="email" />
-        </div>
-        <div class="form-row">
-          <label>Ville / région</label>
+          <label>Ville / région <span style="opacity:.6;font-weight:400;">(facultatif)</span></label>
           <input type="text" id="dmd-city" placeholder="Bordeaux, Nouvelle-Aquitaine" autocomplete="address-level2" />
         </div>
         <div class="dmd-nav">
@@ -21469,25 +21511,50 @@ body.pav-tv .nav, body.pav-tv footer, body.pav-tv .cookie, body.pav-tv .founding
      coach_profiles / coach_availability / coaching_bookings / coach_reviews.
      ============================================================ -->
 <div class="page" id="page-coach-espace">
-  <section class="page-hero">
+  <!-- Héro personnalisé (rempli par loadCoachEspace) : le coach arrive CHEZ LUI,
+       pas sur un compte pilote générique — demande fondateur 2026-07-19. -->
+  <section class="page-hero" style="padding-bottom:34px;">
     <div class="wrap">
       <div class="page-hero-eyebrow">N° ⬡ · Espace coach</div>
-      <h1 class="page-hero-title">Votre espace<br/><em>coach</em>.</h1>
-      <p class="page-hero-lede">Votre fiche et vos tarifs, vos créneaux sur les journées OXV, vos réservations et les retours de vos pilotes. La donnée de roulage, elle, vit dans l'application.</p>
+      <div id="ceHero" style="display:flex;align-items:center;gap:26px;flex-wrap:wrap;margin-top:8px;">
+        <div id="ceHeroAvatar" class="ce-avatar" onclick="document.getElementById('cePhotoFile').click()" title="Changer ma photo">⌬</div>
+        <div style="flex:1;min-width:240px;">
+          <h1 class="page-hero-title" id="ceHeroName" style="font-size:clamp(30px,4vw,52px);margin-bottom:6px;">Votre espace <em>coach</em>.</h1>
+          <p class="page-hero-lede" id="ceHeroHeadline" style="margin:0;max-width:none;">Votre fiche est votre vitrine : histoire, médias, tarifs, créneaux.</p>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:10px;align-items:flex-end;">
+          <div id="ceProfileStatus" style="font-family:var(--mono);font-size:10px;letter-spacing:0.1em;color:var(--cream-mute);"></div>
+          <div style="display:flex;gap:10px;flex-wrap:wrap;">
+            <button class="btn btn-sm" onclick="ceApercuFiche()"><span>Aperçu de ma fiche</span></button>
+            <button class="btn btn-sm btn-primary" id="cePublishBtn" onclick="ceTogglePublish()"><span>Publier ma fiche</span></button>
+          </div>
+        </div>
+      </div>
+      <input type="file" id="cePhotoFile" accept="image/jpeg,image/png,image/webp" style="display:none;" onchange="ceUploadPhoto(this)">
     </div>
   </section>
-  <section class="section">
-    <div class="wrap" style="max-width:1000px;">
+  <section class="section" style="padding-top:24px;">
+    <div class="wrap" style="max-width:1080px;">
       <div id="coachEspaceGuard" style="display:none;" class="bento">
         <p style="font-family:var(--sans);font-size:14px;color:var(--cream-mute);margin:0;padding:8px;">Cet espace est réservé aux coachs partenaires OXV. <button class="link-inline" onclick="goTo('coach')" style="background:none;border:none;color:var(--oxv-red);cursor:pointer;padding:0;font:inherit;">Devenir coach partenaire →</button></p>
       </div>
       <div id="coachEspaceContent" style="display:none;">
+
+        <!-- Tableau de bord factuel -->
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:12px;margin-bottom:18px;">
+          <div class="bento" style="padding:18px 20px;"><div class="ce-stat" id="ceStatBookings">—</div><div class="ce-stat-lbl">Demandes en attente</div></div>
+          <div class="bento" style="padding:18px 20px;"><div class="ce-stat" id="ceStatSlots">—</div><div class="ce-stat-lbl">Créneaux à venir</div></div>
+          <div class="bento" style="padding:18px 20px;"><div class="ce-stat" id="ceStatPilots">—</div><div class="ce-stat-lbl">Pilotes suivis</div></div>
+          <div class="bento" style="padding:18px 20px;"><div class="ce-stat" id="ceStatRating">—</div><div class="ce-stat-lbl">Note moyenne</div></div>
+        </div>
+
         <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:16px;margin-bottom:16px;">
           <div class="bento" style="padding:26px;">
-            <div style="font-family:var(--mono);font-size:10px;letter-spacing:0.22em;text-transform:uppercase;color:var(--gold-data);margin-bottom:12px;">Ma fiche &amp; mes tarifs</div>
-            <div id="ceProfileStatus" style="font-family:var(--sans);font-size:13px;color:var(--cream-mute);margin-bottom:12px;">Chargement…</div>
+            <div style="font-family:var(--mono);font-size:10px;letter-spacing:0.22em;text-transform:uppercase;color:var(--gold-data);margin-bottom:12px;">Ma fiche — mon histoire</div>
             <input id="ceHeadline" class="form-input" placeholder="Accroche (ex. Coach BPJEPS · trajectoire &amp; régularité)" maxlength="120">
-            <textarea id="ceBio" class="form-input" style="margin-top:10px;min-height:74px;" placeholder="Présentation" maxlength="1200"></textarea>
+            <textarea id="ceBio" class="form-input" style="margin-top:10px;min-height:74px;" placeholder="Présentation courte — qui vous êtes, votre approche" maxlength="1200"></textarea>
+            <textarea id="cePalmares" class="form-input" style="margin-top:10px;min-height:60px;" placeholder="Votre histoire &amp; palmarès — parcours, titres, expériences marquantes" maxlength="1200"></textarea>
+            <input id="ceSpecialties" class="form-input" style="margin-top:10px;" placeholder="Spécialités, séparées par des virgules (ex. Trajectoire, Freinage, GT)" maxlength="200">
             <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:10px;">
               <div><input id="ceSessionPrice" class="form-input" type="number" min="0" step="1" placeholder="€ / session"><span style="font-family:var(--mono);font-size:9px;color:var(--cream-faint);">Tarif session (public)</span></div>
               <div><input id="ceSeasonPrice" class="form-input" type="number" min="0" step="1" placeholder="€ / saison"><span style="font-family:var(--mono);font-size:9px;color:var(--cream-faint);">Tarif saison (public)</span></div>
@@ -21496,6 +21563,23 @@ body.pav-tv .nav, body.pav-tv footer, body.pav-tv .cookie, body.pav-tv .founding
             <button class="btn btn-sm" style="margin-top:12px;" onclick="ceSaveProfile()"><span>Enregistrer</span></button>
             <p style="font-family:var(--mono);font-size:10px;color:var(--cream-faint);margin:10px 0 0;letter-spacing:0.06em;">Le paiement se fait directement entre vous et le pilote — jamais via OXV.</p>
           </div>
+          <div class="bento" style="padding:26px;">
+            <div style="font-family:var(--mono);font-size:10px;letter-spacing:0.22em;text-transform:uppercase;color:var(--gold-data);margin-bottom:12px;">Mes médias &amp; liens</div>
+            <div id="ceMediaList" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(110px,1fr));gap:10px;margin-bottom:12px;"></div>
+            <div style="display:flex;gap:8px;">
+              <input id="ceMediaUrl" class="form-input" style="flex:1;" placeholder="Lien YouTube ou image (https://…)" maxlength="400">
+              <button class="btn btn-sm" onclick="ceAddMedia()"><span>Ajouter</span></button>
+            </div>
+            <p style="font-family:var(--mono);font-size:9px;color:var(--cream-faint);margin:8px 0 14px;letter-spacing:0.05em;">Vidéos YouTube et photos — affichés sur votre fiche publique.</p>
+            <div style="border-top:1px solid var(--bento-border);padding-top:14px;display:grid;gap:8px;">
+              <input id="ceInstagram" class="form-input" placeholder="Instagram (https://instagram.com/…)" maxlength="300">
+              <input id="ceYoutube" class="form-input" placeholder="Chaîne YouTube (https://youtube.com/…)" maxlength="300">
+              <input id="ceWebsite" class="form-input" placeholder="Site web (https://…)" maxlength="300">
+            </div>
+            <button class="btn btn-sm" style="margin-top:12px;" onclick="ceSaveProfile()"><span>Enregistrer</span></button>
+          </div>
+        </div>
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:16px;margin-bottom:16px;">
           <div class="bento" style="padding:26px;">
             <div style="font-family:var(--mono);font-size:10px;letter-spacing:0.22em;text-transform:uppercase;color:var(--blue-data);margin-bottom:12px;">Mes créneaux · journées OXV</div>
             <div id="ceSlotsList" style="font-family:var(--sans);font-size:13px;line-height:1.7;color:var(--cream-mute);">Chargement…</div>
@@ -21824,6 +21908,9 @@ body.pav-tv .nav, body.pav-tv footer, body.pav-tv .cookie, body.pav-tv .founding
 
 <!-- ============ TOAST ============ -->
 <div class="toast" id="toast"></div>
+
+<!-- ============ FICHE COACH PUBLIQUE (modale, remplie par showCoachFiche) ============ -->
+<div class="coach-fiche-modal" id="coachFicheModal" onclick="if(event.target===this)this.classList.remove('open')"></div>
 
 <script type="module">
 import * as THREE from 'three';
@@ -22259,6 +22346,14 @@ window.goTo = function(page, opts) {
     requireSession().then(valid => {
       if (!valid) return; // requireSession redirige déjà vers login
     });
+  }
+
+  // Aiguillage par rôle (fondateur 2026-07-19) : l'espace compte est un espace
+  // PILOTE. Un coach ou un partenaire connecté est renvoyé vers SON espace —
+  // fini le « Bienvenue pilote » pour un coach.
+  const oxvRole = window.OXVApi?.user?.dbProfile?.role;
+  if ((page === 'compte' || page.indexOf('compte-') === 0) && (oxvRole === 'coach' || oxvRole === 'partner')) {
+    page = oxvRole === 'coach' ? 'coach-espace' : 'partenaire-espace';
   }
 
   document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
@@ -26524,9 +26619,14 @@ window.submitLogin = async function() {
       toast('Connexion réussie', 'ok');
       [email, pwd].forEach(el => el.value = '');
 
-      // Si admin : redirection vers /admin, sinon /compte
+      // Aiguillage par rôle (fondateur 2026-07-19) : un coach arrive CHEZ LUI,
+      // un partenaire dans son espace — jamais sur le compte pilote.
       if (profile?.role === 'admin') {
         goTo('admin');
+      } else if (profile?.role === 'coach') {
+        goTo('coach-espace');
+      } else if (profile?.role === 'partner') {
+        goTo('partenaire-espace');
       } else {
         goTo('compte');
       }
@@ -29025,15 +29125,34 @@ window.loadCoachEspace = async function() {
     }
     if (!prof) { guard.style.display = ''; content.style.display = 'none'; return; }
     guard.style.display = 'none'; content.style.display = '';
-    // Fiche & tarifs (transaction directe coach↔pilote — jamais via OXV)
+    window.__ceProf = prof;
+    // Héro personnalisé : le coach est CHEZ LUI (fondateur 2026-07-19)
+    const db = window.OXVApi.user.dbProfile || {};
+    const nom = ((db.first_name || '') + ' ' + (db.last_name || '')).trim();
+    const heroName = document.getElementById('ceHeroName');
+    if (heroName) heroName.innerHTML = nom ? 'Coach <em>' + escapeHtml(nom) + '</em>.' : 'Votre espace <em>coach</em>.';
+    const heroHl = document.getElementById('ceHeroHeadline');
+    if (heroHl) heroHl.textContent = prof.headline || 'Votre fiche est votre vitrine : complétez votre histoire, vos médias, vos tarifs.';
+    const av = document.getElementById('ceHeroAvatar');
+    if (av) {
+      if (prof.photo_url) { av.style.backgroundImage = 'url(' + JSON.stringify(prof.photo_url) + ')'; av.textContent = ''; }
+      else { av.style.backgroundImage = ''; av.textContent = '⌬'; }
+    }
     const st = document.getElementById('ceProfileStatus');
     if (st) st.innerHTML = prof.is_published
-      ? '<span class="tag-inline green">Fiche publiée sur la vitrine coach</span>'
-      : '<span class="tag-inline gold">Fiche non publiée — publication par OXV après revue</span>';
+      ? '<span class="tag-inline green">Fiche publiée</span>'
+      : '<span class="tag-inline gold">Brouillon — non visible des pilotes</span>';
+    const pb = document.getElementById('cePublishBtn');
+    if (pb) pb.innerHTML = prof.is_published ? '<span>Dépublier</span>' : '<span>Publier ma fiche</span>';
+    // Champs
     const setv = (id, v) => { const el = document.getElementById(id); if (el && v != null) el.value = v; };
-    setv('ceHeadline', prof.headline); setv('ceBio', prof.bio);
+    setv('ceHeadline', prof.headline); setv('ceBio', prof.bio); setv('cePalmares', prof.palmares);
+    setv('ceSpecialties', Array.isArray(prof.specialties) ? prof.specialties.join(', ') : (prof.specialties || ''));
     setv('ceSessionPrice', prof.session_price_eur); setv('ceSeasonPrice', prof.season_price_eur);
     setv('cePaymentLink', prof.payment_link);
+    setv('ceInstagram', prof.instagram_url); setv('ceYoutube', prof.youtube_url); setv('ceWebsite', prof.website_url);
+    ceRenderMedias(prof);
+    ceLoadStats(uid);
     ceLoadSlots(uid); ceLoadBookings(uid); ceLoadReviews(uid); ceLoadNextSessions();
   } catch (e) { console.warn('[Espace coach]', e); guard.style.display = ''; content.style.display = 'none'; }
 };
@@ -29041,12 +29160,179 @@ window.ceSaveProfile = async function() {
   const uid = window.OXVApi.user.profile?.id;
   const gv = id => { const el = document.getElementById(id); return el ? el.value.trim() : ''; };
   const num = v => { const n = parseInt(v, 10); return isFinite(n) && n >= 0 ? n : null; };
+  const url = v => { const s = gv(v); return s && /^https:\/\//.test(s) ? s.slice(0, 300) : null; };
+  const specs = gv('ceSpecialties') ? gv('ceSpecialties').split(',').map(s => s.trim()).filter(Boolean).slice(0, 8) : null;
   const { error } = await supabase.from('coach_profiles').update({
-    headline: gv('ceHeadline') || null, bio: gv('ceBio') || null,
+    headline: gv('ceHeadline') || null, bio: gv('ceBio') || null, palmares: gv('cePalmares') || null,
+    specialties: specs,
     session_price_eur: num(gv('ceSessionPrice')), season_price_eur: num(gv('ceSeasonPrice')),
-    payment_link: gv('cePaymentLink') || null, updated_at: new Date().toISOString()
+    payment_link: gv('cePaymentLink') || null,
+    instagram_url: url('ceInstagram'), youtube_url: url('ceYoutube'), website_url: url('ceWebsite'),
+    updated_at: new Date().toISOString()
   }).eq('coach_id', uid);
+  if (!error) window.loadCoachEspace();
   toast(error ? 'Enregistrement refusé' : 'Fiche enregistrée', error ? 'warn' : 'ok');
+};
+/* — Photo de profil : compressée puis déposée dans coach-media/{uid}/ (bucket public, policy owner) — */
+window.ceUploadPhoto = async function(input) {
+  const f = input && input.files && input.files[0];
+  if (!f) return;
+  if (f.size > 5 * 1024 * 1024) { toast('Photo trop lourde (5 Mo max)', 'warn'); return; }
+  const uid = window.OXVApi.user.profile?.id;
+  try {
+    const blob = await pavCompressImage(f, 640);
+    const path = uid + '/profil-' + Date.now() + '.webp';
+    const up = await supabase.storage.from('coach-media').upload(path, blob, { contentType: 'image/webp' });
+    if (up.error) throw up.error;
+    const { data: pub } = supabase.storage.from('coach-media').getPublicUrl(path);
+    const { error } = await supabase.from('coach_profiles').update({ photo_url: pub.publicUrl, updated_at: new Date().toISOString() }).eq('coach_id', uid);
+    if (error) throw error;
+    toast('Photo mise à jour', 'ok');
+    window.loadCoachEspace();
+  } catch (e) { toast('Téléversement refusé', 'warn'); console.warn('[ceUploadPhoto]', e); }
+  input.value = '';
+};
+/* — Médias de la fiche (media jsonb : [{type:'youtube'|'image', url}]) — */
+function ceYoutubeId(u) {
+  const m = String(u || '').match(/(?:youtube\.com\/(?:watch\?v=|embed\/|shorts\/)|youtu\.be\/)([A-Za-z0-9_-]{6,20})/);
+  return m ? m[1] : null;
+}
+function ceRenderMedias(prof) {
+  const box = document.getElementById('ceMediaList');
+  if (!box) return;
+  const list = Array.isArray(prof.media) ? prof.media : [];
+  box.innerHTML = list.map((m, i) => {
+    const yt = m.type === 'youtube' ? ceYoutubeId(m.url) : null;
+    const thumb = yt ? 'https://i.ytimg.com/vi/' + yt + '/hqdefault.jpg' : m.url;
+    return '<div class="ce-media-item"><img src="' + escapeHtml(thumb) + '" alt="" loading="lazy">' +
+      '<span class="ce-media-tag">' + (yt ? 'Vidéo' : 'Photo') + '</span>' +
+      '<button class="ce-media-del" onclick="ceRemoveMedia(' + i + ')" aria-label="Retirer">✕</button></div>';
+  }).join('') || '<p style="font-family:var(--mono);font-size:10px;color:var(--cream-faint);grid-column:1/-1;margin:0;">Aucun média — ajoutez vos vidéos et photos.</p>';
+}
+window.ceAddMedia = async function() {
+  const inp = document.getElementById('ceMediaUrl');
+  const u = (inp?.value || '').trim();
+  if (!/^https:\/\//.test(u)) { toast('Lien https requis', 'warn'); return; }
+  const uid = window.OXVApi.user.profile?.id;
+  const list = Array.isArray(window.__ceProf?.media) ? window.__ceProf.media.slice() : [];
+  if (list.length >= 12) { toast('12 médias maximum', 'warn'); return; }
+  const yt = ceYoutubeId(u);
+  const isImg = /\.(jpe?g|png|webp|gif)(\?|$)/i.test(u);
+  if (!yt && !isImg) { toast('Lien YouTube ou image directe (jpg, png, webp) uniquement', 'warn'); return; }
+  list.push({ type: yt ? 'youtube' : 'image', url: u.slice(0, 400) });
+  const { error } = await supabase.from('coach_profiles').update({ media: list, updated_at: new Date().toISOString() }).eq('coach_id', uid);
+  if (!error) { if (inp) inp.value = ''; window.__ceProf.media = list; ceRenderMedias(window.__ceProf); toast('Média ajouté', 'ok'); }
+  else toast('Enregistrement refusé', 'warn');
+};
+window.ceRemoveMedia = async function(i) {
+  const uid = window.OXVApi.user.profile?.id;
+  const list = Array.isArray(window.__ceProf?.media) ? window.__ceProf.media.slice() : [];
+  list.splice(i, 1);
+  const { error } = await supabase.from('coach_profiles').update({ media: list, updated_at: new Date().toISOString() }).eq('coach_id', uid);
+  if (!error) { window.__ceProf.media = list; ceRenderMedias(window.__ceProf); }
+  else toast('Enregistrement refusé', 'warn');
+};
+/* — Publication de la fiche par le coach (la candidature a déjà été validée par OXV) — */
+window.ceTogglePublish = async function() {
+  const uid = window.OXVApi.user.profile?.id;
+  const cur = !!(window.__ceProf && window.__ceProf.is_published);
+  if (!cur && !(window.__ceProf && (window.__ceProf.headline || window.__ceProf.bio))) {
+    toast('Complétez au moins votre accroche avant de publier', 'warn'); return;
+  }
+  const { error } = await supabase.from('coach_profiles').update({ is_published: !cur, updated_at: new Date().toISOString() }).eq('coach_id', uid);
+  if (!error) { toast(cur ? 'Fiche dépubliée' : 'Fiche publiée — visible des pilotes', 'ok'); window.loadCoachEspace(); }
+  else toast('Action refusée', 'warn');
+};
+window.ceApercuFiche = function() {
+  const uid = window.OXVApi.user.profile?.id;
+  if (uid) showCoachFiche(uid);
+};
+/* — Tableau de bord factuel — */
+async function ceLoadStats(uid) {
+  const set = (id, v) => { const el = document.getElementById(id); if (el) el.textContent = v; };
+  try {
+    const { count: nb } = await supabase.from('coaching_bookings').select('id', { count: 'exact', head: true }).eq('coach_id', uid).eq('status', 'pending');
+    set('ceStatBookings', nb ?? 0);
+  } catch (e) { set('ceStatBookings', '—'); }
+  try {
+    const { count: ns } = await supabase.from('coach_availability').select('id', { count: 'exact', head: true }).eq('coach_id', uid).eq('status', 'open').gte('starts_at', new Date().toISOString());
+    set('ceStatSlots', ns ?? 0);
+  } catch (e) { set('ceStatSlots', '—'); }
+  try {
+    const { count: np } = await supabase.from('coach_pilots').select('id', { count: 'exact', head: true }).eq('coach_id', uid).eq('active', true);
+    set('ceStatPilots', np ?? 0);
+  } catch (e) { set('ceStatPilots', '—'); }
+  try {
+    const { data: revs } = await supabase.from('coach_reviews').select('rating').eq('coach_id', uid);
+    const rs = (revs || []).map(r => Number(r.rating)).filter(isFinite);
+    set('ceStatRating', rs.length ? (rs.reduce((a, b) => a + b, 0) / rs.length).toFixed(1) + '/5' : '—');
+  } catch (e) { set('ceStatRating', '—'); }
+}
+/* — Fiche coach PUBLIQUE (modale) : l'outil de sélection du coach par les pilotes.
+     RLS : fiche publiée lisible par tous ; le coach voit la sienne même en brouillon (aperçu). — */
+window.showCoachFiche = async function(coachId) {
+  const modal = document.getElementById('coachFicheModal');
+  if (!modal) return;
+  modal.innerHTML = '<div class="coach-fiche-card"><p class="coach-fiche-txt">Chargement…</p></div>';
+  modal.classList.add('open');
+  try {
+    const { data: p } = await supabase.from('coach_profiles').select('*').eq('coach_id', coachId).maybeSingle();
+    if (!p) { modal.innerHTML = '<div class="coach-fiche-card"><button class="coach-fiche-close" onclick="document.getElementById(\'coachFicheModal\').classList.remove(\'open\')">✕</button><p class="coach-fiche-txt">Fiche indisponible.</p></div>'; return; }
+    let slots = [];
+    try {
+      const { data: s } = await supabase.from('coach_availability').select('id, starts_at, ends_at').eq('coach_id', coachId).eq('status', 'open').gte('starts_at', new Date().toISOString()).order('starts_at').limit(6);
+      slots = s || [];
+    } catch (e) {}
+    let rating = null, nbAvis = 0;
+    try {
+      const { data: revs } = await supabase.from('coach_reviews').select('rating').eq('coach_id', coachId);
+      const rs = (revs || []).map(r => Number(r.rating)).filter(isFinite);
+      nbAvis = rs.length;
+      if (rs.length) rating = (rs.reduce((a, b) => a + b, 0) / rs.length).toFixed(1);
+    } catch (e) {}
+    const specs = Array.isArray(p.specialties) ? p.specialties : [];
+    const medias = Array.isArray(p.media) ? p.media : [];
+    const liens = [
+      p.instagram_url ? '<a class="btn btn-sm" href="' + escapeHtml(p.instagram_url) + '" target="_blank" rel="noopener"><span>Instagram</span></a>' : '',
+      p.youtube_url ? '<a class="btn btn-sm" href="' + escapeHtml(p.youtube_url) + '" target="_blank" rel="noopener"><span>YouTube</span></a>' : '',
+      p.website_url ? '<a class="btn btn-sm" href="' + escapeHtml(p.website_url) + '" target="_blank" rel="noopener"><span>Site web</span></a>' : ''
+    ].filter(Boolean).join('');
+    const tarifs = [
+      p.session_price_eur ? Number(p.session_price_eur).toLocaleString('fr-FR') + ' € / session' : '',
+      p.season_price_eur ? Number(p.season_price_eur).toLocaleString('fr-FR') + ' € / saison' : ''
+    ].filter(Boolean).join(' · ');
+    modal.innerHTML = '<div class="coach-fiche-card">' +
+      '<button class="coach-fiche-close" onclick="document.getElementById(\'coachFicheModal\').classList.remove(\'open\')" aria-label="Fermer">✕</button>' +
+      (!p.is_published ? '<p style="font-family:var(--mono);font-size:10px;letter-spacing:0.12em;text-transform:uppercase;color:var(--gold-data);margin:0 0 14px;">Aperçu — fiche non publiée</p>' : '') +
+      '<div class="coach-fiche-head">' +
+      (p.photo_url ? '<img src="' + escapeHtml(p.photo_url) + '" alt="">' : '') +
+      '<div style="flex:1;min-width:200px;"><div class="coach-fiche-name">' + escapeHtml(p.headline || 'Coach OXV') + '</div>' +
+      (rating ? '<div class="coach-fiche-headline">' + rating + '/5 · ' + nbAvis + ' avis</div>' : '') +
+      (specs.length ? '<div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:10px;">' + specs.map(s => '<span style="font-family:var(--mono);font-size:9px;letter-spacing:0.1em;text-transform:uppercase;color:var(--cream-mute);border:1px solid var(--cream-line);padding:4px 8px;border-radius:2px;">' + escapeHtml(s) + '</span>').join('') + '</div>' : '') +
+      '</div>' +
+      (tarifs ? '<div style="font-family:var(--mono);font-size:13px;color:var(--gold-data);text-align:right;">' + tarifs + '</div>' : '') +
+      '</div>' +
+      (p.bio ? '<div class="coach-fiche-sec">Présentation</div><p class="coach-fiche-txt">' + escapeHtml(p.bio) + '</p>' : '') +
+      (p.palmares ? '<div class="coach-fiche-sec">Histoire &amp; palmarès</div><p class="coach-fiche-txt">' + escapeHtml(p.palmares) + '</p>' : '') +
+      (medias.length ? '<div class="coach-fiche-sec">Médias</div><div class="coach-fiche-medias">' + medias.map(m => {
+        const yt = m.type === 'youtube' ? ceYoutubeId(m.url) : null;
+        if (yt) return '<iframe src="https://www.youtube-nocookie.com/embed/' + yt + '" title="Vidéo du coach" loading="lazy" allowfullscreen frameborder="0"></iframe>';
+        return '<img src="' + escapeHtml(m.url) + '" alt="" loading="lazy">';
+      }).join('') + '</div>' : '') +
+      (slots.length ? '<div class="coach-fiche-sec">Créneaux · journées OXV</div>' + slots.map(s =>
+        '<div style="display:flex;justify-content:space-between;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid var(--bento-border);">' +
+        '<span style="font-family:var(--mono);font-size:12px;color:var(--cream);">' + new Date(s.starts_at).toLocaleDateString('fr-FR', { weekday: 'short', day: 'numeric', month: 'short' }) + ' · ' + new Date(s.starts_at).toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' }) + '–' + new Date(s.ends_at).toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' }) + '</span>' +
+        (window.OXVApi?.user?.isLoggedIn
+          ? '<button class="btn btn-sm" onclick="bookCoachSlot(\'' + escapeHtml(coachId) + '\',\'' + escapeHtml(s.id) + '\',\'' + escapeHtml(s.starts_at) + '\')"><span>Demander</span></button>'
+          : '<button class="btn btn-sm" onclick="document.getElementById(\'coachFicheModal\').classList.remove(\'open\');goTo(\'login\')"><span>Se connecter</span></button>') +
+        '</div>').join('') : '') +
+      (liens ? '<div class="coach-fiche-sec">Liens</div><div style="display:flex;gap:10px;flex-wrap:wrap;">' + liens + '</div>' : '') +
+      '<p style="font-family:var(--mono);font-size:9px;color:var(--cream-faint);margin:22px 0 0;letter-spacing:0.06em;">Le coach exerce sous sa propre responsabilité. Règlement directement auprès du coach — jamais via OXV.</p>' +
+      '</div>';
+  } catch (e) {
+    console.warn('[showCoachFiche]', e);
+    modal.classList.remove('open');
+  }
 };
 async function ceLoadNextSessions() {
   const el = document.getElementById('ceNextSessions');
@@ -29532,7 +29818,7 @@ window.loadCoachVitrine = async function() {
         p.youtube_url ? `<a href="${escapeHtml(p.youtube_url)}" target="_blank" rel="noopener" style="color:var(--cream-mute);font-family:var(--mono);font-size:10px;">YouTube</a>` : '',
         p.website_url ? `<a href="${escapeHtml(p.website_url)}" target="_blank" rel="noopener" style="color:var(--cream-mute);font-family:var(--mono);font-size:10px;">Site</a>` : ''
       ].filter(Boolean).join(' · ');
-      return `<div class="bento" style="padding:24px;">
+      return `<div class="bento" style="padding:24px;cursor:pointer;" onclick="if(!event.target.closest('button,a'))showCoachFiche('${p.coach_id}')" title="Voir la fiche complète">
         <div style="display:flex;align-items:center;gap:14px;margin-bottom:12px;">
           ${p.photo_url ? `<img src="${escapeHtml(p.photo_url)}" alt="" loading="lazy" style="width:52px;height:52px;border-radius:50%;object-fit:cover;border:1px solid var(--bento-border);" />` : ''}
           <div>
