@@ -16849,6 +16849,7 @@ body.pav-tv .nav, body.pav-tv footer, body.pav-tv .cookie, body.pav-tv .founding
         <button class="account-nav-item active" onclick="goToAccount('compte-vehicules')"><span>Mes véhicules</span><span class="arr">→</span></button>
         <button class="account-nav-item" onclick="goToAccount('compte-documents')"><span>Mes documents</span><span class="arr">→</span></button>
         <button class="account-nav-item" onclick="goToAccount('compte-sessions')"><span>Mes sessions</span><span class="arr">→</span></button>
+        <button class="account-nav-item" onclick="goToAccount('compte-checkup')"><span>Check-up</span><span class="arr">→</span></button>
         <button class="account-nav-item" onclick="goToAccount('compte-medias')"><span>Mes médias</span><span class="arr">→</span></button>
         <button class="account-nav-item" onclick="goToAccount('compte-progression')"><span>Ma progression</span><span class="arr">→</span></button>
         <button class="account-nav-item" onclick="goToAccount('compte-heritage')"><span>Mon Heritage</span><span class="arr">→</span></button>
@@ -16919,6 +16920,7 @@ body.pav-tv .nav, body.pav-tv footer, body.pav-tv .cookie, body.pav-tv .founding
         <button class="account-nav-item" onclick="goToAccount('compte-vehicules')"><span>Mes véhicules</span><span class="arr">→</span></button>
         <button class="account-nav-item active" onclick="goToAccount('compte-documents')"><span>Mes documents</span><span class="arr">→</span></button>
         <button class="account-nav-item" onclick="goToAccount('compte-sessions')"><span>Mes sessions</span><span class="arr">→</span></button>
+        <button class="account-nav-item" onclick="goToAccount('compte-checkup')"><span>Check-up</span><span class="arr">→</span></button>
         <button class="account-nav-item" onclick="goToAccount('compte-medias')"><span>Mes médias</span><span class="arr">→</span></button>
         <button class="account-nav-item" onclick="goToAccount('compte-progression')"><span>Ma progression</span><span class="arr">→</span></button>
         <button class="account-nav-item" onclick="goToAccount('compte-heritage')"><span>Mon Heritage</span><span class="arr">→</span></button>
@@ -16975,6 +16977,7 @@ body.pav-tv .nav, body.pav-tv footer, body.pav-tv .cookie, body.pav-tv .founding
         <button class="account-nav-item" onclick="goToAccount('compte-vehicules')"><span>Mes véhicules</span><span class="arr">→</span></button>
         <button class="account-nav-item" onclick="goToAccount('compte-documents')"><span>Mes documents</span><span class="arr">→</span></button>
         <button class="account-nav-item active" onclick="goToAccount('compte-sessions')"><span>Mes sessions</span><span class="arr">→</span></button>
+        <button class="account-nav-item" onclick="goToAccount('compte-checkup')"><span>Check-up</span><span class="arr">→</span></button>
         <button class="account-nav-item" onclick="goToAccount('compte-medias')"><span>Mes médias</span><span class="arr">→</span></button>
         <button class="account-nav-item" onclick="goToAccount('compte-progression')"><span>Ma progression</span><span class="arr">→</span></button>
         <button class="account-nav-item" onclick="goToAccount('compte-heritage')"><span>Mon Heritage</span><span class="arr">→</span></button>
@@ -17033,6 +17036,51 @@ body.pav-tv .nav, body.pav-tv footer, body.pav-tv .cookie, body.pav-tv .founding
 <!-- /compte-sessions -->
 
 <!-- ============ COMPTE — MES MÉDIAS ============ -->
+<!-- ============ COMPTE : CHECK-UP (détail d'éligibilité item par item — fondateur 2026-07-19) ============ -->
+<div class="page" id="page-compte-checkup">
+  <div class="account-layout">
+    <aside class="account-sidebar">
+      <div class="account-sidebar-eyebrow">— Espace pilote</div>
+      <div class="account-sidebar-name acct-name-sync">Pilote <em>OXV</em></div>
+      <div class="account-sidebar-email acct-email-sync">—</div>
+      <div class="account-sidebar-status acct-kyc-sync">
+        <span class="dot pending"></span>
+        <span class="text"><strong>Dossier en cours</strong><br/>Documents à transmettre</span>
+      </div>
+      <nav class="account-nav">
+        <button class="account-nav-item" onclick="goToAccount('compte')"><span>Tableau de bord</span><span class="arr">→</span></button>
+        <button class="account-nav-item" onclick="goToAccount('compte-profil')"><span>Mon profil</span><span class="arr">→</span></button>
+        <button class="account-nav-item" onclick="goToAccount('compte-vehicules')"><span>Mes véhicules</span><span class="arr">→</span></button>
+        <button class="account-nav-item" onclick="goToAccount('compte-documents')"><span>Mes documents</span><span class="arr">→</span></button>
+        <button class="account-nav-item" onclick="goToAccount('compte-sessions')"><span>Mes sessions</span><span class="arr">→</span></button>
+        <button class="account-nav-item active" onclick="goToAccount('compte-checkup')"><span>Check-up</span><span class="arr">→</span></button>
+        <button class="account-nav-item" onclick="goToAccount('compte-medias')"><span>Mes médias</span><span class="arr">→</span></button>
+        <button class="account-nav-item" onclick="goToAccount('compte-progression')"><span>Ma progression</span><span class="arr">→</span></button>
+        <button class="account-nav-item" onclick="goToAccount('compte-heritage')"><span>Mon Heritage</span><span class="arr">→</span></button>
+        <button class="account-nav-item" onclick="goToAccount('compte-paiements')"><span>Mes paiements</span><span class="arr">→</span></button>
+        <div class="account-nav-divider"></div>
+        <button class="account-nav-item" onclick="goToAccount('compte-preferences')"><span>Préférences</span><span class="arr">→</span></button>
+        <button class="account-nav-item" onclick="logoutUser()"><span>Se déconnecter</span><span class="arr">→</span></button>
+      </nav>
+    </aside>
+    <main class="account-main">
+      <div class="account-header">
+        <div class="account-header-eyebrow">N° ⌬.C · Check-up</div>
+        <h1 class="account-header-title">Mon <em>check-up</em>.</h1>
+        <p class="account-header-sub">Le détail, point par point, de ce qui conditionne votre accès piste — certains points sont de votre côté, d'autres sont validés par OXV (jusqu'au contrôle sur site le jour J).</p>
+      </div>
+      <div id="checkupLoading" class="account-loading">— Chargement du check-up…</div>
+      <div id="checkupEmpty" class="account-empty" style="display:none;">
+        <div class="account-empty-icon">○</div>
+        <p class="account-empty-text">Aucune session à venir — le check-up s'active dès votre première réservation.</p>
+        <button class="btn btn-primary" style="margin-top:14px;" onclick="goTo('booking')"><span>Réserver une session →</span></button>
+      </div>
+      <div id="checkupList" style="display:none;"></div>
+    </main>
+  </div>
+</div>
+<!-- /compte-checkup -->
+
 <div class="page" id="page-compte-medias">
   <div class="account-layout">
     <aside class="account-sidebar">
@@ -17040,6 +17088,7 @@ body.pav-tv .nav, body.pav-tv footer, body.pav-tv .cookie, body.pav-tv .founding
       <nav class="account-nav">
         <button class="account-nav-item" onclick="goToAccount('compte')"><span>Tableau de bord</span><span class="arr">→</span></button>
         <button class="account-nav-item" onclick="goToAccount('compte-sessions')"><span>Mes sessions</span><span class="arr">→</span></button>
+        <button class="account-nav-item" onclick="goToAccount('compte-checkup')"><span>Check-up</span><span class="arr">→</span></button>
         <button class="account-nav-item active" onclick="goToAccount('compte-medias')"><span>Mes médias</span><span class="arr">→</span></button>
         <button class="account-nav-item" onclick="goToAccount('compte-progression')"><span>Ma progression</span><span class="arr">→</span></button>
         <button class="account-nav-item" onclick="goToAccount('compte-paiements')"><span>Mes paiements</span><span class="arr">→</span></button>
@@ -17087,6 +17136,7 @@ body.pav-tv .nav, body.pav-tv footer, body.pav-tv .cookie, body.pav-tv .founding
         <button class="account-nav-item" onclick="goToAccount('compte-vehicules')"><span>Mes véhicules</span><span class="arr">→</span></button>
         <button class="account-nav-item" onclick="goToAccount('compte-documents')"><span>Mes documents</span><span class="arr">→</span></button>
         <button class="account-nav-item" onclick="goToAccount('compte-sessions')"><span>Mes sessions</span><span class="arr">→</span></button>
+        <button class="account-nav-item" onclick="goToAccount('compte-checkup')"><span>Check-up</span><span class="arr">→</span></button>
         <button class="account-nav-item" onclick="goToAccount('compte-medias')"><span>Mes médias</span><span class="arr">→</span></button>
         <button class="account-nav-item" onclick="goToAccount('compte-progression')"><span>Ma progression</span><span class="arr">→</span></button>
         <button class="account-nav-item active" onclick="goToAccount('compte-heritage')"><span>Mon Heritage</span><span class="arr">→</span></button>
@@ -17174,6 +17224,7 @@ body.pav-tv .nav, body.pav-tv footer, body.pav-tv .cookie, body.pav-tv .founding
         <button class="account-nav-item" onclick="goToAccount('compte-vehicules')"><span>Mes véhicules</span><span class="arr">→</span></button>
         <button class="account-nav-item" onclick="goToAccount('compte-documents')"><span>Mes documents</span><span class="arr">→</span></button>
         <button class="account-nav-item" onclick="goToAccount('compte-sessions')"><span>Mes sessions</span><span class="arr">→</span></button>
+        <button class="account-nav-item" onclick="goToAccount('compte-checkup')"><span>Check-up</span><span class="arr">→</span></button>
         <button class="account-nav-item" onclick="goToAccount('compte-medias')"><span>Mes médias</span><span class="arr">→</span></button>
         <button class="account-nav-item" onclick="goToAccount('compte-progression')"><span>Ma progression</span><span class="arr">→</span></button>
         <button class="account-nav-item" onclick="goToAccount('compte-heritage')"><span>Mon Heritage</span><span class="arr">→</span></button>
@@ -17322,6 +17373,7 @@ body.pav-tv .nav, body.pav-tv footer, body.pav-tv .cookie, body.pav-tv .founding
         <button class="account-nav-item" onclick="goToAccount('compte-vehicules')"><span>Mes véhicules</span><span class="arr">→</span></button>
         <button class="account-nav-item" onclick="goToAccount('compte-documents')"><span>Mes documents</span><span class="arr">→</span></button>
         <button class="account-nav-item" onclick="goToAccount('compte-sessions')"><span>Mes sessions</span><span class="arr">→</span></button>
+        <button class="account-nav-item" onclick="goToAccount('compte-checkup')"><span>Check-up</span><span class="arr">→</span></button>
         <button class="account-nav-item" onclick="goToAccount('compte-medias')"><span>Mes médias</span><span class="arr">→</span></button>
         <button class="account-nav-item active" onclick="goToAccount('compte-progression')"><span>Ma progression</span><span class="arr">→</span></button>
         <button class="account-nav-item" onclick="goToAccount('compte-heritage')"><span>Mon Heritage</span><span class="arr">→</span></button>
@@ -17652,6 +17704,7 @@ body.pav-tv .nav, body.pav-tv footer, body.pav-tv .cookie, body.pav-tv .founding
         <button class="account-nav-item" onclick="goToAccount('compte-vehicules')"><span>Mes véhicules</span><span class="arr">→</span></button>
         <button class="account-nav-item" onclick="goToAccount('compte-documents')"><span>Mes documents</span><span class="arr">→</span></button>
         <button class="account-nav-item" onclick="goToAccount('compte-sessions')"><span>Mes sessions</span><span class="arr">→</span></button>
+        <button class="account-nav-item" onclick="goToAccount('compte-checkup')"><span>Check-up</span><span class="arr">→</span></button>
         <button class="account-nav-item" onclick="goToAccount('compte-medias')"><span>Mes médias</span><span class="arr">→</span></button>
         <button class="account-nav-item" onclick="goToAccount('compte-progression')"><span>Ma progression</span><span class="arr">→</span></button>
         <button class="account-nav-item" onclick="goToAccount('compte-heritage')"><span>Mon Heritage</span><span class="arr">→</span></button>
@@ -21660,7 +21713,7 @@ body.pav-tv .nav, body.pav-tv footer, body.pav-tv .cookie, body.pav-tv .founding
         <div class="bento" style="padding:22px 26px;margin-bottom:16px;display:flex;align-items:center;gap:18px;flex-wrap:wrap;border-color:rgba(200,16,46,0.25);">
           <div style="flex:1;min-width:240px;">
             <div style="font-family:var(--mono);font-size:10px;letter-spacing:0.22em;text-transform:uppercase;color:var(--red-oxv);margin-bottom:8px;">Écran de session · jour J</div>
-            <p style="font-family:var(--sans);font-size:13px;line-height:1.6;color:var(--cream-mute);margin:0;">Branchez votre ordinateur en HDMI sur l'écran du stand, ouvrez la TV coach en plein écran, puis pilotez-la depuis la télécommande sur votre tablette ou téléphone : suivi live, restitution post-session, multi-suivi.</p>
+            <p style="font-family:var(--sans);font-size:13px;line-height:1.7;color:var(--cream-mute);margin:0;"><strong style="color:var(--cream);">1.</strong> Branchez l'écran du stand en HDMI et ouvrez <strong style="color:var(--cream);">Ma TV de stand</strong> en plein écran (touche F11).<br/><strong style="color:var(--cream);">2.</strong> Sur votre téléphone ou tablette, ouvrez la <strong style="color:var(--cream);">Télécommande</strong> : choisissez le pilote à suivre, lancez une restitution ou un multi-suivi — la TV obéit instantanément.</p>
           </div>
           <div style="display:flex;gap:10px;flex-wrap:wrap;">
             <button class="btn btn-sm btn-primary" onclick="goTo('pavillon-coach')"><span>Ouvrir ma TV de stand →</span></button>
@@ -22453,7 +22506,7 @@ window.goTo = function(page, opts) {
   // Plus de création de compte libre : la voie d'entrée est la candidature.
   if (page === 'signup') page = 'demande';
   // Pages protégées (pilote) : nécessitent une connexion
-  const protectedPages = ['compte', 'compte-profil', 'compte-vehicules', 'compte-documents', 'compte-sessions', 'compte-progression', 'compte-heritage', 'compte-paiements', 'compte-preferences'];
+  const protectedPages = ['compte', 'compte-profil', 'compte-vehicules', 'compte-documents', 'compte-sessions', 'compte-checkup', 'compte-progression', 'compte-heritage', 'compte-paiements', 'compte-preferences'];
   // Pages admin : nécessitent une connexion + role=admin
   const adminPages = ['admin', 'admin-pilotes', 'admin-pilote-detail', 'admin-sessions', 'admin-paiements', 'admin-inbox', 'admin-medias', 'admin-articles', 'admin-emails', 'admin-stats', 'admin-securite', 'admin-demandes', 'admin-validations'];
   const isProtected = protectedPages.includes(page) || adminPages.includes(page);
@@ -22493,7 +22546,7 @@ window.goTo = function(page, opts) {
   }, 50);
 
   // Charge les données pour les pages compte
-  const accountPages = ['compte', 'compte-profil', 'compte-vehicules', 'compte-documents', 'compte-sessions', 'compte-progression', 'compte-heritage', 'compte-paiements', 'compte-preferences'];
+  const accountPages = ['compte', 'compte-profil', 'compte-vehicules', 'compte-documents', 'compte-sessions', 'compte-checkup', 'compte-progression', 'compte-heritage', 'compte-paiements', 'compte-preferences'];
   if (accountPages.includes(page)) {
     // Affiche instantanément le tile admin si le profil est déjà en cache
     if (window.OXVApi.user.dbProfile?.role === 'admin') {
@@ -22521,6 +22574,9 @@ window.goTo = function(page, opts) {
   }
   if (page === 'compte-medias') {
     setTimeout(() => loadPilotMedia('mediasPageBlock', 'mediasPage'), 150);
+  }
+  if (page === 'compte-checkup') {
+    setTimeout(() => { if (typeof window.loadCheckup === 'function') loadCheckup(); }, 150);
   }
   if (page === 'compte-heritage') {
     setTimeout(() => loadHeritage(), 150);
@@ -22631,7 +22687,7 @@ const OXV_OG_IMAGE = OXV_BASE_URL + '/brand/og-cover.png';
 // Pages non indexables (espace pilote, admin, authentification)
 const OXV_NOINDEX_PAGES = ['login', 'signup', 'forgot-password', 'reset-password', 'verify-email',
   'compte', 'compte-profil', 'compte-vehicules', 'compte-documents', 'compte-sessions',
-  'compte-medias', 'compte-progression', 'compte-heritage', 'compte-paiements', 'compte-preferences',
+  'compte-checkup', 'compte-medias', 'compte-progression', 'compte-heritage', 'compte-paiements', 'compte-preferences',
   'admin', 'admin-pilotes', 'admin-pilote-detail', 'admin-sessions', 'admin-session-detail',
   'admin-paiements', 'admin-medias', 'admin-articles', 'admin-emails', 'admin-stats', 'admin-securite', 'admin-demandes', 'admin-validations', 'demande', 'partenaire-espace', 'coach-espace', 'partenaire-connexion',
   'pavillon-accueil', 'pavillon-coach', 'pavillon-admin', 'pavillon-controle', 'pavillon-regie'];
@@ -23946,6 +24002,16 @@ async function bkLoadDatesForOffer() {
   bkState.regsBySession = regsBySession;
   bkState.currentMonthFilter = 'all';
 
+  // Coach visible DÈS le choix de la date (fondateur 2026-07-19) :
+  // journées portant au moins un créneau coach validé → badge sur la carte.
+  bkState.coachDates = new Set();
+  try {
+    const dMin = filteredSessions[0].date, dMax = filteredSessions[filteredSessions.length - 1].date;
+    const { data: cs } = await supabase.from('coach_availability').select('starts_at').eq('status', 'open')
+      .gte('starts_at', dMin + 'T00:00:00').lte('starts_at', dMax + 'T23:59:59');
+    (cs || []).forEach(c => bkState.coachDates.add(String(c.starts_at).slice(0, 10)));
+  } catch (e) {}
+
   // Pré-calcule les capacités restantes pour chaque session
   filteredSessions.forEach(s => {
     const r = regsBySession[s.id] || { access: 0, signature: 0, promotion: 0, heritage: 0, total: 0 };
@@ -24052,6 +24118,7 @@ function bkRenderSessions(monthKey) {
         <span class="bk-date-day ${dayClass}">${dayLabel} · ${isHalfDay ? 'Demi-journée' : 'Journée complète'}</span>
         <span class="bk-date-main">${dateLabel}</span>
         <span class="bk-date-meta"><strong>${placesLabel}</strong> · ${formatLabel.split(' · ')[1]}</span>
+        ${bkState.coachDates && bkState.coachDates.has(s.date) ? '<span class="cal-card-coach">Coach disponible</span>' : ''}
       </button>
     `;
   }).join('');
@@ -28221,6 +28288,75 @@ window.bkRenderCoachUpsell = async function(dateISO) {
   </div>`;
 };
 /* — Mes sessions : rappel coach par journée à venir (statut ou proposition) — */
+/* — Page Check-up : le détail item par item (fondateur 2026-07-19 : le bandeau
+     disait « incomplet » alors que les documents étaient complets — le pilote
+     doit VOIR quels points restent, et qui les valide). — */
+window.loadCheckup = async function() {
+  if (!window.OXVApi?.user?.isLoggedIn) return;
+  const userId = window.OXVApi.user.profile?.id;
+  const loading = document.getElementById('checkupLoading');
+  const empty = document.getElementById('checkupEmpty');
+  const list = document.getElementById('checkupList');
+  if (!list) return;
+  if (loading) loading.style.display = 'block';
+  if (empty) empty.style.display = 'none';
+  list.style.display = 'none';
+  try {
+    const today = new Date().toISOString().split('T')[0];
+    const { data: regs } = await supabase.from('registrations')
+      .select('id, status, sessions (id, date, format)')
+      .eq('user_id', userId).neq('status', 'cancelled');
+    const upcoming = (regs || []).filter(r => r.sessions && r.sessions.date >= today)
+      .sort((a, b) => a.sessions.date < b.sessions.date ? -1 : 1);
+    if (loading) loading.style.display = 'none';
+    if (!upcoming.length) { if (empty) empty.style.display = 'block'; return; }
+    const ids = upcoming.map(r => r.id);
+    const [{ data: aggs }, { data: items }] = await Promise.all([
+      supabase.from('registration_eligibility').select('*').in('registration_id', ids),
+      supabase.from('eligibility_items').select('registration_id, item_key, status, note').in('registration_id', ids)
+    ]);
+    const aggBy = {}; (aggs || []).forEach(a => aggBy[a.registration_id] = a);
+    const itemsBy = {}; (items || []).forEach(i => { (itemsBy[i.registration_id] = itemsBy[i.registration_id] || []).push(i); });
+    const ICO = { ok: ['✓', 'var(--green-perf)'], validated: ['✓', 'var(--green-perf)'], pending: ['●', 'var(--gold-data)'], refused: ['✗', 'var(--red)'] };
+    list.innerHTML = upcoming.map(reg => {
+      const a = aggBy[reg.id];
+      const its = (itemsBy[reg.id] || []);
+      const dateLbl = new Date(reg.sessions.date + 'T12:00:00').toLocaleDateString('fr-FR', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' });
+      const verdict = a ? (a.eligibility_status === 'GO'
+        ? '<span class="tag-inline green">GO — prêt à rouler</span>'
+        : a.eligibility_status === 'NO_GO'
+        ? '<span class="tag-inline" style="color:var(--red);border-color:var(--red);">NO-GO — un point est refusé</span>'
+        : '<span class="tag-inline gold">En attente — ' + a.ok_count + '/' + a.total_count + '</span>') : '';
+      const rows = its.map(i => {
+        const [ic, col] = ICO[i.status] || ICO.pending;
+        return `<div style="display:flex;align-items:baseline;gap:12px;padding:8px 0;border-top:1px solid var(--bento-border);">
+          <span style="font-family:var(--mono);font-size:14px;color:${col};width:18px;text-align:center;">${ic}</span>
+          <span style="flex:1;font-family:var(--sans);font-size:13.5px;color:var(--cream);">${escapeHtml(ELIG_LABELS[i.item_key] || i.item_key)}</span>
+          <span style="font-family:var(--mono);font-size:10px;letter-spacing:0.08em;text-transform:uppercase;color:${col};">${i.status === 'ok' || i.status === 'validated' ? 'Validé' : i.status === 'refused' ? 'Refusé' : 'En attente'}</span>
+          ${i.note ? `<div style="width:100%;font-size:12px;color:var(--cream-mute);margin-left:30px;">${escapeHtml(String(i.note).slice(0, 160))}</div>` : ''}
+        </div>`;
+      }).join('') || '<p style="font-family:var(--sans);font-size:13px;color:var(--cream-mute);">Check-up en préparation pour cette session.</p>';
+      return `<div class="bento" style="padding:24px;margin-bottom:16px;">
+        <div style="display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:10px;">
+          <div style="font-family:var(--mono);font-size:11px;letter-spacing:0.16em;text-transform:uppercase;color:var(--cream-mute);">Session du ${escapeHtml(dateLbl)}</div>
+          ${verdict}
+        </div>
+        ${rows}
+        <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:14px;">
+          <button class="btn btn-sm" onclick="goToAccount('compte-documents')"><span>Mes documents</span></button>
+          <button class="btn btn-sm" onclick="goToAccount('compte-vehicules')"><span>Mes véhicules</span></button>
+        </div>
+        <p style="font-family:var(--mono);font-size:9px;color:var(--cream-faint);margin:12px 0 0;letter-spacing:0.05em;">Les points « en attente » sont vérifiés par OXV — au plus tard lors du contrôle sur site le jour J (scan de votre QR profil).</p>
+      </div>`;
+    }).join('');
+    list.style.display = 'block';
+  } catch (e) {
+    console.warn('[Check-up]', e);
+    if (loading) loading.style.display = 'none';
+    if (empty) empty.style.display = 'block';
+  }
+};
+
 async function renderCoachForSessions(upcoming, container) {
   if (!upcoming || !upcoming.length || !container) return;
   try {
@@ -29606,19 +29742,33 @@ async function ceLoadNextSessions() {
     // MÊME filtre que le calendrier public de réservation (loadPublicCalendar) :
     // futures, non annulées, non archivées, non privatisées — les deux calendriers
     // sont identiques (constat fondateur 2026-07-19 : ils divergeaient).
-    const { data } = await supabase.from('sessions_public').select('date, format, circuit_name')
+    const { data } = await supabase.from('sessions_public').select('date, format, circuit_name, start_time, end_time')
       .gte('date', today).not('status', 'in', '(cancelled,archived)').eq('is_private', false)
       .order('date').limit(10);
     const sel = document.getElementById('ceSlotDate');
     if (data && data.length) {
       el.textContent = 'Vos créneaux sont adossés aux journées OXV — choisissez la journée :';
       // Le choix est CONTRAINT aux journées OXV réelles ; chaque journée porte SON circuit
-      // (multi-circuit, fondateur 2026-07-19) — repris sur le créneau, la TV et la télécommande.
-      if (sel) sel.innerHTML = '<option value="">Journée OXV…</option>' + data.map(s =>
-        '<option value="' + escapeHtml(s.date) + '" data-circuit="' + escapeHtml(s.circuit_name || '') + '">' +
-        escapeHtml(new Date(s.date + 'T12:00:00').toLocaleDateString('fr-FR', { weekday: 'long', day: 'numeric', month: 'long' })) +
-        (s.format ? ' · ' + escapeHtml(String(s.format)) : '') +
-        (s.circuit_name ? ' · ' + escapeHtml(s.circuit_name) : '') + '</option>').join('');
+      // ET SA PLAGE HORAIRE (fondateur 2026-07-19) — le créneau doit rester dedans.
+      if (sel) {
+        sel.innerHTML = '<option value="">Journée OXV…</option>' + data.map(s => {
+          const st = s.start_time ? String(s.start_time).slice(0, 5) : '';
+          const en = s.end_time ? String(s.end_time).slice(0, 5) : '';
+          return '<option value="' + escapeHtml(s.date) + '" data-circuit="' + escapeHtml(s.circuit_name || '') + '" data-start="' + escapeHtml(st) + '" data-end="' + escapeHtml(en) + '">' +
+          escapeHtml(new Date(s.date + 'T12:00:00').toLocaleDateString('fr-FR', { weekday: 'long', day: 'numeric', month: 'long' })) +
+          (s.format ? ' · ' + escapeHtml(String(s.format)) : '') +
+          (st && en ? ' · ' + st + '–' + en : '') +
+          (s.circuit_name ? ' · ' + escapeHtml(s.circuit_name) : '') + '</option>';
+        }).join('');
+        // À la sélection : les heures du créneau sont bornées à la plage de la journée
+        sel.onchange = function() {
+          const o = sel.selectedOptions[0];
+          const h1 = document.getElementById('ceSlotStart'), h2 = document.getElementById('ceSlotEnd');
+          if (!o || !o.dataset.start) return;
+          if (h1) { h1.min = o.dataset.start; h1.max = o.dataset.end; h1.value = o.dataset.start; }
+          if (h2) { h2.min = o.dataset.start; h2.max = o.dataset.end; h2.value = o.dataset.end; }
+        };
+      }
     } else {
       el.textContent = 'Aucune journée OXV publiée au calendrier — la proposition de créneaux ouvrira avec la saison.';
       if (sel) sel.innerHTML = '<option value="">Calendrier en préparation</option>';
@@ -29647,8 +29797,15 @@ window.ceCreateSlot = async function() {
   const h1 = document.getElementById('ceSlotStart').value, h2 = document.getElementById('ceSlotEnd').value;
   const cap = parseInt(document.getElementById('ceSlotCap').value, 10) || 1;
   if (!d || !h1 || !h2 || h2 <= h1) { toast('Journée OXV et horaires requis', 'warn'); return; }
+  // Le créneau reste DANS la plage horaire de la journée OXV (fondateur 2026-07-19).
+  const opt = sel.selectedOptions[0];
+  const winS = opt?.dataset?.start || '', winE = opt?.dataset?.end || '';
+  if (winS && winE && (h1 < winS || h2 > winE)) {
+    toast(`Le créneau doit rester dans la plage de la journée OXV (${winS}–${winE})`, 'warn');
+    return;
+  }
   // Le créneau porte le circuit de SA journée (multi-circuit, fondateur 2026-07-19).
-  const circuitJour = (sel.selectedOptions[0]?.dataset?.circuit || '').trim() || 'Circuit de Haute Saintonge';
+  const circuitJour = (opt?.dataset?.circuit || '').trim() || 'Circuit de Haute Saintonge';
   // Convention : créneau créé 'closed' = proposé, en attente de validation OXV (l'admin passe à 'open').
   const { error } = await supabase.from('coach_availability').insert({
     coach_id: uid, circuit_name: circuitJour,
@@ -35152,7 +35309,9 @@ const PAV_HS_ID = '0670af3f-ef84-4843-8a55-0c8bc3dcdca9'; // Haute Saintonge —
 // app_segment_analyses.kind → hex pilier (vocabulaire gelé §2.3 CLAUDE.md).
 const PAV_QDI_COLORS = { trajectoire: '#60A5FA', fluidite: '#FFB703', freinage: '#E63946', acceleration: '#4ADE80', regularite: '#C084FC' };
 const PAV_AXES = [ { k: 'cap', l: 'Cap' }, { k: 'trajectoire', l: 'Trajectoire' }, { k: 'visee', l: 'Visée' }, { k: 'plongee', l: 'Plongée' }, { k: 'anticipation', l: 'Anticipation' } ]; // ordre FIGÉ
-const PAV_INSIGNE = '<svg class="pav-insigne" viewBox="0 0 26 30" fill="none"><path d="M2 4 L13 1 L24 4 L24 16 Q24 25 13 29 Q2 25 2 16 Z" stroke="#C8102E" stroke-width="1.6"/><path d="M8 10 L18 20 M18 10 L8 20" stroke="#C8102E" stroke-width="1.6"/><path d="M13 20 L13 24" stroke="#C8102E" stroke-width="1.6"/></svg>';
+// L'insigne RÉEL du site (symbole #oxv-insignia, même document) — fini le bouclier
+// simplifié des maquettes (retour fondateur 2026-07-19 : « nos logos, ce n'est pas ça »).
+const PAV_INSIGNE = '<svg class="pav-insigne" style="color:#C8102E;fill:currentColor;"><use href="#oxv-insignia"/></svg>';
 const PAV_INSIGNE_GRIS = PAV_INSIGNE.replace(/#C8102E/g, '#8A8A8A');
 const PAV_TRACE_DEMO = 'M120 520 L500 520 Q560 520 575 465 L605 330 Q618 285 665 285 L790 285 Q845 285 845 235 L845 155 Q845 105 895 105 L925 105 Q975 105 968 160 L935 420 Q928 470 880 482 L430 590 Q360 606 310 585 L145 560 Q95 552 120 520 Z';
 
@@ -36011,7 +36170,18 @@ function pavCoachRender() {
     '<span class="pav-horloge"></span></div></div>';
   let corps = '';
   if (mode === 'idle') {
-    corps = '<div class="pav-idle">' + PAV_INSIGNE + '<div class="pav-idle-txt">Stand Coach · Espace réservé</div><div class="pav-horloge"></div></div>';
+    // Écran d'attente UTILE (retour fondateur 2026-07-19) : insigne réel, coach,
+    // circuit du jour EN TRACÉ, mode d'emploi — plus un écran nu.
+    corps = '<div class="pav-idle" style="position:relative;">' +
+      '<div style="position:absolute;inset:6% 8%;opacity:0.14;">' + pavTrackSvg('pavIdle') + '</div>' +
+      '<div style="position:relative;display:flex;flex-direction:column;align-items:center;gap:24px;">' +
+      PAV_INSIGNE +
+      '<div class="pav-idle-txt">Stand Coach · Espace réservé</div>' +
+      (nomCoach ? '<div style="font-family:\'Syncopate\', sans-serif;font-weight:700;font-size:28px;letter-spacing:0.08em;text-transform:uppercase;">' + nomCoach + '</div>' : '') +
+      ((PAV.circuit && PAV.circuit.name) ? '<div class="pav-idle-txt" style="color:#C8102E;">' + pavEsc(PAV.circuit.name) + '</div>' : '') +
+      '<div class="pav-horloge"></div>' +
+      '<div class="pav-idle-txt" style="font-size:11px;color:#555555;line-height:2;">' + nFile + ' pilote' + (nFile > 1 ? 's' : '') + ' dans votre file ce jour<br>Pilotez cet écran depuis la Télécommande, sur votre tablette ou téléphone</div>' +
+      '</div></div>';
     st.innerHTML = '<div class="pav-scene pav-c">' + head + pavDrapeauHtml() + corps + '<div class="pav-reconnect">Reconnexion…</div></div>';
   } else if (mode === 'multi') {
     corps = pavCoachMultiHtml();
