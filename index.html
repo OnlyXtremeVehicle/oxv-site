@@ -21548,6 +21548,18 @@ body.pav-tv .nav, body.pav-tv footer, body.pav-tv .cookie, body.pav-tv .founding
           <div class="bento" style="padding:18px 20px;"><div class="ce-stat" id="ceStatRating">—</div><div class="ce-stat-lbl">Note moyenne</div></div>
         </div>
 
+        <!-- Écran de session (Pavillon) : la TV du stand + la télécommande — le jour J -->
+        <div class="bento" style="padding:22px 26px;margin-bottom:16px;display:flex;align-items:center;gap:18px;flex-wrap:wrap;border-color:rgba(200,16,46,0.25);">
+          <div style="flex:1;min-width:240px;">
+            <div style="font-family:var(--mono);font-size:10px;letter-spacing:0.22em;text-transform:uppercase;color:var(--red-oxv);margin-bottom:8px;">Écran de session · jour J</div>
+            <p style="font-family:var(--sans);font-size:13px;line-height:1.6;color:var(--cream-mute);margin:0;">Branchez votre ordinateur en HDMI sur l'écran du stand, ouvrez la TV coach en plein écran, puis pilotez-la depuis la télécommande sur votre tablette ou téléphone : suivi live, restitution post-session, multi-suivi.</p>
+          </div>
+          <div style="display:flex;gap:10px;flex-wrap:wrap;">
+            <button class="btn btn-sm btn-primary" onclick="goTo('pavillon-coach')"><span>Ouvrir ma TV de stand →</span></button>
+            <button class="btn btn-sm" onclick="goTo('pavillon-controle')"><span>Télécommande</span></button>
+          </div>
+        </div>
+
         <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:16px;margin-bottom:16px;">
           <div class="bento" style="padding:26px;">
             <div style="font-family:var(--mono);font-size:10px;letter-spacing:0.22em;text-transform:uppercase;color:var(--gold-data);margin-bottom:12px;">Ma fiche — mon histoire</div>
@@ -22562,6 +22574,10 @@ function oxvPathToRoute(pathname) {
   const parts = p.split('/');
   if (parts[0] === 'actualites' && parts[1]) return { page: 'article', articleId: decodeURIComponent(parts[1]) };
   if (parts[0] === 'pavillon' && parts[1]) return { page: 'pavillon-' + parts[1] };
+  // Contrôle pilote sur site (QR de l'app, arbitrage 2026-07-19) :
+  // le QR du profil pilote encode https://www.oxvehicle.fr/controle-pilote/{user_id}
+  // → ouverture directe du dossier pilote (documents + éligibilité), garde admin.
+  if (parts[0] === 'controle-pilote' && parts[1]) return { page: 'controle-pilote', pilotId: parts[1] };
   return { page: parts[0] };
 }
 
@@ -22677,6 +22693,13 @@ function oxvRouteFromLocation() {
   }
   const r = oxvPathToRoute(location.pathname);
   if (r.page === 'article' && r.articleId) { openArticle(r.articleId, { fromPop: true }); return; }
+  // Scan QR pilote : dossier admin direct ; hors connexion, on mémorise la cible
+  // et on reprend après le login (le fondateur scanne souvent depuis son téléphone).
+  if (r.page === 'controle-pilote' && r.pilotId && /^[0-9a-f-]{36}$/i.test(r.pilotId)) {
+    if (window.OXVApi?.user?.isLoggedIn) { goToAdminPilote(r.pilotId); }
+    else { window.__scanPilote = r.pilotId; toast('Connexion requise pour le contrôle pilote', 'warn'); goTo('login', { fromPop: true }); }
+    return;
+  }
   const exists = document.getElementById('page-' + r.page);
   goTo(exists ? r.page : 'home', { fromPop: true });
 }
@@ -26621,7 +26644,10 @@ window.submitLogin = async function() {
 
       // Aiguillage par rôle (fondateur 2026-07-19) : un coach arrive CHEZ LUI,
       // un partenaire dans son espace — jamais sur le compte pilote.
-      if (profile?.role === 'admin') {
+      if (profile?.role === 'admin' && window.__scanPilote) {
+        const pid = window.__scanPilote; window.__scanPilote = null;
+        goToAdminPilote(pid); // reprise du scan QR interrompu par le login
+      } else if (profile?.role === 'admin') {
         goTo('admin');
       } else if (profile?.role === 'coach') {
         goTo('coach-espace');
