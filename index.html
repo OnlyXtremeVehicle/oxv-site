@@ -21538,6 +21538,40 @@ body.pav-tv .nav, body.pav-tv footer, body.pav-tv .cookie, body.pav-tv .founding
             <button class="btn btn-sm" style="margin-top:12px;" onclick="pcCreateAccount()"><span>Créer mon entreprise →</span></button>
             <p style="font-family:var(--mono);font-size:10px;color:var(--cream-faint);margin:10px 0 0;letter-spacing:0.06em;">Soumise à validation OXV avant toute apparition dans l'app.</p>
           </div>
+
+          <!-- Fiche entreprise ÉDITABLE (espace valorisant — fondateur 2026-07-19) -->
+          <div id="pcEditor" style="display:none;margin-top:16px;border-top:1px solid var(--bento-border);padding-top:16px;">
+            <div style="display:flex;align-items:center;gap:16px;flex-wrap:wrap;margin-bottom:14px;">
+              <div id="pcLogo" class="ce-avatar" style="border-radius:12px;font-size:24px;" onclick="document.getElementById('pcLogoFile').click()" title="Changer le logo">⧉</div>
+              <input type="file" id="pcLogoFile" accept="image/jpeg,image/png,image/webp" style="display:none;" onchange="pcUploadLogo(this)">
+              <div style="flex:1;min-width:200px;display:grid;gap:8px;">
+                <input id="pcEditName" class="form-input" placeholder="Nom de l'entreprise" maxlength="80">
+                <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
+                  <select id="pcEditType" class="form-input">
+                    <option value="garage">Garage</option><option value="photographe">Photographe</option>
+                    <option value="hotel">Hôtel</option><option value="restaurant">Restaurant</option>
+                    <option value="transport">Transport</option><option value="assurance">Assurance</option>
+                    <option value="loueur">Loueur</option><option value="autre">Autre</option>
+                  </select>
+                  <input id="pcEditZone" class="form-input" placeholder="Zone (ex. Nouvelle-Aquitaine)" maxlength="120">
+                </div>
+              </div>
+              <button class="btn btn-sm" onclick="showPartnerFiche()"><span>Aperçu de ma fiche</span></button>
+            </div>
+            <textarea id="pcEditDesc" class="form-input" style="min-height:70px;" placeholder="Description — activité, spécialités, ce que vous proposez aux pilotes OXV" maxlength="600"></textarea>
+            <input id="pcEditEmail" class="form-input" type="email" style="margin-top:8px;" placeholder="Email de contact" maxlength="120">
+            <button class="btn btn-sm" style="margin-top:12px;" onclick="pcSaveAccount()"><span>Enregistrer ma fiche</span></button>
+            <div style="border-top:1px solid var(--bento-border);margin-top:16px;padding-top:14px;">
+              <div style="font-family:var(--mono);font-size:10px;letter-spacing:0.22em;text-transform:uppercase;color:var(--gold-data);margin-bottom:10px;">Médias de l'entreprise</div>
+              <div id="pcMediaList" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(110px,1fr));gap:10px;margin-bottom:10px;"></div>
+              <div style="display:flex;gap:8px;">
+                <input id="pcMediaUrl" class="form-input" style="flex:1;" placeholder="Lien YouTube ou image (https://…)" maxlength="400">
+                <button class="btn btn-sm" onclick="pcAddMedia()"><span>Ajouter</span></button>
+              </div>
+              <input type="file" id="pcMediaFile" accept="image/jpeg,image/png,image/webp" style="display:none;" onchange="pcUploadMediaPhoto(this)">
+              <button class="btn btn-sm" style="margin-top:8px;width:100%;" onclick="document.getElementById('pcMediaFile').click()"><span>Téléverser une photo depuis mon appareil →</span></button>
+            </div>
+          </div>
         </div>
         <div class="bento" id="pcOffersBlock" style="padding:26px;margin-top:16px;display:none;">
           <div style="font-family:var(--mono);font-size:10px;letter-spacing:0.22em;text-transform:uppercase;color:var(--blue-data);margin-bottom:12px;">Mes produits, offres &amp; événements</div>
@@ -29596,16 +29630,142 @@ window.loadPartnerCompany = async function() {
       return;
     }
     window.__pcAccountId = acc.id;
+    window.__pcAccount = acc;
     if (form) form.style.display = 'none';
     const badge = acc.status === 'validated' ? '<span class="tag-inline green">Validée — visible côté app</span>'
       : acc.status === 'pending' ? '<span class="tag-inline gold">En attente de validation OXV</span>'
       : '<span class="tag-inline">Désactivée</span>';
-    if (box) box.innerHTML = `<strong style="color:var(--offwhite);">${escapeHtml(acc.display_name || 'Entreprise')}</strong><br/>
-      ${escapeHtml(acc.type || '')}${acc.geo_zone ? ' · ' + escapeHtml(acc.geo_zone) : ''}<br/>${badge}`;
+    if (box) box.innerHTML = `<strong style="color:var(--offwhite);">${escapeHtml(acc.display_name || 'Entreprise')}</strong> ${badge}`;
+    // Fiche éditable (espace valorisant — fondateur 2026-07-19)
+    const ed = document.getElementById('pcEditor');
+    if (ed) {
+      ed.style.display = '';
+      const setv = (id, v) => { const el = document.getElementById(id); if (el && v != null) el.value = v; };
+      setv('pcEditName', acc.display_name); setv('pcEditType', acc.type || 'autre');
+      setv('pcEditZone', acc.geo_zone); setv('pcEditDesc', acc.description); setv('pcEditEmail', acc.contact_email);
+      const logo = document.getElementById('pcLogo');
+      if (logo) {
+        if (acc.logo_url) { logo.style.backgroundImage = 'url(' + JSON.stringify(acc.logo_url) + ')'; logo.textContent = ''; }
+        else { logo.style.backgroundImage = ''; logo.textContent = '⧉'; }
+      }
+      pcRenderMedias(acc);
+    }
     if (offersBlock) offersBlock.style.display = '';
     pcLoadOffers(acc.id);
   } catch (e) { if (box) box.textContent = 'Espace entreprise indisponible.'; }
 };
+/* — Fiche entreprise éditable : logo, identité, médias (espace valorisant, fondateur 2026-07-19) — */
+window.pcSaveAccount = async function() {
+  const gv = id => (document.getElementById(id)?.value || '').trim();
+  if (!gv('pcEditName')) { toast('Le nom de l’entreprise est requis', 'warn'); return; }
+  const { error } = await supabase.from('partner_accounts').update({
+    display_name: gv('pcEditName').slice(0, 80),
+    type: gv('pcEditType') || 'autre',
+    geo_zone: gv('pcEditZone') || null,
+    description: gv('pcEditDesc') || null,
+    contact_email: gv('pcEditEmail') || null,
+    updated_at: new Date().toISOString()
+  }).eq('id', window.__pcAccountId);
+  toast(error ? 'Enregistrement refusé' : 'Fiche entreprise enregistrée', error ? 'warn' : 'ok');
+  if (!error) loadPartnerCompany();
+};
+window.pcUploadLogo = async function(input) {
+  const f = input && input.files && input.files[0];
+  if (!f) return;
+  if (f.size > 5 * 1024 * 1024) { toast('Logo trop lourd (5 Mo max)', 'warn'); input.value = ''; return; }
+  const uid = window.OXVApi.user.profile?.id;
+  try {
+    const blob = await pavCompressImage(f, 640);
+    const path = uid + '/logo-' + Date.now() + '.webp';
+    const up = await supabase.storage.from('partner-media').upload(path, blob, { contentType: 'image/webp' });
+    if (up.error) throw up.error;
+    const { data: pub } = supabase.storage.from('partner-media').getPublicUrl(path);
+    const { error } = await supabase.from('partner_accounts').update({ logo_url: pub.publicUrl, updated_at: new Date().toISOString() }).eq('id', window.__pcAccountId);
+    if (error) throw error;
+    toast('Logo mis à jour', 'ok');
+    loadPartnerCompany();
+  } catch (e) { toast('Téléversement refusé', 'warn'); console.warn('[pcUploadLogo]', e); }
+  input.value = '';
+};
+function pcRenderMedias(acc) {
+  const box = document.getElementById('pcMediaList');
+  if (!box) return;
+  const list = Array.isArray(acc.media) ? acc.media : [];
+  box.innerHTML = list.map((m, i) => {
+    const yt = m.type === 'youtube' ? ceYoutubeId(m.url) : null;
+    const thumb = yt ? 'https://i.ytimg.com/vi/' + yt + '/hqdefault.jpg' : m.url;
+    return '<div class="ce-media-item"><img src="' + escapeHtml(thumb) + '" alt="" loading="lazy">' +
+      '<span class="ce-media-tag">' + (yt ? 'Vidéo' : 'Photo') + '</span>' +
+      '<button class="ce-media-del" onclick="pcRemoveMedia(' + i + ')" aria-label="Retirer">✕</button></div>';
+  }).join('') || '<p style="font-family:var(--mono);font-size:10px;color:var(--cream-faint);grid-column:1/-1;margin:0;">Aucun média — montrez votre atelier, vos produits, vos réalisations.</p>';
+}
+async function pcSetMedias(list) {
+  const { error } = await supabase.from('partner_accounts').update({ media: list, updated_at: new Date().toISOString() }).eq('id', window.__pcAccountId);
+  if (!error) { window.__pcAccount.media = list; pcRenderMedias(window.__pcAccount); }
+  return !error;
+}
+window.pcAddMedia = async function() {
+  const inp = document.getElementById('pcMediaUrl');
+  const u = (inp?.value || '').trim();
+  if (!/^https:\/\//.test(u)) { toast('Lien https requis', 'warn'); return; }
+  const list = Array.isArray(window.__pcAccount?.media) ? window.__pcAccount.media.slice() : [];
+  if (list.length >= 12) { toast('12 médias maximum', 'warn'); return; }
+  const yt = ceYoutubeId(u);
+  const isImg = /\.(jpe?g|png|webp|gif)(\?|$)/i.test(u);
+  if (!yt && !isImg) { toast('Lien YouTube ou image directe uniquement', 'warn'); return; }
+  list.push({ type: yt ? 'youtube' : 'image', url: u.slice(0, 400) });
+  if (await pcSetMedias(list)) { if (inp) inp.value = ''; toast('Média ajouté', 'ok'); }
+  else toast('Enregistrement refusé', 'warn');
+};
+window.pcRemoveMedia = async function(i) {
+  const list = Array.isArray(window.__pcAccount?.media) ? window.__pcAccount.media.slice() : [];
+  list.splice(i, 1);
+  if (!(await pcSetMedias(list))) toast('Enregistrement refusé', 'warn');
+};
+window.pcUploadMediaPhoto = async function(input) {
+  const f = input && input.files && input.files[0];
+  if (!f) return;
+  if (f.size > 8 * 1024 * 1024) { toast('Photo trop lourde (8 Mo max)', 'warn'); input.value = ''; return; }
+  const uid = window.OXVApi.user.profile?.id;
+  const list = Array.isArray(window.__pcAccount?.media) ? window.__pcAccount.media.slice() : [];
+  if (list.length >= 12) { toast('12 médias maximum', 'warn'); input.value = ''; return; }
+  try {
+    const blob = await pavCompressImage(f, 1280);
+    const path = uid + '/media-' + Date.now() + '.webp';
+    const up = await supabase.storage.from('partner-media').upload(path, blob, { contentType: 'image/webp' });
+    if (up.error) throw up.error;
+    const { data: pub } = supabase.storage.from('partner-media').getPublicUrl(path);
+    list.push({ type: 'image', url: pub.publicUrl });
+    if (await pcSetMedias(list)) toast('Photo ajoutée', 'ok'); else throw new Error('maj refusée');
+  } catch (e) { toast('Téléversement refusé', 'warn'); console.warn('[pcUploadMediaPhoto]', e); }
+  input.value = '';
+};
+/* — Aperçu de la fiche entreprise (modale partagée avec la fiche coach) — */
+window.showPartnerFiche = function() {
+  const acc = window.__pcAccount;
+  const modal = document.getElementById('coachFicheModal');
+  if (!acc || !modal) return;
+  const medias = Array.isArray(acc.media) ? acc.media : [];
+  const TYPE_LBL = { garage: 'Garage / préparation', photographe: 'Photographe / vidéo', hotel: 'Hôtel', restaurant: 'Restaurant', transport: 'Transport / convoyage', assurance: 'Assurance', loueur: 'Loueur', autre: 'Partenaire' };
+  modal.innerHTML = '<div class="coach-fiche-card">' +
+    '<button class="coach-fiche-close" onclick="document.getElementById(\'coachFicheModal\').classList.remove(\'open\')" aria-label="Fermer">✕</button>' +
+    (acc.status !== 'validated' ? '<p style="font-family:var(--mono);font-size:10px;letter-spacing:0.12em;text-transform:uppercase;color:var(--gold-data);margin:0 0 14px;">Aperçu — en attente de validation OXV</p>' : '') +
+    '<div class="coach-fiche-head">' +
+    (acc.logo_url ? '<img src="' + escapeHtml(acc.logo_url) + '" alt="" style="border-radius:14px;">' : '') +
+    '<div style="flex:1;min-width:200px;"><div class="coach-fiche-name">' + escapeHtml(acc.display_name || 'Entreprise') + '</div>' +
+    '<div class="coach-fiche-headline">' + escapeHtml(TYPE_LBL[acc.type] || 'Partenaire') + (acc.geo_zone ? ' · ' + escapeHtml(acc.geo_zone) : '') + '</div></div></div>' +
+    (acc.description ? '<div class="coach-fiche-sec">Présentation</div><p class="coach-fiche-txt">' + escapeHtml(acc.description) + '</p>' : '') +
+    (medias.length ? '<div class="coach-fiche-sec">Médias</div><div class="coach-fiche-medias">' + medias.map(m => {
+      const yt = m.type === 'youtube' ? ceYoutubeId(m.url) : null;
+      if (yt) return '<iframe src="https://www.youtube-nocookie.com/embed/' + yt + '" title="Vidéo du partenaire" loading="lazy" allowfullscreen frameborder="0"></iframe>';
+      return '<img src="' + escapeHtml(m.url) + '" alt="" loading="lazy">';
+    }).join('') + '</div>' : '') +
+    (acc.contact_email ? '<div class="coach-fiche-sec">Contact</div><p class="coach-fiche-txt">' + escapeHtml(acc.contact_email) + '</p>' : '') +
+    '<p style="font-family:var(--mono);font-size:9px;color:var(--cream-faint);margin:22px 0 0;letter-spacing:0.06em;">La transaction se fait directement chez le partenaire — OXV met en relation.</p>' +
+    '</div>';
+  modal.classList.add('open');
+};
+
 window.pcCreateAccount = async function() {
   const uid = window.OXVApi.user.profile?.id;
   const gv = id => (document.getElementById(id)?.value || '').trim();
