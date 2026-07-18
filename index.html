@@ -17883,6 +17883,10 @@ body.pav-tv .nav, body.pav-tv footer, body.pav-tv .cookie, body.pav-tv .founding
         <button class="admin-nav-item" onclick="goToAdmin('admin-sessions')">
           <span>Sessions</span>
         </button>
+        <button class="admin-nav-item" onclick="goToAdmin('admin-validations')">
+          <span>Validations</span>
+          <span class="badge-count nav-badge-validations" style="display:none;">0</span>
+        </button>
         <button class="admin-nav-item" onclick="goToAdmin('admin-paiements')">
           <span>Paiements</span>
         </button>
@@ -18133,6 +18137,10 @@ body.pav-tv .nav, body.pav-tv footer, body.pav-tv .cookie, body.pav-tv .founding
         <button class="admin-nav-item" onclick="goToAdmin('admin-sessions')">
           <span>Sessions</span>
         </button>
+        <button class="admin-nav-item" onclick="goToAdmin('admin-validations')">
+          <span>Validations</span>
+          <span class="badge-count nav-badge-validations" style="display:none;">0</span>
+        </button>
         <button class="admin-nav-item" onclick="goToAdmin('admin-paiements')">
           <span>Paiements</span>
         </button>
@@ -18255,6 +18263,55 @@ body.pav-tv .nav, body.pav-tv footer, body.pav-tv .cookie, body.pav-tv .founding
 <!-- /admin-pilotes -->
 
 <!-- ============ ADMIN : DEMANDES D'INSCRIPTION ============ -->
+<!-- ============ ADMIN : VALIDATIONS (créneaux coach · offres partenaires · entreprises) ============ -->
+<div class="page" id="page-admin-validations">
+  <div class="admin-layout">
+    <aside class="admin-sidebar">
+      <div class="admin-brand">
+        <div class="admin-brand-mark">⌬</div>
+        <div class="admin-brand-text">OXV<em>Admin</em></div>
+      </div>
+      <nav class="admin-nav">
+        <button class="admin-nav-item" onclick="goToAdmin('admin')"><span>Tableau de bord</span></button>
+        <div class="admin-nav-section">— Opérations</div>
+        <button class="admin-nav-item" onclick="goToAdmin('admin-demandes')"><span>Demandes</span></button>
+        <button class="admin-nav-item" onclick="goToAdmin('admin-pilotes')"><span>Pilotes</span></button>
+        <button class="admin-nav-item" onclick="goToAdmin('admin-sessions')"><span>Sessions</span></button>
+        <button class="admin-nav-item active" onclick="goToAdmin('admin-validations')"><span>Validations</span></button>
+        <button class="admin-nav-item" onclick="goToAdmin('admin-paiements')"><span>Paiements</span></button>
+        <div class="admin-nav-divider"></div>
+        <button class="admin-nav-item" onclick="goTo('compte')"><span>← Vue pilote</span></button>
+        <button class="admin-nav-item" onclick="logoutUser()"><span>Se déconnecter</span></button>
+      </nav>
+    </aside>
+    <main class="admin-main">
+      <div class="admin-header">
+        <div class="admin-header-left">
+          <div class="admin-header-eyebrow">N° ⌬.V · Opérations</div>
+          <h1 class="admin-header-title">File de <em>validation</em>.</h1>
+          <div class="admin-header-sub" id="avCountSub">Créneaux coach · offres et événements partenaires · entreprises</div>
+        </div>
+      </div>
+      <div style="display:grid;gap:16px;">
+        <div class="bento" style="padding:24px;">
+          <div style="font-family:var(--mono);font-size:10px;letter-spacing:0.22em;text-transform:uppercase;color:var(--blue-data);margin-bottom:12px;">Créneaux coach à valider</div>
+          <div id="avCoachSlots" style="font-family:var(--sans);font-size:13px;line-height:1.7;color:var(--cream-mute);">Chargement…</div>
+        </div>
+        <div class="bento" style="padding:24px;">
+          <div style="font-family:var(--mono);font-size:10px;letter-spacing:0.22em;text-transform:uppercase;color:var(--gold-data);margin-bottom:12px;">Offres &amp; événements partenaires (brouillons à publier)</div>
+          <div id="avPartnerOffers" style="font-family:var(--sans);font-size:13px;line-height:1.7;color:var(--cream-mute);">Chargement…</div>
+        </div>
+        <div class="bento" style="padding:24px;">
+          <div style="font-family:var(--mono);font-size:10px;letter-spacing:0.22em;text-transform:uppercase;color:var(--cream-mute);margin-bottom:12px;">Entreprises partenaires en attente</div>
+          <div id="avPartnerAccounts" style="font-family:var(--sans);font-size:13px;line-height:1.7;color:var(--cream-mute);">Chargement…</div>
+        </div>
+      </div>
+      <p style="font-family:var(--sans);font-size:12px;color:var(--cream-faint);margin:18px 0 0;line-height:1.6;">Un créneau validé devient réservable sur la vitrine coach. Une offre publiée apparaît dans le catalogue de l'application (événements : sur la carte). Rien ne sort sans votre validation — élément par élément.</p>
+    </main>
+  </div>
+</div>
+<!-- /admin-validations -->
+
 <div class="page" id="page-admin-demandes">
 
   <div class="admin-layout">
@@ -18284,6 +18341,10 @@ body.pav-tv .nav, body.pav-tv footer, body.pav-tv .cookie, body.pav-tv .founding
         </button>
         <button class="admin-nav-item" onclick="goToAdmin('admin-sessions')">
           <span>Sessions</span>
+        </button>
+        <button class="admin-nav-item" onclick="goToAdmin('admin-validations')">
+          <span>Validations</span>
+          <span class="badge-count nav-badge-validations" style="display:none;">0</span>
         </button>
         <button class="admin-nav-item" onclick="goToAdmin('admin-paiements')">
           <span>Paiements</span>
@@ -22347,7 +22408,7 @@ window.goTo = function(page, opts) {
   // Pages protégées (pilote) : nécessitent une connexion
   const protectedPages = ['compte', 'compte-profil', 'compte-vehicules', 'compte-documents', 'compte-sessions', 'compte-progression', 'compte-heritage', 'compte-paiements', 'compte-preferences'];
   // Pages admin : nécessitent une connexion + role=admin
-  const adminPages = ['admin', 'admin-pilotes', 'admin-pilote-detail', 'admin-sessions', 'admin-paiements', 'admin-inbox', 'admin-medias', 'admin-articles', 'admin-emails', 'admin-stats', 'admin-securite', 'admin-demandes'];
+  const adminPages = ['admin', 'admin-pilotes', 'admin-pilote-detail', 'admin-sessions', 'admin-paiements', 'admin-inbox', 'admin-medias', 'admin-articles', 'admin-emails', 'admin-stats', 'admin-securite', 'admin-demandes', 'admin-validations'];
   const isProtected = protectedPages.includes(page) || adminPages.includes(page);
 
   if (isProtected && !window.OXVApi.user.isLoggedIn) {
@@ -22429,7 +22490,7 @@ window.goTo = function(page, opts) {
 
   // Pages admin
   if (page === 'admin') {
-    setTimeout(() => loadAdminDashboard(), 150);
+    setTimeout(() => { loadAdminDashboard(); if (typeof window.avRefreshBadge === 'function') window.avRefreshBadge(); }, 150);
   }
   if (page === 'admin-pilotes') {
     setTimeout(() => loadAdminPilotes(), 150);
@@ -22463,6 +22524,9 @@ window.goTo = function(page, opts) {
   }
   if (page === 'admin-demandes') {
     setTimeout(() => { if (typeof window.loadAdminDemandes === 'function') loadAdminDemandes(); }, 150);
+  }
+  if (page === 'admin-validations') {
+    setTimeout(() => { if (typeof window.loadAdminValidations === 'function') loadAdminValidations(); }, 150);
   }
   if (page === 'founding') {
     setTimeout(() => { if (typeof window.loadFounding === 'function') window.loadFounding(); }, 150);
@@ -22522,7 +22586,7 @@ const OXV_NOINDEX_PAGES = ['login', 'signup', 'forgot-password', 'reset-password
   'compte', 'compte-profil', 'compte-vehicules', 'compte-documents', 'compte-sessions',
   'compte-medias', 'compte-progression', 'compte-heritage', 'compte-paiements', 'compte-preferences',
   'admin', 'admin-pilotes', 'admin-pilote-detail', 'admin-sessions', 'admin-session-detail',
-  'admin-paiements', 'admin-medias', 'admin-articles', 'admin-emails', 'admin-stats', 'admin-securite', 'admin-demandes', 'demande', 'partenaire-espace', 'coach-espace', 'partenaire-connexion',
+  'admin-paiements', 'admin-medias', 'admin-articles', 'admin-emails', 'admin-stats', 'admin-securite', 'admin-demandes', 'admin-validations', 'demande', 'partenaire-espace', 'coach-espace', 'partenaire-connexion',
   'pavillon-accueil', 'pavillon-coach', 'pavillon-admin', 'pavillon-controle', 'pavillon-regie'];
 
 // Titre + description par page publique
@@ -22555,6 +22619,7 @@ const OXV_PAGE_SEO = {
   signup:      { title: 'Créer un compte · OXV', description: 'Créez votre compte pilote OXV.' },
   demande:     { title: 'Rejoindre le cercle — demande d\'inscription · OXV', description: 'Déposez votre candidature pour rejoindre OXV : pilote, pilote licencié FFSA ou coach partenaire. Chaque demande est étudiée individuellement.' },
   'partenaire-connexion': { title: 'Espace partenaire — Connexion · OXV', description: 'Connexion à l\'espace partenaire OXV : fiche entreprise, offres et événements.' },
+  'admin-validations': { title: 'Validations · Admin OXV', description: 'File de validation : créneaux coach, offres partenaires, entreprises.' },
   'pavillon-accueil':  { title: 'Pavillon · Écran accueil · OXV', description: 'Écran d\'affichage Pavillon OXV.' },
   'pavillon-coach':    { title: 'Pavillon · Stand coach · OXV', description: 'Écran réservé du stand coach OXV.' },
   'pavillon-admin':    { title: 'Pavillon · Photos · OXV', description: 'Gestion des photos diffusées au Pavillon.' },
@@ -29403,15 +29468,17 @@ async function ceLoadNextSessions() {
   if (!el) return;
   try {
     const today = new Date().toISOString().split('T')[0];
-    const { data } = await supabase.from('sessions_public').select('date, format').gte('date', today).order('date').limit(10);
+    const { data } = await supabase.from('sessions_public').select('date, format, circuit_name').gte('date', today).order('date').limit(10);
     const sel = document.getElementById('ceSlotDate');
     if (data && data.length) {
       el.textContent = 'Vos créneaux sont adossés aux journées OXV — choisissez la journée :';
-      // Le choix est CONTRAINT aux journées OXV réelles (demande fondateur 2026-07-19)
+      // Le choix est CONTRAINT aux journées OXV réelles ; chaque journée porte SON circuit
+      // (multi-circuit, fondateur 2026-07-19) — repris sur le créneau, la TV et la télécommande.
       if (sel) sel.innerHTML = '<option value="">Journée OXV…</option>' + data.map(s =>
-        '<option value="' + escapeHtml(s.date) + '">' +
+        '<option value="' + escapeHtml(s.date) + '" data-circuit="' + escapeHtml(s.circuit_name || '') + '">' +
         escapeHtml(new Date(s.date + 'T12:00:00').toLocaleDateString('fr-FR', { weekday: 'long', day: 'numeric', month: 'long' })) +
-        (s.format ? ' · ' + escapeHtml(String(s.format)) : '') + '</option>').join('');
+        (s.format ? ' · ' + escapeHtml(String(s.format)) : '') +
+        (s.circuit_name ? ' · ' + escapeHtml(s.circuit_name) : '') + '</option>').join('');
     } else {
       el.textContent = 'Aucune journée OXV publiée au calendrier — la proposition de créneaux ouvrira avec la saison.';
       if (sel) sel.innerHTML = '<option value="">Calendrier en préparation</option>';
@@ -29435,13 +29502,16 @@ async function ceLoadSlots(uid) {
 }
 window.ceCreateSlot = async function() {
   const uid = window.OXVApi.user.profile?.id;
-  const d = document.getElementById('ceSlotDate').value;
+  const sel = document.getElementById('ceSlotDate');
+  const d = sel.value;
   const h1 = document.getElementById('ceSlotStart').value, h2 = document.getElementById('ceSlotEnd').value;
   const cap = parseInt(document.getElementById('ceSlotCap').value, 10) || 1;
-  if (!d || !h1 || !h2 || h2 <= h1) { toast('Date et horaires requis', 'warn'); return; }
+  if (!d || !h1 || !h2 || h2 <= h1) { toast('Journée OXV et horaires requis', 'warn'); return; }
+  // Le créneau porte le circuit de SA journée (multi-circuit, fondateur 2026-07-19).
+  const circuitJour = (sel.selectedOptions[0]?.dataset?.circuit || '').trim() || 'Circuit de Haute Saintonge';
   // Convention : créneau créé 'closed' = proposé, en attente de validation OXV (l'admin passe à 'open').
   const { error } = await supabase.from('coach_availability').insert({
-    coach_id: uid, circuit_name: 'Circuit de Haute Saintonge',
+    coach_id: uid, circuit_name: circuitJour,
     starts_at: d + 'T' + h1 + ':00', ends_at: d + 'T' + h2 + ':00',
     capacity: Math.min(6, Math.max(1, cap)), status: 'closed',
     notes: (document.getElementById('ceSlotNote').value || '').slice(0, 200) || null
@@ -30888,6 +30958,105 @@ window.adminDecideDemande = async function(demandeId, action) {
   }
 };
 
+
+/* ============ ADMIN : FILE DE VALIDATION (créneaux coach · offres partenaires · entreprises)
+   Arbitrage 2026-07-18 : rien ne sort sans validation admin, élément par élément.
+   Les triggers anti auto-publication (verrous) font respecter ces états côté base. ============ */
+window.loadAdminValidations = async function() {
+  if (!window.OXVApi?.user?.isLoggedIn) { goTo('login'); return; }
+  const boxS = document.getElementById('avCoachSlots');
+  const boxO = document.getElementById('avPartnerOffers');
+  const boxA = document.getElementById('avPartnerAccounts');
+  let nS = 0, nO = 0, nA = 0;
+  // — Créneaux coach proposés (closed, à venir) —
+  try {
+    const { data: slots } = await supabase.from('coach_availability').select('*')
+      .eq('status', 'closed').gte('starts_at', new Date().toISOString()).order('starts_at').limit(30);
+    nS = (slots || []).length;
+    let coachs = {};
+    try {
+      const ids = Array.from(new Set((slots || []).map(s => s.coach_id)));
+      if (ids.length) {
+        const { data: us } = await supabase.from('users').select('id, first_name, last_name').in('id', ids);
+        (us || []).forEach(u => coachs[u.id] = ((u.first_name || '') + ' ' + (u.last_name || '')).trim());
+      }
+    } catch (e) {}
+    if (boxS) boxS.innerHTML = nS ? slots.map(s => `<div style="display:flex;justify-content:space-between;gap:10px;align-items:center;padding:9px 0;border-top:1px solid var(--bento-border);flex-wrap:wrap;">
+      <span><strong style="color:var(--offwhite);">${escapeHtml(coachs[s.coach_id] || 'Coach')}</strong>
+      <span style="font-family:var(--mono);font-size:11px;color:var(--cream-mute);"> · ${new Date(s.starts_at).toLocaleDateString('fr-FR', { weekday: 'short', day: 'numeric', month: 'short' })} ${new Date(s.starts_at).toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' })}–${new Date(s.ends_at).toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' })} · ${s.capacity || 1} pl. · ${escapeHtml(s.circuit_name || '')}</span>
+      ${s.notes ? `<div style="font-size:12px;color:var(--cream-faint);width:100%;">« ${escapeHtml(String(s.notes).slice(0, 120))} »</div>` : ''}</span>
+      <span style="display:flex;gap:8px;">
+        <button class="btn btn-sm btn-primary" onclick="avSlotAction('${s.id}','open')"><span>Valider</span></button>
+        <button class="btn btn-sm" onclick="avSlotAction('${s.id}','cancelled')"><span>Refuser</span></button>
+      </span></div>`).join('') : 'Aucun créneau en attente.';
+  } catch (e) { if (boxS) boxS.textContent = 'Créneaux indisponibles.'; }
+  // — Offres & événements partenaires en brouillon —
+  try {
+    const { data: offers } = await supabase.from('partner_offers').select('*').eq('status', 'draft').order('created_at').limit(30);
+    nO = (offers || []).length;
+    let ents = {};
+    try {
+      const pids = Array.from(new Set((offers || []).map(o => o.partner_id)));
+      if (pids.length) {
+        const { data: accs } = await supabase.from('partner_accounts').select('id, display_name').in('id', pids);
+        (accs || []).forEach(a => ents[a.id] = a.display_name);
+      }
+    } catch (e) {}
+    if (boxO) boxO.innerHTML = nO ? offers.map(o => `<div style="display:flex;justify-content:space-between;gap:10px;align-items:center;padding:9px 0;border-top:1px solid var(--bento-border);flex-wrap:wrap;">
+      <span><strong style="color:var(--offwhite);">${escapeHtml(o.title || 'Sans titre')}</strong>
+      <span style="font-family:var(--mono);font-size:11px;color:var(--cream-mute);"> · ${escapeHtml(ents[o.partner_id] || 'Partenaire')} · ${escapeHtml(o.category || '')}${o.price_eur != null ? ' · ' + Number(o.price_eur).toLocaleString('fr-FR') + ' €' : ''}${o.valid_until ? ' · échéance ' + new Date(o.valid_until).toLocaleDateString('fr-FR', { day: 'numeric', month: 'short' }) : ''}</span>
+      ${o.description ? `<div style="font-size:12px;color:var(--cream-faint);width:100%;">${escapeHtml(String(o.description).slice(0, 140))}</div>` : ''}</span>
+      <span style="display:flex;gap:8px;">
+        <button class="btn btn-sm btn-primary" onclick="avOfferAction('${o.id}','published')"><span>Publier</span></button>
+        <button class="btn btn-sm" onclick="avOfferAction('${o.id}','archived')"><span>Refuser</span></button>
+      </span></div>`).join('') : 'Aucun brouillon partenaire en attente.';
+  } catch (e) { if (boxO) boxO.textContent = 'Offres indisponibles.'; }
+  // — Entreprises en attente —
+  try {
+    const { data: accs } = await supabase.from('partner_accounts').select('*').eq('status', 'pending').order('created_at').limit(20);
+    nA = (accs || []).length;
+    if (boxA) boxA.innerHTML = nA ? accs.map(a => `<div style="display:flex;justify-content:space-between;gap:10px;align-items:center;padding:9px 0;border-top:1px solid var(--bento-border);flex-wrap:wrap;">
+      <span><strong style="color:var(--offwhite);">${escapeHtml(a.display_name || 'Entreprise')}</strong>
+      <span style="font-family:var(--mono);font-size:11px;color:var(--cream-mute);"> · ${escapeHtml(a.type || '')}${a.contact_email ? ' · ' + escapeHtml(a.contact_email) : ''}</span></span>
+      <span style="display:flex;gap:8px;">
+        <button class="btn btn-sm btn-primary" onclick="avAccountAction('${a.id}','validated')"><span>Valider</span></button>
+        <button class="btn btn-sm" onclick="avAccountAction('${a.id}','disabled')"><span>Refuser</span></button>
+      </span></div>`).join('') : 'Aucune entreprise en attente.';
+  } catch (e) { if (boxA) boxA.textContent = 'Entreprises indisponibles.'; }
+  const sub = document.getElementById('avCountSub');
+  if (sub) sub.textContent = `${nS} créneau${nS > 1 ? 'x' : ''} coach · ${nO} offre${nO > 1 ? 's' : ''} partenaire · ${nA} entreprise${nA > 1 ? 's' : ''} en attente`;
+  avSetBadge(nS + nO + nA);
+};
+function avSetBadge(n) {
+  document.querySelectorAll('.nav-badge-validations').forEach(b => {
+    b.textContent = n; b.style.display = n > 0 ? '' : 'none';
+  });
+}
+window.avRefreshBadge = async function() {
+  try {
+    const [s, o, a] = await Promise.all([
+      supabase.from('coach_availability').select('id', { count: 'exact', head: true }).eq('status', 'closed').gte('starts_at', new Date().toISOString()),
+      supabase.from('partner_offers').select('id', { count: 'exact', head: true }).eq('status', 'draft'),
+      supabase.from('partner_accounts').select('id', { count: 'exact', head: true }).eq('status', 'pending')
+    ]);
+    avSetBadge((s.count || 0) + (o.count || 0) + (a.count || 0));
+  } catch (e) {}
+};
+window.avSlotAction = async function(id, status) {
+  const { error } = await supabase.from('coach_availability').update({ status: status, updated_at: new Date().toISOString() }).eq('id', id);
+  toast(error ? 'Action refusée' : (status === 'open' ? 'Créneau validé — réservable sur la vitrine' : 'Créneau refusé'), error ? 'warn' : 'ok');
+  if (!error) loadAdminValidations();
+};
+window.avOfferAction = async function(id, status) {
+  const { error } = await supabase.from('partner_offers').update({ status: status, updated_at: new Date().toISOString() }).eq('id', id);
+  toast(error ? 'Action refusée' : (status === 'published' ? 'Publiée — visible dans le catalogue app' : 'Refusée (archivée)'), error ? 'warn' : 'ok');
+  if (!error) loadAdminValidations();
+};
+window.avAccountAction = async function(id, status) {
+  const { error } = await supabase.from('partner_accounts').update({ status: status, updated_at: new Date().toISOString() }).eq('id', id);
+  toast(error ? 'Action refusée' : (status === 'validated' ? 'Entreprise validée' : 'Entreprise désactivée'), error ? 'warn' : 'ok');
+  if (!error) loadAdminValidations();
+};
 
 window.loadAdminPilotes = async function() {
   if (!window.OXVApi.user.isLoggedIn) return;
@@ -34899,13 +35068,21 @@ function pavChannel(name, wire, onReady) {
   };
   return make();
 }
-/* — Circuit courant : session du jour sinon repli Haute Saintonge — */
+/* — Circuit courant : celui de LA journée (session du jour), sinon repli Haute Saintonge.
+     sessions_public expose circuit_id/circuit_name (migration 2026-07-19) : lisible par
+     tous les comptes écrans, multi-circuit réel. — */
 async function pavResolveCircuit() {
   let cid = null;
   try {
-    const { data } = await supabase.from('sessions').select('circuit_id').eq('date', pavTodayISO()).limit(1);
+    const { data } = await supabase.from('sessions_public').select('circuit_id').eq('date', pavTodayISO()).limit(1);
     if (data && data[0] && data[0].circuit_id) cid = data[0].circuit_id;
   } catch (e) {}
+  if (!cid) {
+    try {
+      const { data } = await supabase.from('sessions').select('circuit_id').eq('date', pavTodayISO()).limit(1);
+      if (data && data[0] && data[0].circuit_id) cid = data[0].circuit_id;
+    } catch (e) {}
+  }
   try {
     const { data } = await supabase.from('circuits')
       .select('id,name,track_svg_path,bbox_min_lat,bbox_min_lon,bbox_max_lat,bbox_max_lon,best_lap_seconds')
@@ -35326,10 +35503,33 @@ async function pavCoachStart() {
 }
 async function pavCoachLoadFile() {
   const uid = window.OXVApi.user.profile?.id;
+  // Deux sources fusionnées (fondateur 2026-07-19) :
+  //   1. coach_pilots actifs (appairage app — télémétrie)
+  //   2. pilotes INSCRITS À LA SESSION du jour : réservations acceptées/réalisées
+  //      sur MES créneaux du jour (coaching_bookings) — le coach voit sa vraie
+  //      file du jour même sans appairage app préalable.
+  let appIds = [];
   try {
     const { data: cps } = await supabase.from('coach_pilots').select('pilot_id,active,status').eq('coach_id', uid).eq('active', true);
-    PAV.coach.pilotIds = (cps || []).map(x => x.pilot_id);
-  } catch (e) { PAV.coach.pilotIds = []; }
+    appIds = (cps || []).map(x => x.pilot_id);
+  } catch (e) {}
+  PAV.coach.bookings = {};
+  try {
+    const d0 = pavTodayISO();
+    const { data: slots } = await supabase.from('coach_availability').select('id, starts_at, circuit_name').eq('coach_id', uid)
+      .gte('starts_at', d0 + 'T00:00:00').lt('starts_at', d0 + 'T23:59:59');
+    const slotIds = (slots || []).map(s => s.id);
+    if (slotIds.length) {
+      const { data: bks } = await supabase.from('coaching_bookings')
+        .select('pilot_id, pilot_first_name, requested_starts_at, status')
+        .eq('coach_id', uid).in('status', ['accepted', 'completed']).in('availability_id', slotIds);
+      (bks || []).forEach(b => { if (b.pilot_id && !PAV.coach.bookings[b.pilot_id]) PAV.coach.bookings[b.pilot_id] = b; });
+    }
+  } catch (e) {}
+  const bookingIds = Object.keys(PAV.coach.bookings);
+  // Le périmètre autorisé (défense pavSessionAllowed) couvre les DEUX sources :
+  // un pilote inscrit à la session du jour est un pilote du coach ce jour-là.
+  PAV.coach.pilotIds = Array.from(new Set(appIds.concat(bookingIds)));
   const ids = PAV.coach.pilotIds;
   if (!ids.length) { PAV.coach.file = []; return; }
   let users = {};
@@ -35353,16 +35553,21 @@ async function pavCoachLoadFile() {
   } catch (e) {}
   PAV.coach.file = ids.map(pid => {
     const u = users[pid] || {};
+    const bk = PAV.coach.bookings[pid] || null;
     const mine = tss.filter(t => t.user_id === pid);
     const liveTs = mine.find(t => !t.ended_at);
     const doneTs = mine.find(t => t.status === 'completed');
     // États : En piste (session sans ended_at) / Post-session (completed ce jour) / À venir (aucune)
     const etat = liveTs ? 'live' : (doneTs ? 'post' : 'avenir');
     const ts = liveTs || doneTs || null;
+    const heureCreneau = bk && bk.requested_starts_at ? new Date(bk.requested_starts_at).toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' }) : null;
+    const autoLbl = ts && vehicles[ts.vehicle_id] ? vehicles[ts.vehicle_id].trim() : '';
     return {
       pilot_id: pid, car: u.car_number, handle: u.public_handle,
-      nom: (u.first_name || u.last_name) ? ((u.first_name || '') + ' ' + (u.last_name || '')).trim() : null,
-      etat: etat, ts: ts, auto: ts && vehicles[ts.vehicle_id] ? vehicles[ts.vehicle_id].trim() : ''
+      // Identité : profil app si lisible, sinon prénom porté par la réservation de session
+      nom: (u.first_name || u.last_name) ? ((u.first_name || '') + ' ' + (u.last_name || '')).trim() : (bk && bk.pilot_first_name ? bk.pilot_first_name : null),
+      etat: etat, ts: ts,
+      auto: autoLbl || (heureCreneau ? 'Créneau ' + heureCreneau : '')
     };
   }).sort((a, b) => (a.car || 999) - (b.car || 999));
 }
@@ -35489,7 +35694,7 @@ function pavCoachRender() {
   const mode = PAV.coach.mode;
   const nomCoach = PAV.demo ? 'J. Moreau' : pavEsc(((window.OXVApi.user.dbProfile || {}).first_name || '') + ' ' + ((window.OXVApi.user.dbProfile || {}).last_name || '')).trim();
   const nFile = PAV.demo ? 4 : PAV.coach.file.length;
-  const head = '<div class="pav-hd"><div class="pav-marque">' + PAV_INSIGNE + '<span class="pav-oxv">OXV</span><span class="pav-sousmarque">Stand Coach' + (PAV.demo ? ' · Démo' : '') + '</span><span class="pav-prive">Espace réservé</span></div>' +
+  const head = '<div class="pav-hd"><div class="pav-marque">' + PAV_INSIGNE + '<span class="pav-oxv">OXV</span><span class="pav-sousmarque">Stand Coach' + (PAV.demo ? ' · Démo' : (PAV.circuit && PAV.circuit.name ? ' · ' + pavEsc(PAV.circuit.name) : '')) + '</span><span class="pav-prive">Espace réservé</span></div>' +
     '<div class="pav-hd-droite">' +
     (mode === 'restitution' ? '<span class="pav-badge-mode">Restitution · Session terminée</span>' : '') +
     (mode === 'multi' ? '<span class="pav-badge-mode pav-contour">Multi-suivi · ' + PAV.coach.multi.length + ' pilotes en piste</span>' : '') +
