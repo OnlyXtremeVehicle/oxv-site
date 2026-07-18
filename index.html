@@ -13341,6 +13341,295 @@ body { font-synthesis-style: none; }
   font-style: normal;
 }
 
+/* ============================================================
+   PAVILLON — lot ECRANS_PAVILLON (2026-07-18)
+   Transposition des références tv-accueil / tv-coach /
+   tv-coach-restitution / tv-coach-multi. Préfixe .pav- (aucune
+   collision avec les styles marketing). Tokens écrans dédiés :
+   #0A0A0A / #FFFFFF / #C8102E — l'or (doré) est INTERDIT dans ce lot.
+   Couleurs QDI = couleurs de DONNÉES uniquement (écran coach).
+   ============================================================ */
+body.pav-tv { overflow: hidden; }
+body.pav-tv .nav, body.pav-tv footer, body.pav-tv .cookie, body.pav-tv .founding-bandeau { display: none !important; }
+
+.pav-stage { position: fixed; inset: 0; background: #000; z-index: 1300; overflow: hidden; }
+.pav-stage, .pav-tool {
+  --pv-noir:#0A0A0A; --pv-blanc:#FFFFFF; --pv-rouge:#C8102E;
+  --pv-surface:#121212; --pv-surface2:#1A1A1A; --pv-ligne:#242424;
+  --pv-gris:#8A8A8A; --pv-gris2:#555555;
+  --pv-qdi-trajectoire:#60A5FA; --pv-qdi-fluidite:#FFB703; --pv-qdi-freinage:#E63946;
+  --pv-qdi-acceleration:#4ADE80; --pv-qdi-regularite:#C084FC;
+}
+.pav-scene {
+  width: 1920px; height: 1080px; background: var(--pv-noir); color: var(--pv-blanc);
+  font-family: 'Inter', sans-serif; position: absolute; top: 50%; left: 50%;
+  transform-origin: center center; display: grid;
+  opacity: 0; transition: opacity 0.3s;
+}
+.pav-scene.pav-ready { opacity: 1; }
+.pav-scene.pav-a { grid-template-rows: 96px auto 1fr 64px; }
+.pav-scene.pav-c { grid-template-rows: 84px auto 1fr; }
+.pav-scene * { margin: 0; padding: 0; box-sizing: border-box; }
+@media (prefers-reduced-motion: reduce) { .pav-scene *, .pav-scene svg * { animation: none !important; } }
+
+/* — En-têtes TV — */
+.pav-hd { display: flex; align-items: center; justify-content: space-between; padding: 0 48px; border-bottom: 1px solid var(--pv-ligne); }
+.pav-c .pav-hd { padding: 0 44px; }
+.pav-marque { display: flex; align-items: center; gap: 20px; }
+.pav-c .pav-marque { gap: 18px; }
+.pav-marque svg.pav-insigne { width: 40px; height: 46px; }
+.pav-c .pav-marque svg.pav-insigne { width: 34px; height: 39px; }
+.pav-oxv { font-family: 'Syncopate', sans-serif; font-weight: 700; font-size: 30px; letter-spacing: 0.14em; }
+.pav-c .pav-oxv { font-size: 25px; }
+.pav-sousmarque { font-family: 'JetBrains Mono', monospace; font-size: 12px; letter-spacing: 0.22em; color: var(--pv-gris); text-transform: uppercase; border-left: 1px solid var(--pv-ligne); padding-left: 20px; }
+.pav-c .pav-sousmarque { font-size: 11px; letter-spacing: 0.2em; padding-left: 18px; }
+.pav-prive { font-family: 'JetBrains Mono', monospace; font-size: 10px; font-weight: 700; letter-spacing: 0.16em; text-transform: uppercase; color: var(--pv-rouge); border: 1px solid var(--pv-rouge); padding: 5px 12px; border-radius: 2px; }
+.pav-hd-droite { display: flex; align-items: center; gap: 40px; }
+.pav-c .pav-hd-droite { gap: 30px; }
+.pav-coach-nom { font-family: 'JetBrains Mono', monospace; font-size: 13px; letter-spacing: 0.1em; color: var(--pv-gris); text-transform: uppercase; }
+.pav-coach-nom b { color: var(--pv-blanc); }
+.pav-badge-live { display: flex; align-items: center; gap: 12px; font-family: 'JetBrains Mono', monospace; font-size: 15px; font-weight: 700; letter-spacing: 0.18em; text-transform: uppercase; }
+.pav-badge-live .pav-pastille { width: 12px; height: 12px; border-radius: 50%; background: var(--pv-rouge); animation: pavPulse 1.6s ease-in-out infinite; }
+.pav-badge-live.pav-pause .pav-pastille, .pav-badge-live.pav-fermee .pav-pastille { background: var(--pv-gris2); animation: none; }
+.pav-badge-msg { font-family: 'JetBrains Mono', monospace; font-size: 11px; letter-spacing: 0.1em; color: var(--pv-gris); text-transform: uppercase; margin-top: 5px; }
+@keyframes pavPulse { 0%,100% { opacity: 1; box-shadow: 0 0 0 0 rgba(200,16,46,0.5); } 50% { opacity: 0.75; box-shadow: 0 0 0 9px rgba(200,16,46,0); } }
+.pav-badge-mode { font-family: 'JetBrains Mono', monospace; font-size: 12px; font-weight: 700; letter-spacing: 0.18em; text-transform: uppercase; color: var(--pv-noir); background: var(--pv-blanc); padding: 7px 16px; border-radius: 2px; }
+.pav-badge-mode.pav-contour { color: var(--pv-blanc); background: transparent; border: 1px solid var(--pv-ligne); }
+.pav-horloge { font-family: 'JetBrains Mono', monospace; font-size: 34px; font-weight: 700; letter-spacing: 0.06em; }
+.pav-c .pav-horloge { font-size: 26px; letter-spacing: 0.05em; }
+.pav-datejour { font-family: 'JetBrains Mono', monospace; font-size: 13px; letter-spacing: 0.14em; color: var(--pv-gris); text-transform: uppercase; text-align: right; margin-top: 4px; }
+
+/* — Drapeau (Addendum 03 : relais déclaratif, jamais de vert) —
+   Rangée de grille EN FLUX (le contenu descend) : le bandeau prime
+   visuellement mais ne masque RIEN. Apparition 200 ms, puis stable
+   (aucun clignotement). */
+.pav-drapeau { display: none; background: var(--pv-noir); align-items: center; gap: 26px; padding: 12px 48px; }
+.pav-drapeau.pav-on { display: flex; animation: pavDrapeauIn 0.2s ease-out; }
+@keyframes pavDrapeauIn { from { opacity: 0; } to { opacity: 1; } }
+/* #FFB703 = code de signalisation piste universel (drapeau jaune), usage distinct des couleurs QDI — documenté. */
+.pav-drapeau.pav-jaune { border-top: 3px solid #FFB703; border-bottom: 3px solid #FFB703; }
+.pav-drapeau.pav-rouge { border-top: 3px solid #C8102E; border-bottom: 3px solid #C8102E; }
+.pav-drapeau .pav-drapeau-titre { font-family: 'Syncopate', sans-serif; font-weight: 700; font-size: 22px; letter-spacing: 0.1em; text-transform: uppercase; }
+.pav-drapeau.pav-jaune .pav-drapeau-titre { color: #FFB703; }
+.pav-drapeau.pav-rouge .pav-drapeau-titre { color: #C8102E; }
+.pav-drapeau .pav-drapeau-info { font-family: 'JetBrains Mono', monospace; font-size: 12px; letter-spacing: 0.12em; color: var(--pv-gris); text-transform: uppercase; }
+.pav-drapeau .pav-drapeau-legal { font-family: 'JetBrains Mono', monospace; font-size: 10px; letter-spacing: 0.1em; color: var(--pv-gris2); text-transform: uppercase; margin-left: auto; }
+
+/* — Accueil : corps — */
+.pav-a-main { display: grid; grid-template-columns: 1fr 460px; min-height: 0; }
+.pav-zone-trace { position: relative; display: flex; flex-direction: column; padding: 40px 24px 24px 48px; min-height: 0; }
+.pav-titre-session { display: flex; align-items: baseline; gap: 24px; }
+.pav-titre-session h1 { font-family: 'Syncopate', sans-serif; font-weight: 700; font-size: 34px; letter-spacing: 0.06em; text-transform: uppercase; }
+.pav-titre-session .pav-type { font-family: 'JetBrains Mono', monospace; font-size: 14px; letter-spacing: 0.2em; color: var(--pv-rouge); text-transform: uppercase; font-weight: 700; }
+.pav-soustitre { font-family: 'JetBrains Mono', monospace; font-size: 13px; letter-spacing: 0.12em; color: var(--pv-gris); text-transform: uppercase; margin-top: 10px; }
+.pav-carte { flex: 1; position: relative; margin-top: 12px; min-height: 0; }
+.pav-carte svg { width: 100%; height: 100%; }
+.pav-vide-msg { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; font-family: 'JetBrains Mono', monospace; font-size: 15px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--pv-gris2); }
+.pav-dot circle.pav-fond { fill: var(--pv-noir); stroke: var(--pv-blanc); stroke-width: 2; }
+.pav-c .pav-dot circle.pav-fond, .pav-dot.pav-suivi circle.pav-fond { stroke: var(--pv-rouge); stroke-width: 3; }
+.pav-dot text { font-family: 'JetBrains Mono', monospace; font-size: 15px; font-weight: 700; fill: var(--pv-blanc); text-anchor: middle; dominant-baseline: central; }
+.pav-compteur { position: absolute; left: 0; bottom: 0; display: flex; align-items: baseline; gap: 14px; }
+.pav-compteur .pav-nb { font-family: 'JetBrains Mono', monospace; font-size: 58px; font-weight: 700; line-height: 1; }
+.pav-compteur .pav-nb span { color: var(--pv-gris2); font-size: 34px; }
+.pav-compteur .pav-lbl { font-family: 'JetBrains Mono', monospace; font-size: 12px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--pv-gris); max-width: 130px; line-height: 1.6; }
+.pav-a-aside { border-left: 1px solid var(--pv-ligne); display: flex; flex-direction: column; overflow: hidden; }
+.pav-bloc { padding: 28px 36px; border-bottom: 1px solid var(--pv-ligne); position: relative; }
+.pav-bloc-titre { font-family: 'JetBrains Mono', monospace; font-size: 12px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--pv-gris); display: flex; align-items: center; gap: 12px; margin-bottom: 20px; }
+.pav-bloc-titre::after { content: ""; flex: 1; height: 1px; background: var(--pv-ligne); }
+.pav-bloc-titre .pav-pageind { font-family: 'JetBrains Mono', monospace; font-size: 10px; color: var(--pv-gris2); letter-spacing: 0.08em; }
+.pav-meteo { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
+.pav-meteo .pav-val { font-family: 'JetBrains Mono', monospace; font-size: 30px; font-weight: 700; }
+.pav-meteo .pav-val small { font-size: 16px; color: var(--pv-gris); font-weight: 500; }
+.pav-meteo .pav-lab { font-family: 'JetBrains Mono', monospace; font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--pv-gris2); margin-top: 6px; }
+.pav-bloc.pav-pilotes { flex: 1; overflow: hidden; }
+.pav-pilote-ligne { display: flex; align-items: center; gap: 16px; padding: 11px 0; border-bottom: 1px solid var(--pv-surface2); }
+.pav-pilote-ligne:last-child { border-bottom: none; }
+.pav-num { font-family: 'JetBrains Mono', monospace; font-size: 15px; font-weight: 700; color: var(--pv-noir); background: var(--pv-blanc); border-radius: 3px; min-width: 52px; text-align: center; padding: 5px 0; }
+.pav-pilote-ligne .pav-id { font-family: 'Inter', sans-serif; font-size: 17px; font-weight: 600; flex: 1; }
+.pav-pilote-ligne .pav-id .pav-pseudo { color: var(--pv-gris); font-weight: 400; font-size: 14px; }
+.pav-pilote-ligne .pav-auto { font-family: 'JetBrains Mono', monospace; font-size: 12px; letter-spacing: 0.04em; color: var(--pv-gris); text-align: right; }
+.pav-planning-ligne { display: flex; align-items: center; gap: 18px; padding: 9px 0; }
+.pav-planning-ligne .pav-heure { font-family: 'JetBrains Mono', monospace; font-size: 15px; font-weight: 700; min-width: 118px; }
+.pav-planning-ligne .pav-quoi { font-size: 15px; color: #D6D6D6; flex: 1; }
+.pav-planning-ligne.pav-actif .pav-heure { color: var(--pv-rouge); }
+.pav-planning-ligne.pav-actif .pav-quoi { color: var(--pv-blanc); font-weight: 600; }
+.pav-planning-ligne .pav-marqueur { width: 7px; height: 7px; border-radius: 50%; background: var(--pv-surface2); flex-shrink: 0; }
+.pav-planning-ligne.pav-actif .pav-marqueur { background: var(--pv-rouge); }
+.pav-planning-ligne.pav-passe { opacity: 0.4; }
+.pav-alt { transition: opacity 0.4s; }
+.pav-alt.pav-fade { opacity: 0; }
+.pav-a-foot { border-top: 1px solid var(--pv-ligne); display: flex; align-items: center; justify-content: space-between; padding: 0 48px; }
+.pav-principe { font-family: 'Inter', sans-serif; font-style: italic; font-size: 15px; color: var(--pv-gris); }
+.pav-principe b { font-family: 'JetBrains Mono', monospace; font-style: normal; font-weight: 500; font-size: 11px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--pv-gris2); margin-left: 16px; }
+.pav-circuit-ref { font-family: 'JetBrains Mono', monospace; font-size: 11px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--pv-gris2); }
+.pav-photo-bande { margin-top: auto; position: relative; height: 180px; overflow: hidden; }
+.pav-photo-bande img, .pav-veille-photos img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; opacity: 0; transition: opacity 1.2s; }
+.pav-photo-bande img.pav-on, .pav-veille-photos img.pav-on { opacity: 1; }
+
+/* — Accueil : veille — */
+.pav-veille { position: relative; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 34px; text-align: center; overflow: hidden; }
+.pav-veille-photos { position: absolute; inset: 0; }
+.pav-veille-photos::after { content: ""; position: absolute; inset: 0; background: rgba(10,10,10,0.72); }
+.pav-veille-inner { position: relative; z-index: 2; display: flex; flex-direction: column; align-items: center; gap: 34px; }
+.pav-veille svg.pav-insigne { width: 96px; height: 110px; }
+.pav-veille .pav-manifeste { font-family: 'Inter', sans-serif; font-style: italic; font-size: 24px; color: #D6D6D6; max-width: 760px; line-height: 1.6; }
+.pav-veille .pav-horloge { font-size: 64px; }
+.pav-veille .pav-prochaine { font-family: 'JetBrains Mono', monospace; font-size: 14px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--pv-gris); line-height: 2.2; }
+
+/* — Coach : corps — */
+.pav-c-main { display: grid; grid-template-columns: 1fr 560px; min-height: 0; }
+.pav-zone-pilote { display: grid; grid-template-rows: 92px 1fr 150px; border-right: 1px solid var(--pv-ligne); overflow: hidden; min-height: 0; }
+.pav-zone-pilote.pav-restit { grid-template-rows: 92px 1fr 168px; }
+.pav-bandeau-pilote { display: flex; align-items: center; justify-content: space-between; padding: 0 44px; border-bottom: 1px solid var(--pv-ligne); }
+.pav-identite { display: flex; align-items: center; gap: 18px; }
+.pav-identite .pav-num { font-size: 19px; padding: 7px 14px; min-width: 0; }
+.pav-identite .pav-nom { font-family: 'Syncopate', sans-serif; font-weight: 700; font-size: 21px; letter-spacing: 0.05em; text-transform: uppercase; }
+.pav-identite .pav-auto { font-family: 'JetBrains Mono', monospace; font-size: 13px; color: var(--pv-gris); letter-spacing: 0.06em; }
+.pav-tour-courant { display: flex; align-items: center; gap: 34px; }
+.pav-tour-courant .pav-cellule { text-align: right; }
+.pav-tour-courant .pav-lbl { font-family: 'JetBrains Mono', monospace; font-size: 10px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--pv-gris2); }
+.pav-tour-courant .pav-val { font-family: 'JetBrains Mono', monospace; font-size: 33px; font-weight: 700; line-height: 1.1; }
+.pav-tour-courant .pav-val.pav-live { color: var(--pv-rouge); }
+.pav-zone-pilote.pav-restit .pav-tour-courant .pav-val { font-size: 30px; line-height: 1.15; }
+.pav-piste-donnees { display: grid; grid-template-columns: 1fr 300px; padding: 24px 44px 12px; gap: 24px; min-height: 0; }
+.pav-restit .pav-piste-donnees { grid-template-columns: 1fr 330px; gap: 26px; }
+.pav-coltitre { font-family: 'JetBrains Mono', monospace; font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--pv-gris); display: flex; align-items: center; gap: 12px; margin-bottom: 14px; }
+.pav-coltitre::after { content: ""; flex: 1; height: 1px; background: var(--pv-ligne); }
+.pav-derniers-tours { display: flex; flex-direction: column; min-height: 0; }
+.pav-tour-ligne { display: flex; justify-content: space-between; align-items: baseline; padding: 9px 0; border-bottom: 1px solid var(--pv-surface2); font-family: 'JetBrains Mono', monospace; }
+.pav-tour-ligne .pav-n { font-size: 12px; color: var(--pv-gris2); width: 46px; }
+.pav-tour-ligne .pav-t { font-size: 19px; font-weight: 700; }
+.pav-tour-ligne .pav-d { font-size: 12px; color: var(--pv-gris); width: 72px; text-align: right; }
+.pav-tour-ligne.pav-ref .pav-tag { font-size: 8px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--pv-noir); background: var(--pv-blanc); padding: 2px 6px; border-radius: 2px; margin-left: 8px; }
+.pav-mesures { margin-top: 22px; display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+.pav-mesure .pav-lbl { font-family: 'JetBrains Mono', monospace; font-size: 9px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--pv-gris2); }
+.pav-mesure .pav-val { font-family: 'JetBrains Mono', monospace; font-size: 21px; font-weight: 700; margin-top: 3px; }
+.pav-mesure .pav-val small { font-size: 12px; color: var(--pv-gris); font-weight: 500; }
+.pav-bande-coach { border-top: 1px solid var(--pv-ligne); background: var(--pv-surface); padding: 18px 44px; display: flex; flex-direction: column; gap: 10px; overflow: hidden; }
+.pav-entete-bande { display: flex; align-items: center; gap: 14px; font-family: 'JetBrains Mono', monospace; font-size: 10px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--pv-gris); }
+.pav-entete-bande .pav-fil { flex: 1; height: 1px; background: var(--pv-ligne); }
+.pav-annotation { display: flex; gap: 16px; align-items: baseline; }
+.pav-annotation .pav-cible { font-family: 'JetBrains Mono', monospace; font-size: 12px; font-weight: 700; color: var(--pv-rouge); min-width: 44px; }
+.pav-annotation .pav-texte { font-size: 16px; color: #E4E4E4; line-height: 1.5; }
+.pav-restit .pav-annotation .pav-texte { font-size: 15px; line-height: 1.45; }
+.pav-annotation .pav-heure { font-family: 'JetBrains Mono', monospace; font-size: 10px; color: var(--pv-gris2); margin-left: auto; flex-shrink: 0; }
+.pav-c-aside { display: flex; flex-direction: column; overflow: hidden; }
+.pav-c-aside .pav-bloc { padding: 24px 36px; }
+.pav-qdi-conteneur { display: grid; grid-template-columns: 1fr 168px; gap: 12px; align-items: center; }
+.pav-radar svg { width: 100%; }
+.pav-radar polygon.pav-grille { fill: none; stroke: var(--pv-surface2); stroke-width: 1; }
+.pav-radar line.pav-axe { stroke: var(--pv-surface2); stroke-width: 1; }
+.pav-radar polygon.pav-reference { fill: rgba(255,255,255,0.05); stroke: #4A4A4A; stroke-width: 1.5; stroke-dasharray: 4 4; }
+.pav-radar polygon.pav-courante { fill: rgba(200,16,46,0.10); stroke: var(--pv-rouge); stroke-width: 2; }
+.pav-radar text { font-family: 'JetBrains Mono', monospace; font-size: 12px; letter-spacing: 0.08em; text-transform: uppercase; fill: var(--pv-gris); text-anchor: middle; }
+.pav-qdi-legende { display: flex; flex-direction: column; gap: 11px; }
+.pav-qdi-axe { display: flex; align-items: center; gap: 10px; }
+.pav-qdi-axe .pav-puce { width: 9px; height: 9px; border-radius: 2px; flex-shrink: 0; }
+.pav-qdi-axe .pav-nom { font-family: 'JetBrains Mono', monospace; font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; color: #C9C9C9; flex: 1; }
+.pav-qdi-axe .pav-evolution { font-family: 'JetBrains Mono', monospace; font-size: 11px; font-weight: 700; color: var(--pv-gris); }
+.pav-qdi-note { font-family: 'JetBrains Mono', monospace; font-size: 9px; letter-spacing: 0.1em; color: var(--pv-gris2); text-transform: uppercase; margin-top: 14px; }
+.pav-qdi-attente { font-family: 'JetBrains Mono', monospace; font-size: 12px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--pv-gris2); padding: 34px 0; text-align: center; }
+.pav-dispersion { position: relative; height: 34px; background: var(--pv-surface2); border-radius: 3px; overflow: hidden; }
+.pav-dispersion .pav-plage { position: absolute; top: 0; bottom: 0; background: rgba(192,132,252,0.22); border-left: 2px solid var(--pv-qdi-regularite); border-right: 2px solid var(--pv-qdi-regularite); }
+.pav-dispersion .pav-mediane { position: absolute; top: 0; bottom: 0; width: 2px; background: var(--pv-blanc); }
+.pav-dispersion .pav-marque { position: absolute; top: 24px; bottom: 3px; width: 1px; background: #6B6B6B; }
+.pav-dispersion-legende { display: flex; justify-content: space-between; font-family: 'JetBrains Mono', monospace; font-size: 10px; color: var(--pv-gris2); margin-top: 8px; letter-spacing: 0.06em; }
+.pav-bloc.pav-file { flex: 1; overflow: hidden; }
+.pav-file-ligne { display: flex; align-items: center; gap: 14px; padding: 12px 0; border-bottom: 1px solid var(--pv-surface2); }
+.pav-file-ligne:last-child { border-bottom: none; }
+.pav-file-ligne .pav-num { font-size: 13px; min-width: 46px; padding: 4px 0; }
+.pav-file-ligne .pav-qui { flex: 1; }
+.pav-file-ligne .pav-qui .pav-nom { font-size: 15px; font-weight: 600; }
+.pav-file-ligne .pav-qui .pav-detail { font-family: 'JetBrains Mono', monospace; font-size: 10px; color: var(--pv-gris); letter-spacing: 0.05em; margin-top: 2px; }
+.pav-etat { font-family: 'JetBrains Mono', monospace; font-size: 9px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; padding: 5px 10px; border-radius: 2px; border: 1px solid var(--pv-ligne); color: var(--pv-gris); }
+.pav-etat.pav-live { border-color: var(--pv-rouge); color: var(--pv-rouge); }
+.pav-etat.pav-post { border-color: #4A4A4A; color: #C9C9C9; }
+/* Restitution : comparaison self vs self */
+.pav-comparaison { display: flex; flex-direction: column; min-height: 0; }
+.pav-comp-ligne { display: grid; grid-template-columns: 1fr 92px 92px 64px; align-items: baseline; padding: 10px 0; border-bottom: 1px solid var(--pv-surface2); font-family: 'JetBrains Mono', monospace; }
+.pav-comp-ligne.pav-tete { border-bottom: 1px solid var(--pv-ligne); padding-bottom: 8px; }
+.pav-comp-ligne.pav-tete span { font-size: 9px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--pv-gris2); font-weight: 500; }
+.pav-comp-ligne.pav-tete span:not(:first-child) { text-align: right; }
+.pav-comp-ligne .pav-metrique { font-size: 12px; color: #C9C9C9; letter-spacing: 0.03em; }
+.pav-comp-ligne .pav-v { font-size: 16px; font-weight: 700; text-align: right; }
+.pav-comp-ligne .pav-v.pav-avant { color: var(--pv-gris); font-weight: 500; }
+.pav-comp-ligne .pav-d { font-size: 12px; color: #D6D6D6; text-align: right; }
+.pav-comp-note { font-family: 'JetBrains Mono', monospace; font-size: 9px; letter-spacing: 0.1em; color: var(--pv-gris2); text-transform: uppercase; margin-top: 14px; line-height: 1.7; }
+.pav-suite { flex: 1; display: flex; flex-direction: column; }
+.pav-suite-carte { background: var(--pv-surface); border: 1px solid var(--pv-ligne); border-radius: 4px; padding: 18px 20px; margin-bottom: 12px; }
+.pav-suite-carte .pav-qui { display: flex; align-items: center; gap: 12px; }
+.pav-suite-carte .pav-num { font-size: 13px; padding: 4px 10px; min-width: 0; }
+.pav-suite-carte .pav-nom { font-size: 15px; font-weight: 600; }
+.pav-suite-carte .pav-detail { font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--pv-gris); margin-top: 8px; letter-spacing: 0.05em; }
+.pav-rappel-app { margin-top: auto; font-family: 'JetBrains Mono', monospace; font-size: 10px; letter-spacing: 0.1em; color: var(--pv-gris2); text-transform: uppercase; line-height: 1.8; }
+/* Multi-suivi (A9) : tri par numéro, tuiles indépendantes — AUCUNE grille commune de chronos */
+.pav-multi { display: grid; grid-template-columns: 1fr 1fr; grid-template-rows: 1fr 1fr; min-height: 0; }
+.pav-multi.pav-multi-2 { grid-template-rows: 1fr; }
+.pav-tuile { border-right: 1px solid var(--pv-ligne); border-bottom: 1px solid var(--pv-ligne); display: grid; grid-template-rows: 64px 1fr; overflow: hidden; }
+.pav-tuile:nth-child(2n) { border-right: none; }
+.pav-multi:not(.pav-multi-2) .pav-tuile:nth-child(n+3) { border-bottom: none; }
+.pav-multi-2 .pav-tuile { border-bottom: none; }
+.pav-tuile-tete { display: flex; align-items: center; justify-content: space-between; padding: 0 30px; border-bottom: 1px solid var(--pv-surface2); }
+.pav-tuile-identite { display: flex; align-items: center; gap: 14px; }
+.pav-tuile-identite .pav-num { font-size: 16px; padding: 5px 11px; min-width: 0; }
+.pav-tuile-identite .pav-nom { font-family: 'Syncopate', sans-serif; font-weight: 700; font-size: 15px; letter-spacing: 0.05em; text-transform: uppercase; }
+.pav-tuile-identite .pav-auto { font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--pv-gris); letter-spacing: 0.05em; }
+.pav-tuile-etat { font-family: 'JetBrains Mono', monospace; font-size: 10px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; display: flex; align-items: center; gap: 9px; color: var(--pv-rouge); }
+.pav-tuile-etat .pav-pastille { width: 9px; height: 9px; border-radius: 50%; background: var(--pv-rouge); animation: pavPulse 1.6s ease-in-out infinite; }
+.pav-tuile-corps { display: grid; grid-template-columns: 1fr 250px; gap: 20px; padding: 18px 30px 20px; min-height: 0; }
+.pav-td-col { display: flex; flex-direction: column; justify-content: center; gap: 14px; }
+.pav-td .pav-lbl { font-family: 'JetBrains Mono', monospace; font-size: 9px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--pv-gris2); }
+.pav-td .pav-val { font-family: 'JetBrains Mono', monospace; font-size: 25px; font-weight: 700; line-height: 1.15; }
+.pav-td .pav-val.pav-live { color: var(--pv-rouge); }
+.pav-td .pav-val.pav-petit { font-size: 19px; }
+.pav-td .pav-sous { font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--pv-gris); margin-top: 2px; }
+.pav-tuile.pav-vide { display: flex; align-items: center; justify-content: center; }
+.pav-tuile.pav-vide svg { width: 34px; height: 39px; margin: 0 auto 16px; opacity: 0.35; display: block; }
+.pav-tuile.pav-vide .pav-txt { font-family: 'JetBrains Mono', monospace; font-size: 11px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--pv-gris2); line-height: 2; text-align: center; }
+/* Idle */
+.pav-idle { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 30px; }
+.pav-idle svg.pav-insigne { width: 96px; height: 110px; }
+.pav-idle .pav-idle-txt { font-family: 'JetBrains Mono', monospace; font-size: 14px; letter-spacing: 0.22em; text-transform: uppercase; color: var(--pv-gris); }
+.pav-idle .pav-horloge { font-size: 54px; }
+
+/* — Reconnexion / états système — */
+.pav-reconnect { position: absolute; right: 20px; bottom: 14px; font-family: 'JetBrains Mono', monospace; font-size: 11px; letter-spacing: 0.12em; color: var(--pv-gris); text-transform: uppercase; z-index: 40; display: none; }
+.pav-reconnect.pav-on { display: block; }
+.pav-config { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 18px; text-align: center; }
+.pav-config .pav-config-titre { font-family: 'Syncopate', sans-serif; font-size: 20px; letter-spacing: 0.1em; text-transform: uppercase; }
+.pav-config .pav-config-txt { font-family: 'JetBrains Mono', monospace; font-size: 12px; letter-spacing: 0.14em; color: var(--pv-gris); text-transform: uppercase; line-height: 2; }
+
+/* — Outils (admin photos / télécommande / régie) : sobres, tactiles — */
+.pav-tool { min-height: 100vh; background: var(--pv-noir); color: var(--pv-blanc); font-family: 'Inter', sans-serif; padding: 22px 20px 80px; max-width: 760px; margin: 0 auto; }
+.pav-tool-head { display: flex; align-items: center; gap: 16px; padding-bottom: 18px; border-bottom: 1px solid var(--pv-ligne); margin-bottom: 22px; }
+.pav-tool-head svg { width: 30px; height: 34px; }
+.pav-tool-head .pav-tool-titre { font-family: 'Syncopate', sans-serif; font-weight: 700; font-size: 17px; letter-spacing: 0.1em; text-transform: uppercase; }
+.pav-tool-head .pav-tool-sous { font-family: 'JetBrains Mono', monospace; font-size: 10px; letter-spacing: 0.18em; color: var(--pv-gris); text-transform: uppercase; margin-left: auto; text-align: right; line-height: 1.8; }
+.pav-tool-section { margin-bottom: 30px; }
+.pav-tool-section .pav-coltitre { margin-bottom: 16px; }
+.pav-btn-row { display: flex; flex-wrap: wrap; gap: 10px; }
+.pav-btn { min-height: 48px; padding: 12px 20px; background: var(--pv-surface); border: 1px solid var(--pv-ligne); border-radius: 3px; color: var(--pv-blanc); font-family: 'JetBrains Mono', monospace; font-size: 12px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; cursor: pointer; }
+.pav-btn:disabled { opacity: 0.35; cursor: not-allowed; }
+.pav-btn.pav-actif { border-color: var(--pv-blanc); background: var(--pv-blanc); color: var(--pv-noir); }
+.pav-btn.pav-jaune-btn.pav-actif { background: #FFB703; border-color: #FFB703; }
+.pav-btn.pav-rouge-btn.pav-actif { background: var(--pv-rouge); border-color: var(--pv-rouge); color: var(--pv-blanc); }
+.pav-btn.pav-confirm { border-color: var(--pv-rouge); color: var(--pv-rouge); }
+.pav-btn.pav-mini { min-height: 40px; padding: 8px 14px; font-size: 10px; }
+.pav-input { width: 100%; min-height: 48px; background: var(--pv-surface); border: 1px solid var(--pv-ligne); border-radius: 3px; color: var(--pv-blanc); font-family: 'Inter', sans-serif; font-size: 15px; padding: 12px 14px; }
+.pav-note { font-family: 'JetBrains Mono', monospace; font-size: 10px; letter-spacing: 0.1em; color: var(--pv-gris2); text-transform: uppercase; line-height: 1.9; margin-top: 12px; }
+.pav-tool .pav-file-ligne { gap: 12px; }
+.pav-tool .pav-file-ligne .pav-actions { display: flex; gap: 8px; flex-wrap: wrap; justify-content: flex-end; }
+.pav-check { width: 26px; height: 26px; accent-color: var(--pv-rouge); flex-shrink: 0; }
+.pav-photo-grille { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 12px; }
+.pav-photo-carte { background: var(--pv-surface); border: 1px solid var(--pv-ligne); border-radius: 3px; overflow: hidden; }
+.pav-photo-carte img { width: 100%; aspect-ratio: 16/10; object-fit: cover; display: block; }
+.pav-photo-carte.pav-off img { opacity: 0.35; }
+.pav-photo-carte .pav-photo-meta { padding: 8px 10px; font-family: 'JetBrains Mono', monospace; font-size: 9px; letter-spacing: 0.08em; color: var(--pv-gris); text-transform: uppercase; display: flex; flex-direction: column; gap: 6px; }
+.pav-photo-carte .pav-photo-actions { display: flex; gap: 6px; flex-wrap: wrap; }
+.pav-tests { font-family: 'JetBrains Mono', monospace; font-size: 13px; line-height: 2; padding: 40px 48px; overflow: auto; }
+.pav-tests .ok { color: #4ADE80; }
+.pav-tests .ko { color: var(--pv-rouge); }
+
 </style>
 <!-- JSON-LD : LocalBusiness / lieu (PR-HUB-08 GEO) -->
 <script type="application/ld+json">
@@ -21182,6 +21471,20 @@ body { font-synthesis-style: none; }
 </div>
 <!-- /partenaires -->
 
+<!-- ============================================================
+     PAVILLON — écrans TV & outils (lot ECRANS_PAVILLON, 2026-07-18)
+     Routes hors navigation publique et hors sitemap (noindex).
+     Scènes 1920×1080 rendues par JS (renderPavillonAccueil /
+     renderPavillonCoach) ; outils (admin photos, télécommande,
+     régie) en pages sombres minimales. Préfixe CSS : .pav-
+     ============================================================ -->
+<div class="page" id="page-pavillon-accueil"><div class="pav-stage" id="pavStageAccueil"></div></div>
+<div class="page" id="page-pavillon-coach"><div class="pav-stage" id="pavStageCoach"></div></div>
+<div class="page" id="page-pavillon-admin"><div class="pav-tool" id="pavToolAdmin"></div></div>
+<div class="page" id="page-pavillon-controle"><div class="pav-tool" id="pavToolControle"></div></div>
+<div class="page" id="page-pavillon-regie"><div class="pav-tool" id="pavToolRegie"></div></div>
+<!-- /pavillon -->
+
 <!-- ============ FOOTER ============ -->
 <footer>
   <div class="foot-rule" aria-hidden="true"></div>
@@ -21814,6 +22117,14 @@ window.goTo = function(page, opts) {
     setTimeout(() => { if (typeof window.loadPartnerSpace === 'function') window.loadPartnerSpace(); }, 150);
   }
 
+  // Pavillon (lot ECRANS_PAVILLON) : montage à l'entrée, démontage systématique à la sortie
+  // (abonnements Realtime + timers nettoyés — aucun listener ne survit au changement de route).
+  if (page.indexOf('pavillon-') === 0) {
+    setTimeout(() => { if (typeof window.pavillonMount === 'function') window.pavillonMount(page); }, 50);
+  } else if (window.__pavMounted && typeof window.pavillonUnmount === 'function') {
+    window.pavillonUnmount();
+  }
+
   // Synchronisation URL (History API) + meta SEO
   if (!opts.fromPop) oxvSyncUrl(page, opts);
   oxvUpdateSEO(page, opts);
@@ -21838,7 +22149,8 @@ const OXV_NOINDEX_PAGES = ['login', 'signup', 'forgot-password', 'reset-password
   'compte', 'compte-profil', 'compte-vehicules', 'compte-documents', 'compte-sessions',
   'compte-medias', 'compte-progression', 'compte-heritage', 'compte-paiements', 'compte-preferences',
   'admin', 'admin-pilotes', 'admin-pilote-detail', 'admin-sessions', 'admin-session-detail',
-  'admin-paiements', 'admin-medias', 'admin-articles', 'admin-emails', 'admin-stats', 'admin-securite', 'admin-demandes', 'demande', 'partenaire-espace'];
+  'admin-paiements', 'admin-medias', 'admin-articles', 'admin-emails', 'admin-stats', 'admin-securite', 'admin-demandes', 'demande', 'partenaire-espace',
+  'pavillon-accueil', 'pavillon-coach', 'pavillon-admin', 'pavillon-controle', 'pavillon-regie'];
 
 // Titre + description par page publique
 const OXV_PAGE_SEO = {
@@ -21868,12 +22180,19 @@ const OXV_PAGE_SEO = {
   charte:      { title: 'Charte éditoriale & design · OXV', description: 'La charte OXV : palette, typographies, ton éditorial et principes de design du site.' },
   login:       { title: 'Connexion · OXV', description: 'Connexion à l\'espace pilote OXV.' },
   signup:      { title: 'Créer un compte · OXV', description: 'Créez votre compte pilote OXV.' },
-  demande:     { title: 'Rejoindre le cercle — demande d\'inscription · OXV', description: 'Déposez votre candidature pour rejoindre OXV : pilote, pilote licencié FFSA ou coach partenaire. Chaque demande est étudiée individuellement.' }
+  demande:     { title: 'Rejoindre le cercle — demande d\'inscription · OXV', description: 'Déposez votre candidature pour rejoindre OXV : pilote, pilote licencié FFSA ou coach partenaire. Chaque demande est étudiée individuellement.' },
+  'pavillon-accueil':  { title: 'Pavillon · Écran accueil · OXV', description: 'Écran d\'affichage Pavillon OXV.' },
+  'pavillon-coach':    { title: 'Pavillon · Stand coach · OXV', description: 'Écran réservé du stand coach OXV.' },
+  'pavillon-admin':    { title: 'Pavillon · Photos · OXV', description: 'Gestion des photos diffusées au Pavillon.' },
+  'pavillon-controle': { title: 'Pavillon · Télécommande coach · OXV', description: 'Télécommande de l\'écran du stand coach.' },
+  'pavillon-regie':    { title: 'Pavillon · Régie · OXV', description: 'Console d\'état piste du Pavillon.' }
 };
 
 function oxvRouteToPath(page, articleId) {
   if (page === 'home') return '/';
   if (page === 'article') return articleId ? '/actualites/' + articleId : '/actualites';
+  // Routes Pavillon (lot ECRANS_PAVILLON) : /pavillon/accueil, /pavillon/coach, /pavillon/admin, /pavillon/controle, /pavillon/regie
+  if (page.indexOf('pavillon-') === 0) return '/pavillon/' + page.slice(9);
   return '/' + page;
 }
 function oxvPathToRoute(pathname) {
@@ -21881,6 +22200,7 @@ function oxvPathToRoute(pathname) {
   if (!p) return { page: 'home' };
   const parts = p.split('/');
   if (parts[0] === 'actualites' && parts[1]) return { page: 'article', articleId: decodeURIComponent(parts[1]) };
+  if (parts[0] === 'pavillon' && parts[1]) return { page: 'pavillon-' + parts[1] };
   return { page: parts[0] };
 }
 
@@ -21977,9 +22297,11 @@ function oxvSetArticleJsonLd(article, url) {
 function oxvSyncUrl(page, opts) {
   opts = opts || {};
   const path = (page === 'article' && opts.article) ? oxvRouteToPath('article', opts.article.id) : oxvRouteToPath(page);
+  // Pavillon : la query (?demo=1&mode=…) pilote les modes démo/tests — conservée vers ces routes uniquement.
+  const q = page.indexOf('pavillon-') === 0 ? (location.search || '') : '';
   try {
-    if (location.pathname !== path) {
-      history.pushState({ page: page, articleId: opts.article ? opts.article.id : null }, '', path);
+    if (location.pathname + location.search !== path + q) {
+      history.pushState({ page: page, articleId: opts.article ? opts.article.id : null }, '', path + q);
     }
   } catch (e) { /* environnement sans History API */ }
 }
@@ -33343,6 +33665,1426 @@ function initFoundingBandeau() {
       })
       .catch(() => {});
   }
+}
+
+/* ============================================================
+   PAVILLON — module écrans TV + outils (lot ECRANS_PAVILLON)
+   ------------------------------------------------------------
+   Choix §3 : CLAUDE.md fige le site en MONOFICHIER (pas de
+   pavillon.js séparé) — tout le lot vit ici, préfixe pav.
+   Contrat temps réel v2 (CONTRAT_TEMPS_REEL_PAVILLON.md) :
+     canal 1  pavillon:{circuit_id}:live      (réception, event "position")
+     canal 2  pavillon:coach:{uid}:control    (émission /pavillon/controle, réception TV coach, event "control")
+     canal 3  postgres_changes INSERT coach_annotations
+     canal 4  pavillon:{circuit_id}:etat      (émission /pavillon/regie, réception accueil, event "etat")
+   DEPENDANCE_APP: émission Broadcast pavillon:{circuit_id}:live
+   (throttle RaceBox 25 Hz → 1 Hz, event "position") — lot app à planifier.
+   TODO_ARBITRAGE: rôle display — aucune valeur "display" dans users.role
+   (constaté 18/07 : pilot/admin/coach/partner/pro_pilot) → garde accueil =
+   compte authentifié standard en attendant.
+   TODO_ARBITRAGE: rôle staff — /pavillon/admin et /pavillon/regie gardés
+   par users.role = "admin" (mécanisme existant), une seule résolution.
+   TODO_ARBITRAGE: policies realtime — canaux en mode authentifié simple
+   tant que la migration d'autorisation Broadcast n'est pas validée.
+   TODO_ARBITRAGE: contrat QDI — app_session_analyses.qdi NULL partout à ce
+   jour ; l'UI gère l'absence (« QDI en attente de calcul »).
+   ============================================================ */
+const PAV = {
+  route: null, demo: false, tests: false, q: null,
+  circuit: null, channels: [], timers: [], rafs: [], listeners: [],
+  etat: null, etatMessage: null, etatFromChannel: false,
+  drapeau: null, drapeauTs: null,
+  live: {}, liveThrottle: {}, warned: {},
+  accueil: { pilotes: [], page: 0, altPlanning: true, photos: [], photoIdx: 0, meteo: null, sessionsJour: [], prochaines: [], maxCap: null },
+  coach: { mode: 'idle', pilotIds: [], file: [], session: null, laps: [], refPerso: null, qdi: null, segments: [], annotations: [], multi: [], prev: null },
+  ctrl: { lastAction: null, sel: [] },
+  regie: { pending: null },
+  backoff: 1000
+};
+const PAV_HS_ID = '0670af3f-ef84-4843-8a55-0c8bc3dcdca9'; // Haute Saintonge — repli si aucune session du jour
+// Mapping segment → couleur QDI (couleurs de DONNÉES, jamais de fonds).
+// app_segment_analyses.kind → hex pilier (vocabulaire gelé §2.3 CLAUDE.md).
+const PAV_QDI_COLORS = { trajectoire: '#60A5FA', fluidite: '#FFB703', freinage: '#E63946', acceleration: '#4ADE80', regularite: '#C084FC' };
+const PAV_AXES = [ { k: 'cap', l: 'Cap' }, { k: 'trajectoire', l: 'Trajectoire' }, { k: 'visee', l: 'Visée' }, { k: 'plongee', l: 'Plongée' }, { k: 'anticipation', l: 'Anticipation' } ]; // ordre FIGÉ
+const PAV_INSIGNE = '<svg class="pav-insigne" viewBox="0 0 26 30" fill="none"><path d="M2 4 L13 1 L24 4 L24 16 Q24 25 13 29 Q2 25 2 16 Z" stroke="#C8102E" stroke-width="1.6"/><path d="M8 10 L18 20 M18 10 L8 20" stroke="#C8102E" stroke-width="1.6"/><path d="M13 20 L13 24" stroke="#C8102E" stroke-width="1.6"/></svg>';
+const PAV_INSIGNE_GRIS = PAV_INSIGNE.replace(/#C8102E/g, '#8A8A8A');
+const PAV_TRACE_DEMO = 'M120 520 L500 520 Q560 520 575 465 L605 330 Q618 285 665 285 L790 285 Q845 285 845 235 L845 155 Q845 105 895 105 L925 105 Q975 105 968 160 L935 420 Q928 470 880 482 L430 590 Q360 606 310 585 L145 560 Q95 552 120 520 Z';
+
+function pavEsc(s) { return String(s == null ? '' : s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c])); }
+function pavWarnOnce(key, msg) { if (PAV.warned[key]) return; PAV.warned[key] = true; console.warn('[Pavillon]', msg); }
+function pavTimer(fn, ms) { const id = setInterval(fn, ms); PAV.timers.push(id); return id; }
+function pavOnce(fn, ms) { const id = setTimeout(fn, ms); PAV.timers.push(id); return id; }
+function pavTodayISO() { const d = new Date(); return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0'); }
+
+/* — formatLapTime : mêmes règles que le lot PROFIL_CARTES (m:ss.mmm ; tirets si absent) — */
+function pavFormatLapTime(sec, dec) {
+  dec = (dec == null) ? 3 : dec;
+  const n = Number(sec);
+  if (!isFinite(n) || n <= 0) return '—';
+  const m = Math.floor(n / 60);
+  const s = n - m * 60;
+  const sTxt = s.toFixed(dec);
+  return m + ':' + (s < 10 ? '0' : '') + sTxt;
+}
+function pavFormatDelta(sec, dec) {
+  dec = (dec == null) ? 3 : dec;
+  const n = Number(sec);
+  if (!isFinite(n)) return '—';
+  return (n >= 0 ? '+' : '−') + Math.abs(n).toFixed(dec);
+}
+function pavMedian(arr) {
+  if (!arr || !arr.length) return null;
+  const a = arr.slice().sort((x, y) => x - y);
+  const mid = Math.floor(a.length / 2);
+  return a.length % 2 ? a[mid] : (a[mid - 1] + a[mid]) / 2;
+}
+/* — radarPoints(values, rayonMax) : 5 axes, ordre figé, 0-100 → rayon — */
+function pavRadarPoints(values, rMax) {
+  return values.map((v, i) => {
+    const ang = (Math.PI * 2 * i / 5) - Math.PI / 2;
+    const r = Math.max(0, Math.min(100, Number(v) || 0)) / 100 * rMax;
+    return (Math.cos(ang) * r).toFixed(1) + ',' + (Math.sin(ang) * r).toFixed(1);
+  }).join(' ');
+}
+/* — projectToTrack(lat, lon, circuit) : homographie simple bbox géo → viewBox du tracé (y inversé) — */
+function pavProjectToTrack(lat, lon, circuit) {
+  const vb = circuit.viewBox || { x: 0, y: 0, w: 1000, h: 640 };
+  const dLat = (circuit.bbox_max_lat - circuit.bbox_min_lat) || 1;
+  const dLon = (circuit.bbox_max_lon - circuit.bbox_min_lon) || 1;
+  return {
+    x: vb.x + ((lon - circuit.bbox_min_lon) / dLon) * vb.w,
+    y: vb.y + ((circuit.bbox_max_lat - lat) / dLat) * vb.h
+  };
+}
+/* — validateMessage(canal, payload) : contrat v2 — v1 ET v2 acceptés, inconnu ignoré + warn unique — */
+function pavValidateMessage(canal, m) {
+  if (!m || typeof m !== 'object') return false;
+  if (m.v !== 1 && m.v !== 2) { pavWarnOnce('v-' + canal, 'version de message inconnue (canal ' + canal + ')'); return false; }
+  if (canal === 1) return typeof m.user_id === 'string' && isFinite(Number(m.car_number)) && isFinite(Number(m.lat)) && isFinite(Number(m.lon)) && !!m.ts;
+  if (canal === 2) {
+    if (m.action === 'follow_pilot') return typeof m.telemetry_session_id === 'string' && !!m.ts;
+    if (m.action === 'show_restitution') return typeof m.telemetry_session_id === 'string' && !!m.ts;
+    if (m.action === 'idle') return !!m.ts;
+    if (m.action === 'multi') return m.v === 2 && Array.isArray(m.telemetry_session_ids) && !!m.ts;
+    return false;
+  }
+  if (canal === 4) {
+    if (['ouverte', 'pause', 'fermee', 'veille'].indexOf(m.etat) < 0) return false;
+    if ('drapeau' in m && m.drapeau !== null && m.drapeau !== 'jaune' && m.drapeau !== 'rouge') { pavWarnOnce('drapeau', 'valeur de drapeau inconnue — ignorée (jamais de vert dans le système)'); return false; }
+    return !!m.ts;
+  }
+  return false;
+}
+/* — Défense rafale : throttle réception 1 Hz par user_id (app mal throttlée → on journalise) — */
+function pavThrottleOk(userId, now) {
+  now = now || Date.now();
+  const last = PAV.liveThrottle[userId] || 0;
+  if (now - last < 900) { pavWarnOnce('rafale-' + userId, 'cadence > 1 Hz reçue pour ' + userId + ' — throttle réception appliqué'); return false; }
+  PAV.liveThrottle[userId] = now;
+  return true;
+}
+function pavCardinal(deg) {
+  if (!isFinite(Number(deg))) return '';
+  const dirs = ['N', 'NE', 'E', 'SE', 'S', 'SO', 'O', 'NO'];
+  return dirs[Math.round((Number(deg) % 360) / 45) % 8];
+}
+/* Requête tolérante : certaines tables app référencent la session télémétrie
+   sous telemetry_session_id ou session_id — on tente les deux (schéma app évolutif). */
+async function pavBySession(table, sessionId, cols) {
+  try {
+    const r1 = await supabase.from(table).select(cols).eq('telemetry_session_id', sessionId);
+    if (!r1.error) return r1.data || [];
+  } catch (e) { /* colonne absente */ }
+  try {
+    const r2 = await supabase.from(table).select(cols).eq('session_id', sessionId);
+    if (!r2.error) return r2.data || [];
+  } catch (e) { /* colonne absente */ }
+  return [];
+}
+
+/* — Cycle de vie — */
+window.pavillonMount = async function(page) {
+  if (window.__pavMounted) window.pavillonUnmount();
+  window.__pavMounted = page;
+  PAV.route = page;
+  PAV.q = new URLSearchParams(location.search);
+  PAV.demo = PAV.q.get('demo') === '1';
+  PAV.tests = PAV.q.get('tests') === '1';
+  document.body.classList.add('pav-tv');
+  pavInjectFonts();
+  try {
+    if (PAV.tests) { pavRenderTests(page); return; }
+    const ok = await pavGuard(page);
+    if (!ok) return;
+    if (page === 'pavillon-accueil') await pavAccueilStart();
+    else if (page === 'pavillon-coach') await pavCoachStart();
+    else if (page === 'pavillon-admin') await pavAdminStart();
+    else if (page === 'pavillon-controle') await pavControleStart();
+    else if (page === 'pavillon-regie') await pavRegieStart();
+  } catch (e) {
+    console.warn('[Pavillon] montage :', e);
+    pavRenderConfigError(page);
+  }
+};
+window.pavillonUnmount = function() {
+  PAV.channels.forEach(ch => { try { supabase.removeChannel(ch); } catch (e) {} });
+  PAV.channels = [];
+  PAV.timers.forEach(t => { clearInterval(t); clearTimeout(t); });
+  PAV.timers = [];
+  PAV.rafs.forEach(r => cancelAnimationFrame(r));
+  PAV.rafs = [];
+  PAV.listeners.forEach(([tgt, ev, fn]) => tgt.removeEventListener(ev, fn));
+  PAV.listeners = [];
+  PAV.live = {}; PAV.liveThrottle = {};
+  document.body.classList.remove('pav-tv');
+  window.__pavMounted = null;
+  PAV.route = null;
+};
+function pavInjectFonts() {
+  if (document.getElementById('pav-fonts')) return;
+  const l = document.createElement('link');
+  l.id = 'pav-fonts'; l.rel = 'stylesheet';
+  l.href = 'https://fonts.googleapis.com/css2?family=Syncopate:wght@400;700&family=JetBrains+Mono:wght@400;500;700&display=swap';
+  document.head.appendChild(l);
+}
+function pavStage(page) {
+  const map = { 'pavillon-accueil': 'pavStageAccueil', 'pavillon-coach': 'pavStageCoach', 'pavillon-admin': 'pavToolAdmin', 'pavillon-controle': 'pavToolControle', 'pavillon-regie': 'pavToolRegie' };
+  return document.getElementById(map[page] || map[PAV.route]);
+}
+function pavShowScene(sc) {
+  // Pas de flash de police système : la scène reste voilée tant que les fontes ne sont pas prêtes (repli 2,5 s).
+  let shown = false;
+  const show = () => { if (!shown) { shown = true; sc.classList.add('pav-ready'); } };
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(show);
+  pavOnce(show, 2500);
+}
+function pavScaleSetup(sc) {
+  const apply = () => {
+    const s = Math.min(window.innerWidth / 1920, window.innerHeight / 1080);
+    sc.style.transform = 'translate(-50%, -50%) scale(' + s + ')';
+  };
+  apply();
+  window.addEventListener('resize', apply);
+  PAV.listeners.push([window, 'resize', apply]);
+}
+function pavClock(sc) {
+  const tick = () => {
+    const n = new Date();
+    sc.querySelectorAll('.pav-horloge').forEach(el => { el.textContent = n.toLocaleTimeString('fr-FR', { hour12: false }); });
+    const dj = sc.querySelector('.pav-datejour');
+    if (dj) dj.textContent = n.toLocaleDateString('fr-FR', { weekday: 'short', day: '2-digit', month: 'long', year: 'numeric' });
+  };
+  tick();
+  if (PAV.clockTimer) clearInterval(PAV.clockTimer); // un seul intervalle d'horloge, même après re-render
+  PAV.clockTimer = pavTimer(tick, 1000);
+}
+async function pavGuard(page) {
+  // La garde est revérifiée à CHAQUE affichage de route (QA §7.5).
+  if (PAV.demo) return true; // recette visuelle : données factices uniquement, zéro requête
+  const u = window.OXVApi && window.OXVApi.user;
+  if (!u || !u.isLoggedIn) { toast('Connexion requise', 'warn'); goTo('login'); return false; }
+  if (page === 'pavillon-coach' || page === 'pavillon-controle') {
+    try {
+      const { data } = await supabase.from('coach_permissions').select('can_view_pilots').eq('user_id', u.id).maybeSingle();
+      if (!data || data.can_view_pilots !== true) { toast('Accès réservé', 'warn'); goTo('home'); return false; }
+    } catch (e) { toast('Accès réservé', 'warn'); goTo('home'); return false; }
+  }
+  if (page === 'pavillon-admin' || page === 'pavillon-regie') {
+    const role = u.dbProfile && u.dbProfile.role;
+    if (role !== 'admin') { toast('Accès réservé', 'warn'); goTo('home'); return false; }
+  }
+  return true;
+}
+function pavRenderConfigError(page) {
+  const st = pavStage(page);
+  if (!st) return;
+  st.innerHTML = '<div class="pav-scene pav-a pav-ready" style="grid-template-rows:1fr;"><div class="pav-config">' + PAV_INSIGNE_GRIS +
+    '<div class="pav-config-titre">Configuration Pavillon incomplète</div>' +
+    '<div class="pav-config-txt">Vues ou tables Pavillon absentes.<br>Appliquer les migrations du lot ECRANS_PAVILLON.</div></div></div>';
+  const sc = st.querySelector('.pav-scene');
+  pavScaleSetup(sc);
+}
+/* — Canaux avec reconnexion (backoff 1 s → 30 s, bandeau discret, refresh au retour) — */
+function pavChannel(name, wire, onReady) {
+  const make = () => {
+    const ch = supabase.channel(name, { config: { broadcast: { self: true } } });
+    wire(ch);
+    ch.subscribe(status => {
+      const bd = document.querySelector('.pav-reconnect');
+      if (status === 'SUBSCRIBED') {
+        PAV.backoff = 1000;
+        if (bd) bd.classList.remove('pav-on');
+        if (onReady) onReady(ch);
+      } else if (status === 'CHANNEL_ERROR' || status === 'TIMED_OUT') {
+        if (bd) bd.classList.add('pav-on');
+        try { supabase.removeChannel(ch); } catch (e) {}
+        const i = PAV.channels.indexOf(ch);
+        if (i >= 0) PAV.channels.splice(i, 1);
+        if (PAV.route) pavOnce(() => { if (PAV.route) make(); }, PAV.backoff);
+        PAV.backoff = Math.min(30000, PAV.backoff * 2);
+      }
+    });
+    PAV.channels.push(ch);
+    return ch;
+  };
+  return make();
+}
+/* — Circuit courant : session du jour sinon repli Haute Saintonge — */
+async function pavResolveCircuit() {
+  let cid = null;
+  try {
+    const { data } = await supabase.from('sessions').select('circuit_id').eq('date', pavTodayISO()).limit(1);
+    if (data && data[0] && data[0].circuit_id) cid = data[0].circuit_id;
+  } catch (e) {}
+  try {
+    const { data } = await supabase.from('circuits')
+      .select('id,name,track_svg_path,bbox_min_lat,bbox_min_lon,bbox_max_lat,bbox_max_lon,best_lap_seconds')
+      .eq('id', cid || PAV_HS_ID).maybeSingle();
+    PAV.circuit = data || { id: cid || PAV_HS_ID, name: '', track_svg_path: null };
+  } catch (e) {
+    PAV.circuit = { id: cid || PAV_HS_ID, name: '', track_svg_path: null };
+  }
+  return PAV.circuit;
+}
+/* — Tracé : SVG réel (viewBox ajusté au path) ou message d'absence ; démo = schéma de la maquette — */
+function pavTrackSvg(idPrefix, opts) {
+  opts = opts || {};
+  if (PAV.demo) {
+    return '<svg viewBox="0 0 1000 640" fill="none" data-pav-track="demo">' +
+      '<path id="' + idPrefix + '-piste" d="' + PAV_TRACE_DEMO + '" stroke="#2E2E2E" stroke-width="' + (opts.mini ? 24 : 26) + '" stroke-linejoin="round"/>' +
+      '<path d="' + PAV_TRACE_DEMO + '" stroke="#FFFFFF" stroke-width="' + (opts.mini ? 2.5 : 3) + '" stroke-linejoin="round"/>' +
+      '<g transform="translate(300 520)"><rect x="-4" y="-20" width="8" height="40" fill="#C8102E"/>' + (opts.mini ? '' : '<text x="0" y="-34" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="13" fill="#8A8A8A" letter-spacing="2">S/F</text>') + '</g>' +
+      '<g class="pav-track-extra"></g><g class="pav-dots"></g></svg>';
+  }
+  const c = PAV.circuit || {};
+  if (!c.track_svg_path) {
+    return '<div class="pav-vide-msg">Tracé indisponible</div>';
+  }
+  return '<svg viewBox="0 0 1000 640" fill="none" data-pav-track="real">' +
+    '<path id="' + idPrefix + '-piste" d="' + pavEsc(c.track_svg_path) + '" stroke="#2E2E2E" stroke-width="' + (opts.mini ? 24 : 26) + '" stroke-linejoin="round"/>' +
+    '<path d="' + pavEsc(c.track_svg_path) + '" stroke="#FFFFFF" stroke-width="' + (opts.mini ? 2.5 : 3) + '" stroke-linejoin="round"/>' +
+    '<g class="pav-track-extra"></g><g class="pav-dots"></g></svg>';
+}
+function pavFitTrack(sc) {
+  // Ajuste le viewBox au path réel (le repère du SVG stocké est inconnu) + mémorise pour la projection.
+  sc.querySelectorAll('svg[data-pav-track="real"]').forEach(svg => {
+    const p = svg.querySelector('path');
+    if (!p) return;
+    try {
+      const bb = p.getBBox();
+      const pad = Math.max(bb.width, bb.height) * 0.06 + 20;
+      svg.setAttribute('viewBox', (bb.x - pad) + ' ' + (bb.y - pad) + ' ' + (bb.width + pad * 2) + ' ' + (bb.height + pad * 2));
+      if (PAV.circuit) PAV.circuit.viewBox = { x: bb.x - pad, y: bb.y - pad, w: bb.width + pad * 2, h: bb.height + pad * 2 };
+    } catch (e) {}
+  });
+}
+/* — Drapeau (Addendum 03) : bandeau sur les DEUX écrans, tous modes — */
+function pavDrapeauHtml() {
+  const d = PAV.drapeau;
+  const on = d === 'jaune' || d === 'rouge';
+  const heure = PAV.drapeauTs ? new Date(PAV.drapeauTs).toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit', timeZone: 'Europe/Paris' }) : '';
+  return '<div class="pav-drapeau ' + (on ? 'pav-on ' : '') + (d === 'jaune' ? 'pav-jaune' : d === 'rouge' ? 'pav-rouge' : '') + '">' +
+    '<span class="pav-drapeau-titre">' + (d === 'rouge' ? 'Drapeau rouge — piste neutralisée' : d === 'jaune' ? 'Drapeau jaune' : '') + '</span>' +
+    (on && heure ? '<span class="pav-drapeau-info">Signalé ' + heure + '</span>' : '') +
+    (on ? '<span class="pav-drapeau-legal">Information indicative — seuls les signaux du circuit font foi.</span>' : '') +
+    '</div>';
+}
+
+/* ============ ÉCRAN ACCUEIL (public, arbitrage A7 : pseudonymisé, AUCUN chrono) ============ */
+async function pavAccueilStart() {
+  const st = pavStage('pavillon-accueil');
+  if (PAV.demo) {
+    PAV.accueil.pilotes = pavDemoPilotes(Number(PAV.q.get('pilotes')) || 4);
+    PAV.accueil.meteo = { demo: true };
+    PAV.accueil.maxCap = 20;
+    PAV.etat = PAV.q.get('etat') || 'ouverte';
+    PAV.drapeau = (PAV.q.get('drapeau') === 'jaune' || PAV.q.get('drapeau') === 'rouge') ? PAV.q.get('drapeau') : null;
+    PAV.drapeauTs = PAV.drapeau ? new Date().toISOString() : null;
+    PAV.accueil.prochaines = [ { date: '2027-10-22', format: 'access', places: 6 }, { date: '2027-10-30', format: 'signature', places: 3 }, { date: '2027-11-06', format: 'signature', places: 11 } ];
+  } else {
+    await pavResolveCircuit();
+    const okData = await pavAccueilLoadCold();
+    if (!okData) { pavRenderConfigError('pavillon-accueil'); return; }
+    pavDeriveEtat();
+    pavTimer(() => { if (!PAV.etatFromChannel) { pavDeriveEtat(); pavAccueilRender(); } }, 60000);
+    pavTimer(() => { pavAccueilLoadCold().then(() => pavAccueilRender()); }, 300000);
+    // Canal 1 — positions live (réception seule)
+    pavChannel('pavillon:' + PAV.circuit.id + ':live', ch => {
+      ch.on('broadcast', { event: 'position' }, p => pavOnPosition(p && p.payload, false));
+    });
+    // Canal 4 — état piste + drapeau (régie)
+    pavChannel('pavillon:' + PAV.circuit.id + ':etat', ch => {
+      ch.on('broadcast', { event: 'etat' }, p => {
+        const m = p && p.payload;
+        if (!pavValidateMessage(4, m)) return;
+        PAV.etatFromChannel = true;
+        PAV.etat = m.etat;
+        PAV.etatMessage = (typeof m.message === 'string' ? m.message.slice(0, 120) : null);
+        if ('drapeau' in m) { PAV.drapeau = m.drapeau || null; PAV.drapeauTs = m.drapeau_ts || m.ts; }
+        pavAccueilRender();
+      });
+    }, () => { pavAccueilLoadCold().then(() => pavAccueilRender()); });
+    pavTimer(pavSweepDots, 1000);
+    pavStartDotLoop();
+    pavAccueilLoadPhotos();
+  }
+  pavTimer(() => { PAV.accueil.page++; pavAccueilRenderPilotes(); }, 10000);           // A12 : pagination 10 s
+  pavTimer(() => { PAV.accueil.altPlanning = !PAV.accueil.altPlanning; pavAccueilAlt(); }, 45000); // A11 : alternance 45 s
+  pavAccueilRender();
+}
+async function pavAccueilLoadCold() {
+  // Vue pseudonymisée SERVEUR (jamais users en direct) — vue absente = configuration incomplète.
+  const r = await supabase.from('pavillon_pilotes_jour').select('*');
+  if (r.error) return false;
+  PAV.accueil.pilotes = (r.data || []).map(x => ({
+    user_id: x.user_id, car: x.car_number, handle: x.public_handle, nom: x.display_name, auto: x.vehicle_label
+  })).sort((a, b) => (a.car || 999) - (b.car || 999)); // ordre par numéro, stable (A12)
+  try {
+    const m = await supabase.from('pavillon_meteo').select('*').order('captured_at', { ascending: false }).limit(1);
+    PAV.accueil.meteo = (m.data && m.data[0]) || null;
+  } catch (e) { PAV.accueil.meteo = null; }
+  try {
+    let s = await supabase.from('sessions').select('date,start_time,end_time,format,notes,max_capacity,status').eq('date', pavTodayISO());
+    if (s.error) s = await supabase.from('sessions_public').select('*').eq('date', pavTodayISO());
+    PAV.accueil.sessionsJour = s.data || [];
+    PAV.accueil.maxCap = (s.data && s.data[0] && s.data[0].max_capacity) || null;
+  } catch (e) { PAV.accueil.sessionsJour = []; }
+  try {
+    // A11 — Prochaines sessions : sessions_public à venir + places restantes via session_availability
+    const f = await supabase.from('sessions_public').select('*').gt('date', pavTodayISO()).order('date', { ascending: true }).limit(3);
+    const rows = (f.data || []).filter(x => !x.status || x.status === 'scheduled');
+    let avail = {};
+    try {
+      const av = await supabase.from('session_availability').select('*');
+      (av.data || []).forEach(a => { const id = a.session_id || a.id; if (id != null) avail[id] = a; });
+    } catch (e) {}
+    PAV.accueil.prochaines = rows.map(x => {
+      const a = avail[x.id] || {};
+      const places = [a.places_restantes, a.remaining, a.available, a.places].find(v => isFinite(Number(v)));
+      return { date: x.date, format: x.format, places: isFinite(Number(places)) ? Number(places) : null };
+    });
+  } catch (e) { PAV.accueil.prochaines = []; }
+  return true;
+}
+function pavDeriveEtat() {
+  // Repli sans émetteur : créneau en cours → ouverte · jour de session hors créneau → pause · sinon → veille.
+  const ss = PAV.accueil.sessionsJour;
+  if (!ss || !ss.length) { PAV.etat = 'veille'; return; }
+  const now = new Date();
+  const hm = String(now.getHours()).padStart(2, '0') + ':' + String(now.getMinutes()).padStart(2, '0');
+  const enCours = ss.some(s => s.start_time && s.end_time && String(s.start_time).slice(0, 5) <= hm && hm < String(s.end_time).slice(0, 5));
+  PAV.etat = enCours ? 'ouverte' : 'pause';
+}
+function pavFormatLabel(f) {
+  const x = String(f || '').toLowerCase();
+  if (x.indexOf('herit') === 0) return 'Heritage';
+  if (x.indexOf('sig') === 0) return 'Signature · journée complète';
+  if (x.indexOf('acc') === 0) return 'Access · demi-journée';
+  return f ? pavEsc(f) : 'Session';
+}
+function pavAccueilRender() {
+  const st = pavStage('pavillon-accueil');
+  if (!st) return;
+  const etat = PAV.etat || 'veille';
+  if (etat === 'veille') { pavAccueilRenderVeille(st); return; }
+  const c = PAV.circuit || {};
+  const sess = PAV.accueil.sessionsJour[0];
+  const badgeCls = etat === 'ouverte' ? '' : (etat === 'pause' ? 'pav-pause' : 'pav-fermee');
+  const badgeTxt = etat === 'ouverte' ? 'Piste ouverte' : (etat === 'pause' ? 'Piste en pause' : 'Piste fermée');
+  const titre = PAV.demo ? 'Session Signature' : (sess ? pavFormatLabel(sess.format).split(' · ')[0] : 'Session');
+  const type = PAV.demo ? 'Journée complète' : (sess ? (pavFormatLabel(sess.format).split(' · ')[1] || '') : '');
+  const sousTitre = PAV.demo ? 'Tracé Jean-Pierre Beltoise · 1,4 km · Sens horaire' : pavEsc(c.name || '');
+  const sousMarque = PAV.demo ? 'Pavillon · Circuit de Haute Saintonge' : ('Pavillon' + (c.name ? ' · ' + pavEsc(c.name) : '')) + (PAV.demo ? ' · Démo' : '');
+  st.innerHTML = '<div class="pav-scene pav-a">' +
+    '<div class="pav-hd"><div class="pav-marque">' + PAV_INSIGNE + '<span class="pav-oxv">OXV</span><span class="pav-sousmarque">' + sousMarque + (PAV.demo ? ' · Démo' : '') + '</span></div>' +
+    '<div class="pav-hd-droite"><div><div class="pav-badge-live ' + badgeCls + '"><span class="pav-pastille"></span> ' + badgeTxt + '</div>' +
+    (PAV.etatMessage ? '<div class="pav-badge-msg">' + pavEsc(PAV.etatMessage) + '</div>' : '') + '</div>' +
+    '<div><div class="pav-horloge"></div><div class="pav-datejour"></div></div></div></div>' +
+    pavDrapeauHtml() +
+    '<div class="pav-a-main"><section class="pav-zone-trace">' +
+    '<div class="pav-titre-session"><h1>' + pavEsc(titre) + '</h1>' + (type ? '<span class="pav-type">' + pavEsc(type) + '</span>' : '') + '</div>' +
+    '<div class="pav-soustitre">' + sousTitre + '</div>' +
+    '<div class="pav-carte">' + pavTrackSvg('pavA') + pavCompteurHtml() + (etat !== 'ouverte' ? '<div class="pav-vide-msg" style="background:rgba(10,10,10,0.55);">' + badgeTxt + '</div>' : (PAV.accueil.pilotes.length ? '' : '<div class="pav-vide-msg">Aucune session en cours</div>')) + '</div>' +
+    '</section><aside class="pav-a-aside">' +
+    pavMeteoHtml() +
+    '<div class="pav-bloc pav-pilotes"><div class="pav-bloc-titre">En piste <span class="pav-pageind" id="pavPageInd"></span></div><div id="pavPilotesListe"></div></div>' +
+    '<div class="pav-bloc" style="min-height:238px;"><div class="pav-alt" id="pavAltBloc"></div></div>' +
+    (etat !== 'ouverte' ? '<div class="pav-photo-bande" id="pavPhotoBande"></div>' : '') +
+    '</aside></div>' +
+    '<footer class="pav-a-foot"><div class="pav-principe">« Vous ne pilotez contre personne d’autre que vous-même. » <b>Le principe OXV</b></div>' +
+    '<div class="pav-circuit-ref">' + (PAV.demo ? 'La Génétouze · Nouvelle-Aquitaine' : pavEsc(c.name || '')) + '</div></footer>' +
+    '<div class="pav-reconnect">Reconnexion…</div>' +
+    '</div>';
+  const sc = st.querySelector('.pav-scene');
+  pavScaleSetup(sc); pavClock(sc); pavShowScene(sc); pavFitTrack(sc);
+  pavAccueilRenderPilotes();
+  pavAccueilAlt(true);
+  if (PAV.demo && etat === 'ouverte') pavDemoDots(sc, [27, 8, 44, 15].slice(0, Math.min(4, PAV.accueil.pilotes.length || 4)));
+  if (!PAV.demo && etat !== 'ouverte') pavAccueilRenderBande();
+}
+function pavCompteurHtml() {
+  const n = PAV.demo ? 12 : PAV.accueil.pilotes.length;
+  const cap = PAV.accueil.maxCap;
+  return '<div class="pav-compteur"><span class="pav-nb">' + n + (cap ? '<span>/' + cap + '</span>' : '') + '</span><span class="pav-lbl">Pilotes présents ce jour</span></div>';
+}
+function pavMeteoHtml() {
+  if (PAV.demo) {
+    return '<div class="pav-bloc"><div class="pav-bloc-titre">Conditions</div><div class="pav-meteo">' +
+      '<div><div class="pav-val">34<small>°C</small></div><div class="pav-lab">Piste</div></div>' +
+      '<div><div class="pav-val">26<small>°C</small></div><div class="pav-lab">Air</div></div>' +
+      '<div><div class="pav-val">12<small>km/h</small></div><div class="pav-lab">Vent SO</div></div>' +
+      '<div><div class="pav-val">Sec</div><div class="pav-lab">Piste</div></div></div></div>';
+  }
+  const m = PAV.accueil.meteo;
+  if (!m) return ''; // vide → bloc masqué, pas de valeurs inventées
+  const cells = [];
+  if (isFinite(Number(m.temperature_c))) cells.push('<div><div class="pav-val">' + Math.round(m.temperature_c) + '<small>°C</small></div><div class="pav-lab">Air</div></div>');
+  if (isFinite(Number(m.wind_speed_kmh))) cells.push('<div><div class="pav-val">' + Math.round(m.wind_speed_kmh) + '<small>km/h</small></div><div class="pav-lab">Vent ' + pavCardinal(m.wind_direction_deg) + '</div></div>');
+  if (isFinite(Number(m.precipitation_mm))) cells.push('<div><div class="pav-val">' + (Number(m.precipitation_mm) === 0 ? 'Sec' : Number(m.precipitation_mm).toFixed(1) + '<small>mm</small>') + '</div><div class="pav-lab">Précip.</div></div>');
+  if (m.weather_label) cells.push('<div><div class="pav-val" style="font-size:19px;line-height:1.4;">' + pavEsc(m.weather_label) + '</div><div class="pav-lab">Ciel</div></div>');
+  if (!cells.length) return '';
+  return '<div class="pav-bloc"><div class="pav-bloc-titre">Conditions</div><div class="pav-meteo">' + cells.join('') + '</div></div>';
+}
+function pavAccueilRenderPilotes() {
+  const box = document.getElementById('pavPilotesListe');
+  const ind = document.getElementById('pavPageInd');
+  if (!box) return;
+  const list = PAV.accueil.pilotes;
+  const pages = Math.max(1, Math.ceil(list.length / 8));
+  const page = PAV.accueil.page % pages;
+  const slice = list.slice(page * 8, page * 8 + 8);
+  // A7 : N° + pseudo ; prénom + initiale UNIQUEMENT si opt-in (déjà appliqué CÔTÉ SERVEUR par la vue).
+  box.innerHTML = slice.map(p => '<div class="pav-pilote-ligne"><span class="pav-num">' + pavEsc(p.car != null ? String(p.car).padStart(2, '0') : '—') + '</span>' +
+    '<span class="pav-id">' + (p.nom ? pavEsc(p.nom) + (p.handle ? ' <span class="pav-pseudo">· @' + pavEsc(p.handle) + '</span>' : '') : '@' + pavEsc(p.handle || 'pilote')) + '</span>' +
+    '<span class="pav-auto">' + pavEsc(p.auto || '') + '</span></div>').join('') ||
+    '<div class="pav-vide-msg" style="position:static;padding:30px 0;">Aucun pilote ce jour</div>';
+  if (ind) ind.textContent = pages > 1 ? (page + 1) + '/' + pages : '';
+}
+function pavAccueilAlt(first) {
+  const box = document.getElementById('pavAltBloc');
+  if (!box) return;
+  const paint = () => {
+    if (PAV.accueil.altPlanning) {
+      const rows = PAV.demo ?
+        [ { h: '09:00', q: 'Accueil · vérifications', cls: 'pav-passe' }, { h: '09:45', q: 'Briefing pilotes', cls: 'pav-passe' }, { h: '10:30–17:30', q: 'Roulage libre — sessions de 20 min', cls: 'pav-actif' }, { h: '12:30', q: 'Pause déjeuner · piste fermée', cls: '' }, { h: '18:00', q: 'Restitution · Pavillon', cls: '' } ] :
+        PAV.accueil.sessionsJour.map(s => {
+          const now = new Date(); const hm = String(now.getHours()).padStart(2, '0') + ':' + String(now.getMinutes()).padStart(2, '0');
+          const st5 = s.start_time ? String(s.start_time).slice(0, 5) : ''; const en5 = s.end_time ? String(s.end_time).slice(0, 5) : '';
+          const actif = st5 && en5 && st5 <= hm && hm < en5;
+          const passe = en5 && en5 <= hm;
+          return { h: st5 + (en5 ? '–' + en5 : ''), q: pavFormatLabel(s.format) + (s.notes ? ' — ' + pavEsc(String(s.notes).slice(0, 60)) : ''), cls: actif ? 'pav-actif' : (passe ? 'pav-passe' : '') };
+        });
+      box.innerHTML = '<div class="pav-bloc-titre" style="margin-bottom:20px;">Planning du jour</div>' +
+        (rows.length ? rows.map(r => '<div class="pav-planning-ligne ' + r.cls + '"><span class="pav-marqueur"></span><span class="pav-heure">' + r.h + '</span><span class="pav-quoi">' + r.q + '</span></div>').join('') :
+        '<div class="pav-planning-ligne"><span class="pav-quoi">Aucune session aujourd’hui</span></div>');
+    } else {
+      const rows = PAV.accueil.prochaines;
+      // A11 : AUCUN prix affiché.
+      box.innerHTML = '<div class="pav-bloc-titre" style="margin-bottom:20px;">Prochaines sessions</div>' +
+        (rows.length ? rows.map(r => {
+          const d = new Date(r.date + 'T12:00:00');
+          const dtxt = d.toLocaleDateString('fr-FR', { weekday: 'short', day: '2-digit', month: 'short' });
+          return '<div class="pav-planning-ligne"><span class="pav-marqueur"></span><span class="pav-heure">' + pavEsc(dtxt) + '</span><span class="pav-quoi">' + pavFormatLabel(r.format).split(' · ')[0] + (r.places != null ? ' · ' + r.places + ' place' + (r.places > 1 ? 's' : '') : '') + '</span></div>';
+        }).join('') : '<div class="pav-planning-ligne"><span class="pav-quoi">Calendrier à venir</span></div>');
+    }
+  };
+  if (first) { paint(); return; }
+  box.classList.add('pav-fade');
+  pavOnce(() => { paint(); box.classList.remove('pav-fade'); }, 400);
+}
+function pavAccueilRenderVeille(st) {
+  const c = PAV.circuit || {};
+  const p = PAV.accueil.prochaines[0];
+  const pro = p ? new Date(p.date + 'T12:00:00').toLocaleDateString('fr-FR', { weekday: 'long', day: '2-digit', month: 'long' }) + ' · ' + pavFormatLabel(p.format).split(' · ')[0] : null;
+  st.innerHTML = '<div class="pav-scene pav-a" style="grid-template-rows:1fr;"><div class="pav-veille">' +
+    '<div class="pav-veille-photos" id="pavVeillePhotos"></div>' +
+    '<div class="pav-veille-inner">' + PAV_INSIGNE +
+    '<div class="pav-manifeste">« Vous ne pilotez contre personne d’autre que vous-même. »</div>' +
+    '<div class="pav-horloge"></div>' +
+    '<div class="pav-prochaine">' + (pro ? 'Prochaine ouverture<br>' + pavEsc(pro) : 'OXV · ' + pavEsc(c.name || 'Pavillon')) +
+    (PAV.accueil.prochaines.length > 1 ? '<br>' + PAV.accueil.prochaines.slice(1).map(x => pavEsc(new Date(x.date + 'T12:00:00').toLocaleDateString('fr-FR', { day: '2-digit', month: 'short' })) + ' · ' + pavFormatLabel(x.format).split(' · ')[0]).join('<br>') : '') + '</div>' +
+    '</div>' + pavDrapeauHtml().replace('class="pav-drapeau', 'style="position:absolute;top:0;left:0;right:0;z-index:5;" class="pav-drapeau') +
+    '<div class="pav-reconnect">Reconnexion…</div></div></div>';
+  const sc = st.querySelector('.pav-scene');
+  pavScaleSetup(sc); pavClock(sc); pavShowScene(sc);
+  pavAccueilRenderCarrousel();
+}
+/* — A13 : photos prédéfinies (jamais session_media) — */
+async function pavAccueilLoadPhotos() {
+  try {
+    const { data, error } = await supabase.from('pavillon_photos').select('*').eq('is_active', true).order('sort_order', { ascending: true });
+    if (error || !data || !data.length) { PAV.accueil.photos = []; return; }
+    const signed = [];
+    for (const ph of data) {
+      try {
+        const { data: s } = await supabase.storage.from('pavillon-photos').createSignedUrl(ph.storage_path, 86400);
+        if (s && s.signedUrl) signed.push({ url: s.signedUrl, legende: ph.legende });
+      } catch (e) {}
+    }
+    PAV.accueil.photos = signed;
+    pavOnce(() => pavAccueilLoadPhotos(), 82800000); // re-signature à 23 h de vie
+    pavAccueilRenderCarrousel(); pavAccueilRenderBande();
+  } catch (e) { PAV.accueil.photos = []; }
+}
+function pavAccueilRenderCarrousel() {
+  const box = document.getElementById('pavVeillePhotos');
+  if (!box) return;
+  const ph = PAV.accueil.photos;
+  if (!ph.length) { box.innerHTML = ''; return; }
+  box.innerHTML = ph.map((p, i) => '<img src="' + pavEsc(p.url) + '" alt="" class="' + (i === 0 ? 'pav-on' : '') + '">');
+  if (PAV.accueil.carTimer) clearInterval(PAV.accueil.carTimer); // 1 photo → statique, sans transition
+  if (ph.length > 1) PAV.accueil.carTimer = pavTimer(() => {
+    const imgs = box.querySelectorAll('img');
+    if (!imgs.length) return;
+    PAV.accueil.photoIdx = (PAV.accueil.photoIdx + 1) % imgs.length;
+    imgs.forEach((im, i) => im.classList.toggle('pav-on', i === PAV.accueil.photoIdx));
+  }, 8000);
+}
+function pavAccueilRenderBande() {
+  const box = document.getElementById('pavPhotoBande');
+  if (!box) return;
+  const ph = PAV.accueil.photos;
+  if (!ph.length) { box.innerHTML = ''; return; }
+  box.innerHTML = ph.map((p, i) => '<img src="' + pavEsc(p.url) + '" alt="" class="' + (i === 0 ? 'pav-on' : '') + '">');
+  if (PAV.accueil.bandeTimer) clearInterval(PAV.accueil.bandeTimer);
+  if (ph.length > 1) PAV.accueil.bandeTimer = pavTimer(() => {
+    const imgs = box.querySelectorAll('img');
+    if (!imgs.length) return;
+    PAV.accueil.photoIdx = (PAV.accueil.photoIdx + 1) % imgs.length;
+    imgs.forEach((im, i) => im.classList.toggle('pav-on', i === PAV.accueil.photoIdx));
+  }, 8000);
+}
+/* — Positions live : réception, interpolation, TTL 20 s — */
+function pavOnPosition(m, isCoach) {
+  if (!pavValidateMessage(1, m)) return;
+  if (!pavThrottleOk(m.user_id)) return;
+  const c = PAV.circuit;
+  if (!c || !c.viewBox || !isFinite(Number(c.bbox_min_lat))) return; // pas de projection possible
+  const pt = pavProjectToTrack(Number(m.lat), Number(m.lon), c);
+  const e = PAV.live[m.user_id] || { x: pt.x, y: pt.y };
+  PAV.live[m.user_id] = {
+    fromX: e.curX != null ? e.curX : pt.x, fromY: e.curY != null ? e.curY : pt.y,
+    toX: pt.x, toY: pt.y, t0: performance.now(), dur: 1000,
+    curX: e.curX != null ? e.curX : pt.x, curY: e.curY != null ? e.curY : pt.y,
+    car: Number(m.car_number), last: Date.now(), speed: Number(m.speed_kmh)
+  };
+}
+function pavSweepDots() {
+  const now = Date.now();
+  Object.keys(PAV.live).forEach(uid => { if (now - PAV.live[uid].last > 20000) delete PAV.live[uid]; });
+}
+function pavStartDotLoop() {
+  const step = () => {
+    if (!PAV.route) return;
+    const sc = document.querySelector('.pav-scene');
+    const layer = sc && sc.querySelector('.pav-dots');
+    if (layer) {
+      const now = performance.now();
+      const ids = Object.keys(PAV.live);
+      // L'écran accueil IGNORE speed_kmh (aucune donnée de performance publique) — seuls N° et position sont rendus.
+      let html = '';
+      ids.forEach(uid => {
+        const d = PAV.live[uid];
+        const k = Math.min(1, (now - d.t0) / d.dur);
+        d.curX = d.fromX + (d.toX - d.fromX) * k;
+        d.curY = d.fromY + (d.toY - d.fromY) * k;
+        html += '<g class="pav-dot' + (PAV.coach.session && PAV.coach.session.user_id === uid ? ' pav-suivi' : '') + '" transform="translate(' + d.curX.toFixed(1) + ' ' + d.curY.toFixed(1) + ')"><circle class="pav-fond" r="17"></circle><text>' + String(d.car).padStart(2, '0') + '</text></g>';
+      });
+      layer.innerHTML = html;
+    }
+    PAV.rafs[0] = requestAnimationFrame(step);
+  };
+  PAV.rafs[0] = requestAnimationFrame(step);
+}
+function pavDemoDots(sc, cars) {
+  const svg = sc.querySelector('svg[data-pav-track]');
+  if (!svg) return;
+  const layer = svg.querySelector('.pav-dots');
+  const pid = svg.querySelector('path').id;
+  layer.innerHTML = cars.map((c, i) => {
+    const begin = i === 0 ? '0s' : '-' + (i * 12 + 2) + 's';
+    return '<g class="pav-dot"><circle class="pav-fond" r="17"><animateMotion dur="46s" begin="' + begin + '" repeatCount="indefinite"><mpath href="#' + pid + '"/></animateMotion></circle>' +
+      '<text><animateMotion dur="46s" begin="' + begin + '" repeatCount="indefinite"><mpath href="#' + pid + '"/></animateMotion>' + String(c).padStart(2, '0') + '</text></g>';
+  }).join('');
+}
+function pavDemoPilotes(n) {
+  const base = [
+    { car: 27, nom: 'Antoine V.', handle: 'averlaine', auto: '911 GT3' },
+    { car: 8, nom: null, handle: 'delta-blue', auto: 'AMG GT R' },
+    { car: 44, nom: null, handle: 'morvandiau', auto: 'Cayman GT4 RS' },
+    { car: 15, nom: 'Claire D.', handle: 'cd-alpine', auto: 'A110 R' }
+  ];
+  const out = base.slice(0, Math.min(n, 4));
+  for (let i = 5; out.length < n; i++) out.push({ car: i * 3 + 1, nom: null, handle: 'pilote-' + i, auto: 'GT' });
+  return out.sort((a, b) => a.car - b.car);
+}
+
+/* ============ ÉCRAN COACH (réservé — 4 modes : idle / live / restitution / multi) ============ */
+async function pavCoachStart() {
+  const uid = PAV.demo ? 'demo' : window.OXVApi.user.id;
+  if (!PAV.demo) {
+    await pavResolveCircuit();
+    await pavCoachLoadFile();
+    // Canal 2 — contrôle (télécommande du même coach)
+    pavChannel('pavillon:coach:' + uid + ':control', ch => {
+      ch.on('broadcast', { event: 'control' }, p => pavOnControl(p && p.payload));
+    });
+    // Canal 1 — positions
+    pavChannel('pavillon:' + PAV.circuit.id + ':live', ch => {
+      ch.on('broadcast', { event: 'position' }, p => pavOnPosition(p && p.payload, true));
+    });
+    pavTimer(pavSweepDots, 1000);
+    pavTimer(() => { pavCoachLoadFile().then(() => pavCoachRender()); }, 300000);
+    pavStartDotLoop();
+    PAV.coach.mode = 'idle'; // sans message : la TV démarre en idle
+    const dq = PAV.q.get('drapeau'); // le drapeau s'affiche aussi côté coach (Addendum 03)
+    if (dq === 'jaune' || dq === 'rouge') { PAV.drapeau = dq; PAV.drapeauTs = new Date().toISOString(); }
+    pavChannel('pavillon:' + PAV.circuit.id + ':etat', ch => {
+      ch.on('broadcast', { event: 'etat' }, p => {
+        const m = p && p.payload;
+        if (!pavValidateMessage(4, m)) return;
+        if ('drapeau' in m) { PAV.drapeau = m.drapeau || null; PAV.drapeauTs = m.drapeau_ts || m.ts; pavCoachRender(); }
+      });
+    });
+  } else {
+    PAV.coach.mode = PAV.q.get('mode') || 'live';
+    const dq = PAV.q.get('drapeau');
+    if (dq === 'jaune' || dq === 'rouge') { PAV.drapeau = dq; PAV.drapeauTs = new Date().toISOString(); }
+    pavCoachDemoData();
+  }
+  pavCoachRender();
+}
+async function pavCoachLoadFile() {
+  const uid = window.OXVApi.user.id;
+  try {
+    const { data: cps } = await supabase.from('coach_pilots').select('pilot_id,active,status').eq('coach_id', uid).eq('active', true);
+    PAV.coach.pilotIds = (cps || []).map(x => x.pilot_id);
+  } catch (e) { PAV.coach.pilotIds = []; }
+  const ids = PAV.coach.pilotIds;
+  if (!ids.length) { PAV.coach.file = []; return; }
+  let users = {};
+  try {
+    const { data: us } = await supabase.from('users').select('id,first_name,last_name,car_number,public_handle').in('id', ids);
+    (us || []).forEach(u => users[u.id] = u); // RLS peut restreindre → repli N° seul
+  } catch (e) {}
+  let tss = [];
+  try {
+    const start = pavTodayISO() + 'T00:00:00';
+    const { data } = await supabase.from('telemetry_sessions').select('id,user_id,vehicle_id,status,started_at,ended_at').in('user_id', ids).gte('started_at', start).order('started_at', { ascending: false });
+    tss = data || [];
+  } catch (e) {}
+  let vehicles = {};
+  try {
+    const vids = tss.map(t => t.vehicle_id).filter(Boolean);
+    if (vids.length) {
+      const { data: vs } = await supabase.from('vehicles').select('id,brand,model').in('id', vids);
+      (vs || []).forEach(v => vehicles[v.id] = (v.brand || '') + ' ' + (v.model || ''));
+    }
+  } catch (e) {}
+  PAV.coach.file = ids.map(pid => {
+    const u = users[pid] || {};
+    const mine = tss.filter(t => t.user_id === pid);
+    const liveTs = mine.find(t => !t.ended_at);
+    const doneTs = mine.find(t => t.status === 'completed');
+    // États : En piste (session sans ended_at) / Post-session (completed ce jour) / À venir (aucune)
+    const etat = liveTs ? 'live' : (doneTs ? 'post' : 'avenir');
+    const ts = liveTs || doneTs || null;
+    return {
+      pilot_id: pid, car: u.car_number, handle: u.public_handle,
+      nom: (u.first_name || u.last_name) ? ((u.first_name || '') + ' ' + (u.last_name || '')).trim() : null,
+      etat: etat, ts: ts, auto: ts && vehicles[ts.vehicle_id] ? vehicles[ts.vehicle_id].trim() : ''
+    };
+  }).sort((a, b) => (a.car || 999) - (b.car || 999));
+}
+function pavSessionAllowed(tsRow) {
+  // Défense en profondeur : la tablette est fiable, le canal ne l'est pas par principe.
+  return !!tsRow && PAV.coach.pilotIds.indexOf(tsRow.user_id) >= 0;
+}
+async function pavOnControl(m) {
+  if (!pavValidateMessage(2, m)) return;
+  if (m.action === 'idle') { PAV.coach.mode = 'idle'; pavCoachRender(); return; }
+  if (m.action === 'multi') {
+    const ids = (m.telemetry_session_ids || []).slice(0, 4);
+    const rows = [];
+    for (const id of ids) {
+      try {
+        const { data: ts } = await supabase.from('telemetry_sessions').select('id,user_id,vehicle_id,status,started_at,ended_at').eq('id', id).maybeSingle();
+        if (pavSessionAllowed(ts)) rows.push(ts);
+        else pavWarnOnce('etrangere-' + id, 'session étrangère écartée du multi-suivi');
+      } catch (e) {}
+    }
+    if (rows.length < 2) { pavWarnOnce('multi-min', 'multi-suivi : moins de 2 sessions valides — écran inchangé'); return; }
+    PAV.coach.multi = [];
+    for (const ts of rows) await pavCoachLoadTuile(ts);
+    // DOCTRINE: tri par numéro — ne jamais trier par temps.
+    PAV.coach.multi.sort((a, b) => (a.car || 999) - (b.car || 999));
+    PAV.coach.mode = 'multi';
+    pavCoachRender();
+    return;
+  }
+  try {
+    const { data: ts } = await supabase.from('telemetry_sessions').select('id,user_id,vehicle_id,status,started_at,ended_at,max_speed_kmh,max_g_lateral,distance_km,circuit_id,weather').eq('id', m.telemetry_session_id).maybeSingle();
+    if (!pavSessionAllowed(ts)) { pavWarnOnce('etrangere-' + m.telemetry_session_id, 'session hors coach_pilots — refusée, écran inchangé'); return; }
+    await pavCoachLoadSession(ts, m.action === 'show_restitution');
+    PAV.coach.mode = m.action === 'show_restitution' ? 'restitution' : 'live';
+    pavCoachRender();
+  } catch (e) { console.warn('[Pavillon] contrôle :', e); }
+}
+async function pavCoachLoadSession(ts, restitution) {
+  PAV.coach.session = ts;
+  try {
+    const { data: laps } = await supabase.from('laps').select('lap_number,duration_seconds,is_best_lap,max_g_braking,is_outlap,is_inlap,ended_at').eq('session_id', ts.id).order('lap_number', { ascending: true });
+    PAV.coach.laps = (laps || []).filter(l => isFinite(Number(l.duration_seconds)) && Number(l.duration_seconds) > 0);
+  } catch (e) { PAV.coach.laps = []; }
+  // Référence personnelle : min des tours du pilote sur ce circuit (sessions terminées incluses),
+  // repli min de la session — même règle que le lot PROFIL_CARTES.
+  PAV.coach.refPerso = null;
+  try {
+    const { data: allTs } = await supabase.from('telemetry_sessions').select('id').eq('user_id', ts.user_id).eq('circuit_id', ts.circuit_id).eq('status', 'completed');
+    const tids = (allTs || []).map(x => x.id).concat([ts.id]);
+    if (tids.length) {
+      const { data: best } = await supabase.from('laps').select('duration_seconds').in('session_id', tids).gt('duration_seconds', 0).order('duration_seconds', { ascending: true }).limit(1);
+      if (best && best[0]) PAV.coach.refPerso = Number(best[0].duration_seconds);
+    }
+  } catch (e) {}
+  if (PAV.coach.refPerso == null && PAV.coach.laps.length) PAV.coach.refPerso = Math.min.apply(null, PAV.coach.laps.map(l => Number(l.duration_seconds)));
+  // QDI (contrat jsonb §4 migration) — NULL partout à ce jour : l'UI gère l'absence.
+  PAV.coach.qdi = null;
+  try {
+    const rows = await pavBySession('app_session_analyses', ts.id, '*');
+    const row = rows && rows[0];
+    if (row && row.qdi && row.qdi.axes) PAV.coach.qdi = row.qdi;
+  } catch (e) {}
+  PAV.coach.segments = [];
+  try { PAV.coach.segments = await pavBySession('app_segment_analyses', ts.id, '*'); } catch (e) {}
+  PAV.coach.annotations = [];
+  try {
+    const { data: an } = await supabase.from('coach_annotations').select('corner_index,body,created_at').eq('telemetry_session_id', ts.id).is('deleted_at', null).order('created_at', { ascending: false }).limit(3);
+    PAV.coach.annotations = an || [];
+  } catch (e) {}
+  // Canal 3 — annotations en INSERT (Realtime postgres_changes ; publication à valider en migration)
+  // Un seul abonnement annotations à la fois : l'ancien est retiré à chaque bascule de session
+  // (QA Addendum 01 : 20 bascules live→restitution→idle → nombre de listeners constant).
+  if (PAV.coach.annotChan) {
+    try { supabase.removeChannel(PAV.coach.annotChan); } catch (e) {}
+    const ix = PAV.channels.indexOf(PAV.coach.annotChan);
+    if (ix >= 0) PAV.channels.splice(ix, 1);
+    PAV.coach.annotChan = null;
+  }
+  PAV.coach.annotChan = pavChannel('pav-annotations-' + ts.id, ch => {
+    ch.on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'coach_annotations', filter: 'telemetry_session_id=eq.' + ts.id }, payload => {
+      const a = payload && payload.new;
+      if (!a) return;
+      PAV.coach.annotations.unshift({ corner_index: a.corner_index, body: a.body, created_at: a.created_at });
+      PAV.coach.annotations = PAV.coach.annotations.slice(0, 3); // max 3 visibles
+      pavCoachRenderAnnotations();
+    });
+  });
+  if (restitution) {
+    PAV.coach.prev = null;
+    try {
+      const { data: prevTs } = await supabase.from('telemetry_sessions').select('id,started_at,weather,max_speed_kmh').eq('user_id', ts.user_id).eq('circuit_id', ts.circuit_id).eq('status', 'completed').lt('started_at', ts.started_at).order('started_at', { ascending: false }).limit(1);
+      if (prevTs && prevTs[0]) {
+        const { data: pl } = await supabase.from('laps').select('duration_seconds').eq('session_id', prevTs[0].id).gt('duration_seconds', 0);
+        const durs = (pl || []).map(x => Number(x.duration_seconds));
+        PAV.coach.prev = { ts: prevTs[0], count: durs.length, best: durs.length ? Math.min.apply(null, durs) : null, median: pavMedian(durs), band: durs.length ? Math.max.apply(null, durs) - Math.min.apply(null, durs) : null };
+      }
+    } catch (e) {}
+  }
+}
+async function pavCoachLoadTuile(ts) {
+  let laps = [];
+  try {
+    const { data } = await supabase.from('laps').select('lap_number,duration_seconds,ended_at').eq('session_id', ts.id).gt('duration_seconds', 0).order('lap_number', { ascending: true });
+    laps = data || [];
+  } catch (e) {}
+  let ref = null;
+  try {
+    const { data: allTs } = await supabase.from('telemetry_sessions').select('id').eq('user_id', ts.user_id).eq('status', 'completed');
+    const tids = (allTs || []).map(x => x.id).concat([ts.id]);
+    const { data: best } = await supabase.from('laps').select('duration_seconds').in('session_id', tids).gt('duration_seconds', 0).order('duration_seconds', { ascending: true }).limit(1);
+    if (best && best[0]) ref = Number(best[0].duration_seconds);
+  } catch (e) {}
+  const f = PAV.coach.file.find(x => x.pilot_id === ts.user_id) || {};
+  const last = laps.length ? laps[laps.length - 1] : null;
+  PAV.coach.multi.push({
+    tsId: ts.id, user_id: ts.user_id, car: f.car, nom: f.nom || (f.handle ? '@' + f.handle : 'Pilote'), auto: f.auto || '',
+    tourN: laps.length, dernier: last ? Number(last.duration_seconds) : null, ref: ref,
+    depuis: last && last.ended_at ? last.ended_at : ts.started_at
+  });
+}
+function pavCoachRender() {
+  const st = pavStage('pavillon-coach');
+  if (!st) return;
+  const mode = PAV.coach.mode;
+  const nomCoach = PAV.demo ? 'J. Moreau' : pavEsc(((window.OXVApi.user.dbProfile || {}).first_name || '') + ' ' + ((window.OXVApi.user.dbProfile || {}).last_name || '')).trim();
+  const nFile = PAV.demo ? 4 : PAV.coach.file.length;
+  const head = '<div class="pav-hd"><div class="pav-marque">' + PAV_INSIGNE + '<span class="pav-oxv">OXV</span><span class="pav-sousmarque">Stand Coach' + (PAV.demo ? ' · Démo' : '') + '</span><span class="pav-prive">Espace réservé</span></div>' +
+    '<div class="pav-hd-droite">' +
+    (mode === 'restitution' ? '<span class="pav-badge-mode">Restitution · Session terminée</span>' : '') +
+    (mode === 'multi' ? '<span class="pav-badge-mode pav-contour">Multi-suivi · ' + PAV.coach.multi.length + ' pilotes en piste</span>' : '') +
+    (mode === 'live' || mode === 'idle' ? '<span class="pav-coach-nom">Coach · <b>' + (nomCoach || '—') + '</b> · ' + nFile + ' pilote' + (nFile > 1 ? 's' : '') + ' ce jour</span>' : '') +
+    '<span class="pav-horloge"></span></div></div>';
+  let corps = '';
+  if (mode === 'idle') {
+    corps = '<div class="pav-idle">' + PAV_INSIGNE + '<div class="pav-idle-txt">Stand Coach · Espace réservé</div><div class="pav-horloge"></div></div>';
+    st.innerHTML = '<div class="pav-scene pav-c">' + head + pavDrapeauHtml() + corps + '<div class="pav-reconnect">Reconnexion…</div></div>';
+  } else if (mode === 'multi') {
+    corps = pavCoachMultiHtml();
+    st.innerHTML = '<div class="pav-scene pav-c">' + head + pavDrapeauHtml() + corps + '<div class="pav-reconnect">Reconnexion…</div></div>';
+  } else {
+    corps = pavCoachZoneHtml(mode === 'restitution') + pavCoachAsideHtml(mode === 'restitution');
+    st.innerHTML = '<div class="pav-scene pav-c">' + head + pavDrapeauHtml() + '<div class="pav-c-main">' + corps + '</div><div class="pav-reconnect">Reconnexion…</div></div>';
+  }
+  const sc = st.querySelector('.pav-scene');
+  pavScaleSetup(sc); pavClock(sc); pavShowScene(sc); pavFitTrack(sc);
+  pavCoachPaintSegments(sc);
+  if (mode === 'live' || mode === 'multi') pavCoachLiveChrono(sc);
+  if (PAV.demo && (mode === 'live')) pavDemoDots(sc, [27]);
+  if (PAV.demo && mode === 'multi') sc.querySelectorAll('.pav-mini-circuit svg').forEach((svg, i) => {
+    const layer = svg.querySelector('.pav-dots'); const pid = svg.querySelector('path').id;
+    const cars = PAV.coach.multi.map(t => t.car);
+    layer.innerHTML = '<g class="pav-dot"><circle class="pav-fond" r="16"><animateMotion dur="' + (46 + i * 3) + 's" begin="-' + (i * 9) + 's" repeatCount="indefinite"><mpath href="#' + pid + '"/></animateMotion></circle><text><animateMotion dur="' + (46 + i * 3) + 's" begin="-' + (i * 9) + 's" repeatCount="indefinite"><mpath href="#' + pid + '"/></animateMotion>' + String(cars[i]).padStart(2, '0') + '</text></g>';
+  });
+}
+function pavCoachIdentiteHtml(restit) {
+  if (PAV.demo) {
+    return restit ?
+      '<div class="pav-identite"><span class="pav-num">15</span><span class="pav-nom">Claire Deniau</span><span class="pav-auto">A110 R · Session 011 · terminée 14:52</span></div>' :
+      '<div class="pav-identite"><span class="pav-num">27</span><span class="pav-nom">Antoine Verlaine</span><span class="pav-auto">911 GT3 · Session 024</span></div>';
+  }
+  const s = PAV.coach.session || {};
+  const f = PAV.coach.file.find(x => x.pilot_id === s.user_id) || {};
+  const fin = restit && s.ended_at ? ' · terminée ' + new Date(s.ended_at).toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' }) : '';
+  return '<div class="pav-identite"><span class="pav-num">' + pavEsc(f.car != null ? String(f.car).padStart(2, '0') : '—') + '</span>' +
+    '<span class="pav-nom">' + pavEsc(f.nom || (f.handle ? '@' + f.handle : 'Pilote')) + '</span>' +
+    '<span class="pav-auto">' + pavEsc(f.auto || '') + fin + '</span></div>';
+}
+function pavCoachZoneHtml(restit) {
+  const laps = PAV.coach.laps;
+  const durs = laps.map(l => Number(l.duration_seconds));
+  const ref = PAV.demo ? 112.418 : PAV.coach.refPerso;
+  let droite;
+  if (restit) {
+    const best = PAV.demo ? 121.844 : (durs.length ? Math.min.apply(null, durs) : null);
+    const med = PAV.demo ? 123.1 : pavMedian(durs);
+    const band = PAV.demo ? 2.6 : (durs.length ? Math.max.apply(null, durs) - Math.min.apply(null, durs) : null);
+    const prev = PAV.demo ? { count: 22, best: 123.522, median: 125.4, band: 3.9, ts: { max_speed_kmh: 196, weather: 'sec' } } : PAV.coach.prev;
+    const cur = PAV.demo ? { count: 26, vmax: 199, weather: 'sec' } : { count: durs.length, vmax: PAV.coach.session && PAV.coach.session.max_speed_kmh, weather: PAV.coach.session && PAV.coach.session.weather };
+    const lignes = [
+      { m: 'Meilleur tour', a: prev ? pavFormatLapTime(prev.best) : null, b: pavFormatLapTime(best), d: prev && best != null && prev.best != null ? pavFormatDelta(best - prev.best) : null },
+      { m: 'Médiane', a: prev ? pavFormatLapTime(prev.median, 1) : null, b: pavFormatLapTime(med, 1), d: prev && med != null && prev.median != null ? pavFormatDelta(med - prev.median, 1) : null },
+      { m: 'Bande dispersion', a: prev && prev.band != null ? prev.band.toFixed(1) + ' s' : null, b: band != null ? band.toFixed(1) + ' s' : '—', d: prev && band != null && prev.band != null ? pavFormatDelta(band - prev.band, 1) : null },
+      { m: 'Tours', a: prev ? String(prev.count) : null, b: String(cur.count), d: prev ? pavFormatDelta(cur.count - prev.count, 0) : null },
+      { m: 'V. max', a: prev && prev.ts && prev.ts.max_speed_kmh != null ? String(Math.round(prev.ts.max_speed_kmh)) : null, b: cur.vmax != null ? String(Math.round(cur.vmax)) : '—', d: prev && cur.vmax != null && prev.ts && prev.ts.max_speed_kmh != null ? pavFormatDelta(cur.vmax - prev.ts.max_speed_kmh, 0) : null }
+    ];
+    const meteoNote = (() => {
+      const wa = prev && prev.ts && prev.ts.weather; const wb = cur.weather;
+      if (!wa && !wb) return '';
+      return '<br>Conditions : ' + pavEsc(String(wa || '—')) + ' / ' + pavEsc(String(wb || '—')) + '.';
+    })();
+    droite = '<div class="pav-comparaison"><div class="pav-coltitre">' + (prev ? 'Session N vs Session N−1' : 'Session') + '</div>' +
+      '<div class="pav-comp-ligne pav-tete"><span>Métrique</span><span>' + (prev ? 'S.préc.' : '—') + '</span><span>Session</span><span>Écart</span></div>' +
+      lignes.map(l => '<div class="pav-comp-ligne"><span class="pav-metrique">' + l.m + '</span><span class="pav-v pav-avant">' + (l.a == null ? (prev ? '—' : 'Première session') : l.a) + '</span><span class="pav-v">' + l.b + '</span><span class="pav-d">' + (l.d == null ? '—' : l.d) + '</span></div>').join('') +
+      '<div class="pav-comp-note">Comparaison avec la session précédente<br>du même pilote.' + meteoNote + '</div></div>';
+  } else {
+    const shown = PAV.demo ?
+      [ { n: 'T17', t: 113.044 }, { n: 'T16', t: 112.418, ref: true }, { n: 'T15', t: 113.310 }, { n: 'T14', t: 114.101 }, { n: 'T13', t: 113.788 } ] :
+      laps.slice(-5).reverse().map(l => ({ n: 'T' + l.lap_number, t: Number(l.duration_seconds), ref: ref != null && Number(l.duration_seconds) === ref }));
+    const mesures = PAV.demo ?
+      { v: 218, gl: 1.42, gf: 1.18, d: 25.2 } :
+      {
+        v: PAV.coach.session && PAV.coach.session.max_speed_kmh, gl: PAV.coach.session && PAV.coach.session.max_g_lateral,
+        gf: laps.length ? Math.max.apply(null, laps.map(l => Number(l.max_g_braking) || 0)) : null,
+        d: PAV.coach.session && PAV.coach.session.distance_km
+      };
+    droite = '<div class="pav-derniers-tours"><div class="pav-coltitre">Derniers tours</div>' +
+      (shown.length ? shown.map(l => '<div class="pav-tour-ligne' + (l.ref ? ' pav-ref' : '') + '"><span class="pav-n">' + l.n + '</span><span class="pav-t">' + pavFormatLapTime(l.t) + (l.ref ? '<span class="pav-tag">Réf</span>' : '') + '</span><span class="pav-d">' + (l.ref || ref == null ? '—' : pavFormatDelta(l.t - ref)) + '</span></div>').join('') : '<div class="pav-tour-ligne"><span class="pav-n">—</span><span class="pav-t">—</span><span class="pav-d">—</span></div>') +
+      '<div class="pav-mesures">' +
+      '<div class="pav-mesure"><div class="pav-lbl">V. max</div><div class="pav-val">' + (mesures.v != null ? Math.round(mesures.v) + ' <small>km/h</small>' : '—') + '</div></div>' +
+      '<div class="pav-mesure"><div class="pav-lbl">G latéral max</div><div class="pav-val">' + (mesures.gl != null ? Number(mesures.gl).toFixed(2) + ' <small>g</small>' : '—') + '</div></div>' +
+      '<div class="pav-mesure"><div class="pav-lbl">G freinage max</div><div class="pav-val">' + (mesures.gf ? Number(mesures.gf).toFixed(2) + ' <small>g</small>' : '—') + '</div></div>' +
+      '<div class="pav-mesure"><div class="pav-lbl">Distance</div><div class="pav-val">' + (mesures.d != null ? Number(mesures.d).toFixed(1) + ' <small>km</small>' : '—') + '</div></div>' +
+      '</div></div>';
+  }
+  const bandeau = restit ?
+    '<div class="pav-tour-courant">' +
+    '<div class="pav-cellule"><div class="pav-lbl">Tours</div><div class="pav-val">' + (PAV.demo ? 26 : durs.length) + '</div></div>' +
+    '<div class="pav-cellule"><div class="pav-lbl">Meilleur</div><div class="pav-val">' + (PAV.demo ? '2:01.844' : pavFormatLapTime(durs.length ? Math.min.apply(null, durs) : null)) + '</div></div>' +
+    '<div class="pav-cellule"><div class="pav-lbl">Médiane</div><div class="pav-val">' + (PAV.demo ? '2:03.1' : pavFormatLapTime(pavMedian(durs), 1)) + '</div></div>' +
+    '<div class="pav-cellule"><div class="pav-lbl">Distance</div><div class="pav-val">' + (PAV.demo ? '36.4 km' : (PAV.coach.session && PAV.coach.session.distance_km != null ? Number(PAV.coach.session.distance_km).toFixed(1) + ' km' : '—')) + '</div></div></div>' :
+    '<div class="pav-tour-courant">' +
+    '<div class="pav-cellule"><div class="pav-lbl">Tour en cours</div><div class="pav-val pav-live" id="pavChronoLive">—</div></div>' +
+    '<div class="pav-cellule"><div class="pav-lbl">Tour</div><div class="pav-val">' + (PAV.demo ? 18 : (laps.length + 1)) + '</div></div>' +
+    '<div class="pav-cellule"><div class="pav-lbl">Réf. personnelle</div><div class="pav-val">' + pavFormatLapTime(ref) + '</div></div></div>';
+  const annotHead = restit ? 'Annotations de session' + (PAV.demo ? ' — J. Moreau' : '') : 'Annotations coach — visibles dans cet espace uniquement';
+  return '<section class="pav-zone-pilote' + (restit ? ' pav-restit' : '') + '">' +
+    '<div class="pav-bandeau-pilote">' + pavCoachIdentiteHtml(restit) + bandeau + '</div>' +
+    '<div class="pav-piste-donnees"><div class="pav-carte">' + pavTrackSvg('pavC') + '</div>' + droite + '</div>' +
+    '<div class="pav-bande-coach"><div class="pav-entete-bande">' + annotHead + ' <span class="pav-fil"></span></div><div id="pavAnnots">' + pavAnnotationsHtml() + '</div></div>' +
+    '</section>';
+}
+function pavAnnotationsHtml() {
+  const an = PAV.demo ?
+    (PAV.coach.mode === 'restitution' ?
+      [ { c: 'V1', t: 'Point de freinage stabilisé sur les 10 derniers tours — dispersion d’entrée réduite de moitié vs S.009.', h: '14:31' },
+        { c: 'V2–V3', t: 'Liaison prise en une seule courbe à partir de T12 — volant plus stable, vitesse mini en hausse.', h: '14:40' },
+        { c: 'Global', t: 'Régularité en nette progression — la bande de dispersion devient l’acquis de la session.', h: '14:55' } ] :
+      [ { c: 'V1', t: 'Freinage initié 15 m plus tôt que la référence sur les 3 derniers tours — point de corde atteint à vitesse plus basse.', h: '14:28' },
+        { c: 'V6', t: 'Réaccélération plus progressive depuis T14 — sortie stabilisée.', h: '14:21' } ]) :
+    PAV.coach.annotations.map(a => ({
+      c: a.corner_index != null ? 'V' + a.corner_index : 'Global',
+      t: a.body || '',
+      h: a.created_at ? new Date(a.created_at).toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' }) : ''
+    }));
+  if (!an.length) return '<div class="pav-annotation"><span class="pav-texte" style="color:#8A8A8A;">Aucune annotation pour cette session.</span></div>';
+  return an.map(a => '<div class="pav-annotation"><span class="pav-cible">' + pavEsc(a.c) + '</span><span class="pav-texte">' + pavEsc(a.t) + '</span><span class="pav-heure">' + pavEsc(a.h) + '</span></div>').join('');
+}
+function pavCoachRenderAnnotations() {
+  const el = document.getElementById('pavAnnots');
+  if (el) el.innerHTML = pavAnnotationsHtml();
+}
+function pavCoachAsideHtml(restit) {
+  const qdi = PAV.demo ?
+    { axes: { cap: { value: restit ? 76 : 84, reference: restit ? 64 : 72 }, trajectoire: { value: restit ? 64 : 70, reference: restit ? 55 : 62 }, visee: { value: restit ? 55 : 60, reference: restit ? 50 : 56 }, plongee: { value: restit ? 73 : 69, reference: restit ? 58 : 65 }, anticipation: { value: restit ? 70 : 80, reference: restit ? 66 : 75 } } } :
+    PAV.coach.qdi;
+  let qdiHtml;
+  const sessLabel = restit ? 'Session terminée' : 'Session';
+  if (qdi && qdi.axes) {
+    const vals = PAV_AXES.map(a => (qdi.axes[a.k] || {}).value || 0);
+    const refs = PAV_AXES.map(a => (qdi.axes[a.k] || {}).reference || 0);
+    const colors = ['#60A5FA', '#FFB703', '#E63946', '#4ADE80', '#C084FC'];
+    const pts = pavRadarPoints(vals, 100).split(' ');
+    qdiHtml = '<div class="pav-qdi-conteneur"><div class="pav-radar"><svg viewBox="0 0 300 270">' +
+      '<g transform="translate(150 140)">' +
+      '<polygon class="pav-grille" points="' + pavRadarPoints([100, 100, 100, 100, 100], 100) + '"/>' +
+      '<polygon class="pav-grille" points="' + pavRadarPoints([66, 66, 66, 66, 66], 100) + '"/>' +
+      '<polygon class="pav-grille" points="' + pavRadarPoints([33, 33, 33, 33, 33], 100) + '"/>' +
+      pavRadarPoints([100, 100, 100, 100, 100], 100).split(' ').map(p => '<line class="pav-axe" x1="0" y1="0" x2="' + p.split(',')[0] + '" y2="' + p.split(',')[1] + '"/>').join('') +
+      '<polygon class="pav-reference" points="' + pavRadarPoints(refs, 100) + '"/>' +
+      '<polygon class="pav-courante" points="' + pavRadarPoints(vals, 100) + '"/>' +
+      pts.map((p, i) => '<circle cx="' + p.split(',')[0] + '" cy="' + p.split(',')[1] + '" r="5" fill="' + colors[i] + '"/>').join('') +
+      '</g>' +
+      '<text x="150" y="26">Cap</text><text x="272" y="106">Trajectoire</text><text x="225" y="250">Visée</text><text x="75" y="250">Plongée</text><text x="28" y="106">Anticipation</text>' +
+      '</svg></div><div class="pav-qdi-legende">' +
+      PAV_AXES.map((a, i) => {
+        const d = Math.round(vals[i] - refs[i]);
+        return '<div class="pav-qdi-axe"><span class="pav-puce" style="background:' + colors[i] + '"></span><span class="pav-nom">' + a.l + '</span><span class="pav-evolution">' + (d >= 0 ? '+' : '−') + Math.abs(d) + '</span></div>';
+      }).join('') +
+      '<div class="pav-qdi-note">Écarts vs. propre référence.<br>Aucun score global.</div></div></div>';
+  } else {
+    qdiHtml = '<div class="pav-qdi-attente">QDI en attente de calcul</div>';
+  }
+  // Dispersion
+  const durs = PAV.demo ?
+    (restit ? [121.8, 122.4, 122.9, 123.1, 123.6, 124.2, 125.1, 127.9] : [112.4, 113.0, 113.3, 113.8, 114.1, 115.2, 116.8]) :
+    PAV.coach.laps.map(l => Number(l.duration_seconds));
+  let dispHtml = '';
+  if (durs.length >= 2) {
+    const mn = Math.min.apply(null, durs), mx = Math.max.apply(null, durs), md = pavMedian(durs);
+    const span = Math.max(0.001, mx - mn);
+    const pad = span * 0.25;
+    const total = span + pad * 2;
+    const pct = v => (((v - mn + pad) / total) * 100).toFixed(1);
+    dispHtml = '<div class="pav-dispersion"><div class="pav-plage" style="left:' + pct(mn) + '%;width:' + (span / total * 100).toFixed(1) + '%;"></div>' +
+      '<div class="pav-mediane" style="left:' + pct(md) + '%;"></div>' +
+      (restit ? durs.map(v => '<div class="pav-marque" style="left:' + pct(v) + '%;"></div>').join('') : '') +
+      '</div><div class="pav-dispersion-legende"><span>' + pavFormatLapTime(mn, 1) + '</span><span>Bande : ' + span.toFixed(1) + ' s · Médiane ' + pavFormatLapTime(md, 1) + '</span><span>' + pavFormatLapTime(mx, 1) + '</span></div>';
+  } else {
+    dispHtml = '<div class="pav-qdi-attente">Dispersion disponible dès 2 tours</div>';
+  }
+  let bas;
+  if (restit) {
+    const next = PAV.demo ? { car: 8, nom: 'Marc Ellouin', detail: 'AMG GT R · Créneau 15:10 · Briefing en cours' } :
+      (() => { const f = PAV.coach.file.find(x => x.etat === 'avenir'); return f ? { car: f.car, nom: f.nom || (f.handle ? '@' + f.handle : 'Pilote'), detail: f.auto || '' } : null; })();
+    bas = '<div class="pav-bloc pav-suite"><div class="pav-coltitre">Prochain créneau</div>' +
+      (next ? '<div class="pav-suite-carte"><div class="pav-qui"><span class="pav-num">' + pavEsc(next.car != null ? String(next.car).padStart(2, '0') : '—') + '</span><span class="pav-nom">' + pavEsc(next.nom) + '</span></div><div class="pav-detail">' + pavEsc(next.detail) + '</div></div>' : '<div class="pav-note">File du jour terminée.</div>') +
+      '<div class="pav-rappel-app">Restitution complète disponible<br>sur l’application — Espace Pilote.</div></div>';
+  } else {
+    const file = PAV.demo ?
+      [ { car: 27, nom: 'Antoine Verlaine', detail: '911 GT3 · Session 024 · Tour 18', etat: 'live' },
+        { car: 15, nom: 'Claire Deniau', detail: 'A110 R · Session 011 · 26 tours', etat: 'post' },
+        { car: 8, nom: 'Marc Ellouin', detail: 'AMG GT R · Créneau 15:10', etat: 'avenir' },
+        { car: 44, nom: 'Paul Morvan', detail: 'Cayman GT4 RS · Créneau 15:40', etat: 'avenir' } ] :
+      PAV.coach.file.map(f => ({ car: f.car, nom: f.nom || (f.handle ? '@' + f.handle : 'Pilote'), detail: f.auto || '', etat: f.etat }));
+    bas = '<div class="pav-bloc pav-file"><div class="pav-coltitre">Mes pilotes · aujourd’hui</div>' +
+      (file.length ? file.map(f => '<div class="pav-file-ligne"><span class="pav-num">' + pavEsc(f.car != null ? String(f.car).padStart(2, '0') : '—') + '</span><div class="pav-qui"><div class="pav-nom">' + pavEsc(f.nom) + '</div><div class="pav-detail">' + pavEsc(f.detail) + '</div></div>' +
+        '<span class="pav-etat ' + (f.etat === 'live' ? 'pav-live' : f.etat === 'post' ? 'pav-post' : '') + '">' + (f.etat === 'live' ? 'En piste' : f.etat === 'post' ? 'Post-session' : 'À venir') + '</span></div>').join('') : '<div class="pav-note">Aucun pilote actif.</div>') + '</div>';
+  }
+  const titreQdi = 'QDI · ' + sessLabel + ' vs référence personnelle';
+  return '<aside class="pav-c-aside"><div class="pav-bloc"><div class="pav-coltitre">' + titreQdi + '</div>' + qdiHtml + '</div>' +
+    '<div class="pav-bloc"><div class="pav-coltitre">Régularité · ' + (restit ? ((PAV.demo ? 26 : PAV.coach.laps.length) + ' tours') : 'dispersion des tours') + '</div>' + dispHtml + '</div>' + bas + '</aside>';
+}
+function pavCoachMultiHtml() {
+  const tiles = PAV.coach.multi;
+  const n = tiles.length;
+  const grid2 = n === 2 ? ' pav-multi-2' : '';
+  let html = '<main class="pav-multi' + grid2 + '">';
+  tiles.forEach((t, i) => {
+    html += '<div class="pav-tuile"><div class="pav-tuile-tete"><div class="pav-tuile-identite"><span class="pav-num">' + pavEsc(t.car != null ? String(t.car).padStart(2, '0') : '—') + '</span><span class="pav-nom">' + pavEsc(t.nom) + '</span><span class="pav-auto">' + pavEsc(t.auto) + '</span></div>' +
+      '<div class="pav-tuile-etat"><span class="pav-pastille"></span> En piste · T' + (t.tourN + 1) + '</div></div>' +
+      '<div class="pav-tuile-corps"><div class="pav-mini-circuit pav-carte">' + pavTrackSvg('pavM' + i, { mini: true }) + '</div>' +
+      // Chaque tuile est un miroir individuel : écart vs SA propre référence, jamais de vis-à-vis.
+      '<div class="pav-td-col"><div class="pav-td"><div class="pav-lbl">Tour en cours</div><div class="pav-val pav-live" data-pav-tuile-chrono="' + i + '">—</div></div>' +
+      '<div class="pav-td"><div class="pav-lbl">Dernier tour</div><div class="pav-val">' + pavFormatLapTime(t.dernier) + '</div>' + (t.ref != null && t.dernier != null ? '<div class="pav-sous">Écart réf. ' + pavFormatDelta(t.dernier - t.ref) + '</div>' : '') + '</div>' +
+      '<div class="pav-td"><div class="pav-lbl">Réf. personnelle</div><div class="pav-val pav-petit">' + pavFormatLapTime(t.ref) + '</div></div></div></div></div>';
+  });
+  const libre = 4 - n;
+  if (n === 3 || (n < 4 && n !== 2)) {
+    const next = PAV.demo ? 'Prochain créneau · 15:40 · N° 44' :
+      (() => { const f = PAV.coach.file.find(x => x.etat === 'avenir'); return f ? 'Prochain créneau · N° ' + (f.car != null ? String(f.car).padStart(2, '0') : '—') : 'File du jour terminée'; })();
+    for (let i = 0; i < libre; i++) html += '<div class="pav-tuile pav-vide"><div>' + PAV_INSIGNE_GRIS + '<div class="pav-txt">Emplacement libre<br>' + pavEsc(next) + '</div></div></div>';
+  }
+  html += '</main>';
+  return html;
+}
+function pavCoachDemoData() {
+  PAV.coach.pilotIds = ['d1', 'd2', 'd3', 'd4'];
+  PAV.coach.file = [
+    { pilot_id: 'd1', car: 8, nom: 'Marc Ellouin', auto: 'AMG GT R', etat: 'live' },
+    { pilot_id: 'd2', car: 15, nom: 'Claire Deniau', auto: 'A110 R', etat: 'live' },
+    { pilot_id: 'd3', car: 27, nom: 'Antoine Verlaine', auto: '911 GT3', etat: 'live' },
+    { pilot_id: 'd4', car: 44, nom: 'Paul Morvan', auto: 'Cayman GT4 RS', etat: 'avenir' }
+  ];
+  if (PAV.coach.mode === 'multi') {
+    const nDemo = Math.min(4, Math.max(2, Number(PAV.q.get('n')) || 3));
+    // DOCTRINE: tri par numéro — ne jamais trier par temps.
+    PAV.coach.multi = [
+      { car: 8, nom: 'Marc Ellouin', auto: 'AMG GT R', tourN: 5, dernier: 118.911, ref: 117.707 },
+      { car: 15, nom: 'Claire Deniau', auto: 'A110 R', tourN: 13, dernier: 122.144, ref: 121.844 },
+      { car: 27, nom: 'Antoine Verlaine', auto: '911 GT3', tourN: 18, dernier: 113.044, ref: 112.418 },
+      { car: 44, nom: 'Paul Morvan', auto: 'Cayman GT4 RS', tourN: 3, dernier: 125.402, ref: 124.1 }
+    ].slice(0, nDemo).sort((a, b) => a.car - b.car);
+  }
+  if (PAV.coach.mode === 'live') {
+    PAV.coach.laps = [ { lap_number: 13, duration_seconds: 113.788 }, { lap_number: 14, duration_seconds: 114.101 }, { lap_number: 15, duration_seconds: 113.310 }, { lap_number: 16, duration_seconds: 112.418 }, { lap_number: 17, duration_seconds: 113.044 } ];
+    PAV.coach.refPerso = 112.418;
+  }
+  if (PAV.coach.mode === 'restitution') {
+    PAV.coach.laps = [121.844, 122.4, 122.9, 123.1, 123.4, 123.8, 124.2, 127.9].map((d, i) => ({ lap_number: i + 1, duration_seconds: d }));
+  }
+}
+function pavCoachLiveChrono(sc) {
+  // Tour en cours : temps écoulé depuis la fin du dernier tour (repli : début de session).
+  // Sert le mode live (#pavChronoLive) ET les tuiles multi (chronos indépendants).
+  const el = sc.querySelector('#pavChronoLive');
+  if (PAV.coach.chronoTimer) clearInterval(PAV.coach.chronoTimer); // un seul chrono, même après re-render
+  let base;
+  if (PAV.demo) base = Date.now() - 72400;
+  else {
+    const laps = PAV.coach.laps;
+    const last = laps.length ? laps[laps.length - 1] : null;
+    const ref = (last && last.ended_at) ? last.ended_at : (PAV.coach.session && PAV.coach.session.started_at);
+    base = ref ? new Date(ref).getTime() : Date.now();
+  }
+  PAV.coach.chronoTimer = pavTimer(() => {
+    const t = (Date.now() - base) / 1000;
+    if (el && t > 0 && t < 3600) el.textContent = pavFormatLapTime(t, 1);
+    // Tuiles multi : chronos indépendants
+    document.querySelectorAll('[data-pav-tuile-chrono]').forEach(td => {
+      const i = Number(td.getAttribute('data-pav-tuile-chrono'));
+      const tu = PAV.coach.multi[i];
+      if (!tu) return;
+      const b = PAV.demo ? Date.now() - (47200 + i * 21000) : (tu.depuis ? new Date(tu.depuis).getTime() : Date.now());
+      const tt = (Date.now() - b) / 1000;
+      if (tt > 0 && tt < 3600) td.textContent = pavFormatLapTime(tt, 1);
+    });
+  }, 100);
+}
+function pavCoachPaintSegments(sc) {
+  // Segments QDI : portions du tracé colorées (couleurs de DONNÉES).
+  // Découpage : 7 segments égaux du path (vocabulaire gelé « 7-segments ») ;
+  // app_segment_analyses.segment_index (0-6) + kind → couleur pilier.
+  const svg = sc.querySelector('svg[data-pav-track]');
+  if (!svg) return;
+  const extra = svg.querySelector('.pav-track-extra');
+  const piste = svg.querySelector('path');
+  if (!extra || !piste) return;
+  const segs = PAV.demo ?
+    (PAV.coach.mode === 'restitution' ?
+      [ { segment_index: 1, kind: 'freinage' }, { segment_index: 2, kind: 'fluidite' }, { segment_index: 4, kind: 'regularite' } ] :
+      (PAV.coach.mode === 'live' ? [ { segment_index: 1, kind: 'freinage' }, { segment_index: 3, kind: 'trajectoire' }, { segment_index: 5, kind: 'acceleration' } ] : [])) :
+    (PAV.coach.segments || []);
+  if (!segs.length || PAV.route !== 'pavillon-coach') return;
+  try {
+    const total = piste.getTotalLength();
+    const segLen = total / 7;
+    extra.innerHTML = segs.map(s => {
+      const k = String(s.kind || '').toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '');
+      const color = PAV_QDI_COLORS[k];
+      if (!color || !isFinite(Number(s.segment_index))) return '';
+      const off = segLen * Number(s.segment_index);
+      const d = piste.getAttribute('d');
+      return '<path d="' + d + '" stroke="' + color + '" stroke-width="7" fill="none" stroke-linecap="round" stroke-dasharray="' + segLen.toFixed(1) + ' ' + (total - segLen).toFixed(1) + '" stroke-dashoffset="' + (-off).toFixed(1) + '"/>';
+    }).join('');
+  } catch (e) {}
+}
+
+/* ============ /pavillon/controle — télécommande de la TV coach (Addendum 04) ============ */
+async function pavControleStart() {
+  const st = pavStage('pavillon-controle');
+  const uid = window.OXVApi.user.id; // JAMAIS un paramètre d'URL
+  await pavCoachLoadFile();
+  let chan = null;
+  chan = pavChannel('pavillon:coach:' + uid + ':control', ch => {
+    ch.on('broadcast', { event: 'control' }, p => {
+      const m = p && p.payload;
+      if (!pavValidateMessage(2, m)) return;
+      PAV.ctrl.lastAction = m; // le dernier message fait foi, y compris après rechargement
+      render();
+    });
+  });
+  const emit = (payload) => {
+    payload.ts = new Date().toISOString();
+    if (!pavValidateMessage(2, payload)) { pavWarnOnce('emit-ctrl', 'message de contrôle invalide — non émis'); return; }
+    chan.send({ type: 'broadcast', event: 'control', payload: payload });
+  };
+  const render = () => {
+    const cur = PAV.ctrl.lastAction || { action: 'idle' };
+    const curIds = cur.action === 'multi' ? (cur.telemetry_session_ids || []) : [];
+    st.innerHTML = '<div class="pav-tool-head">' + PAV_INSIGNE + '<span class="pav-tool-titre">Télécommande · Stand coach</span><span class="pav-tool-sous">La TV du stand obéit<br>à cette tablette</span></div>' +
+      '<div class="pav-tool-section"><div class="pav-coltitre">Mes pilotes du jour</div>' +
+      (PAV.coach.file.length ? PAV.coach.file.map(f => {
+        const tsId = f.ts && f.ts.id;
+        const marked = (cur.action === 'follow_pilot' && cur.telemetry_session_id === tsId) || (cur.action === 'show_restitution' && cur.telemetry_session_id === tsId) || (curIds.indexOf(tsId) >= 0);
+        return '<div class="pav-file-ligne">' +
+          (f.etat === 'live' && tsId ? '<input type="checkbox" class="pav-check" data-ts="' + pavEsc(tsId) + '" ' + (PAV.ctrl.sel.indexOf(tsId) >= 0 ? 'checked' : '') + ' aria-label="Sélection multi">' : '<span style="width:26px;"></span>') +
+          '<span class="pav-num">' + pavEsc(f.car != null ? String(f.car).padStart(2, '0') : '—') + '</span>' +
+          '<div class="pav-qui"><div class="pav-nom">' + pavEsc(f.nom || (f.handle ? '@' + f.handle : 'Pilote')) + (marked ? ' <span style="color:#C8102E;font-family:JetBrains Mono,monospace;font-size:10px;letter-spacing:0.12em;">● À L’ÉCRAN</span>' : '') + '</div>' +
+          '<div class="pav-detail">' + pavEsc(f.auto || '') + '</div></div>' +
+          '<div class="pav-actions">' +
+          (f.etat === 'live' && tsId ? '<button class="pav-btn pav-mini" data-act="follow" data-ts="' + pavEsc(tsId) + '">Suivre</button>' : '') +
+          (f.etat === 'post' && tsId ? '<button class="pav-btn pav-mini" data-act="restit" data-ts="' + pavEsc(tsId) + '">Restitution</button>' : '') +
+          (f.etat === 'avenir' ? '<span class="pav-etat">À venir</span>' : '') +
+          '</div></div>';
+      }).join('') : '<div class="pav-note">Aucun pilote actif aujourd’hui.</div>') + '</div>' +
+      '<div class="pav-tool-section"><div class="pav-btn-row">' +
+      '<button class="pav-btn" id="pavBtnMulti" ' + (PAV.ctrl.sel.length >= 2 && PAV.ctrl.sel.length <= 4 ? '' : 'disabled') + '>Multi-suivi (' + PAV.ctrl.sel.length + ')</button>' +
+      '<button class="pav-btn' + (cur.action === 'idle' ? ' pav-actif' : '') + '" id="pavBtnIdle">Écran neutre</button>' +
+      '</div><div class="pav-note">Multi-suivi : 2 à 4 pilotes en piste. Tri par numéro de voiture.</div></div>';
+    st.querySelectorAll('[data-act="follow"]').forEach(b => b.onclick = () => emit({ v: 1, action: 'follow_pilot', user_id: (PAV.coach.file.find(f => f.ts && f.ts.id === b.dataset.ts) || {}).pilot_id, telemetry_session_id: b.dataset.ts }));
+    st.querySelectorAll('[data-act="restit"]').forEach(b => b.onclick = () => emit({ v: 1, action: 'show_restitution', telemetry_session_id: b.dataset.ts }));
+    st.querySelectorAll('.pav-check').forEach(c => c.onchange = () => {
+      const id = c.dataset.ts;
+      if (c.checked) { if (PAV.ctrl.sel.indexOf(id) < 0) PAV.ctrl.sel.push(id); }
+      else PAV.ctrl.sel = PAV.ctrl.sel.filter(x => x !== id);
+      render();
+    });
+    const bm = st.querySelector('#pavBtnMulti');
+    if (bm) bm.onclick = () => {
+      if (PAV.ctrl.sel.length < 2 || PAV.ctrl.sel.length > 4) return; // bornes 2–4 à l'émission
+      // Tri par numéro appliqué à l'ÉMISSION comme à la réception.
+      const sorted = PAV.ctrl.sel.slice().sort((a, b) => {
+        const fa = PAV.coach.file.find(f => f.ts && f.ts.id === a) || {};
+        const fb = PAV.coach.file.find(f => f.ts && f.ts.id === b) || {};
+        return (fa.car || 999) - (fb.car || 999);
+      });
+      emit({ v: 2, action: 'multi', telemetry_session_ids: sorted });
+    };
+    const bi = st.querySelector('#pavBtnIdle');
+    if (bi) bi.onclick = () => emit({ v: 1, action: 'idle' });
+  };
+  render();
+  pavTimer(() => { pavCoachLoadFile().then(render); }, 300000);
+}
+
+/* ============ /pavillon/regie — console Staff : état piste + drapeaux (Addendum 04) ============ */
+async function pavRegieStart() {
+  const st = pavStage('pavillon-regie');
+  await pavResolveCircuit();
+  let state = { etat: 'veille', drapeau: null, drapeau_ts: null, message: '' };
+  let chan = null;
+  const render = () => {
+    st.innerHTML = '<div class="pav-tool-head">' + PAV_INSIGNE + '<span class="pav-tool-titre">Régie · Pavillon</span><span class="pav-tool-sous">' + pavEsc((PAV.circuit && PAV.circuit.name) || '') + '</span></div>' +
+      '<div class="pav-tool-section"><div class="pav-coltitre">État piste</div><div class="pav-btn-row">' +
+      ['ouverte', 'pause', 'fermee', 'veille'].map(e => '<button class="pav-btn' + (state.etat === e ? ' pav-actif' : '') + '" data-etat="' + e + '">' + (e === 'fermee' ? 'Fermée' : e.charAt(0).toUpperCase() + e.slice(1)) + '</button>').join('') +
+      '</div><input class="pav-input" id="pavRegieMsg" style="margin-top:12px;" maxlength="120" placeholder="Message optionnel (ex. Reprise 13:30)" value="' + pavEsc(state.message || '') + '"></div>' +
+      '<div class="pav-tool-section"><div class="pav-coltitre">Drapeau — relais déclaratif</div><div class="pav-btn-row">' +
+      '<button class="pav-btn pav-jaune-btn' + (state.drapeau === 'jaune' ? ' pav-actif' : '') + (PAV.regie.pending === 'jaune' ? ' pav-confirm' : '') + '" data-drapeau="jaune">' + (PAV.regie.pending === 'jaune' ? 'Confirmer jaune' : 'Jaune') + '</button>' +
+      '<button class="pav-btn pav-rouge-btn' + (state.drapeau === 'rouge' ? ' pav-actif' : '') + (PAV.regie.pending === 'rouge' ? ' pav-confirm' : '') + '" data-drapeau="rouge">' + (PAV.regie.pending === 'rouge' ? 'Confirmer rouge' : 'Rouge') + '</button>' +
+      '<button class="pav-btn' + (state.drapeau === null ? ' pav-actif' : '') + '" data-drapeau="aucun">Aucun</button>' +
+      '</div><div class="pav-note">Relais d’information. Seuls les signaux du circuit font foi.</div></div>';
+    const emit = () => {
+      const payload = { v: 2, etat: state.etat, drapeau: state.drapeau, drapeau_ts: state.drapeau_ts, message: state.message || undefined, ts: new Date().toISOString() };
+      if (!pavValidateMessage(4, payload)) { pavWarnOnce('emit-regie', 'message régie invalide — non émis'); return; }
+      chan.send({ type: 'broadcast', event: 'etat', payload: payload }); // état complet : le canal est idempotent
+    };
+    st.querySelectorAll('[data-etat]').forEach(b => b.onclick = () => {
+      state.etat = b.dataset.etat;
+      state.message = (st.querySelector('#pavRegieMsg') || {}).value || '';
+      emit(); render();
+    });
+    st.querySelectorAll('[data-drapeau]').forEach(b => b.onclick = () => {
+      const d = b.dataset.drapeau;
+      if (d === 'aucun') {
+        // Lever une neutralisation ne doit jamais attendre : immédiat + annule toute confirmation en attente.
+        PAV.regie.pending = null;
+        state.drapeau = null; state.drapeau_ts = null;
+        emit(); render(); return;
+      }
+      if (PAV.regie.pending === d) {
+        PAV.regie.pending = null;
+        state.drapeau = d; state.drapeau_ts = new Date().toISOString();
+        emit(); render();
+      } else {
+        PAV.regie.pending = d; // premier appui → confirmation exigée, aucune émission
+        render();
+      }
+    });
+    const mi = st.querySelector('#pavRegieMsg');
+    if (mi) mi.onchange = () => { state.message = mi.value.slice(0, 120); };
+  };
+  chan = pavChannel('pavillon:' + PAV.circuit.id + ':etat', ch => {
+    ch.on('broadcast', { event: 'etat' }, p => {
+      const m = p && p.payload;
+      if (!pavValidateMessage(4, m)) return;
+      // La régie écoute son propre canal : deux postes restent synchronisés.
+      state = { etat: m.etat, drapeau: ('drapeau' in m) ? m.drapeau : null, drapeau_ts: m.drapeau_ts || null, message: m.message || '' };
+      render();
+    });
+  });
+  render();
+}
+
+/* ============ /pavillon/admin — photos prédéfinies (A13) ============ */
+async function pavAdminStart() {
+  const st = pavStage('pavillon-admin');
+  const render = async () => {
+    let rows = [], err = null;
+    try {
+      const r = await supabase.from('pavillon_photos').select('*').order('sort_order', { ascending: true });
+      if (r.error) err = r.error; else rows = r.data || [];
+    } catch (e) { err = e; }
+    let grid;
+    if (err) {
+      grid = '<div class="pav-note">Table pavillon_photos absente — appliquer la migration 20260718_pavillon_photos.sql (lot ECRANS_PAVILLON).</div>';
+    } else if (!rows.length) {
+      grid = '<div class="pav-note">Aucune photo. Les écrans retombent sur leur version sans photo.</div>';
+    } else {
+      const cards = [];
+      for (const ph of rows) {
+        let url = '';
+        try { const { data: s } = await supabase.storage.from('pavillon-photos').createSignedUrl(ph.storage_path, 3600); url = (s && s.signedUrl) || ''; } catch (e) {}
+        cards.push('<div class="pav-photo-carte' + (ph.is_active ? '' : ' pav-off') + '">' + (url ? '<img src="' + pavEsc(url) + '" alt="">' : '') +
+          '<div class="pav-photo-meta"><span>' + pavEsc(ph.legende || 'Sans légende') + (ph.is_active ? '' : ' · désactivée') + '</span>' +
+          '<div class="pav-photo-actions">' +
+          '<button class="pav-btn pav-mini" data-up="' + ph.id + '">↑</button>' +
+          '<button class="pav-btn pav-mini" data-down="' + ph.id + '">↓</button>' +
+          '<button class="pav-btn pav-mini" data-toggle="' + ph.id + '">' + (ph.is_active ? 'Désactiver' : 'Activer') + '</button>' +
+          '<button class="pav-btn pav-mini" data-del="' + ph.id + '">Supprimer</button>' +
+          '</div></div></div>');
+      }
+      grid = '<div class="pav-photo-grille">' + cards.join('') + '</div>';
+    }
+    st.innerHTML = '<div class="pav-tool-head">' + PAV_INSIGNE + '<span class="pav-tool-titre">Photos · Pavillon</span><span class="pav-tool-sous">Diffusion : veille / pause / fermée<br>Jamais en piste ouverte</span></div>' +
+      '<div class="pav-tool-section"><div class="pav-coltitre">Téléverser</div>' +
+      '<input type="file" id="pavPhotoFile" class="pav-input" accept="image/jpeg,image/webp">' +
+      '<input type="text" id="pavPhotoLegende" class="pav-input" style="margin-top:10px;" maxlength="120" placeholder="Légende (optionnelle)">' +
+      '<div class="pav-btn-row" style="margin-top:12px;"><button class="pav-btn" id="pavPhotoUp">Téléverser</button></div>' +
+      '<div class="pav-note">JPG / WebP · 5 Mo max · compressé à 1920 px avant envoi.<br>Écriture verrouillée tant que la policy staff n’est pas appliquée (TODO_ARBITRAGE: rôle staff).</div></div>' +
+      '<div class="pav-tool-section"><div class="pav-coltitre">Photos diffusées</div>' + grid + '</div>';
+    st.querySelector('#pavPhotoUp').onclick = async () => {
+      const inp = st.querySelector('#pavPhotoFile');
+      const f = inp && inp.files && inp.files[0];
+      if (!f) { toast('Choisissez un fichier', 'warn'); return; }
+      if (f.size > 5 * 1024 * 1024) { toast('Fichier trop lourd (5 Mo max)', 'warn'); return; }
+      if (['image/jpeg', 'image/webp'].indexOf(f.type) < 0) { toast('Format accepté : JPG ou WebP', 'warn'); return; }
+      try {
+        const blob = await pavCompressImage(f, 1920);
+        const path = 'curation/' + Date.now() + '.webp';
+        const up = await supabase.storage.from('pavillon-photos').upload(path, blob, { contentType: 'image/webp' });
+        if (up.error) throw up.error;
+        const ins = await supabase.from('pavillon_photos').insert({ storage_path: path, legende: (st.querySelector('#pavPhotoLegende') || {}).value || null, sort_order: Date.now() % 100000, created_by: window.OXVApi.user.id });
+        if (ins.error) throw ins.error;
+        toast('Photo ajoutée', 'ok'); render();
+      } catch (e) {
+        toast('Écriture refusée — migration ou policy staff manquante', 'warn');
+      }
+    };
+    st.querySelectorAll('[data-toggle]').forEach(b => b.onclick = async () => {
+      const ph = rows.find(x => x.id === b.dataset.toggle);
+      const r = await supabase.from('pavillon_photos').update({ is_active: !ph.is_active }).eq('id', ph.id);
+      if (r.error) toast('Écriture refusée (policy staff en attente)', 'warn'); else render();
+    });
+    st.querySelectorAll('[data-del]').forEach(b => b.onclick = async () => {
+      if (!confirm('Supprimer cette photo ?')) return;
+      const r = await supabase.from('pavillon_photos').delete().eq('id', b.dataset.del);
+      if (r.error) toast('Écriture refusée (policy staff en attente)', 'warn'); else render();
+    });
+    const move = async (id, dir) => {
+      const i = rows.findIndex(x => x.id === id);
+      const j = i + dir;
+      if (i < 0 || j < 0 || j >= rows.length) return;
+      const a = rows[i], b2 = rows[j];
+      const r1 = await supabase.from('pavillon_photos').update({ sort_order: b2.sort_order }).eq('id', a.id);
+      const r2 = await supabase.from('pavillon_photos').update({ sort_order: a.sort_order }).eq('id', b2.id);
+      if (r1.error || r2.error) toast('Écriture refusée (policy staff en attente)', 'warn'); else render();
+    };
+    st.querySelectorAll('[data-up]').forEach(b => b.onclick = () => move(b.dataset.up, -1));
+    st.querySelectorAll('[data-down]').forEach(b => b.onclick = () => move(b.dataset.down, 1));
+  };
+  render();
+}
+function pavCompressImage(file, maxW) {
+  return new Promise((resolve, reject) => {
+    const img = new Image();
+    img.onload = () => {
+      const k = Math.min(1, maxW / img.width);
+      const cv = document.createElement('canvas');
+      cv.width = Math.round(img.width * k); cv.height = Math.round(img.height * k);
+      cv.getContext('2d').drawImage(img, 0, 0, cv.width, cv.height);
+      cv.toBlob(b => b ? resolve(b) : reject(new Error('compression')), 'image/webp', 0.85);
+    };
+    img.onerror = reject;
+    img.src = URL.createObjectURL(file);
+  });
+}
+
+/* ============ ?tests=1 — assertions du lot (QA §7.3 + contrat §Tests) ============ */
+function pavRenderTests(page) {
+  const st = pavStage(page);
+  const T = [];
+  const eq = (name, got, want) => T.push({ name: name, ok: JSON.stringify(got) === JSON.stringify(want), got: got, want: want });
+  const ok = (name, cond) => T.push({ name: name, ok: !!cond });
+  // projectToTrack : coins bbox → coins viewBox ; centre → centre (y inversé)
+  const circ = { bbox_min_lat: 45, bbox_max_lat: 46, bbox_min_lon: 0, bbox_max_lon: 1, viewBox: { x: 0, y: 0, w: 100, h: 100 } };
+  eq('projectToTrack coin SW', pavProjectToTrack(45, 0, circ), { x: 0, y: 100 });
+  eq('projectToTrack coin NE', pavProjectToTrack(46, 1, circ), { x: 100, y: 0 });
+  eq('projectToTrack centre', pavProjectToTrack(45.5, 0.5, circ), { x: 50, y: 50 });
+  // radarPoints : 100 partout → pentagone extérieur ; 0 → centre
+  ok('radarPoints 100 → sommet haut (0,-R)', pavRadarPoints([100, 100, 100, 100, 100], 100).split(' ')[0] === '0.0,-100.0');
+  ok('radarPoints 0 → centre', pavRadarPoints([0, 0, 0, 0, 0], 100).split(' ').every(p => p === '0.0,0.0'));
+  // formatLapTime — mêmes cas que le lot PROFIL_CARTES
+  eq('formatLapTime 112.418', pavFormatLapTime(112.418), '1:52.418');
+  eq('formatLapTime 59.9', pavFormatLapTime(59.9), '0:59.900');
+  eq('formatLapTime 125.4 dec1', pavFormatLapTime(125.4, 1), '2:05.4');
+  eq('formatLapTime null', pavFormatLapTime(null), '—');
+  eq('formatLapTime 0', pavFormatLapTime(0), '—');
+  // Logique d'état file (En piste / Post-session / À venir)
+  const etatOf = (tss) => { const live = tss.find(t => !t.ended_at); const done = tss.find(t => t.status === 'completed'); return live ? 'live' : (done ? 'post' : 'avenir'); };
+  eq('file état en piste', etatOf([{ status: 'completed', ended_at: 'x' }, { status: null, ended_at: null }]), 'live');
+  eq('file état post', etatOf([{ status: 'completed', ended_at: 'x' }]), 'post');
+  eq('file état à venir', etatOf([]), 'avenir');
+  // Contrat — 6 cas communs
+  ok('c1 position valide', pavValidateMessage(1, { v: 1, user_id: 'u', car_number: 27, lat: 45.2, lon: -0.1, ts: 't' }));
+  ok('c2 position sans car_number rejetée', !pavValidateMessage(1, { v: 1, user_id: 'u', lat: 45.2, lon: -0.1, ts: 't' }));
+  PAV.coach.pilotIds = ['p1'];
+  ok('c3 session étrangère refusée', !pavSessionAllowed({ user_id: 'autre' }) && pavSessionAllowed({ user_id: 'p1' }));
+  ok('c4 etat pause + message accepté', pavValidateMessage(4, { v: 1, etat: 'pause', message: 'Reprise 13:30', ts: 't' }));
+  PAV.live = { u1: { last: Date.now() - 21000 }, u2: { last: Date.now() } };
+  pavSweepDots();
+  ok('c5 TTL 20 s → pastille retirée', !PAV.live.u1 && !!PAV.live.u2);
+  PAV.liveThrottle = {};
+  const t0 = Date.now();
+  ok('c6 rafale 25 Hz → throttle 1 Hz', pavThrottleOk('u', t0) && !pavThrottleOk('u', t0 + 40) && pavThrottleOk('u', t0 + 1000));
+  ok('drapeau vert = valeur inconnue ignorée', !pavValidateMessage(4, { v: 2, etat: 'ouverte', drapeau: 'vert', ts: 't' }));
+  ok('multi v1 rejeté (action v2)', !pavValidateMessage(2, { v: 1, action: 'multi', telemetry_session_ids: ['a', 'b'], ts: 't' }));
+  PAV.live = {}; PAV.liveThrottle = {}; PAV.coach.pilotIds = [];
+  const pass = T.filter(t => t.ok).length;
+  st.innerHTML = '<div class="pav-scene pav-a pav-ready" style="grid-template-rows:1fr;transform:none;position:static;width:auto;height:auto;min-height:100vh;"><div class="pav-tests">' +
+    '<div style="margin-bottom:16px;">PAVILLON · TESTS — ' + pass + '/' + T.length + ' OK</div>' +
+    T.map(t => '<div class="' + (t.ok ? 'ok' : 'ko') + '">' + (t.ok ? '✓' : '✗') + ' ' + pavEsc(t.name) + (t.ok ? '' : ' — obtenu ' + pavEsc(JSON.stringify(t.got)) + ' · attendu ' + pavEsc(JSON.stringify(t.want))) + '</div>').join('') +
+    '</div></div>';
 }
 
 window.addEventListener('DOMContentLoaded', () => {
