@@ -13630,6 +13630,35 @@ body.pav-tv .nav, body.pav-tv footer, body.pav-tv .cookie, body.pav-tv .founding
 .pav-tests .ok { color: #4ADE80; }
 .pav-tests .ko { color: var(--pv-rouge); }
 
+/* ============================================================
+   CANDIDATURE — format PAYSAGE PC / tablette (fondateur 2026-07-19)
+   La carte n'est plus une colonne « téléphone » (460 px) au milieu
+   de l'écran : rail éditorial compact et sticky à gauche, formulaire
+   pleine largeur en DEUX colonnes à droite. Les libellés de section,
+   notes, consentements, zones de texte et navigation gardent la
+   pleine largeur. Mobile (< 920 px) strictement inchangé.
+   ============================================================ */
+@media (min-width: 920px) {
+  #page-demande .auth-wrap { grid-template-columns: 320px 1fr; gap: 64px; max-width: 1360px; align-items: start; }
+  #page-demande .auth-side { position: sticky; top: 110px; align-self: start; padding-right: 44px; }
+  #page-demande .auth-card { max-width: none; }
+  #page-demande .dmd-seg { grid-template-columns: repeat(4, 1fr); }
+  #page-demande .dmd-step.active,
+  #page-demande .dmd-block.show {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0 28px;
+    align-items: start;
+  }
+  #page-demande .dmd-step.active > .dmd-block,
+  #page-demande .dmd-step.active .consent,
+  #page-demande .dmd-step.active .dmd-nav,
+  #page-demande .dmd-step.active .dmd-step-hint,
+  #page-demande .dmd-block-label,
+  #page-demande .dmd-note,
+  #page-demande .form-row:has(textarea) { grid-column: 1 / -1; }
+}
+
 </style>
 <!-- JSON-LD : LocalBusiness / lieu (PR-HUB-08 GEO) -->
 <script type="application/ld+json">
