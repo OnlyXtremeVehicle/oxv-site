@@ -21709,15 +21709,15 @@ body.pav-tv .nav, body.pav-tv footer, body.pav-tv .cookie, body.pav-tv .founding
           <div class="bento" style="padding:18px 20px;"><div class="ce-stat" id="ceStatRating">—</div><div class="ce-stat-lbl">Note moyenne</div></div>
         </div>
 
-        <!-- Écran de session (Pavillon) : la TV du stand + la télécommande — le jour J -->
+        <!-- Écran de session UNIFIÉ (fondateur 2026-07-19 v2) : tout se pilote sur
+             l'écran même, à la souris — la télécommande n'est plus nécessaire. -->
         <div class="bento" style="padding:22px 26px;margin-bottom:16px;display:flex;align-items:center;gap:18px;flex-wrap:wrap;border-color:rgba(200,16,46,0.25);">
           <div style="flex:1;min-width:240px;">
             <div style="font-family:var(--mono);font-size:10px;letter-spacing:0.22em;text-transform:uppercase;color:var(--red-oxv);margin-bottom:8px;">Écran de session · jour J</div>
-            <p style="font-family:var(--sans);font-size:13px;line-height:1.7;color:var(--cream-mute);margin:0;"><strong style="color:var(--cream);">1.</strong> Branchez l'écran du stand en HDMI et ouvrez <strong style="color:var(--cream);">Ma TV de stand</strong> en plein écran (touche F11).<br/><strong style="color:var(--cream);">2.</strong> Sur votre téléphone ou tablette, ouvrez la <strong style="color:var(--cream);">Télécommande</strong> : choisissez le pilote à suivre, lancez une restitution ou un multi-suivi — la TV obéit instantanément.</p>
+            <p style="font-family:var(--sans);font-size:13px;line-height:1.7;color:var(--cream-mute);margin:0;">Branchez l'écran du stand en HDMI, passez en plein écran (touche F11) — tout se pilote directement à la souris : votre file de pilotes du jour, le suivi en piste, la restitution, le multi-suivi. Connecté à vos créneaux et au circuit de la journée.</p>
           </div>
           <div style="display:flex;gap:10px;flex-wrap:wrap;">
-            <button class="btn btn-sm btn-primary" onclick="goTo('pavillon-coach')"><span>Ouvrir ma TV de stand →</span></button>
-            <button class="btn btn-sm" onclick="goTo('pavillon-controle')"><span>Télécommande</span></button>
+            <button class="btn btn-sm btn-primary" onclick="goTo('pavillon-coach')"><span>Ouvrir mon écran de session →</span></button>
           </div>
         </div>
 
@@ -24606,6 +24606,24 @@ window.bkConfirmBooking = async function() {
         .eq('id', bkState.heritagePack.id);
     }
 
+    // Coach choisi à l'étape 4 : la demande part avec la réservation — le
+    // prérequis « inscrit à la journée » vient d'être rempli à l'instant.
+    // Paiement direct au coach, jamais via OXV.
+    bkState.coachRequested = false;
+    if (bkState.coachChoice && bkState.coachChoice.date === bkState.selectedSession.date) {
+      try {
+        const c = bkState.coachChoice;
+        const { error: cbErr } = await supabase.from('coaching_bookings').insert({
+          pilot_id: userId, coach_id: c.coachId, availability_id: c.slotId,
+          requested_starts_at: c.startsAt,
+          circuit_name: c.circuitName || bkState.selectedSession.circuit_name || 'Circuit de Haute Saintonge',
+          status: 'pending', pilot_first_name: window.OXVApi.user.dbProfile?.first_name || null
+        });
+        if (!cbErr) bkState.coachRequested = true;
+        else console.warn('[booking] demande coach :', cbErr);
+      } catch (e) { console.warn('[booking] demande coach :', e); }
+    }
+
     // Affichage page 5 confirmation — état paiement piloté par OXV_PAYMENT (lien CB/Visa/PayPal/Apple Pay)
     bkRenderPaymentConfirm(reg, priceDeposit, bkState.useHeritage ? 'heritage' : bkState.selectedOffer);
 
@@ -24644,7 +24662,7 @@ window.bkGoToStep = function(n) {
   if (n === 1) bkLoadOffers();
   if (n === 2) bkLoadDatesForOffer();
   if (n === 3) bkLoadVehicles();
-  if (n === 4) bkBuildRecap();
+  if (n === 4) { bkBuildRecap(); if (typeof window.bkRenderCoachOption === 'function') bkRenderCoachOption(); }
 };
 
 
@@ -28130,21 +28148,26 @@ async function renderClientEligibility(upcoming, containerEl) {
       const reg = upcoming.find(r => r.id === a.registration_id);
       const dateLbl = reg?.sessions?.date ? new Date(reg.sessions.date).toLocaleDateString('fr-FR', { day: 'numeric', month: 'long', year: 'numeric' }) : '';
       const miss = (byReg[a.registration_id] || []);
-      const missLbl = miss.map(m => (ELIG_LABELS[m.item_key] || m.item_key) + (m.status === 'refused' ? ' (refusé)' : '')).join(' · ');
+      // Fondateur v2 : ne plus lister comme « à compléter » ce qui est vérifié par
+      // OXV le jour J — le pilote ne peut rien y faire en ligne.
+      const missVous = miss.filter(m => (CHECKUP_META[m.item_key] || {}).grp === 'vous');
+      const missLbl = missVous.map(m => (ELIG_LABELS[m.item_key] || m.item_key) + (m.status === 'refused' ? ' (refusé)' : '')).join(' · ');
+      const nJourJ = miss.length - missVous.length;
       const theme = a.eligibility_status === 'GO'
         ? { col: 'var(--green-perf)', border: 'rgba(74,222,128,0.35)', lbl: 'GO — vous êtes prêt à rouler' }
         : a.eligibility_status === 'NO_GO'
         ? { col: 'var(--red)', border: 'rgba(230,57,70,0.35)', lbl: 'NO-GO — un point est refusé' }
-        : { col: 'var(--gold-data)', border: 'rgba(201,162,74,0.35)', lbl: 'EN ATTENTE — check-up incomplet' };
+        : { col: 'var(--gold-data)', border: 'rgba(201,162,74,0.35)', lbl: missVous.length ? 'EN ATTENTE — des points restent de votre côté' : 'EN ATTENTE — vérification OXV le jour J' };
       const col = theme.col, lbl = theme.lbl;
       return `<div style="border:1px solid ${theme.border};border-radius:10px;padding:14px 18px;margin-bottom:12px;background:var(--anthracite);">
         <div style="display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;">
           <div>
             <div style="font-family:var(--mono);font-size:11px;letter-spacing:0.14em;color:${col};margin-bottom:4px;">CHECK-UP · ${a.ok_count}/${a.total_count}${dateLbl ? ' · session du ' + dateLbl : ''}</div>
             <div style="font-family:var(--sans);font-size:14px;color:var(--cream);">${lbl}</div>
-            ${missLbl ? `<div style="font-family:var(--sans);font-size:12px;color:var(--cream-mute);margin-top:6px;">À compléter : ${missLbl}</div>` : ''}
+            ${missLbl ? `<div style="font-family:var(--sans);font-size:12px;color:var(--cream-mute);margin-top:6px;">De votre côté : ${missLbl}</div>` : ''}
+            ${nJourJ > 0 ? `<div style="font-family:var(--sans);font-size:12px;color:var(--cream-faint);margin-top:${missLbl ? '2px' : '6px'};">${nJourJ} point${nJourJ > 1 ? 's' : ''} vérifié${nJourJ > 1 ? 's' : ''} par OXV le jour J — rien à faire en ligne</div>` : ''}
           </div>
-          ${a.eligibility_status !== 'GO' ? `<button class="btn btn-sm" onclick="goToAccount('compte-documents')"><span>Compléter mes documents</span></button>` : ''}
+          ${a.eligibility_status !== 'GO' ? `<button class="btn btn-sm" onclick="goToAccount('compte-checkup')"><span>Voir mon check-up</span></button>` : ''}
         </div>
       </div>`;
     }).join('');
@@ -28222,6 +28245,7 @@ window.loadMySessions = async function() {
   } else if (upcomingBlock && upcomingDiv) {
     upcomingBlock.style.display = 'block';
     upcomingDiv.innerHTML = renderSessionsTable(upcoming, /*isPast*/ false);
+    renderPilotQr(upcomingDiv);                     // fondateur 2026-07-19 v2 : QR de contrôle à présenter le jour J
     renderClientEligibility(upcoming, upcomingDiv); // PR-HUB-02 : bandeau GO/EN ATTENTE/NO-GO
     renderCoachForSessions(upcoming, upcomingDiv);  // fondateur 2026-07-19 : coach de la journée (statut ou proposition)
   }
@@ -28241,6 +28265,46 @@ window.loadMySessions = async function() {
   loadPilotMedia();
 };
 
+/* — QR de contrôle (fondateur 2026-07-19 v2) : le pilote sort son QR depuis
+     Mes sessions ; OXV le scanne le jour J → dossier documents + éligibilité.
+     Même contrat que l'app : URL /controle-pilote/{user_id}. — */
+let __oxvQrSvgCache = null;
+async function renderPilotQr(container) {
+  const userId = window.OXVApi?.user?.profile?.id;
+  if (!userId || !container) return;
+  const box = document.createElement('div');
+  box.id = 'pilotQrBlock';
+  container.insertAdjacentElement('afterbegin', box);
+  const qrUrl = 'https://www.oxvehicle.fr/controle-pilote/' + userId;
+  let qrHtml;
+  try {
+    if (!__oxvQrSvgCache) {
+      const mod = await import('https://esm.sh/qrcode-generator@1.4.4');
+      const qrFactory = mod.default || mod;
+      const qr = qrFactory(0, 'M');
+      qr.addData(qrUrl);
+      qr.make();
+      __oxvQrSvgCache = qr.createSvgTag({ cellSize: 4, margin: 0, scalable: true });
+    }
+    qrHtml = `<div style="background:#FFFFFF;border-radius:10px;padding:12px;width:148px;height:148px;flex-shrink:0;display:flex;align-items:center;justify-content:center;">
+      <div style="width:124px;height:124px;">${__oxvQrSvgCache.replace('<svg ', '<svg style="width:100%;height:100%;display:block;" ')}</div>
+    </div>`;
+  } catch (e) {
+    console.warn('[QR contrôle]', e);
+    qrHtml = `<div style="background:var(--acier);border-radius:10px;padding:16px;width:148px;flex-shrink:0;font-family:var(--mono);font-size:9px;color:var(--cream-mute);word-break:break-all;line-height:1.5;">QR indisponible hors ligne — présentez ce lien :<br>${escapeHtml(qrUrl)}</div>`;
+  }
+  const name = [window.OXVApi.user.profile?.first_name, window.OXVApi.user.profile?.last_name].filter(Boolean).join(' ');
+  box.innerHTML = `<div class="bento" style="padding:22px;margin-bottom:18px;display:flex;gap:22px;align-items:center;flex-wrap:wrap;">
+    ${qrHtml}
+    <div style="flex:1;min-width:220px;">
+      <div style="font-family:var(--mono);font-size:10px;letter-spacing:0.18em;text-transform:uppercase;color:var(--gold-data);margin-bottom:6px;">Mon QR de contrôle</div>
+      <div style="font-family:var(--display);font-weight:600;font-size:19px;color:var(--offwhite);letter-spacing:-0.02em;margin-bottom:8px;">${escapeHtml(name || 'Pilote OXV')}</div>
+      <p style="font-family:var(--sans);font-size:13px;color:var(--cream-mute);line-height:1.65;margin:0;">Présentez ce code à l’accueil OXV le jour J. L’équipe le scanne, vérifie vos documents et votre éligibilité — vous accédez à la piste.</p>
+      <p style="font-family:var(--mono);font-size:9px;letter-spacing:0.05em;color:var(--cream-faint);margin:10px 0 0;">Code personnel · valable pour toutes vos sessions · aussi disponible dans l’app OXV</p>
+    </div>
+  </div>`;
+}
+
 /* ============ COACH DANS LE PARCOURS PILOTE (fondateur 2026-07-19) ============
    Le pilote croise le coach aux trois moments naturels : confirmation de
    réservation (la journée vient d'être prise), Mes sessions (rappel + statut),
@@ -28249,7 +28313,7 @@ async function oxvCoachesForDate(dateISO) {
   // Créneaux VALIDÉS par OXV ce jour-là + fiches coach publiées uniquement
   try {
     const { data: slots } = await supabase.from('coach_availability')
-      .select('id, coach_id, starts_at, ends_at')
+      .select('id, coach_id, starts_at, ends_at, circuit_name')
       .eq('status', 'open')
       .gte('starts_at', dateISO + 'T00:00:00').lt('starts_at', dateISO + 'T23:59:59')
       .order('starts_at');
@@ -28274,11 +28338,79 @@ function oxvCoachSlotRow(x, dateISO) {
     <button class="btn btn-sm" id="bkCoach-${escapeHtml(x.slot.id)}" onclick="bookCoachSlot('${escapeHtml(x.slot.coach_id)}','${escapeHtml(x.slot.id)}','${escapeHtml(x.slot.starts_at)}');this.disabled=true;this.innerHTML='<span>Demandé ✓</span>';"><span>Demander</span></button>
   </div>`;
 }
-/* — Étape 5 du booking : « Un coach pour cette journée ? » — */
+/* — Étape 4 du booking : le coach au TARIF AFFICHÉ, sélectionnable AVANT la
+     confirmation (fondateur 2026-07-19 v2 : « Coach disponible » ne doit plus
+     être un cul-de-sac — « il faut qu'on lui propose le coach au tarif indiqué
+     par le coach »). La demande part automatiquement avec la réservation. — */
+window.bkToggleCoachChoice = function(ix) {
+  const x = (bkState.coachOptions || [])[ix];
+  if (!x || !bkState.selectedSession) return;
+  if (bkState.coachChoice && bkState.coachChoice.slotId === x.slot.id) {
+    bkState.coachChoice = null;
+  } else {
+    bkState.coachChoice = {
+      date: bkState.selectedSession.date,
+      coachId: x.slot.coach_id, slotId: x.slot.id, startsAt: x.slot.starts_at,
+      circuitName: x.slot.circuit_name || null,
+      price: x.prof.session_price_eur || null, headline: x.prof.headline || 'Coach OXV'
+    };
+  }
+  bkPaintCoachOption();
+};
+function bkPaintCoachOption() {
+  const box = document.getElementById('bkCoachOption');
+  if (!box) return;
+  const coaches = bkState.coachOptions || [];
+  if (!coaches.length) { box.innerHTML = ''; return; }
+  const h = t => new Date(t).toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' });
+  const rows = coaches.slice(0, 3).map((x, ix) => {
+    const sel = bkState.coachChoice && bkState.coachChoice.slotId === x.slot.id;
+    const price = x.prof.session_price_eur ? Number(x.prof.session_price_eur).toLocaleString('fr-FR') + ' €' : 'Tarif sur la fiche';
+    return `<div style="display:flex;align-items:center;gap:12px;padding:10px 0;border-top:1px solid var(--bento-border);flex-wrap:wrap;">
+      ${x.prof.photo_url ? `<img src="${escapeHtml(x.prof.photo_url)}" alt="" style="width:40px;height:40px;border-radius:50%;object-fit:cover;border:1px solid var(--bento-border);">` : ''}
+      <span style="flex:1;min-width:170px;">
+        <strong style="color:var(--offwhite);font-size:13.5px;cursor:pointer;" onclick="showCoachFiche('${escapeHtml(x.slot.coach_id)}')">${escapeHtml(x.prof.headline || 'Coach OXV')}</strong>
+        <span style="font-family:var(--mono);font-size:11px;color:var(--cream-mute);display:block;">${h(x.slot.starts_at)}–${h(x.slot.ends_at)} · <strong style="color:var(--gold-data);">${price}</strong> / session</span>
+      </span>
+      <button class="btn btn-sm${sel ? ' btn-primary' : ''}" onclick="bkToggleCoachChoice(${ix})"><span>${sel ? '✓ Ajouté — retirer' : 'Ajouter à ma journée'}</span></button>
+    </div>`;
+  }).join('');
+  box.innerHTML = `<div class="bento" style="padding:20px 24px;margin-top:16px;border-color:rgba(201,162,74,0.35);">
+    <div style="font-family:var(--mono);font-size:10px;letter-spacing:0.22em;text-transform:uppercase;color:var(--gold-data);margin-bottom:4px;">Coach disponible ce jour — en option</div>
+    <p style="font-family:var(--sans);font-size:12.5px;line-height:1.6;color:var(--cream-mute);margin:0 0 4px;">Un coach partenaire diplômé accompagne votre roulage. La demande part avec votre réservation ; le coach confirme dans votre espace. Règlement directement auprès du coach — jamais via OXV.</p>
+    ${rows}
+    ${bkState.coachChoice ? `<p style="font-family:var(--mono);font-size:10px;letter-spacing:0.06em;color:var(--green-perf);margin:10px 0 0;">✓ Coach ajouté à votre demande${bkState.coachChoice.price ? ' · ' + Number(bkState.coachChoice.price).toLocaleString('fr-FR') + ' € à régler au coach' : ''} — hors montant OXV ci-dessus</p>` : ''}
+  </div>`;
+}
+window.bkRenderCoachOption = async function() {
+  const recap = document.getElementById('bkRecap');
+  if (!recap || !bkState.selectedSession) return;
+  let box = document.getElementById('bkCoachOption');
+  if (!box) { box = document.createElement('div'); box.id = 'bkCoachOption'; recap.insertAdjacentElement('afterend', box); }
+  const dateISO = bkState.selectedSession.date;
+  if (bkState.coachChoice && bkState.coachChoice.date !== dateISO) bkState.coachChoice = null; // date changée
+  if (bkState.coachOptionsDate !== dateISO) {
+    bkState.coachOptions = await oxvCoachesForDate(dateISO);
+    bkState.coachOptionsDate = dateISO;
+  }
+  bkPaintCoachOption();
+};
+
+/* — Étape 5 du booking : confirmation coach, ou rattrapage si rien choisi — */
 window.bkRenderCoachUpsell = async function(dateISO) {
   const box = document.getElementById('bkCoachUpsell');
   if (!box) return;
   box.innerHTML = '';
+  // Coach déjà demandé à l'étape 4 → confirmation, pas une nouvelle offre
+  if (bkState.coachRequested && bkState.coachChoice) {
+    const c = bkState.coachChoice;
+    const hh = new Date(c.startsAt).toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' });
+    box.innerHTML = `<div class="bento" style="padding:20px 24px;margin:18px auto;max-width:560px;text-align:left;border-color:rgba(74,222,128,0.35);">
+      <div style="font-family:var(--mono);font-size:10px;letter-spacing:0.22em;text-transform:uppercase;color:var(--green-perf);margin-bottom:4px;">✓ Demande de coach envoyée</div>
+      <p style="font-family:var(--sans);font-size:12.5px;line-height:1.6;color:var(--cream-mute);margin:0;">${escapeHtml(c.headline)} · créneau ${hh}${c.price ? ' · ' + Number(c.price).toLocaleString('fr-FR') + ' € à régler directement au coach' : ''}.<br>Le coach confirme — suivez la réponse dans <strong style="color:var(--cream);">Mes sessions</strong>.</p>
+    </div>`;
+    return;
+  }
   const coaches = await oxvCoachesForDate(dateISO);
   if (!coaches.length) return; // pas de coach ce jour → rien, jamais de contenu creux
   box.innerHTML = `<div class="bento" style="padding:20px 24px;margin:18px auto;max-width:560px;text-align:left;border-color:rgba(201,162,74,0.35);">
@@ -28288,9 +28420,21 @@ window.bkRenderCoachUpsell = async function(dateISO) {
   </div>`;
 };
 /* — Mes sessions : rappel coach par journée à venir (statut ou proposition) — */
-/* — Page Check-up : le détail item par item (fondateur 2026-07-19 : le bandeau
-     disait « incomplet » alors que les documents étaient complets — le pilote
-     doit VOIR quels points restent, et qui les valide). — */
+/* — Page Check-up REFONDUE (fondateur 2026-07-19, v2) : intuitive, actionnable,
+     connectée. Deux groupes clairs — « De votre côté » (avec l'action exacte,
+     et l'état réel du document si déjà transmis) et « Vérifié par OXV le jour J »
+     (rien à faire en ligne). Jauge de progression par session. — */
+const CHECKUP_META = {
+  permis:             { grp: 'vous',  desc: 'Votre permis de conduire, téléversé dans Mes documents.', act: 'compte-documents', actLbl: 'Téléverser', docs: ['driving_license'] },
+  cni:                { grp: 'vous',  desc: 'Votre pièce d’identité, téléversée dans Mes documents.', act: 'compte-documents', actLbl: 'Téléverser', docs: ['identity', 'identity_card', 'id_card'] },
+  assurance_circuit:  { grp: 'vous',  desc: 'L’attestation d’assurance couvrant le roulage sur circuit.', act: 'compte-documents', actLbl: 'Téléverser', docs: ['insurance_circuit', 'insurance_track', 'insurance_road'] },
+  controle_technique: { grp: 'vous',  desc: 'Le contrôle technique en cours de validité du véhicule engagé.', act: 'compte-vehicules', actLbl: 'Mon véhicule', docs: ['technical_inspection', 'vehicle_ct', 'ct'] },
+  pneus_freins:       { grp: 'jourj', desc: 'État des pneus et des freins — contrôle visuel au paddock.' },
+  niveau_sonore:      { grp: 'jourj', desc: 'Mesure du niveau sonore à l’accueil piste.' },
+  casque:             { grp: 'jourj', desc: 'Casque homologué — vérifié au briefing.' },
+  decharge:           { grp: 'jourj', desc: 'La décharge de responsabilité, signée sur place le matin.' },
+  briefing:           { grp: 'jourj', desc: 'Votre présence au briefing sécurité, obligatoire avant de rouler.' }
+};
 window.loadCheckup = async function() {
   if (!window.OXVApi?.user?.isLoggedIn) return;
   const userId = window.OXVApi.user.profile?.id;
@@ -28303,9 +28447,19 @@ window.loadCheckup = async function() {
   list.style.display = 'none';
   try {
     const today = new Date().toISOString().split('T')[0];
-    const { data: regs } = await supabase.from('registrations')
-      .select('id, status, sessions (id, date, format)')
-      .eq('user_id', userId).neq('status', 'cancelled');
+    const [{ data: regs }, docsRes] = await Promise.all([
+      supabase.from('registrations').select('id, status, sessions (id, date, format)').eq('user_id', userId).neq('status', 'cancelled'),
+      supabase.from('documents').select('document_type, status').eq('user_id', userId)
+    ]);
+    // État réel des documents déjà transmis (le check-up ne renvoie plus vers
+    // une page « déjà complète » sans explication)
+    const docsByType = {};
+    (docsRes.data || []).forEach(d => { docsByType[d.document_type] = d.status; });
+    const docState = meta => {
+      if (!meta || !meta.docs) return null;
+      for (const t of meta.docs) { if (docsByType[t] != null) return docsByType[t]; }
+      return null;
+    };
     const upcoming = (regs || []).filter(r => r.sessions && r.sessions.date >= today)
       .sort((a, b) => a.sessions.date < b.sessions.date ? -1 : 1);
     if (loading) loading.style.display = 'none';
@@ -28317,36 +28471,60 @@ window.loadCheckup = async function() {
     ]);
     const aggBy = {}; (aggs || []).forEach(a => aggBy[a.registration_id] = a);
     const itemsBy = {}; (items || []).forEach(i => { (itemsBy[i.registration_id] = itemsBy[i.registration_id] || []).push(i); });
-    const ICO = { ok: ['✓', 'var(--green-perf)'], validated: ['✓', 'var(--green-perf)'], pending: ['●', 'var(--gold-data)'], refused: ['✗', 'var(--red)'] };
+    const itemRow = (i) => {
+      const meta = CHECKUP_META[i.item_key] || {};
+      const label = ELIG_LABELS[i.item_key] || i.item_key;
+      const okStates = ['ok', 'validated', 'na'];
+      const dState = docState(meta);
+      // Statut qui PARLE : validé / transmis-en vérification / à faire / refusé
+      let chip, chipCol, action = '';
+      if (okStates.includes(i.status)) { chip = i.status === 'na' ? 'Non concerné' : 'Validé'; chipCol = 'var(--green-perf)'; }
+      else if (i.status === 'refused') {
+        chip = 'Refusé — à reprendre'; chipCol = 'var(--red)';
+        if (meta.act) action = `<button class="btn btn-sm" style="padding:6px 12px;font-size:9px;" onclick="goToAccount('${meta.act}')"><span>${meta.actLbl || 'Corriger'}</span></button>`;
+      } else if (meta.grp === 'vous' && dState) { chip = 'Transmis — vérification OXV en cours'; chipCol = 'var(--gold-data)'; }
+      else if (meta.grp === 'vous') {
+        chip = 'À transmettre'; chipCol = 'var(--gold-data)';
+        action = `<button class="btn btn-sm" style="padding:6px 12px;font-size:9px;" onclick="goToAccount('${meta.act}')"><span>${meta.actLbl || 'Compléter'}</span></button>`;
+      } else { chip = 'Le jour J, sur site'; chipCol = 'var(--cream-mute)'; }
+      const ic = okStates.includes(i.status) ? '✓' : i.status === 'refused' ? '✗' : '●';
+      return `<div style="display:flex;align-items:center;gap:14px;padding:10px 0;border-top:1px solid var(--bento-border);flex-wrap:wrap;">
+        <span style="font-family:var(--mono);font-size:15px;color:${chipCol};width:20px;text-align:center;">${ic}</span>
+        <span style="flex:1;min-width:200px;">
+          <span style="font-family:var(--sans);font-size:13.5px;color:var(--cream);display:block;">${escapeHtml(label)}</span>
+          <span style="font-family:var(--sans);font-size:11.5px;color:var(--cream-faint);">${escapeHtml(meta.desc || '')}</span>
+          ${i.note ? `<span style="display:block;font-size:11.5px;color:var(--gold-data);margin-top:2px;">Note OXV : ${escapeHtml(String(i.note).slice(0, 160))}</span>` : ''}
+        </span>
+        <span style="font-family:var(--mono);font-size:9px;letter-spacing:0.08em;text-transform:uppercase;color:${chipCol};white-space:nowrap;">${chip}</span>
+        ${action}
+      </div>`;
+    };
     list.innerHTML = upcoming.map(reg => {
       const a = aggBy[reg.id];
       const its = (itemsBy[reg.id] || []);
       const dateLbl = new Date(reg.sessions.date + 'T12:00:00').toLocaleDateString('fr-FR', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' });
-      const verdict = a ? (a.eligibility_status === 'GO'
-        ? '<span class="tag-inline green">GO — prêt à rouler</span>'
-        : a.eligibility_status === 'NO_GO'
-        ? '<span class="tag-inline" style="color:var(--red);border-color:var(--red);">NO-GO — un point est refusé</span>'
-        : '<span class="tag-inline gold">En attente — ' + a.ok_count + '/' + a.total_count + '</span>') : '';
-      const rows = its.map(i => {
-        const [ic, col] = ICO[i.status] || ICO.pending;
-        return `<div style="display:flex;align-items:baseline;gap:12px;padding:8px 0;border-top:1px solid var(--bento-border);">
-          <span style="font-family:var(--mono);font-size:14px;color:${col};width:18px;text-align:center;">${ic}</span>
-          <span style="flex:1;font-family:var(--sans);font-size:13.5px;color:var(--cream);">${escapeHtml(ELIG_LABELS[i.item_key] || i.item_key)}</span>
-          <span style="font-family:var(--mono);font-size:10px;letter-spacing:0.08em;text-transform:uppercase;color:${col};">${i.status === 'ok' || i.status === 'validated' ? 'Validé' : i.status === 'refused' ? 'Refusé' : 'En attente'}</span>
-          ${i.note ? `<div style="width:100%;font-size:12px;color:var(--cream-mute);margin-left:30px;">${escapeHtml(String(i.note).slice(0, 160))}</div>` : ''}
-        </div>`;
-      }).join('') || '<p style="font-family:var(--sans);font-size:13px;color:var(--cream-mute);">Check-up en préparation pour cette session.</p>';
-      return `<div class="bento" style="padding:24px;margin-bottom:16px;">
-        <div style="display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:10px;">
-          <div style="font-family:var(--mono);font-size:11px;letter-spacing:0.16em;text-transform:uppercase;color:var(--cream-mute);">Session du ${escapeHtml(dateLbl)}</div>
-          ${verdict}
+      const okN = a ? a.ok_count : its.filter(i => ['ok', 'validated', 'na'].includes(i.status)).length;
+      const totN = a ? a.total_count : (its.length || 1);
+      const pct = Math.round((okN / Math.max(1, totN)) * 100);
+      const go = a && a.eligibility_status === 'GO';
+      const nogo = a && a.eligibility_status === 'NO_GO';
+      const barCol = go ? 'var(--green-perf)' : nogo ? 'var(--red)' : 'var(--gold-data)';
+      const vous = its.filter(i => (CHECKUP_META[i.item_key] || {}).grp === 'vous');
+      const jourj = its.filter(i => (CHECKUP_META[i.item_key] || {}).grp !== 'vous');
+      return `<div class="bento" style="padding:26px;margin-bottom:16px;">
+        <div style="display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;">
+          <div>
+            <div style="font-family:var(--mono);font-size:10px;letter-spacing:0.18em;text-transform:uppercase;color:var(--cream-mute);">Session du</div>
+            <div style="font-family:var(--display);font-weight:600;font-size:19px;color:var(--offwhite);letter-spacing:-0.02em;">${escapeHtml(dateLbl)}</div>
+          </div>
+          <div style="text-align:right;min-width:170px;">
+            <div style="font-family:var(--mono);font-size:20px;font-weight:700;color:${barCol};">${okN}<span style="color:var(--cream-faint);font-size:13px;">/${totN}</span> <span style="font-size:10px;letter-spacing:0.1em;">${go ? 'PRÊT À ROULER' : nogo ? 'POINT REFUSÉ' : 'EN COURS'}</span></div>
+            <div style="height:4px;border-radius:3px;background:var(--acier);margin-top:6px;overflow:hidden;"><span style="display:block;height:100%;width:${pct}%;background:${barCol};transition:width 0.6s;"></span></div>
+          </div>
         </div>
-        ${rows}
-        <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:14px;">
-          <button class="btn btn-sm" onclick="goToAccount('compte-documents')"><span>Mes documents</span></button>
-          <button class="btn btn-sm" onclick="goToAccount('compte-vehicules')"><span>Mes véhicules</span></button>
-        </div>
-        <p style="font-family:var(--mono);font-size:9px;color:var(--cream-faint);margin:12px 0 0;letter-spacing:0.05em;">Les points « en attente » sont vérifiés par OXV — au plus tard lors du contrôle sur site le jour J (scan de votre QR profil).</p>
+        ${vous.length ? `<div style="font-family:var(--mono);font-size:9px;letter-spacing:0.2em;text-transform:uppercase;color:var(--gold-data);margin:20px 0 4px;">— De votre côté</div>${vous.map(itemRow).join('')}` : ''}
+        ${jourj.length ? `<div style="font-family:var(--mono);font-size:9px;letter-spacing:0.2em;text-transform:uppercase;color:var(--cream-mute);margin:20px 0 4px;">— Vérifié par OXV le jour J · rien à faire en ligne</div>${jourj.map(itemRow).join('')}` : ''}
+        <p style="font-family:var(--sans);font-size:12px;color:var(--cream-faint);margin:16px 0 0;line-height:1.6;">Le jour J, présentez votre <strong style="color:var(--cream);">QR de contrôle</strong> (dans Mes sessions) : OXV scanne, vérifie, et vous roulez.</p>
       </div>`;
     }).join('');
     list.style.display = 'block';
@@ -30441,9 +30619,15 @@ window.bookCoachSlot = async function(coachId, availabilityId, startsAt) {
       return;
     }
   } catch (e) { console.warn('[bookCoachSlot] vérification inscription :', e); }
+  // Multi-circuit : le circuit vient du créneau du coach, jamais d'une valeur figée
+  let circuitName = 'Circuit de Haute Saintonge';
+  try {
+    const { data: sl } = await supabase.from('coach_availability').select('circuit_name').eq('id', availabilityId).maybeSingle();
+    if (sl && sl.circuit_name) circuitName = sl.circuit_name;
+  } catch (e) {}
   const { error } = await supabase.from('coaching_bookings').insert({
     pilot_id: uid, coach_id: coachId, availability_id: availabilityId,
-    requested_starts_at: startsAt, circuit_name: 'Circuit de Haute Saintonge',
+    requested_starts_at: startsAt, circuit_name: circuitName,
     status: 'pending', pilot_first_name: firstName
   });
   toast(error ? 'Demande impossible (déjà demandée ?)' : 'Demande envoyée — le coach vous répond dans son espace', error ? 'warn' : 'ok');
@@ -36156,13 +36340,80 @@ async function pavCoachLoadTuile(ts) {
     depuis: last && last.ended_at ? last.ended_at : ts.started_at
   });
 }
+/* — ÉCRAN DE SESSION UNIFIÉ (fondateur 2026-07-19 v2) : « on fait tout depuis
+     l'écran de session, il choisira avec sa souris ». Les actions passent par
+     pavOnControl EN LOCAL — mêmes messages, même validation, même défense
+     pavSessionAllowed que le canal télécommande (qui reste compatible). — */
+function pavTvGo(action, tsId) {
+  const m = { v: 1, action: action, ts: new Date().toISOString() };
+  if (tsId) m.telemetry_session_id = tsId;
+  if (action === 'follow_pilot') m.user_id = (PAV.coach.file.find(f => f.ts && f.ts.id === tsId) || {}).pilot_id;
+  pavOnControl(m);
+}
+function pavTvMulti() {
+  const sel = PAV.coach.sel || [];
+  if (sel.length < 2 || sel.length > 4) return; // bornes 2–4, comme la télécommande
+  // DOCTRINE: tri par numéro — ne jamais trier par temps.
+  const sorted = sel.slice().sort((a, b) => {
+    const fa = PAV.coach.file.find(f => f.ts && f.ts.id === a) || {};
+    const fb = PAV.coach.file.find(f => f.ts && f.ts.id === b) || {};
+    return (fa.car || 999) - (fb.car || 999);
+  });
+  pavOnControl({ v: 2, action: 'multi', telemetry_session_ids: sorted, ts: new Date().toISOString() });
+}
+function pavTvRowHtml(f, curId, multiIds) {
+  const tsId = f.ts && f.ts.id;
+  const sel = PAV.coach.sel || [];
+  const onScreen = tsId && (curId === tsId || multiIds.indexOf(tsId) >= 0);
+  return '<div class="pav-file-ligne">' +
+    (f.etat === 'live' && tsId ? '<input type="checkbox" class="pav-check pav-tvcheck" data-ts="' + pavEsc(tsId) + '" ' + (sel.indexOf(tsId) >= 0 ? 'checked' : '') + ' aria-label="Sélection multi-suivi">' : '<span style="width:26px;flex-shrink:0;"></span>') +
+    '<span class="pav-num">' + pavEsc(f.car != null ? String(f.car).padStart(2, '0') : '—') + '</span>' +
+    '<div class="pav-qui"><div class="pav-nom">' + pavEsc(f.nom || (f.handle ? '@' + f.handle : 'Pilote')) + (onScreen ? ' <span style="color:#C8102E;font-family:\'JetBrains Mono\',monospace;font-size:10px;letter-spacing:0.12em;">● À L’ÉCRAN</span>' : '') + '</div>' +
+    '<div class="pav-detail">' + pavEsc(f.auto || '') + '</div></div>' +
+    '<div style="display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end;align-items:center;">' +
+    (f.etat === 'live' && tsId ? '<button class="pav-btn pav-mini" data-tvact="follow" data-ts="' + pavEsc(tsId) + '">Suivre</button>' : '') +
+    (f.etat === 'post' && tsId ? '<button class="pav-btn pav-mini" data-tvact="restit" data-ts="' + pavEsc(tsId) + '">Restitution</button>' : '') +
+    (!tsId || f.etat === 'avenir' ? '<span class="pav-etat' + (f.etat === 'live' ? ' pav-live' : f.etat === 'post' ? ' pav-post' : '') + '">' + (f.etat === 'live' ? 'En piste' : f.etat === 'post' ? 'Post-session' : 'À venir') + '</span>' : '') +
+    '</div></div>';
+}
+function pavTvFileHtml() {
+  // Sélection multi purgée des sessions qui ne sont plus en piste
+  PAV.coach.sel = (PAV.coach.sel || []).filter(id => PAV.coach.file.some(f => f.ts && f.ts.id === id && f.etat === 'live'));
+  const curId = (PAV.coach.mode === 'live' || PAV.coach.mode === 'restitution') && PAV.coach.session ? PAV.coach.session.id : null;
+  const multiIds = PAV.coach.mode === 'multi' ? PAV.coach.multi.map(t => t.tsId) : [];
+  const sel = PAV.coach.sel;
+  return '<div class="pav-bloc" style="border-bottom:none;display:flex;flex-direction:column;min-height:0;flex:1;overflow:hidden;">' +
+    '<div class="pav-coltitre">Ma file · aujourd’hui</div>' +
+    '<div style="flex:1;overflow-y:auto;min-height:0;">' +
+    (PAV.coach.file.length ? PAV.coach.file.map(f => pavTvRowHtml(f, curId, multiIds)).join('') : '<div class="pav-note">Aucun pilote dans votre file aujourd’hui.<br>Vos réservations acceptées du jour apparaissent ici.</div>') +
+    '</div>' +
+    '<div class="pav-btn-row" style="margin-top:16px;">' +
+    '<button class="pav-btn pav-mini" id="pavTvMulti" ' + (sel.length >= 2 && sel.length <= 4 ? '' : 'disabled') + '>Multi-suivi (' + sel.length + ')</button>' +
+    (PAV.coach.mode !== 'idle' ? '<button class="pav-btn pav-mini" id="pavTvIdle">Écran neutre</button>' : '<button class="pav-btn pav-mini" id="pavTvRefresh">Actualiser</button>') +
+    '</div>' +
+    '<div class="pav-note">Tout se pilote ici, à la souris. Multi-suivi : 2 à 4 pilotes en piste.</div></div>';
+}
+function pavTvBind(sc) {
+  sc.querySelectorAll('[data-tvact="follow"]').forEach(b => b.onclick = () => pavTvGo('follow_pilot', b.dataset.ts));
+  sc.querySelectorAll('[data-tvact="restit"]').forEach(b => b.onclick = () => pavTvGo('show_restitution', b.dataset.ts));
+  sc.querySelectorAll('.pav-tvcheck').forEach(c => c.onchange = () => {
+    const id = c.dataset.ts;
+    PAV.coach.sel = PAV.coach.sel || [];
+    if (c.checked) { if (PAV.coach.sel.indexOf(id) < 0) PAV.coach.sel.push(id); }
+    else PAV.coach.sel = PAV.coach.sel.filter(x => x !== id);
+    pavCoachRender();
+  });
+  const bm = sc.querySelector('#pavTvMulti'); if (bm) bm.onclick = pavTvMulti;
+  const bi = sc.querySelector('#pavTvIdle'); if (bi) bi.onclick = () => pavTvGo('idle');
+  const br = sc.querySelector('#pavTvRefresh'); if (br) br.onclick = () => { pavCoachLoadFile().then(() => pavCoachRender()); };
+}
 function pavCoachRender() {
   const st = pavStage('pavillon-coach');
   if (!st) return;
   const mode = PAV.coach.mode;
   const nomCoach = PAV.demo ? 'J. Moreau' : pavEsc(((window.OXVApi.user.dbProfile || {}).first_name || '') + ' ' + ((window.OXVApi.user.dbProfile || {}).last_name || '')).trim();
   const nFile = PAV.demo ? 4 : PAV.coach.file.length;
-  const head = '<div class="pav-hd"><div class="pav-marque">' + PAV_INSIGNE + '<span class="pav-oxv">OXV</span><span class="pav-sousmarque">Stand Coach' + (PAV.demo ? ' · Démo' : (PAV.circuit && PAV.circuit.name ? ' · ' + pavEsc(PAV.circuit.name) : '')) + '</span><span class="pav-prive">Espace réservé</span></div>' +
+  const head = '<div class="pav-hd"><div class="pav-marque">' + PAV_INSIGNE + '<span class="pav-oxv">OXV</span><span class="pav-sousmarque">Écran de session' + (PAV.demo ? ' · Démo' : (PAV.circuit && PAV.circuit.name ? ' · ' + pavEsc(PAV.circuit.name) : '')) + '</span><span class="pav-prive">Espace réservé</span></div>' +
     '<div class="pav-hd-droite">' +
     (mode === 'restitution' ? '<span class="pav-badge-mode">Restitution · Session terminée</span>' : '') +
     (mode === 'multi' ? '<span class="pav-badge-mode pav-contour">Multi-suivi · ' + PAV.coach.multi.length + ' pilotes en piste</span>' : '') +
@@ -36170,21 +36421,26 @@ function pavCoachRender() {
     '<span class="pav-horloge"></span></div></div>';
   let corps = '';
   if (mode === 'idle') {
-    // Écran d'attente UTILE (retour fondateur 2026-07-19) : insigne réel, coach,
-    // circuit du jour EN TRACÉ, mode d'emploi — plus un écran nu.
-    corps = '<div class="pav-idle" style="position:relative;">' +
-      '<div style="position:absolute;inset:6% 8%;opacity:0.14;">' + pavTrackSvg('pavIdle') + '</div>' +
-      '<div style="position:relative;display:flex;flex-direction:column;align-items:center;gap:24px;">' +
+    // Accueil de l'ÉCRAN DE SESSION (fondateur v2) : deux colonnes — identité à
+    // gauche avec le tracé CONTENU sous les infos (plus aucun texte sur le
+    // circuit), file du jour INTERACTIVE à droite. Tout se pilote à la souris.
+    corps = '<div class="pav-c-main" style="grid-template-columns:1fr 620px;">' +
+      '<div class="pav-bloc" style="border-bottom:none;border-right:1px solid var(--pv-ligne);display:flex;flex-direction:column;align-items:flex-start;gap:16px;min-height:0;">' +
       PAV_INSIGNE +
-      '<div class="pav-idle-txt">Stand Coach · Espace réservé</div>' +
-      (nomCoach ? '<div style="font-family:\'Syncopate\', sans-serif;font-weight:700;font-size:28px;letter-spacing:0.08em;text-transform:uppercase;">' + nomCoach + '</div>' : '') +
-      ((PAV.circuit && PAV.circuit.name) ? '<div class="pav-idle-txt" style="color:#C8102E;">' + pavEsc(PAV.circuit.name) + '</div>' : '') +
-      '<div class="pav-horloge"></div>' +
-      '<div class="pav-idle-txt" style="font-size:11px;color:#555555;line-height:2;">' + nFile + ' pilote' + (nFile > 1 ? 's' : '') + ' dans votre file ce jour<br>Pilotez cet écran depuis la Télécommande, sur votre tablette ou téléphone</div>' +
-      '</div></div>';
+      '<div style="font-family:\'JetBrains Mono\',monospace;font-size:13px;letter-spacing:0.22em;text-transform:uppercase;color:#8A8A8A;">Écran de session · Espace réservé</div>' +
+      (nomCoach ? '<div style="font-family:\'Syncopate\', sans-serif;font-weight:700;font-size:30px;letter-spacing:0.08em;text-transform:uppercase;">' + nomCoach + '</div>' : '') +
+      ((PAV.circuit && PAV.circuit.name) ? '<div style="font-family:\'JetBrains Mono\',monospace;font-size:13px;letter-spacing:0.22em;text-transform:uppercase;color:#C8102E;">' + pavEsc(PAV.circuit.name) + '</div>' : '') +
+      '<div class="pav-horloge" style="font-size:44px;"></div>' +
+      '<div style="font-family:\'JetBrains Mono\',monospace;font-size:11px;letter-spacing:0.12em;text-transform:uppercase;color:#555555;">' + nFile + ' pilote' + (nFile > 1 ? 's' : '') + ' dans votre file ce jour</div>' +
+      '<div class="pav-carte" style="width:100%;opacity:0.55;">' + pavTrackSvg('pavIdle') + '</div>' +
+      '</div>' +
+      pavTvFileHtml() +
+      '</div>';
     st.innerHTML = '<div class="pav-scene pav-c">' + head + pavDrapeauHtml() + corps + '<div class="pav-reconnect">Reconnexion…</div></div>';
   } else if (mode === 'multi') {
-    corps = pavCoachMultiHtml();
+    corps = pavCoachMultiHtml() +
+      '<div style="position:absolute;right:36px;bottom:24px;z-index:6;">' +
+      '<button class="pav-btn pav-mini" id="pavTvIdle">Écran neutre · Ma file</button></div>';
     st.innerHTML = '<div class="pav-scene pav-c">' + head + pavDrapeauHtml() + corps + '<div class="pav-reconnect">Reconnexion…</div></div>';
   } else {
     corps = pavCoachZoneHtml(mode === 'restitution') + pavCoachAsideHtml(mode === 'restitution');
@@ -36192,6 +36448,7 @@ function pavCoachRender() {
   }
   const sc = st.querySelector('.pav-scene');
   pavScaleSetup(sc); pavClock(sc); pavShowScene(sc); pavFitTrack(sc);
+  pavTvBind(sc); // écran de session unifié : toutes les actions à la souris, sur l'écran même
   pavCoachPaintSegments(sc);
   if (mode === 'live' || mode === 'multi') pavCoachLiveChrono(sc);
   if (PAV.demo && (mode === 'live')) pavDemoDots(sc, [27]);
@@ -36353,17 +36610,20 @@ function pavCoachAsideHtml(restit) {
       (() => { const f = PAV.coach.file.find(x => x.etat === 'avenir'); return f ? { car: f.car, nom: f.nom || (f.handle ? '@' + f.handle : 'Pilote'), detail: f.auto || '' } : null; })();
     bas = '<div class="pav-bloc pav-suite"><div class="pav-coltitre">Prochain créneau</div>' +
       (next ? '<div class="pav-suite-carte"><div class="pav-qui"><span class="pav-num">' + pavEsc(next.car != null ? String(next.car).padStart(2, '0') : '—') + '</span><span class="pav-nom">' + pavEsc(next.nom) + '</span></div><div class="pav-detail">' + pavEsc(next.detail) + '</div></div>' : '<div class="pav-note">File du jour terminée.</div>') +
+      '<div class="pav-btn-row" style="margin-top:14px;"><button class="pav-btn pav-mini" id="pavTvIdle">Écran neutre · Ma file</button></div>' +
       '<div class="pav-rappel-app">Restitution complète disponible<br>sur l’application — Espace Pilote.</div></div>';
-  } else {
-    const file = PAV.demo ?
-      [ { car: 27, nom: 'Antoine Verlaine', detail: '911 GT3 · Session 024 · Tour 18', etat: 'live' },
+  } else if (PAV.demo) {
+    const file = [ { car: 27, nom: 'Antoine Verlaine', detail: '911 GT3 · Session 024 · Tour 18', etat: 'live' },
         { car: 15, nom: 'Claire Deniau', detail: 'A110 R · Session 011 · 26 tours', etat: 'post' },
         { car: 8, nom: 'Marc Ellouin', detail: 'AMG GT R · Créneau 15:10', etat: 'avenir' },
-        { car: 44, nom: 'Paul Morvan', detail: 'Cayman GT4 RS · Créneau 15:40', etat: 'avenir' } ] :
-      PAV.coach.file.map(f => ({ car: f.car, nom: f.nom || (f.handle ? '@' + f.handle : 'Pilote'), detail: f.auto || '', etat: f.etat }));
+        { car: 44, nom: 'Paul Morvan', detail: 'Cayman GT4 RS · Créneau 15:40', etat: 'avenir' } ];
     bas = '<div class="pav-bloc pav-file"><div class="pav-coltitre">Mes pilotes · aujourd’hui</div>' +
-      (file.length ? file.map(f => '<div class="pav-file-ligne"><span class="pav-num">' + pavEsc(f.car != null ? String(f.car).padStart(2, '0') : '—') + '</span><div class="pav-qui"><div class="pav-nom">' + pavEsc(f.nom) + '</div><div class="pav-detail">' + pavEsc(f.detail) + '</div></div>' +
-        '<span class="pav-etat ' + (f.etat === 'live' ? 'pav-live' : f.etat === 'post' ? 'pav-post' : '') + '">' + (f.etat === 'live' ? 'En piste' : f.etat === 'post' ? 'Post-session' : 'À venir') + '</span></div>').join('') : '<div class="pav-note">Aucun pilote actif.</div>') + '</div>';
+      file.map(f => '<div class="pav-file-ligne"><span class="pav-num">' + pavEsc(String(f.car).padStart(2, '0')) + '</span><div class="pav-qui"><div class="pav-nom">' + pavEsc(f.nom) + '</div><div class="pav-detail">' + pavEsc(f.detail) + '</div></div>' +
+        '<span class="pav-etat ' + (f.etat === 'live' ? 'pav-live' : f.etat === 'post' ? 'pav-post' : '') + '">' + (f.etat === 'live' ? 'En piste' : f.etat === 'post' ? 'Post-session' : 'À venir') + '</span></div>').join('') + '</div>';
+  } else {
+    // Écran de session unifié : la file de l'aside est INTERACTIVE elle aussi
+    // (Suivre / Restitution / multi / Écran neutre) — plus besoin de télécommande.
+    bas = pavTvFileHtml();
   }
   const titreQdi = 'QDI · ' + sessLabel + ' vs référence personnelle';
   return '<aside class="pav-c-aside"><div class="pav-bloc"><div class="pav-coltitre">' + titreQdi + '</div>' + qdiHtml + '</div>' +
