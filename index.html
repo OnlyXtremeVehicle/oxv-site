@@ -29468,7 +29468,12 @@ async function ceLoadNextSessions() {
   if (!el) return;
   try {
     const today = new Date().toISOString().split('T')[0];
-    const { data } = await supabase.from('sessions_public').select('date, format, circuit_name').gte('date', today).order('date').limit(10);
+    // MÊME filtre que le calendrier public de réservation (loadPublicCalendar) :
+    // futures, non annulées, non archivées, non privatisées — les deux calendriers
+    // sont identiques (constat fondateur 2026-07-19 : ils divergeaient).
+    const { data } = await supabase.from('sessions_public').select('date, format, circuit_name')
+      .gte('date', today).not('status', 'in', '(cancelled,archived)').eq('is_private', false)
+      .order('date').limit(10);
     const sel = document.getElementById('ceSlotDate');
     if (data && data.length) {
       el.textContent = 'Vos créneaux sont adossés aux journées OXV — choisissez la journée :';
@@ -29995,11 +30000,29 @@ window.loadCoachVitrine = async function() {
 };
 
 /* Demande de réservation d'un créneau coach (policy : pending uniquement, coach publié uniquement).
-   La transaction financière reste directe coach↔pilote (arbitrage 2026-07-18). */
+   La transaction financière reste directe coach↔pilote (arbitrage 2026-07-18).
+   PRÉREQUIS (fondateur 2026-07-19) : le pilote doit être INSCRIT à la journée OXV
+   du créneau — le coach s'ajoute à une journée réservée, jamais l'inverse. */
 window.bookCoachSlot = async function(coachId, availabilityId, startsAt) {
   if (!window.OXVApi?.user?.isLoggedIn) { goTo('login'); return; }
   const uid = window.OXVApi.user.profile?.id;
   const firstName = window.OXVApi.user.dbProfile?.first_name || null;
+  // Vérifie l'inscription à la journée OXV correspondante (registrations non annulées)
+  try {
+    const slotDate = String(startsAt).slice(0, 10);
+    const { data: regs } = await supabase.from('registrations').select('session_id').eq('user_id', uid).neq('status', 'cancelled');
+    let inscrit = false;
+    if (regs && regs.length) {
+      const { data: ss } = await supabase.from('sessions_public').select('id').eq('date', slotDate).in('id', regs.map(r => r.session_id));
+      inscrit = !!(ss && ss.length);
+    }
+    if (!inscrit) {
+      const dtxt = new Date(slotDate + 'T12:00:00').toLocaleDateString('fr-FR', { day: 'numeric', month: 'long' });
+      toast(`Réservez d’abord votre session OXV du ${dtxt} — le coach s’ajoute à votre journée`, 'warn');
+      goTo('booking');
+      return;
+    }
+  } catch (e) { console.warn('[bookCoachSlot] vérification inscription :', e); }
   const { error } = await supabase.from('coaching_bookings').insert({
     pilot_id: uid, coach_id: coachId, availability_id: availabilityId,
     requested_starts_at: startsAt, circuit_name: 'Circuit de Haute Saintonge',
@@ -35198,8 +35221,10 @@ async function pavAccueilLoadCold() {
   } catch (e) { PAV.accueil.sessionsJour = []; }
   try {
     // A11 — Prochaines sessions : sessions_public à venir + places restantes via session_availability
-    const f = await supabase.from('sessions_public').select('*').gt('date', pavTodayISO()).order('date', { ascending: true }).limit(3);
-    const rows = (f.data || []).filter(x => !x.status || x.status === 'scheduled');
+    const f = await supabase.from('sessions_public').select('*').gt('date', pavTodayISO())
+      .not('status', 'in', '(cancelled,archived)').eq('is_private', false)
+      .order('date', { ascending: true }).limit(3);
+    const rows = f.data || [];
     let avail = {};
     try {
       const av = await supabase.from('session_availability').select('*');
