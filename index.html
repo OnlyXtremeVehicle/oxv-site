@@ -16484,6 +16484,12 @@ body.pav-tv .nav, body.pav-tv footer, body.pav-tv .cookie, body.pav-tv .founding
           <span class="account-nav-btn-sub">Tableau de bord · gestion · réglages</span>
         </button>
 
+        <button id="coachEspaceTile" class="account-nav-btn" onclick="goTo('coach-espace')" style="display:none;border-color:rgba(74,140,255,0.35);background:rgba(74,140,255,0.05);">
+          <span class="account-nav-btn-icon" style="color:var(--blue-data);">⌬</span>
+          <span class="account-nav-btn-label" style="color:var(--blue-data);">Espace Coach</span>
+          <span class="account-nav-btn-sub">Fiche · tarifs · créneaux · réservations</span>
+        </button>
+
       </div>
 
       <!-- KPIs -->
@@ -17954,6 +17960,21 @@ body.pav-tv .nav, body.pav-tv footer, body.pav-tv .cookie, body.pav-tv .founding
           <span style="font-family:var(--mono);font-size:10px;color:var(--cream-mute);">Licence 750 € / saison · facturable via le module factures</span>
         </div>
         <div id="adminCoachRows" class="admin-todo-list">
+          <div class="admin-empty">
+            <div class="admin-empty-icon">○</div>
+            <div class="admin-empty-text">Chargement…</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Validations en attente (arbitrages fondateur 2026-07-18 : validation admin PAR ÉLÉMENT
+           avant toute apparition dans l'app — entreprises partenaires, offres, créneaux coach) -->
+      <div class="admin-section">
+        <div class="admin-section-head">
+          <div class="admin-section-title">Validations en attente</div>
+          <span style="font-family:var(--mono);font-size:10px;color:var(--cream-mute);">Rien ne paraît dans l'app sans votre validation</span>
+        </div>
+        <div id="adminValidationRows" class="admin-todo-list">
           <div class="admin-empty">
             <div class="admin-empty-icon">○</div>
             <div class="admin-empty-text">Chargement…</div>
@@ -21325,10 +21346,133 @@ body.pav-tv .nav, body.pav-tv footer, body.pav-tv .cookie, body.pav-tv .founding
         </div>
         <p style="font-family:var(--sans);font-size:12px;color:var(--cream-faint);margin:20px 0 0;line-height:1.6;">Statistiques de visibilité détaillées : disponibles après le lancement public. Vous n'avez jamais accès aux médias privés des pilotes — c'est une garantie OXV.</p>
       </div>
+
+      <!-- Mon entreprise & catalogue app (arbitrages 2026-07-18 : self-service, validation OXV par élément,
+           vitrine + mise en relation — la transaction se fait chez le partenaire) -->
+      <div id="partnerCompanySection" style="display:none;margin-top:24px;">
+        <div class="bento" style="padding:26px;">
+          <div style="font-family:var(--mono);font-size:10px;letter-spacing:0.22em;text-transform:uppercase;color:var(--gold-data);margin-bottom:12px;">Mon entreprise · catalogue de l'app</div>
+          <div id="pcAccountBox" style="font-family:var(--sans);font-size:14px;line-height:1.7;color:var(--cream-mute);">Chargement…</div>
+          <div id="pcAccountForm" style="display:none;margin-top:14px;">
+            <p style="font-family:var(--sans);font-size:13px;line-height:1.65;color:var(--cream-mute);margin:0 0 14px;">Créez votre entreprise sur OXV : après validation, vos produits, offres et événements peuvent paraître dans le catalogue et sur la carte de l'application. La transaction se fait toujours chez vous — OXV met en relation.</p>
+            <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:10px;">
+              <input id="pcName" class="form-input" placeholder="Nom de l'entreprise *" maxlength="80">
+              <select id="pcType" class="form-input">
+                <option value="garage">Garage / préparation</option>
+                <option value="photographe">Photographe / vidéo</option>
+                <option value="hotel">Hôtel / restauration</option>
+                <option value="transport">Transport / convoyage</option>
+                <option value="assurance">Assurance</option>
+                <option value="concession">Concession</option>
+                <option value="autre">Autre</option>
+              </select>
+              <input id="pcEmail" class="form-input" type="email" placeholder="Email de contact *" maxlength="120">
+              <input id="pcZone" class="form-input" placeholder="Zone géographique (ex. Bordeaux / Nouvelle-Aquitaine)" maxlength="120">
+            </div>
+            <textarea id="pcDesc" class="form-input" style="margin-top:10px;min-height:74px;" placeholder="Description courte (activité, spécialités)" maxlength="600"></textarea>
+            <button class="btn btn-sm" style="margin-top:12px;" onclick="pcCreateAccount()"><span>Créer mon entreprise →</span></button>
+            <p style="font-family:var(--mono);font-size:10px;color:var(--cream-faint);margin:10px 0 0;letter-spacing:0.06em;">Soumise à validation OXV avant toute apparition dans l'app.</p>
+          </div>
+        </div>
+        <div class="bento" id="pcOffersBlock" style="padding:26px;margin-top:16px;display:none;">
+          <div style="font-family:var(--mono);font-size:10px;letter-spacing:0.22em;text-transform:uppercase;color:var(--blue-data);margin-bottom:12px;">Mes produits, offres &amp; événements</div>
+          <div id="pcOffersList" style="font-family:var(--sans);font-size:14px;line-height:1.7;color:var(--cream-mute);">Chargement…</div>
+          <div style="border-top:1px solid var(--bento-border);margin-top:16px;padding-top:16px;">
+            <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:10px;">
+              <input id="pcOfferTitle" class="form-input" placeholder="Titre *" maxlength="90">
+              <select id="pcOfferCat" class="form-input" onchange="document.getElementById('pcOfferDateWrap').style.display = this.value === 'evenement' ? '' : 'none';">
+                <option value="produit">Produit</option>
+                <option value="offre">Offre / avantage</option>
+                <option value="evenement">Événement (carte de l'app)</option>
+              </select>
+              <input id="pcOfferPrice" class="form-input" type="number" min="0" step="1" placeholder="Prix indicatif € (optionnel)">
+            </div>
+            <div id="pcOfferDateWrap" style="display:none;margin-top:10px;">
+              <input id="pcOfferDate" class="form-input" type="datetime-local" style="max-width:280px;">
+              <span style="font-family:var(--mono);font-size:10px;color:var(--cream-faint);margin-left:8px;">Date de l'événement</span>
+            </div>
+            <textarea id="pcOfferDesc" class="form-input" style="margin-top:10px;min-height:64px;" placeholder="Description *" maxlength="800"></textarea>
+            <input id="pcOfferCond" class="form-input" style="margin-top:10px;" placeholder="Conditions (optionnel — ex. sur présentation du Pass OXV)" maxlength="300">
+            <button class="btn btn-sm" style="margin-top:12px;" onclick="pcCreateOffer()"><span>Soumettre à validation →</span></button>
+          </div>
+        </div>
+      </div>
     </div>
   </section>
 </div>
 <!-- /partenaire-espace -->
+
+<!-- ============================================================
+     ESPACE COACH (arbitrages fondateur 2026-07-18)
+     Le coach organise : fiche & tarifs publiés (transaction directe
+     coach↔pilote, hors OXV), créneaux adossés aux journées OXV
+     (proposés ici, VALIDÉS PAR L'ADMIN avant publication),
+     réservations reçues, retours de visite. La restitution QDI
+     reste sur l'application (doctrine §2.1 : le coach exerce sous
+     sa propre responsabilité). Tables app existantes uniquement :
+     coach_profiles / coach_availability / coaching_bookings / coach_reviews.
+     ============================================================ -->
+<div class="page" id="page-coach-espace">
+  <section class="page-hero">
+    <div class="wrap">
+      <div class="page-hero-eyebrow">N° ⬡ · Espace coach</div>
+      <h1 class="page-hero-title">Votre espace<br/><em>coach</em>.</h1>
+      <p class="page-hero-lede">Votre fiche et vos tarifs, vos créneaux sur les journées OXV, vos réservations et les retours de vos pilotes. La donnée de roulage, elle, vit dans l'application.</p>
+    </div>
+  </section>
+  <section class="section">
+    <div class="wrap" style="max-width:1000px;">
+      <div id="coachEspaceGuard" style="display:none;" class="bento">
+        <p style="font-family:var(--sans);font-size:14px;color:var(--cream-mute);margin:0;padding:8px;">Cet espace est réservé aux coachs partenaires OXV. <button class="link-inline" onclick="goTo('coach')" style="background:none;border:none;color:var(--oxv-red);cursor:pointer;padding:0;font:inherit;">Devenir coach partenaire →</button></p>
+      </div>
+      <div id="coachEspaceContent" style="display:none;">
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:16px;margin-bottom:16px;">
+          <div class="bento" style="padding:26px;">
+            <div style="font-family:var(--mono);font-size:10px;letter-spacing:0.22em;text-transform:uppercase;color:var(--gold-data);margin-bottom:12px;">Ma fiche &amp; mes tarifs</div>
+            <div id="ceProfileStatus" style="font-family:var(--sans);font-size:13px;color:var(--cream-mute);margin-bottom:12px;">Chargement…</div>
+            <input id="ceHeadline" class="form-input" placeholder="Accroche (ex. Coach BPJEPS · trajectoire &amp; régularité)" maxlength="120">
+            <textarea id="ceBio" class="form-input" style="margin-top:10px;min-height:74px;" placeholder="Présentation" maxlength="1200"></textarea>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:10px;">
+              <div><input id="ceSessionPrice" class="form-input" type="number" min="0" step="1" placeholder="€ / session"><span style="font-family:var(--mono);font-size:9px;color:var(--cream-faint);">Tarif session (public)</span></div>
+              <div><input id="ceSeasonPrice" class="form-input" type="number" min="0" step="1" placeholder="€ / saison"><span style="font-family:var(--mono);font-size:9px;color:var(--cream-faint);">Tarif saison (public)</span></div>
+            </div>
+            <input id="cePaymentLink" class="form-input" style="margin-top:10px;" placeholder="Lien de paiement direct (optionnel — Lydia, PayPal…)" maxlength="300">
+            <button class="btn btn-sm" style="margin-top:12px;" onclick="ceSaveProfile()"><span>Enregistrer</span></button>
+            <p style="font-family:var(--mono);font-size:10px;color:var(--cream-faint);margin:10px 0 0;letter-spacing:0.06em;">Le paiement se fait directement entre vous et le pilote — jamais via OXV.</p>
+          </div>
+          <div class="bento" style="padding:26px;">
+            <div style="font-family:var(--mono);font-size:10px;letter-spacing:0.22em;text-transform:uppercase;color:var(--blue-data);margin-bottom:12px;">Mes créneaux · journées OXV</div>
+            <div id="ceSlotsList" style="font-family:var(--sans);font-size:13px;line-height:1.7;color:var(--cream-mute);">Chargement…</div>
+            <div style="border-top:1px solid var(--bento-border);margin-top:14px;padding-top:14px;">
+              <div id="ceNextSessions" style="font-family:var(--mono);font-size:10px;color:var(--cream-faint);margin-bottom:10px;letter-spacing:0.05em;">Journées OXV à venir : chargement…</div>
+              <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:8px;">
+                <input id="ceSlotDate" class="form-input" type="date">
+                <input id="ceSlotStart" class="form-input" type="time" value="09:00">
+                <input id="ceSlotEnd" class="form-input" type="time" value="12:00">
+                <input id="ceSlotCap" class="form-input" type="number" min="1" max="6" value="2" placeholder="Places">
+              </div>
+              <input id="ceSlotNote" class="form-input" style="margin-top:8px;" placeholder="Note (optionnel — ex. matinée découverte)" maxlength="200">
+              <button class="btn btn-sm" style="margin-top:10px;" onclick="ceCreateSlot()"><span>Proposer ce créneau →</span></button>
+              <p style="font-family:var(--mono);font-size:10px;color:var(--cream-faint);margin:8px 0 0;letter-spacing:0.06em;">Publié après validation OXV.</p>
+            </div>
+          </div>
+        </div>
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:16px;">
+          <div class="bento" style="padding:26px;">
+            <div style="font-family:var(--mono);font-size:10px;letter-spacing:0.22em;text-transform:uppercase;color:var(--cream-mute);margin-bottom:12px;">Réservations reçues</div>
+            <div id="ceBookings" style="font-family:var(--sans);font-size:13px;line-height:1.7;color:var(--cream-mute);">Chargement…</div>
+          </div>
+          <div class="bento" style="padding:26px;">
+            <div style="font-family:var(--mono);font-size:10px;letter-spacing:0.22em;text-transform:uppercase;color:var(--cream-mute);margin-bottom:12px;">Retours de mes pilotes</div>
+            <div id="ceReviews" style="font-family:var(--sans);font-size:13px;line-height:1.7;color:var(--cream-mute);">Chargement…</div>
+          </div>
+        </div>
+        <p style="font-family:var(--sans);font-size:12px;color:var(--cream-faint);margin:20px 0 0;line-height:1.6;">La restitution des données de roulage (QDI, télémétrie, annotations) vit dans l'application OXV Mirror — cet espace couvre l'organisation. Vous exercez sous votre propre responsabilité (cadre légal de la licence coach).</p>
+      </div>
+    </div>
+  </section>
+</div>
+<!-- /coach-espace -->
 
 
 <div class="page" id="page-presse">
@@ -22027,6 +22171,11 @@ window.goTo = function(page, opts) {
       const adminTile = document.getElementById('adminDashboardTile');
       if (adminTile) adminTile.style.display = 'flex';
     }
+    // Tile Espace coach (arbitrages 2026-07-18) — visible pour les comptes coach
+    if (window.OXVApi.user.dbProfile?.role === 'coach' || window.OXVApi.user.dbProfile?.role === 'admin') {
+      const coachTile = document.getElementById('coachEspaceTile');
+      if (coachTile) coachTile.style.display = 'flex';
+    }
     setTimeout(() => loadAccountSidebar(), 100);
   }
   if (page === 'compte-profil') {
@@ -22116,6 +22265,9 @@ window.goTo = function(page, opts) {
   if (page === 'partenaire-espace') {
     setTimeout(() => { if (typeof window.loadPartnerSpace === 'function') window.loadPartnerSpace(); }, 150);
   }
+  if (page === 'coach-espace') {
+    setTimeout(() => { if (typeof window.loadCoachEspace === 'function') window.loadCoachEspace(); }, 150);
+  }
 
   // Pavillon (lot ECRANS_PAVILLON) : montage à l'entrée, démontage systématique à la sortie
   // (abonnements Realtime + timers nettoyés — aucun listener ne survit au changement de route).
@@ -22149,7 +22301,7 @@ const OXV_NOINDEX_PAGES = ['login', 'signup', 'forgot-password', 'reset-password
   'compte', 'compte-profil', 'compte-vehicules', 'compte-documents', 'compte-sessions',
   'compte-medias', 'compte-progression', 'compte-heritage', 'compte-paiements', 'compte-preferences',
   'admin', 'admin-pilotes', 'admin-pilote-detail', 'admin-sessions', 'admin-session-detail',
-  'admin-paiements', 'admin-medias', 'admin-articles', 'admin-emails', 'admin-stats', 'admin-securite', 'admin-demandes', 'demande', 'partenaire-espace',
+  'admin-paiements', 'admin-medias', 'admin-articles', 'admin-emails', 'admin-stats', 'admin-securite', 'admin-demandes', 'demande', 'partenaire-espace', 'coach-espace',
   'pavillon-accueil', 'pavillon-coach', 'pavillon-admin', 'pavillon-controle', 'pavillon-regie'];
 
 // Titre + description par page publique
@@ -22185,7 +22337,8 @@ const OXV_PAGE_SEO = {
   'pavillon-coach':    { title: 'Pavillon · Stand coach · OXV', description: 'Écran réservé du stand coach OXV.' },
   'pavillon-admin':    { title: 'Pavillon · Photos · OXV', description: 'Gestion des photos diffusées au Pavillon.' },
   'pavillon-controle': { title: 'Pavillon · Télécommande coach · OXV', description: 'Télécommande de l\'écran du stand coach.' },
-  'pavillon-regie':    { title: 'Pavillon · Régie · OXV', description: 'Console d\'état piste du Pavillon.' }
+  'pavillon-regie':    { title: 'Pavillon · Régie · OXV', description: 'Console d\'état piste du Pavillon.' },
+  'coach-espace':      { title: 'Espace coach · OXV', description: 'Espace de gestion des coachs partenaires OXV.' }
 };
 
 function oxvRouteToPath(page, articleId) {
@@ -28636,8 +28789,9 @@ window.loadPartnerSpace = async function() {
     const uid = window.OXVApi.user.profile?.id;
     const { data: mine } = await supabase.from('partners')
       .select('id, name, partner_type, city, is_published, is_premium').eq('owner_id', uid);
-    if (!mine || !mine.length) { guard.style.display = ''; content.style.display = 'none'; return; }
+    if (!mine || !mine.length) { guard.style.display = ''; content.style.display = 'none'; loadPartnerCompany(); return; }
     guard.style.display = 'none'; content.style.display = '';
+    loadPartnerCompany(); // entreprise self-service + catalogue app (arbitrages 2026-07-18)
     const p = mine[0];
     const fiche = document.getElementById('partnerSpaceFiche');
     if (fiche) fiche.innerHTML = `<strong style="color:var(--offwhite);">${escapeHtml(p.name)}</strong><br/>
@@ -28685,6 +28839,264 @@ window.loadAdminPartners = async function() {
       <div style="display:flex;gap:8px;">${p.is_published ? '<span class="tag-inline green">Publié</span>' : '<span class="tag-inline gold">Brouillon</span>'}${p.is_premium ? '<span class="tag-inline gold">Premium</span>' : ''}</div>
     </div>`).join('');
   } catch (e) { console.warn('[Admin partenaires]', e); }
+};
+
+/* ===================== ESPACE COACH + ENTREPRISE PARTENAIRE (arbitrages 2026-07-18) =====================
+   Zéro table nouvelle : coach_profiles / coach_availability / coaching_bookings / coach_reviews
+   + partner_accounts / partner_offers (modèle app partagé). Conventions de statut de l'app respectées :
+   créneau proposé = 'closed' (en attente), publié = 'open' (admin) · entreprise 'pending'→'validated' (admin)
+   · offre 'draft'→'published' (admin). Le verrou serveur (triggers anti auto-publication) est dans
+   docs/site/migrations/20260718_validation_admin_coach_partenaire.sql — à valider par le fondateur. */
+
+window.loadCoachEspace = async function() {
+  const guard = document.getElementById('coachEspaceGuard');
+  const content = document.getElementById('coachEspaceContent');
+  if (!guard || !content) return;
+  if (!window.OXVApi?.user?.isLoggedIn) { toast('Connexion requise', 'warn'); goTo('login'); return; }
+  const uid = window.OXVApi.user.profile?.id;
+  try {
+    let { data: prof } = await supabase.from('coach_profiles').select('*').eq('coach_id', uid).maybeSingle();
+    const isCoachRole = window.OXVApi.user.dbProfile?.role === 'coach' || window.OXVApi.user.dbProfile?.role === 'admin';
+    if (!prof && !isCoachRole) { guard.style.display = ''; content.style.display = 'none'; return; }
+    if (!prof && isCoachRole) {
+      const ins = await supabase.from('coach_profiles').insert({ coach_id: uid }).select().maybeSingle();
+      if (!ins.error) prof = ins.data;
+    }
+    if (!prof) { guard.style.display = ''; content.style.display = 'none'; return; }
+    guard.style.display = 'none'; content.style.display = '';
+    // Fiche & tarifs (transaction directe coach↔pilote — jamais via OXV)
+    const st = document.getElementById('ceProfileStatus');
+    if (st) st.innerHTML = prof.is_published
+      ? '<span class="tag-inline green">Fiche publiée sur la vitrine coach</span>'
+      : '<span class="tag-inline gold">Fiche non publiée — publication par OXV après revue</span>';
+    const setv = (id, v) => { const el = document.getElementById(id); if (el && v != null) el.value = v; };
+    setv('ceHeadline', prof.headline); setv('ceBio', prof.bio);
+    setv('ceSessionPrice', prof.session_price_eur); setv('ceSeasonPrice', prof.season_price_eur);
+    setv('cePaymentLink', prof.payment_link);
+    ceLoadSlots(uid); ceLoadBookings(uid); ceLoadReviews(uid); ceLoadNextSessions();
+  } catch (e) { console.warn('[Espace coach]', e); guard.style.display = ''; content.style.display = 'none'; }
+};
+window.ceSaveProfile = async function() {
+  const uid = window.OXVApi.user.profile?.id;
+  const gv = id => { const el = document.getElementById(id); return el ? el.value.trim() : ''; };
+  const num = v => { const n = parseInt(v, 10); return isFinite(n) && n >= 0 ? n : null; };
+  const { error } = await supabase.from('coach_profiles').update({
+    headline: gv('ceHeadline') || null, bio: gv('ceBio') || null,
+    session_price_eur: num(gv('ceSessionPrice')), season_price_eur: num(gv('ceSeasonPrice')),
+    payment_link: gv('cePaymentLink') || null, updated_at: new Date().toISOString()
+  }).eq('coach_id', uid);
+  toast(error ? 'Enregistrement refusé' : 'Fiche enregistrée', error ? 'warn' : 'ok');
+};
+async function ceLoadNextSessions() {
+  const el = document.getElementById('ceNextSessions');
+  if (!el) return;
+  try {
+    const today = new Date().toISOString().split('T')[0];
+    const { data } = await supabase.from('sessions_public').select('date').gte('date', today).order('date').limit(4);
+    el.textContent = (data && data.length)
+      ? 'Journées OXV à venir : ' + data.map(s => new Date(s.date).toLocaleDateString('fr-FR', { day: 'numeric', month: 'short' })).join(' · ')
+      : 'Journées OXV à venir : calendrier en préparation.';
+    if (data && data[0]) { const d = document.getElementById('ceSlotDate'); if (d && !d.value) d.value = data[0].date; }
+  } catch (e) { el.textContent = 'Journées OXV à venir : calendrier en préparation.'; }
+}
+async function ceLoadSlots(uid) {
+  const box = document.getElementById('ceSlotsList');
+  if (!box) return;
+  try {
+    const { data: slots } = await supabase.from('coach_availability').select('*').eq('coach_id', uid).order('starts_at', { ascending: true }).limit(12);
+    const badge = s => s.status === 'open' ? '<span class="tag-inline green">Publié</span>'
+      : s.status === 'closed' ? '<span class="tag-inline gold">En attente OXV</span>'
+      : s.status === 'full' ? '<span class="tag-inline">Complet</span>' : '<span class="tag-inline">Annulé</span>';
+    box.innerHTML = (slots && slots.length) ? slots.map(s =>
+      `<div style="display:flex;justify-content:space-between;gap:8px;align-items:center;padding:7px 0;border-top:1px solid var(--bento-border);flex-wrap:wrap;">
+        <span style="font-family:var(--mono);font-size:12px;">${new Date(s.starts_at).toLocaleDateString('fr-FR', { day: 'numeric', month: 'short' })} · ${new Date(s.starts_at).toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' })}–${new Date(s.ends_at).toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' })} · ${s.capacity || 1} pl.</span>
+        ${badge(s)}
+      </div>`).join('') : 'Aucun créneau proposé pour le moment.';
+  } catch (e) { box.textContent = 'Créneaux indisponibles.'; }
+}
+window.ceCreateSlot = async function() {
+  const uid = window.OXVApi.user.profile?.id;
+  const d = document.getElementById('ceSlotDate').value;
+  const h1 = document.getElementById('ceSlotStart').value, h2 = document.getElementById('ceSlotEnd').value;
+  const cap = parseInt(document.getElementById('ceSlotCap').value, 10) || 1;
+  if (!d || !h1 || !h2 || h2 <= h1) { toast('Date et horaires requis', 'warn'); return; }
+  // Convention : créneau créé 'closed' = proposé, en attente de validation OXV (l'admin passe à 'open').
+  const { error } = await supabase.from('coach_availability').insert({
+    coach_id: uid, circuit_name: 'Circuit de Haute Saintonge',
+    starts_at: d + 'T' + h1 + ':00', ends_at: d + 'T' + h2 + ':00',
+    capacity: Math.min(6, Math.max(1, cap)), status: 'closed',
+    notes: (document.getElementById('ceSlotNote').value || '').slice(0, 200) || null
+  });
+  if (error) { toast('Création refusée', 'warn'); return; }
+  toast('Créneau proposé — en attente de validation OXV', 'ok');
+  ceLoadSlots(uid);
+};
+async function ceLoadBookings(uid) {
+  const box = document.getElementById('ceBookings');
+  if (!box) return;
+  try {
+    const { data: bks } = await supabase.from('coaching_bookings').select('*').eq('coach_id', uid).order('created_at', { ascending: false }).limit(10);
+    if (!bks || !bks.length) { box.textContent = 'Aucune réservation pour le moment.'; return; }
+    const lbl = { pending: 'À répondre', accepted: 'Acceptée', declined: 'Déclinée', cancelled: 'Annulée', paid: 'Payée', completed: 'Réalisée', refunded: 'Remboursée' };
+    box.innerHTML = bks.map(b => `<div style="padding:8px 0;border-top:1px solid var(--bento-border);">
+      <div style="display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap;align-items:center;">
+        <span><strong style="color:var(--offwhite);">${escapeHtml(b.pilot_first_name || 'Pilote')}</strong>
+        <span style="font-family:var(--mono);font-size:11px;color:var(--cream-mute);"> · ${b.requested_starts_at ? new Date(b.requested_starts_at).toLocaleDateString('fr-FR', { day: 'numeric', month: 'short' }) : ''}</span></span>
+        <span class="tag-inline ${b.status === 'pending' ? 'gold' : (b.status === 'accepted' || b.status === 'completed' ? 'green' : '')}">${lbl[b.status] || escapeHtml(b.status)}</span>
+      </div>
+      ${b.message ? `<div style="font-size:12px;color:var(--cream-faint);margin-top:4px;">« ${escapeHtml(String(b.message).slice(0, 140))} »</div>` : ''}
+      ${b.status === 'pending' ? `<div style="display:flex;gap:8px;margin-top:8px;">
+        <button class="btn btn-sm" onclick="ceRespondBooking('${b.id}','accepted')"><span>Accepter</span></button>
+        <button class="btn btn-sm" onclick="ceRespondBooking('${b.id}','declined')"><span>Décliner</span></button>
+      </div>` : ''}
+      ${b.status === 'accepted' ? `<div style="margin-top:8px;"><button class="btn btn-sm" onclick="ceRespondBooking('${b.id}','completed')"><span>Marquer réalisée</span></button></div>` : ''}
+    </div>`).join('');
+  } catch (e) { box.textContent = 'Réservations indisponibles.'; }
+}
+window.ceRespondBooking = async function(id, status) {
+  const patch = { status: status, updated_at: new Date().toISOString() };
+  if (status === 'accepted' || status === 'declined') patch.responded_at = new Date().toISOString();
+  if (status === 'completed') patch.completed_at = new Date().toISOString();
+  const { error } = await supabase.from('coaching_bookings').update(patch).eq('id', id);
+  toast(error ? 'Action refusée' : 'Réservation mise à jour', error ? 'warn' : 'ok');
+  if (!error) ceLoadBookings(window.OXVApi.user.profile?.id);
+};
+async function ceLoadReviews(uid) {
+  const box = document.getElementById('ceReviews');
+  if (!box) return;
+  try {
+    const { data: rvs } = await supabase.from('coach_reviews').select('pilot_first_name, rating, comment, created_at').eq('coach_id', uid).order('created_at', { ascending: false }).limit(8);
+    box.innerHTML = (rvs && rvs.length) ? rvs.map(r => `<div style="padding:8px 0;border-top:1px solid var(--bento-border);">
+      <span style="font-family:var(--mono);font-size:11px;color:var(--gold-data);">${'●'.repeat(Math.max(0, Math.min(5, r.rating || 0)))}${'○'.repeat(5 - Math.max(0, Math.min(5, r.rating || 0)))}</span>
+      <strong style="color:var(--offwhite);font-size:13px;margin-left:8px;">${escapeHtml(r.pilot_first_name || 'Pilote')}</strong>
+      ${r.comment ? `<div style="font-size:12px;color:var(--cream-mute);margin-top:3px;">« ${escapeHtml(String(r.comment).slice(0, 200))} »</div>` : ''}
+    </div>`).join('') : 'Aucun retour pour le moment — ils arrivent après vos premières visites.';
+  } catch (e) { box.textContent = 'Retours indisponibles.'; }
+}
+
+/* — Entreprise partenaire (self-service) + offres/événements du catalogue app — */
+window.loadPartnerCompany = async function() {
+  const section = document.getElementById('partnerCompanySection');
+  if (!section || !window.OXVApi?.user?.isLoggedIn) return;
+  section.style.display = '';
+  const uid = window.OXVApi.user.profile?.id;
+  const box = document.getElementById('pcAccountBox');
+  const form = document.getElementById('pcAccountForm');
+  const offersBlock = document.getElementById('pcOffersBlock');
+  try {
+    const { data: acc } = await supabase.from('partner_accounts').select('*').eq('profile_id', uid).maybeSingle();
+    if (!acc) {
+      if (box) box.innerHTML = 'Aucune entreprise déclarée sur votre compte.';
+      if (form) form.style.display = '';
+      if (offersBlock) offersBlock.style.display = 'none';
+      return;
+    }
+    window.__pcAccountId = acc.id;
+    if (form) form.style.display = 'none';
+    const badge = acc.status === 'validated' ? '<span class="tag-inline green">Validée — visible côté app</span>'
+      : acc.status === 'pending' ? '<span class="tag-inline gold">En attente de validation OXV</span>'
+      : '<span class="tag-inline">Désactivée</span>';
+    if (box) box.innerHTML = `<strong style="color:var(--offwhite);">${escapeHtml(acc.display_name || 'Entreprise')}</strong><br/>
+      ${escapeHtml(acc.type || '')}${acc.geo_zone ? ' · ' + escapeHtml(acc.geo_zone) : ''}<br/>${badge}`;
+    if (offersBlock) offersBlock.style.display = '';
+    pcLoadOffers(acc.id);
+  } catch (e) { if (box) box.textContent = 'Espace entreprise indisponible.'; }
+};
+window.pcCreateAccount = async function() {
+  const uid = window.OXVApi.user.profile?.id;
+  const gv = id => (document.getElementById(id)?.value || '').trim();
+  if (!gv('pcName') || !gv('pcEmail')) { toast('Nom et email requis', 'warn'); return; }
+  // La policy INSERT force status='pending' : aucune entreprise ne naît validée.
+  const { error } = await supabase.from('partner_accounts').insert({
+    profile_id: uid, display_name: gv('pcName').slice(0, 80), type: gv('pcType') || 'autre',
+    description: gv('pcDesc').slice(0, 600) || null, contact_email: gv('pcEmail').slice(0, 120),
+    geo_zone: gv('pcZone').slice(0, 120) || null, status: 'pending'
+  });
+  if (error) { toast('Création refusée', 'warn'); return; }
+  toast('Entreprise créée — en attente de validation OXV', 'ok');
+  loadPartnerCompany();
+};
+async function pcLoadOffers(accountId) {
+  const box = document.getElementById('pcOffersList');
+  if (!box) return;
+  try {
+    const { data: offers } = await supabase.from('partner_offers').select('*').eq('partner_id', accountId).order('created_at', { ascending: false }).limit(15);
+    const catLbl = { produit: 'Produit', offre: 'Offre', evenement: 'Événement' };
+    const badge = o => o.status === 'published' ? '<span class="tag-inline green">Publiée dans l\'app</span>'
+      : o.status === 'draft' ? '<span class="tag-inline gold">En attente de validation OXV</span>'
+      : '<span class="tag-inline">Archivée</span>';
+    box.innerHTML = (offers && offers.length) ? offers.map(o => `<div style="display:flex;justify-content:space-between;gap:8px;align-items:center;padding:7px 0;border-top:1px solid var(--bento-border);flex-wrap:wrap;">
+      <span><strong style="color:var(--offwhite);font-size:13px;">${escapeHtml(o.title)}</strong>
+      <span style="font-family:var(--mono);font-size:10px;color:var(--cream-mute);"> · ${catLbl[o.category] || escapeHtml(o.category || '')}${o.price_eur != null ? ' · ' + o.price_eur + ' €' : ''}${o.category === 'evenement' && o.valid_until ? ' · ' + new Date(o.valid_until).toLocaleDateString('fr-FR', { day: 'numeric', month: 'short' }) : ''}</span></span>
+      <span style="display:flex;gap:8px;align-items:center;">${badge(o)}${o.status !== 'archived' ? `<button class="btn btn-sm" style="padding:6px 10px;font-size:9px;" onclick="pcArchiveOffer('${o.id}')"><span>Archiver</span></button>` : ''}</span>
+    </div>`).join('') : 'Aucun élément. Vos produits, offres et événements paraissent dans l\'app après validation.';
+  } catch (e) { box.textContent = 'Catalogue indisponible.'; }
+}
+window.pcCreateOffer = async function() {
+  const accountId = window.__pcAccountId;
+  if (!accountId) return;
+  const gv = id => (document.getElementById(id)?.value || '').trim();
+  if (!gv('pcOfferTitle') || !gv('pcOfferDesc')) { toast('Titre et description requis', 'warn'); return; }
+  const cat = gv('pcOfferCat') || 'produit';
+  const price = parseInt(gv('pcOfferPrice'), 10);
+  // Convention catalogue/app : category produit|offre|evenement · évènement daté via valid_until (géo = zone de l'entreprise).
+  const { error } = await supabase.from('partner_offers').insert({
+    partner_id: accountId, title: gv('pcOfferTitle').slice(0, 90), description: gv('pcOfferDesc').slice(0, 800),
+    category: cat, price_eur: isFinite(price) && price >= 0 ? price : null,
+    conditions: gv('pcOfferCond').slice(0, 300) || null,
+    valid_until: cat === 'evenement' && gv('pcOfferDate') ? new Date(gv('pcOfferDate')).toISOString() : null,
+    status: 'draft'
+  });
+  if (error) { toast('Création refusée', 'warn'); return; }
+  toast('Soumis à validation OXV', 'ok');
+  ['pcOfferTitle', 'pcOfferDesc', 'pcOfferPrice', 'pcOfferCond', 'pcOfferDate'].forEach(id => { const el = document.getElementById(id); if (el) el.value = ''; });
+  pcLoadOffers(accountId);
+};
+window.pcArchiveOffer = async function(id) {
+  const { error } = await supabase.from('partner_offers').update({ status: 'archived', updated_at: new Date().toISOString() }).eq('id', id);
+  toast(error ? 'Action refusée' : 'Élément archivé', error ? 'warn' : 'ok');
+  if (!error && window.__pcAccountId) pcLoadOffers(window.__pcAccountId);
+};
+
+/* — Admin : file de validation (entreprises · offres · créneaux coach) — */
+window.loadAdminValidations = async function() {
+  const box = document.getElementById('adminValidationRows');
+  if (!box) return;
+  try {
+    const [accs, offers, slots] = await Promise.all([
+      supabase.from('partner_accounts').select('id, display_name, type, geo_zone, created_at').eq('status', 'pending').order('created_at'),
+      supabase.from('partner_offers').select('id, title, category, price_eur, partner_id, created_at').eq('status', 'draft').order('created_at'),
+      supabase.from('coach_availability').select('id, coach_id, starts_at, ends_at, capacity, notes').eq('status', 'closed').gte('starts_at', new Date().toISOString()).order('starts_at')
+    ]);
+    const rows = [];
+    (accs.data || []).forEach(a => rows.push(`<div style="display:flex;align-items:center;justify-content:space-between;gap:10px;padding:12px 14px;border-top:1px solid var(--bento-border);flex-wrap:wrap;">
+      <div><span class="tag-inline gold">Entreprise</span> <strong style="color:var(--cream);font-size:13px;">${escapeHtml(a.display_name || '—')}</strong>
+      <span style="font-family:var(--mono);font-size:11px;color:var(--cream-mute);"> · ${escapeHtml(a.type || '')}${a.geo_zone ? ' · ' + escapeHtml(a.geo_zone) : ''}</span></div>
+      <div style="display:flex;gap:8px;"><button class="btn btn-sm" onclick="advValidate('account','${a.id}',true)"><span>Valider</span></button>
+      <button class="btn btn-sm" onclick="advValidate('account','${a.id}',false)"><span>Refuser</span></button></div></div>`));
+    (offers.data || []).forEach(o => rows.push(`<div style="display:flex;align-items:center;justify-content:space-between;gap:10px;padding:12px 14px;border-top:1px solid var(--bento-border);flex-wrap:wrap;">
+      <div><span class="tag-inline gold">${o.category === 'evenement' ? 'Événement (map)' : 'Offre (catalogue)'}</span> <strong style="color:var(--cream);font-size:13px;">${escapeHtml(o.title)}</strong>
+      <span style="font-family:var(--mono);font-size:11px;color:var(--cream-mute);">${o.price_eur != null ? ' · ' + o.price_eur + ' €' : ''}</span></div>
+      <div style="display:flex;gap:8px;"><button class="btn btn-sm" onclick="advValidate('offer','${o.id}',true)"><span>Publier</span></button>
+      <button class="btn btn-sm" onclick="advValidate('offer','${o.id}',false)"><span>Refuser</span></button></div></div>`));
+    (slots.data || []).forEach(s => rows.push(`<div style="display:flex;align-items:center;justify-content:space-between;gap:10px;padding:12px 14px;border-top:1px solid var(--bento-border);flex-wrap:wrap;">
+      <div><span class="tag-inline gold">Créneau coach</span>
+      <span style="font-family:var(--mono);font-size:12px;color:var(--cream);">${new Date(s.starts_at).toLocaleDateString('fr-FR', { day: 'numeric', month: 'short' })} · ${new Date(s.starts_at).toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' })}–${new Date(s.ends_at).toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' })} · ${s.capacity || 1} pl.</span>
+      ${s.notes ? `<span style="font-family:var(--mono);font-size:10px;color:var(--cream-mute);">${escapeHtml(String(s.notes).slice(0, 60))}</span>` : ''}</div>
+      <div style="display:flex;gap:8px;"><button class="btn btn-sm" onclick="advValidate('slot','${s.id}',true)"><span>Publier</span></button>
+      <button class="btn btn-sm" onclick="advValidate('slot','${s.id}',false)"><span>Refuser</span></button></div></div>`));
+    box.innerHTML = rows.length ? rows.join('')
+      : '<div class="admin-empty"><div class="admin-empty-icon">○</div><div class="admin-empty-text">Rien à valider. Les demandes des coachs et partenaires arrivent ici.</div></div>';
+  } catch (e) { console.warn('[Admin validations]', e); }
+};
+window.advValidate = async function(kind, id, approve) {
+  let r;
+  const now = new Date().toISOString();
+  if (kind === 'account') r = await supabase.from('partner_accounts').update({ status: approve ? 'validated' : 'disabled', updated_at: now }).eq('id', id);
+  else if (kind === 'offer') r = await supabase.from('partner_offers').update({ status: approve ? 'published' : 'archived', updated_at: now }).eq('id', id);
+  else if (kind === 'slot') r = await supabase.from('coach_availability').update({ status: approve ? 'open' : 'cancelled', updated_at: now }).eq('id', id);
+  toast(r && r.error ? 'Action refusée' : (approve ? 'Validé — visible côté app' : 'Refusé'), r && r.error ? 'warn' : 'ok');
+  if (!r || !r.error) loadAdminValidations();
 };
 
 /* ===================== ÉCURIES & PARRAINAGE (PR-HUB-03) =====================
@@ -29471,6 +29883,7 @@ window.loadAdminDashboard = async function() {
   refreshInboxBadge();
   if (typeof loadAdminCoaches === 'function') loadAdminCoaches();
   if (typeof loadAdminPartners === 'function') loadAdminPartners();
+  if (typeof loadAdminValidations === 'function') loadAdminValidations();
 
   // Greeting
   const userId = window.OXVApi.user.profile?.id;
