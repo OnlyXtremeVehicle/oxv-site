@@ -18774,6 +18774,12 @@ body.pav-tv .nav, body.pav-tv footer, body.pav-tv .cookie, body.pav-tv .founding
           <input type="date" id="newSessionDate" class="form-input" />
         </div>
 
+        <!-- Circuit (multi-circuit — la journée porte SON circuit) -->
+        <div class="form-row">
+          <label class="form-label">Circuit</label>
+          <select id="newSessionCircuit" class="form-input"><option value="">Chargement…</option></select>
+        </div>
+
         <!-- Format -->
         <div class="form-row">
           <label class="form-label">Format</label>
@@ -32757,6 +32763,14 @@ window.openAddSessionModal = function() {
   document.querySelector('input[name="newSessionFormat"][value="full_day"]').checked = true;
   document.getElementById('newSessionOfferAccess').checked = true;
   document.getElementById('newSessionOfferSignature').checked = false;
+  // Circuits partenaires (multi-circuit) — Haute Saintonge présélectionné
+  const cs = document.getElementById('newSessionCircuit');
+  if (cs) {
+    supabase.from('circuits').select('id, name').order('name').then(({ data, error }) => {
+      if (error || !data || !data.length) { cs.innerHTML = '<option value="">Circuit indisponible — à renseigner plus tard</option>'; return; }
+      cs.innerHTML = data.map(c => `<option value="${escapeHtml(c.id)}"${/haute saintonge/i.test(c.name) ? ' selected' : ''}>${escapeHtml(c.name)}</option>`).join('');
+    });
+  }
   updateAddSessionForm();
   modal.style.display = 'flex';
 };
@@ -32847,12 +32861,14 @@ window.confirmAddSession = async function() {
   btn.querySelector('span').textContent = 'Création…';
 
   try {
+    const circuitId = (document.getElementById('newSessionCircuit')?.value || '').trim() || null;
     const { data, error } = await supabase
       .from('sessions')
       .insert({
         date: dateStr,
         status: 'scheduled',
         is_private: isPrivate,
+        circuit_id: circuitId, // multi-circuit : la journée porte SON circuit (fondateur 2026-07-19)
         format: format,
         available_offers: availableOffers,
         max_capacity: maxCapacity,
