@@ -21582,6 +21582,8 @@ body.pav-tv .nav, body.pav-tv footer, body.pav-tv .cookie, body.pav-tv .founding
               <input id="ceMediaUrl" class="form-input" style="flex:1;" placeholder="Lien YouTube ou image (https://…)" maxlength="400">
               <button class="btn btn-sm" onclick="ceAddMedia()"><span>Ajouter</span></button>
             </div>
+            <input type="file" id="ceMediaFile" accept="image/jpeg,image/png,image/webp" style="display:none;" onchange="ceUploadMediaPhoto(this)">
+            <button class="btn btn-sm" style="margin-top:8px;width:100%;" onclick="document.getElementById('ceMediaFile').click()"><span>Téléverser une photo depuis mon appareil →</span></button>
             <p style="font-family:var(--mono);font-size:9px;color:var(--cream-faint);margin:8px 0 14px;letter-spacing:0.05em;">Vidéos YouTube et photos — affichés sur votre fiche publique.</p>
             <div style="border-top:1px solid var(--bento-border);padding-top:14px;display:grid;gap:8px;">
               <input id="ceInstagram" class="form-input" placeholder="Instagram (https://instagram.com/…)" maxlength="300">
@@ -21598,7 +21600,7 @@ body.pav-tv .nav, body.pav-tv footer, body.pav-tv .cookie, body.pav-tv .founding
             <div style="border-top:1px solid var(--bento-border);margin-top:14px;padding-top:14px;">
               <div id="ceNextSessions" style="font-family:var(--mono);font-size:10px;color:var(--cream-faint);margin-bottom:10px;letter-spacing:0.05em;">Journées OXV à venir : chargement…</div>
               <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:8px;">
-                <input id="ceSlotDate" class="form-input" type="date">
+                <select id="ceSlotDate" class="form-input"><option value="">Journée OXV…</option></select>
                 <input id="ceSlotStart" class="form-input" type="time" value="09:00">
                 <input id="ceSlotEnd" class="form-input" type="time" value="12:00">
                 <input id="ceSlotCap" class="form-input" type="number" min="1" max="6" value="2" placeholder="Places">
@@ -29258,6 +29260,42 @@ window.ceRemoveMedia = async function(i) {
   if (!error) { window.__ceProf.media = list; ceRenderMedias(window.__ceProf); }
   else toast('Enregistrement refusé', 'warn');
 };
+/* — Photo de fiche téléversée depuis l'appareil (compressée, bucket coach-media/{uid}/) — */
+window.ceUploadMediaPhoto = async function(input) {
+  const f = input && input.files && input.files[0];
+  if (!f) return;
+  if (f.size > 8 * 1024 * 1024) { toast('Photo trop lourde (8 Mo max)', 'warn'); input.value = ''; return; }
+  const uid = window.OXVApi.user.profile?.id;
+  const list = Array.isArray(window.__ceProf?.media) ? window.__ceProf.media.slice() : [];
+  if (list.length >= 12) { toast('12 médias maximum', 'warn'); input.value = ''; return; }
+  try {
+    const blob = await pavCompressImage(f, 1280);
+    const path = uid + '/media-' + Date.now() + '.webp';
+    const up = await supabase.storage.from('coach-media').upload(path, blob, { contentType: 'image/webp' });
+    if (up.error) throw up.error;
+    const { data: pub } = supabase.storage.from('coach-media').getPublicUrl(path);
+    list.push({ type: 'image', url: pub.publicUrl });
+    const { error } = await supabase.from('coach_profiles').update({ media: list, updated_at: new Date().toISOString() }).eq('coach_id', uid);
+    if (error) throw error;
+    window.__ceProf.media = list; ceRenderMedias(window.__ceProf);
+    toast('Photo ajoutée à votre fiche', 'ok');
+  } catch (e) { toast('Téléversement refusé', 'warn'); console.warn('[ceUploadMediaPhoto]', e); }
+  input.value = '';
+};
+/* — Retrait d'un créneau (gestion coach) — */
+window.ceCancelSlot = async function(id) {
+  if (!confirm('Retirer ce créneau ? Les pilotes ne pourront plus le demander.')) return;
+  const { error } = await supabase.from('coach_availability').update({ status: 'cancelled' }).eq('id', id);
+  toast(error ? 'Action refusée' : 'Créneau retiré', error ? 'warn' : 'ok');
+  if (!error) { ceLoadSlots(window.OXVApi.user.profile?.id); ceLoadStats(window.OXVApi.user.profile?.id); }
+};
+/* — Retour de visite du coach (coaching_bookings.coach_note) — */
+window.ceSaveBookingNote = async function(id) {
+  const el = document.getElementById('ceNote-' + id);
+  const note = (el?.value || '').trim().slice(0, 600);
+  const { error } = await supabase.from('coaching_bookings').update({ coach_note: note || null, updated_at: new Date().toISOString() }).eq('id', id);
+  toast(error ? 'Enregistrement refusé' : 'Retour de visite enregistré', error ? 'warn' : 'ok');
+};
 /* — Publication de la fiche par le coach (la candidature a déjà été validée par OXV) — */
 window.ceTogglePublish = async function() {
   const uid = window.OXVApi.user.profile?.id;
@@ -29365,11 +29403,19 @@ async function ceLoadNextSessions() {
   if (!el) return;
   try {
     const today = new Date().toISOString().split('T')[0];
-    const { data } = await supabase.from('sessions_public').select('date').gte('date', today).order('date').limit(4);
-    el.textContent = (data && data.length)
-      ? 'Journées OXV à venir : ' + data.map(s => new Date(s.date).toLocaleDateString('fr-FR', { day: 'numeric', month: 'short' })).join(' · ')
-      : 'Journées OXV à venir : calendrier en préparation.';
-    if (data && data[0]) { const d = document.getElementById('ceSlotDate'); if (d && !d.value) d.value = data[0].date; }
+    const { data } = await supabase.from('sessions_public').select('date, format').gte('date', today).order('date').limit(10);
+    const sel = document.getElementById('ceSlotDate');
+    if (data && data.length) {
+      el.textContent = 'Vos créneaux sont adossés aux journées OXV — choisissez la journée :';
+      // Le choix est CONTRAINT aux journées OXV réelles (demande fondateur 2026-07-19)
+      if (sel) sel.innerHTML = '<option value="">Journée OXV…</option>' + data.map(s =>
+        '<option value="' + escapeHtml(s.date) + '">' +
+        escapeHtml(new Date(s.date + 'T12:00:00').toLocaleDateString('fr-FR', { weekday: 'long', day: 'numeric', month: 'long' })) +
+        (s.format ? ' · ' + escapeHtml(String(s.format)) : '') + '</option>').join('');
+    } else {
+      el.textContent = 'Aucune journée OXV publiée au calendrier — la proposition de créneaux ouvrira avec la saison.';
+      if (sel) sel.innerHTML = '<option value="">Calendrier en préparation</option>';
+    }
   } catch (e) { el.textContent = 'Journées OXV à venir : calendrier en préparation.'; }
 }
 async function ceLoadSlots(uid) {
@@ -29383,7 +29429,7 @@ async function ceLoadSlots(uid) {
     box.innerHTML = (slots && slots.length) ? slots.map(s =>
       `<div style="display:flex;justify-content:space-between;gap:8px;align-items:center;padding:7px 0;border-top:1px solid var(--bento-border);flex-wrap:wrap;">
         <span style="font-family:var(--mono);font-size:12px;">${new Date(s.starts_at).toLocaleDateString('fr-FR', { day: 'numeric', month: 'short' })} · ${new Date(s.starts_at).toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' })}–${new Date(s.ends_at).toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' })} · ${s.capacity || 1} pl.</span>
-        ${badge(s)}
+        <span style="display:flex;gap:8px;align-items:center;">${badge(s)}${(s.status === 'open' || s.status === 'closed') && new Date(s.starts_at) > new Date() ? `<button class="btn btn-sm" style="padding:4px 10px;font-size:9px;" onclick="ceCancelSlot('${s.id}')"><span>Retirer</span></button>` : ''}</span>
       </div>`).join('') : 'Aucun créneau proposé pour le moment.';
   } catch (e) { box.textContent = 'Créneaux indisponibles.'; }
 }
@@ -29423,6 +29469,10 @@ async function ceLoadBookings(uid) {
         <button class="btn btn-sm" onclick="ceRespondBooking('${b.id}','declined')"><span>Décliner</span></button>
       </div>` : ''}
       ${b.status === 'accepted' ? `<div style="margin-top:8px;"><button class="btn btn-sm" onclick="ceRespondBooking('${b.id}','completed')"><span>Marquer réalisée</span></button></div>` : ''}
+      ${(b.status === 'accepted' || b.status === 'completed') ? `<div style="display:flex;gap:8px;margin-top:8px;">
+        <input id="ceNote-${b.id}" class="form-input" style="flex:1;font-size:12px;" placeholder="Retour de visite — points travaillés, suite proposée…" maxlength="600" value="${escapeHtml(b.coach_note || '')}">
+        <button class="btn btn-sm" style="padding:6px 12px;font-size:9px;" onclick="ceSaveBookingNote('${b.id}')"><span>Noter</span></button>
+      </div>` : ''}
     </div>`).join('');
   } catch (e) { box.textContent = 'Réservations indisponibles.'; }
 }
@@ -34805,7 +34855,7 @@ async function pavGuard(page) {
   if (!u || !u.isLoggedIn) { toast('Connexion requise', 'warn'); goTo('login'); return false; }
   if (page === 'pavillon-coach' || page === 'pavillon-controle') {
     try {
-      const { data } = await supabase.from('coach_permissions').select('can_view_pilots').eq('user_id', u.id).maybeSingle();
+      const { data } = await supabase.from('coach_permissions').select('can_view_pilots').eq('user_id', u.profile?.id).maybeSingle();
       if (!data || data.can_view_pilots !== true) { toast('Accès réservé', 'warn'); goTo('home'); return false; }
     } catch (e) { toast('Accès réservé', 'warn'); goTo('home'); return false; }
   }
@@ -35241,7 +35291,7 @@ function pavDemoPilotes(n) {
 
 /* ============ ÉCRAN COACH (réservé — 4 modes : idle / live / restitution / multi) ============ */
 async function pavCoachStart() {
-  const uid = PAV.demo ? 'demo' : window.OXVApi.user.id;
+  const uid = PAV.demo ? 'demo' : window.OXVApi.user.profile?.id;
   if (!PAV.demo) {
     await pavResolveCircuit();
     await pavCoachLoadFile();
@@ -35275,7 +35325,7 @@ async function pavCoachStart() {
   pavCoachRender();
 }
 async function pavCoachLoadFile() {
-  const uid = window.OXVApi.user.id;
+  const uid = window.OXVApi.user.profile?.id;
   try {
     const { data: cps } = await supabase.from('coach_pilots').select('pilot_id,active,status').eq('coach_id', uid).eq('active', true);
     PAV.coach.pilotIds = (cps || []).map(x => x.pilot_id);
@@ -35743,7 +35793,7 @@ function pavCoachPaintSegments(sc) {
 /* ============ /pavillon/controle — télécommande de la TV coach (Addendum 04) ============ */
 async function pavControleStart() {
   const st = pavStage('pavillon-controle');
-  const uid = window.OXVApi.user.id; // JAMAIS un paramètre d'URL
+  const uid = window.OXVApi.user.profile?.id; // JAMAIS un paramètre d'URL
   await pavCoachLoadFile();
   let chan = null;
   chan = pavChannel('pavillon:coach:' + uid + ':control', ch => {
@@ -35914,7 +35964,7 @@ async function pavAdminStart() {
         const path = 'curation/' + Date.now() + '.webp';
         const up = await supabase.storage.from('pavillon-photos').upload(path, blob, { contentType: 'image/webp' });
         if (up.error) throw up.error;
-        const ins = await supabase.from('pavillon_photos').insert({ storage_path: path, legende: (st.querySelector('#pavPhotoLegende') || {}).value || null, sort_order: Date.now() % 100000, created_by: window.OXVApi.user.id });
+        const ins = await supabase.from('pavillon_photos').insert({ storage_path: path, legende: (st.querySelector('#pavPhotoLegende') || {}).value || null, sort_order: Date.now() % 100000, created_by: window.OXVApi.user.profile?.id });
         if (ins.error) throw ins.error;
         toast('Photo ajoutée', 'ok'); render();
       } catch (e) {
