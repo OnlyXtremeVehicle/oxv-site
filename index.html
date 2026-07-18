@@ -15932,6 +15932,9 @@ body.pav-tv .nav, body.pav-tv footer, body.pav-tv .cookie, body.pav-tv .founding
         <button type="button" class="dmd-seg-opt" data-type="coach" onclick="dmdSelectType('coach')">
           <span class="dmd-seg-ic">⌬</span><span>Coach</span>
         </button>
+        <button type="button" class="dmd-seg-opt" data-type="partenaire" onclick="dmdSelectType('partenaire')">
+          <span class="dmd-seg-ic">⧉</span><span>Partenaire</span>
+        </button>
       </div>
 
       <!-- Barre de progression -->
@@ -16084,6 +16087,30 @@ body.pav-tv .nav, body.pav-tv footer, body.pav-tv .cookie, body.pav-tv .founding
           </div>
           <p class="dmd-note">
             Le coach exerce sous sa propre responsabilité et son propre diplôme. OXV fournit l'outil, le lieu et la mise en relation — jamais le conseil de pilotage.
+          </p>
+        </div>
+
+        <!-- BLOC PARTENAIRE (type partenaire) -->
+        <div class="dmd-block" data-block="partenaire">
+          <div class="dmd-block-label">— Votre entreprise</div>
+          <div class="form-row">
+            <label>Nom de l'entreprise</label>
+            <input type="text" id="dmd-company-name" placeholder="Raison sociale ou nom commercial" />
+          </div>
+          <div class="form-row">
+            <label>Votre fonction</label>
+            <input type="text" id="dmd-company-role" placeholder="Gérant, responsable partenariats…" />
+          </div>
+          <div class="form-row">
+            <label>SIRET <span style="opacity:.6;font-weight:400;">(facultatif)</span></label>
+            <input type="text" id="dmd-company-siret" placeholder="14 chiffres" />
+          </div>
+          <div class="form-row">
+            <label>Site web <span style="opacity:.6;font-weight:400;">(facultatif)</span></label>
+            <input type="url" id="dmd-company-website" placeholder="https://…" />
+          </div>
+          <p class="dmd-note">
+            Après validation par OXV, vous accédez à l'espace partenaire : fiche entreprise, produits, offres et événements — chaque élément est relu par OXV avant d'apparaître dans l'application.
           </p>
         </div>
 
@@ -21550,6 +21577,10 @@ body.pav-tv .nav, body.pav-tv footer, body.pav-tv .cookie, body.pav-tv .founding
       <p class="page-hero-lede">
         Le Corporate <strong style="color:var(--cream);">achète</strong> une expérience. Le partenaire, lui, <strong style="color:var(--cream);">apporte</strong> une offre, un service ou une présence à l'écosystème OXV — et bénéficie de notre audience de pilotes exigeants. Si vous voulez en faire partie, parlons-en.
       </p>
+      <div style="display:flex;gap:12px;flex-wrap:wrap;margin-top:26px;">
+        <button class="btn btn-primary" onclick="goToDemande('partenaire')"><span>Devenir partenaire →</span></button>
+        <button class="btn" onclick="goTo('partenaire-connexion')"><span>Déjà partenaire · Connexion</span></button>
+      </div>
     </div>
   </section>
 
@@ -21614,6 +21645,58 @@ body.pav-tv .nav, body.pav-tv footer, body.pav-tv .cookie, body.pav-tv .founding
   </section>
 </div>
 <!-- /partenaires -->
+
+<!-- ============ CONNEXION PARTENAIRE ============ -->
+<div class="page" id="page-partenaire-connexion">
+  <div class="auth-wrap">
+    <div class="auth-side">
+      <div class="auth-side-eyebrow">N° ⧉ · Espace partenaire</div>
+      <h1 class="auth-side-title">Votre vitrine<br/>dans le <em>cercle</em>.</h1>
+      <p class="auth-side-text">
+        Votre entreprise, vos offres, vos événements. <em>Devant les pilotes OXV.</em>
+      </p>
+      <ul class="auth-side-bullets">
+        <li>Fiche entreprise gérée en autonomie</li>
+        <li>Produits et offres dans le catalogue de l'application</li>
+        <li>Événements sur la carte des pilotes</li>
+        <li>Chaque publication validée par OXV avant diffusion</li>
+      </ul>
+    </div>
+
+    <div class="auth-card">
+      <div class="auth-card-eyebrow">— Connexion partenaire</div>
+      <h2 class="auth-card-title">Accéder à mon <em>espace</em>.</h2>
+      <p class="auth-card-sub">
+        Pas encore partenaire ? <a onclick="goToDemande('partenaire')">Déposer une candidature</a>
+      </p>
+
+      <div class="auth-form">
+        <div class="form-row">
+          <label>Email</label>
+          <input type="email" id="pli-email" placeholder="contact@entreprise.fr" autocomplete="email" />
+        </div>
+        <div class="form-row">
+          <label>Mot de passe</label>
+          <div class="pwd-wrap">
+            <input type="password" id="pli-pwd" placeholder="••••••••" autocomplete="current-password" />
+            <button type="button" class="pwd-toggle" onclick="togglePwdVisibility('pli-pwd', this)" aria-label="Afficher le mot de passe">
+              <span class="pwd-eye-icon">👁</span>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div class="auth-actions">
+        <button class="btn btn-primary btn-lg" style="width:100%;" onclick="submitPartnerLogin()"><span>Ouvrir mon espace →</span></button>
+        <p style="text-align:center;margin:14px 0 0;"><a onclick="goTo('forgot-password')" style="font-family:var(--mono);font-size:11px;color:var(--cream-mute);cursor:pointer;">Mot de passe oublié ?</a></p>
+      </div>
+      <p style="font-family:var(--mono);font-size:10px;line-height:1.7;color:var(--cream-faint);margin:18px 0 0;letter-spacing:0.04em;">
+        L'accès partenaire est ouvert après validation de votre candidature par OXV.
+      </p>
+    </div>
+  </div>
+</div>
+<!-- /partenaire-connexion -->
 
 <!-- ============================================================
      PAVILLON — écrans TV & outils (lot ECRANS_PAVILLON, 2026-07-18)
@@ -22301,7 +22384,7 @@ const OXV_NOINDEX_PAGES = ['login', 'signup', 'forgot-password', 'reset-password
   'compte', 'compte-profil', 'compte-vehicules', 'compte-documents', 'compte-sessions',
   'compte-medias', 'compte-progression', 'compte-heritage', 'compte-paiements', 'compte-preferences',
   'admin', 'admin-pilotes', 'admin-pilote-detail', 'admin-sessions', 'admin-session-detail',
-  'admin-paiements', 'admin-medias', 'admin-articles', 'admin-emails', 'admin-stats', 'admin-securite', 'admin-demandes', 'demande', 'partenaire-espace', 'coach-espace',
+  'admin-paiements', 'admin-medias', 'admin-articles', 'admin-emails', 'admin-stats', 'admin-securite', 'admin-demandes', 'demande', 'partenaire-espace', 'coach-espace', 'partenaire-connexion',
   'pavillon-accueil', 'pavillon-coach', 'pavillon-admin', 'pavillon-controle', 'pavillon-regie'];
 
 // Titre + description par page publique
@@ -22333,6 +22416,7 @@ const OXV_PAGE_SEO = {
   login:       { title: 'Connexion · OXV', description: 'Connexion à l\'espace pilote OXV.' },
   signup:      { title: 'Créer un compte · OXV', description: 'Créez votre compte pilote OXV.' },
   demande:     { title: 'Rejoindre le cercle — demande d\'inscription · OXV', description: 'Déposez votre candidature pour rejoindre OXV : pilote, pilote licencié FFSA ou coach partenaire. Chaque demande est étudiée individuellement.' },
+  'partenaire-connexion': { title: 'Espace partenaire — Connexion · OXV', description: 'Connexion à l\'espace partenaire OXV : fiche entreprise, offres et événements.' },
   'pavillon-accueil':  { title: 'Pavillon · Écran accueil · OXV', description: 'Écran d\'affichage Pavillon OXV.' },
   'pavillon-coach':    { title: 'Pavillon · Stand coach · OXV', description: 'Écran réservé du stand coach OXV.' },
   'pavillon-admin':    { title: 'Pavillon · Photos · OXV', description: 'Gestion des photos diffusées au Pavillon.' },
@@ -26106,7 +26190,8 @@ window.dmdSelectType = function(type) {
   const show = {
     pilote:     ['vehicle', 'experience'],
     pilote_pro: ['vehicle', 'experience', 'ffsa'],
-    coach:      ['coach']
+    coach:      ['coach'],
+    partenaire: ['partenaire']
   }[type] || [];
   document.querySelectorAll('#page-demande .dmd-block').forEach(blk => {
     const name = blk.getAttribute('data-block');
@@ -26117,7 +26202,9 @@ window.dmdSelectType = function(type) {
   if (mlabel) {
     mlabel.innerHTML = (type === 'coach')
       ? 'Votre approche / pourquoi OXV ? <span style="opacity:.6;font-weight:400;">(facultatif)</span>'
-      : 'Pourquoi OXV ? <span style="opacity:.6;font-weight:400;">(facultatif)</span>';
+      : (type === 'partenaire')
+        ? 'Ce que vous souhaitez proposer aux membres OXV <span style="opacity:.6;font-weight:400;">(facultatif)</span>'
+        : 'Pourquoi OXV ? <span style="opacity:.6;font-weight:400;">(facultatif)</span>';
   }
 };
 
@@ -26149,6 +26236,10 @@ window.dmdGoStep = function(n) {
         if (!v('dmd-rcpro'))  { toast('L’assurance RC professionnelle est requise', 'warn'); return; }
         if (!v('dmd-pro-status')) { toast('Précisez votre statut professionnel', 'warn'); return; }
         if (!v('dmd-coach-years')) { toast('Indiquez vos années d’expérience en coaching', 'warn'); return; }
+      }
+      if (type === 'partenaire') {
+        if (!v('dmd-company-name')) { toast('Indiquez le nom de votre entreprise', 'warn'); return; }
+        if (!v('dmd-company-role')) { toast('Précisez votre fonction dans l’entreprise', 'warn'); return; }
       }
     }
   }
@@ -26198,6 +26289,11 @@ window.submitDemande = async function() {
     if (!v('dmd-coach-years')) { toast('Indiquez vos années d\u2019expérience en coaching', 'warn'); return; }
   }
 
+  if (type === 'partenaire') {
+    if (!v('dmd-company-name')) { toast('Indiquez le nom de votre entreprise', 'warn'); return; }
+    if (!v('dmd-company-role')) { toast('Précisez votre fonction dans l’entreprise', 'warn'); return; }
+  }
+
   // --- Consentements ---
   if (!checked('dmd-c-cgv') || !checked('dmd-c-rgpd') || !checked('dmd-c-contact')) {
     toast('Merci de valider les trois consentements obligatoires', 'warn'); return;
@@ -26221,6 +26317,12 @@ window.submitDemande = async function() {
     row.vehicle_year  = v('dmd-veh-year') ? parseInt(v('dmd-veh-year'), 10) : null;
     row.vehicle_type  = v('dmd-veh-type') || null;
     row.track_experience = v('dmd-track-exp') || null;
+  }
+  if (type === 'partenaire') {
+    row.company_name    = v('dmd-company-name') || null;
+    row.company_role    = v('dmd-company-role') || null;
+    row.company_siret   = v('dmd-company-siret') || null;
+    row.company_website = v('dmd-company-website') || null;
   }
   if (type === 'pilote_pro') {
     row.ffsa_number = v('dmd-ffsa-num') || null;
@@ -26326,6 +26428,36 @@ window.submitSignup = async function() {
     }
     toast(msg, 'warn');
   }
+};
+
+/* Connexion partenaire : même auth que le site, redirection vers l'espace partenaire.
+   Un compte partenaire naît de la candidature type « partenaire » validée par l'admin
+   (validate-inscription v9 → users.role = 'partner'). */
+window.submitPartnerLogin = async function() {
+  const email = document.getElementById('pli-email');
+  const pwd = document.getElementById('pli-pwd');
+  if (!isValidEmail(email.value)) { toast('Email invalide', 'warn'); return; }
+  if (!pwd.value) { toast('Mot de passe requis', 'warn'); return; }
+
+  const btn = event.target.closest('button');
+  const orig = btn ? btn.innerHTML : '';
+  if (btn) { btn.innerHTML = '<span>⟳ Connexion…</span>'; btn.disabled = true; }
+
+  const result = await window.OXVApi.user.login(email.value, pwd.value);
+  if (btn) { btn.innerHTML = orig; btn.disabled = false; }
+
+  if (!result.ok) { toast('Identifiants incorrects', 'warn'); return; }
+  const userId = window.OXVApi.user.profile?.id;
+  if (userId) {
+    const { data: profile } = await supabase.from('users').select('suspended_at, role').eq('id', userId).single();
+    if (profile?.suspended_at) {
+      await window.OXVApi.user.logout();
+      toast('Compte suspendu · contactez contact@oxvehicle.fr', 'warn');
+      return;
+    }
+  }
+  toast('Bienvenue dans votre espace partenaire', 'ok');
+  goTo('partenaire-espace');
 };
 
 window.submitLogin = async function() {
@@ -30338,21 +30470,22 @@ window.adminDecideDemande = async function(demandeId, action) {
   btns.forEach(b => { b.disabled = true; });
 
   try {
-    const { data, error } = await supabase.functions.invoke('validate-inscription', {
-      body: { demande_id: demandeId, action, admin_note }
+    // Relais DB sécurisé (garde admin + secret Vault injecté côté serveur).
+    // L'ancienne invocation directe n'envoyait pas le secret x-oxv-admin-secret
+    // et échouait systématiquement en 401 — corrigé le 2026-07-19.
+    const { data, error } = await supabase.rpc('admin_validate_inscription', {
+      p_demande_id: demandeId, p_action: action, p_admin_note: admin_note
     });
     if (error) throw error;
-    if (data && data.error) throw new Error(data.error);
+    if (data && data.ok === false) throw new Error(data.error || 'relay_failed');
 
     if (action === 'accept') {
-      toast('✓ Compte créé · email d\u2019accès envoyé', 'ok');
-      if (data && data.action_link) {
-        console.info('[validate-inscription] lien de secours (si email non reçu) :', data.action_link);
-      }
+      toast('✓ Acceptation relayée · compte et email en cours', 'ok');
     } else {
       toast('Candidature refusée', 'ok');
     }
-    await loadAdminDemandes();
+    // Relais asynchrone (pg_net) : on laisse 2,5 s à l'edge function avant rechargement.
+    setTimeout(() => loadAdminDemandes(), 2500);
   } catch (e) {
     btns.forEach(b => { b.disabled = false; });
     const msg = (e && e.message) ? e.message : '';
