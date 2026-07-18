@@ -1,6 +1,13 @@
 -- ============================================================
 -- OXV — Validation admin par élément (arbitrages fondateur 2026-07-18)
--- À EXÉCUTER APRÈS VALIDATION PAR M. FILLAT (base partagée site/app).
+-- ✅ APPLIQUÉE le 2026-07-18 (GO fondateur « applique et continue »),
+-- migration `validation_admin_coach_partenaire_site`. TESTÉE PAR RÔLE :
+-- partenaire→auto-validation bloquée (pending) · offre→auto-publication
+-- bloquée (draft) · coach non-admin→auto-ouverture bloquée (closed) ·
+-- admin→transitions OK · 0 ligne de test restante. NB : le compte coach
+-- artefact administration@ a is_admin=true → bypass légitime (à nettoyer,
+-- cf SECURITE_P2). Les vues+photos Pavillon ont été appliquées le même
+-- jour (`pavillon_vues_et_photos`, policy staff résolue en is_admin()).
 -- « Rien n'apparaît dans l'app avant approbation admin » :
 --   · partner_accounts   : seul un admin peut passer status='validated'
 --     (l'INSERT force déjà 'pending' via policy — ce trigger ferme l'UPDATE)

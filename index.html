@@ -29344,7 +29344,7 @@ window.loadCoachVitrine = async function() {
   if (!grid || typeof supabase === 'undefined') return;
   try {
     const { data: profiles, error } = await supabase.from('coach_profiles')
-      .select('coach_id, headline, bio, specialties, palmares, photo_url, season_price_eur, instagram_url, youtube_url, website_url')
+      .select('coach_id, headline, bio, specialties, palmares, photo_url, season_price_eur, session_price_eur, instagram_url, youtube_url, website_url')
       .eq('is_published', true).limit(12);
     if (error || !profiles || !profiles.length) return; // état vide honnête conservé
     // Note moyenne (lisible connecté uniquement — dégradation propre en anonyme)
@@ -29352,6 +29352,15 @@ window.loadCoachVitrine = async function() {
     try {
       const { data: revs } = await supabase.from('coach_reviews').select('coach_id, rating');
       (revs || []).forEach(r => { (ratings[r.coach_id] = ratings[r.coach_id] || []).push(r.rating); });
+    } catch (e) {}
+    // Créneaux publiés ('open' = validés par OXV) — lisibles connecté, dégradation propre en anonyme
+    let slotsByCoach = {};
+    try {
+      const { data: slots } = await supabase.from('coach_availability')
+        .select('id, coach_id, starts_at, ends_at, capacity')
+        .eq('status', 'open').gte('starts_at', new Date().toISOString())
+        .order('starts_at').limit(60);
+      (slots || []).forEach(s => { (slotsByCoach[s.coach_id] = slotsByCoach[s.coach_id] || []).push(s); });
     } catch (e) {}
     grid.innerHTML = profiles.map(p => {
       const rs = ratings[p.coach_id];
@@ -29374,12 +29383,36 @@ window.loadCoachVitrine = async function() {
         ${p.bio ? `<p style="font-family:var(--sans);font-size:13px;line-height:1.6;color:var(--cream-mute);margin:0 0 10px;">${escapeHtml(String(p.bio).slice(0, 180))}${String(p.bio).length > 180 ? '…' : ''}</p>` : ''}
         ${p.palmares ? `<p style="font-family:var(--sans);font-size:12px;line-height:1.5;color:var(--cream-faint);margin:0 0 10px;">${escapeHtml(String(p.palmares).slice(0, 120))}</p>` : ''}
         <div style="display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;">
-          ${p.season_price_eur ? `<span style="font-family:var(--mono);font-size:13px;color:var(--gold-data);">${Number(p.season_price_eur).toLocaleString('fr-FR')} € / saison</span>` : '<span></span>'}
+          <span style="font-family:var(--mono);font-size:13px;color:var(--gold-data);">${[p.session_price_eur ? Number(p.session_price_eur).toLocaleString('fr-FR') + ' € / session' : '', p.season_price_eur ? Number(p.season_price_eur).toLocaleString('fr-FR') + ' € / saison' : ''].filter(Boolean).join(' · ') || ''}</span>
           ${links ? `<span>${links}</span>` : ''}
         </div>
+        ${(slotsByCoach[p.coach_id] || []).length ? `<div style="border-top:1px solid var(--bento-border);margin-top:12px;padding-top:12px;">
+          <div style="font-family:var(--mono);font-size:9px;letter-spacing:0.18em;text-transform:uppercase;color:var(--cream-mute);margin-bottom:8px;">Créneaux · journées OXV</div>
+          ${slotsByCoach[p.coach_id].slice(0, 3).map(s => `<div style="display:flex;justify-content:space-between;align-items:center;gap:8px;padding:5px 0;">
+            <span style="font-family:var(--mono);font-size:11px;color:var(--cream);">${new Date(s.starts_at).toLocaleDateString('fr-FR', { day: 'numeric', month: 'short' })} · ${new Date(s.starts_at).toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' })}–${new Date(s.ends_at).toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' })}</span>
+            ${window.OXVApi?.user?.isLoggedIn
+              ? `<button class="btn btn-sm" style="padding:6px 12px;font-size:9px;" onclick="bookCoachSlot('${p.coach_id}','${s.id}','${s.starts_at}')"><span>Demander</span></button>`
+              : `<button class="btn btn-sm" style="padding:6px 12px;font-size:9px;" onclick="goTo('login')"><span>Se connecter</span></button>`}
+          </div>`).join('')}
+          <p style="font-family:var(--mono);font-size:9px;color:var(--cream-faint);margin:6px 0 0;letter-spacing:0.06em;">Règlement directement auprès du coach — jamais via OXV.</p>
+        </div>` : ''}
       </div>`;
     }).join('');
   } catch (e) { console.warn('[Coachs vitrine]', e); }
+};
+
+/* Demande de réservation d'un créneau coach (policy : pending uniquement, coach publié uniquement).
+   La transaction financière reste directe coach↔pilote (arbitrage 2026-07-18). */
+window.bookCoachSlot = async function(coachId, availabilityId, startsAt) {
+  if (!window.OXVApi?.user?.isLoggedIn) { goTo('login'); return; }
+  const uid = window.OXVApi.user.profile?.id;
+  const firstName = window.OXVApi.user.dbProfile?.first_name || null;
+  const { error } = await supabase.from('coaching_bookings').insert({
+    pilot_id: uid, coach_id: coachId, availability_id: availabilityId,
+    requested_starts_at: startsAt, circuit_name: 'Circuit de Haute Saintonge',
+    status: 'pending', pilot_first_name: firstName
+  });
+  toast(error ? 'Demande impossible (déjà demandée ?)' : 'Demande envoyée — le coach vous répond dans son espace', error ? 'warn' : 'ok');
 };
 
 window.loadMonCoach = async function() {
