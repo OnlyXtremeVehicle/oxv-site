@@ -1,0 +1,32 @@
+-- ============================================================
+-- OXV — Correctif relais admin_validate_inscription
+-- ✅ APPLIQUÉE le 2026-07-19 (migration `fix_relay_validate_inscription_jwt`).
+--
+-- CONTEXTE (bug latent découvert en préparant la connexion partenaire) :
+--   · L'UI admin appelait l'edge function validate-inscription EN DIRECT
+--     (supabase.functions.invoke) SANS le secret x-oxv-admin-secret
+--     → 401 systématique : le bouton « Accepter » ne fonctionnait pas.
+--   · Le relais DB admin_validate_inscription (le bon canal) envoyait
+--     « Authorization: Bearer <invoke_secret> » — pas un JWT valide →
+--     rejeté par la plateforme dès que la fonction est verify_jwt=true
+--     (ce que le redéploiement v9 a réactivé).
+--
+-- CORRECTIF (testé de bout en bout, dry_run, réponse 200) :
+--   1. Authorization = clé anon du projet (JWT valide, publique par
+--      nature — présente dans le HTML du site). L'autorisation réelle
+--      reste le secret x-oxv-admin-secret injecté côté serveur (Vault).
+--   2. Paramètre p_dry_run : répétition sans effet (ni email ni
+--      mutation) pour les tests.
+--   3. Côté site : adminDecideDemande bascule sur supabase.rpc(
+--      'admin_validate_inscription', …) — le canal sécurisé.
+--
+-- Le corps de la fonction vit en base (source de vérité) ; ce fichier
+-- est la trace visible dans le repo. Voir la migration appliquée :
+-- supabase → migrations → fix_relay_validate_inscription_jwt.
+--
+-- Edge function validate-inscription v9 (déployée le même jour) :
+--   accept + type coach → users.role='coach' + coach_permissions
+--   (can_view_pilots, can_manage_own_sessions) + coach_profiles
+--   brouillon (is_published=false). accept + type partenaire →
+--   users.role='partner' (l'espace partenaire fait le reste).
+-- ============================================================
