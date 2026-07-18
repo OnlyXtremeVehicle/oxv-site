@@ -13630,6 +13630,9 @@ body.pav-tv .nav, body.pav-tv footer, body.pav-tv .cookie, body.pav-tv .founding
 .pav-tests .ok { color: #4ADE80; }
 .pav-tests .ko { color: var(--pv-rouge); }
 
+/* Badge coach du calendrier (parcours pilote, fondateur 2026-07-19) */
+.cal-card-coach { font-family: var(--mono); font-size: 9px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--gold-data); margin-top: 6px; }
+
 /* ============================================================
    CANDIDATURE — format PAYSAGE PC / tablette (fondateur 2026-07-19)
    La carte n'est plus une colonne « téléphone » (460 px) au milieu
@@ -20387,6 +20390,10 @@ body.pav-tv .nav, body.pav-tv footer, body.pav-tv .cookie, body.pav-tv .founding
 
         <div id="bkConfirmPayment" class="bk-payment-confirm"></div>
 
+        <!-- Coach de la journée (fondateur 2026-07-19 : mise en avant du coach
+             AU MOMENT où la journée vient d'être réservée) -->
+        <div id="bkCoachUpsell"></div>
+
         <div class="bk-warning">
           Conservez votre référence OXV ci-dessus : elle identifie votre dossier lors du paiement.
         </div>
@@ -24537,6 +24544,11 @@ window.bkConfirmBooking = async function() {
 
     track('complete_booking', { offer: bkState.useHeritage ? 'heritage' : bkState.selectedOffer, amount: Math.round((priceTotal || 0) / 100) });
     bkShowStep(5);
+    // Coach de la journée : proposé au meilleur moment — la journée vient d'être réservée,
+    // le prérequis « inscrit à la journée » est rempli (fondateur 2026-07-19).
+    if (typeof window.bkRenderCoachUpsell === 'function' && bkState.selectedSession?.date) {
+      bkRenderCoachUpsell(bkState.selectedSession.date);
+    }
 
     // Email de confirmation : envoyé côté serveur par le trigger DB
     // `trg_registration_emails` (Edge Function send-booking-confirmation). Plus
@@ -28144,6 +28156,7 @@ window.loadMySessions = async function() {
     upcomingBlock.style.display = 'block';
     upcomingDiv.innerHTML = renderSessionsTable(upcoming, /*isPast*/ false);
     renderClientEligibility(upcoming, upcomingDiv); // PR-HUB-02 : bandeau GO/EN ATTENTE/NO-GO
+    renderCoachForSessions(upcoming, upcomingDiv);  // fondateur 2026-07-19 : coach de la journée (statut ou proposition)
   }
 
   // Affiche bloc past
@@ -28160,6 +28173,88 @@ window.loadMySessions = async function() {
   // Médias du pilote (photos, vidéos embarquées / drone)
   loadPilotMedia();
 };
+
+/* ============ COACH DANS LE PARCOURS PILOTE (fondateur 2026-07-19) ============
+   Le pilote croise le coach aux trois moments naturels : confirmation de
+   réservation (la journée vient d'être prise), Mes sessions (rappel + statut),
+   calendrier (badge « Coach disponible »). Toujours connecté au créneau validé. */
+async function oxvCoachesForDate(dateISO) {
+  // Créneaux VALIDÉS par OXV ce jour-là + fiches coach publiées uniquement
+  try {
+    const { data: slots } = await supabase.from('coach_availability')
+      .select('id, coach_id, starts_at, ends_at')
+      .eq('status', 'open')
+      .gte('starts_at', dateISO + 'T00:00:00').lt('starts_at', dateISO + 'T23:59:59')
+      .order('starts_at');
+    if (!slots || !slots.length) return [];
+    const ids = Array.from(new Set(slots.map(s => s.coach_id)));
+    const { data: profs } = await supabase.from('coach_profiles')
+      .select('coach_id, headline, photo_url, session_price_eur')
+      .eq('is_published', true).in('coach_id', ids);
+    const byCoach = {};
+    (profs || []).forEach(p => { byCoach[p.coach_id] = p; });
+    return slots.filter(s => byCoach[s.coach_id]).map(s => ({ slot: s, prof: byCoach[s.coach_id] }));
+  } catch (e) { return []; }
+}
+function oxvCoachSlotRow(x, dateISO) {
+  const h = t => new Date(t).toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' });
+  return `<div style="display:flex;align-items:center;gap:12px;padding:9px 0;border-top:1px solid var(--bento-border);flex-wrap:wrap;">
+    ${x.prof.photo_url ? `<img src="${escapeHtml(x.prof.photo_url)}" alt="" style="width:38px;height:38px;border-radius:50%;object-fit:cover;border:1px solid var(--bento-border);">` : ''}
+    <span style="flex:1;min-width:160px;">
+      <strong style="color:var(--offwhite);font-size:13px;cursor:pointer;" onclick="showCoachFiche('${escapeHtml(x.slot.coach_id)}')">${escapeHtml(x.prof.headline || 'Coach OXV')}</strong>
+      <span style="font-family:var(--mono);font-size:11px;color:var(--cream-mute);display:block;">${h(x.slot.starts_at)}–${h(x.slot.ends_at)}${x.prof.session_price_eur ? ' · ' + Number(x.prof.session_price_eur).toLocaleString('fr-FR') + ' € / session' : ''}</span>
+    </span>
+    <button class="btn btn-sm" id="bkCoach-${escapeHtml(x.slot.id)}" onclick="bookCoachSlot('${escapeHtml(x.slot.coach_id)}','${escapeHtml(x.slot.id)}','${escapeHtml(x.slot.starts_at)}');this.disabled=true;this.innerHTML='<span>Demandé ✓</span>';"><span>Demander</span></button>
+  </div>`;
+}
+/* — Étape 5 du booking : « Un coach pour cette journée ? » — */
+window.bkRenderCoachUpsell = async function(dateISO) {
+  const box = document.getElementById('bkCoachUpsell');
+  if (!box) return;
+  box.innerHTML = '';
+  const coaches = await oxvCoachesForDate(dateISO);
+  if (!coaches.length) return; // pas de coach ce jour → rien, jamais de contenu creux
+  box.innerHTML = `<div class="bento" style="padding:20px 24px;margin:18px auto;max-width:560px;text-align:left;border-color:rgba(201,162,74,0.35);">
+    <div style="font-family:var(--mono);font-size:10px;letter-spacing:0.22em;text-transform:uppercase;color:var(--gold-data);margin-bottom:4px;">Un coach pour cette journée ?</div>
+    <p style="font-family:var(--sans);font-size:12.5px;line-height:1.6;color:var(--cream-mute);margin:0 0 6px;">Un coach partenaire diplômé accompagne votre roulage ce jour-là. Règlement directement auprès du coach — jamais via OXV.</p>
+    ${coaches.slice(0, 3).map(x => oxvCoachSlotRow(x, dateISO)).join('')}
+  </div>`;
+};
+/* — Mes sessions : rappel coach par journée à venir (statut ou proposition) — */
+async function renderCoachForSessions(upcoming, container) {
+  if (!upcoming || !upcoming.length || !container) return;
+  try {
+    const userId = window.OXVApi.user.profile?.id;
+    const { data: myBks } = await supabase.from('coaching_bookings')
+      .select('id, coach_id, requested_starts_at, status')
+      .eq('pilot_id', userId).in('status', ['pending', 'accepted', 'completed']);
+    const bkByDate = {};
+    (myBks || []).forEach(b => { if (b.requested_starts_at) bkByDate[String(b.requested_starts_at).slice(0, 10)] = b; });
+    const wrap = document.createElement('div');
+    for (const reg of upcoming.slice(0, 4)) {
+      const d = reg.sessions?.date;
+      if (!d) continue;
+      const dtxt = new Date(d + 'T12:00:00').toLocaleDateString('fr-FR', { day: 'numeric', month: 'long' });
+      const mine = bkByDate[d];
+      if (mine) {
+        const lbl = mine.status === 'pending' ? '<span class="tag-inline gold">Demande envoyée — en attente du coach</span>'
+          : mine.status === 'accepted' ? '<span class="tag-inline green">Coach confirmé pour cette journée</span>'
+          : '<span class="tag-inline green">Séance coach réalisée</span>';
+        wrap.insertAdjacentHTML('beforeend', `<div class="bento" style="padding:14px 18px;margin-top:10px;display:flex;align-items:center;gap:12px;flex-wrap:wrap;">
+          <span style="font-family:var(--mono);font-size:11px;color:var(--cream-mute);">${escapeHtml(dtxt)}</span>${lbl}</div>`);
+        continue;
+      }
+      const coaches = await oxvCoachesForDate(d);
+      if (coaches.length) {
+        wrap.insertAdjacentHTML('beforeend', `<div class="bento" style="padding:14px 18px;margin-top:10px;border-color:rgba(201,162,74,0.3);">
+          <div style="font-family:var(--mono);font-size:10px;letter-spacing:0.18em;text-transform:uppercase;color:var(--gold-data);margin-bottom:2px;">${escapeHtml(dtxt)} · coach disponible</div>
+          ${coaches.slice(0, 2).map(x => oxvCoachSlotRow(x, d)).join('')}
+        </div>`);
+      }
+    }
+    if (wrap.children.length) container.appendChild(wrap);
+  } catch (e) { console.warn('[Coach sessions]', e); }
+}
 
 window.oxvScrollToMedia = function() {
   const block = document.getElementById('sessionsMediaBlock');
@@ -34188,6 +34283,18 @@ window.loadPublicCalendar = async function() {
       return;
     }
 
+    // Badge « Coach disponible » : journées portant au moins un créneau coach VALIDÉ
+    // (fondateur 2026-07-19 : le pilote voit le coach dès le calendrier).
+    window.__calCoachDates = new Set();
+    try {
+      if (sessions.length) {
+        const dMin = sessions[0].date, dMax = sessions[sessions.length - 1].date;
+        const { data: cs } = await supabase.from('coach_availability').select('starts_at')
+          .eq('status', 'open').gte('starts_at', dMin + 'T00:00:00').lte('starts_at', dMax + 'T23:59:59');
+        (cs || []).forEach(c => window.__calCoachDates.add(String(c.starts_at).slice(0, 10)));
+      }
+    } catch (e) {}
+
   // Comptage des inscriptions — vue d'agrégats publique (fiable quel que soit le rôle)
   const sessionIds = sessions.map(s => s.id);
   let regsBySession = {};
@@ -34369,6 +34476,7 @@ function applyPublicCalFilter() {
         <div class="cal-card-day">${dayLabel} · ${yearLabel}</div>
 
         <div class="cal-card-offers">${offerPills}</div>
+        ${(window.__calCoachDates && window.__calCoachDates.has(s.date)) ? '<div class="cal-card-coach">Coach disponible ce jour</div>' : ''}
         ${mineBadge}
 
         <div class="cal-card-info">
