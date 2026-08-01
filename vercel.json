@@ -3,8 +3,8 @@
   "trailingSlash": false,
   "rewrites": [
     {
-      "source": "/((?!brand/|membre-fondateur|sitemap\\.xml|robots\\.txt|favicon\\.ico).*)",
-      "destination": "/index.html"
+      "source": "/:path*",
+      "destination": "/"
     }
   ],
   "headers": [
