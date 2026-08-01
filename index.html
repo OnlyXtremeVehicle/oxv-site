@@ -36289,7 +36289,8 @@ async function pavCoachLoadSession(ts, restitution) {
     const { data: an } = await supabase.from('coach_annotations').select('corner_index,body,created_at').eq('telemetry_session_id', ts.id).is('deleted_at', null).order('created_at', { ascending: false }).limit(3);
     PAV.coach.annotations = an || [];
   } catch (e) {}
-  // Canal 3 — annotations en INSERT (Realtime postgres_changes ; publication à valider en migration)
+  // Canal 3 — annotations en INSERT (Realtime postgres_changes ; publication appliquée
+  // le 2026-08-01 : migration pavillon_realtime_coach_annotations, RLS conservée)
   // Un seul abonnement annotations à la fois : l'ancien est retiré à chaque bascule de session
   // (QA Addendum 01 : 20 bascules live→restitution→idle → nombre de listeners constant).
   if (PAV.coach.annotChan) {
