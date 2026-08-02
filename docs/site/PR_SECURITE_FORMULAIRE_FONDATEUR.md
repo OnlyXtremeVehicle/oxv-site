@@ -1,7 +1,7 @@
 # PR-SÉCURITÉ — Formulaire Membre Fondateur (chantier 3)
 
 > Surface : 🔒 Edge function `capture-membre-fondateur` + 🗄️ Supabase. Date : 2026-08-01.
-> **Statut : ✅ base durcie et appliquée · ⏳ fonction v8 écrite et versionnée, DÉPLOIEMENT EN ATTENTE.**
+> **Statut : ✅ livré — migration appliquée, fonction v8 DÉPLOYÉE et vérifiée en production.**
 >
 > Le document de reprise renvoyait à un `PR_SECURITE_FORMULAIRE_FONDATEUR.md` rédigé
 > côté site : il n'existe dans **aucune branche de ce clone**. Ce fichier prend sa place.
@@ -53,7 +53,7 @@ Migration `founding_members_anti_abus` (appliquée) :
   service-role y accède. Même forme que `app_pairing_redeem_attempts` (précédent PR-HUB-04).
 - **`founding_members_email_unique`** sur `lower(email)` — un email, une candidature.
 
-## 3. Fonction v8 — écrite, versionnée, **non déployée**
+## 3. Fonction v8 — déployée
 
 Source : [`supabase/functions/capture-membre-fondateur/index.ts`](../../supabase/functions/capture-membre-fondateur/index.ts)
 (le dépôt n'avait pas de `supabase/functions/` ; il est créé ici pour que la source
@@ -70,41 +70,42 @@ déployée cesse d'exister uniquement chez Supabase).
 
 Aucun de ces contrôles ne change le parcours d'un visiteur légitime, qui soumet une fois.
 
-## 4. ⚠️ État intermédiaire actuel — à connaître
+## 4. Comportement sur une deuxième soumission du même email
 
-L'index unique est **actif** ; la fonction **v7** l'est encore. Conséquence sur une
-**deuxième soumission avec le même email** :
+| | avant | maintenant (v8) |
+|---|---|---|
+| Ligne dupliquée | créée | refusée |
+| 2ᵉ email + 2ᵉ Yousign **facturé** | **oui** | **non** |
+| Ce que voit le visiteur | succès | succès (silencieux, sans nouvel envoi) |
 
-| | avant | maintenant (v7 + index) | après v8 |
-|---|---|---|---|
-| Ligne dupliquée | créée | refusée (23505) | refusée |
-| 2ᵉ email + 2ᵉ Yousign **facturé** | **oui** | **non** | non |
-| Ce que voit le visiteur | succès | « Une erreur est survenue. » (HTTP 500) | succès silencieux |
-
-C'est **strictement plus sûr** qu'avant — la double facturation est déjà coupée — au
-prix d'un message inutile dans ce seul cas. La v8 le transforme en succès propre.
-
-Retour arrière si besoin : `drop index public.founding_members_email_unique;`
+Retour arrière de l'unicité si besoin : `drop index public.founding_members_email_unique;`
 (rétablit le comportement d'avant, double facturation comprise).
 
-## 5. Action requise — déploiement
+## 5. Vérification en production — v8, 2026-08-01
 
-Le déploiement de la fonction n'a **pas** pu être exécuté depuis cette session (refusé
-par la politique d'autorisation de l'outil). À lancer depuis le dépôt :
+Fonction déployée : **version 8, ACTIVE**, `verify_jwt: false`. Tests exécutés en
+HTTPS réel contre l'endpoint de production :
 
-```bash
-supabase functions deploy capture-membre-fondateur --project-ref fouvuqkdxarjpjbqnsjq --no-verify-jwt
-```
+| # | Appel | Attendu | Obtenu |
+|---|---|---|---|
+| 1 | POST sans `Origin`, jeton valide | 403 | **403** `{"error":"Forbidden"}` |
+| 2 | POST `Origin: https://exemple.invalid` | 403 | **403** `{"error":"Forbidden"}` |
+| 3 | POST bonne origine, mauvais jeton | 403 | **403** `{"error":"Forbidden"}` |
+| 4 | POST complet, **email déjà en base** | 200 `{ok:true}` sans effet de bord | **200** `{"ok":true,"id":"35d7…"}`, `ACAO` = l'origine seule |
+| 5 | 4ᵉ appel dans l'heure | 429 | **429** `{"error":"rate_limited"}` (appels 2 et 3 en 200) |
+| 6 | `OPTIONS` bonne origine | 200 + `ACAO` | **200**, `ACAO` = origine, `Vary: Origin` |
+| 7 | `OPTIONS` origine invalide | 403 | **403**, aucun `ACAO` |
 
-À vérifier juste après, sans créer ni ligne ni email ni facturation :
+Le test 4 traverse **toute** la fonction (origine → jeton → validation → limitation →
+déduplication) et s'arrête avant l'insertion : c'est le chemin complet, sans effet de bord.
 
-1. `POST` sans en-tête `Origin` → **403**.
-2. `POST` avec `Origin: https://exemple.invalid` → **403**.
-3. `POST` avec la bonne origine et un mauvais `x-oxv-form-token` → **403**.
-4. `POST` complet avec **l'email déjà présent en base** → **200 `{ok:true}`**, et
-   `select count(*) from founding_members` inchangé (chemin de déduplication : il
-   traverse toute la fonction sans effet de bord).
-5. Le formulaire réel sur `oxvehicle.fr/membre-fondateur` : préflight OPTIONS accepté.
+**Aucun effet de bord constaté** : `founding_members` reste à 1 ligne, 1
+`signature_envoyee` — aucune insertion, aucun email, aucune facturation. Les 3 lignes
+de `founding_submit_attempts` produites par les tests ont été **supprimées**.
+
+**Non testé** : le chemin nominal complet (nouvel email → insertion → Resend → Yousign).
+Le vérifier consommerait une signature facturée et un email réel. Il n'a pas été modifié
+au-delà de l'échappement de `prenom` et du passage de l'email en minuscules.
 
 ## 6. Ce que cela ne règle pas — décision produit
 
