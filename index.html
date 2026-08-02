@@ -4190,7 +4190,10 @@ footer {
   letter-spacing: 0.22em;
   text-transform: uppercase;
 }
-.session-table .session-status.pending   { color: #C9A24A; border-color: #C9A24A; }
+/* `pending_payment` partage le traitement de `pending` : ce sont deux états non
+   soldés, distingués par le libellé, pas par une couleur inventée. */
+.session-table .session-status.pending,
+.session-table .session-status.pending_payment { color: #C9A24A; border-color: #C9A24A; }
 .session-table .session-status.confirmed { color: var(--copper-glow); border-color: var(--copper); }
 .session-table .session-status.cancelled { color: #E07878; border-color: #C45959; }
 .session-table .session-status.attended  { color: var(--copper-glow); border-color: var(--copper-glow); }
@@ -6821,8 +6824,10 @@ footer {
   text-transform: uppercase;
 }
 .admin-list-pill .dot { width: 5px; height: 5px; border-radius: 50%; }
-.admin-list-pill.pending   { color: #C9A24A; border-color: #C9A24A; }
-.admin-list-pill.pending .dot { background: #C9A24A; }
+.admin-list-pill.pending,
+.admin-list-pill.pending_payment { color: #C9A24A; border-color: #C9A24A; }
+.admin-list-pill.pending .dot,
+.admin-list-pill.pending_payment .dot { background: #C9A24A; }
 .admin-list-pill.confirmed { color: var(--copper-glow); border-color: var(--copper); }
 .admin-list-pill.confirmed .dot { background: var(--copper-glow); }
 .admin-list-pill.cancelled,
@@ -28861,11 +28866,12 @@ function renderSessionsTable(rows, isPast) {
     const offerLabel = OFFER_LABELS[reg.offer_type] || reg.offer_type;
     const statusKey = reg.status;
     const statusLabel = {
-      pending:   'En attente',
-      confirmed: 'Confirmée',
-      cancelled: 'Annulée',
-      attended:  'Effectuée',
-      no_show:   'Non venu'
+      pending:         'En attente',
+      pending_payment: 'Paiement attendu',
+      confirmed:       'Confirmée',
+      cancelled:       'Annulée',
+      attended:        'Effectuée',
+      no_show:         'Non venu'
     }[statusKey] || statusKey;
     const price = ((reg.price_total || 0) / 100).toLocaleString('fr-FR') + ' €';
 
@@ -28893,11 +28899,12 @@ function renderSessionsTable(rows, isPast) {
     const offerLabel = OFFER_LABELS[reg.offer_type] || reg.offer_type;
     const statusKey = reg.status;
     const statusLabel = {
-      pending:   'En attente',
-      confirmed: 'Confirmée',
-      cancelled: 'Annulée',
-      attended:  'Effectuée',
-      no_show:   'Non venu'
+      pending:         'En attente',
+      pending_payment: 'Paiement attendu',
+      confirmed:       'Confirmée',
+      cancelled:       'Annulée',
+      attended:        'Effectuée',
+      no_show:         'Non venu'
     }[statusKey] || statusKey;
     const price = ((reg.price_total || 0) / 100).toLocaleString('fr-FR') + ' €';
 
@@ -33135,11 +33142,12 @@ function renderPilotSessions(regs) {
     heritage: 'Heritage'
   };
   const statusLabels = {
-    pending:   'En attente',
-    confirmed: 'Confirmée',
-    cancelled: 'Annulée',
-    attended:  'Effectuée',
-    no_show:   'Non venu'
+    pending:         'En attente',
+    pending_payment: 'Paiement attendu',
+    confirmed:       'Confirmée',
+    cancelled:       'Annulée',
+    attended:        'Effectuée',
+    no_show:         'Non venu'
   };
 
   list.innerHTML = `
@@ -34299,11 +34307,12 @@ function renderAdminSDRegs(regs) {
 
   const offerLabels = { access: 'Access', signature: 'Signature', promotion: 'Promotion', heritage: 'Heritage' };
   const regStatusLabels = {
-    pending:   'En attente',
-    confirmed: 'Confirmée',
-    cancelled: 'Annulée',
-    attended:  'Effectuée',
-    no_show:   'Non venu'
+    pending:         'En attente',
+    pending_payment: 'Paiement attendu',
+    confirmed:       'Confirmée',
+    cancelled:       'Annulée',
+    attended:        'Effectuée',
+    no_show:         'Non venu'
   };
   const payStatusLabels = {
     pending:   'En attente',
