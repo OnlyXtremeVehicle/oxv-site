@@ -38,7 +38,7 @@
   "logo": "https://www.oxvehicle.fr/brand/favicon-512.png",
   "image": "https://www.oxvehicle.fr/brand/favicon-512.png",
   "sport": "Track day / Circuit automobile",
-  "priceRange": "390 € – 2 490 €",
+  "priceRange": "250 € – 2 490 €",
   "areaServed": "France",
   "address": {
     "@type": "PostalAddress",
@@ -948,7 +948,7 @@ h1, h2, h3, h4, h5 {
 .signature:first-child { border-top: 0; }
 @media (min-width: 880px) {
   .signature { border-top: 0; border-left: 1px solid var(--cream-line); padding: 64px 40px; }
-  .signature:first-child { border-left: 0; }
+  .signature:nth-child(3n+1) { border-left: 0; }
 }
 .signature-num {
   font-family: var(--display);
@@ -12206,6 +12206,7 @@ textarea:focus-visible {
 .tp-ping[data-corner="T5"] { animation-delay: 0.5s; }
 .tp-ping[data-corner="T6"] { animation-delay: 0.6s; }
 .tp-ping[data-corner="T7"] { animation-delay: 0.7s; }
+.tp-ping[data-corner="T8"] { animation-delay: 0.8s; }
 @keyframes ping-in {
   from { opacity: 0; transform: scale(0.4); }
   to { opacity: 1; transform: scale(1); }
@@ -14004,7 +14005,7 @@ body.pav-tv .nav, body.pav-tv footer, body.pav-tv .cookie, body.pav-tv .founding
             <div class="home-journey-card-tag">— La piste, sans filtre</div>
             <h3 class="home-journey-card-name"><em>Access</em></h3>
             <p class="home-journey-card-text">
-              Demi-journée le lundi. 20 pilotes maximum. Briefing premium, café d'accueil, banque photo &amp; vidéo livrée dans l'app. Le circuit dans sa forme la plus pure, pour 390 € TTC.
+              Demi-journée le lundi. 20 pilotes maximum. Briefing premium, café d'accueil, banque photo &amp; vidéo livrée dans l'app. Le circuit dans sa forme la plus pure, pour 390 € TTC — <strong style="color:var(--cream);">250 € TTC pour votre première session</strong>.
             </p>
             <button class="home-journey-card-link" onclick="goTo('offers')">Découvrir →</button>
           </div>
@@ -14447,7 +14448,7 @@ body.pav-tv .nav, body.pav-tv footer, body.pav-tv .cookie, body.pav-tv .founding
           <div class="compare-cell head"><span class="compare-tier-name">Heritage</span></div>
 
           <div class="compare-cell label">Prix par pilote</div>
-          <div class="compare-cell">390 € TTC</div>
+          <div class="compare-cell">390 € TTC<br/><span style="font-size:11px;color:var(--gold);">250 € la première</span></div>
           <div class="compare-cell featured">690 € TTC</div>
           <div class="compare-cell">2 490 € TTC · 4 sessions</div>
 
@@ -14510,7 +14511,7 @@ body.pav-tv .nav, body.pav-tv footer, body.pav-tv .cookie, body.pav-tv .founding
         <!-- Mobile : cartes empilées (même contenu que la grille) -->
         <div class="compare-cards">
           <div class="compare-card">
-            <div class="compare-card-head">Access <span>390 € TTC</span></div>
+            <div class="compare-card-head">Access <span>390 € TTC · 250 € la première</span></div>
             <ul>
               <li><span>Temps de piste</span>Demi-journée · lundi</li>
               <li><span>Pilotes sur la piste</span>20 max</li>
@@ -14709,10 +14710,34 @@ body.pav-tv .nav, body.pav-tv footer, body.pav-tv .cookie, body.pav-tv .founding
                   <stop offset="50%" stop-color="#FFC93C"/>
                   <stop offset="100%" stop-color="#FFB703"/>
                 </linearGradient>
+
+                <!-- Damier de la ligne de départ / arrivée -->
+                <pattern id="tp-checker" width="4" height="4" patternUnits="userSpaceOnUse">
+                  <rect width="4" height="4" fill="#F8F9FA"/>
+                  <rect width="2" height="2" fill="#050505"/>
+                  <rect x="2" y="2" width="2" height="2" fill="#050505"/>
+                </pattern>
               </defs>
               
               <rect x="0" y="0" width="1000" height="600" fill="url(#tp-grid)"/>
               <rect x="0" y="0" width="1000" height="600" fill="url(#tp-grid-major)"/>
+
+              <!-- ============================================================
+                   INFRASTRUCTURE — paddock, pavillon, voie des stands
+                   Pavillon : polygone cadastral (DGI). Voie des stands : OpenStreetMap.
+                   Emprise du paddock (3 000 m²) : indicative, orientée sur le pavillon.
+                   ============================================================ -->
+              <g class="tp-infra">
+                <path d="M 196.25,366.18 L 306.13,418.02 L 328.21,394.8 L 218.33,342.97 Z" fill="rgba(248,249,250,0.035)" stroke="rgba(248,249,250,0.20)" stroke-width="1" stroke-dasharray="5 4"/>
+                <g transform="translate(262.23, 380.49) rotate(25.3)" font-family="JetBrains Mono, monospace">
+                  <text y="-1" text-anchor="middle" fill="rgba(248,249,250,0.52)" font-size="9" letter-spacing="2">PADDOCK</text>
+                  <text y="10" text-anchor="middle" fill="rgba(248,249,250,0.34)" font-size="7" letter-spacing="1">3 000 m²</text>
+                </g>
+                <path d="M 241.72,344.92 L 234.16,352.79 L 309.24,388.21 L 316.69,380.34 Z" fill="rgba(255,183,3,0.16)" stroke="rgba(255,183,3,0.45)" stroke-width="1"/>
+                <text x="331" y="387" transform="rotate(25.3, 331, 387)" fill="rgba(255,183,3,0.55)" font-family="JetBrains Mono, monospace" font-size="8" letter-spacing="1.5">PAVILLON</text>
+                <path d="M 661.83,487.52 L 624.45,481.93 L 530.53,459.67 L 486.52,448.9 L 464.36,441.96 L 450.48,435.54 L 401.81,406.65 L 374.17,388.83 L 346.93,376.72 L 331.4,370.19 L 255.7,338.4 L 231.06,328.35 L 214.8,321.73 L 174.83,307.44 L 132.79,292.21 L 100.48,276.16 L 76.66,258.45 L 61.44,238.05 L 54.29,222.41 L 50.25,202.64 L 49.11,189.07 L 49.94,164.73" fill="none" stroke="rgba(248,249,250,0.30)" stroke-width="2.5" stroke-dasharray="7 5" stroke-linejoin="round" stroke-linecap="round"/>
+                <text x="505" y="467" transform="rotate(14, 505, 467)" fill="rgba(248,249,250,0.45)" font-family="JetBrains Mono, monospace" font-size="8" letter-spacing="1.5">VOIE DES STANDS</text>
+              </g>
               
               <!-- ============================================================
                    TRACÉ OFFICIEL — Circuit de Haute Saintonge (Beltoise)
@@ -14760,7 +14785,7 @@ body.pav-tv .nav, body.pav-tv footer, body.pav-tv .cookie, body.pav-tv .founding
                    ============================================================ -->
               
               <!-- SECTEUR 1 (S1) : Start → T2 — Ligne droite + freinage T1 -->
-              <path d="M 145.82,94.21 L 178.04,97.2 L 326.51,117.16 L 799.64,176.96 L 889.3,189.25 L 933.43,195.17 L 940.97,198.18 L 946.48,202.09 L 949.6,207.93 L 950.0,215.49 L 945.86,222.86 L 937.08,228.09 L 925.93,230.83 L 884.06,230.98 L 745.11,224.88 L 700.88,223.2"
+              <path d="M 539.78,144.08 L 799.66,176.95 L 889.34,189.28 L 933.45,195.18 L 941.01,198.18 L 946.5,202.12 L 949.6,207.92 L 950.02,215.48 L 945.88,222.83 L 937.07,228.11 L 925.89,230.8 L 884.06,231.01 L 745.09,224.9 L 700.87,223.14 L 685.13,223.66 L 672.29,226.66 L 663.49,231.74 L 656.14,239.81 L 633.67,274.71"
                     fill="none"
                     stroke="#4ADE80"
                     stroke-width="8"
@@ -14769,7 +14794,7 @@ body.pav-tv .nav, body.pav-tv footer, body.pav-tv .cookie, body.pav-tv .founding
                     opacity="0.95"/>
               
               <!-- SECTEUR 2 (S2) : T2 → T5 — Section technique -->
-              <path d="M 700.88,223.2 L 685.16,223.62 L 672.32,226.63 L 663.52,231.71 L 656.1,239.77 L 633.71,274.72 L 593.63,333.0 L 584.17,347.77 L 580.2,356.47 L 579.39,363.5 L 581.33,374.08 L 588.4,384.28 L 599.17,393.3 L 632.59,406.77 L 673.01,422.95 L 686.94,427.29 L 702.81,426.73 L 720.32,418.39 L 755.17,404.73 L 775.01,401.41 L 796.93,401.78 L 821.52,407.15 L 839.98,415.95 L 855.72,428.46"
+              <path d="M 633.67,274.71 L 593.59,333.02 L 584.17,347.72 L 580.23,356.42 L 579.41,363.46 L 581.37,374.13 L 588.41,384.28 L 599.18,393.29 L 632.63,406.75 L 673.02,422.9 L 686.89,427.25 L 702.84,426.74 L 720.34,418.35 L 755.13,404.78 L 775.02,401.36 L 796.97,401.78 L 821.51,407.16 L 839.94,415.97 L 855.68,428.5 L 865,438.33 L 870.49,450.55 L 871.01,463.08 L 867.28,474.48 L 858.17,486.59 L 843.46,496.22 L 826.79,502.54 L 805.87,505.75 L 788.17,504.82"
                     fill="none"
                     stroke="#FFC93C"
                     stroke-width="8"
@@ -14778,7 +14803,7 @@ body.pav-tv .nav, body.pav-tv footer, body.pav-tv .cookie, body.pav-tv .founding
                     opacity="0.95"/>
               
               <!-- SECTEUR 3 (S3) : T5 → Start — Épingle + ligne retour -->
-              <path d="M 855.72,428.46 L 864.99,438.36 L 870.45,450.53 L 870.97,463.09 L 867.31,474.44 L 858.17,486.59 L 843.46,496.22 L 826.8,502.56 L 805.87,505.79 L 788.21,504.85 L 720.87,495.99 L 661.89,487.52 L 644.38,479.83 L 601.47,454.7 L 575.49,439.63 L 546.24,428.67 L 503.66,412.63 L 443.01,388.36 L 368.46,359.89 L 308.5,336.91 L 199.04,295.03 L 180.05,283.35 L 166.92,268.35 L 154.45,256.9 L 139.58,248.4 L 111.05,235.02 L 89.59,223.06 L 64.15,200.81 L 54.5,184.52 L 50.0,164.73 L 56.24,135.3 L 76.08,113.49 L 100.54,100.86 L 123.23,95.01 L 145.82,94.21"
+              <path d="M 788.17,504.82 L 720.86,496.02 L 661.83,487.52 L 644.33,479.86 L 601.46,454.7 L 575.47,439.68 L 546.27,428.7 L 503.61,412.65 L 443.03,388.32 L 368.47,359.94 L 308.51,336.95 L 199.06,295.01 L 180,283.31 L 166.96,268.39 L 154.43,256.9 L 139.62,248.41 L 111.04,235.05 L 89.6,223.04 L 64.13,200.77 L 54.5,184.51 L 49.94,164.73 L 56.26,135.32 L 76.04,113.47 L 100.58,100.84 L 123.26,95.04 L 145.83,94.21 L 178.04,97.21 L 326.53,117.1 L 539.78,144.08"
                     fill="none"
                     stroke="#C084FC"
                     stroke-width="8"
@@ -14800,84 +14825,95 @@ body.pav-tv .nav, body.pav-tv footer, body.pav-tv .cookie, body.pav-tv .founding
                    ============================================================ -->
               
               <g class="tp-pings">
-                
-                <!-- PING T1 — Épingle droite (point de freinage) -->
-                <g class="tp-ping" data-corner="T1" data-name="T1 — Épingle de Beltoise" data-type="braking" data-tip="Premier freinage appuyé du tour, en bout de ligne droite. La décélération la plus forte du tracé se mesure ici." onclick="showCornerDetail('T1')">
-                  <circle cx="940" cy="195" r="22" fill="rgba(255, 201, 60, 0.12)" class="tp-ping-halo"/>
-                  <circle cx="940" cy="195" r="12" fill="rgba(255, 201, 60, 0.35)" class="tp-ping-pulse">
-                    <animate attributeName="r" values="10;16;10" dur="2.5s" repeatCount="indefinite"/>
-                    <animate attributeName="opacity" values="0.5;0.2;0.5" dur="2.5s" repeatCount="indefinite"/>
+
+                <!-- PING T1 — Épingle à droite · droite · 169° · PK 330 m -->
+                <g class="tp-ping" data-corner="T1" data-name="T1 — Épingle à droite" data-type="braking" data-tip="Premier freinage appuyé du tour, en bout de la grande ligne droite : la décélération la plus forte du tracé s'y mesure." onclick="showCornerDetail('T1')">
+                  <circle cx="950.02" cy="215.48" r="22" fill="rgba(255, 201, 60, 0.12)" class="tp-ping-halo"/>
+                  <circle cx="950.02" cy="215.48" r="12" fill="rgba(255, 201, 60, 0.35)" class="tp-ping-pulse">
+                    <animate attributeName="r" values="10;16;10" dur="2.5s" begin="0.0s" repeatCount="indefinite"/>
+                    <animate attributeName="opacity" values="0.5;0.2;0.5" dur="2.5s" begin="0.0s" repeatCount="indefinite"/>
                   </circle>
-                  <circle cx="940" cy="195" r="6" fill="#FFC93C"/>
-                  <text x="940" y="199" text-anchor="middle" fill="#050505" font-family="JetBrains Mono, monospace" font-size="9" font-weight="700">1</text>
+                  <circle cx="950.02" cy="215.48" r="7" fill="#FFC93C"/>
+                  <text x="950.02" y="219.48" text-anchor="middle" fill="#050505" font-family="JetBrains Mono, monospace" font-size="9" font-weight="700">1</text>
                 </g>
-                
-                <!-- PING T2 — Courbe rapide à droite -->
-                <g class="tp-ping" data-corner="T2" data-name="T2 — Rapide à droite" data-type="speed" data-tip="Courbe rapide négociée sans freinage. La vitesse de passage s'y lit directement dans la donnée." onclick="showCornerDetail('T2')">
-                  <circle cx="675" cy="228" r="22" fill="rgba(74, 222, 128, 0.12)" class="tp-ping-halo"/>
-                  <circle cx="675" cy="228" r="12" fill="rgba(74, 222, 128, 0.35)" class="tp-ping-pulse">
+
+                <!-- PING T2 — Gauche rapide · gauche · 69° · PK 549 m -->
+                <g class="tp-ping" data-corner="T2" data-name="T2 — Gauche rapide" data-type="speed" data-tip="Courbe rapide à gauche, négociée sans freinage. La vitesse de passage s'y lit directement dans la donnée." onclick="showCornerDetail('T2')">
+                  <circle cx="672.29" cy="226.66" r="22" fill="rgba(74, 222, 128, 0.12)" class="tp-ping-halo"/>
+                  <circle cx="672.29" cy="226.66" r="12" fill="rgba(74, 222, 128, 0.35)" class="tp-ping-pulse">
                     <animate attributeName="r" values="10;16;10" dur="2.5s" begin="0.4s" repeatCount="indefinite"/>
                     <animate attributeName="opacity" values="0.5;0.2;0.5" dur="2.5s" begin="0.4s" repeatCount="indefinite"/>
                   </circle>
-                  <circle cx="675" cy="228" r="6" fill="#4ADE80"/>
-                  <text x="675" y="232" text-anchor="middle" fill="#050505" font-family="JetBrains Mono, monospace" font-size="9" font-weight="700">2</text>
+                  <circle cx="672.29" cy="226.66" r="6" fill="#4ADE80"/>
+                  <text x="672.29" y="230.66" text-anchor="middle" fill="#050505" font-family="JetBrains Mono, monospace" font-size="9" font-weight="700">2</text>
                 </g>
-                
-                <!-- PING T3 — S technique gauche -->
-                <g class="tp-ping" data-corner="T3" data-name="T3 — Gauche technique" data-type="precision" data-tip="Gauche technique en entrée de section sinueuse. La répétabilité du point de corde s'y lit tour après tour." onclick="showCornerDetail('T3')">
-                  <circle cx="585" cy="345" r="22" fill="rgba(230, 57, 70, 0.12)" class="tp-ping-halo"/>
-                  <circle cx="585" cy="345" r="12" fill="rgba(230, 57, 70, 0.35)" class="tp-ping-pulse">
+
+                <!-- PING T3 — Gauche technique · gauche · 85° · PK 725 m -->
+                <g class="tp-ping" data-corner="T3" data-name="T3 — Gauche technique" data-type="precision" data-tip="Gauche technique qui ouvre la section sinueuse. Le placement au point de corde et sa répétabilité se lisent tour après tour — la zone la plus sensible pour la branche Trajectoire du QDI." onclick="showCornerDetail('T3')">
+                  <circle cx="581.37" cy="374.13" r="22" fill="rgba(230, 57, 70, 0.12)" class="tp-ping-halo"/>
+                  <circle cx="581.37" cy="374.13" r="12" fill="rgba(230, 57, 70, 0.35)" class="tp-ping-pulse">
                     <animate attributeName="r" values="10;16;10" dur="2.5s" begin="0.8s" repeatCount="indefinite"/>
                     <animate attributeName="opacity" values="0.5;0.2;0.5" dur="2.5s" begin="0.8s" repeatCount="indefinite"/>
                   </circle>
-                  <circle cx="585" cy="345" r="6" fill="#E63946"/>
-                  <text x="585" y="349" text-anchor="middle" fill="#FFFFFF" font-family="JetBrains Mono, monospace" font-size="9" font-weight="700">3</text>
+                  <circle cx="581.37" cy="374.13" r="6" fill="#E63946"/>
+                  <text x="581.37" y="378.13" text-anchor="middle" fill="#FFFFFF" font-family="JetBrains Mono, monospace" font-size="9" font-weight="700">3</text>
                 </g>
-                
-                <!-- PING T4 — S technique droite -->
-                <g class="tp-ping" data-corner="T4" data-name="T4 — Réaccélération" data-type="acceleration" data-tip="Zone de réaccélération entre T3 et T5. La progressivité de la remise des gaz s'y mesure." onclick="showCornerDetail('T4')">
-                  <circle cx="688" cy="427" r="22" fill="rgba(74, 222, 128, 0.12)" class="tp-ping-halo"/>
-                  <circle cx="688" cy="427" r="12" fill="rgba(74, 222, 128, 0.35)" class="tp-ping-pulse">
+
+                <!-- PING T4 — Gauche d'appui · gauche · 64° · PK 825 m -->
+                <g class="tp-ping" data-corner="T4" data-name="T4 — Gauche d'appui" data-type="acceleration" data-tip="Gauche d'appui suivie d'une réaccélération. La trace longitudinale y montre la continuité de la remise des gaz." onclick="showCornerDetail('T4')">
+                  <circle cx="686.89" cy="427.25" r="22" fill="rgba(74, 222, 128, 0.12)" class="tp-ping-halo"/>
+                  <circle cx="686.89" cy="427.25" r="12" fill="rgba(74, 222, 128, 0.35)" class="tp-ping-pulse">
                     <animate attributeName="r" values="10;16;10" dur="2.5s" begin="1.2s" repeatCount="indefinite"/>
                     <animate attributeName="opacity" values="0.5;0.2;0.5" dur="2.5s" begin="1.2s" repeatCount="indefinite"/>
                   </circle>
-                  <circle cx="688" cy="427" r="6" fill="#4ADE80"/>
-                  <text x="688" y="431" text-anchor="middle" fill="#050505" font-family="JetBrains Mono, monospace" font-size="9" font-weight="700">4</text>
+                  <circle cx="686.89" cy="427.25" r="6" fill="#4ADE80"/>
+                  <text x="686.89" y="431.25" text-anchor="middle" fill="#050505" font-family="JetBrains Mono, monospace" font-size="9" font-weight="700">4</text>
                 </g>
-                
-                <!-- PING T5 — Virage moyen à droite -->
-                <g class="tp-ping" data-corner="T5" data-name="T5 — Courbe moyenne" data-type="fluidity" data-tip="Courbe de liaison vers l'épingle. La continuité de l'accélération s'y lit dans la trace longitudinale." onclick="showCornerDetail('T5')">
-                  <circle cx="838" cy="415" r="22" fill="rgba(255, 183, 3, 0.12)" class="tp-ping-halo"/>
-                  <circle cx="838" cy="415" r="12" fill="rgba(255, 183, 3, 0.35)" class="tp-ping-pulse">
+
+                <!-- PING T5 — Épingle Saintonge · droite · 225° · PK 996 m -->
+                <g class="tp-ping" data-corner="T5" data-name="T5 — Épingle Saintonge" data-type="braking" data-tip="Épingle serrée à droite, l'arc le plus fermé du tracé : second freinage fort du tour, suivi d'une longue relance." onclick="showCornerDetail('T5')">
+                  <circle cx="870.49" cy="450.55" r="22" fill="rgba(255, 201, 60, 0.12)" class="tp-ping-halo"/>
+                  <circle cx="870.49" cy="450.55" r="12" fill="rgba(255, 201, 60, 0.35)" class="tp-ping-pulse">
                     <animate attributeName="r" values="10;16;10" dur="2.5s" begin="1.6s" repeatCount="indefinite"/>
                     <animate attributeName="opacity" values="0.5;0.2;0.5" dur="2.5s" begin="1.6s" repeatCount="indefinite"/>
                   </circle>
-                  <circle cx="838" cy="415" r="6" fill="#FFB703"/>
-                  <text x="838" y="419" text-anchor="middle" fill="#050505" font-family="JetBrains Mono, monospace" font-size="9" font-weight="700">5</text>
+                  <circle cx="870.49" cy="450.55" r="7" fill="#FFC93C"/>
+                  <text x="870.49" y="454.55" text-anchor="middle" fill="#050505" font-family="JetBrains Mono, monospace" font-size="9" font-weight="700">5</text>
                 </g>
-                
-                <!-- PING T6 — Épingle de Saintonge -->
-                <g class="tp-ping" data-corner="T6" data-name="T6 — Épingle Saintonge" data-type="braking" data-tip="Épingle serrée, second freinage fort du tour. L'enchaînement T6-T7 est la séquence la plus dense du tracé." onclick="showCornerDetail('T6')">
-                  <circle cx="722" cy="498" r="22" fill="rgba(255, 201, 60, 0.12)" class="tp-ping-halo"/>
-                  <circle cx="722" cy="498" r="12" fill="rgba(255, 201, 60, 0.35)" class="tp-ping-pulse">
+
+                <!-- PING T6 — Droite de liaison · droite · 28° · PK 1209 m -->
+                <g class="tp-ping" data-corner="T6" data-name="T6 — Droite de liaison" data-type="fluidity" data-tip="Courbe de liaison à droite, à peine marquée. La continuité de la vitesse s'y lit dans la trace longitudinale." onclick="showCornerDetail('T6')">
+                  <circle cx="644.33" cy="479.86" r="22" fill="rgba(255, 183, 3, 0.12)" class="tp-ping-halo"/>
+                  <circle cx="644.33" cy="479.86" r="12" fill="rgba(255, 183, 3, 0.35)" class="tp-ping-pulse">
                     <animate attributeName="r" values="10;16;10" dur="2.5s" begin="2.0s" repeatCount="indefinite"/>
                     <animate attributeName="opacity" values="0.5;0.2;0.5" dur="2.5s" begin="2.0s" repeatCount="indefinite"/>
                   </circle>
-                  <circle cx="722" cy="498" r="6" fill="#FFC93C"/>
-                  <text x="722" y="502" text-anchor="middle" fill="#050505" font-family="JetBrains Mono, monospace" font-size="9" font-weight="700">6</text>
+                  <circle cx="644.33" cy="479.86" r="6" fill="#FFB703"/>
+                  <text x="644.33" y="483.86" text-anchor="middle" fill="#050505" font-family="JetBrains Mono, monospace" font-size="9" font-weight="700">6</text>
                 </g>
-                
-                <!-- PING T7 — Épingle Beltoise gauche (la grande) -->
-                <g class="tp-ping" data-corner="T7" data-name="T7 — Épingle Beltoise" data-type="precision" data-tip="Virage signature du tracé, avant la ligne droite des stands. La position au point de corde se lit dans la vitesse mesurée ensuite." onclick="showCornerDetail('T7')">
-                  <circle cx="57" cy="180" r="22" fill="rgba(230, 57, 70, 0.12)" class="tp-ping-halo"/>
-                  <circle cx="57" cy="180" r="12" fill="rgba(230, 57, 70, 0.35)" class="tp-ping-pulse">
-                    <animate attributeName="r" values="10;18;10" dur="2.5s" begin="2.4s" repeatCount="indefinite"/>
-                    <animate attributeName="opacity" values="0.6;0.2;0.6" dur="2.5s" begin="2.4s" repeatCount="indefinite"/>
+
+                <!-- PING T7 — Courbe de rappel · droite · 30° · PK 1620 m -->
+                <g class="tp-ping" data-corner="T7" data-name="T7 — Courbe de rappel" data-type="fluidity" data-tip="Courbe de rappel à droite, en fin de ligne de retour. La régularité d'un tour à l'autre s'y mesure." onclick="showCornerDetail('T7')">
+                  <circle cx="180" cy="283.31" r="22" fill="rgba(255, 183, 3, 0.12)" class="tp-ping-halo"/>
+                  <circle cx="180" cy="283.31" r="12" fill="rgba(255, 183, 3, 0.35)" class="tp-ping-pulse">
+                    <animate attributeName="r" values="10;16;10" dur="2.5s" begin="2.4s" repeatCount="indefinite"/>
+                    <animate attributeName="opacity" values="0.5;0.2;0.5" dur="2.5s" begin="2.4s" repeatCount="indefinite"/>
                   </circle>
-                  <circle cx="57" cy="180" r="7" fill="#E63946"/>
-                  <text x="57" y="184" text-anchor="middle" fill="#FFFFFF" font-family="JetBrains Mono, monospace" font-size="9" font-weight="700">7</text>
+                  <circle cx="180" cy="283.31" r="6" fill="#FFB703"/>
+                  <text x="180" y="287.31" text-anchor="middle" fill="#050505" font-family="JetBrains Mono, monospace" font-size="9" font-weight="700">7</text>
                 </g>
-                
+
+                <!-- PING T8 — Épingle Beltoise · droite · 154° · PK 1818 m -->
+                <g class="tp-ping" data-corner="T8" data-name="T8 — Épingle Beltoise" data-type="precision" data-tip="Le virage signature du tracé, juste avant la ligne de départ. La position au point de corde se lit dans la vitesse mesurée sur toute la ligne droite suivante." onclick="showCornerDetail('T8')">
+                  <circle cx="56.26" cy="135.32" r="22" fill="rgba(230, 57, 70, 0.12)" class="tp-ping-halo"/>
+                  <circle cx="56.26" cy="135.32" r="12" fill="rgba(230, 57, 70, 0.35)" class="tp-ping-pulse">
+                    <animate attributeName="r" values="10;16;10" dur="2.5s" begin="2.8s" repeatCount="indefinite"/>
+                    <animate attributeName="opacity" values="0.5;0.2;0.5" dur="2.5s" begin="2.8s" repeatCount="indefinite"/>
+                  </circle>
+                  <circle cx="56.26" cy="135.32" r="7" fill="#E63946"/>
+                  <text x="56.26" y="139.32" text-anchor="middle" fill="#FFFFFF" font-family="JetBrains Mono, monospace" font-size="9" font-weight="700">8</text>
+                </g>
+
               </g>
               
               <!-- Labels secteurs S1, S2, S3 -->
@@ -14901,14 +14937,12 @@ body.pav-tv .nav, body.pav-tv footer, body.pav-tv .cookie, body.pav-tv .founding
                 </g>
               </g>
               
-              <!-- Point de départ (Start/Finish) -->
-              <g transform="translate(145.82, 94.21)">
-                <circle r="20" fill="rgba(255, 183, 3, 0.15)" filter="url(#tp-glow)"/>
-                <circle r="11" fill="rgba(255, 183, 3, 0.4)" filter="url(#tp-glow)"/>
-                <circle r="6" fill="#FFFFFF" filter="url(#tp-glow)">
-                  <animate attributeName="r" values="5;8;5" dur="2s" repeatCount="indefinite"/>
-                  <animate attributeName="opacity" values="0.9;1;0.9" dur="2s" repeatCount="indefinite"/>
-                </circle>
+              <!-- Ligne de départ / arrivée — milieu de la grande ligne droite (PK 0) -->
+              <g class="tp-startline">
+                <g transform="translate(539.78, 144.08) rotate(7.2)">
+                  <rect x="-3" y="-9.5" width="6" height="19" fill="url(#tp-checker)" stroke="rgba(248,249,250,0.85)" stroke-width="0.8"/>
+                </g>
+                <text x="539.78" y="121" text-anchor="middle" fill="rgba(248,249,250,0.75)" font-family="JetBrains Mono, monospace" font-size="8" letter-spacing="2">DÉPART · ARRIVÉE</text>
               </g>
               
               <!-- Direction indicator (flèche, sens du tour) -->
@@ -14923,15 +14957,15 @@ body.pav-tv .nav, body.pav-tv footer, body.pav-tv .cookie, body.pav-tv .founding
                     font-weight="500">SENS</text>
               
               <!-- Indicateur d'échelle bas-droit -->
-              <g transform="translate(880, 545)">
-                <line x1="0" y1="0" x2="60" y2="0" stroke="rgba(248,249,250,0.4)" stroke-width="1"/>
+              <g transform="translate(800, 545)">
+                <line x1="0" y1="0" x2="132" y2="0" stroke="rgba(248,249,250,0.4)" stroke-width="1"/>
                 <line x1="0" y1="-3" x2="0" y2="3" stroke="rgba(248,249,250,0.4)" stroke-width="1"/>
-                <line x1="60" y1="-3" x2="60" y2="3" stroke="rgba(248,249,250,0.4)" stroke-width="1"/>
-                <text x="30" y="-8" text-anchor="middle" 
+                <line x1="132" y1="-3" x2="132" y2="3" stroke="rgba(248,249,250,0.4)" stroke-width="1"/>
+                <text x="66" y="-8" text-anchor="middle" 
                       fill="rgba(248,249,250,0.4)"
                       font-family="JetBrains Mono, monospace" 
                       font-size="8" 
-                      letter-spacing="1">200 m</text>
+                      letter-spacing="1">100 m</text>
               </g>
               
               <!-- Compass NORTH (bas-gauche) -->
@@ -14948,22 +14982,24 @@ body.pav-tv .nav, body.pav-tv footer, body.pav-tv .cookie, body.pav-tv .founding
             </svg>
           </div>
           
+          <p style="font-family:var(--mono);font-size:10px;line-height:1.6;color:var(--cream-faint);text-align:center;margin:10px 0 0;letter-spacing:0.04em;">Tracé et pavillon relevés — OpenStreetMap, cadastre DGI. Emprise du paddock indicative. Points kilométriques comptés depuis la ligne de départ.</p>
+
           <!-- Légende interactive des secteurs / virages -->
           <div class="tp-legend">
             <div class="tp-legend-item s1">
               <span class="tp-legend-dot"></span>
               <span class="tp-legend-name">S1</span>
-              <span class="tp-legend-desc">Ligne droite + T1</span>
+              <span class="tp-legend-desc">Ligne droite · T1 · T2</span>
             </div>
             <div class="tp-legend-item s2">
               <span class="tp-legend-dot"></span>
               <span class="tp-legend-name">S2</span>
-              <span class="tp-legend-desc">Section technique</span>
+              <span class="tp-legend-desc">T3 · T4 · épingle T5</span>
             </div>
             <div class="tp-legend-item s3">
               <span class="tp-legend-dot"></span>
               <span class="tp-legend-name">S3</span>
-              <span class="tp-legend-desc">Épingle + retour</span>
+              <span class="tp-legend-desc">T6 · T7 · T8 · retour</span>
             </div>
           </div>
           
@@ -15021,7 +15057,11 @@ body.pav-tv .nav, body.pav-tv footer, body.pav-tv .cookie, body.pav-tv .founding
         <div class="circuit-facts">
           <div class="circuit-fact">
             <div class="circuit-fact-label">Longueur</div>
-            <div class="circuit-fact-value">2 200<em>m</em></div>
+            <div class="circuit-fact-value">2 205<em>m</em></div>
+          </div>
+          <div class="circuit-fact">
+            <div class="circuit-fact-label">Virages</div>
+            <div class="circuit-fact-value">8</div>
           </div>
           <div class="circuit-fact">
             <div class="circuit-fact-label">Tracé</div>
@@ -15045,7 +15085,7 @@ body.pav-tv .nav, body.pav-tv footer, body.pav-tv .cookie, body.pav-tv .founding
       <div class="section-head reveal">
         <div>
           <div class="kicker">N° 03.1 · Anatomie du tour</div>
-          <h2 class="section-title">Sept virages,<br/>une <em>chorégraphie</em>.</h2>
+          <h2 class="section-title">Huit virages,<br/>une <em>chorégraphie</em>.</h2>
         </div>
         <p class="section-lede">
           Chaque courbe a sa logique. La performance vient de leur enchaînement, jamais d'une seule.
@@ -15054,24 +15094,31 @@ body.pav-tv .nav, body.pav-tv footer, body.pav-tv .cookie, body.pav-tv .founding
 
       <div class="signatures reveal-stagger" style="border-top-color: var(--cream-line);">
         <div class="signature">
-          <div class="signature-num">V1 · V2</div>
+          <div class="signature-num">T1</div>
           <h3 class="signature-title">Le pif-paf, l'<em>épingle</em></h3>
           <p class="signature-text">
             Une cuvette à l'aveugle suivie d'une bosse, puis l'épingle V2 en montée à +9 %. Engagement tardif, fluidité, freinage en charge variable. C'est ici que se gagne le tour.
           </p>
         </div>
         <div class="signature">
-          <div class="signature-num">V3 · V4 · V5</div>
+          <div class="signature-num">T2 · T3 · T4</div>
           <h3 class="signature-title">Triple gauche en <em>dévers</em></h3>
           <p class="signature-text">
             Une séquence rythmique, en appui constant. La trajectoire se dicte sur la deuxième courbe, jamais la première. Un test de lecture, pas de bras.
           </p>
         </div>
         <div class="signature">
-          <div class="signature-num">V6 · V7</div>
+          <div class="signature-num">T5</div>
+          <h3 class="signature-title">L'épingle <em>Saintonge</em></h3>
+          <p class="signature-text">
+            L'arc le plus fermé du tracé : 225° à droite, au point kilométrique 996. Second freinage fort du tour, suivi de la plus longue relance vers la ligne de retour.
+          </p>
+        </div>
+        <div class="signature">
+          <div class="signature-num">T6 · T7 · T8</div>
           <h3 class="signature-title">Le retour en <em>relance</em></h3>
           <p class="signature-text">
-            Grande parabolique droite, dernier virage à élargir, puis 650 mètres pied droit. Sortie large : le chrono dépend de la patience, pas de l'agressivité.
+            Grande parabolique droite, dernier virage à élargir, puis 605 mètres pied droit. Sortie large : le chrono dépend de la patience, pas de l'agressivité.
           </p>
         </div>
       </div>
@@ -15120,6 +15167,43 @@ body.pav-tv .nav, body.pav-tv footer, body.pav-tv .cookie, body.pav-tv .founding
     </div>
   </section>
 
+  <section class="section">
+    <div class="wrap">
+      <div class="section-head reveal">
+        <div>
+          <div class="kicker">N° 03.3 · Dispositif</div>
+          <h2 class="section-title">La sécurité en piste,<br/>opérée par le <em>circuit</em>.</h2>
+        </div>
+        <p class="section-lede">
+          Le dispositif est permanent et professionnel, tenu par le Circuit de Haute Saintonge. OXV y ajoute son cadre — <button class="link-inline" onclick="goTo('securite')" style="background:none;border:none;color:var(--oxv-red);cursor:pointer;padding:0;font:inherit;">notre politique</button>, contrôlée au briefing, pilote par pilote.
+        </p>
+      </div>
+
+      <div class="signatures reveal-stagger" style="border-bottom:0;">
+        <div class="signature">
+          <div class="signature-num">◎</div>
+          <h3 class="signature-title">Dix-sept <em>caméras</em></h3>
+          <p class="signature-text">Sur toute la piste, en continu.</p>
+        </div>
+        <div class="signature">
+          <div class="signature-num">⚑</div>
+          <h3 class="signature-title">Feux de <em>signalisation</em></h3>
+          <p class="signature-text">Avant chaque virage.</p>
+        </div>
+        <div class="signature">
+          <div class="signature-num">▣</div>
+          <h3 class="signature-title">Chef de piste <em>dédié</em></h3>
+          <p class="signature-text">Accès, interventions, roulage.</p>
+        </div>
+        <div class="signature">
+          <div class="signature-num">⊕</div>
+          <h3 class="signature-title">Contrôle à l'<em>entrée</em></h3>
+          <p class="signature-text">Sonomètre et technique — non conforme, non admis.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
   <!-- ── Le circuit toute l'année ── -->
   <section class="circuit-annee">
     <div class="wrap">
@@ -15147,7 +15231,7 @@ body.pav-tv .nav, body.pav-tv footer, body.pav-tv .cookie, body.pav-tv .founding
           <div class="circuit-annee-block-title">Accès privatif & événements</div>
           <div class="circuit-annee-block-text">
             <p>Privatisation complète du tracé pour les clubs, concessionnaires ou événements privés — indépendamment des formules Corporate OXV.</p>
-            <p>Le circuit dispose de 2,2 km de piste, d'un paddock couvert de 1 200 m² et d'installations techniques dédiées.</p>
+            <p>Le circuit dispose de 2 205 m de piste, de huit virages, d'un paddock de 3 000 m² et d'installations techniques dédiées.</p>
           </div>
           <button class="circuit-annee-block-link" onclick="goTo('corporate')">Formules corporate OXV →</button>
         </div>
@@ -15155,7 +15239,7 @@ body.pav-tv .nav, body.pav-tv footer, body.pav-tv .cookie, body.pav-tv .founding
         <div class="reveal">
           <div class="circuit-annee-block-title">Le tracé en chiffres</div>
           <div class="circuit-annee-block-text">
-            <p>2,2 km · tracé technique &amp; vallonné · sans chicane artificielle.</p>
+            <p>2 205 m · huit virages · tracé technique &amp; vallonné · sans chicane artificielle.</p>
             <p>Un tracé technique, sans chicane artificielle. Conçu pour révéler la progression — jamais pour punir l'erreur.</p>
           </div>
         </div>
@@ -20521,7 +20605,7 @@ body.pav-tv .nav, body.pav-tv footer, body.pav-tv .cookie, body.pav-tv .founding
         <h2>Article 2 — Offres et tarifs</h2>
         <p>OXV propose trois offres principales pour la saison 2027 :</p>
         <p>
-          · <strong>Access</strong> : 390 € TTC par pilote par session. Format demi-journée le lundi (matin 9h-13h ou après-midi 14h-18h).<br/>
+          · <strong>Access</strong> : 390 € TTC par pilote par session. La première session Access d'un pilote est facturée 250 € TTC ; ce tarif d'entrée s'applique une seule fois, à la première réservation, et n'est pas cumulable avec le pack Heritage. Format demi-journée le lundi (matin 9h-13h ou après-midi 14h-18h).<br/>
           · <strong>Signature</strong> : 690 € TTC par pilote par session. Format journée complète le vendredi (9h-17h).<br/>
           · <strong>Heritage</strong> : 2 490 € TTC. Pack de 4 sessions Signature à utiliser sur la saison de souscription, avec priorité de réservation et un an d'abonnement à l'application OXV Mirror inclus.
         </p>
@@ -21134,6 +21218,74 @@ body.pav-tv .nav, body.pav-tv footer, body.pav-tv .cookie, body.pav-tv .founding
 
   <section class="section">
     <div class="wrap" style="max-width:1000px;">
+      <!-- Nos valeurs — l'ordre des décisions -->
+      <div class="reveal" style="margin-bottom:48px;">
+        <div class="kicker">— Nos valeurs</div>
+        <h2 class="section-title" style="margin-top:18px;margin-bottom:10px;">L'ordre dans lequel<br/>nous <em>décidons</em>.</h2>
+        <p style="font-family:var(--sans);font-size:15px;line-height:1.7;color:var(--cream-mute);max-width:660px;margin:0 0 24px;">Trois mots, et leur ordre. Ce n'est pas une devise : c'est la règle d'arbitrage quand deux exigences s'opposent.</p>
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:16px;">
+          <div class="bento" style="padding:26px;">
+            <div style="font-family:var(--mono);font-size:10px;letter-spacing:0.22em;text-transform:uppercase;color:var(--gold);margin-bottom:8px;">D'abord</div>
+            <div style="font-family:var(--display);font-size:24px;line-height:1.2;color:var(--cream);margin-bottom:10px;">La sécurité</div>
+            <p style="font-family:var(--sans);font-size:14px;line-height:1.6;color:var(--cream-mute);margin:0;">Non négociable, à chaque relais.</p>
+          </div>
+          <div class="bento" style="padding:26px;">
+            <div style="font-family:var(--mono);font-size:10px;letter-spacing:0.22em;text-transform:uppercase;color:var(--gold);margin-bottom:8px;">Toujours</div>
+            <div style="font-family:var(--display);font-size:24px;line-height:1.2;color:var(--cream);margin-bottom:10px;">Le développement</div>
+            <p style="font-family:var(--sans);font-size:14px;line-height:1.6;color:var(--cream-mute);margin:0;">La donnée comme matière.</p>
+          </div>
+          <div class="bento" style="padding:26px;">
+            <div style="font-family:var(--mono);font-size:10px;letter-spacing:0.22em;text-transform:uppercase;color:var(--gold);margin-bottom:8px;">Enfin</div>
+            <div style="font-family:var(--display);font-size:24px;line-height:1.2;color:var(--cream);margin-bottom:10px;">La sensation</div>
+            <p style="font-family:var(--sans);font-size:14px;line-height:1.6;color:var(--cream-mute);margin:0;">De surcroît, jamais en premier.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Notre politique — cinq engagements -->
+      <div class="reveal" style="margin-bottom:48px;">
+        <div class="kicker">— Notre politique</div>
+        <h2 class="section-title" style="margin-top:18px;margin-bottom:10px;">Cinq engagements,<br/>écrits et <em>opposables</em>.</h2>
+        <p style="font-family:var(--sans);font-size:15px;line-height:1.7;color:var(--cream-mute);max-width:660px;margin:0 0 24px;">Des contraintes qu'on s'impose, y compris quand elles coûtent.</p>
+        <ul style="list-style:none;padding:0;margin:0;max-width:820px;">
+          <li style="display:grid;grid-template-columns:34px 1fr;gap:14px;align-items:start;padding:16px 0;border-top:1px solid var(--bento-border);">
+            <span style="font-family:var(--display);font-size:16px;font-style:italic;color:var(--gold);line-height:1.5;">I</span>
+            <span>
+              <strong style="font-family:var(--sans);font-size:15px;color:var(--cream);display:block;margin-bottom:4px;">La sécurité d'abord</strong>
+              <span style="font-family:var(--sans);font-size:14px;line-height:1.65;color:var(--cream-mute);">Jauge stricte, briefing systématique, encadrement à chaque relais.</span>
+            </span>
+          </li>
+          <li style="display:grid;grid-template-columns:34px 1fr;gap:14px;align-items:start;padding:16px 0;border-top:1px solid var(--bento-border);">
+            <span style="font-family:var(--display);font-size:16px;font-style:italic;color:var(--gold);line-height:1.5;">II</span>
+            <span>
+              <strong style="font-family:var(--sans);font-size:15px;color:var(--cream);display:block;margin-bottom:4px;">La règle du miroir</strong>
+              <span style="font-family:var(--sans);font-size:14px;line-height:1.65;color:var(--cream-mute);">On restitue des faits mesurés. On ne juge pas, on ne conseille pas, on ne prescrit aucun pilotage. La lecture causale appartient aux coachs indépendants — la décision, au pilote.</span>
+            </span>
+          </li>
+          <li style="display:grid;grid-template-columns:34px 1fr;gap:14px;align-items:start;padding:16px 0;border-top:1px solid var(--bento-border);">
+            <span style="font-family:var(--display);font-size:16px;font-style:italic;color:var(--gold);line-height:1.5;">III</span>
+            <span>
+              <strong style="font-family:var(--sans);font-size:15px;color:var(--cream);display:block;margin-bottom:4px;">Zéro commission</strong>
+              <span style="font-family:var(--sans);font-size:14px;line-height:1.65;color:var(--cream-mute);">Rien de prélevé sur les prestations des coachs. Le coach fixe ses prix et garde sa clientèle.</span>
+            </span>
+          </li>
+          <li style="display:grid;grid-template-columns:34px 1fr;gap:14px;align-items:start;padding:16px 0;border-top:1px solid var(--bento-border);">
+            <span style="font-family:var(--display);font-size:16px;font-style:italic;color:var(--gold);line-height:1.5;">IV</span>
+            <span>
+              <strong style="font-family:var(--sans);font-size:15px;color:var(--cream);display:block;margin-bottom:4px;">La donnée appartient au pilote</strong>
+              <span style="font-family:var(--sans);font-size:14px;line-height:1.65;color:var(--cream-mute);">Remise à chaque session. Ni revendue, ni exploitée à son insu, ni comparée à celle d'un autre.</span>
+            </span>
+          </li>
+          <li style="display:grid;grid-template-columns:34px 1fr;gap:14px;align-items:start;padding:16px 0;border-top:1px solid var(--bento-border);">
+            <span style="font-family:var(--display);font-size:16px;font-style:italic;color:var(--gold);line-height:1.5;">V</span>
+            <span>
+              <strong style="font-family:var(--sans);font-size:15px;color:var(--cream);display:block;margin-bottom:4px;">La jauge ne bouge pas</strong>
+              <span style="font-family:var(--sans);font-size:14px;line-height:1.65;color:var(--cream-mute);">Vingt pilotes, jamais plus — même quand la demande dépasse.</span>
+            </span>
+          </li>
+        </ul>
+      </div>
+
       <div class="reveal" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:16px;">
         <div class="bento" style="padding:26px;">
           <div style="font-family:var(--display);font-size:10px;letter-spacing:0.2em;text-transform:uppercase;color:var(--gold);margin-bottom:10px;">Briefing obligatoire</div>
@@ -21159,6 +21311,61 @@ body.pav-tv .nav, body.pav-tv footer, body.pav-tv .cookie, body.pav-tv .founding
           <div style="font-family:var(--display);font-size:10px;letter-spacing:0.2em;text-transform:uppercase;color:var(--gold);margin-bottom:10px;">Pas de compétition sauvage</div>
           <p style="font-family:var(--sans);font-size:14px;line-height:1.6;color:var(--cream-mute);margin:0;">Aucun classement public, aucune comparaison agressive imposée. Vingt pilotes par session, le respect du règlement du circuit, et une progression mesurée contre soi-même.</p>
         </div>
+      </div>
+
+      <!-- Le protocole du matin -->
+      <div class="reveal" style="margin-top:48px;">
+        <div class="kicker">— Le protocole du matin</div>
+        <h2 class="section-title" style="margin-top:18px;margin-bottom:10px;">Le même déroulé,<br/>à chaque <em>journée</em>.</h2>
+        <p style="font-family:var(--sans);font-size:15px;line-height:1.7;color:var(--cream-mute);max-width:660px;margin:0 0 24px;">Quatre étapes, dans cet ordre, avant que la première roue ne touche la piste.</p>
+      </div>
+      <div class="signatures reveal-stagger" style="margin-top:8px;">
+        <div class="signature">
+          <div class="signature-num">01</div>
+          <h3 class="signature-title">L'<em>arrivée</em></h3>
+          <p class="signature-text">08:00 — documents, équipement.</p>
+        </div>
+        <div class="signature">
+          <div class="signature-num">02</div>
+          <h3 class="signature-title">Le <em>contrôle</em></h3>
+          <p class="signature-text">Sonomètre, état du véhicule.</p>
+        </div>
+        <div class="signature">
+          <div class="signature-num">03</div>
+          <h3 class="signature-title">Le <em>briefing</em></h3>
+          <p class="signature-text">Vingt minutes — jamais renouvelé.</p>
+        </div>
+        <div class="signature">
+          <div class="signature-num">04</div>
+          <h3 class="signature-title">La <em>piste</em></h3>
+          <p class="signature-text">Chef de piste, relais encadrés.</p>
+        </div>
+      </div>
+
+      <!-- Le pilote, avant de rouler -->
+      <div class="reveal" style="margin-top:48px;">
+        <div class="kicker">— Contrôlé au briefing</div>
+        <h2 class="section-title" style="margin-top:18px;margin-bottom:10px;">Le pilote,<br/>avant de <em>rouler</em>.</h2>
+        <p style="font-family:var(--sans);font-size:15px;line-height:1.7;color:var(--cream-mute);max-width:660px;margin:0 0 24px;">Quatre points vérifiés pilote par pilote. Aucun n'est déclaré sur parole.</p>
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px;">
+          <div class="bento" style="padding:26px;">
+            <div style="font-family:var(--mono);font-size:10px;letter-spacing:0.22em;text-transform:uppercase;color:var(--gold);margin-bottom:8px;">La charte du club</div>
+            <p style="font-family:var(--sans);font-size:14px;line-height:1.6;color:var(--cream-mute);margin:0;">Acceptée à l'inscription — l'esprit du club avant la piste.</p>
+          </div>
+          <div class="bento" style="padding:26px;">
+            <div style="font-family:var(--mono);font-size:10px;letter-spacing:0.22em;text-transform:uppercase;color:var(--gold);margin-bottom:8px;">L'équipement</div>
+            <p style="font-family:var(--sans);font-size:14px;line-height:1.6;color:var(--cream-mute);margin:0;">Casque homologué, chaussures fermées, anneau de remorquage à bord.</p>
+          </div>
+          <div class="bento" style="padding:26px;">
+            <div style="font-family:var(--mono);font-size:10px;letter-spacing:0.22em;text-transform:uppercase;color:var(--gold);margin-bottom:8px;">Les décibels</div>
+            <p style="font-family:var(--sans);font-size:14px;line-height:1.6;color:var(--cream-mute);margin:0;">Le niveau sonore du véhicule, dans la norme du circuit.</p>
+          </div>
+          <div class="bento" style="padding:26px;">
+            <div style="font-family:var(--mono);font-size:10px;letter-spacing:0.22em;text-transform:uppercase;color:var(--gold);margin-bottom:8px;">L'opt-in données</div>
+            <p style="font-family:var(--sans);font-size:14px;line-height:1.6;color:var(--cream-mute);margin:0;">L'application et la captation se choisissent — jamais imposées.</p>
+          </div>
+        </div>
+        <p style="font-family:var(--sans);font-size:14px;line-height:1.65;color:var(--cream-mute);max-width:820px;margin:18px 0 0;">L'assurance circuit est souscrite par le pilote et présentée au briefing avec le permis et le contrôle technique. Elle couvre les véhicules des autres pilotes et les installations de la piste — <strong style="color:var(--cream);">elle n'assure pas le véhicule de son souscripteur</strong> : l'assurance auto classique exclut la conduite sur circuit.</p>
       </div>
 
       <!-- Ce qu'OXV ne fera jamais (TrustBlock) -->
@@ -22695,9 +22902,9 @@ const OXV_NOINDEX_PAGES = ['login', 'signup', 'forgot-password', 'reset-password
 // Titre + description par page publique
 const OXV_PAGE_SEO = {
   home:        { title: 'OXV — Track day signature · Circuit de Haute Saintonge', description: 'OXV organise des track days confidentiels sur le tracé Beltoise au Circuit de Haute Saintonge. Vingt pilotes par session, télémétrie, médias livrés dans l\'app. Saison 2027.' },
-  offers:      { title: 'Les offres — Access, Signature, Heritage · OXV', description: 'Trois offres pour rouler sur le tracé Beltoise : Access (390 € TTC), Signature (690 € TTC) et Heritage (2 490 € TTC). Télémétrie 25 Hz, banque média dans l\'app, coach partenaire en option.' },
+  offers:      { title: 'Les offres — Access, Signature, Heritage · OXV', description: 'Trois offres pour rouler sur le tracé Beltoise : Access (390 € TTC, 250 € la première session), Signature (690 € TTC) et Heritage (2 490 € TTC). Télémétrie 25 Hz, banque média dans l\'app, coach partenaire en option.' },
   calendrier:  { title: 'Calendrier de la saison 2027 · OXV', description: 'Le calendrier des sessions OXV au Circuit de Haute Saintonge. Lundis demi-journée, vendredis journée complète. Vingt pilotes maximum.' },
-  circuit:     { title: 'Le circuit de Haute Saintonge — tracé Beltoise · OXV', description: 'Dessiné en 2009 par Jean-Pierre Beltoise. 2,2 km, tracé technique, aucune chicane artificielle. Le tracé que pilote OXV.' },
+  circuit:     { title: 'Le circuit de Haute Saintonge — tracé Beltoise · OXV', description: 'Dessiné en 2009 par Jean-Pierre Beltoise. 2 205 m, huit virages, tracé technique, aucune chicane artificielle. Le tracé que pilote OXV.' },
   corporate:   { title: 'OXV Corporate — privatisation du tracé Beltoise', description: 'Privatisez le Circuit de Haute Saintonge. Deux formats sur devis, trois scénarios : comité de direction, concession, lancement produit.' },
   securite:    { title: 'Sécurité & cadre · OXV', description: 'Le cadre de sécurité OXV : briefing obligatoire, documents vérifiés, silence total en roulage, lecture des données après la session, vingt pilotes maximum. Et la place exacte de la donnée.' },
   'apres-journee': { title: 'Votre journée OXV — avant, pendant, après', description: 'De J-7 au rapport final : rituels de préparation, roulage silencieux, puis médias dès le soir, télémétrie dans l\'app, bilan de session, rapport Signature et carnet de saison. Un miroir, jamais un classement.' },
@@ -22911,7 +23118,7 @@ La saison 2027 est la première saison OXV. Les pilotes qui s'inscrivent mainten
 
 Concrètement, trois portes d'entrée s'offrent à vous :
 
-- **Access** — la demi-journée du lundi, 20 pilotes, le circuit dans sa forme la plus pure, pour 390 € TTC.
+- **Access** — la demi-journée du lundi, 20 pilotes, le circuit dans sa forme la plus pure, pour 390 € TTC — 250 € pour une première session.
 - **Signature** — la journée complète du vendredi, télémétrie 25 Hz, déjeuner traiteur, banque média dans l'app, coach partenaire en option, pour 690 € TTC.
 - **Heritage** — l'engagement saison : quatre sessions Signature, priorité de réservation, un an d'app OXV Mirror, pour 2 490 € TTC.
 
@@ -22946,10 +23153,10 @@ Pour un pilote qui cherche à progresser, c'est un terrain idéal. Chaque sessio
 
 ## Le tracé en *chiffres*
 
-- 2,2 km de piste
-- Une dizaine de virages
-- De longues lignes droites, sans chicane artificielle
-- Paddock couvert de 1 200 m²
+- 2 205 m de piste, mesurés sur le relevé GPS
+- 8 virages — cinq à droite, trois à gauche
+- La plus longue ligne droite : 605 m
+- Paddock de 3 000 m²
 - Aucune chicane artificielle
 
 ## Le *partenariat* OXV / Haute Saintonge
@@ -23126,7 +23333,7 @@ Le soir même, les premières images arrivent. Dans les jours qui suivent, vous 
 
 ## Quelle offre pour débuter ?
 
-Pour une première fois, l'offre Access — une demi-journée le lundi, à 390 € TTC — est la porte d'entrée idéale : le circuit dans sa forme la plus pure, vingt pilotes, le cadre OXV. Quand vous voudrez aller plus loin (télémétrie 25 Hz, journée complète, média dédié), la Signature vous attendra.
+Pour une première fois, l'offre Access — une demi-journée le lundi, à 250 € TTC pour une première session, 390 € ensuite — est la porte d'entrée idéale : le circuit dans sa forme la plus pure, vingt pilotes, le cadre OXV. Quand vous voudrez aller plus loin (télémétrie 25 Hz, journée complète, média dédié), la Signature vous attendra.
 
 > La sécurité, d'abord. Le développement, toujours. La sensation, enfin.
 
@@ -23785,7 +23992,7 @@ async function bkLoadPricing() {
 // Grille de secours si Supabase indisponible (mêmes valeurs que la BDD)
 function bkPricingFallback() {
   return {
-    'access_half_day':    { first_session: 39000, subsequent: 39000 },
+    'access_half_day':    { first_session: 25000, subsequent: 39000 },
     'signature_full_day': { first_session: 69000, subsequent: 69000 },
     'heritage_full_day':  { first_session: 249000, subsequent: 249000 }
   };
@@ -24151,17 +24358,26 @@ async function bkLoadOffers() {
   const attendedCount = profile?.attended_count || 0;
   const override = profile?.unlocked_offers_override || {};
 
+  // Tarif première session : il se déclenche au premier ENGAGEMENT, pas à la
+  // première session effectuée. Sans cela un pilote pourrait réserver plusieurs
+  // Access au tarif d'entrée avant d'en avoir roulé une seule.
+  const { count: engagementCount } = await supabase
+    .from('registrations')
+    .select('id', { count: 'exact', head: true })
+    .eq('user_id', userId)
+    .neq('status', 'cancelled');
+
+  const tarifCount = Math.max(attendedCount, engagementCount || 0);
+
   // Toutes les offres sont librement accessibles :
   // « Vous commencez par Access ou directement par Signature. Vous engagez la saison avec Heritage. »
-  bkState.attendedCount = attendedCount;
+  bkState.attendedCount = tarifCount;
   bkState.unlockedOffers = {
     access:    true,
     signature: true,
     heritage:  true
   };
 
-  // Prix Access fixe : 390 € la demi-journée
-  bkState.accessPrice = 39000;
 
   // Vérifie pack Heritage actif
   const { data: heritages } = await supabase
@@ -24255,10 +24471,13 @@ async function bkLoadOffers() {
     // Offre débloquée et disponible — tarif fixe par offre
     let priceLine;
     if (key === 'access') {
-      const price = bkComputePrice('access', 'half_day', attendedCount);
-      priceLine = `<div class="bk-offer-price">${(price / 100).toLocaleString('fr-FR')} €</div>`;
+      const price = bkComputePrice('access', 'half_day', tarifCount);
+      const plein = bkComputePrice('access', 'half_day', 1);
+      priceLine = price < plein
+        ? `<div class="bk-offer-price">${(price / 100).toLocaleString('fr-FR')} € <span style="font-size:0.6em;color:var(--cream-faint);text-decoration:line-through;margin-left:6px;">${(plein / 100).toLocaleString('fr-FR')} €</span></div><div class="bk-offer-meta" style="color:var(--gold);">Tarif première session</div>`
+        : `<div class="bk-offer-price">${(price / 100).toLocaleString('fr-FR')} €</div>`;
     } else if (key === 'signature') {
-      const price = bkComputePrice('signature', 'full_day', attendedCount);
+      const price = bkComputePrice('signature', 'full_day', tarifCount);
       priceLine = `<div class="bk-offer-price">${(price / 100).toLocaleString('fr-FR')} €</div>`;
     } else {
       priceLine = `<div class="bk-offer-price">${(off.price / 100).toLocaleString('fr-FR')} €</div>`;
@@ -24417,8 +24636,11 @@ function bkBuildRecap() {
     dueLabel = `${(total / 100).toLocaleString('fr-FR')} € · à régler avant la session`;
   }
 
-  // Label "tarif offre" — tarif fixe par offre
-  const tarifLabel = `<span class="bk-recap-value">${(offerPrice / 100).toLocaleString('fr-FR')} €</span>`;
+  // Label "tarif offre" — tarif fixe par offre, mention si tarif première session
+  const tarifPlein = bkComputePrice(bkState.selectedOffer, sessionFormat, 1);
+  const tarifLabel = offerPrice < tarifPlein
+    ? `<span class="bk-recap-value">${(offerPrice / 100).toLocaleString('fr-FR')} € <em style="color:var(--copper-glow);font-style:normal;">(première session)</em></span>`
+    : `<span class="bk-recap-value">${(offerPrice / 100).toLocaleString('fr-FR')} €</span>`;
 
   recap.innerHTML = `
     <div class="bk-recap-line">
@@ -24791,46 +25013,76 @@ window.showCornerDetail = function(cornerId) {
   // Données détaillées de chaque virage (Beltoise Haute Saintonge)
   const corners = {
     T1: {
-      name: 'T1 — Épingle de Beltoise',
+      name: 'T1 — Épingle à droite',
       type: 'braking',
       tag: 'Freinage appuyé',
-      tip: 'Premier point de freinage majeur, en bout de longue ligne droite : la décélération la plus forte du tour s\'y mesure. La vitesse de sortie conditionne toute la portion jusqu\'à T2 — c\'est ce que la donnée montre, tour après tour.',
+      pk: 330,
+      sens: 'droite',
+      angle: 169,
+      tip: 'Premier freinage appuyé du tour, en bout de la grande ligne droite : la décélération la plus forte du tracé s\'y mesure.',
     },
     T2: {
-      name: 'T2 — Rapide à droite',
+      name: 'T2 — Gauche rapide',
       type: 'speed',
       tag: 'Vitesse de passage',
-      tip: 'Courbe rapide à droite, négociée sans freinage. La télémétrie y lit la vitesse de passage et la ligne empruntée : quelques mètres d\'écart à l\'entrée se mesurent en km/h à la sortie.',
+      pk: 549,
+      sens: 'gauche',
+      angle: 69,
+      tip: 'Courbe rapide à gauche, négociée sans freinage. La vitesse de passage s\'y lit directement dans la donnée.',
     },
     T3: {
       name: 'T3 — Gauche technique',
       type: 'precision',
       tag: 'Précision trajectoire',
-      tip: 'Gauche technique qui ouvre la section sinueuse. Le placement au point de corde et sa répétabilité d\'un tour à l\'autre s\'y lisent directement — la zone la plus sensible pour la branche Trajectoire du QDI.',
+      pk: 725,
+      sens: 'gauche',
+      angle: 85,
+      tip: 'Gauche technique qui ouvre la section sinueuse. Le placement au point de corde et sa répétabilité se lisent tour après tour — la zone la plus sensible pour la branche Trajectoire du QDI.',
     },
     T4: {
-      name: 'T4 — Réaccélération',
+      name: 'T4 — Gauche d\'appui',
       type: 'acceleration',
       tag: 'Réaccélération',
-      tip: 'Zone de réaccélération entre T3 et T5. La trace longitudinale y montre la progressivité de la remise des gaz et la continuité de l\'accélération.',
+      pk: 825,
+      sens: 'gauche',
+      angle: 64,
+      tip: 'Gauche d\'appui suivie d\'une réaccélération. La trace longitudinale y montre la continuité de la remise des gaz.',
     },
     T5: {
-      name: 'T5 — Courbe moyenne',
-      type: 'fluidity',
-      tag: 'Fluidité',
-      tip: 'Courbe moyenne de liaison vers l\'épingle T6. La continuité de l\'accélération et la régularité de la ligne s\'y lisent tour après tour.',
-    },
-    T6: {
-      name: 'T6 — Épingle Saintonge',
+      name: 'T5 — Épingle Saintonge',
       type: 'braking',
       tag: 'Freinage fort',
-      tip: 'Épingle serrée à droite : second freinage fort du tour. L\'enchaînement immédiat vers T7 en fait la séquence la plus dense du tracé — les écarts s\'y cumulent d\'un virage à l\'autre.',
+      pk: 996,
+      sens: 'droite',
+      angle: 225,
+      tip: 'Épingle serrée à droite, l\'arc le plus fermé du tracé : second freinage fort du tour, suivi d\'une longue relance.',
+    },
+    T6: {
+      name: 'T6 — Droite de liaison',
+      type: 'fluidity',
+      tag: 'Fluidité',
+      pk: 1209,
+      sens: 'droite',
+      angle: 28,
+      tip: 'Courbe de liaison à droite, à peine marquée. La continuité de la vitesse s\'y lit dans la trace longitudinale.',
     },
     T7: {
-      name: 'T7 — Épingle Beltoise',
+      name: 'T7 — Courbe de rappel',
+      type: 'fluidity',
+      tag: 'Régularité',
+      pk: 1620,
+      sens: 'droite',
+      angle: 30,
+      tip: 'Courbe de rappel à droite, en fin de ligne de retour. La régularité d\'un tour à l\'autre s\'y mesure.',
+    },
+    T8: {
+      name: 'T8 — Épingle Beltoise',
       type: 'precision',
       tag: 'Virage signature',
-      tip: 'Le virage signature du tracé, juste avant la ligne droite des stands. La position du véhicule au point de corde se lit directement dans la vitesse mesurée sur toute la ligne droite suivante.',
+      pk: 1818,
+      sens: 'droite',
+      angle: 154,
+      tip: 'Le virage signature du tracé, juste avant la ligne de départ. La position au point de corde se lit dans la vitesse mesurée sur toute la ligne droite suivante.',
     },
   };
   
