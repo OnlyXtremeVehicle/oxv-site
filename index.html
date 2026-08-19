@@ -16611,6 +16611,9 @@ body.pav-tv .nav, body.pav-tv footer, body.pav-tv .cookie, body.pav-tv .founding
         </p>
       </div>
 
+      <!-- Mention d'appartenance a une ecurie -->
+      <div id="compteEcurieMention" class="bento" style="display:none;padding:22px;margin-bottom:22px;border-color:rgba(201,162,74,0.30);"></div>
+
       <!-- Navigation principale : gros boutons accessibles -->
       <div class="account-nav-grid">
 
@@ -20412,6 +20415,9 @@ body.pav-tv .nav, body.pav-tv footer, body.pav-tv .cookie, body.pav-tv .founding
         <!-- Récap final visible -->
         <div id="bkRecap" class="bk-recap"></div>
 
+        <!-- Inviter son écurie sur cette date -->
+        <div id="bkEcurieBloc" class="bento" style="display:none;padding:22px;margin-top:16px;border-color:rgba(201,162,74,0.28);"></div>
+
         <!-- Mode de paiement -->
         <div class="bk-step-eyebrow" style="margin-bottom: 14px; margin-top: 24px; padding-top: 24px; border-top: 1px solid var(--cream-line);">— Mode de paiement</div>
         <div class="bk-payments">
@@ -23273,6 +23279,9 @@ window.goTo = function(page, opts) {
   if (page === 'compte-progression') {
     setTimeout(() => loadProgression(), 150);
   }
+  if (page === 'compte') {
+    setTimeout(() => { if (typeof afficherMentionEcurie === 'function') afficherMentionEcurie(); }, 150);
+  }
   if (page === 'compte-preferences') {
     setTimeout(() => { loadPreferences(); if (typeof loadCommunityVisibility === 'function') loadCommunityVisibility(); if (typeof loadCrewCard === 'function') loadCrewCard(); }, 150);
   }
@@ -25082,6 +25091,7 @@ window.bkSelectPayment = function(opt, el) {
 function bkBuildRecap() {
   const recap = document.getElementById('bkRecap');
   if (!recap || !bkState.selectedSession || !bkState.selectedOffer || !bkState.selectedVehicle) return;
+  try { bkChargerBlocEcurie(); } catch (_) {}
 
   const session = bkState.selectedSession;
   const date = new Date(session.date);
@@ -31075,6 +31085,19 @@ window.copierLienEcurie = async function() {
 };
 
 /* — Côté invité : capter le code à l'arrivée — */
+function capterDatePartagee() {
+  let id = null;
+  try { id = new URLSearchParams(location.search).get('session'); } catch (_) { return; }
+  if (!id) return;
+  try { sessionStorage.setItem('oxvDatePartagee', id.trim().slice(0, 64)); } catch (_) {}
+  try { history.replaceState(null, '', location.pathname + location.hash); } catch (_) {}
+  setTimeout(() => {
+    toast('Une date vous a été partagée — elle vous attend au calendrier', 'ok');
+    try { goTo('calendrier'); } catch (_) {}
+  }, 600);
+}
+window.capterDatePartagee = capterDatePartagee;
+
 function capterInvitationEcurie() {
   let code = null;
   try { code = new URLSearchParams(location.search).get('ecurie'); } catch (_) { return; }
@@ -31111,7 +31134,9 @@ async function honorerInvitationEcurie() {
     const { data, error } = await supabase.rpc('oxv_redeem_referral', { p_code: code });
     if (error) throw error;
     if (data?.ok) {
-      toast('Vous avez rejoint l\'écurie — ses fonctionnalités sont ouvertes', 'ok');
+      const nom = await nomDeMonEcurie();
+      toast(nom ? ('Vous faites partie de l' + String.fromCharCode(39) + 'écurie ' + nom + ' — ses fonctionnalités sont ouvertes')
+                : 'Vous avez rejoint l' + String.fromCharCode(39) + 'écurie — ses fonctionnalités sont ouvertes', 'ok');
       if (typeof track === 'function') track('join_crew_via_link');
     } else if (data?.error === 'deja_dans_une_ecurie') {
       toast('Vous appartenez déjà à une écurie', 'warn');
@@ -31130,6 +31155,84 @@ async function honorerInvitationEcurie() {
   if (typeof loadCrewCard === 'function') { try { loadCrewCard(); } catch (_) {} }
 }
 window.honorerInvitationEcurie = honorerInvitationEcurie;
+
+/* — Nom de l'écurie du pilote connecté, ou null — */
+async function nomDeMonEcurie() {
+  try {
+    const { data } = await supabase.from('crews').select('name').limit(1);
+    return (data && data[0] && data[0].name) || null;
+  } catch (_) { return null; }
+}
+window.nomDeMonEcurie = nomDeMonEcurie;
+
+/* — Mention d'appartenance affichée dans l'espace pilote — */
+window.afficherMentionEcurie = async function() {
+  const cible = document.getElementById('compteEcurieMention');
+  if (!cible || !window.OXVApi?.user?.isLoggedIn) return;
+  try {
+    const { data: membres } = await supabase.from('crew_members').select('crew_id, user_id, role, referral_validated');
+    if (!membres || !membres.length) { cible.style.display = 'none'; return; }
+    const nom = await nomDeMonEcurie();
+    const valides = membres.filter(m => m.referral_validated || m.role === 'captain').length;
+    const moi = membres.find(m => m.user_id === window.OXVApi.user.profile?.id);
+    const role = moi?.role === 'captain' ? 'Capitaine' : 'Membre';
+    cible.innerHTML =
+      '<div style="display:flex;flex-wrap:wrap;gap:12px;align-items:center;justify-content:space-between;">' +
+        '<div>' +
+          '<div style="font-family:var(--mono);font-size:9px;letter-spacing:0.22em;text-transform:uppercase;color:var(--gold-data);margin-bottom:6px;">' + role + ' d' + String.fromCharCode(39) + 'écurie</div>' +
+          '<div style="font-family:var(--display);font-weight:600;font-size:20px;color:var(--offwhite);">' +
+            (nom ? escapeHtml(nom) : 'Votre écurie, à nommer') + '</div>' +
+          '<div style="font-family:var(--sans);font-size:13px;color:var(--cream-mute);margin-top:4px;">' +
+            membres.length + ' membre' + (membres.length > 1 ? 's' : '') + ' · ' + valides + ' validé' + (valides > 1 ? 's' : '') +
+            ' · toutes les fonctionnalités d' + String.fromCharCode(39) + 'écurie sont ouvertes</div>' +
+        '</div>' +
+        '<button class="btn btn-sm" onclick="goTo(' + String.fromCharCode(39) + 'compte-preferences' + String.fromCharCode(39) + ')"><span>Gérer mon écurie</span></button>' +
+      '</div>';
+    cible.style.display = '';
+  } catch (e) { console.warn('[Écurie]', e); }
+};
+
+/* ===================== INVITER SON ÉCURIE SUR UNE DATE =====================
+   Les noms des autres membres ne sont pas lisibles côté client (RLS) : on
+   annonce l'effectif et on produit un lien vers la session, que le pilote
+   transmet lui-même à son écurie. */
+window.bkChargerBlocEcurie = async function() {
+  const zone = document.getElementById('bkEcurieBloc');
+  if (!zone || !window.OXVApi?.user?.isLoggedIn || !bkState.selectedSession) return;
+  try {
+    const { data: membres } = await supabase.from('crew_members').select('user_id');
+    if (!membres || membres.length < 2) { zone.style.display = 'none'; return; }
+    const nom = await nomDeMonEcurie();
+    const autres = membres.length - 1;
+    zone.innerHTML =
+      '<div style="font-family:var(--mono);font-size:10px;letter-spacing:0.22em;text-transform:uppercase;color:var(--gold-data);margin-bottom:8px;">Votre écurie</div>' +
+      '<p style="font-family:var(--sans);font-size:14px;line-height:1.6;color:var(--cream-mute);margin:0 0 14px;">' +
+        (nom ? ('<strong style="color:var(--cream);">' + escapeHtml(nom) + '</strong> compte ') : 'Votre écurie compte ') +
+        autres + ' autre' + (autres > 1 ? 's' : '') + ' pilote' + (autres > 1 ? 's' : '') +
+        '. Envoyez-leur cette date — chacun réserve sa place, vous roulez le même jour.</p>' +
+      '<div style="display:flex;gap:10px;flex-wrap:wrap;align-items:center;">' +
+        '<button class="btn btn-sm btn-primary" onclick="bkInviterEcurie()"><span>Inviter mon écurie sur cette date</span></button>' +
+        '<input type="text" id="bkEcurieLien" readonly onclick="this.select()" style="display:none;background:rgba(0,0,0,0.4);border:1px solid var(--bento-border);color:var(--cream);padding:9px 12px;font-family:var(--mono);font-size:12px;flex:1 1 300px;min-width:0;" />' +
+      '</div>';
+    zone.style.display = '';
+  } catch (e) { console.warn('[Écurie]', e); zone.style.display = 'none'; }
+};
+
+window.bkInviterEcurie = async function() {
+  if (!bkState.selectedSession) return;
+  const lien = location.origin + '/?session=' + encodeURIComponent(bkState.selectedSession.id);
+  const champ = document.getElementById('bkEcurieLien');
+  if (champ) { champ.value = lien; champ.style.display = ''; }
+  const texte = 'Je roule avec OXV ce jour-là — prenez votre place, on y va ensemble.';
+  if (navigator.share) {
+    try { await navigator.share({ title: 'Une date OXV', text: texte, url: lien }); }
+    catch (_) {}
+  } else if (navigator.clipboard) {
+    try { await navigator.clipboard.writeText(lien); toast('Lien de la date copié', 'ok'); }
+    catch (_) { toast('Lien prêt — copiez-le ci-dessous', 'ok'); }
+  }
+  if (typeof track === 'function') track('invite_crew_session');
+};
 
 /* ===================== ÉCURIES & PARRAINAGE (PR-HUB-03) =====================
    Option C fondateur : pas de réduction — le parrainage construit une écurie.
@@ -37852,6 +37955,7 @@ window.addEventListener('DOMContentLoaded', () => {
   safe('onAuthChange', () => onAuthChange());
   safe('updateSummary', () => updateSummary());
   safe('capterInvitationEcurie', () => capterInvitationEcurie());
+  safe('capterDatePartagee', () => capterDatePartagee());
 
   // body.loaded conservé (états de chargement CSS). Le force-visible des .reveal
   // est RETIRÉ : les reveals sont désormais pilotés par le scroll (setupReveal),
