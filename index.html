@@ -15838,23 +15838,23 @@ body.pav-tv .nav, body.pav-tv footer, body.pav-tv .cookie, body.pav-tv .founding
         </p>
         <div class="form-grid" style="max-width:840px;">
           <div class="form-row">
-            <label>Prénom</label>
+            <label for="wl-first">Prénom</label>
             <input type="text" id="wl-first" placeholder="Prénom" />
           </div>
           <div class="form-row">
-            <label>Nom</label>
+            <label for="wl-last">Nom</label>
             <input type="text" id="wl-last" placeholder="Nom" />
           </div>
           <div class="form-row">
-            <label>Email</label>
+            <label for="wl-email">Email</label>
             <input type="email" id="wl-email" placeholder="email@exemple.fr" />
           </div>
           <div class="form-row">
-            <label>Téléphone (facultatif)</label>
+            <label for="wl-phone">Téléphone (facultatif)</label>
             <input type="tel" id="wl-phone" placeholder="06 12 34 56 78" />
           </div>
           <div class="form-row">
-            <label>Je veux être prévenu pour</label>
+            <label for="wl-pref">Je veux être prévenu pour</label>
             <select id="wl-pref">
               <option>Access (demi-journée)</option>
               <option>Signature (journée complète)</option>
@@ -15864,11 +15864,11 @@ body.pav-tv .nav, body.pav-tv footer, body.pav-tv .cookie, body.pav-tv .founding
             </select>
           </div>
           <div class="form-row">
-            <label>Département</label>
+            <label for="wl-dept">Département</label>
             <input type="text" id="wl-dept" placeholder="Ex. 17, 33, 75…" />
           </div>
           <div class="form-row full">
-            <label>Votre véhicule (facultatif)</label>
+            <label for="wl-vehicle">Votre véhicule (facultatif)</label>
             <input type="text" id="wl-vehicle" placeholder="Ex. Porsche Cayman GT4, Alpine A110…" />
           </div>
           <div class="form-row full">
@@ -15914,19 +15914,19 @@ body.pav-tv .nav, body.pav-tv footer, body.pav-tv .cookie, body.pav-tv .founding
             <h2 class="section-title" style="font-size: 36px; margin-bottom: 24px;">Un <em>message</em>.</h2>
             <div class="form-grid">
               <div class="form-row">
-                <label>Prénom</label>
+                <label for="ct-first">Prénom</label>
                 <input type="text" id="ct-first" placeholder="Prénom" />
               </div>
               <div class="form-row">
-                <label>Nom</label>
+                <label for="ct-last">Nom</label>
                 <input type="text" id="ct-last" placeholder="Nom" />
               </div>
               <div class="form-row">
-                <label>Email</label>
+                <label for="ct-email">Email</label>
                 <input type="email" id="ct-email" placeholder="email@exemple.fr" />
               </div>
               <div class="form-row">
-                <label>Sujet</label>
+                <label for="ct-subj">Sujet</label>
                 <select id="ct-subj">
                   <option>Question générale</option>
                   <option>Réservation</option>
@@ -15936,7 +15936,7 @@ body.pav-tv .nav, body.pav-tv footer, body.pav-tv .cookie, body.pav-tv .founding
                 </select>
               </div>
               <div class="form-row full">
-                <label>Message</label>
+                <label for="ct-msg">Message</label>
                 <textarea id="ct-msg" rows="6" placeholder="Votre message..."></textarea>
               </div>
               <div class="form-row full">
@@ -16021,22 +16021,22 @@ body.pav-tv .nav, body.pav-tv footer, body.pav-tv .cookie, body.pav-tv .founding
       <div class="auth-form">
         <div class="form-grid" style="grid-template-columns: 1fr 1fr; gap: 14px;">
           <div class="form-row">
-            <label>Prénom</label>
+            <label for="su-first">Prénom</label>
             <input type="text" id="su-first" placeholder="Prénom" autocomplete="given-name" />
           </div>
           <div class="form-row">
-            <label>Nom</label>
+            <label for="su-last">Nom</label>
             <input type="text" id="su-last" placeholder="Nom" autocomplete="family-name" />
           </div>
         </div>
         <div class="form-row">
-          <label>Email</label>
+          <label for="su-email">Email</label>
           <input type="email" id="su-email" placeholder="prenom.nom@email.fr" autocomplete="email" />
         </div>
         <div class="form-row">
           <label>Mot de passe</label>
           <div class="pwd-wrap">
-            <input type="password" id="su-pwd" placeholder="••••••••" autocomplete="new-password" oninput="checkPasswordStrength(); checkPasswordMatch();" />
+            <input type="password" id="su-pwd" placeholder="••••••••" autocomplete="new-password" oninput="checkPasswordStrength(); checkPasswordMatch();" aria-label="Mot de passe" />
             <button type="button" class="pwd-toggle" onclick="togglePwdVisibility('su-pwd', this)" aria-label="Afficher le mot de passe">
               <span class="pwd-eye-icon">👁</span>
             </button>
@@ -16047,7 +16047,7 @@ body.pav-tv .nav, body.pav-tv footer, body.pav-tv .cookie, body.pav-tv .founding
         <div class="form-row">
           <label>Confirmer le mot de passe</label>
           <div class="pwd-wrap">
-            <input type="password" id="su-pwd-confirm" placeholder="••••••••" autocomplete="new-password" oninput="checkPasswordMatch()" />
+            <input type="password" id="su-pwd-confirm" placeholder="••••••••" autocomplete="new-password" oninput="checkPasswordMatch()" aria-label="Confirmation du mot de passe" />
             <button type="button" class="pwd-toggle" onclick="togglePwdVisibility('su-pwd-confirm', this)" aria-label="Afficher le mot de passe">
               <span class="pwd-eye-icon">👁</span>
             </button>
@@ -16146,32 +16146,32 @@ body.pav-tv .nav, body.pav-tv footer, body.pav-tv .cookie, body.pav-tv .founding
         <div class="dmd-block-label" style="border-top:none;padding-top:0;margin-top:4px;">— Identité</div>
         <div class="form-grid" style="grid-template-columns: 1fr 1fr; gap: 14px;">
           <div class="form-row">
-            <label>Prénom</label>
+            <label for="dmd-first">Prénom</label>
             <input type="text" id="dmd-first" autocomplete="given-name" />
           </div>
           <div class="form-row">
-            <label>Nom</label>
+            <label for="dmd-last">Nom</label>
             <input type="text" id="dmd-last" autocomplete="family-name" />
           </div>
         </div>
         <div class="form-row">
           <label>Date de naissance <span style="opacity:.6;font-weight:400;">(facultatif)</span></label>
-          <input type="date" id="dmd-birth" autocomplete="bday" />
+          <input type="date" id="dmd-birth" autocomplete="bday" aria-label="Date de naissance" />
         </div>
         <div class="dmd-block-label">— Contact</div>
         <div class="form-grid" style="grid-template-columns: 1fr 1fr; gap: 14px;">
           <div class="form-row">
-            <label>Téléphone</label>
+            <label for="dmd-phone">Téléphone</label>
             <input type="tel" id="dmd-phone" placeholder="06 12 34 56 78" autocomplete="tel" />
           </div>
           <div class="form-row">
-            <label>Email</label>
+            <label for="dmd-email">Email</label>
             <input type="email" id="dmd-email" placeholder="prenom.nom@email.fr" autocomplete="email" />
           </div>
         </div>
         <div class="form-row">
           <label>Ville / région <span style="opacity:.6;font-weight:400;">(facultatif)</span></label>
-          <input type="text" id="dmd-city" placeholder="Bordeaux, Nouvelle-Aquitaine" autocomplete="address-level2" />
+          <input type="text" id="dmd-city" placeholder="Bordeaux, Nouvelle-Aquitaine" autocomplete="address-level2" aria-label="Bordeaux, Nouvelle-Aquitaine" />
         </div>
         <div class="dmd-nav">
           <button type="button" class="btn btn-primary btn-lg" onclick="dmdGoStep(2)"><span>Continuer →</span></button>
@@ -16185,21 +16185,21 @@ body.pav-tv .nav, body.pav-tv footer, body.pav-tv .cookie, body.pav-tv .founding
           <div class="dmd-block-label">— Votre véhicule</div>
           <div class="form-grid" style="grid-template-columns: 1fr 1fr; gap: 14px;">
             <div class="form-row">
-              <label>Marque</label>
+              <label for="dmd-veh-brand">Marque</label>
               <input type="text" id="dmd-veh-brand" placeholder="Ex. Porsche" />
             </div>
             <div class="form-row">
-              <label>Modèle</label>
+              <label for="dmd-veh-model">Modèle</label>
               <input type="text" id="dmd-veh-model" placeholder="Ex. 911 GT3" />
             </div>
           </div>
           <div class="form-grid" style="grid-template-columns: 1fr 1fr; gap: 14px;">
             <div class="form-row">
               <label>Année <span style="opacity:.6;font-weight:400;">(facultatif)</span></label>
-              <input type="number" id="dmd-veh-year" placeholder="2022" min="1950" max="2030" />
+              <input type="number" id="dmd-veh-year" placeholder="2022" min="1950" max="2030" aria-label="2022" />
             </div>
             <div class="form-row">
-              <label>Type</label>
+              <label for="dmd-veh-type">Type</label>
               <select id="dmd-veh-type">
                 <option value="">—</option>
                 <option value="route">Voiture fermée (route)</option>
@@ -16214,7 +16214,7 @@ body.pav-tv .nav, body.pav-tv footer, body.pav-tv .cookie, body.pav-tv .founding
         <div class="dmd-block" data-block="experience">
           <div class="dmd-block-label">— Expérience circuit</div>
           <div class="form-row">
-            <label>Avez-vous déjà roulé sur circuit ?</label>
+            <label for="dmd-track-exp">Avez-vous déjà roulé sur circuit ?</label>
             <select id="dmd-track-exp">
               <option value="">—</option>
               <option value="jamais">Jamais</option>
@@ -16229,11 +16229,11 @@ body.pav-tv .nav, body.pav-tv footer, body.pav-tv .cookie, body.pav-tv .founding
           <div class="dmd-block-label">— Licence FFSA</div>
           <div class="form-grid" style="grid-template-columns: 1fr 1fr; gap: 14px;">
             <div class="form-row">
-              <label>N° de licence</label>
+              <label for="dmd-ffsa-num">N° de licence</label>
               <input type="text" id="dmd-ffsa-num" placeholder="N° FFSA" />
             </div>
             <div class="form-row">
-              <label>Catégorie</label>
+              <label for="dmd-ffsa-cat">Catégorie</label>
               <input type="text" id="dmd-ffsa-cat" placeholder="Ex. Circuit Concurrent" />
             </div>
           </div>
@@ -16243,34 +16243,34 @@ body.pav-tv .nav, body.pav-tv footer, body.pav-tv .cookie, body.pav-tv .founding
         <div class="dmd-block" data-block="coach">
           <div class="dmd-block-label">— Qualification professionnelle</div>
           <div class="form-row">
-            <label>Diplôme BPJEPS (ou équivalent)</label>
+            <label for="dmd-bpjeps">Diplôme BPJEPS (ou équivalent)</label>
             <input type="text" id="dmd-bpjeps" placeholder="N° · mention · année d'obtention" />
           </div>
           <div class="form-row">
-            <label>Assurance responsabilité civile professionnelle</label>
+            <label for="dmd-rcpro">Assurance responsabilité civile professionnelle</label>
             <input type="text" id="dmd-rcpro" placeholder="Assureur · n° de contrat" />
           </div>
           <div class="form-row">
-            <label>Statut professionnel</label>
+            <label for="dmd-pro-status">Statut professionnel</label>
             <input type="text" id="dmd-pro-status" placeholder="Auto-entrepreneur, société, salarié porté…" />
           </div>
           <div class="dmd-block-label" style="margin-top:18px;">— Expérience d'encadrement</div>
           <div class="form-row">
-            <label>Années d'expérience en coaching circuit</label>
+            <label for="dmd-coach-years">Années d'expérience en coaching circuit</label>
             <input type="text" id="dmd-coach-years" placeholder="Ex. 6 ans · GT, sportives" />
           </div>
           <div class="form-row">
             <label>Circuits et disciplines pratiqués <span style="opacity:.6;font-weight:400;">(facultatif)</span></label>
-            <input type="text" id="dmd-coach-tracks" placeholder="Ex. Le Mans, Magny-Cours · perfectionnement" />
+            <input type="text" id="dmd-coach-tracks" placeholder="Ex. Le Mans, Magny-Cours · perfectionnement" aria-label="Ex. Le Mans, Magny-Cours · perfectionnement" />
           </div>
           <div class="dmd-block-label" style="margin-top:18px;">— Activité envisagée avec OXV</div>
           <div class="form-row">
             <label>Pilotes que vous pensez amener <span style="opacity:.6;font-weight:400;">(estimation)</span></label>
-            <input type="text" id="dmd-coach-pilots" placeholder="Ex. 3 à 5 pilotes par saison" />
+            <input type="text" id="dmd-coach-pilots" placeholder="Ex. 3 à 5 pilotes par saison" aria-label="Ex. 3 à 5 pilotes par saison" />
           </div>
           <div class="form-row">
             <label>Votre approche du coaching <span style="opacity:.6;font-weight:400;">(facultatif)</span></label>
-            <textarea id="dmd-coach-pitch" rows="3" placeholder="Quelques lignes sur votre méthode et ce que vous recherchez chez OXV"></textarea>
+            <textarea id="dmd-coach-pitch" rows="3" placeholder="Quelques lignes sur votre méthode et ce que vous recherchez chez OXV" aria-label="Quelques lignes sur votre méthode et ce que vous recherchez chez OXV"></textarea>
           </div>
           <p class="dmd-note">
             Le coach exerce sous sa propre responsabilité et son propre diplôme. OXV fournit l'outil, le lieu et la mise en relation — jamais le conseil de pilotage.
@@ -16281,20 +16281,20 @@ body.pav-tv .nav, body.pav-tv footer, body.pav-tv .cookie, body.pav-tv .founding
         <div class="dmd-block" data-block="partenaire">
           <div class="dmd-block-label">— Votre entreprise</div>
           <div class="form-row">
-            <label>Nom de l'entreprise</label>
+            <label for="dmd-company-name">Nom de l'entreprise</label>
             <input type="text" id="dmd-company-name" placeholder="Raison sociale ou nom commercial" />
           </div>
           <div class="form-row">
-            <label>Votre fonction</label>
+            <label for="dmd-company-role">Votre fonction</label>
             <input type="text" id="dmd-company-role" placeholder="Gérant, responsable partenariats…" />
           </div>
           <div class="form-row">
             <label>SIRET <span style="opacity:.6;font-weight:400;">(facultatif)</span></label>
-            <input type="text" id="dmd-company-siret" placeholder="14 chiffres" />
+            <input type="text" id="dmd-company-siret" placeholder="14 chiffres" aria-label="14 chiffres" />
           </div>
           <div class="form-row">
             <label>Site web <span style="opacity:.6;font-weight:400;">(facultatif)</span></label>
-            <input type="url" id="dmd-company-website" placeholder="https://…" />
+            <input type="url" id="dmd-company-website" placeholder="https://…" aria-label="https://…" />
           </div>
           <p class="dmd-note">
             Après validation par OXV, vous accédez à l'espace partenaire : fiche entreprise, produits, offres et événements — chaque élément est relu par OXV avant d'apparaître dans l'application.
@@ -16313,11 +16313,11 @@ body.pav-tv .nav, body.pav-tv footer, body.pav-tv .cookie, body.pav-tv .founding
         <div class="dmd-block-label" style="margin-top:6px;">— Adhésion au cercle</div>
         <div class="form-row">
           <label>Parrainé par un membre ? <span style="opacity:.6;font-weight:400;">(facultatif — votre candidature passe en priorité)</span></label>
-          <input type="text" id="dmd-referral" placeholder="Code parrain (OXV-…) ou nom du membre" />
+          <input type="text" id="dmd-referral" placeholder="Code parrain (OXV-…) ou nom du membre" aria-label="Code parrain (OXV-…) ou nom du membre" />
         </div>
         <div class="form-row">
           <label id="dmd-motivation-label">Pourquoi OXV ? <span style="opacity:.6;font-weight:400;">(facultatif)</span></label>
-          <textarea id="dmd-motivation" rows="3" placeholder="Quelques mots sur ce qui vous amène vers OXV"></textarea>
+          <textarea id="dmd-motivation" rows="3" placeholder="Quelques mots sur ce qui vous amène vers OXV" aria-label="Quelques mots sur ce qui vous amène vers OXV"></textarea>
         </div>
 
         <!-- CONSENTEMENTS -->
@@ -16397,13 +16397,13 @@ body.pav-tv .nav, body.pav-tv footer, body.pav-tv .cookie, body.pav-tv .founding
 
       <div class="auth-form">
         <div class="form-row">
-          <label>Email</label>
+          <label for="li-email">Email</label>
           <input type="email" id="li-email" placeholder="prenom.nom@email.fr" autocomplete="email" />
         </div>
         <div class="form-row">
           <label>Mot de passe</label>
           <div class="pwd-wrap">
-            <input type="password" id="li-pwd" placeholder="••••••••" autocomplete="current-password" />
+            <input type="password" id="li-pwd" placeholder="••••••••" autocomplete="current-password" aria-label="Mot de passe" />
             <button type="button" class="pwd-toggle" onclick="togglePwdVisibility('li-pwd', this)" aria-label="Afficher le mot de passe">
               <span class="pwd-eye-icon">👁</span>
             </button>
@@ -16466,7 +16466,7 @@ body.pav-tv .nav, body.pav-tv footer, body.pav-tv .cookie, body.pav-tv .founding
 
       <div class="auth-form">
         <div class="form-row">
-          <label>Email</label>
+          <label for="fp-email">Email</label>
           <input type="email" id="fp-email" placeholder="prenom.nom@email.fr" autocomplete="email" />
         </div>
       </div>
@@ -16510,7 +16510,7 @@ body.pav-tv .nav, body.pav-tv footer, body.pav-tv .cookie, body.pav-tv .founding
         <div class="form-row">
           <label>Nouveau mot de passe</label>
           <div class="pwd-wrap">
-            <input type="password" id="rp-pwd" placeholder="••••••••" autocomplete="new-password" />
+            <input type="password" id="rp-pwd" placeholder="••••••••" autocomplete="new-password" aria-label="Nouveau mot de passe" />
             <button type="button" class="pwd-toggle" onclick="togglePwdVisibility('rp-pwd', this)" aria-label="Afficher">
               <span class="pwd-eye-icon">👁</span>
             </button>
@@ -16519,7 +16519,7 @@ body.pav-tv .nav, body.pav-tv footer, body.pav-tv .cookie, body.pav-tv .founding
         <div class="form-row">
           <label>Confirmer le mot de passe</label>
           <div class="pwd-wrap">
-            <input type="password" id="rp-pwd-confirm" placeholder="••••••••" autocomplete="new-password" />
+            <input type="password" id="rp-pwd-confirm" placeholder="••••••••" autocomplete="new-password" aria-label="Confirmation du nouveau mot de passe" />
             <button type="button" class="pwd-toggle" onclick="togglePwdVisibility('rp-pwd-confirm', this)" aria-label="Afficher">
               <span class="pwd-eye-icon">👁</span>
             </button>
@@ -16885,23 +16885,23 @@ body.pav-tv .nav, body.pav-tv footer, body.pav-tv .cookie, body.pav-tv .founding
           <div class="account-form-section">— Identité</div>
 
           <div class="form-row">
-            <label>Prénom</label>
+            <label for="pf-first">Prénom</label>
             <input type="text" id="pf-first" autocomplete="given-name" />
           </div>
           <div class="form-row">
-            <label>Nom</label>
+            <label for="pf-last">Nom</label>
             <input type="text" id="pf-last" autocomplete="family-name" />
           </div>
           <div class="form-row">
-            <label>Date de naissance</label>
+            <label for="pf-birth">Date de naissance</label>
             <input type="date" id="pf-birth" autocomplete="bday" />
           </div>
           <div class="form-row">
-            <label>Téléphone</label>
+            <label for="pf-phone">Téléphone</label>
             <input type="tel" id="pf-phone" placeholder="+33 6 ..." autocomplete="tel" />
           </div>
           <div class="form-row full">
-            <label>Email</label>
+            <label for="pf-email">Email</label>
             <input type="email" id="pf-email" disabled style="opacity:.6;" />
             <span style="font-family:var(--mono);font-size:9px;letter-spacing:0.18em;text-transform:uppercase;color:var(--cream-faint);margin-top:6px;">L'email sert d'identifiant de connexion · contactez-nous pour le modifier</span>
           </div>
@@ -16909,26 +16909,26 @@ body.pav-tv .nav, body.pav-tv footer, body.pav-tv .cookie, body.pav-tv .founding
           <div class="account-form-section">— Adresse</div>
 
           <div class="form-row full">
-            <label>Adresse</label>
+            <label for="pf-address">Adresse</label>
             <input type="text" id="pf-address" placeholder="12 rue Victor Hugo" autocomplete="street-address" />
           </div>
           <div class="form-row">
-            <label>Code postal</label>
+            <label for="pf-zip">Code postal</label>
             <input type="text" id="pf-zip" placeholder="33000" autocomplete="postal-code" />
           </div>
           <div class="form-row">
-            <label>Ville</label>
+            <label for="pf-city">Ville</label>
             <input type="text" id="pf-city" placeholder="Bordeaux" autocomplete="address-level2" />
           </div>
 
           <div class="account-form-section">— Contact d'urgence</div>
 
           <div class="form-row">
-            <label>Nom de la personne</label>
+            <label for="pf-emname">Nom de la personne</label>
             <input type="text" id="pf-emname" placeholder="Prénom et nom" />
           </div>
           <div class="form-row">
-            <label>Téléphone</label>
+            <label for="pf-emphone">Téléphone</label>
             <input type="tel" id="pf-emphone" placeholder="+33 6 ..." />
           </div>
           <div class="form-row full">
@@ -17963,7 +17963,7 @@ body.pav-tv .nav, body.pav-tv footer, body.pav-tv .cookie, body.pav-tv .founding
             </div>
             <div id="crewShareBox" style="display:none;margin-top:12px;">
               <div style="display:flex;gap:10px;flex-wrap:wrap;align-items:center;">
-                <input type="text" id="crewShareLink" readonly onclick="this.select()" style="background:rgba(0,0,0,0.4);border:1px solid var(--bento-border);color:var(--cream);padding:9px 12px;font-family:var(--mono);font-size:12px;flex:1 1 320px;min-width:0;" />
+                <input type="text" id="crewShareLink" readonly onclick="this.select()" style="background:rgba(0,0,0,0.4);border:1px solid var(--bento-border);color:var(--cream);padding:9px 12px;font-family:var(--mono);font-size:12px;flex:1 1 320px;min-width:0;" aria-label="Lien d'invitation à votre écurie" />
                 <button class="btn btn-sm" onclick="copierLienEcurie()"><span>Copier</span></button>
               </div>
               <p style="font-family:var(--sans);font-size:11px;color:var(--cream-faint);margin:8px 0 0;">Qui ouvre ce lien crée son compte et rejoint votre écurie — sans code à recopier.</p>
@@ -17971,13 +17971,13 @@ body.pav-tv .nav, body.pav-tv footer, body.pav-tv .cookie, body.pav-tv .founding
             <div id="crewStatusBox" style="margin-top:16px;font-family:var(--sans);font-size:13px;line-height:1.7;color:var(--cream-mute);">Chargement de votre écurie…</div>
             <div id="crewJoinBox" style="display:none;margin-top:12px;">
               <div style="display:flex;gap:10px;flex-wrap:wrap;align-items:center;">
-                <input type="text" id="crewJoinCode" placeholder="Code parrain (OXV-…)" style="background:rgba(0,0,0,0.4);border:1px solid var(--bento-border);color:var(--cream);padding:9px 12px;border-radius:6px;font-family:var(--mono);text-transform:uppercase;" />
+                <input type="text" id="crewJoinCode" placeholder="Code parrain (OXV-…)" style="background:rgba(0,0,0,0.4);border:1px solid var(--bento-border);color:var(--cream);padding:9px 12px;border-radius:6px;font-family:var(--mono);text-transform:uppercase;" aria-label="Code parrain (OXV-…)" />
                 <button class="btn btn-sm" onclick="redeemReferral()"><span>Rejoindre une écurie</span></button>
               </div>
             </div>
             <div id="crewNameBox" style="display:none;margin-top:12px;">
               <div style="display:flex;gap:10px;flex-wrap:wrap;align-items:center;">
-                <input type="text" id="crewNameInput" placeholder="Nom de votre écurie" maxlength="40" style="background:rgba(0,0,0,0.4);border:1px solid var(--bento-border);color:var(--cream);padding:9px 12px;border-radius:6px;font-family:var(--sans);" />
+                <input type="text" id="crewNameInput" placeholder="Nom de votre écurie" maxlength="40" style="background:rgba(0,0,0,0.4);border:1px solid var(--bento-border);color:var(--cream);padding:9px 12px;border-radius:6px;font-family:var(--sans);" aria-label="Nom de votre écurie" />
                 <button class="btn btn-sm" onclick="nameMyCrew()"><span>Nommer l'écurie</span></button>
               </div>
               <p style="font-family:var(--sans);font-size:11px;color:var(--cream-faint);margin:8px 0 0;">Le nom apparaît publiquement sur le Plateau au palier 20 membres validés.</p>
@@ -18379,7 +18379,7 @@ body.pav-tv .nav, body.pav-tv footer, body.pav-tv .cookie, body.pav-tv .founding
       <!-- Toolbar : recherche + filtres -->
       <div class="admin-toolbar">
         <div class="admin-search">
-          <input type="text" id="pilotesSearch" placeholder="Rechercher par nom ou email…" oninput="filterPilotes()" />
+          <input type="text" id="pilotesSearch" placeholder="Rechercher par nom ou email…" oninput="filterPilotes()" aria-label="Rechercher par nom ou email…" />
         </div>
       </div>
 
@@ -18724,7 +18724,7 @@ body.pav-tv .nav, body.pav-tv footer, body.pav-tv .cookie, body.pav-tv .founding
         <div class="admin-notes-block">
           <div class="admin-notes-title">— Notes admin (visible uniquement par toi)</div>
           <div class="admin-notes-sub">Préférences, infos opérationnelles, points d'attention pour ce pilote.</div>
-          <textarea class="admin-notes-textarea" id="apNotes" placeholder="Ex. : préfère qu'on l'appelle Cédric (pas Cyril), allergie noix, pilote très expérimenté, à mettre dans le groupe rapide..."></textarea>
+          <textarea class="admin-notes-textarea" id="apNotes" placeholder="Ex. : préfère qu'on l'appelle Cédric (pas Cyril), allergie noix, pilote très expérimenté, à mettre dans le groupe rapide..." aria-label="Notes internes sur le pilote"></textarea>
           <div class="admin-notes-actions">
             <span id="apNotesStatus">Non modifié</span>
             <button class="btn btn-sm" onclick="saveAdminNotes()"><span>Enregistrer</span></button>
@@ -18957,13 +18957,13 @@ body.pav-tv .nav, body.pav-tv footer, body.pav-tv .cookie, body.pav-tv .founding
         <!-- Date -->
         <div class="form-row">
           <label class="form-label">Date</label>
-          <input type="date" id="newSessionDate" class="form-input" />
+          <input type="date" id="newSessionDate" class="form-input" aria-label="Date" />
         </div>
 
         <!-- Circuit (multi-circuit — la journée porte SON circuit) -->
         <div class="form-row">
           <label class="form-label">Circuit</label>
-          <select id="newSessionCircuit" class="form-input"><option value="">Chargement…</option></select>
+          <select id="newSessionCircuit" class="form-input" aria-label="Circuit"><option value="">Chargement…</option></select>
         </div>
 
         <!-- Format -->
@@ -19014,7 +19014,7 @@ body.pav-tv .nav, body.pav-tv footer, body.pav-tv .cookie, body.pav-tv .founding
         <!-- Notes -->
         <div class="form-row">
           <label class="form-label">Notes (optionnel)</label>
-          <textarea id="newSessionNotes" class="form-input" rows="2" placeholder="Informations internes (météo prévue, contexte spécial…)"></textarea>
+          <textarea id="newSessionNotes" class="form-input" rows="2" placeholder="Informations internes (météo prévue, contexte spécial…)" aria-label="Informations internes (météo prévue, contexte spécial…)"></textarea>
         </div>
 
       </div>
@@ -19173,13 +19173,13 @@ body.pav-tv .nav, body.pav-tv footer, body.pav-tv .cookie, body.pav-tv .founding
     <div class="vmodal-eyebrow">— Édition session</div>
     <h2 class="vmodal-title">Modifier la <em>session</em>.</h2>
     <div class="form-grid" style="margin-top:16px;">
-      <div class="form-row"><label>Date</label><input type="date" id="ase-date" /></div>
-      <div class="form-row"><label>Heure de début</label><input type="time" id="ase-start" /></div>
-      <div class="form-row"><label>Heure de fin</label><input type="time" id="ase-end" /></div>
-      <div class="form-row"><label>Capacité totale</label><input type="number" id="ase-cap" min="0" max="40" /></div>
-      <div class="form-row"><label>Capacité Access</label><input type="number" id="ase-cap-access" min="0" max="40" /></div>
-      <div class="form-row"><label>Capacité Signature</label><input type="number" id="ase-cap-sig" min="0" max="40" /></div>
-      <div class="form-row full"><label>Notes internes</label><textarea id="ase-notes" rows="3" style="background:rgba(0,0,0,0.4);border:1px solid var(--bento-border);color:var(--cream);padding:10px 14px;border-radius:6px;width:100%;font-family:var(--sans);"></textarea></div>
+      <div class="form-row"><label for="ase-date">Date</label><input type="date" id="ase-date" /></div>
+      <div class="form-row"><label for="ase-start">Heure de début</label><input type="time" id="ase-start" /></div>
+      <div class="form-row"><label for="ase-end">Heure de fin</label><input type="time" id="ase-end" /></div>
+      <div class="form-row"><label for="ase-cap">Capacité totale</label><input type="number" id="ase-cap" min="0" max="40" /></div>
+      <div class="form-row"><label for="ase-cap-access">Capacité Access</label><input type="number" id="ase-cap-access" min="0" max="40" /></div>
+      <div class="form-row"><label for="ase-cap-sig">Capacité Signature</label><input type="number" id="ase-cap-sig" min="0" max="40" /></div>
+      <div class="form-row full"><label for="ase-notes">Notes internes</label><textarea id="ase-notes" rows="3" style="background:rgba(0,0,0,0.4);border:1px solid var(--bento-border);color:var(--cream);padding:10px 14px;border-radius:6px;width:100%;font-family:var(--sans);"></textarea></div>
     </div>
     <div style="display:flex;gap:8px;justify-content:flex-end;margin-top:16px;">
       <button class="btn btn-sm" onclick="adminCloseSessionEdit()"><span>Annuler</span></button>
@@ -19218,13 +19218,13 @@ body.pav-tv .nav, body.pav-tv footer, body.pav-tv .cookie, body.pav-tv .founding
     </div>
     <div style="margin:14px 0;">
       <div style="font-family:var(--sans);font-size:12px;color:var(--cream-mute);margin-bottom:8px;">Recommanderiez-vous OXV ? (0 = pas du tout · 10 = absolument)</div>
-      <select id="fbNps" style="background:rgba(0,0,0,0.4);border:1px solid var(--bento-border);color:var(--cream);padding:9px 12px;border-radius:6px;font-family:var(--mono);">
+      <select id="fbNps" style="background:rgba(0,0,0,0.4);border:1px solid var(--bento-border);color:var(--cream);padding:9px 12px;border-radius:6px;font-family:var(--mono);" aria-label="Note de recommandation">
         <option value="">—</option>
         <option>0</option><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option><option>6</option><option>7</option><option>8</option><option>9</option><option>10</option>
       </select>
     </div>
     <div class="form-row full" style="margin:14px 0;">
-      <label>En un mot, votre journée ?</label>
+      <label for="fbComment">En un mot, votre journée ?</label>
       <textarea id="fbComment" rows="3" placeholder="Ce qui vous a marqué, ce qu'on peut améliorer…" style="background:rgba(0,0,0,0.4);border:1px solid var(--bento-border);color:var(--cream);padding:10px 14px;border-radius:6px;width:100%;font-family:var(--sans);"></textarea>
     </div>
     <div class="consent" id="fbPublishOk" onclick="toggleConsent('fbPublishOk')" style="margin:14px 0;">
@@ -19334,13 +19334,13 @@ body.pav-tv .nav, body.pav-tv footer, body.pav-tv .cookie, body.pav-tv .founding
         <div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:20px;flex-wrap:wrap;gap:12px;">
           <h3 class="prog-evolution-title">Historique des paiements</h3>
           <div style="display:flex;gap:8px;flex-wrap:wrap;">
-            <select class="form-row" id="payFilterStatus" onchange="paymentRenderHistory();" style="background:rgba(0,0,0,0.4);border:1px solid var(--bento-border);color:var(--cream);font-family:var(--sans);font-size:12px;padding:8px 12px;border-radius:6px;">
+            <select class="form-row" id="payFilterStatus" onchange="paymentRenderHistory();" style="background:rgba(0,0,0,0.4);border:1px solid var(--bento-border);color:var(--cream);font-family:var(--sans);font-size:12px;padding:8px 12px;border-radius:6px;" aria-label="Filtrer les paiements par statut">
               <option value="all">Tous statuts</option>
               <option value="validated">Validés</option>
               <option value="pending">En attente</option>
               <option value="refunded">Remboursés</option>
             </select>
-            <select class="form-row" id="payFilterPeriod" onchange="paymentRenderHistory();" style="background:rgba(0,0,0,0.4);border:1px solid var(--bento-border);color:var(--cream);font-family:var(--sans);font-size:12px;padding:8px 12px;border-radius:6px;">
+            <select class="form-row" id="payFilterPeriod" onchange="paymentRenderHistory();" style="background:rgba(0,0,0,0.4);border:1px solid var(--bento-border);color:var(--cream);font-family:var(--sans);font-size:12px;padding:8px 12px;border-radius:6px;" aria-label="Filtrer les paiements par periode">
               <option value="month">Ce mois</option>
               <option value="3months">3 derniers mois</option>
               <option value="year">Cette année</option>
@@ -19396,12 +19396,12 @@ body.pav-tv .nav, body.pav-tv footer, body.pav-tv .cookie, body.pav-tv .founding
     </div>
 
     <div class="form-row full" style="margin-bottom:16px;">
-      <label>Date de réception du paiement</label>
+      <label for="payValidateDate">Date de réception du paiement</label>
       <input type="date" id="payValidateDate" style="background:rgba(0,0,0,0.4);border:1px solid var(--bento-border);color:var(--cream);padding:10px 14px;border-radius:6px;" />
     </div>
 
     <div class="form-row full" style="margin-bottom:16px;">
-      <label>Note interne (optionnel)</label>
+      <label for="payValidateNote">Note interne (optionnel)</label>
       <textarea id="payValidateNote" rows="3" placeholder="Ex. : Paiement confirmé par le prestataire. ID transaction : XXX..." style="background:rgba(0,0,0,0.4);border:1px solid var(--bento-border);color:var(--cream);padding:10px 14px;border-radius:6px;width:100%;font-family:var(--sans);"></textarea>
     </div>
 
@@ -19470,7 +19470,7 @@ body.pav-tv .nav, body.pav-tv footer, body.pav-tv .cookie, body.pav-tv .founding
         <div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:20px;flex-wrap:wrap;gap:12px;">
           <h3 class="prog-evolution-title">Messages</h3>
           <div style="display:flex;gap:8px;flex-wrap:wrap;">
-            <select class="form-row" id="inboxFilterStatus" onchange="inboxRender();" style="background:rgba(0,0,0,0.4);border:1px solid var(--bento-border);color:var(--cream);font-family:var(--sans);font-size:12px;padding:8px 12px;border-radius:6px;">
+            <select class="form-row" id="inboxFilterStatus" onchange="inboxRender();" style="background:rgba(0,0,0,0.4);border:1px solid var(--bento-border);color:var(--cream);font-family:var(--sans);font-size:12px;padding:8px 12px;border-radius:6px;" aria-label="Filtrer les messages par statut">
               <option value="all">Tous statuts</option>
               <option value="new">Nouveaux</option>
               <option value="read">Lus</option>
@@ -19478,7 +19478,7 @@ body.pav-tv .nav, body.pav-tv footer, body.pav-tv .cookie, body.pav-tv .founding
               <option value="spam">Spam</option>
               <option value="archived">Archivés</option>
             </select>
-            <select class="form-row" id="inboxFilterSource" onchange="inboxRender();" style="background:rgba(0,0,0,0.4);border:1px solid var(--bento-border);color:var(--cream);font-family:var(--sans);font-size:12px;padding:8px 12px;border-radius:6px;">
+            <select class="form-row" id="inboxFilterSource" onchange="inboxRender();" style="background:rgba(0,0,0,0.4);border:1px solid var(--bento-border);color:var(--cream);font-family:var(--sans);font-size:12px;padding:8px 12px;border-radius:6px;" aria-label="Filtrer les messages par source">
               <option value="all">Toutes sources</option>
               <option value="contact">Contact</option>
               <option value="corporate">Corporate</option>
@@ -19526,7 +19526,7 @@ body.pav-tv .nav, body.pav-tv footer, body.pav-tv .cookie, body.pav-tv .founding
       <div style="display:flex;gap:10px;flex-wrap:wrap;">
         <div style="flex:1;min-width:130px;">
           <label style="display:block;font-family:var(--sans);font-size:11px;color:var(--cream-mute);margin-bottom:4px;">Statut lead</label>
-          <select id="inboxCrmStatus" style="width:100%;background:rgba(0,0,0,0.4);border:1px solid var(--bento-border);color:var(--cream);padding:8px 10px;border-radius:6px;font-family:var(--sans);">
+          <select id="inboxCrmStatus" style="width:100%;background:rgba(0,0,0,0.4);border:1px solid var(--bento-border);color:var(--cream);padding:8px 10px;border-radius:6px;font-family:var(--sans);" aria-label="Statut lead">
             <option value="">—</option>
             <option value="lead">Nouveau lead</option>
             <option value="contacted">Contacté</option>
@@ -19538,7 +19538,7 @@ body.pav-tv .nav, body.pav-tv footer, body.pav-tv .cookie, body.pav-tv .founding
         </div>
         <div style="flex:1;min-width:110px;">
           <label style="display:block;font-family:var(--sans);font-size:11px;color:var(--cream-mute);margin-bottom:4px;">Priorité</label>
-          <select id="inboxCrmPriority" style="width:100%;background:rgba(0,0,0,0.4);border:1px solid var(--bento-border);color:var(--cream);padding:8px 10px;border-radius:6px;font-family:var(--sans);">
+          <select id="inboxCrmPriority" style="width:100%;background:rgba(0,0,0,0.4);border:1px solid var(--bento-border);color:var(--cream);padding:8px 10px;border-radius:6px;font-family:var(--sans);" aria-label="Priorité">
             <option value="normal">Normale</option>
             <option value="high">Haute</option>
             <option value="urgent">Urgente</option>
@@ -19546,13 +19546,13 @@ body.pav-tv .nav, body.pav-tv footer, body.pav-tv .cookie, body.pav-tv .founding
         </div>
         <div style="flex:1;min-width:130px;">
           <label style="display:block;font-family:var(--sans);font-size:11px;color:var(--cream-mute);margin-bottom:4px;">Relance le</label>
-          <input type="date" id="inboxCrmNext" style="width:100%;background:rgba(0,0,0,0.4);border:1px solid var(--bento-border);color:var(--cream);padding:7px 10px;border-radius:6px;font-family:var(--sans);">
+          <input type="date" id="inboxCrmNext" style="width:100%;background:rgba(0,0,0,0.4);border:1px solid var(--bento-border);color:var(--cream);padding:7px 10px;border-radius:6px;font-family:var(--sans);" aria-label="Relance le">
         </div>
       </div>
       <button class="btn btn-sm" onclick="inboxSaveCrm()" style="margin-top:10px;"><span>Enregistrer le suivi</span></button>
     </div>
     <div class="form-row full" style="margin-top:16px;">
-      <label>Note interne</label>
+      <label for="inboxModalNote">Note interne</label>
       <textarea id="inboxModalNote" rows="2" placeholder="Note privée admin…" style="background:rgba(0,0,0,0.4);border:1px solid var(--bento-border);color:var(--cream);padding:10px 14px;border-radius:6px;width:100%;font-family:var(--sans);"></textarea>
     </div>
     <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:16px;">
@@ -19817,11 +19817,11 @@ body.pav-tv .nav, body.pav-tv footer, body.pav-tv .cookie, body.pav-tv .founding
           Si vous laissez le corps vide ou désactivez le template, l'email part dans sa version par défaut (codée).
         </p>
         <div class="form-row" style="margin-bottom:14px;">
-          <label>Sujet</label>
+          <label for="emk-ed-subject">Sujet</label>
           <input type="text" id="emk-ed-subject" />
         </div>
         <div class="form-row" style="margin-bottom:14px;">
-          <label>Corps HTML</label>
+          <label for="emk-ed-body">Corps HTML</label>
           <textarea id="emk-ed-body" rows="12" style="font-family:var(--mono);font-size:12px;line-height:1.5;"></textarea>
         </div>
         <label class="consent" id="emk-ed-enabled" onclick="emkToggleEnabled()" style="margin-bottom:16px;">
@@ -20024,7 +20024,7 @@ body.pav-tv .nav, body.pav-tv footer, body.pav-tv .cookie, body.pav-tv .founding
           <h3 class="prog-evolution-title" style="margin-bottom:10px;">— Export compta (micro-entreprise)</h3>
           <p style="font-family:var(--sans);font-size:12px;color:var(--cream-mute);margin:0 0 14px;line-height:1.5;">Paiements + factures/avoirs de la période, en CSV (compatible Excel).</p>
           <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap;">
-            <input type="month" id="bilanExportMonth" style="background:rgba(0,0,0,0.4);border:1px solid var(--bento-border);color:var(--cream);padding:9px 12px;border-radius:6px;font-family:var(--mono);" />
+            <input type="month" id="bilanExportMonth" style="background:rgba(0,0,0,0.4);border:1px solid var(--bento-border);color:var(--cream);padding:9px 12px;border-radius:6px;font-family:var(--mono);" aria-label="Mois de l'export comptable" />
             <button class="btn btn-sm" onclick="exportComptaCsv()"><span>Exporter le CSV</span></button>
           </div>
         </div>
@@ -20150,7 +20150,7 @@ body.pav-tv .nav, body.pav-tv footer, body.pav-tv .cookie, body.pav-tv .founding
     </p>
 
     <div class="form-row full">
-      <label>Motif du rejet</label>
+      <label for="rejectReason">Motif du rejet</label>
       <textarea class="reject-modal-textarea" id="rejectReason" placeholder="Ex. : Photo floue, document tronqué. Merci de renvoyer un scan complet et lisible." rows="4"></textarea>
     </div>
 
@@ -20174,7 +20174,7 @@ body.pav-tv .nav, body.pav-tv footer, body.pav-tv .cookie, body.pav-tv .founding
     </p>
 
     <div class="form-row full">
-      <label>Motif (interne, jamais visible par le pilote)</label>
+      <label for="suspendReason">Motif (interne, jamais visible par le pilote)</label>
       <textarea class="reject-modal-textarea" id="suspendReason" placeholder="Ex. : Impayé sur la session du 12 mai. À régler avant réactivation. — Sophie, 09/05/2026" rows="3"></textarea>
     </div>
 
@@ -20195,18 +20195,18 @@ body.pav-tv .nav, body.pav-tv footer, body.pav-tv .cookie, body.pav-tv .founding
 
     <div class="account-form">
       <div class="form-row full">
-        <label>Fichier</label>
+        <label for="dm-file">Fichier</label>
         <input type="file" id="dm-file" accept="image/*,application/pdf" />
         <span style="font-family:var(--mono);font-size:9px;letter-spacing:0.18em;text-transform:uppercase;color:var(--cream-faint);margin-top:6px;">JPG, PNG ou PDF · 10 Mo max</span>
         <div id="dm-existing-file" style="display:none;margin-top:10px;padding:12px 14px;border:1px solid var(--cream-line);font-family:var(--mono);font-size:11px;color:var(--cream-mute);"></div>
       </div>
 
       <div class="form-row">
-        <label>Date de début de validité</label>
+        <label for="dm-start">Date de début de validité</label>
         <input type="date" id="dm-start" />
       </div>
       <div class="form-row">
-        <label>Date de fin de validité</label>
+        <label for="dm-end">Date de fin de validité</label>
         <input type="date" id="dm-end" />
       </div>
 
@@ -20232,27 +20232,27 @@ body.pav-tv .nav, body.pav-tv footer, body.pav-tv .cookie, body.pav-tv .founding
 
     <div class="account-form">
       <div class="form-row">
-        <label>Marque</label>
+        <label for="vh-brand">Marque</label>
         <input type="text" id="vh-brand" placeholder="Ex. Porsche, BMW, Alpine..." />
       </div>
       <div class="form-row">
-        <label>Modèle</label>
+        <label for="vh-model">Modèle</label>
         <input type="text" id="vh-model" placeholder="Ex. 911 GT3, M3 Competition..." />
       </div>
       <div class="form-row">
-        <label>Année</label>
+        <label for="vh-year">Année</label>
         <input type="number" id="vh-year" placeholder="2022" min="1950" max="2030" />
       </div>
       <div class="form-row">
-        <label>Immatriculation</label>
+        <label for="vh-plate">Immatriculation</label>
         <input type="text" id="vh-plate" placeholder="AB-123-CD" maxlength="10" style="text-transform: uppercase;" />
       </div>
       <div class="form-row">
-        <label>Valeur déclarée (€)</label>
+        <label for="vh-value">Valeur déclarée (€)</label>
         <input type="number" id="vh-value" placeholder="125000" min="0" step="1000" />
       </div>
       <div class="form-row full">
-        <label>Notes (optionnel)</label>
+        <label for="vh-notes">Notes (optionnel)</label>
         <textarea id="vh-notes" rows="2" placeholder="Préparation, modifications, partenaires..."></textarea>
       </div>
 
@@ -20261,19 +20261,19 @@ body.pav-tv .nav, body.pav-tv footer, body.pav-tv .cookie, body.pav-tv .founding
         <div class="photo-zones">
           <div class="photo-zone" data-photo-slot="front">
             <span class="photo-zone-label">Face</span>
-            <input type="file" accept="image/*" onchange="handlePhotoSelect(event, 'front')" />
+            <input type="file" accept="image/*" onchange="handlePhotoSelect(event, 'front')" aria-label="Photos du véhicule" />
           </div>
           <div class="photo-zone" data-photo-slot="side">
             <span class="photo-zone-label">Profil</span>
-            <input type="file" accept="image/*" onchange="handlePhotoSelect(event, 'side')" />
+            <input type="file" accept="image/*" onchange="handlePhotoSelect(event, 'side')" aria-label="Face" />
           </div>
           <div class="photo-zone" data-photo-slot="rear">
             <span class="photo-zone-label">Arrière</span>
-            <input type="file" accept="image/*" onchange="handlePhotoSelect(event, 'rear')" />
+            <input type="file" accept="image/*" onchange="handlePhotoSelect(event, 'rear')" aria-label="Profil" />
           </div>
           <div class="photo-zone" data-photo-slot="interior">
             <span class="photo-zone-label">Intérieur</span>
-            <input type="file" accept="image/*" onchange="handlePhotoSelect(event, 'interior')" />
+            <input type="file" accept="image/*" onchange="handlePhotoSelect(event, 'interior')" aria-label="Arrière" />
           </div>
         </div>
         <span style="font-family:var(--mono);font-size:9px;letter-spacing:0.18em;text-transform:uppercase;color:var(--cream-faint);margin-top:8px;display:block;">Format JPG ou PNG · 5 Mo max par photo</span>
@@ -21003,23 +21003,23 @@ body.pav-tv .nav, body.pav-tv footer, body.pav-tv .cookie, body.pav-tv .founding
       <div class="founding-form-grid">
         <div class="founding-field">
           <label class="form-label" style="font-family:var(--mono);font-size:9px;letter-spacing:0.2em;text-transform:uppercase;color:var(--cream-mute);display:block;margin-bottom:7px;">Prénom</label>
-          <input class="form-input" id="fndFirstName" type="text" placeholder="Alexandre" autocomplete="given-name" />
+          <input class="form-input" id="fndFirstName" type="text" placeholder="Alexandre" autocomplete="given-name" aria-label="Alexandre" />
         </div>
         <div class="founding-field">
           <label class="form-label" style="font-family:var(--mono);font-size:9px;letter-spacing:0.2em;text-transform:uppercase;color:var(--cream-mute);display:block;margin-bottom:7px;">Nom</label>
-          <input class="form-input" id="fndLastName" type="text" placeholder="Dupont" autocomplete="family-name" />
+          <input class="form-input" id="fndLastName" type="text" placeholder="Dupont" autocomplete="family-name" aria-label="Dupont" />
         </div>
         <div class="founding-field full">
           <label class="form-label" style="font-family:var(--mono);font-size:9px;letter-spacing:0.2em;text-transform:uppercase;color:var(--cream-mute);display:block;margin-bottom:7px;">Email</label>
-          <input class="form-input" id="fndEmail" type="email" placeholder="alexandre@exemple.fr" autocomplete="email" />
+          <input class="form-input" id="fndEmail" type="email" placeholder="alexandre@exemple.fr" autocomplete="email" aria-label="alexandre@exemple.fr" />
         </div>
         <div class="founding-field full">
           <label class="form-label" style="font-family:var(--mono);font-size:9px;letter-spacing:0.2em;text-transform:uppercase;color:var(--cream-mute);display:block;margin-bottom:7px;">Votre véhicule (marque, modèle)</label>
-          <input class="form-input" id="fndVehicle" type="text" placeholder="Porsche 911 GT3, Ferrari 488, Lotus Emira…" />
+          <input class="form-input" id="fndVehicle" type="text" placeholder="Porsche 911 GT3, Ferrari 488, Lotus Emira…" aria-label="Porsche 911 GT3, Ferrari 488, Lotus Emira…" />
         </div>
         <div class="founding-field full">
           <label class="form-label" style="font-family:var(--mono);font-size:9px;letter-spacing:0.2em;text-transform:uppercase;color:var(--cream-mute);display:block;margin-bottom:7px;">Pourquoi OXV ? <span style="color:var(--cream-mute);font-style:italic;">(optionnel — mais nous le lisons vraiment)</span></label>
-          <textarea class="form-input" id="fndMessage" rows="4" placeholder="Votre expérience des circuits, ce que vous cherchez, ce qui vous a attiré vers OXV…" style="resize:vertical;"></textarea>
+          <textarea class="form-input" id="fndMessage" rows="4" placeholder="Votre expérience des circuits, ce que vous cherchez, ce qui vous a attiré vers OXV…" style="resize:vertical;" aria-label="Votre expérience des circuits, ce que vous cherchez, ce qui vous a attiré vers OXV…"></textarea>
         </div>
         <div class="full" style="display:flex;align-items:center;gap:10px;margin-top:4px;">
           <input type="checkbox" id="fndConsent" style="width:16px;height:16px;flex-shrink:0;accent-color:var(--gold);" />
@@ -22143,8 +22143,8 @@ body.pav-tv .nav, body.pav-tv footer, body.pav-tv .cookie, body.pav-tv .founding
           <div id="pcAccountForm" style="display:none;margin-top:14px;">
             <p style="font-family:var(--sans);font-size:13px;line-height:1.65;color:var(--cream-mute);margin:0 0 14px;">Créez votre entreprise sur OXV : après validation, vos produits, offres et événements peuvent paraître dans le catalogue et sur la carte de l'application. La transaction se fait toujours chez vous — OXV met en relation.</p>
             <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:10px;">
-              <input id="pcName" class="form-input" placeholder="Nom de l'entreprise *" maxlength="80">
-              <select id="pcType" class="form-input">
+              <input id="pcName" class="form-input" placeholder="Nom de l'entreprise *" maxlength="80" aria-label="Nom de l'entreprise *">
+              <select id="pcType" class="form-input" aria-label="Type de partenaire">
                 <option value="garage">Garage / préparation</option>
                 <option value="photographe">Photographe / vidéo</option>
                 <option value="hotel">Hôtel / restauration</option>
@@ -22153,10 +22153,10 @@ body.pav-tv .nav, body.pav-tv footer, body.pav-tv .cookie, body.pav-tv .founding
                 <option value="concession">Concession</option>
                 <option value="autre">Autre</option>
               </select>
-              <input id="pcEmail" class="form-input" type="email" placeholder="Email de contact *" maxlength="120">
-              <input id="pcZone" class="form-input" placeholder="Zone géographique (ex. Bordeaux / Nouvelle-Aquitaine)" maxlength="120">
+              <input id="pcEmail" class="form-input" type="email" placeholder="Email de contact *" maxlength="120" aria-label="Email de contact *">
+              <input id="pcZone" class="form-input" placeholder="Zone géographique (ex. Bordeaux / Nouvelle-Aquitaine)" maxlength="120" aria-label="Zone géographique (ex. Bordeaux / Nouvelle-Aquitaine)">
             </div>
-            <textarea id="pcDesc" class="form-input" style="margin-top:10px;min-height:74px;" placeholder="Description courte (activité, spécialités)" maxlength="600"></textarea>
+            <textarea id="pcDesc" class="form-input" style="margin-top:10px;min-height:74px;" placeholder="Description courte (activité, spécialités)" maxlength="600" aria-label="Description courte (activité, spécialités)"></textarea>
             <button class="btn btn-sm" style="margin-top:12px;" onclick="pcCreateAccount()"><span>Créer mon entreprise →</span></button>
             <p style="font-family:var(--mono);font-size:10px;color:var(--cream-faint);margin:10px 0 0;letter-spacing:0.06em;">Soumise à validation OXV avant toute apparition dans l'app.</p>
           </div>
@@ -22165,32 +22165,32 @@ body.pav-tv .nav, body.pav-tv footer, body.pav-tv .cookie, body.pav-tv .founding
           <div id="pcEditor" style="display:none;margin-top:16px;border-top:1px solid var(--bento-border);padding-top:16px;">
             <div style="display:flex;align-items:center;gap:16px;flex-wrap:wrap;margin-bottom:14px;">
               <div id="pcLogo" class="ce-avatar" style="border-radius:12px;font-size:24px;" onclick="document.getElementById('pcLogoFile').click()" title="Changer le logo">⧉</div>
-              <input type="file" id="pcLogoFile" accept="image/jpeg,image/png,image/webp" style="display:none;" onchange="pcUploadLogo(this)">
+              <input type="file" id="pcLogoFile" accept="image/jpeg,image/png,image/webp" style="display:none;" onchange="pcUploadLogo(this)" aria-label="Logo de l'entreprise">
               <div style="flex:1;min-width:200px;display:grid;gap:8px;">
-                <input id="pcEditName" class="form-input" placeholder="Nom de l'entreprise" maxlength="80">
+                <input id="pcEditName" class="form-input" placeholder="Nom de l'entreprise" maxlength="80" aria-label="Nom de l'entreprise">
                 <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
-                  <select id="pcEditType" class="form-input">
+                  <select id="pcEditType" class="form-input" aria-label="Type de partenaire">
                     <option value="garage">Garage</option><option value="photographe">Photographe</option>
                     <option value="hotel">Hôtel</option><option value="restaurant">Restaurant</option>
                     <option value="transport">Transport</option><option value="assurance">Assurance</option>
                     <option value="loueur">Loueur</option><option value="autre">Autre</option>
                   </select>
-                  <input id="pcEditZone" class="form-input" placeholder="Zone (ex. Nouvelle-Aquitaine)" maxlength="120">
+                  <input id="pcEditZone" class="form-input" placeholder="Zone (ex. Nouvelle-Aquitaine)" maxlength="120" aria-label="Zone (ex. Nouvelle-Aquitaine)">
                 </div>
               </div>
               <button class="btn btn-sm" onclick="showPartnerFiche()"><span>Aperçu de ma fiche</span></button>
             </div>
-            <textarea id="pcEditDesc" class="form-input" style="min-height:70px;" placeholder="Description — activité, spécialités, ce que vous proposez aux pilotes OXV" maxlength="600"></textarea>
-            <input id="pcEditEmail" class="form-input" type="email" style="margin-top:8px;" placeholder="Email de contact" maxlength="120">
+            <textarea id="pcEditDesc" class="form-input" style="min-height:70px;" placeholder="Description — activité, spécialités, ce que vous proposez aux pilotes OXV" maxlength="600" aria-label="Description — activité, spécialités, ce que vous proposez aux pilotes OXV"></textarea>
+            <input id="pcEditEmail" class="form-input" type="email" style="margin-top:8px;" placeholder="Email de contact" maxlength="120" aria-label="Email de contact">
             <button class="btn btn-sm" style="margin-top:12px;" onclick="pcSaveAccount()"><span>Enregistrer ma fiche</span></button>
             <div style="border-top:1px solid var(--bento-border);margin-top:16px;padding-top:14px;">
               <div style="font-family:var(--mono);font-size:10px;letter-spacing:0.22em;text-transform:uppercase;color:var(--gold-data);margin-bottom:10px;">Médias de l'entreprise</div>
               <div id="pcMediaList" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(110px,1fr));gap:10px;margin-bottom:10px;"></div>
               <div style="display:flex;gap:8px;">
-                <input id="pcMediaUrl" class="form-input" style="flex:1;" placeholder="Lien YouTube ou image (https://…)" maxlength="400">
+                <input id="pcMediaUrl" class="form-input" style="flex:1;" placeholder="Lien YouTube ou image (https://…)" maxlength="400" aria-label="Lien YouTube ou image (https://…)">
                 <button class="btn btn-sm" onclick="pcAddMedia()"><span>Ajouter</span></button>
               </div>
-              <input type="file" id="pcMediaFile" accept="image/jpeg,image/png,image/webp" style="display:none;" onchange="pcUploadMediaPhoto(this)">
+              <input type="file" id="pcMediaFile" accept="image/jpeg,image/png,image/webp" style="display:none;" onchange="pcUploadMediaPhoto(this)" aria-label="Media de l'entreprise">
               <button class="btn btn-sm" style="margin-top:8px;width:100%;" onclick="document.getElementById('pcMediaFile').click()"><span>Téléverser une photo depuis mon appareil →</span></button>
             </div>
           </div>
@@ -22200,20 +22200,20 @@ body.pav-tv .nav, body.pav-tv footer, body.pav-tv .cookie, body.pav-tv .founding
           <div id="pcOffersList" style="font-family:var(--sans);font-size:14px;line-height:1.7;color:var(--cream-mute);">Chargement…</div>
           <div style="border-top:1px solid var(--bento-border);margin-top:16px;padding-top:16px;">
             <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:10px;">
-              <input id="pcOfferTitle" class="form-input" placeholder="Titre *" maxlength="90">
-              <select id="pcOfferCat" class="form-input" onchange="document.getElementById('pcOfferDateWrap').style.display = this.value === 'evenement' ? '' : 'none';">
+              <input id="pcOfferTitle" class="form-input" placeholder="Titre *" maxlength="90" aria-label="Titre *">
+              <select id="pcOfferCat" class="form-input" onchange="document.getElementById('pcOfferDateWrap').style.display = this.value === 'evenement' ? '' : 'none';" aria-label="Categorie de l'offre">
                 <option value="produit">Produit</option>
                 <option value="offre">Offre / avantage</option>
                 <option value="evenement">Événement (carte de l'app)</option>
               </select>
-              <input id="pcOfferPrice" class="form-input" type="number" min="0" step="1" placeholder="Prix indicatif € (optionnel)">
+              <input id="pcOfferPrice" class="form-input" type="number" min="0" step="1" placeholder="Prix indicatif € (optionnel)" aria-label="Prix indicatif € (optionnel)">
             </div>
             <div id="pcOfferDateWrap" style="display:none;margin-top:10px;">
-              <input id="pcOfferDate" class="form-input" type="datetime-local" style="max-width:280px;">
+              <input id="pcOfferDate" class="form-input" type="datetime-local" style="max-width:280px;" aria-label="Date de validite de l'offre">
               <span style="font-family:var(--mono);font-size:10px;color:var(--cream-faint);margin-left:8px;">Date de l'événement</span>
             </div>
-            <textarea id="pcOfferDesc" class="form-input" style="margin-top:10px;min-height:64px;" placeholder="Description *" maxlength="800"></textarea>
-            <input id="pcOfferCond" class="form-input" style="margin-top:10px;" placeholder="Conditions (optionnel — ex. sur présentation du Pass OXV)" maxlength="300">
+            <textarea id="pcOfferDesc" class="form-input" style="margin-top:10px;min-height:64px;" placeholder="Description *" maxlength="800" aria-label="Description *"></textarea>
+            <input id="pcOfferCond" class="form-input" style="margin-top:10px;" placeholder="Conditions (optionnel — ex. sur présentation du Pass OXV)" maxlength="300" aria-label="Conditions (optionnel — ex. sur présentation du Pass OXV)">
             <button class="btn btn-sm" style="margin-top:12px;" onclick="pcCreateOffer()"><span>Soumettre à validation →</span></button>
           </div>
         </div>
@@ -22253,7 +22253,7 @@ body.pav-tv .nav, body.pav-tv footer, body.pav-tv .cookie, body.pav-tv .founding
           </div>
         </div>
       </div>
-      <input type="file" id="cePhotoFile" accept="image/jpeg,image/png,image/webp" style="display:none;" onchange="ceUploadPhoto(this)">
+      <input type="file" id="cePhotoFile" accept="image/jpeg,image/png,image/webp" style="display:none;" onchange="ceUploadPhoto(this)" aria-label="Photo de profil du coach">
     </div>
   </section>
   <section class="section" style="padding-top:24px;">
@@ -22286,15 +22286,15 @@ body.pav-tv .nav, body.pav-tv footer, body.pav-tv .cookie, body.pav-tv .founding
         <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:16px;margin-bottom:16px;">
           <div class="bento" style="padding:26px;">
             <div style="font-family:var(--mono);font-size:10px;letter-spacing:0.22em;text-transform:uppercase;color:var(--gold-data);margin-bottom:12px;">Ma fiche — mon histoire</div>
-            <input id="ceHeadline" class="form-input" placeholder="Accroche (ex. Coach BPJEPS · trajectoire &amp; régularité)" maxlength="120">
-            <textarea id="ceBio" class="form-input" style="margin-top:10px;min-height:74px;" placeholder="Présentation courte — qui vous êtes, votre approche" maxlength="1200"></textarea>
-            <textarea id="cePalmares" class="form-input" style="margin-top:10px;min-height:60px;" placeholder="Votre histoire &amp; palmarès — parcours, titres, expériences marquantes" maxlength="1200"></textarea>
-            <input id="ceSpecialties" class="form-input" style="margin-top:10px;" placeholder="Spécialités, séparées par des virgules (ex. Trajectoire, Freinage, GT)" maxlength="200">
+            <input id="ceHeadline" class="form-input" placeholder="Accroche (ex. Coach BPJEPS · trajectoire &amp; régularité)" maxlength="120" aria-label="Accroche (ex. Coach BPJEPS · trajectoire &amp; régularité)">
+            <textarea id="ceBio" class="form-input" style="margin-top:10px;min-height:74px;" placeholder="Présentation courte — qui vous êtes, votre approche" maxlength="1200" aria-label="Présentation courte — qui vous êtes, votre approche"></textarea>
+            <textarea id="cePalmares" class="form-input" style="margin-top:10px;min-height:60px;" placeholder="Votre histoire &amp; palmarès — parcours, titres, expériences marquantes" maxlength="1200" aria-label="Votre histoire &amp; palmarès — parcours, titres, expériences marquantes"></textarea>
+            <input id="ceSpecialties" class="form-input" style="margin-top:10px;" placeholder="Spécialités, séparées par des virgules (ex. Trajectoire, Freinage, GT)" maxlength="200" aria-label="Spécialités, séparées par des virgules (ex. Trajectoire, Freinage, GT)">
             <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:10px;">
-              <div><input id="ceSessionPrice" class="form-input" type="number" min="0" step="1" placeholder="€ / session"><span style="font-family:var(--mono);font-size:9px;color:var(--cream-faint);">Tarif session (public)</span></div>
-              <div><input id="ceSeasonPrice" class="form-input" type="number" min="0" step="1" placeholder="€ / saison"><span style="font-family:var(--mono);font-size:9px;color:var(--cream-faint);">Tarif saison (public)</span></div>
+              <div><input id="ceSessionPrice" class="form-input" type="number" min="0" step="1" placeholder="€ / session" aria-label="€ / session"><span style="font-family:var(--mono);font-size:9px;color:var(--cream-faint);">Tarif session (public)</span></div>
+              <div><input id="ceSeasonPrice" class="form-input" type="number" min="0" step="1" placeholder="€ / saison" aria-label="€ / saison"><span style="font-family:var(--mono);font-size:9px;color:var(--cream-faint);">Tarif saison (public)</span></div>
             </div>
-            <input id="cePaymentLink" class="form-input" style="margin-top:10px;" placeholder="Lien de paiement direct (optionnel — Lydia, PayPal…)" maxlength="300">
+            <input id="cePaymentLink" class="form-input" style="margin-top:10px;" placeholder="Lien de paiement direct (optionnel — Lydia, PayPal…)" maxlength="300" aria-label="Lien de paiement direct (optionnel — Lydia, PayPal…)">
             <button class="btn btn-sm" style="margin-top:12px;" onclick="ceSaveProfile()"><span>Enregistrer</span></button>
             <p style="font-family:var(--mono);font-size:10px;color:var(--cream-faint);margin:10px 0 0;letter-spacing:0.06em;">Le paiement se fait directement entre vous et le pilote — jamais via OXV.</p>
           </div>
@@ -22302,16 +22302,16 @@ body.pav-tv .nav, body.pav-tv footer, body.pav-tv .cookie, body.pav-tv .founding
             <div style="font-family:var(--mono);font-size:10px;letter-spacing:0.22em;text-transform:uppercase;color:var(--gold-data);margin-bottom:12px;">Mes médias &amp; liens</div>
             <div id="ceMediaList" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(110px,1fr));gap:10px;margin-bottom:12px;"></div>
             <div style="display:flex;gap:8px;">
-              <input id="ceMediaUrl" class="form-input" style="flex:1;" placeholder="Lien YouTube ou image (https://…)" maxlength="400">
+              <input id="ceMediaUrl" class="form-input" style="flex:1;" placeholder="Lien YouTube ou image (https://…)" maxlength="400" aria-label="Lien YouTube ou image (https://…)">
               <button class="btn btn-sm" onclick="ceAddMedia()"><span>Ajouter</span></button>
             </div>
-            <input type="file" id="ceMediaFile" accept="image/jpeg,image/png,image/webp" style="display:none;" onchange="ceUploadMediaPhoto(this)">
+            <input type="file" id="ceMediaFile" accept="image/jpeg,image/png,image/webp" style="display:none;" onchange="ceUploadMediaPhoto(this)" aria-label="Media du coach">
             <button class="btn btn-sm" style="margin-top:8px;width:100%;" onclick="document.getElementById('ceMediaFile').click()"><span>Téléverser une photo depuis mon appareil →</span></button>
             <p style="font-family:var(--mono);font-size:9px;color:var(--cream-faint);margin:8px 0 14px;letter-spacing:0.05em;">Vidéos YouTube et photos — affichés sur votre fiche publique.</p>
             <div style="border-top:1px solid var(--bento-border);padding-top:14px;display:grid;gap:8px;">
-              <input id="ceInstagram" class="form-input" placeholder="Instagram (https://instagram.com/…)" maxlength="300">
-              <input id="ceYoutube" class="form-input" placeholder="Chaîne YouTube (https://youtube.com/…)" maxlength="300">
-              <input id="ceWebsite" class="form-input" placeholder="Site web (https://…)" maxlength="300">
+              <input id="ceInstagram" class="form-input" placeholder="Instagram (https://instagram.com/…)" maxlength="300" aria-label="Instagram (https://instagram.com/…)">
+              <input id="ceYoutube" class="form-input" placeholder="Chaîne YouTube (https://youtube.com/…)" maxlength="300" aria-label="Chaîne YouTube (https://youtube.com/…)">
+              <input id="ceWebsite" class="form-input" placeholder="Site web (https://…)" maxlength="300" aria-label="Site web (https://…)">
             </div>
             <button class="btn btn-sm" style="margin-top:12px;" onclick="ceSaveProfile()"><span>Enregistrer</span></button>
           </div>
@@ -22323,12 +22323,12 @@ body.pav-tv .nav, body.pav-tv footer, body.pav-tv .cookie, body.pav-tv .founding
             <div style="border-top:1px solid var(--bento-border);margin-top:14px;padding-top:14px;">
               <div id="ceNextSessions" style="font-family:var(--mono);font-size:10px;color:var(--cream-faint);margin-bottom:10px;letter-spacing:0.05em;">Journées OXV à venir : chargement…</div>
               <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:8px;">
-                <select id="ceSlotDate" class="form-input"><option value="">Journée OXV…</option></select>
-                <input id="ceSlotStart" class="form-input" type="time" value="09:00">
-                <input id="ceSlotEnd" class="form-input" type="time" value="12:00">
-                <input id="ceSlotCap" class="form-input" type="number" min="1" max="6" value="2" placeholder="Places">
+                <select id="ceSlotDate" class="form-input" aria-label="Date du creneau"><option value="">Journée OXV…</option></select>
+                <input id="ceSlotStart" class="form-input" type="time" value="09:00" aria-label="Heure de debut du creneau">
+                <input id="ceSlotEnd" class="form-input" type="time" value="12:00" aria-label="Heure de fin du creneau">
+                <input id="ceSlotCap" class="form-input" type="number" min="1" max="6" value="2" placeholder="Places" aria-label="Places">
               </div>
-              <input id="ceSlotNote" class="form-input" style="margin-top:8px;" placeholder="Note (optionnel — ex. matinée découverte)" maxlength="200">
+              <input id="ceSlotNote" class="form-input" style="margin-top:8px;" placeholder="Note (optionnel — ex. matinée découverte)" maxlength="200" aria-label="Note (optionnel — ex. matinée découverte)">
               <button class="btn btn-sm" style="margin-top:10px;" onclick="ceCreateSlot()"><span>Proposer ce créneau →</span></button>
               <p style="font-family:var(--mono);font-size:10px;color:var(--cream-faint);margin:8px 0 0;letter-spacing:0.06em;">Publié après validation OXV.</p>
             </div>
@@ -22388,12 +22388,12 @@ body.pav-tv .nav, body.pav-tv footer, body.pav-tv .cookie, body.pav-tv .founding
       <h2 class="section-title" style="font-size:32px;margin-bottom:8px;">Contact <em>presse</em>.</h2>
       <p style="font-family:var(--sans);font-size:15px;line-height:1.7;color:var(--cream-mute);max-width:640px;margin:0 0 24px;">Une demande d'interview, de visuels, de tournage sur circuit ou d'information ? Écrivez-nous.</p>
       <div class="form-grid" style="max-width:840px;">
-        <div class="form-row"><label>Média / rédaction</label><input type="text" id="pr-outlet" placeholder="Nom du média" /></div>
-        <div class="form-row"><label>Journaliste</label><input type="text" id="pr-name" placeholder="Prénom Nom" /></div>
-        <div class="form-row"><label>Email</label><input type="email" id="pr-email" placeholder="email@media.fr" /></div>
-        <div class="form-row"><label>Téléphone (facultatif)</label><input type="tel" id="pr-phone" placeholder="06 12 34 56 78" /></div>
-        <div class="form-row"><label>Échéance (facultatif)</label><input type="date" id="pr-deadline" /></div>
-        <div class="form-row"><label>Type de demande</label>
+        <div class="form-row"><label for="pr-outlet">Média / rédaction</label><input type="text" id="pr-outlet" placeholder="Nom du média" /></div>
+        <div class="form-row"><label for="pr-name">Journaliste</label><input type="text" id="pr-name" placeholder="Prénom Nom" /></div>
+        <div class="form-row"><label for="pr-email">Email</label><input type="email" id="pr-email" placeholder="email@media.fr" /></div>
+        <div class="form-row"><label for="pr-phone">Téléphone (facultatif)</label><input type="tel" id="pr-phone" placeholder="06 12 34 56 78" /></div>
+        <div class="form-row"><label for="pr-deadline">Échéance (facultatif)</label><input type="date" id="pr-deadline" /></div>
+        <div class="form-row"><label for="pr-type">Type de demande</label>
           <select id="pr-type">
             <option>Dossier / kit média</option>
             <option>Interview / porte-parole</option>
@@ -22402,7 +22402,7 @@ body.pav-tv .nav, body.pav-tv footer, body.pav-tv .cookie, body.pav-tv .founding
             <option>Autre</option>
           </select>
         </div>
-        <div class="form-row full"><label>Votre sujet / angle</label><textarea id="pr-msg" rows="4" placeholder="Décrivez votre sujet, l'angle envisagé, le support et le calendrier…"></textarea></div>
+        <div class="form-row full"><label for="pr-msg">Votre sujet / angle</label><textarea id="pr-msg" rows="4" placeholder="Décrivez votre sujet, l'angle envisagé, le support et le calendrier…"></textarea></div>
         <div class="form-row full">
           <div class="consent" id="pr-rgpd" onclick="toggleConsent('pr-rgpd')">
             <div class="ck"></div>
@@ -22626,8 +22626,8 @@ body.pav-tv .nav, body.pav-tv footer, body.pav-tv .cookie, body.pav-tv .founding
       <h2 class="section-title" style="font-size:32px;margin-bottom:8px;">Devenir <em>partenaire</em>.</h2>
       <p style="font-family:var(--sans);font-size:15px;line-height:1.7;color:var(--cream-mute);max-width:640px;margin:0 0 24px;">Décrivez votre activité : nous revenons vers vous pour étudier une collaboration.</p>
       <div class="form-grid" style="max-width:840px;">
-        <div class="form-row"><label>Société</label><input type="text" id="pt-company" placeholder="Nom de la structure" /></div>
-        <div class="form-row"><label>Type de partenaire</label>
+        <div class="form-row"><label for="pt-company">Société</label><input type="text" id="pt-company" placeholder="Nom de la structure" /></div>
+        <div class="form-row"><label for="pt-type">Type de partenaire</label>
           <select id="pt-type">
             <option>Garage / préparateur</option>
             <option>Photographe / vidéaste</option>
@@ -22638,11 +22638,11 @@ body.pav-tv .nav, body.pav-tv footer, body.pav-tv .cookie, body.pav-tv .founding
             <option>Autre</option>
           </select>
         </div>
-        <div class="form-row"><label>Contact</label><input type="text" id="pt-name" placeholder="Prénom Nom" /></div>
-        <div class="form-row"><label>Email</label><input type="email" id="pt-email" placeholder="email@exemple.fr" /></div>
-        <div class="form-row"><label>Téléphone (facultatif)</label><input type="tel" id="pt-phone" placeholder="06 12 34 56 78" /></div>
-        <div class="form-row"><label>Zone / rayon d'action</label><input type="text" id="pt-zone" placeholder="Ex. Nouvelle-Aquitaine, national…" /></div>
-        <div class="form-row full"><label>Votre offre / spécialité</label><textarea id="pt-msg" rows="4" placeholder="Activité, marques, services proposés, ce que vous aimeriez apporter à OXV…"></textarea></div>
+        <div class="form-row"><label for="pt-name">Contact</label><input type="text" id="pt-name" placeholder="Prénom Nom" /></div>
+        <div class="form-row"><label for="pt-email">Email</label><input type="email" id="pt-email" placeholder="email@exemple.fr" /></div>
+        <div class="form-row"><label for="pt-phone">Téléphone (facultatif)</label><input type="tel" id="pt-phone" placeholder="06 12 34 56 78" /></div>
+        <div class="form-row"><label for="pt-zone">Zone / rayon d'action</label><input type="text" id="pt-zone" placeholder="Ex. Nouvelle-Aquitaine, national…" /></div>
+        <div class="form-row full"><label for="pt-msg">Votre offre / spécialité</label><textarea id="pt-msg" rows="4" placeholder="Activité, marques, services proposés, ce que vous aimeriez apporter à OXV…"></textarea></div>
         <div class="form-row full">
           <div class="consent" id="pt-rgpd" onclick="toggleConsent('pt-rgpd')">
             <div class="ck"></div>
@@ -22684,13 +22684,13 @@ body.pav-tv .nav, body.pav-tv footer, body.pav-tv .cookie, body.pav-tv .founding
 
       <div class="auth-form">
         <div class="form-row">
-          <label>Email</label>
+          <label for="pli-email">Email</label>
           <input type="email" id="pli-email" placeholder="contact@entreprise.fr" autocomplete="email" />
         </div>
         <div class="form-row">
           <label>Mot de passe</label>
           <div class="pwd-wrap">
-            <input type="password" id="pli-pwd" placeholder="••••••••" autocomplete="current-password" />
+            <input type="password" id="pli-pwd" placeholder="••••••••" autocomplete="current-password" aria-label="Mot de passe" />
             <button type="button" class="pwd-toggle" onclick="togglePwdVisibility('pli-pwd', this)" aria-label="Afficher le mot de passe">
               <span class="pwd-eye-icon">👁</span>
             </button>
@@ -26305,7 +26305,7 @@ function adminRenderPanel(sessionId, media, pilots) {
       </div>
       <div class="amp-field">
         <label class="amp-label">Type</label>
-        <select class="amp-select" id="amp-type-${sessionId}">
+        <select class="amp-select" id="amp-type-${sessionId}" aria-label="Type">
           <option value="photo">◳ Photo</option>
           <option value="video_embedded">▶ Vidéo embarquée</option>
           <option value="video_drone">⛟ Drone</option>
@@ -26314,19 +26314,19 @@ function adminRenderPanel(sessionId, media, pilots) {
       </div>
       <div class="amp-field">
         <label class="amp-label">Pilote ciblé</label>
-        <select class="amp-select" id="amp-pilot-${sessionId}">${pilotOptions}</select>
+        <select class="amp-select" id="amp-pilot-${sessionId}" aria-label="Pilote ciblé">${pilotOptions}</select>
       </div>
       <div class="amp-field full">
         <label class="amp-label">Titre</label>
-        <input class="amp-input" id="amp-title-${sessionId}" placeholder="ex : Photos session 12 mai" />
+        <input class="amp-input" id="amp-title-${sessionId}" placeholder="ex : Photos session 12 mai" aria-label="ex : Photos session 12 mai" />
       </div>
       <div class="amp-field full">
         <label class="amp-label">Fichier (recommandé — nécessite un pilote ciblé)</label>
-        <input class="amp-input" id="amp-file-${sessionId}" type="file" accept="image/*,video/*,application/pdf" style="padding:8px;" />
+        <input class="amp-input" id="amp-file-${sessionId}" type="file" accept="image/*,video/*,application/pdf" style="padding:8px;" aria-label="Fichier (recommandé — nécessite un pilote ciblé)" />
       </div>
       <div class="amp-field full">
         <label class="amp-label">…ou lien externe (URL complète)</label>
-        <input class="amp-input" id="amp-url-${sessionId}" type="url" placeholder="https://…" />
+        <input class="amp-input" id="amp-url-${sessionId}" type="url" placeholder="https://…" aria-label="https://…" />
       </div>
       <div class="amp-field full" style="margin-top:4px;">
         <button class="btn btn-primary btn-sm" onclick="adminSaveMedia('${sessionId}')"><span>Enregistrer le média</span></button>
@@ -26869,7 +26869,7 @@ function show2FAEnrollModal(data) {
       </div>
       
       <div class="form-row full" style="margin-bottom:16px;">
-        <label>Entrer le code à 6 chiffres généré</label>
+        <label for="twofa-code">Entrer le code à 6 chiffres généré</label>
         <input type="text" id="twofa-code" maxlength="6" placeholder="000000" 
                style="background:rgba(0,0,0,0.4);border:1px solid var(--bento-border);color:var(--cream);padding:14px 18px;border-radius:6px;font-family:var(--mono);font-size:24px;text-align:center;letter-spacing:0.3em;" />
       </div>
@@ -30789,7 +30789,7 @@ async function ceLoadBookings(uid) {
       </div>` : ''}
       ${b.status === 'accepted' ? `<div style="margin-top:8px;"><button class="btn btn-sm" onclick="ceRespondBooking('${b.id}','completed')"><span>Marquer réalisée</span></button></div>` : ''}
       ${(b.status === 'accepted' || b.status === 'completed') ? `<div style="display:flex;gap:8px;margin-top:8px;">
-        <input id="ceNote-${b.id}" class="form-input" style="flex:1;font-size:12px;" placeholder="Retour de visite — points travaillés, suite proposée…" maxlength="600" value="${escapeHtml(b.coach_note || '')}">
+        <input id="ceNote-${b.id}" class="form-input" style="flex:1;font-size:12px;" placeholder="Retour de visite — points travaillés, suite proposée…" maxlength="600" value="${escapeHtml(b.coach_note || '')}" aria-label="Retour de visite — points travaillés, suite proposée…">
         <button class="btn btn-sm" style="padding:6px 12px;font-size:9px;" onclick="ceSaveBookingNote('${b.id}')"><span>Noter</span></button>
       </div>` : ''}
     </div>`).join('');
@@ -31118,6 +31118,19 @@ window.copierLienEcurie = async function() {
 };
 
 /* — Côté invité : capter le code à l'arrivée — */
+
+/* — Mouvement réduit : les animations SMIL des SVG échappent aux media queries
+   CSS. Si le système demande moins de mouvement, on les fige. — */
+function respecterMouvementReduit() {
+  let veut = false;
+  try { veut = window.matchMedia('(prefers-reduced-motion: reduce)').matches; } catch (_) { return; }
+  if (!veut) return;
+  document.querySelectorAll('svg').forEach(svg => {
+    try { if (typeof svg.pauseAnimations === 'function') svg.pauseAnimations(); } catch (_) {}
+  });
+}
+window.respecterMouvementReduit = respecterMouvementReduit;
+
 function capterDatePartagee() {
   let id = null;
   try { id = new URLSearchParams(location.search).get('session'); } catch (_) { return; }
@@ -31245,7 +31258,7 @@ window.bkChargerBlocEcurie = async function() {
         '. Envoyez-leur cette date — chacun réserve sa place, vous roulez le même jour.</p>' +
       '<div style="display:flex;gap:10px;flex-wrap:wrap;align-items:center;">' +
         '<button class="btn btn-sm btn-primary" onclick="bkInviterEcurie()"><span>Inviter mon écurie sur cette date</span></button>' +
-        '<input type="text" id="bkEcurieLien" readonly onclick="this.select()" style="display:none;background:rgba(0,0,0,0.4);border:1px solid var(--bento-border);color:var(--cream);padding:9px 12px;font-family:var(--mono);font-size:12px;flex:1 1 300px;min-width:0;" />' +
+        '<input type="text" id="bkEcurieLien" readonly onclick="this.select()" style="display:none;background:rgba(0,0,0,0.4);border:1px solid var(--bento-border);color:var(--cream);padding:9px 12px;font-family:var(--mono);font-size:12px;flex:1 1 300px;min-width:0;" aria-label="Lien vers cette date, à partager à votre écurie" />' +
       '</div>';
     zone.style.display = '';
   } catch (e) { console.warn('[Écurie]', e); zone.style.display = 'none'; }
@@ -32488,7 +32501,7 @@ function renderDemandeCard(d) {
   let actions = '';
   if (d.statut === 'en_attente') {
     actions = `
-      <textarea class="dmc-note-input" id="dnote-${d.id}" rows="2" placeholder="Note interne (facultatif, jointe à l'email en cas de refus)"></textarea>
+      <textarea class="dmc-note-input" id="dnote-${d.id}" rows="2" placeholder="Note interne (facultatif, jointe à l'email en cas de refus)" aria-label="Note interne (facultatif, jointe à l'email en cas de refus)"></textarea>
       <div class="dmc-actions">
         <button class="btn btn-primary btn-sm" onclick="adminDecideDemande('${d.id}','accept')"><span>Accepter &amp; créer le compte</span></button>
         <button class="btn btn-sm" onclick="adminDecideDemande('${d.id}','reject')"><span>Refuser</span></button>
@@ -37786,7 +37799,7 @@ async function pavRegieStart() {
     st.innerHTML = '<div class="pav-tool-head">' + PAV_INSIGNE + '<span class="pav-tool-titre">Régie · Pavillon</span><span class="pav-tool-sous">' + pavEsc((PAV.circuit && PAV.circuit.name) || '') + '</span></div>' +
       '<div class="pav-tool-section"><div class="pav-coltitre">État piste</div><div class="pav-btn-row">' +
       ['ouverte', 'pause', 'fermee', 'veille'].map(e => '<button class="pav-btn' + (state.etat === e ? ' pav-actif' : '') + '" data-etat="' + e + '">' + (e === 'fermee' ? 'Fermée' : e.charAt(0).toUpperCase() + e.slice(1)) + '</button>').join('') +
-      '</div><input class="pav-input" id="pavRegieMsg" style="margin-top:12px;" maxlength="120" placeholder="Message optionnel (ex. Reprise 13:30)" value="' + pavEsc(state.message || '') + '"></div>' +
+      '</div><input class="pav-input" id="pavRegieMsg" style="margin-top:12px;" maxlength="120" placeholder="Message optionnel (ex. Reprise 13:30)" value="' + pavEsc(state.message || '') + '" aria-label="Message optionnel (ex. Reprise 13:30)"></div>' +
       '<div class="pav-tool-section"><div class="pav-coltitre">Drapeau — relais déclaratif</div><div class="pav-btn-row">' +
       '<button class="pav-btn pav-jaune-btn' + (state.drapeau === 'jaune' ? ' pav-actif' : '') + (PAV.regie.pending === 'jaune' ? ' pav-confirm' : '') + '" data-drapeau="jaune">' + (PAV.regie.pending === 'jaune' ? 'Confirmer jaune' : 'Jaune') + '</button>' +
       '<button class="pav-btn pav-rouge-btn' + (state.drapeau === 'rouge' ? ' pav-actif' : '') + (PAV.regie.pending === 'rouge' ? ' pav-confirm' : '') + '" data-drapeau="rouge">' + (PAV.regie.pending === 'rouge' ? 'Confirmer rouge' : 'Rouge') + '</button>' +
@@ -37866,8 +37879,8 @@ async function pavAdminStart() {
     }
     st.innerHTML = '<div class="pav-tool-head">' + PAV_INSIGNE + '<span class="pav-tool-titre">Photos · Pavillon</span><span class="pav-tool-sous">Diffusion : veille / pause / fermée<br>Jamais en piste ouverte</span></div>' +
       '<div class="pav-tool-section"><div class="pav-coltitre">Téléverser</div>' +
-      '<input type="file" id="pavPhotoFile" class="pav-input" accept="image/jpeg,image/webp">' +
-      '<input type="text" id="pavPhotoLegende" class="pav-input" style="margin-top:10px;" maxlength="120" placeholder="Légende (optionnelle)">' +
+      '<input type="file" id="pavPhotoFile" class="pav-input" accept="image/jpeg,image/webp" aria-label="Photo du Pavillon">' +
+      '<input type="text" id="pavPhotoLegende" class="pav-input" style="margin-top:10px;" maxlength="120" placeholder="Légende (optionnelle)" aria-label="Légende (optionnelle)">' +
       '<div class="pav-btn-row" style="margin-top:12px;"><button class="pav-btn" id="pavPhotoUp">Téléverser</button></div>' +
       '<div class="pav-note">JPG / WebP · 5 Mo max · compressé à 1920 px avant envoi.<br>Écriture verrouillée tant que la policy staff n’est pas appliquée (TODO_ARBITRAGE: rôle staff).</div></div>' +
       '<div class="pav-tool-section"><div class="pav-coltitre">Photos diffusées</div>' + grid + '</div>';
@@ -37989,6 +38002,7 @@ window.addEventListener('DOMContentLoaded', () => {
   safe('updateSummary', () => updateSummary());
   safe('capterInvitationEcurie', () => capterInvitationEcurie());
   safe('capterDatePartagee', () => capterDatePartagee());
+  safe('respecterMouvementReduit', () => respecterMouvementReduit());
 
   // body.loaded conservé (états de chargement CSS). Le force-visible des .reveal
   // est RETIRÉ : les reveals sont désormais pilotés par le scroll (setupReveal),

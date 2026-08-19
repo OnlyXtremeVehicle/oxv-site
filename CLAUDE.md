@@ -19,7 +19,7 @@ OXV n'est pas agréé coaching. Le site et l'app **restituent des faits** ; ils 
 - Interdit dans tout contenu à destination du pilote : formulations causales ou prescriptives (« vous devriez freiner plus tard », « votre problème vient de », « améliorez », « corrigez »).
 - Autorisé : constat factuel, mesure, comparaison neutre (« vitesse d'entrée virage 3 : 112 km/h · référence session : 118 km/h »).
 - Toute figure de « coach IA », « OXV Coach », « débrief par IA » côté pilote est **supprimée**. La formulation de référence : *restitution factuelle de la donnée de roulage*. On affiche la donnée, simplement présentée — rien d'autre.
-- La page **coach partenaire** (coach humain diplômé BPJEPS, licence 750 €/saison) est légitime et conservée : le coaching y est exercé par le coach sous sa propre responsabilité, jamais par OXV. Son encadré « Cadre légal » ne doit jamais être affaibli.
+- La page **coach partenaire** (coach humain diplômé BPJEPS, Espace Coach 550 € TTC/saison) est légitime et conservée : le coaching y est exercé par le coach sous sa propre responsabilité, jamais par OXV. Son encadré « Cadre légal » ne doit jamais être affaibli.
 
 ### 2.2 Politique multi-circuit
 OXV est une plateforme multi-circuit basée à Bordeaux. **Le Circuit de Haute-Saintonge (tracé Beltoise) n'appartient pas à OXV** : il n'est développé que sur sa page dédiée, jamais ailleurs.
@@ -28,19 +28,31 @@ OXV est une plateforme multi-circuit basée à Bordeaux. **Le Circuit de Haute-S
 - Ne jamais inventer d'autres circuits partenaires : les emplacements non confirmés s'affichent « Sélection en cours ».
 
 ### 2.3 Vocabulaire gelé
-- **QDI** : 64 occurrences sur le site (recompte réel du 2026-07-04 — l'ancien « ~136 » datait d'une version antérieure). Vocabulaire figé (QDI, marges, 7-segments). **Aucun renommage** avant données réelles de roulage. (Le QDI est abandonné côté app pilote — cela ne concerne pas le site pour l'instant.)
+- **QDI** : 79 occurrences sur le site (recompte du 2026-08-18 ; 64 au 2026-07-04, l'ancien « ~136 » datait d'une version encore antérieure). Le compte **ne doit pas baisser** — il sert de garde-fou contre une suppression accidentelle de vocabulaire, pas de cible. Vocabulaire figé (QDI, marges, 7-segments). **Aucun renommage** avant données réelles de roulage. (Le QDI est abandonné côté app pilote — cela ne concerne pas le site pour l'instant.)
 - **Couleurs piliers QDI intouchables** : Trajectoire `#60A5FA` · Fluidité `#FFB703` · Freinage `#E63946` · Accélération `#4ADE80` · Régularité `#C084FC`. Ce sont des couleurs de DONNÉE, jamais de fond.
 - **Faucon** : totem strictement interne. Jamais dans le contenu client (pas de « Falcon Eye », « Dive Mode », etc.). Vocabulaire HUD autorisé : Cap, Trajectoire, Anticipation, Visée, Plongée.
 
-### 2.4 Tarifs — grille canonique (modèle v9, validée)
-- **Access : 390 € TTC** (HT interne 325 €) · **Signature : 690 € TTC** (HT interne 575 €) · **Heritage : 2 490 € TTC** (HT interne 2 075 €)
-- **B2B : Standard 13 000 € HT · Signature 17 000 € HT** — grille strictement INTERNE : sur le site, toujours « sur devis », aucun prix B2B affiché.
-- **Licence coach partenaire : 750 € / saison**
+### 2.4 Tarifs — grille canonique (modèle financier v16 du 2026-08-13)
+- **Access : 390 € TTC** (HT interne 325 €) · **première session Access : 250 € TTC** (HT 208,33 €) — tarif de découverte, **une seule fois par pilote**, déclenché au premier engagement (et non à la première session effectuée).
+- **Signature : 690 € TTC** (HT interne 575 €) · **Heritage : 2 490 € TTC** (HT interne 2 075 €), soit 622,50 € la session.
+- **B2B : Standard 13 000 € HT · Signature 18 500 € HT** — grille strictement INTERNE : sur le site, toujours « sur devis », aucun prix B2B affiché. *(La v9 disait 17 000 € pour la Signature ; le modèle v16 dit 18 500 € — écart à confirmer par le fondateur.)*
+- **Espace Coach : 550 € TTC / saison**, 0 % de commission sur les prestations du coach. ⚠️ Ne pas confondre avec les **750 € TTC / an du Partenaire Application** : la confusion entre les deux a fait publier 750 € comme licence coach jusqu'au 2026-08-18, JSON-LD compris.
+- **L'application OXV Mirror est comprise dans chaque offre, 0 € pour le pilote** (décision fondateur 2026-08-18, conforme au dossier p. 23). Aucun abonnement pilote. **Aucun prix ne doit apparaître sur la page application.** Le rapport QDI est remis à chaque pilote sans condition — toute formulation « avec l'abonnement » est un reliquat à supprimer.
+- **Partenaires** : les quatre formats sont décrits sans montant sur le site public ; le contact se fait par courriel à contact@oxvehicle.fr. Les fourchettes du dossier restent internes.
 - Décisions actées : **Heritage = pack de 4 sessions Signature** (pas de mix demi/pleines) · **capacité 20 pilotes max par session, Access inclus** (la valeur 18 du BP v9 est obsolète).
+- **Formats** : Access = **l'après-midi du lundi (14h–18h), quatre relais** (décision fondateur 2026-08-18 — le créneau du matin est supprimé, CGV comprises). Signature = journée complète du vendredi, six relais.
+- **Heritage a perdu un argument** le 2026-08-18 : « un an d'app Mirror inclus » est devenu vide dès lors que l'application est gratuite pour tous. Il reste les quatre sessions, l'économie de 270 €, la priorité de réservation et l'accès anticipé N+1. **Un remplaçant éventuel est une décision commerciale non prise.**
 - Toute autre valeur trouvée dans le repo (README 350/590/890/1 290, anciennes versions) est obsolète : à remplacer par la grille ci-dessus.
 - **Promotion** : aucun prix validé dans la grille v9. Ne pas afficher de prix Promotion sans instruction explicite.
 - Affichage : la grille B2C est entièrement TTC — mention « TTC » à côté de chaque prix. Le B2B s'exprime en HT. Toute occurrence « 390 € HT » sur le site ou dans les documents est une erreur à corriger en « 390 € TTC ».
 - BDD : valeur Heritage = **249 000 centimes** (pas 229 000). Correction à appliquer avant l'ouverture des paiements (~janvier 2027), sur instruction.
+
+### 2.4 bis — Écuries et contrôle sonore (décisions du 2026-08-18)
+- **Écurie** = une équipe créée par un membre pour **réserver ensemble**. On y entre **par lien d'invitation** : l'invité ouvre le lien, crée son compte, et se retrouve rattaché — sans code à recopier. Une mention nommée (« Vous faites partie de l'écurie X ») lui est transmise et lui ouvre les fonctionnalités. La réservation propose ensuite d'inviter son écurie sur la date choisie.
+  - Le modèle « une écurie par marque, adhésion automatique » du dossier d'août est **abandonné**.
+  - Mécanique : RPC `oxv_get_my_referral_code` / `oxv_redeem_referral` / `oxv_name_my_crew` (SECURITY DEFINER, aucune écriture directe). Liens `/?ecurie=CODE` et `/?session=ID`, captés au boot, paramètre retiré de l'URL, rattachement sur `SIGNED_IN`.
+  - **Les noms des autres membres ne sont pas lisibles côté client** (RLS sur `users`) : on annonce un effectif, jamais une liste.
+- **Décibels** : le pilote ne **certifie** pas la conformité sonore de son véhicule — il **reconnaît** qu'un contrôle a lieu sur place et qu'un dépassement de la norme du circuit (98 dB, tolérance 3 dB) entraîne le refus d'accès à la piste, sans remboursement. La norme est **attribuée au circuit**, jamais assertée par OXV.
 
 ### 2.5 Ton éditorial
 - Vouvoiement strict. Minimalisme sec façon Ferrari. Pas d'emojis. Pas de superlatifs creux.
@@ -51,6 +63,9 @@ OXV est une plateforme multi-circuit basée à Bordeaux. **Le Circuit de Haute-S
 - **Pas de refactoring spéculatif.** Modifications ciblées sur des éléments validés uniquement. La base est bonne : on la développe, on ne la refond pas.
 - Avant de modifier une edge function : l'inspecter (`get_edge_function` via MCP Supabase ou lecture du dossier `supabase/functions/`). Les fonctions marquées « ACTIVE » peuvent être des templates non implémentés.
 - Toute incohérence structurelle détectée (contradiction de contenu, de prix, de logique) : **la signaler avant de produire**, ne pas la résoudre silencieusement.
+- **Un script de correction doit écrire son fichier même s'il échoue en route.** Une assertion qui lève avant le `write` fait perdre tous les remplacements déjà annoncés « ok » en console. Vérifier le rendu, jamais les logs seuls.
+- **Après tout retrait de prix ou de mention, vérifier aussi le JSON-LD et `llms.txt`.** Une page peut être propre à l'œil et continuer d'annoncer un prix aux moteurs de recherche.
+- **Tout schéma ou carte SVG se mesure à 375 px de large**, pas à l'œil sur grand écran : un viewBox large y écrase ses libellés à deux ou trois pixels. Reprendre les classes `.oxv-schema-wrap` et `.oxv-schema`.
 - Me challenger, pas me valider. Communication directe. Décisions structurantes via prompts de confirmation explicites.
 - Logique d'économie unitaire : l'unité de marge est le jour de piste loué, pas l'offre individuelle.
 
@@ -67,8 +82,18 @@ OXV est une plateforme multi-circuit basée à Bordeaux. **Le Circuit de Haute-S
 # Doctrine miroir — ne doit retourner AUCUNE occurrence côté contenu pilote
 grep -n -i "coach ia\|oxv coach\|coaching ia\|par ia\|falcon\|dive mode" index.html
 
-# QDI — le compte ne doit pas baisser sans instruction explicite
+# QDI — le compte ne doit pas baisser sans instruction explicite (79 au 2026-08-18)
 grep -c "QDI" index.html
+
+# Aucun tarif pilote pour l'application, aucune trace de l'ancienne licence coach
+grep -n "15 €/mois\|150 €/an\|750 €\|avec l'abonnement" index.html
+# (« sans abonnement pilote » est la formulation correcte : ne pas la confondre avec un reliquat)
+
+# Chiffres du tracé hors de sa page dédiée (§2.2) — doit rester vide
+grep -n "2,2 km" index.html
+
+# Créneau Access du matin — supprimé, doit rester vide
+grep -n "9h-13h" index.html
 ```
 
 Exception : la page coach partenaire humain et son SEO peuvent contenir « coach » — jamais associé à une IA ni à OXV comme opérateur du coaching.
