@@ -948,7 +948,19 @@ h1, h2, h3, h4, h5 {
 .signature:first-child { border-top: 0; }
 @media (min-width: 880px) {
   .signature { border-top: 0; border-left: 1px solid var(--cream-line); padding: 64px 40px; }
-  .signature:nth-child(3n+1) { border-left: 0; }
+  .signature:first-child { border-left: 0; }
+}
+/* — Variante quatre éléments : 2×2 puis quatre colonnes en très large —
+   la grille de base (3 colonnes) laisse le quatrième élément orphelin. */
+@media (min-width: 880px) and (max-width: 1199px) {
+  .signatures--quatre { grid-template-columns: repeat(2, 1fr); }
+  .signatures--quatre .signature { padding: 48px 36px; }
+  .signatures--quatre .signature:nth-child(2n+1) { border-left: 0; }
+  .signatures--quatre .signature:nth-child(n+3) { border-top: 1px solid var(--cream-line); }
+}
+@media (min-width: 1200px) {
+  .signatures--quatre { grid-template-columns: repeat(4, 1fr); }
+  .signatures--quatre .signature { padding: 56px 28px; }
 }
 .signature-num {
   font-family: var(--display);
@@ -15121,7 +15133,7 @@ body.pav-tv .nav, body.pav-tv footer, body.pav-tv .cookie, body.pav-tv .founding
         </p>
       </div>
 
-      <div class="signatures reveal-stagger" style="border-top-color: var(--cream-line);">
+      <div class="signatures signatures--quatre reveal-stagger" style="border-top-color: var(--cream-line);">
         <div class="signature">
           <div class="signature-num">T1</div>
           <h3 class="signature-title">Le pif-paf, l'<em>épingle</em></h3>
@@ -15208,7 +15220,7 @@ body.pav-tv .nav, body.pav-tv footer, body.pav-tv .cookie, body.pav-tv .founding
         </p>
       </div>
 
-      <div class="signatures reveal-stagger" style="border-bottom:0;">
+      <div class="signatures signatures--quatre reveal-stagger" style="border-bottom:0;">
         <div class="signature">
           <div class="signature-num">◎</div>
           <h3 class="signature-title">Dix-sept <em>caméras</em></h3>
@@ -21394,7 +21406,7 @@ body.pav-tv .nav, body.pav-tv footer, body.pav-tv .cookie, body.pav-tv .founding
         <h2 class="section-title" style="margin-top:18px;margin-bottom:10px;">Le même déroulé,<br/>à chaque <em>journée</em>.</h2>
         <p style="font-family:var(--sans);font-size:15px;line-height:1.7;color:var(--cream-mute);max-width:660px;margin:0 0 24px;">Quatre étapes, dans cet ordre, avant que la première roue ne touche la piste.</p>
       </div>
-      <div class="signatures reveal-stagger" style="margin-top:8px;">
+      <div class="signatures signatures--quatre reveal-stagger" style="margin-top:8px;">
         <div class="signature">
           <div class="signature-num">01</div>
           <h3 class="signature-title">L'<em>arrivée</em></h3>
@@ -21422,7 +21434,7 @@ body.pav-tv .nav, body.pav-tv footer, body.pav-tv .cookie, body.pav-tv .founding
         <div class="kicker">— Contrôlé au briefing</div>
         <h2 class="section-title" style="margin-top:18px;margin-bottom:10px;">Le pilote,<br/>avant de <em>rouler</em>.</h2>
         <p style="font-family:var(--sans);font-size:15px;line-height:1.7;color:var(--cream-mute);max-width:660px;margin:0 0 24px;">Quatre points vérifiés pilote par pilote. Aucun n'est déclaré sur parole.</p>
-        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px;">
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(400px,100%),1fr));gap:16px;">
           <div class="bento" style="padding:26px;">
             <div style="font-family:var(--mono);font-size:10px;letter-spacing:0.22em;text-transform:uppercase;color:var(--gold);margin-bottom:8px;">La charte du club</div>
             <p style="font-family:var(--sans);font-size:14px;line-height:1.6;color:var(--cream-mute);margin:0;">Acceptée à l'inscription — l'esprit du club avant la piste.</p>
