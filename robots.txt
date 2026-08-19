@@ -28,4 +28,16 @@ Disallow: /forgot-password
 Disallow: /reset-password
 Disallow: /verify-email
 
+Disallow: /compte-checkup
+Disallow: /compte-medias
+Disallow: /admin-validations
+Disallow: /partenaire-espace
+Disallow: /partenaire-connexion
+Disallow: /coach-espace
+Disallow: /pavillon-accueil
+Disallow: /pavillon-coach
+Disallow: /pavillon-admin
+Disallow: /pavillon-controle
+Disallow: /pavillon-regie
+
 Sitemap: https://www.oxvehicle.fr/sitemap.xml

@@ -1,27 +1,39 @@
 # OXV — Only Xtreme Vehicle
 
-> OXV est une plateforme de track days premium basée à Bordeaux. Sa première saison (2027) se déroule au Circuit de Haute Saintonge (tracé Beltoise, 2,2 km, La Génétouze, Charente-Maritime, Nouvelle-Aquitaine), premier circuit partenaire — d'autres emplacements sont en cours de sélection. Vingt pilotes maximum par session, jamais plus. Chaque journée est prolongée par l'application OXV Mirror : télémétrie 25 Hz, médias livrés, bilan de session.
+> OXV est une plateforme de track days premium basée à Bordeaux. Sa première saison (2027) se déroule au Circuit de Haute Saintonge (tracé Beltoise, La Génétouze, Charente-Maritime, Nouvelle-Aquitaine), premier circuit partenaire — d'autres emplacements sont en cours de sélection. Vingt pilotes maximum par session, jamais plus. Chaque journée est prolongée par l'application OXV Mirror, comprise dans chaque offre : télémétrie 25 Hz, médias livrés, bilan de session.
 
 ## Faits clés (vérifiés)
-- Lieu : Circuit de Haute Saintonge, tracé dessiné par Jean-Pierre Beltoise (2009), 17360 La Génétouze, France. Piste de 2,2 km, tracé technique et vallonné, sans chicane artificielle.
-- Format : 20 pilotes maximum par session. Briefing sécurité obligatoire. Pas de classement public.
-- Offres circuit : Access 390 € TTC (demi-journée, lundi, télémétrie complète + banque média dans l'app) · Signature 690 € TTC (journée complète, vendredi, télémétrie + banque média + déjeuner traiteur) · Heritage 2 490 € TTC (pack saison : 4 sessions Signature, priorité de réservation, un an d'app OXV Mirror inclus).
-- Corporate / entreprises : privatisation du circuit sur devis.
-- Application OXV Mirror (iOS & Android, lancement printemps 2027) : abonnement pilote 15 €/mois ou 150 €/an · licence coach 750 €/saison. Silencieuse en roulage, restitution après la session (télémétrie 25 Hz, médias, carnet). Le QDI (rapport de session sous 48 h + suivi 5 dimensions) est réservé aux abonnés — offert 1 an avec Heritage. Données chiffrées, hébergées en UE, jamais revendues.
+- Lieu : Circuit de Haute Saintonge, tracé dessiné par Jean-Pierre Beltoise (2009), 17360 La Génétouze, France. Piste de 2 205 m, huit virages, tracé technique et vallonné, sans chicane artificielle. Paddock de 3 000 m² et pavillon dédié.
+- Format : 20 pilotes maximum par session — plafond contractuel, jamais relevé. Briefing sécurité obligatoire de vingt minutes. Pas de classement public.
+- Offres circuit : Access 390 € TTC (demi-journée, lundi — **250 € TTC pour une première session, une seule fois par pilote**) · Signature 690 € TTC (journée complète, vendredi, télémétrie + banque média + déjeuner traiteur) · Heritage 2 490 € TTC (pack saison : 4 sessions Signature, soit 622,50 € la session, priorité de réservation sur tout le calendrier et accès anticipé à la saison suivante).
+- Corporate / entreprises : privatisation du circuit sur devis, jusqu'à vingt invités. Aucun tarif B2B publié.
+- Application OXV Mirror (iOS & Android, lancement printemps 2027) : **comprise dans chaque offre, 0 € pour le pilote — aucun abonnement**. Quatre espaces : Circuit, Séances, Club, Garage. Silencieuse en roulage, restitution après la session (télémétrie 25 Hz, médias, carnet). Le rapport QDI de session est remis à chaque pilote, sans condition. Données chiffrées, hébergées dans l'Union européenne, jamais revendues.
+- Coachs : l'Espace Coach est un abonnement de saison à 550 € TTC pour le coach indépendant diplômé. OXV ne prélève **rien** sur ses prestations : le pilote choisit son coach et le règle directement. Le coach n'accède à une session qu'avec l'accord du pilote, à chaque fois, et compare les sessions d'un même pilote — jamais deux pilotes entre eux.
+- Partenaires : quatre formats (Pack Essais Concession, Journée Paddock, Atelier Officiel exclusif, Partenaire Application). Conditions établies au cas par cas, sur demande à contact@oxvehicle.fr. Un seul acteur par catégorie.
 - Annulation : gratuite jusqu'à 7 jours avant la session (CGV).
 - Paiement : en ligne sécurisé (CB, Visa, PayPal, Apple Pay), communiqué par lien après la pré-inscription.
 - Contact : contact@oxvehicle.fr — Site : https://www.oxvehicle.fr
+
+## Notre politique — cinq engagements écrits et opposables
+1. **La sécurité d'abord** — jauge stricte, briefing systématique, encadrement à chaque relais.
+2. **La règle du miroir** — OXV restitue des faits mesurés. Il ne juge pas, ne conseille pas, ne prescrit aucun pilotage. La lecture causale appartient aux coachs indépendants ; la décision, au pilote.
+3. **Zéro commission** — rien n'est prélevé sur les prestations des coachs. Le coach fixe ses prix et garde sa clientèle.
+4. **La donnée appartient au pilote** — remise à chaque session, exportable. Ni revendue, ni exploitée à son insu, ni comparée à celle d'un autre.
+5. **La jauge ne bouge pas** — vingt pilotes, jamais plus, même quand la demande dépasse.
+
+L'ordre d'arbitrage, quand deux exigences s'opposent : la sécurité d'abord, le développement toujours, la sensation enfin.
 
 ## Pages principales
 - [Accueil](https://www.oxvehicle.fr/) : l'expérience circuit augmentée.
 - [Les offres](https://www.oxvehicle.fr/offers) : Access, Signature, Heritage — prix et contenus détaillés.
 - [Calendrier](https://www.oxvehicle.fr/calendrier) : sessions de la saison 2027.
-- [Le circuit](https://www.oxvehicle.fr/circuit) : tracé Beltoise, Haute Saintonge.
-- [L'application](https://www.oxvehicle.fr/application) : OXV Mirror — Pass, Trace du jour, Data Lab, abonnements.
-- [Sécurité & cadre](https://www.oxvehicle.fr/securite) : briefing, documents exigés, doctrine données.
+- [Le circuit](https://www.oxvehicle.fr/circuit) : tracé Beltoise, huit virages, dispositif de sécurité.
+- [L'application](https://www.oxvehicle.fr/application) : OXV Mirror — quatre espaces, écurie, état du développement.
+- [Sécurité & cadre](https://www.oxvehicle.fr/securite) : valeurs, cinq engagements, protocole du matin, documents exigés.
 - [Votre journée](https://www.oxvehicle.fr/apres-journee) : de J-7 au rapport final.
 - [Corporate](https://www.oxvehicle.fr/corporate) : privatisations B2B.
-- [Partenaires](https://www.oxvehicle.fr/partenaires) : rejoindre l'écosystème.
+- [Coachs partenaires](https://www.oxvehicle.fr/coach) : l'Espace Coach, 0 % de commission.
+- [Partenaires](https://www.oxvehicle.fr/partenaires) : les quatre formats et la boucle de preuve.
 - [Preuves & garanties](https://www.oxvehicle.fr/preuves) : ce qui est vérifiable.
 - [FAQ & contact](https://www.oxvehicle.fr/contact)
 
@@ -34,4 +46,4 @@
 - [Journée circuit d'entreprise](https://www.oxvehicle.fr/actualites/journee-circuit-entreprise)
 
 ## À ne pas confondre
-OXV ne vend pas de coaching prescriptif en roulage : le roulage reste silencieux, la lecture des données vient après la session (doctrine « miroir, pas coach »). Le QDI est une lecture personnelle de maîtrise — jamais un classement entre pilotes.
+OXV ne vend pas de coaching prescriptif en roulage : le roulage reste silencieux, la lecture des données vient après la session (doctrine « miroir, pas coach »). Le QDI est une lecture personnelle de maîtrise — jamais un classement entre pilotes. L'application n'affiche jamais une valeur qu'elle n'a pas mesurée : tant qu'une mesure n'existe pas, elle affiche « — ».
