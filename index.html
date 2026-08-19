@@ -91,7 +91,7 @@
   "brand": { "@type": "Brand", "name": "OXV" },
   "url": "https://www.oxvehicle.fr/#offers",
   "offers": [
-    { "@type": "Offer", "name": "Access", "description": "Demi-journée le lundi · 20 pilotes max", "price": "390", "priceCurrency": "EUR", "availability": "https://schema.org/InStock", "url": "https://www.oxvehicle.fr/#offers" },
+    { "@type": "Offer", "name": "Access", "description": "Demi-journée le lundi après-midi · quatre relais · 20 pilotes max", "price": "390", "priceCurrency": "EUR", "availability": "https://schema.org/InStock", "url": "https://www.oxvehicle.fr/#offers" },
     { "@type": "Offer", "name": "Signature", "description": "Journée complète le vendredi · télémétrie 25 Hz · restitution data · média · déjeuner traiteur", "price": "690", "priceCurrency": "EUR", "availability": "https://schema.org/InStock", "url": "https://www.oxvehicle.fr/#offers" },
     { "@type": "Offer", "name": "Heritage", "description": "4 sessions Signature au choix sur la saison · priorité de réservation", "price": "2490", "priceCurrency": "EUR", "availability": "https://schema.org/InStock", "url": "https://www.oxvehicle.fr/#offers" }
   ]
@@ -14004,7 +14004,7 @@ body.pav-tv .nav, body.pav-tv footer, body.pav-tv .cookie, body.pav-tv .founding
             <div class="home-journey-card-tag">— La piste, sans filtre</div>
             <h3 class="home-journey-card-name"><em>Access</em></h3>
             <p class="home-journey-card-text">
-              Demi-journée le lundi. 20 pilotes maximum. Briefing premium, café d'accueil, banque photo &amp; vidéo livrée dans l'app. Le circuit dans sa forme la plus pure, pour 390 € TTC — <strong style="color:var(--cream);">250 € TTC pour votre première session</strong>.
+              L'après-midi du lundi, quatre relais. 20 pilotes maximum. Briefing premium, café d'accueil, banque photo &amp; vidéo livrée dans l'app. Le circuit dans sa forme la plus pure, pour 390 € TTC — <strong style="color:var(--cream);">250 € TTC pour votre première session</strong>.
             </p>
             <button class="home-journey-card-link" onclick="goTo('offers')">Découvrir →</button>
           </div>
@@ -14314,10 +14314,10 @@ body.pav-tv .nav, body.pav-tv footer, body.pav-tv .cookie, body.pav-tv .founding
           <div class="offer-tier">N° 01 · Access</div>
           <h3 class="offer-name">Access<em>La piste, sans filtre</em></h3>
           <p class="offer-tagline">
-            Demi-journée le lundi. Le circuit dans sa forme la plus pure, pour une première rencontre ou un format court entre deux sessions complètes.
+            L'après-midi du lundi, quatre relais encadrés. Le circuit dans sa forme la plus pure, pour une première rencontre ou un format court entre deux sessions complètes.
           </p>
           <ul class="offer-meta">
-            <li><span>Format</span> Demi-journée · lundi matin (9h-13h) ou après-midi (14h-18h)</li>
+            <li><span>Format</span> Demi-journée · lundi après-midi (14h–18h) · quatre relais</li>
             <li><span>Capacité</span> 20 pilotes maximum par session</li>
           </ul>
           <div class="offer-divider"></div>
@@ -15141,7 +15141,7 @@ body.pav-tv .nav, body.pav-tv footer, body.pav-tv .cookie, body.pav-tv .founding
           <div class="signature-num">▲</div>
           <h3 class="signature-title">Bruit · 98 dB <em>+ 3</em></h3>
           <p class="signature-text">
-            Norme circuit, mesure à 75 % du régime moteur. Tolérance 3 dB. Véhicule refusé en cas de dépassement — nous vous le signalons à l'inscription si possible.
+            Norme du Circuit de Haute Saintonge, mesurée à 75 % du régime moteur, tolérance 3 dB. Le contrôle a lieu à l'accueil : au-dessus de la norme, l'accès à la piste est refusé. Nous vous le signalons à l'inscription quand c'est possible — mais c'est la mesure du jour qui fait foi.
           </p>
         </div>
         <div class="signature">
@@ -15743,7 +15743,7 @@ body.pav-tv .nav, body.pav-tv footer, body.pav-tv .cookie, body.pav-tv .founding
       <div class="page-hero-eyebrow">N° ⊟ · Saison 2027</div>
       <h1 class="page-hero-title">Le <em>calendrier</em>.</h1>
       <p class="page-hero-lede">
-        Lundis demi-journée · offre Access. Vendredis journée complète · offres Signature &amp; Heritage. Vingt pilotes par session.
+        Lundis après-midi · offre Access. Vendredis journée complète · offres Signature &amp; Heritage. Vingt pilotes par session.
       </p>
     </div>
   </section>
@@ -15754,7 +15754,7 @@ body.pav-tv .nav, body.pav-tv footer, body.pav-tv .cookie, body.pav-tv .founding
       <!-- Filtres par offre (Lot F, Q2) -->
       <div id="cal-offer-filters" style="display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 12px;">
         <button class="admin-filter active" data-offer="all" onclick="setPublicCalOffer('all', this)">Toutes les offres</button>
-        <button class="admin-filter" data-offer="access" onclick="setPublicCalOffer('access', this)">Access · lundi</button>
+        <button class="admin-filter" data-offer="access" onclick="setPublicCalOffer('access', this)">Access · lundi après-midi</button>
         <button class="admin-filter" data-offer="signature" onclick="setPublicCalOffer('signature', this)">Signature · vendredi</button>
       </div>
       <!-- Filtres par mois -->
@@ -16334,6 +16334,12 @@ body.pav-tv .nav, body.pav-tv footer, body.pav-tv .cookie, body.pav-tv .founding
 
 <!-- ============ AUTH : LOGIN ============ -->
 <div class="page" id="page-login">
+  <div id="crewInviteBanner" style="display:none;background:rgba(216,15,31,0.10);border-bottom:1px solid rgba(216,15,31,0.35);padding:14px 0;">
+    <div class="wrap" style="display:flex;gap:14px;align-items:center;flex-wrap:wrap;justify-content:center;text-align:center;">
+      <span style="font-family:var(--mono);font-size:10px;letter-spacing:0.2em;text-transform:uppercase;color:var(--oxv-red);">Invitation d'écurie</span>
+      <span style="font-family:var(--sans);font-size:14px;color:var(--cream);">Connectez-vous ou créez votre compte : vous rejoindrez l'écurie qui vous a invité.</span>
+    </div>
+  </div>
 
   <div class="auth-wrap">
     <!-- Côté éditorial gauche -->
@@ -17915,11 +17921,19 @@ body.pav-tv .nav, body.pav-tv footer, body.pav-tv .cookie, body.pav-tv .founding
         <div class="pref-section-title">Mon écurie &amp; parrainage</div>
         <div class="pref-row">
           <div class="pref-row-info" style="width:100%;">
-            <div class="pref-row-title">Parrainez, construisez votre écurie</div>
-            <div class="pref-row-desc">Pas de réduction chez OXV : le parrainage construit une <strong style="color:var(--cream);">écurie</strong>. Vos filleuls rejoignent votre groupe, leur candidature passe en <strong style="color:var(--cream);">fast-track</strong>, et l'écurie grandit — <span style="font-family:var(--mono);font-size:11px;">5 membres : priorité de réservation collective · 10 : box dédié un jour de session · 20 : écurie nommée sur le plateau</span>. Seuls les filleuls ayant validé leur première session comptent.</div>
+            <div class="pref-row-title">Votre écurie — rouler et réserver ensemble</div>
+            <div class="pref-row-desc">Une écurie est une équipe qui réserve ses sessions ensemble. Partagez votre lien : la personne invitée crée son compte et rejoint votre écurie automatiquement. Pas de réduction chez OXV — une <strong style="color:var(--cream);">écurie</strong>. Vos filleuls rejoignent votre groupe, leur candidature passe en <strong style="color:var(--cream);">fast-track</strong>, et l'écurie grandit — <span style="font-family:var(--mono);font-size:11px;">5 membres : priorité de réservation collective · 10 : box dédié un jour de session · 20 : écurie nommée sur le plateau</span>. Seuls les filleuls ayant validé leur première session comptent.</div>
             <div id="crewCodeBox" style="margin-top:14px;display:flex;align-items:center;gap:12px;flex-wrap:wrap;">
-              <button class="btn btn-sm" id="crewCodeBtn" onclick="getMyReferralCode()"><span>Afficher mon code parrain</span></button>
+              <button class="btn btn-sm btn-primary" id="crewShareBtn" onclick="partagerInvitationEcurie()"><span>Partager mon invitation</span></button>
+              <button class="btn btn-sm" id="crewCodeBtn" onclick="getMyReferralCode()"><span>Afficher mon code</span></button>
               <code id="crewCodeValue" style="display:none;font-family:var(--mono);font-size:18px;letter-spacing:0.1em;color:var(--offwhite);background:rgba(0,0,0,0.4);border:1px solid var(--bento-border);padding:8px 14px;border-radius:8px;"></code>
+            </div>
+            <div id="crewShareBox" style="display:none;margin-top:12px;">
+              <div style="display:flex;gap:10px;flex-wrap:wrap;align-items:center;">
+                <input type="text" id="crewShareLink" readonly onclick="this.select()" style="background:rgba(0,0,0,0.4);border:1px solid var(--bento-border);color:var(--cream);padding:9px 12px;font-family:var(--mono);font-size:12px;flex:1 1 320px;min-width:0;" />
+                <button class="btn btn-sm" onclick="copierLienEcurie()"><span>Copier</span></button>
+              </div>
+              <p style="font-family:var(--sans);font-size:11px;color:var(--cream-faint);margin:8px 0 0;">Qui ouvre ce lien crée son compte et rejoint votre écurie — sans code à recopier.</p>
             </div>
             <div id="crewStatusBox" style="margin-top:16px;font-family:var(--sans);font-size:13px;line-height:1.7;color:var(--cream-mute);">Chargement de votre écurie…</div>
             <div id="crewJoinBox" style="display:none;margin-top:12px;">
@@ -18929,7 +18943,7 @@ body.pav-tv .nav, body.pav-tv footer, body.pav-tv .cookie, body.pav-tv .founding
             </label>
             <label class="form-radio">
               <input type="radio" name="newSessionFormat" value="half_day" onchange="updateAddSessionForm()" />
-              <span>Demi-journée (matin + après-midi)</span>
+              <span>Demi-journée (lundi après-midi, 14h–18h)</span>
             </label>
             <label class="form-radio">
               <input type="radio" name="newSessionFormat" value="b2b" onchange="updateAddSessionForm()" />
@@ -18952,7 +18966,7 @@ body.pav-tv .nav, body.pav-tv footer, body.pav-tv .cookie, body.pav-tv .founding
             </label>
           </div>
           <div class="form-hint">
-            Demi-journée du lundi → Access. Journée complète du vendredi → Signature (et Heritage, qui consomme une session Signature).
+            Demi-journée du lundi après-midi → Access. Journée complète du vendredi → Signature (et Heritage, qui consomme une session Signature).
           </div>
         </div>
 
@@ -20425,7 +20439,7 @@ body.pav-tv .nav, body.pav-tv footer, body.pav-tv .cookie, body.pav-tv .founding
             <div class="bk-req-body">
               <div class="bk-req-title">Norme bruit</div>
               <div class="bk-req-text">
-                Maximum <strong>98 dB · tolérance 3 dB</strong>. Mesure systématique à l'arrivée.
+                Norme du circuit : <strong>98 dB · tolérance 3 dB</strong>. Mesure systématique à l'arrivée — au-delà, l'accès à la piste est refusé.
                 Véhicule non conforme : refus à l'entrée, sans recours ni remboursement.
               </div>
             </div>
@@ -20466,7 +20480,7 @@ body.pav-tv .nav, body.pav-tv footer, body.pav-tv .cookie, body.pav-tv .founding
             <div class="bk-condition-text">
               <div class="bk-condition-title">Conformité véhicule</div>
               <div class="bk-condition-desc">
-                Je certifie que mon véhicule respecte la norme de bruit (≤ 98 dB +3) et les conditions techniques OXV. <a onclick="event.stopPropagation(); goTo('specs-techniques')">Voir les spécifications →</a>
+                Je sais qu'un contrôle sonore est effectué sur place et que, si mon véhicule dépasse la norme du circuit (98 dB, tolérance 3 dB), l'accès à la piste peut m'être refusé. <a onclick="event.stopPropagation(); goTo('specs-techniques')">Voir les spécifications →</a>
               </div>
             </div>
           </label>
@@ -20604,7 +20618,7 @@ body.pav-tv .nav, body.pav-tv footer, body.pav-tv .cookie, body.pav-tv .founding
         <h2>Article 2 — Offres et tarifs</h2>
         <p>OXV propose trois offres principales pour la saison 2027 :</p>
         <p>
-          · <strong>Access</strong> : 390 € TTC par pilote par session. La première session Access d'un pilote est facturée 250 € TTC ; ce tarif d'entrée s'applique une seule fois, à la première réservation, et n'est pas cumulable avec le pack Heritage. Format demi-journée le lundi (matin 9h-13h ou après-midi 14h-18h).<br/>
+          · <strong>Access</strong> : 390 € TTC par pilote par session. La première session Access d'un pilote est facturée 250 € TTC ; ce tarif d'entrée s'applique une seule fois, à la première réservation, et n'est pas cumulable avec le pack Heritage. Format demi-journée, le lundi après-midi (14h–18h), quatre relais encadrés.<br/>
           · <strong>Signature</strong> : 690 € TTC par pilote par session. Format journée complète le vendredi (9h-17h).<br/>
           · <strong>Heritage</strong> : 2 490 € TTC. Pack de 4 sessions Signature à utiliser sur la saison de souscription, avec priorité de réservation sur le calendrier. L'application OXV Mirror est comprise dans toutes les offres, sans surcoût.
         </p>
@@ -20628,7 +20642,7 @@ body.pav-tv .nav, body.pav-tv footer, body.pav-tv .cookie, body.pav-tv .founding
         <p>Lorsqu'une option d'assurance est proposée, elle relève du régime de renonciation propre aux contrats d'assurance conclus à distance (art. L112-2-1 du Code des assurances), exercé auprès de l'assureur.</p>
 
         <h2>Article 5 — Obligations du client</h2>
-        <p>Le client garantit la conformité du véhicule (contrôle technique à jour, pneumatiques conformes, niveau sonore inférieur à 98 dB + 3 dB), la validité de son permis de conduire et de son assurance circuit. Le client s'engage à respecter le règlement du circuit et les consignes de sécurité.</p>
+        <p>Le client garantit la conformité du véhicule (contrôle technique à jour, pneumatiques conformes) et reconnaît qu'un contrôle sonore est effectué à l'accueil selon la norme du circuit (98 dB, tolérance 3 dB), un dépassement entraînant le refus d'accès à la piste sans remboursement de la session, la validité de son permis de conduire et de son assurance circuit. Le client s'engage à respecter le règlement du circuit et les consignes de sécurité.</p>
 
         <h2>Article 6 — Responsabilité</h2>
         <p>OXV s'engage à fournir l'organisation, l'encadrement et l'accès au circuit avec diligence et dans le respect de ses obligations de sécurité. La pratique du pilotage sur circuit comporte des risques inhérents que le client déclare connaître et accepter ; les dommages causés à son propre véhicule de son seul fait relèvent du client et de son assurance. La présente clause ne limite en rien la responsabilité d'OXV en cas de faute, de manquement à ses obligations légales ou de dommage corporel qui lui serait imputable, ni les garanties légales dont bénéficie le consommateur, qui demeurent pleinement applicables.</p>
@@ -21549,7 +21563,7 @@ body.pav-tv .nav, body.pav-tv footer, body.pav-tv .cookie, body.pav-tv .founding
       <div class="reveal" style="margin-bottom:20px;">
         <div class="kicker">— Espace Club</div>
         <h2 class="section-title" style="font-size:clamp(28px,3.8vw,42px);margin:18px 0 10px;">Rouler à plusieurs.<br/>Sans quitter son <em>miroir</em>.</h2>
-        <p style="font-family:var(--sans);font-size:15px;line-height:1.7;color:var(--cream-mute);max-width:700px;margin:0 0 26px;">Trois usages : organiser une journée, partager ce qu'on en garde, rouler ensemble sur route. Le miroir reste individuel — la route, elle, se partage. Les écuries se construisent aujourd'hui par le parrainage, depuis vos <button class="link-inline" onclick="goTo('compte-preferences')" style="background:none;border:none;color:var(--oxv-red);cursor:pointer;padding:0;font:inherit;">préférences</button>.</p>
+        <p style="font-family:var(--sans);font-size:15px;line-height:1.7;color:var(--cream-mute);max-width:700px;margin:0 0 26px;">Une écurie est une équipe qui réserve ses sessions ensemble. Vous la créez, vous la nommez, et vous invitez par un lien : la personne qui l'ouvre crée son compte et se retrouve dans votre écurie, sans code à recopier. Trois usages suivent — organiser une journée, partager ce qu'on en garde, rouler ensemble sur route. Le miroir reste individuel ; la route, elle, se partage. Tout se pilote depuis vos <button class="link-inline" onclick="goTo('compte-preferences')" style="background:none;border:none;color:var(--oxv-red);cursor:pointer;padding:0;font:inherit;">préférences</button>.</p>
       </div>
 
       <div class="reveal bento" style="padding:0;overflow:hidden;margin-bottom:16px;">
@@ -21569,7 +21583,7 @@ body.pav-tv .nav, body.pav-tv footer, body.pav-tv .cookie, body.pav-tv .founding
             <circle r="38" fill="none" stroke="rgba(216,15,31,0.18)" stroke-width="1" stroke-dasharray="3 5"/>
             <text y="-6" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="11" letter-spacing="3" fill="#D80F1F">ÉCURIE</text>
             <text y="12" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="8" letter-spacing="1.5" fill="rgba(245,242,234,0.45)">UN CERCLE</text>
-            <text y="30" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="7.5" letter-spacing="1" fill="rgba(245,242,234,0.30)">CONSTRUIT PAR PARRAINAGE</text>
+            <text y="30" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="7.5" letter-spacing="1" fill="rgba(245,242,234,0.30)">REJOINTE PAR INVITATION</text>
             <!-- membres -->
             <circle cx="0" cy="-52" r="4" fill="#D80F1F"/>
             <circle cx="45" cy="-26" r="4" fill="rgba(216,15,31,0.6)"/>
@@ -21630,6 +21644,10 @@ body.pav-tv .nav, body.pav-tv footer, body.pav-tv .cookie, body.pav-tv .founding
       </div>
 
       <div class="reveal" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:16px;margin-bottom:48px;">
+        <div class="bento" style="padding:24px;border-color:rgba(216,15,31,0.30);">
+          <div style="font-family:var(--mono);font-size:10px;letter-spacing:0.22em;text-transform:uppercase;margin-bottom:8px;font-size:9px;color:var(--red-oxv);">L'invitation</div>
+          <p style="font-family:var(--sans);font-size:14px;line-height:1.65;color:var(--cream-mute);margin:0;">Un lien, rien d'autre. Votre invité l'ouvre, crée son compte, et rejoint l'écurie dans le même mouvement — avec toutes ses fonctionnalités ouvertes.</p>
+        </div>
         <div class="bento" style="padding:24px;">
           <div style="font-family:var(--mono);font-size:10px;letter-spacing:0.22em;text-transform:uppercase;margin-bottom:8px;font-size:9px;color:var(--red-oxv);">La journée organisée</div>
           <p style="font-family:var(--sans);font-size:14px;line-height:1.65;color:var(--cream-mute);margin:0;">Proposez une date et le circuit. Les membres s'inscrivent dans l'application, l'effectif se remplit — dans le même cadre que les journées du club.</p>
@@ -23014,6 +23032,7 @@ supabase.auth.onAuthStateChange((event, session) => {
     window.OXVApi.user.profile = session.user;
     onAuthChange();
     if (event === 'SIGNED_IN') {
+      try { honorerInvitationEcurie(); } catch (_) {}
       const currentPage = document.querySelector('.page.active')?.id;
       if (currentPage === 'page-login' || currentPage === 'page-verify-email' || !currentPage) {
         goTo('compte');
@@ -23363,7 +23382,7 @@ const OXV_NOINDEX_PAGES = ['login', 'signup', 'forgot-password', 'reset-password
 const OXV_PAGE_SEO = {
   home:        { title: 'OXV — Track day signature · Circuit de Haute Saintonge', description: 'OXV organise des track days confidentiels sur le tracé Beltoise au Circuit de Haute Saintonge. Vingt pilotes par session, télémétrie, médias livrés dans l\'app. Saison 2027.' },
   offers:      { title: 'Les offres — Access, Signature, Heritage · OXV', description: 'Trois offres pour rouler sur le tracé Beltoise : Access (390 € TTC, 250 € la première session), Signature (690 € TTC) et Heritage (2 490 € TTC). Télémétrie 25 Hz, banque média dans l\'app, coach partenaire en option.' },
-  calendrier:  { title: 'Calendrier de la saison 2027 · OXV', description: 'Le calendrier des sessions OXV au Circuit de Haute Saintonge. Lundis demi-journée, vendredis journée complète. Vingt pilotes maximum.' },
+  calendrier:  { title: 'Calendrier de la saison 2027 · OXV', description: 'Le calendrier des sessions OXV au Circuit de Haute Saintonge. Lundis après-midi, vendredis journée complète. Vingt pilotes maximum.' },
   circuit:     { title: 'Le circuit de Haute Saintonge — tracé Beltoise · OXV', description: 'Dessiné en 2009 par Jean-Pierre Beltoise. 2 205 m, huit virages, tracé technique, aucune chicane artificielle. Le tracé que pilote OXV.' },
   corporate:   { title: 'OXV Corporate — privatisation du tracé Beltoise', description: 'Privatisez le Circuit de Haute Saintonge. Deux formats sur devis, trois scénarios : comité de direction, concession, lancement produit.' },
   securite:    { title: 'Sécurité & cadre · OXV', description: 'Le cadre de sécurité OXV : briefing obligatoire, documents vérifiés, silence total en roulage, lecture des données après la session, vingt pilotes maximum. Et la place exacte de la donnée.' },
@@ -23793,7 +23812,7 @@ Le soir même, les premières images arrivent. Dans les jours qui suivent, vous 
 
 ## Quelle offre pour débuter ?
 
-Pour une première fois, l'offre Access — une demi-journée le lundi, à 250 € TTC pour une première session, 390 € ensuite — est la porte d'entrée idéale : le circuit dans sa forme la plus pure, vingt pilotes, le cadre OXV. Quand vous voudrez aller plus loin (télémétrie 25 Hz, journée complète, média dédié), la Signature vous attendra.
+Pour une première fois, l'offre Access — l'après-midi du lundi, à 250 € TTC pour une première session, 390 € ensuite — est la porte d'entrée idéale : le circuit dans sa forme la plus pure, vingt pilotes, le cadre OXV. Quand vous voudrez aller plus loin (télémétrie 25 Hz, journée complète, média dédié), la Signature vous attendra.
 
 > La sécurité, d'abord. Le développement, toujours. La sensation, enfin.
 
@@ -24411,7 +24430,7 @@ window.adminArticleDelete = async function(id) {
 
 // Catalogue des offres (centralisé)
 const BK_OFFERS = {
-  access:    { name: 'Access',    price: 39000,  desc: 'Demi-journée · lundi · 20 pilotes max · télémétrie GPS + banque photo & vidéo' },
+  access:    { name: 'Access',    price: 39000,  desc: 'Lundi après-midi · quatre relais · 20 pilotes max · télémétrie GPS + banque photo & vidéo' },
   signature: { name: 'Signature', price: 69000,  desc: 'Journée complète · vendredi · télémétrie 25 Hz · média · déjeuner traiteur' },
   heritage:  { name: 'Heritage',  price: 249000, desc: '4 sessions Signature · priorité de réservation · accès anticipé saison N+1' }
 };
@@ -31004,6 +31023,113 @@ window.advValidate = async function(kind, id, approve) {
   toast(r && r.error ? 'Action refusée' : (approve ? 'Validé — visible côté app' : 'Refusé'), r && r.error ? 'warn' : 'ok');
   if (!r || !r.error) loadAdminValidations();
 };
+
+
+/* ===================== INVITATION D'ÉCURIE PAR LIEN =====================
+   Une écurie est une équipe qui réserve ensemble. Le capitaine partage un lien ;
+   l'invité se connecte ou crée son compte, et le rattachement se fait tout seul.
+   Aucune écriture directe : tout passe par les fonctions SECURITY DEFINER
+   oxv_get_my_referral_code / oxv_redeem_referral (anti-abus serveur). */
+
+const OXV_INVIT_CLE = 'oxvEcurieInvitation';
+
+/* — Côté capitaine : construire et partager le lien — */
+window.partagerInvitationEcurie = async function() {
+  const btn = document.getElementById('crewShareBtn');
+  const label = btn ? (btn.querySelector('span') || btn) : null;
+  const avant = label ? label.textContent : '';
+  if (label) label.textContent = 'Préparation…';
+  try {
+    const { data: code, error } = await supabase.rpc('oxv_get_my_referral_code');
+    if (error) throw error;
+    if (!code) throw new Error('code indisponible');
+
+    const lien = location.origin + '/?ecurie=' + encodeURIComponent(code);
+    const zone = document.getElementById('crewShareBox');
+    const champ = document.getElementById('crewShareLink');
+    if (champ) champ.value = lien;
+    if (zone) zone.style.display = '';
+
+    const texte = 'Rejoignez mon écurie OXV — on réserve nos sessions ensemble.';
+    if (navigator.share) {
+      try { await navigator.share({ title: 'Mon écurie OXV', text: texte, url: lien }); }
+      catch (_) { /* partage annulé : le lien reste affiché */ }
+    } else if (navigator.clipboard) {
+      try { await navigator.clipboard.writeText(lien); toast('Lien copié — il ne reste plus qu\'à l\'envoyer', 'ok'); }
+      catch (_) { toast('Lien prêt — copiez-le ci-dessous', 'ok'); }
+    }
+    if (typeof track === 'function') track('share_crew_invite');
+  } catch (e) {
+    console.warn('[Écurie]', e);
+    toast('Impossible de préparer le lien · réessayez', 'warn');
+  } finally {
+    if (label) label.textContent = avant || 'Partager mon invitation';
+  }
+};
+
+window.copierLienEcurie = async function() {
+  const champ = document.getElementById('crewShareLink');
+  if (!champ || !champ.value) return;
+  try { await navigator.clipboard.writeText(champ.value); toast('Lien copié', 'ok'); }
+  catch (_) { champ.select(); toast('Sélectionnez et copiez le lien', 'warn'); }
+};
+
+/* — Côté invité : capter le code à l'arrivée — */
+function capterInvitationEcurie() {
+  let code = null;
+  try { code = new URLSearchParams(location.search).get('ecurie'); } catch (_) { return; }
+  if (!code) return;
+  code = code.trim().slice(0, 32);
+
+  try { localStorage.setItem(OXV_INVIT_CLE, code); } catch (_) {}
+
+  // on nettoie l'URL : le code ne doit pas rester visible ni partageable par erreur
+  try {
+    const propre = location.pathname + location.hash;
+    history.replaceState(null, '', propre);
+  } catch (_) {}
+
+  // pré-remplissage du champ parrain du formulaire de demande
+  const champ = document.getElementById('dmd-referral');
+  if (champ && !champ.value) champ.value = code;
+
+  if (window.OXVApi?.user?.isLoggedIn) {
+    honorerInvitationEcurie();
+  } else {
+    const banniere = document.getElementById('crewInviteBanner');
+    if (banniere) banniere.style.display = '';
+    setTimeout(() => toast('Invitation reçue — connectez-vous ou créez votre compte pour rejoindre l\'écurie', 'ok'), 700);
+  }
+}
+
+/* — Rattachement effectif, une fois le pilote authentifié — */
+async function honorerInvitationEcurie() {
+  let code = null;
+  try { code = localStorage.getItem(OXV_INVIT_CLE); } catch (_) {}
+  if (!code) return;
+  try {
+    const { data, error } = await supabase.rpc('oxv_redeem_referral', { p_code: code });
+    if (error) throw error;
+    if (data?.ok) {
+      toast('Vous avez rejoint l\'écurie — ses fonctionnalités sont ouvertes', 'ok');
+      if (typeof track === 'function') track('join_crew_via_link');
+    } else if (data?.error === 'deja_dans_une_ecurie') {
+      toast('Vous appartenez déjà à une écurie', 'warn');
+    } else if (data?.error === 'auto_parrainage_interdit') {
+      toast('Ce lien est le vôtre — partagez-le à quelqu\'un d\'autre', 'warn');
+    } else {
+      toast('Invitation expirée ou inconnue', 'warn');
+    }
+  } catch (e) {
+    console.warn('[Écurie]', e);
+    return; // on garde le code : un réseau qui flanche ne doit pas perdre l'invitation
+  }
+  try { localStorage.removeItem(OXV_INVIT_CLE); } catch (_) {}
+  const banniere = document.getElementById('crewInviteBanner');
+  if (banniere) banniere.style.display = 'none';
+  if (typeof loadCrewCard === 'function') { try { loadCrewCard(); } catch (_) {} }
+}
+window.honorerInvitationEcurie = honorerInvitationEcurie;
 
 /* ===================== ÉCURIES & PARRAINAGE (PR-HUB-03) =====================
    Option C fondateur : pas de réduction — le parrainage construit une écurie.
@@ -37725,6 +37851,7 @@ window.addEventListener('DOMContentLoaded', () => {
   safe('setupMotion', () => setupMotion());
   safe('onAuthChange', () => onAuthChange());
   safe('updateSummary', () => updateSummary());
+  safe('capterInvitationEcurie', () => capterInvitationEcurie());
 
   // body.loaded conservé (états de chargement CSS). Le force-visible des .reveal
   // est RETIRÉ : les reveals sont désormais pilotés par le scroll (setupReveal),
