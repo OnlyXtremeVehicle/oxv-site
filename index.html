@@ -4214,7 +4214,10 @@ footer {
   letter-spacing: 0.22em;
   text-transform: uppercase;
 }
-.session-table .session-status.pending   { color: #C9A24A; border-color: #C9A24A; }
+/* `pending_payment` partage le traitement de `pending` : ce sont deux états non
+   soldés, distingués par le libellé, pas par une couleur inventée. */
+.session-table .session-status.pending,
+.session-table .session-status.pending_payment { color: #C9A24A; border-color: #C9A24A; }
 .session-table .session-status.confirmed { color: var(--copper-glow); border-color: var(--copper); }
 .session-table .session-status.cancelled { color: #E07878; border-color: #C45959; }
 .session-table .session-status.attended  { color: var(--copper-glow); border-color: var(--copper-glow); }
@@ -6845,8 +6848,10 @@ footer {
   text-transform: uppercase;
 }
 .admin-list-pill .dot { width: 5px; height: 5px; border-radius: 50%; }
-.admin-list-pill.pending   { color: #C9A24A; border-color: #C9A24A; }
-.admin-list-pill.pending .dot { background: #C9A24A; }
+.admin-list-pill.pending,
+.admin-list-pill.pending_payment { color: #C9A24A; border-color: #C9A24A; }
+.admin-list-pill.pending .dot,
+.admin-list-pill.pending_payment .dot { background: #C9A24A; }
 .admin-list-pill.confirmed { color: var(--copper-glow); border-color: var(--copper); }
 .admin-list-pill.confirmed .dot { background: var(--copper-glow); }
 .admin-list-pill.cancelled,
@@ -20611,6 +20616,25 @@ body.pav-tv .nav, body.pav-tv footer, body.pav-tv .cookie, body.pav-tv .founding
 </div>
 <!-- /booking -->
 <!-- ============ MENTIONS LÉGALES ============ -->
+<!-- ============ PARTAGE PUBLIC — /share/{jeton} ============
+     Destination des liens émis par l'app. Le corps est rendu par openShare()
+     depuis la RPC share_public_view : rien n'est écrit en dur ici, pour qu'un
+     échec de lecture ne laisse jamais une donnée d'exemple à l'écran. -->
+<div class="page" id="page-share">
+  <section class="page-hero">
+    <div class="wrap">
+      <div class="page-hero-eyebrow">OXV · Lien de partage</div>
+      <h1 class="page-hero-title">Restitution <em>de roulage</em>.</h1>
+    </div>
+  </section>
+  <section class="section">
+    <div class="wrap" style="max-width:780px;">
+      <div id="shareBody"></div>
+    </div>
+  </section>
+</div>
+
+
 <div class="page" id="page-mentions">
   <section class="page-hero">
     <div class="wrap">
@@ -23214,7 +23238,8 @@ const OXV_NOINDEX_PAGES = ['login', 'signup', 'forgot-password', 'reset-password
   'compte-checkup', 'compte-medias', 'compte-progression', 'compte-heritage', 'compte-paiements', 'compte-preferences',
   'admin', 'admin-pilotes', 'admin-pilote-detail', 'admin-sessions', 'admin-session-detail',
   'admin-paiements', 'admin-medias', 'admin-articles', 'admin-emails', 'admin-stats', 'admin-securite', 'admin-demandes', 'admin-validations', 'demande', 'partenaire-espace', 'coach-espace', 'partenaire-connexion',
-  'pavillon-accueil', 'pavillon-coach', 'pavillon-admin', 'pavillon-controle', 'pavillon-regie'];
+  'pavillon-accueil', 'pavillon-coach', 'pavillon-admin', 'pavillon-controle', 'pavillon-regie',
+  'share'];
 
 // Titre + description par page publique
 const OXV_PAGE_SEO = {
@@ -23252,7 +23277,10 @@ const OXV_PAGE_SEO = {
   'pavillon-admin':    { title: 'Pavillon · Photos · OXV', description: 'Gestion des photos diffusées au Pavillon.' },
   'pavillon-controle': { title: 'Pavillon · Télécommande coach · OXV', description: 'Télécommande de l\'écran du stand coach.' },
   'pavillon-regie':    { title: 'Pavillon · Régie · OXV', description: 'Console d\'état piste du Pavillon.' },
-  'coach-espace':      { title: 'Espace coach · OXV', description: 'Espace de gestion des coachs partenaires OXV.' }
+  'coach-espace':      { title: 'Espace coach · OXV', description: 'Espace de gestion des coachs partenaires OXV.' },
+  // Partage : titre volontairement muet. La page est noindex, et l'aperçu de lien
+  // ne doit rien révéler des mesures partagées.
+  share:       { title: 'Lien de partage · OXV', description: 'Restitution de données de roulage partagée par un pilote OXV.' }
 };
 
 function oxvRouteToPath(page, articleId) {
@@ -23272,6 +23300,10 @@ function oxvPathToRoute(pathname) {
   // le QR du profil pilote encode https://www.oxvehicle.fr/controle-pilote/{user_id}
   // → ouverture directe du dossier pilote (documents + éligibilité), garde admin.
   if (parts[0] === 'controle-pilote' && parts[1]) return { page: 'controle-pilote', pilotId: parts[1] };
+  // Partage public émis par l'app (sharesService.ts) : oxvehicle.fr/share/{jeton}.
+  // Sans jeton, la page rend l'état inactif — jamais la home, pour que l'adresse
+  // reste lisible par celui qui a reçu le lien.
+  if (parts[0] === 'share') return { page: 'share', token: parts[1] ? decodeURIComponent(parts[1]) : null };
   return { page: parts[0] };
 }
 
@@ -23387,6 +23419,7 @@ function oxvRouteFromLocation() {
   }
   const r = oxvPathToRoute(location.pathname);
   if (r.page === 'article' && r.articleId) { openArticle(r.articleId, { fromPop: true }); return; }
+  if (r.page === 'share') { openShare(r.token); return; }
   // Scan QR pilote : dossier admin direct ; hors connexion, on mémorise la cible
   // et on reprend après le login (le fondateur scanne souvent depuis son téléphone).
   if (r.page === 'controle-pilote' && r.pilotId && /^[0-9a-f-]{36}$/i.test(r.pilotId)) {
@@ -23398,6 +23431,143 @@ function oxvRouteFromLocation() {
   goTo(exists ? r.page : 'home', { fromPop: true });
 }
 window.addEventListener('popstate', () => oxvRouteFromLocation());
+
+
+/* ============================================================
+   PARTAGE PUBLIC — /share/{jeton}
+   ─────────────────────────────────────────────────────────────
+   Destination des liens émis par l'app (sharesService.ts). Lue par
+   un TIERS, jamais par le pilote : aucune identité, aucune session
+   requise, aucune comparaison entre pilotes.
+
+   Source unique : RPC `share_public_view(p_token)` — security definer,
+   accordée à `anon`, en production. Le site ne lit ici AUCUNE table :
+   c'est la fonction qui valide le jeton (longueur 16–128, non révoqué,
+   non expiré), filtre sur `included_metrics` et compte la consultation.
+   Aucune migration n'est nécessaire pour cette page.
+
+   Contrat de réponse (vérifié en réel le 2026-08-01, clé anon) :
+     inactif → { "status": "inactive" }            (forme unique : inconnu,
+                 révoqué, expiré et mal formé sont indistinguables — dire
+                 « expiré » apprendrait à un curieux que le jeton a existé)
+     actif   → { "status":"active", "scope", "metrics", "session_count",
+                 "expires_at" }
+   `metrics` ne porte QUE les clés cochées par le pilote. Une clé présente
+   à null est une mesure impossible, jamais un zéro : elle s'affiche « — ».
+   ============================================================ */
+const OXV_SHARE_SCOPES = {
+  last_session:     'Dernière session',
+  last_5_sessions:  'Cinq dernières sessions',
+  full_history:     'Historique complet',
+  progression_only: 'Évolution seule'
+};
+// Ordre d'affichage figé. `signature` est volontairement absente de cette
+// liste : la fonction rend toujours null (calcul non implémenté au 01/08/2026).
+// On n'affiche pas une case vide pour une mesure qui n'existe pas encore.
+const OXV_SHARE_METRICS = [
+  { key: 'best_lap',    label: 'Meilleur tour',   note: 'sessions retenues',                        fmt: v => oxvFmtLap(v) },
+  { key: 'lap_count',   label: 'Tours bouclés',   note: 'total des sessions retenues',              fmt: v => oxvShareCount(v) },
+  { key: 'regularity',  label: 'Régularité',      note: 'écart-type des meilleurs tours',           fmt: v => oxvShareSeconds(v) },
+  { key: 'progression', label: 'Évolution du meilleur tour', note: 'dernier meilleur tour comparé au premier', fmt: v => oxvShareDelta(v) }
+];
+
+// Les trois formateurs refusent null EUX-MÊMES, en plus du garde-fou de
+// l'appelant : Number(null) vaut 0, et un 0 affiché à la place d'une mesure
+// absente serait un chiffre inventé. Un vrai 0 mesuré, lui, reste affiché.
+function oxvShareSeconds(v) {
+  if (v == null) return '—';
+  const n = Number(v);
+  if (!isFinite(n)) return '—';
+  return n.toFixed(3).replace('.', ',') + ' s';
+}
+// Delta signé : le signe est une mesure, pas un jugement — aucun « gagné »,
+// aucun « perdu ». Vrai signe moins typographique (U+2212).
+function oxvShareDelta(v) {
+  if (v == null) return '—';
+  const n = Number(v);
+  if (!isFinite(n)) return '—';
+  const sign = n > 0 ? '+' : (n < 0 ? '−' : '');
+  return sign + Math.abs(n).toFixed(3).replace('.', ',') + ' s';
+}
+function oxvShareCount(v) {
+  if (v == null) return '—';
+  const n = Number(v);
+  if (!isFinite(n)) return '—';
+  return String(Math.round(n));
+}
+function oxvShareNotice(text) {
+  return '<p style="font-family:var(--sans);font-size:15px;line-height:1.7;color:var(--cream-mute);margin:0;">' + escapeHtml(text) + '</p>';
+}
+function oxvShareInactive() {
+  return '<div style="border:1px solid var(--bento-border);border-radius:2px;padding:28px;">'
+    + '<div style="font-family:var(--mono);font-size:10px;letter-spacing:0.18em;text-transform:uppercase;color:var(--cream-mute);margin-bottom:12px;">Lien</div>'
+    + '<p style="font-family:var(--display);font-size:22px;line-height:1.4;color:var(--cream);margin:0 0 10px;">Ce lien n\'est plus actif.</p>'
+    + '<p style="font-family:var(--sans);font-size:14px;line-height:1.7;color:var(--cream-mute);margin:0;">Aucune donnée n\'est consultable à cette adresse.</p>'
+    + '</div>';
+}
+function oxvShareActive(d) {
+  const metrics = (d && d.metrics && typeof d.metrics === 'object') ? d.metrics : {};
+  // Seules les métriques cochées par le pilote existent pour cette page.
+  const shown = OXV_SHARE_METRICS.filter(m => Object.prototype.hasOwnProperty.call(metrics, m.key));
+
+  let cards;
+  if (!shown.length) {
+    cards = oxvShareNotice('Aucune mesure n\'est partagée par ce lien.');
+  } else {
+    cards = '<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:1px;background:var(--bento-border);border:1px solid var(--bento-border);border-radius:2px;overflow:hidden;">'
+      + shown.map(m => {
+          const raw = metrics[m.key];
+          const val = (raw == null) ? '—' : m.fmt(raw);
+          return '<div style="background:var(--carbon);padding:22px 20px;">'
+            + '<div style="font-family:var(--mono);font-size:10px;letter-spacing:0.16em;text-transform:uppercase;color:var(--cream-mute);margin-bottom:10px;">' + escapeHtml(m.label) + '</div>'
+            + '<div style="font-family:var(--display);font-size:30px;line-height:1;color:var(--cream);">' + escapeHtml(val) + '</div>'
+            + '<div style="font-family:var(--sans);font-size:12px;color:var(--cream-mute);margin-top:8px;">' + escapeHtml(m.note) + '</div>'
+            + '</div>';
+        }).join('')
+      + '</div>';
+  }
+
+  // Contexte : uniquement ce qui est mesuré. Une portée inconnue est omise
+  // plutôt que devinée (règle : ne jamais inventer une valeur pour combler un vide).
+  const ctx = [];
+  const scope = OXV_SHARE_SCOPES[d.scope];
+  if (scope) ctx.push('Portée : ' + scope + '.');
+  const n = Number(d.session_count);
+  if (isFinite(n)) ctx.push(n > 0 ? ('Établi sur ' + n + (n > 1 ? ' sessions.' : ' session.')) : 'Aucune session retenue à ce jour.');
+  if (d.expires_at) {
+    const dt = new Date(d.expires_at);
+    if (!isNaN(dt.getTime())) {
+      // « 1er août », pas « 1 août » — le premier du mois est ordinal en français.
+      const jour = dt.getDate() === 1 ? '1er' : String(dt.getDate());
+      ctx.push('Lien valable jusqu\'au ' + jour + ' ' + dt.toLocaleDateString('fr-FR', { month: 'long', year: 'numeric' }) + '.');
+    }
+  }
+
+  return cards
+    + (ctx.length ? '<p style="font-family:var(--mono);font-size:11px;letter-spacing:0.06em;color:var(--cream-mute);margin:20px 0 0;">' + escapeHtml(ctx.join(' ')) + '</p>' : '')
+    + '<p style="font-family:var(--sans);font-size:13px;line-height:1.7;color:var(--cream-mute);margin:24px 0 0;padding-top:20px;border-top:1px solid var(--bento-border);">'
+    + 'Mesures issues de la télémétrie enregistrée pendant les sessions du pilote, restituées telles quelles. Aucune comparaison avec d\'autres pilotes.</p>';
+}
+
+async function openShare(token) {
+  goTo('share', { fromPop: true }); // fromPop : l'URL porte le jeton, on ne la réécrit pas
+  const box = document.getElementById('shareBody');
+  if (!box) return;
+  box.innerHTML = oxvShareNotice('Lecture du lien…');
+  if (!token) { box.innerHTML = oxvShareInactive(); return; }
+  let data;
+  try {
+    const { data: res, error } = await supabase.rpc('share_public_view', { p_token: token });
+    if (error) throw error;
+    data = res;
+  } catch (e) {
+    // Une panne réseau n'est pas un lien mort : le dire serait faux.
+    console.warn('[Share] Lecture impossible :', e);
+    box.innerHTML = oxvShareNotice('Lien momentanément illisible. Réessayez dans un instant.');
+    return;
+  }
+  box.innerHTML = (data && data.status === 'active') ? oxvShareActive(data) : oxvShareInactive();
+}
 
 
 /* ============================================================
@@ -29266,11 +29436,12 @@ function renderSessionsTable(rows, isPast) {
     const offerLabel = OFFER_LABELS[reg.offer_type] || reg.offer_type;
     const statusKey = reg.status;
     const statusLabel = {
-      pending:   'En attente',
-      confirmed: 'Confirmée',
-      cancelled: 'Annulée',
-      attended:  'Effectuée',
-      no_show:   'Non venu'
+      pending:         'En attente',
+      pending_payment: 'Paiement attendu',
+      confirmed:       'Confirmée',
+      cancelled:       'Annulée',
+      attended:        'Effectuée',
+      no_show:         'Non venu'
     }[statusKey] || statusKey;
     const price = ((reg.price_total || 0) / 100).toLocaleString('fr-FR') + ' €';
 
@@ -29298,11 +29469,12 @@ function renderSessionsTable(rows, isPast) {
     const offerLabel = OFFER_LABELS[reg.offer_type] || reg.offer_type;
     const statusKey = reg.status;
     const statusLabel = {
-      pending:   'En attente',
-      confirmed: 'Confirmée',
-      cancelled: 'Annulée',
-      attended:  'Effectuée',
-      no_show:   'Non venu'
+      pending:         'En attente',
+      pending_payment: 'Paiement attendu',
+      confirmed:       'Confirmée',
+      cancelled:       'Annulée',
+      attended:        'Effectuée',
+      no_show:         'Non venu'
     }[statusKey] || statusKey;
     const price = ((reg.price_total || 0) / 100).toLocaleString('fr-FR') + ' €';
 
@@ -33753,11 +33925,12 @@ function renderPilotSessions(regs) {
     heritage: 'Heritage'
   };
   const statusLabels = {
-    pending:   'En attente',
-    confirmed: 'Confirmée',
-    cancelled: 'Annulée',
-    attended:  'Effectuée',
-    no_show:   'Non venu'
+    pending:         'En attente',
+    pending_payment: 'Paiement attendu',
+    confirmed:       'Confirmée',
+    cancelled:       'Annulée',
+    attended:        'Effectuée',
+    no_show:         'Non venu'
   };
 
   list.innerHTML = `
@@ -34917,11 +35090,12 @@ function renderAdminSDRegs(regs) {
 
   const offerLabels = { access: 'Access', signature: 'Signature', promotion: 'Promotion', heritage: 'Heritage' };
   const regStatusLabels = {
-    pending:   'En attente',
-    confirmed: 'Confirmée',
-    cancelled: 'Annulée',
-    attended:  'Effectuée',
-    no_show:   'Non venu'
+    pending:         'En attente',
+    pending_payment: 'Paiement attendu',
+    confirmed:       'Confirmée',
+    cancelled:       'Annulée',
+    attended:        'Effectuée',
+    no_show:         'Non venu'
   };
   const payStatusLabels = {
     pending:   'En attente',
@@ -37072,7 +37246,8 @@ async function pavCoachLoadSession(ts, restitution) {
     const { data: an } = await supabase.from('coach_annotations').select('corner_index,body,created_at').eq('telemetry_session_id', ts.id).is('deleted_at', null).order('created_at', { ascending: false }).limit(3);
     PAV.coach.annotations = an || [];
   } catch (e) {}
-  // Canal 3 — annotations en INSERT (Realtime postgres_changes ; publication à valider en migration)
+  // Canal 3 — annotations en INSERT (Realtime postgres_changes ; publication appliquée
+  // le 2026-08-01 : migration pavillon_realtime_coach_annotations, RLS conservée)
   // Un seul abonnement annotations à la fois : l'ancien est retiré à chaque bascule de session
   // (QA Addendum 01 : 20 bascules live→restitution→idle → nombre de listeners constant).
   if (PAV.coach.annotChan) {
