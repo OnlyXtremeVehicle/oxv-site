@@ -127,7 +127,7 @@
 
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&family=Hanken+Grotesk:wght@400;500;600&family=JetBrains+Mono:wght@500;600&display=swap" rel="stylesheet" />
 
 <script type="importmap">
 {
@@ -13744,6 +13744,38 @@ body.pav-tv .nav, body.pav-tv footer, body.pav-tv .cookie, body.pav-tv .founding
 .coach-fiche-medias { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 12px; }
 .coach-fiche-medias iframe, .coach-fiche-medias img { width: 100%; aspect-ratio: 16/9; border: 1px solid var(--bento-border); border-radius: 3px; display: block; object-fit: cover; background: #000; }
 
+/* ————— PR-APP-APERCUS — téléphones OXV Mirror, reconstruits depuis l'app (tokens réels src/ui/v2/tokens.ts : fond #14151A, cartes #1B1D24, texte #E8E9ED, Hanken Grotesk + JetBrains Mono) ————— */
+.mk-phone{width:min(292px,86vw);margin:0 auto;background:#0D0E12;border:1px solid #2A2D38;border-radius:36px;padding:10px;box-shadow:0 30px 80px rgba(0,0,0,.55)}
+.mk-screen{border-radius:27px;overflow:hidden;background:#14151A;font-family:'Hanken Grotesk',Inter,sans-serif;color:#E8E9ED;padding:18px 14px 16px;min-height:480px;display:flex;flex-direction:column;position:relative}
+.mk-eyebrow{font-family:'JetBrains Mono',monospace;font-weight:500;font-size:8.5px;letter-spacing:.2em;text-transform:uppercase;color:#9195A3}
+.mk-mono{font-family:'JetBrains Mono',monospace;font-weight:500}
+.mk-card{background:#1B1D24;border:1px solid #2A2D38;border-radius:14px;padding:12px;margin-top:12px}
+.mk-hero{border-radius:18px;overflow:hidden;position:relative;background:#1B1D24;border:1px solid #22242C;margin-top:12px}
+.mk-hair{border-top:1px solid #22242C}
+.mk-pill{display:inline-block;border:1px solid #3A3E4C;border-radius:999px;padding:5px 12px;font-family:'JetBrains Mono',monospace;font-size:8.5px;letter-spacing:.16em;text-transform:uppercase;color:#E8E9ED}
+.mk-pill--rouge{border-color:#C8102E}
+.mk-toggle{width:34px;height:20px;border-radius:999px;position:relative;flex:0 0 auto}
+.mk-toggle::after{content:'';position:absolute;top:2.5px;width:15px;height:15px;border-radius:50%;background:#E8E9ED}
+.mk-toggle.on{background:#9195A3}.mk-toggle.on::after{right:2.5px}
+.mk-toggle.off{background:#2A2D38}.mk-toggle.off::after{left:2.5px}
+.mk-bar{height:5px;border-radius:3px;background:#202329;overflow:hidden;flex:1}
+.mk-bar i{display:block;height:100%;border-radius:3px}
+.mk-cap{font-family:var(--mono);font-size:10.5px;color:var(--cream-faint);text-align:center;margin:14px auto 0;letter-spacing:.05em;max-width:340px;line-height:1.6}
+.mk-rangee{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:clamp(24px,4.5vw,64px);align-items:center;margin-bottom:64px}
+.mk-rangee:last-child{margin-bottom:0}
+.mk-rangee.inv .mk-txt{order:2}
+@media(max-width:880px){.mk-rangee{grid-template-columns:1fr;gap:28px}.mk-rangee.inv .mk-txt{order:0}}
+@keyframes mkRec{0%,100%{opacity:.5;transform:scale(.9)}50%{opacity:1;transform:scale(1.05)}}
+.mk-recdot{width:26px;height:26px;border-radius:50%;background:#C8102E;animation:mkRec 1.6s ease-in-out infinite}
+@media(prefers-reduced-motion:reduce){.mk-recdot{animation:none}}
+/* Variante COACH — l'espace coach garde son kit v1 (fond #0B0B0D, cartes #111113, rouge coach #E23A4E distinct du rouge de marque) */
+.mk-screen--coach{background:#0B0B0D;color:#F5F5F7}
+.mk-screen--coach .mk-card{background:#111113;border-color:#1E1E22}
+.mk-screen--coach .mk-eyebrow{color:#898991}
+.mk-badge-lire{font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:.1em;color:#E23A4E;background:rgba(226,58,78,.12);border:1px solid rgba(226,58,78,.35);border-radius:999px;padding:3px 8px}
+.mk-tuiles{display:grid;grid-template-columns:1fr 1fr;gap:7px}
+.mk-tuiles>div{border-radius:10px;background:#202329;border:1px solid #2A2D38;overflow:hidden;position:relative}
+
 </style>
 <!-- JSON-LD : LocalBusiness / lieu (PR-HUB-08 GEO) -->
 <script type="application/ld+json">
@@ -21377,10 +21409,50 @@ body.pav-tv .nav, body.pav-tv footer, body.pav-tv .cookie, body.pav-tv .founding
           <p style="font-family:var(--mono);font-size:12px;letter-spacing:0.14em;text-transform:uppercase;color:var(--blue-data);margin:0;">iOS &amp; Android · printemps 2027</p>
         </div>
         <div>
-          <figure style="margin:0;border-radius:14px;overflow:hidden;border:1px solid var(--bento-border);box-shadow:0 24px 70px rgba(0,0,0,0.5);">
-            <img src="img/menu-app.webp" alt="Application OXV Mirror — tableau de bord de télémétrie : trace du circuit, courbes de vitesse et de régularité après la session" loading="lazy" decoding="async" style="width:100%;display:block;" />
-          </figure>
-          <p style="font-family:var(--mono);font-size:11px;color:var(--cream-faint);text-align:center;margin:12px 0 0;letter-spacing:0.04em;">Aperçu illustratif — vos données réelles après votre première session équipée.</p>
+          <div class="mk-phone" role="img" aria-label="Écran d'accueil Miroir de l'application : dernière séance avec son chrono, carte Signature au radar cinq branches, rangée Record, Saison, Heritage.">
+            <div class="mk-screen">
+              <div style="display:flex;align-items:flex-start;justify-content:space-between;">
+                <div>
+                  <div class="mk-eyebrow" style="color:#C8102E;">Paddock</div>
+                  <div style="font-weight:600;font-size:19px;letter-spacing:.09em;margin-top:2px;">MIROIR</div>
+                </div>
+                <div style="width:30px;height:30px;border-radius:50%;background:#202329;border:1px solid #2A2D38;"></div>
+              </div>
+              <div class="mk-hero" style="height:128px;">
+                <svg viewBox="0 0 264 128" style="position:absolute;inset:0;width:100%;height:100%;" aria-hidden="true"><path d="M42 96 C20 78 26 44 62 36 C98 28 128 46 162 38 C200 29 236 44 240 66 C244 90 210 102 172 98 C134 94 118 112 84 108 C62 105 52 104 42 96 Z" fill="none" stroke="rgba(232,233,237,0.13)" stroke-width="2"/></svg>
+                <div style="position:absolute;left:0;right:0;bottom:0;padding:10px 12px;background:linear-gradient(180deg,rgba(10,11,14,0) 0%,rgba(10,11,14,.78) 70%);">
+                  <div class="mk-eyebrow" style="color:#E8E9ED;">Dernière séance · Circuit de Haute Saintonge</div>
+                  <div class="mk-mono" style="font-weight:600;font-size:27px;margin-top:3px;">1:24.<span style="color:#C8102E;">318</span></div>
+                  <div style="font-size:10.5px;color:#A9ADBB;margin-top:1px;">Vendredi 17 juillet</div>
+                </div>
+              </div>
+              <div class="mk-card">
+                <div style="display:flex;justify-content:space-between;align-items:center;">
+                  <span class="mk-eyebrow">Signature · vous vs vous</span><span style="color:#787C8A;">›</span>
+                </div>
+                <div style="display:flex;gap:12px;align-items:center;margin-top:8px;">
+                  <svg viewBox="0 0 96 96" width="96" height="96" aria-hidden="true">
+                    <g fill="none" stroke="#22242C"><polygon points="48,14 80.3,37.5 68,75.5 28,75.5 15.7,37.5"/><polygon points="48,24 70.8,40.6 62.1,67.4 33.9,67.4 25.2,40.6"/><polygon points="48,34 61.3,43.7 56.2,59.3 39.8,59.3 34.7,43.7"/></g>
+                    <polygon points="48,20.1 69.3,41.1 59.6,63.9 34,67.3 24,40.2" fill="rgba(232,233,237,0.06)" stroke="#E8E9ED" stroke-width="1.5"/>
+                    <circle cx="48" cy="20.1" r="3.2" fill="#4F9DF7"/><circle cx="69.3" cy="41.1" r="3.2" fill="#F2CE3B"/><circle cx="59.6" cy="63.9" r="3.2" fill="#F65B5B"/><circle cx="34" cy="67.3" r="3.2" fill="#4FC98A"/><circle cx="24" cy="40.2" r="3.2" fill="#66E4F3"/>
+                  </svg>
+                  <div style="display:grid;gap:5px;font-size:9.5px;color:#A9ADBB;" class="mk-mono">
+                    <span><i style="display:inline-block;width:7px;height:7px;border-radius:50%;background:#4F9DF7;margin-right:7px;"></i>Trajectoire</span>
+                    <span><i style="display:inline-block;width:7px;height:7px;border-radius:50%;background:#F2CE3B;margin-right:7px;"></i>Fluidité</span>
+                    <span><i style="display:inline-block;width:7px;height:7px;border-radius:50%;background:#F65B5B;margin-right:7px;"></i>Freinage</span>
+                    <span><i style="display:inline-block;width:7px;height:7px;border-radius:50%;background:#4FC98A;margin-right:7px;"></i>Accélération</span>
+                    <span><i style="display:inline-block;width:7px;height:7px;border-radius:50%;background:#66E4F3;margin-right:7px;"></i>Régularité</span>
+                  </div>
+                </div>
+              </div>
+              <div style="display:grid;grid-template-columns:1fr 1fr 1fr;margin-top:14px;border-top:1px solid #22242C;border-bottom:1px solid #22242C;">
+                <div style="padding:9px 4px;text-align:center;"><div class="mk-eyebrow">Record</div><div class="mk-mono" style="font-size:12px;margin-top:3px;">1:24.<span style="color:#C8102E;">318</span></div></div>
+                <div style="padding:9px 4px;text-align:center;border-left:1px solid #22242C;border-right:1px solid #22242C;"><div class="mk-eyebrow">Saison</div><div class="mk-mono" style="font-size:12px;margin-top:3px;">412 <span style="font-size:9px;color:#9195A3;">km</span></div></div>
+                <div style="padding:9px 4px;text-align:center;"><div class="mk-eyebrow" style="color:#C4A459;">Heritage</div><div class="mk-mono" style="font-size:12px;margin-top:3px;color:#C4A459;">2/4</div></div>
+              </div>
+            </div>
+          </div>
+          <p class="mk-cap">L'écran d'accueil « Miroir », reconstruit à l'identique depuis l'application — libellés, couleurs et typographies du code. Données d'exemple.</p>
         </div>
       </div>
       <div class="reveal" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(430px,100%),1fr));gap:16px;margin-bottom:48px;">
@@ -21436,6 +21508,316 @@ body.pav-tv .nav, body.pav-tv footer, body.pav-tv .cookie, body.pav-tv .founding
         </ul>
       </div>
 
+      <!-- ============ PR-APP-APERCUS : ECRAN PAR ECRAN ============ -->
+      <div class="reveal" style="margin-bottom:36px;">
+        <div class="kicker">— Écran par écran</div>
+        <h2 class="section-title" style="font-size:clamp(28px,3.8vw,42px);margin:18px 0 10px;">Chaque promesse a son écran.<br/>Les <em>voici</em>.</h2>
+        <p style="font-family:var(--sans);font-size:15px;line-height:1.7;color:var(--cream-mute);max-width:700px;margin:0;">Ces aperçus ne sont pas des maquettes d'intention : ils sont reconstruits à l'identique depuis l'application — ses écrans, ses libellés, ses couleurs, ses typographies. Données d'exemple. Suivez-les dans l'ordre d'une journée.</p>
+      </div>
+
+      <div class="reveal mk-rangee">
+        <div class="mk-txt">
+          <div style="font-family:var(--mono);font-size:9px;letter-spacing:0.24em;text-transform:uppercase;color:var(--oxv-red);margin-bottom:10px;">01 · L'arrivée</div>
+          <h3 style="font-family:var(--display);font-weight:600;font-size:24px;color:var(--offwhite);margin:0 0 12px;">Vous y êtes.</h3>
+          <p style="font-family:var(--sans);font-size:14.5px;line-height:1.7;color:var(--cream-mute);margin:0;">Au paddock, l'app vous accueille d'un geste : l'insigne se dessine au trait — une seule fois par jour — et un seul bouton vous attend. Pas de tableau de bord, pas de réglages : la journée commence par une présence, pas par un menu.</p>
+        </div>
+        <div>
+          <div class="mk-phone" role="img" aria-label="Écran d'arrivée : l'insigne OXV dessiné au trait, le nom du circuit, la phrase Vous y êtes, et le bouton Je suis au paddock.">
+            <div class="mk-screen" style="align-items:center;justify-content:center;text-align:center;">
+              <svg class="brand-insignia" width="72" height="72" style="opacity:.92;" aria-hidden="true"><use href="#oxv-insignia"/></svg>
+              <div style="font-weight:600;font-size:19px;margin-top:20px;">Circuit de Haute Saintonge</div>
+              <div style="font-size:13px;color:#A9ADBB;margin-top:6px;">Vous y êtes.</div>
+              <div style="position:absolute;left:14px;right:14px;bottom:18px;">
+                <span class="mk-pill mk-pill--rouge" style="display:block;text-align:center;padding:11px 12px;font-size:10px;letter-spacing:.2em;">Je suis au paddock</span>
+              </div>
+            </div>
+          </div>
+          <p class="mk-cap">L'écran d'arrivée du jour J.</p>
+        </div>
+      </div>
+
+      <div class="reveal mk-rangee inv">
+        <div class="mk-txt">
+          <div style="font-family:var(--mono);font-size:9px;letter-spacing:0.24em;text-transform:uppercase;color:var(--oxv-red);margin-bottom:10px;">02 · En piste</div>
+          <h3 style="font-family:var(--display);font-weight:600;font-size:24px;color:var(--offwhite);margin:0 0 12px;">Le silence, littéralement.</h3>
+          <p style="font-family:var(--sans);font-size:14.5px;line-height:1.7;color:var(--cream-mute);margin:0;">Pendant que la voiture roule, voici l'écran entier : un voyant, un mot. Aucun chrono, aucune vitesse, aucun message. C'est l'écran le plus travaillé de l'application — et il est presque vide. Le silence en roulage n'est pas une promesse marketing : c'est cet écran.</p>
+        </div>
+        <div>
+          <div class="mk-phone" role="img" aria-label="Écran de roulage : un point rouge qui pulse, le mot REC, et deux commandes en bas — rien d'autre.">
+            <div class="mk-screen" style="align-items:center;justify-content:center;">
+              <div class="mk-recdot"></div>
+              <div class="mk-mono" style="font-size:14px;letter-spacing:.5em;margin:16px 0 0 .5em;">REC</div>
+              <div style="position:absolute;left:14px;right:14px;bottom:18px;text-align:center;">
+                <div style="font-size:13px;color:#E8E9ED;text-decoration:underline;text-underline-offset:3px;margin-bottom:12px;">Mettre en pause</div>
+                <span class="mk-pill" style="display:block;text-align:center;padding:10px 12px;">Terminer le run</span>
+                <div class="mk-mono" style="font-size:9.5px;color:#787C8A;margin-top:11px;">Annuler sans enregistrer</div>
+              </div>
+            </div>
+          </div>
+          <p class="mk-cap">L'écran de roulage, en entier. L'absence est le produit.</p>
+        </div>
+      </div>
+
+      <div class="reveal mk-rangee">
+        <div class="mk-txt">
+          <div style="font-family:var(--mono);font-size:9px;letter-spacing:0.24em;text-transform:uppercase;color:var(--oxv-red);margin-bottom:10px;">03 · Le soir</div>
+          <h3 style="font-family:var(--display);font-weight:600;font-size:24px;color:var(--offwhite);margin:0 0 12px;">Le bilan rend votre journée.</h3>
+          <p style="font-family:var(--sans);font-size:14.5px;line-height:1.7;color:var(--cream-mute);margin:0;">Le chrono d'abord — puis la marge du pilote, en nombre nu, sans jauge qui dramatise. Et quand une donnée manque, l'app le dit : « Véhicule non caractérisé — exclu du calcul. » Un tiret vaut mieux qu'un chiffre inventé.</p>
+        </div>
+        <div>
+          <div class="mk-phone" role="img" aria-label="Écran de bilan : chrono de la séance, marge pilote à 51 pour cent avec ses deux composantes, et les quatre piliers en barres colorées.">
+            <div class="mk-screen">
+              <div class="mk-eyebrow" style="text-align:center;color:#A9ADBB;">15 août 2026 · Circuit de Haute Saintonge</div>
+              <div class="mk-hero" style="height:104px;">
+                <div style="position:absolute;left:0;right:0;bottom:0;padding:10px 12px;background:linear-gradient(180deg,rgba(10,11,14,0) 0%,rgba(10,11,14,.78) 70%);">
+                  <div class="mk-eyebrow" style="color:#C8102E;">Bilan</div>
+                  <div class="mk-mono" style="font-weight:600;font-size:30px;margin-top:2px;">1:41,<span style="color:#C8102E;">203</span></div>
+                  <div class="mk-mono" style="font-size:9.5px;color:#A9ADBB;margin-top:2px;">22 tours · 87 km</div>
+                </div>
+              </div>
+              <div class="mk-card">
+                <div class="mk-eyebrow">Marge pilote</div>
+                <div class="mk-mono" style="font-weight:600;font-size:30px;margin-top:5px;">51 <span style="font-size:13px;color:#A9ADBB;">%</span></div>
+                <div style="display:flex;align-items:center;gap:9px;margin-top:9px;"><span class="mk-mono" style="font-size:9px;color:#A9ADBB;flex:0 0 92px;">Constance · 0,6</span><span class="mk-bar"><i style="width:58%;background:#66E4F3;"></i></span></div>
+                <div style="display:flex;align-items:center;gap:9px;margin-top:6px;"><span class="mk-mono" style="font-size:9px;color:#A9ADBB;flex:0 0 92px;">Fluidité · 0,4</span><span class="mk-bar"><i style="width:42%;background:#F2CE3B;"></i></span></div>
+                <div style="font-size:9.5px;color:#9195A3;margin-top:9px;">Véhicule non caractérisé — exclu du calcul.</div>
+              </div>
+              <div class="mk-card">
+                <div class="mk-eyebrow">Quatre piliers</div>
+                <div style="display:flex;align-items:center;gap:9px;margin-top:9px;"><span style="font-size:10.5px;color:#A9ADBB;flex:0 0 82px;">Trajectoire</span><span class="mk-bar"><i style="width:64%;background:#4F9DF7;"></i></span><span class="mk-mono" style="font-size:9.5px;">64</span></div>
+                <div style="display:flex;align-items:center;gap:9px;margin-top:7px;"><span style="font-size:10.5px;color:#A9ADBB;flex:0 0 82px;">Freinage</span><span class="mk-bar"><i style="width:58%;background:#F65B5B;"></i></span><span class="mk-mono" style="font-size:9.5px;">58</span></div>
+                <div style="display:flex;align-items:center;gap:9px;margin-top:7px;"><span style="font-size:10.5px;color:#A9ADBB;flex:0 0 82px;">Accélération</span><span class="mk-bar"><i style="width:71%;background:#4FC98A;"></i></span><span class="mk-mono" style="font-size:9.5px;">71</span></div>
+                <div style="display:flex;align-items:center;gap:9px;margin-top:7px;"><span style="font-size:10.5px;color:#9195A3;flex:0 0 82px;">Fluidité</span><span class="mk-bar"></span><span class="mk-mono" style="font-size:9.5px;color:#9195A3;">—</span></div>
+              </div>
+            </div>
+          </div>
+          <p class="mk-cap">Le bilan du soir — la valeur absente reste absente.</p>
+        </div>
+      </div>
+
+      <div class="reveal mk-rangee inv">
+        <div class="mk-txt">
+          <div style="font-family:var(--mono);font-size:9px;letter-spacing:0.24em;text-transform:uppercase;color:var(--oxv-red);margin-bottom:10px;">04 · La mesure</div>
+          <h3 style="font-family:var(--display);font-weight:600;font-size:24px;color:var(--offwhite);margin:0 0 12px;">La séance, mesure par mesure.</h3>
+          <p style="font-family:var(--sans);font-size:14.5px;line-height:1.7;color:var(--cream-mute);margin:0;">Huit sections ancrées, du résumé au nuage d'appuis. Ce nuage n'écrête jamais : son cercle porte sa propre échelle, parce qu'un nuage tassé au bord se lirait comme une limite d'adhérence — et ce serait un mensonge.</p>
+        </div>
+        <div>
+          <div class="mk-phone" role="img" aria-label="Écran de séance : rail d'ancres, tour de référence avec ses statistiques, et le nuage d'appuis G-G avec son cercle d'échelle à 1,5 g.">
+            <div class="mk-screen">
+              <div class="mk-eyebrow" style="text-align:center;color:#A9ADBB;">4 juil. 2026 · Circuit de Haute Saintonge</div>
+              <div style="display:flex;gap:6px;margin-top:11px;overflow:hidden;">
+                <span class="mk-pill" style="background:#202329;border-color:#3A3E4C;">Résumé</span><span class="mk-pill">Tours</span><span class="mk-pill">Delta</span><span class="mk-pill">Tracé</span><span class="mk-pill">Télémétrie</span>
+              </div>
+              <div class="mk-card">
+                <div class="mk-eyebrow" style="color:#C8102E;">Tour de référence</div>
+                <div class="mk-mono" style="font-weight:600;font-size:27px;margin-top:3px;">1:24.<span style="color:#C8102E;">318</span></div>
+                <div style="display:grid;grid-template-columns:1fr 1fr 1fr;margin-top:10px;border-top:1px solid #22242C;">
+                  <div style="padding:7px 2px 0;text-align:center;"><div class="mk-eyebrow">Tours</div><div class="mk-mono" style="font-size:11px;margin-top:2px;">12</div></div>
+                  <div style="padding:7px 2px 0;text-align:center;border-left:1px solid #22242C;border-right:1px solid #22242C;"><div class="mk-eyebrow">Distance</div><div class="mk-mono" style="font-size:11px;margin-top:2px;">38,4 km</div></div>
+                  <div style="padding:7px 2px 0;text-align:center;"><div class="mk-eyebrow">V. maxi</div><div class="mk-mono" style="font-size:11px;margin-top:2px;">182 km/h</div></div>
+                </div>
+              </div>
+              <div class="mk-card">
+                <div style="display:flex;justify-content:space-between;align-items:center;"><span class="mk-eyebrow">Les mesures · Appuis</span><span class="mk-mono" style="font-size:8.5px;color:#9195A3;">Cercle : 1,5 g</span></div>
+                <svg viewBox="0 0 120 120" style="display:block;width:104px;margin:8px auto 2px;" aria-hidden="true">
+                  <line x1="60" y1="6" x2="60" y2="114" stroke="#22242C"/><line x1="6" y1="60" x2="114" y2="60" stroke="#22242C"/>
+                  <circle cx="60" cy="60" r="50" fill="none" stroke="#2A2D38" stroke-dasharray="3 4"/>
+                  <g>
+                    <circle cx="60" cy="41" r="2" fill="#4F9DF7"/><circle cx="49" cy="45" r="2" fill="#4F9DF7"/><circle cx="41" cy="53" r="2" fill="#5FA8E8"/><circle cx="37" cy="63" r="2" fill="#7BB6D9"/><circle cx="40" cy="74" r="2" fill="#9CC3C2"/><circle cx="47" cy="83" r="2" fill="#BDCFA8"/><circle cx="57" cy="88" r="2" fill="#D9D98F"/><circle cx="68" cy="87" r="2" fill="#EBDB74"/><circle cx="78" cy="81" r="2" fill="#F2CE3B"/><circle cx="84" cy="71" r="2" fill="#F2CE3B"/><circle cx="85" cy="60" r="2" fill="#EBDB74"/><circle cx="81" cy="49" r="2" fill="#C9D19E"/><circle cx="73" cy="43" r="2" fill="#8FBCCB"/><circle cx="66" cy="52" r="2" fill="#6FAFDF"/><circle cx="55" cy="57" r="2" fill="#4F9DF7"/><circle cx="50" cy="66" r="2" fill="#86BACE"/><circle cx="56" cy="74" r="2" fill="#AECBB5"/><circle cx="66" cy="76" r="2" fill="#D3D695"/><circle cx="74" cy="66" r="2" fill="#E4DA7F"/><circle cx="70" cy="57" r="2" fill="#9DC3C1"/>
+                  </g>
+                </svg>
+                <div class="mk-mono" style="font-size:8px;color:#9195A3;text-align:center;line-height:1.5;">Horizontal : appui latéral. Vertical : freinage (bas) / accélération (haut).</div>
+              </div>
+            </div>
+          </div>
+          <p class="mk-cap">L'écran Séance — le nuage d'appuis et son échelle honnête.</p>
+        </div>
+      </div>
+
+      <div class="reveal mk-rangee">
+        <div class="mk-txt">
+          <div style="font-family:var(--mono);font-size:9px;letter-spacing:0.24em;text-transform:uppercase;color:var(--oxv-red);margin-bottom:10px;">05 · Au fil des mois</div>
+          <h3 style="font-family:var(--display);font-weight:600;font-size:24px;color:var(--offwhite);margin:0 0 12px;">Votre signature. Vous vs vous.</h3>
+          <p style="font-family:var(--sans);font-size:14.5px;line-height:1.7;color:var(--cream-mute);margin:0;">Cinq branches, aucune note chiffrée : un polygone, cinq couleurs, et votre empreinte mois par mois. Une branche non mesurée disparaît — elle n'est jamais tirée à zéro. Le seul comparant autorisé, c'est vous.</p>
+        </div>
+        <div>
+          <div class="mk-phone" role="img" aria-label="Écran Signature : radar à cinq branches nommées Trajectoire, Anticipation, Visée, Plongée et Cap, puis l'empreinte en cartes mensuelles.">
+            <div class="mk-screen">
+              <div style="font-weight:600;font-size:16px;letter-spacing:.12em;text-align:center;">SIGNATURE</div>
+              <svg viewBox="0 0 140 140" style="display:block;width:158px;margin:14px auto 2px;" aria-hidden="true">
+                <g fill="none" stroke="#22242C"><polygon points="70,24 113.7,55.8 97,106.2 43,106.2 26.3,55.8"/><polygon points="70,38 100.4,60.1 88.8,95.9 51.2,95.9 39.6,60.1"/><polygon points="70,52 87.1,64.4 80.6,84.6 59.4,84.6 52.9,64.4"/></g>
+                <polygon points="70,34.1 97.1,61.2 84.9,90.5 51.6,95.3 39.4,60.1" fill="rgba(232,233,237,0.06)" stroke="#E8E9ED" stroke-width="1.6"/>
+                <circle cx="70" cy="34.1" r="4" fill="#4F9DF7"/><circle cx="97.1" cy="61.2" r="4" fill="#F2CE3B"/><circle cx="84.9" cy="90.5" r="4" fill="#F65B5B"/><circle cx="51.6" cy="95.3" r="4" fill="#4FC98A"/><circle cx="39.4" cy="60.1" r="4" fill="#66E4F3"/>
+                <g font-family="Hanken Grotesk,sans-serif" font-size="8.5" fill="#A9ADBB"><text x="70" y="14" text-anchor="middle">Trajectoire</text><text x="120" y="53" text-anchor="middle">Anticipation</text><text x="101" y="119" text-anchor="middle">Visée</text><text x="40" y="119" text-anchor="middle">Plongée</text><text x="21" y="53" text-anchor="middle">Cap</text></g>
+              </svg>
+              <div class="mk-mono" style="font-size:9.5px;letter-spacing:.08em;color:#A9ADBB;text-align:center;margin-top:6px;">Signature générale · 11 séances</div>
+              <div style="margin-top:14px;">
+                <div class="mk-eyebrow">Empreinte</div>
+                <div style="display:flex;gap:8px;margin-top:8px;">
+                  <div style="flex:1;background:#1B1D24;border:1px solid #2A2D38;border-radius:12px;padding:8px;text-align:center;"><svg viewBox="0 0 36 36" width="34" aria-hidden="true"><polygon points="18,7 28.5,14.6 24.5,27 11.5,27 7.5,14.6" fill="none" stroke="#3A3E4C"/><polygon points="18,11 25,16.5 22.5,24 13.5,24 11,16.5" fill="none" stroke="#E8E9ED"/></svg><div class="mk-eyebrow" style="margin-top:5px;">Mai</div></div>
+                  <div style="flex:1;background:#1B1D24;border:1px solid #2A2D38;border-radius:12px;padding:8px;text-align:center;"><svg viewBox="0 0 36 36" width="34" aria-hidden="true"><polygon points="18,7 28.5,14.6 24.5,27 11.5,27 7.5,14.6" fill="none" stroke="#3A3E4C"/><polygon points="18,10 26,16 23,25 13,25 10,16" fill="none" stroke="#E8E9ED"/></svg><div class="mk-eyebrow" style="margin-top:5px;">Juin</div></div>
+                  <div style="flex:1;background:#1B1D24;border:1px solid #C8102E;border-radius:12px;padding:8px;text-align:center;"><svg viewBox="0 0 36 36" width="34" aria-hidden="true"><polygon points="18,7 28.5,14.6 24.5,27 11.5,27 7.5,14.6" fill="none" stroke="#3A3E4C"/><polygon points="18,9 26.6,15.5 23.6,25.6 12.4,25.6 9.4,15.5" fill="none" stroke="#E8E9ED"/></svg><div class="mk-eyebrow" style="margin-top:5px;color:#C8102E;">Juil.</div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <p class="mk-cap">L'écran Signature — le polygone, jamais la note.</p>
+        </div>
+      </div>
+
+      <div class="reveal mk-rangee inv">
+        <div class="mk-txt">
+          <div style="font-family:var(--mono);font-size:9px;letter-spacing:0.24em;text-transform:uppercase;color:var(--oxv-red);margin-bottom:10px;">06 · À plusieurs</div>
+          <h3 style="font-family:var(--display);font-weight:600;font-size:24px;color:var(--offwhite);margin:0 0 12px;">L'écurie, sans chrono.</h3>
+          <p style="font-family:var(--sans);font-size:14.5px;line-height:1.7;color:var(--cream-mute);margin:0;">Un nom, un insigne dessiné au trait, des pilotes. Pas un temps, pas un rang, pas un « meilleur » : une garde automatique interdit tout chrono sur cet écran. L'annuaire des écuries est trié — mais jamais numéroté.</p>
+        </div>
+        <div>
+          <div class="mk-phone" role="img" aria-label="Écran Écurie : le nom Les Pistards, quatre pilotes, l'insigne au trait doré, et la liste des membres avec le capitaine.">
+            <div class="mk-screen">
+              <div style="font-weight:600;font-size:13px;letter-spacing:.14em;text-align:center;">ÉCURIE</div>
+              <div style="font-weight:600;font-size:23px;margin-top:16px;">Les Pistards</div>
+              <div class="mk-eyebrow" style="margin-top:4px;">4 pilotes</div>
+              <div style="margin-top:16px;">
+                <div class="mk-eyebrow">L'insigne</div>
+                <div style="display:flex;gap:8px;margin-top:8px;">
+                  <div style="width:56px;height:48px;border:1px solid #2A2D38;border-radius:12px;display:flex;align-items:center;justify-content:center;"><svg viewBox="0 0 44 36" width="38" aria-hidden="true"><path d="M10 6 h24 v14 c0 6 -6 9 -12 11 c-6 -2 -12 -5 -12 -11 Z" fill="none" stroke="#9195A3" stroke-width="2"/></svg></div>
+                  <div style="width:56px;height:48px;border:2px solid #C4A459;border-radius:12px;display:flex;align-items:center;justify-content:center;"><svg viewBox="0 0 44 36" width="38" aria-hidden="true"><path d="M8 26 L22 8 L36 26 M15 26 L22 17 L29 26" fill="none" stroke="#C4A459" stroke-width="2" stroke-linejoin="round"/></svg></div>
+                  <div style="width:56px;height:48px;border:1px solid #2A2D38;border-radius:12px;display:flex;align-items:center;justify-content:center;"><svg viewBox="0 0 44 36" width="38" aria-hidden="true"><path d="M22 5 L36 18 L22 31 L8 18 Z" fill="none" stroke="#9195A3" stroke-width="2" stroke-linejoin="round"/></svg></div>
+                </div>
+              </div>
+              <div style="margin-top:16px;">
+                <div class="mk-eyebrow">Les pilotes</div>
+                <div style="display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:1px solid #22242C;"><span style="font-size:13px;">Gabin <span style="color:#9195A3;">· vous</span></span><span class="mk-eyebrow">Capitaine</span></div>
+                <div style="display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:1px solid #22242C;"><span style="font-size:13px;">@karim</span></div>
+                <div style="display:flex;justify-content:space-between;align-items:center;padding:10px 0;"><span style="font-size:13px;">Léa</span></div>
+              </div>
+            </div>
+          </div>
+          <p class="mk-cap">L'écran Écurie — l'appartenance, jamais la compétition.</p>
+        </div>
+      </div>
+
+      <div class="reveal mk-rangee">
+        <div class="mk-txt">
+          <div style="font-family:var(--mono);font-size:9px;letter-spacing:0.24em;text-transform:uppercase;color:var(--oxv-red);margin-bottom:10px;">07 · Vos données</div>
+          <h3 style="font-family:var(--display);font-weight:600;font-size:24px;color:var(--offwhite);margin:0 0 12px;">Des réglages qui se lisent.</h3>
+          <p style="font-family:var(--sans);font-size:14.5px;line-height:1.7;color:var(--cream-mute);margin:0;">Chaque interrupteur dit ce qu'il fait, en une ligne factuelle. Tout est coupé par défaut, l'export de vos données est un bouton, la suppression du compte aussi — et un écran « Méthode » explique, grandeur par grandeur, ce qui est mesuré, déduit ou inféré.</p>
+        </div>
+        <div>
+          <div class="mk-phone" role="img" aria-label="Écran Réglages : interrupteurs de notifications avec leur explication, et les actions Exporter mes données et Supprimer mon compte.">
+            <div class="mk-screen">
+              <div style="font-weight:600;font-size:13px;letter-spacing:.14em;text-align:center;">RÉGLAGES</div>
+              <div style="margin-top:14px;"><div class="mk-eyebrow">Notifications</div></div>
+              <div class="mk-card" style="margin-top:8px;">
+                <div style="display:flex;justify-content:space-between;align-items:center;gap:10px;"><div><div style="font-size:12.5px;">Notifications OXV</div><div style="font-size:9.5px;color:#9195A3;margin-top:2px;">Rien pendant que vous roulez.</div></div><span class="mk-toggle on"></span></div>
+                <div style="display:flex;justify-content:space-between;align-items:center;gap:10px;margin-top:12px;padding-top:12px;border-top:1px solid #22242C;"><div><div style="font-size:12.5px;">Offres partenaires</div><div style="font-size:9.5px;color:#9195A3;margin-top:2px;">Coupé par défaut, rien sans votre accord.</div></div><span class="mk-toggle off"></span></div>
+              </div>
+              <div style="margin-top:14px;"><div class="mk-eyebrow">Données &amp; sécurité</div></div>
+              <div class="mk-card" style="margin-top:8px;">
+                <div style="display:flex;justify-content:space-between;align-items:center;padding:2px 0 10px;border-bottom:1px solid #22242C;"><div><div style="font-size:12.5px;">Exporter mes données</div><div style="font-size:9.5px;color:#9195A3;margin-top:2px;">Une copie de vos données, au format ouvert.</div></div><span style="color:#787C8A;">›</span></div>
+                <div style="display:flex;justify-content:space-between;align-items:center;padding:10px 0 2px;"><div><div style="font-size:12.5px;color:#C8102E;">Supprimer mon compte</div><div style="font-size:9.5px;color:#9195A3;margin-top:2px;">Suppression définitive après 30 jours.</div></div><span style="color:#787C8A;">›</span></div>
+              </div>
+              <div style="font-size:9.5px;color:#9195A3;margin-top:auto;padding-top:12px;">Une question sur vos données ? Écrivez à contact@oxvehicle.fr.</div>
+            </div>
+          </div>
+          <p class="mk-cap">Les réglages — et l'écran « Méthode » qui dit d'où vient chaque chiffre.</p>
+        </div>
+      </div>
+
+      <div class="reveal mk-rangee inv">
+        <div class="mk-txt">
+          <div style="font-family:var(--mono);font-size:9px;letter-spacing:0.24em;text-transform:uppercase;color:var(--oxv-red);margin-bottom:10px;">08 · Entre les journées</div>
+          <h3 style="font-family:var(--display);font-weight:600;font-size:24px;color:var(--offwhite);margin:0 0 12px;">La route, à votre goût — puis à votre écurie.</h3>
+          <p style="font-family:var(--sans);font-size:14.5px;line-height:1.7;color:var(--cream-mute);margin:0;">Choisissez la sinuosité, posez une adresse ou touchez un point remarquable — l'app trace votre balade. Hors chrono, donc sans or et sans classement : juste la route. Et la sortie d'écurie se partage en une phrase, sans un chiffre — « Place de Pons → La Table du Cognac → Circuit de Haute Saintonge » — avec le rendez-vous, l'étape à table, et deux réponses possibles : « Je viens » ou « Je ne viens pas ».</p>
+        </div>
+        <div>
+          <div class="mk-phone" role="img" aria-label="Écran Créer votre route : choix de sinuosité, carte sombre avec le tracé et ses points remarquables, puces départ, étape et arrivée, résumé kilométrique et bouton Tracer la route.">
+            <div class="mk-screen">
+              <div style="text-align:center;"><div class="mk-eyebrow" style="color:#A9ADBB;">Créer votre route</div><div class="mk-mono" style="font-size:8.5px;color:#787C8A;margin-top:2px;">Balade · hors chrono</div></div>
+              <div style="display:flex;align-items:center;gap:8px;margin-top:12px;"><span style="width:5px;height:5px;border-radius:50%;background:#9195A3;"></span><span class="mk-eyebrow">Sinuosité de balade</span><span style="flex:1;border-top:1px solid #22242C;"></span></div>
+              <div style="display:flex;gap:6px;margin-top:8px;"><span class="mk-pill" style="color:#9195A3;">Douce</span><span class="mk-pill" style="background:#202329;border-color:#3A3E4C;">Sinueuse</span><span class="mk-pill" style="color:#9195A3;">Très sinueuse</span></div>
+              <div style="position:relative;border:1px solid #2A2D38;border-radius:14px;overflow:hidden;height:168px;margin-top:12px;background:#101216;">
+                <svg viewBox="0 0 240 168" style="position:absolute;inset:0;width:100%;height:100%;" aria-hidden="true">
+                  <path d="M28 138 C56 128 48 96 78 88 C112 79 118 104 148 96 C182 87 178 56 206 44" fill="none" stroke="#E8E9ED" stroke-width="2.2" stroke-linecap="round"/>
+                  <circle cx="28" cy="138" r="7" fill="#E8E9ED"/>
+                  <circle cx="96" cy="120" r="5" fill="#A783F2"/><circle cx="64" cy="70" r="5" fill="#8FA6C4"/><circle cx="176" cy="112" r="5" fill="#E091B8"/>
+                  <circle cx="148" cy="96" r="9" fill="#FFFFFF"/>
+                  <circle cx="206" cy="44" r="7" fill="#E8E9ED"/>
+                </svg>
+                <div style="position:absolute;top:8px;left:8px;background:rgba(11,11,13,0.72);border-radius:8px;padding:6px 8px;" class="mk-mono">
+                  <div style="font-size:6.5px;letter-spacing:.14em;color:#A9ADBB;"><i style="display:inline-block;width:5px;height:5px;border-radius:50%;background:#A783F2;margin-right:5px;"></i>COL</div>
+                  <div style="font-size:6.5px;letter-spacing:.14em;color:#A9ADBB;margin-top:3px;"><i style="display:inline-block;width:5px;height:5px;border-radius:50%;background:#8FA6C4;margin-right:5px;"></i>EAU</div>
+                  <div style="font-size:6.5px;letter-spacing:.14em;color:#A9ADBB;margin-top:3px;"><i style="display:inline-block;width:5px;height:5px;border-radius:50%;background:#FFFFFF;margin-right:5px;"></i>ÉTAPE</div>
+                </div>
+                <div class="mk-mono" style="position:absolute;bottom:6px;right:8px;font-size:6px;color:#787C8A;">Powered by GraphHopper · © OpenStreetMap</div>
+              </div>
+              <div style="display:flex;gap:5px;flex-wrap:wrap;margin-top:10px;">
+                <span class="mk-pill" style="background:#202329;border-color:#202329;font-size:7px;"><i style="display:inline-block;width:5px;height:5px;border-radius:50%;background:#E8E9ED;margin-right:5px;"></i>Départ · votre position</span>
+                <span class="mk-pill" style="background:#202329;border-color:#202329;font-size:7px;"><i style="display:inline-block;width:5px;height:5px;border-radius:50%;background:#FFFFFF;margin-right:5px;"></i>Étape ×</span>
+                <span class="mk-pill" style="background:#202329;border-color:#202329;font-size:7px;"><i style="display:inline-block;width:5px;height:5px;border-radius:50%;background:#E8E9ED;margin-right:5px;"></i>Arrivée ×</span>
+              </div>
+              <div class="mk-mono" style="font-size:9px;color:#A9ADBB;text-align:center;margin-top:10px;">84 km · 96 min · 320 m D+ · sinuosité 1,42</div>
+              <div style="display:flex;gap:8px;margin-top:10px;">
+                <span class="mk-pill" style="flex:1;text-align:center;background:#C8102E;border-color:#C8102E;padding:9px 10px;font-size:9px;">Tracer la route</span>
+                <span class="mk-pill" style="flex:1;text-align:center;padding:9px 10px;font-size:9px;color:#A9ADBB;">Enregistrer</span>
+              </div>
+            </div>
+          </div>
+          <p class="mk-cap">« Créer votre route » — composée à votre goût, cartes auto-hébergées.</p>
+        </div>
+      </div>
+
+      <div class="reveal mk-rangee">
+        <div class="mk-txt">
+          <div style="font-family:var(--mono);font-size:9px;letter-spacing:0.24em;text-transform:uppercase;color:var(--oxv-red);margin-bottom:10px;">09 · Vos médias</div>
+          <h3 style="font-family:var(--display);font-weight:600;font-size:24px;color:var(--offwhite);margin:0 0 12px;">Tout est à vous. Littéralement.</h3>
+          <p style="font-family:var(--sans);font-size:14.5px;line-height:1.7;color:var(--cream-mute);margin:0;">Vos photos et vidéos de roulage sont déposées par OXV après chaque journée — visibles de vous seul, en plein écran, à votre nom. Vous partagez par des liens qui expirent tous, où rien n'est exposé par défaut, révocables d'un geste. Et l'archive complète de vos données se récupère en un bouton, au format ouvert.</p>
+        </div>
+        <div>
+          <div class="mk-phone" role="img" aria-label="Écran Galerie : vos souvenirs groupés par séance, une mosaïque de médias dont une vidéo, et la carte des liens de partage avec leur date d'expiration et le bouton Révoquer.">
+            <div class="mk-screen">
+              <div class="mk-eyebrow" style="color:#C8102E;">Vos souvenirs</div>
+              <div style="font-weight:600;font-size:19px;letter-spacing:.09em;margin-top:2px;">GALERIE</div>
+              <div style="display:flex;gap:6px;margin-top:10px;"><span class="mk-pill" style="background:#202329;border-color:#3A3E4C;">Galerie</span><span class="mk-pill" style="color:#9195A3;">Partages</span></div>
+              <div style="display:flex;justify-content:space-between;align-items:center;margin-top:12px;"><span class="mk-eyebrow">24/05 · Circuit de Haute Saintonge</span><span class="mk-mono" style="font-size:9px;color:#A9ADBB;">18</span></div>
+              <div class="mk-tuiles" style="margin-top:8px;">
+                <div style="height:74px;background:linear-gradient(135deg,#23262E,#171920);"></div>
+                <div style="height:54px;background:linear-gradient(160deg,#1D2027,#14161C);"></div>
+                <div style="height:54px;background:linear-gradient(150deg,#202730,#161A21);position:relative;"><span class="mk-mono" style="position:absolute;bottom:5px;right:6px;font-size:7px;letter-spacing:.1em;color:#E8E9ED;background:rgba(10,11,14,0.72);border-radius:6px;padding:2px 6px;">Vidéo</span></div>
+                <div style="height:74px;background:linear-gradient(140deg,#262231,#17151E);"></div>
+              </div>
+              <div class="mk-card">
+                <div class="mk-eyebrow">Liens de partage</div>
+                <div style="display:flex;justify-content:space-between;align-items:center;margin-top:9px;"><div><div style="font-size:12px;">Dernière séance</div><div class="mk-mono" style="font-size:8.5px;color:#9195A3;margin-top:2px;">3 vues · valable jusqu'au 01/09</div></div><span style="font-size:11px;color:#C8102E;">Révoquer</span></div>
+                <div style="display:flex;justify-content:space-between;align-items:center;margin-top:10px;padding-top:10px;border-top:1px solid #22242C;"><span style="font-size:12px;color:#A9ADBB;">Créer un lien de partage</span><span style="color:#787C8A;">›</span></div>
+              </div>
+            </div>
+          </div>
+          <p class="mk-cap">La galerie — vignettes symbolisées ici ; dans l'app, vos vraies images.</p>
+        </div>
+      </div>
+
+      <div class="reveal" style="margin-bottom:12px;">
+        <div class="kicker">— Et encore</div>
+      </div>
+      <div class="reveal" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:16px;margin-bottom:48px;">
+        <div class="bento" style="padding:22px;">
+          <div style="font-family:var(--mono);font-size:9px;letter-spacing:0.22em;text-transform:uppercase;margin-bottom:8px;color:var(--oxv-red);">Le pass du jour J</div>
+          <p style="font-family:var(--sans);font-size:13.5px;line-height:1.6;color:var(--cream-mute);margin:0;">Votre QR de présence, le check-in d'un geste — la journée commence sans papier.</p>
+        </div>
+        <div class="bento" style="padding:22px;">
+          <div style="font-family:var(--mono);font-size:9px;letter-spacing:0.22em;text-transform:uppercase;margin-bottom:8px;color:var(--blue-data);">Paddock sans réseau</div>
+          <p style="font-family:var(--sans);font-size:13.5px;line-height:1.6;color:var(--cream-mute);margin:0;">La capture s'écrit d'abord sur le téléphone, puis s'envoie sans doublon. Le réseau saturé d'un samedi de roulage n'est pas un risque : c'est le cas prévu.</p>
+        </div>
+        <div class="bento" style="padding:22px;">
+          <div style="font-family:var(--mono);font-size:9px;letter-spacing:0.22em;text-transform:uppercase;margin-bottom:8px;color:var(--gold-data);">La carte-souvenir</div>
+          <p style="font-family:var(--sans);font-size:13.5px;line-height:1.6;color:var(--cream-mute);margin:0;">Le seul or de l'application est celui du chrono : une carte gravée de votre meilleur tour, à partager — rien d'autre ne sort de la séance.</p>
+        </div>
+        <div class="bento" style="padding:22px;">
+          <div style="font-family:var(--mono);font-size:9px;letter-spacing:0.22em;text-transform:uppercase;margin-bottom:8px;color:var(--blue-data);">Plusieurs circuits</div>
+          <p style="font-family:var(--sans);font-size:13.5px;line-height:1.6;color:var(--cream-mute);margin:0;">Trois tracés déjà modélisés — l'architecture apprend un circuit, elle n'en dépend d'aucun.</p>
+        </div>
+      </div>
 
       <!-- ============ L'ECURIE ============ -->
       <div class="reveal" style="margin-bottom:20px;">
@@ -21492,6 +21874,82 @@ body.pav-tv .nav, body.pav-tv footer, body.pav-tv .cookie, body.pav-tv .founding
           <p style="font-family:var(--sans);font-size:14px;line-height:1.65;color:var(--cream-mute);margin:0;"><strong style="color:var(--cream);">Des offres réservées</strong> — certaines conditions ne sont accessibles qu'aux membres, depuis leur fiche.</p>
           <p style="font-family:var(--sans);font-size:14px;line-height:1.65;color:var(--cream-mute);margin:0;"><strong style="color:var(--cream);">Sur place</strong> — permanence technique et essais de véhicules, les jours de roulage, selon les partenaires présents.</p>
           <p style="font-family:var(--sans);font-size:14px;line-height:1.65;color:var(--cream-mute);margin:0;"><strong style="color:var(--cream);">Vos coordonnées</strong> — elles ne partent jamais sans vous. Le consentement se donne au briefing, pilote par pilote, et se retire.</p>
+        </div>
+      </div>
+
+      <div class="reveal mk-rangee" style="margin-top:8px;">
+        <div class="mk-txt">
+          <div style="font-family:var(--mono);font-size:9px;letter-spacing:0.24em;text-transform:uppercase;color:var(--gold-data);margin-bottom:10px;">Vu du coach</div>
+          <h3 style="font-family:var(--display);font-weight:600;font-size:24px;color:var(--offwhite);margin:0 0 12px;">Une console. Pas une clé.</h3>
+          <p style="font-family:var(--sans);font-size:14.5px;line-height:1.7;color:var(--cream-mute);margin:0;">Le coach ne voit que les pilotes qui ont consenti — en lecture seule, au niveau que chacun a choisi, révocable à tout moment. Jamais un email, un téléphone ou une adresse ; chaque consultation est journalisée. Jusqu'au design : l'espace coach porte son propre rouge, pour que sa parole ne se confonde jamais avec la marque.</p>
+        </div>
+        <div>
+          <div class="mk-phone" role="img" aria-label="Console du coach : la liste de ses pilotes consentis avec les séances à lire, l'activité des sept derniers jours, et le bouton Lire la séance de Camille.">
+            <div class="mk-screen mk-screen--coach">
+              <div class="mk-eyebrow">Poste de pilotage</div>
+              <div style="font-weight:600;font-size:19px;margin-top:2px;">Mes pilotes</div>
+              <div style="background:#141416;border:1px solid #232326;border-radius:11px;padding:9px 12px;font-size:11px;color:#898991;margin-top:11px;">Rechercher un pilote</div>
+              <div class="mk-card" style="border-left:2px solid #E23A4E;">
+                <div style="display:flex;align-items:center;gap:10px;">
+                  <div class="mk-mono" style="width:34px;height:34px;border-radius:50%;background:#16161A;display:flex;align-items:center;justify-content:center;font-size:10px;color:#9A9AA3;">CM</div>
+                  <div style="flex:1;"><div style="font-size:13px;font-weight:600;">Camille Martin</div><div style="font-size:10px;color:#9A9AA3;margin-top:1px;">Haute Saintonge · il y a 2 h</div></div>
+                  <span class="mk-badge-lire">2 À LIRE</span>
+                </div>
+              </div>
+              <div class="mk-card">
+                <div style="display:flex;align-items:center;gap:10px;">
+                  <div class="mk-mono" style="width:34px;height:34px;border-radius:50%;background:#16161A;display:flex;align-items:center;justify-content:center;font-size:10px;color:#9A9AA3;">LB</div>
+                  <div style="flex:1;"><div style="font-size:13px;font-weight:600;">Louis Bernard</div><div style="font-size:10px;color:#9A9AA3;margin-top:1px;">Apprivoisé</div></div>
+                  <span style="color:#787C8A;">›</span>
+                </div>
+              </div>
+              <div class="mk-card">
+                <div class="mk-eyebrow">Séances reçues · 7 jours</div>
+                <div style="display:flex;align-items:flex-end;gap:14px;margin-top:9px;">
+                  <div class="mk-mono" style="font-weight:600;font-size:21px;">6</div>
+                  <div style="display:flex;align-items:flex-end;gap:4px;height:26px;flex:1;border-bottom:1px solid #1E1E22;padding-bottom:1px;">
+                    <span style="width:7px;height:10px;background:#E5E5E8;border-radius:2px;"></span><span style="width:7px;height:18px;background:#E5E5E8;border-radius:2px;"></span><span style="width:7px;"></span><span style="width:7px;height:8px;background:#E5E5E8;border-radius:2px;"></span><span style="width:7px;height:22px;background:#E5E5E8;border-radius:2px;"></span><span style="width:7px;"></span><span style="width:7px;height:13px;background:#E5E5E8;border-radius:2px;"></span>
+                  </div>
+                </div>
+                <div class="mk-mono" style="font-size:8.5px;color:#9A9AA3;margin-top:7px;"><i style="display:inline-block;width:6px;height:6px;border-radius:50%;background:#E23A4E;margin-right:6px;"></i>2 à lire · 4 lues</div>
+              </div>
+              <div style="margin-top:12px;background:#E23A4E;border-radius:11px;padding:11px;text-align:center;font-size:11.5px;font-weight:600;color:#FFFFFF;">Lire la séance de Camille</div>
+            </div>
+          </div>
+          <p class="mk-cap">La console du coach — lecture seule, consentie, journalisée. Données d'exemple.</p>
+        </div>
+      </div>
+
+      <div class="reveal mk-rangee inv" style="margin-bottom:48px;">
+        <div class="mk-txt">
+          <div style="font-family:var(--mono);font-size:9px;letter-spacing:0.24em;text-transform:uppercase;color:var(--blue-data);margin-bottom:10px;">Vu du partenaire</div>
+          <h3 style="font-family:var(--display);font-weight:600;font-size:24px;color:var(--offwhite);margin:0 0 12px;">Une vitrine dans l'app du circuit.</h3>
+          <p style="font-family:var(--sans);font-size:14.5px;line-height:1.7;color:var(--cream-mute);margin:0;">Ce qu'un partenaire y gagne : une fiche validée par OXV dans l'annuaire des pilotes, un point sur la carte, ses offres publiées — le prix est affiché, jamais commissionné —, des mises en relation consenties et des rapports d'événement. Ce qu'il ne voit jamais : la télémétrie, ni l'identité d'un pilote qui n'a rien demandé. Les contacts qui arrivent sont donc des contacts choisis.</p>
+        </div>
+        <div>
+          <div class="mk-phone" role="img" aria-label="Annuaire des partenaires vu du pilote : la fiche du partenaire d'exemple Studio Apex, sa catégorie photographe, son offre, la phrase de consentement et le bouton Être mis en relation.">
+            <div class="mk-screen">
+              <div style="font-weight:600;font-size:13px;letter-spacing:.14em;text-align:center;">PARTENAIRES</div>
+              <div class="mk-eyebrow" style="margin-top:12px;">Autour de vos sorties</div>
+              <div style="border:1px solid #2A2D38;border-radius:16px;overflow:hidden;margin-top:9px;">
+                <div style="height:74px;background:#1B1D24;display:flex;align-items:center;justify-content:center;"><span style="font-size:26px;color:#9195A3;font-weight:600;letter-spacing:.06em;">SA</span></div>
+                <div style="padding:12px;">
+                  <div style="font-size:15px;font-weight:600;">Studio Apex</div>
+                  <span class="mk-pill" style="margin-top:7px;font-size:8px;letter-spacing:.06em;text-transform:none;color:#A9ADBB;border-color:#2A2D38;">Photographe / vidéaste</span>
+                  <div style="font-size:11.5px;color:#A9ADBB;margin-top:8px;">Stage photo — au bord de la piste, vos passages.</div>
+                </div>
+              </div>
+              <div class="mk-card">
+                <div class="mk-eyebrow">Offres</div>
+                <div style="display:flex;justify-content:space-between;align-items:center;margin-top:8px;"><span style="font-size:12px;">Stage photo</span><span style="font-size:10px;color:#A9ADBB;text-decoration:underline;text-underline-offset:2px;">Signaler</span></div>
+              </div>
+              <div style="margin-top:auto;padding-top:12px;">
+                <div style="font-size:10.5px;color:#A9ADBB;text-align:center;line-height:1.55;">Vos coordonnées — jamais vos données de pilotage — seront transmises.</div>
+                <span class="mk-pill mk-pill--rouge" style="display:block;text-align:center;padding:11px 12px;font-size:9.5px;letter-spacing:.18em;margin-top:9px;">Être mis en relation</span>
+              </div>
+            </div>
+          </div>
+          <p class="mk-cap">L'annuaire vu du pilote — « Studio Apex », partenaire d'exemple issu des tests de l'app.</p>
         </div>
       </div>
 
