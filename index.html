@@ -92,7 +92,7 @@
   "url": "https://www.oxvehicle.fr/#offers",
   "offers": [
     { "@type": "Offer", "name": "Access", "description": "Demi-journée le lundi après-midi · quatre relais · 20 pilotes max", "price": "390", "priceCurrency": "EUR", "availability": "https://schema.org/InStock", "url": "https://www.oxvehicle.fr/#offers" },
-    { "@type": "Offer", "name": "Signature", "description": "Journée complète le vendredi · télémétrie 25 Hz · restitution data · média · déjeuner traiteur", "price": "690", "priceCurrency": "EUR", "availability": "https://schema.org/InStock", "url": "https://www.oxvehicle.fr/#offers" },
+    { "@type": "Offer", "name": "Signature", "description": "Journée complète le vendredi · six relais · télémétrie 25 Hz · restitution data · média · déjeuner traiteur", "price": "690", "priceCurrency": "EUR", "availability": "https://schema.org/InStock", "url": "https://www.oxvehicle.fr/#offers" },
     { "@type": "Offer", "name": "Heritage", "description": "4 sessions Signature au choix sur la saison · priorité de réservation", "price": "2490", "priceCurrency": "EUR", "availability": "https://schema.org/InStock", "url": "https://www.oxvehicle.fr/#offers" }
   ]
 }
@@ -14395,7 +14395,7 @@ body.pav-tv .nav, body.pav-tv footer, body.pav-tv .cookie, body.pav-tv .founding
             Journée pleine le vendredi. Pilotage, télémétrie, restitution data, hospitalité soignée, captation média. Tout est compris, rien à ajouter.
           </p>
           <ul class="offer-meta">
-            <li><span>Format</span> Vendredi · journée complète 9h-17h</li>
+            <li><span>Format</span> Vendredi · journée complète (9h–17h) · six relais</li>
             <li><span>Capacité</span> 20 pilotes maximum par session</li>
           </ul>
           <div class="offer-divider"></div>
@@ -14495,7 +14495,7 @@ body.pav-tv .nav, body.pav-tv footer, body.pav-tv .cookie, body.pav-tv .founding
 
           <div class="compare-cell label">Temps de piste</div>
           <div class="compare-cell">Demi-journée · lundi</div>
-          <div class="compare-cell featured">Journée complète · vendredi</div>
+          <div class="compare-cell featured">Journée complète · vendredi · six relais</div>
           <div class="compare-cell">4 journées complètes</div>
 
           <div class="compare-cell label">Pilotes sur la piste</div>
@@ -14569,7 +14569,7 @@ body.pav-tv .nav, body.pav-tv footer, body.pav-tv .cookie, body.pav-tv .founding
           <div class="compare-card featured">
             <div class="compare-card-head">Signature <span>690 € TTC</span></div>
             <ul>
-              <li><span>Temps de piste</span>Journée complète · vendredi</li>
+              <li><span>Temps de piste</span>Journée complète · vendredi · six relais</li>
               <li><span>Pilotes sur la piste</span>20 max</li>
               <li><span>Données de roulage</span>Complètes</li>
               <li><span>Bilan (rapport QDI)</span>Compris</li>
@@ -14759,267 +14759,141 @@ body.pav-tv .nav, body.pav-tv footer, body.pav-tv .cookie, body.pav-tv .founding
                   <rect x="2" y="2" width="2" height="2" fill="#050505"/>
                 </pattern>
               </defs>
-              
+
               <rect x="0" y="0" width="1000" height="600" fill="url(#tp-grid)"/>
               <rect x="0" y="0" width="1000" height="600" fill="url(#tp-grid-major)"/>
 
               <!-- ============================================================
-                   INFRASTRUCTURE — paddock, pavillon, voie des stands
-                   Pavillon : polygone cadastral (DGI). Voie des stands : OpenStreetMap.
-                   Emprise du paddock (3 000 m²) : indicative, orientée sur le pavillon.
+                   TRACE OFFICIEL — Circuit de Haute Saintonge (Beltoise)
+                   Source : OpenStreetMap + cadastre DGI. Projection locale a
+                   echelle UNIFORME (0.9314 unite/m sur les deux axes) : les
+                   proportions du trace sont les proportions reelles.
                    ============================================================ -->
               <g class="tp-infra">
-                <path d="M 196.25,366.18 L 306.13,418.02 L 328.21,394.8 L 218.33,342.97 Z" fill="rgba(248,249,250,0.035)" stroke="rgba(248,249,250,0.20)" stroke-width="1" stroke-dasharray="5 4"/>
-                <g transform="translate(262.23, 380.49) rotate(25.3)" font-family="JetBrains Mono, monospace">
+                <path d="M 286.08,366.21 L 363.46,418.05 L 379.01,394.84 L 301.63,343.0 Z" fill="rgba(248,249,250,0.035)" stroke="rgba(248,249,250,0.20)" stroke-width="1" stroke-dasharray="5 4"/>
+                <g transform="translate(332.5, 380.5) rotate(33.8)" font-family="JetBrains Mono, monospace">
                   <text y="-1" text-anchor="middle" fill="rgba(248,249,250,0.52)" font-size="9" letter-spacing="2">PADDOCK</text>
-                  <text y="10" text-anchor="middle" fill="rgba(248,249,250,0.34)" font-size="8.5" letter-spacing="1">3 000 m²</text>
+                  <text y="10" text-anchor="middle" fill="rgba(248,249,250,0.34)" font-size="7.5" letter-spacing="1">3 000 m²</text>
                 </g>
-                <path d="M 241.72,344.92 L 234.16,352.79 L 309.24,388.21 L 316.69,380.34 Z" fill="rgba(255,183,3,0.16)" stroke="rgba(255,183,3,0.45)" stroke-width="1"/>
-                <text x="331" y="387" transform="rotate(25.3, 331, 387)" fill="rgba(255,183,3,0.55)" font-family="JetBrains Mono, monospace" font-size="8" letter-spacing="1.5">PAVILLON</text>
-                <path d="M 661.83,487.52 L 624.45,481.93 L 530.53,459.67 L 486.52,448.9 L 464.36,441.96 L 450.48,435.54 L 401.81,406.65 L 374.17,388.83 L 346.93,376.72 L 331.4,370.19 L 255.7,338.4 L 231.06,328.35 L 214.8,321.73 L 174.83,307.44 L 132.79,292.21 L 100.48,276.16 L 76.66,258.45 L 61.44,238.05 L 54.29,222.41 L 50.25,202.64 L 49.11,189.07 L 49.94,164.73" fill="none" stroke="rgba(248,249,250,0.30)" stroke-width="2.5" stroke-dasharray="7 5" stroke-linejoin="round" stroke-linecap="round"/>
-                <text x="505" y="467" transform="rotate(14, 505, 467)" fill="rgba(248,249,250,0.45)" font-family="JetBrains Mono, monospace" font-size="8" letter-spacing="1.5">VOIE DES STANDS</text>
+                <path d="M 318.12,344.95 L 312.8,352.82 L 365.67,388.24 L 370.92,380.37 Z" fill="rgba(255,183,3,0.16)" stroke="rgba(255,183,3,0.45)" stroke-width="1"/>
+                <text x="376.6" y="392.9" transform="rotate(33.8, 376.6, 392.9)" fill="rgba(255,183,3,0.55)" font-family="JetBrains Mono, monospace" font-size="8" letter-spacing="1.5">PAVILLON</text>
+                <path d="M 613.98,487.56 L 587.66,481.97 L 521.51,459.7 L 490.52,448.93 L 474.91,441.99 L 465.14,435.57 L 430.87,406.68 L 411.4,388.86 L 392.22,376.74 L 381.28,370.22 L 327.97,338.42 L 310.61,328.38 L 299.16,321.75 L 271.01,307.46 L 241.41,292.23 L 218.65,276.18 L 201.88,258.47 L 191.16,238.07 L 186.13,222.43 L 183.29,202.65 L 182.48,189.08 L 183.07,164.74" fill="none" stroke="rgba(248,249,250,0.30)" stroke-width="2.5" stroke-dasharray="7 5" stroke-linejoin="round" stroke-linecap="round"/>
+                <text x="506.0" y="468.3" transform="rotate(19.2, 506.0, 468.3)" text-anchor="middle" fill="rgba(248,249,250,0.45)" font-family="JetBrains Mono, monospace" font-size="8" letter-spacing="1.5">VOIE DES STANDS</text>
               </g>
-              
-              <!-- ============================================================
-                   TRACÉ OFFICIEL — Circuit de Haute Saintonge (Beltoise)
-                   Source : OpenStreetMap, données réelles
-                   bbox : 45.2388/45.2428 lat × -0.0967/-0.0881 lon
-                   ============================================================ -->
-              
-              <!-- Shadow du tracé (ombre portée) -->
-              <path d="M 145.82,94.21 L 178.04,97.2 L 326.51,117.16 L 799.64,176.96 L 889.3,189.25 L 933.43,195.17 L 940.97,198.18 L 946.48,202.09 L 949.6,207.93 L 950.0,215.49 L 945.86,222.86 L 937.08,228.09 L 925.93,230.83 L 884.06,230.98 L 745.11,224.88 L 700.88,223.2 L 685.16,223.62 L 672.32,226.63 L 663.52,231.71 L 656.1,239.77 L 633.71,274.72 L 593.63,333.0 L 584.17,347.77 L 580.2,356.47 L 579.39,363.5 L 581.33,374.08 L 588.4,384.28 L 599.17,393.3 L 632.59,406.77 L 673.01,422.95 L 686.94,427.29 L 702.81,426.73 L 720.32,418.39 L 755.17,404.73 L 775.01,401.41 L 796.93,401.78 L 821.52,407.15 L 839.98,415.95 L 855.72,428.46 L 864.99,438.36 L 870.45,450.53 L 870.97,463.09 L 867.31,474.44 L 858.17,486.59 L 843.46,496.22 L 826.8,502.56 L 805.87,505.79 L 788.21,504.85 L 720.87,495.99 L 661.89,487.52 L 644.38,479.83 L 601.47,454.7 L 575.49,439.63 L 546.24,428.67 L 503.66,412.63 L 443.01,388.36 L 368.46,359.89 L 308.5,336.91 L 199.04,295.03 L 180.05,283.35 L 166.92,268.35 L 154.45,256.9 L 139.58,248.4 L 111.05,235.02 L 89.59,223.06 L 64.15,200.81 L 54.5,184.52 L 50.0,164.73 L 56.24,135.3 L 76.08,113.49 L 100.54,100.86 L 123.23,95.01 L 145.82,94.21 Z"
-                    fill="none"
-                    stroke="rgba(255, 183, 3, 0.12)"
-                    stroke-width="18"
-                    stroke-linejoin="round"
-                    stroke-linecap="round"
-                    transform="translate(3, 3)"/>
-              
-              <!-- Tracé principal (or doré) -->
-              <path d="M 145.82,94.21 L 178.04,97.2 L 326.51,117.16 L 799.64,176.96 L 889.3,189.25 L 933.43,195.17 L 940.97,198.18 L 946.48,202.09 L 949.6,207.93 L 950.0,215.49 L 945.86,222.86 L 937.08,228.09 L 925.93,230.83 L 884.06,230.98 L 745.11,224.88 L 700.88,223.2 L 685.16,223.62 L 672.32,226.63 L 663.52,231.71 L 656.1,239.77 L 633.71,274.72 L 593.63,333.0 L 584.17,347.77 L 580.2,356.47 L 579.39,363.5 L 581.33,374.08 L 588.4,384.28 L 599.17,393.3 L 632.59,406.77 L 673.01,422.95 L 686.94,427.29 L 702.81,426.73 L 720.32,418.39 L 755.17,404.73 L 775.01,401.41 L 796.93,401.78 L 821.52,407.15 L 839.98,415.95 L 855.72,428.46 L 864.99,438.36 L 870.45,450.53 L 870.97,463.09 L 867.31,474.44 L 858.17,486.59 L 843.46,496.22 L 826.8,502.56 L 805.87,505.79 L 788.21,504.85 L 720.87,495.99 L 661.89,487.52 L 644.38,479.83 L 601.47,454.7 L 575.49,439.63 L 546.24,428.67 L 503.66,412.63 L 443.01,388.36 L 368.46,359.89 L 308.5,336.91 L 199.04,295.03 L 180.05,283.35 L 166.92,268.35 L 154.45,256.9 L 139.58,248.4 L 111.05,235.02 L 89.59,223.06 L 64.15,200.81 L 54.5,184.52 L 50.0,164.73 L 56.24,135.3 L 76.08,113.49 L 100.54,100.86 L 123.23,95.01 L 145.82,94.21 Z"
-                    fill="none"
-                    stroke="url(#tp-track-gradient)"
-                    stroke-width="6"
-                    stroke-linejoin="round"
-                    stroke-linecap="round"/>
-              
-              <!-- ============================================================
-                   TRACÉ OFFICIEL — Circuit de Haute Saintonge (Beltoise)
-                   Source : OpenStreetMap, données réelles
-                   bbox : 45.2388/45.2428 lat × -0.0967/-0.0881 lon
-                   ============================================================ -->
-              
-              <!-- Shadow du tracé (ombre portée) -->
-              <path d="M 145.82,94.21 L 178.04,97.2 L 326.51,117.16 L 799.64,176.96 L 889.3,189.25 L 933.43,195.17 L 940.97,198.18 L 946.48,202.09 L 949.6,207.93 L 950.0,215.49 L 945.86,222.86 L 937.08,228.09 L 925.93,230.83 L 884.06,230.98 L 745.11,224.88 L 700.88,223.2 L 685.16,223.62 L 672.32,226.63 L 663.52,231.71 L 656.1,239.77 L 633.71,274.72 L 593.63,333.0 L 584.17,347.77 L 580.2,356.47 L 579.39,363.5 L 581.33,374.08 L 588.4,384.28 L 599.17,393.3 L 632.59,406.77 L 673.01,422.95 L 686.94,427.29 L 702.81,426.73 L 720.32,418.39 L 755.17,404.73 L 775.01,401.41 L 796.93,401.78 L 821.52,407.15 L 839.98,415.95 L 855.72,428.46 L 864.99,438.36 L 870.45,450.53 L 870.97,463.09 L 867.31,474.44 L 858.17,486.59 L 843.46,496.22 L 826.8,502.56 L 805.87,505.79 L 788.21,504.85 L 720.87,495.99 L 661.89,487.52 L 644.38,479.83 L 601.47,454.7 L 575.49,439.63 L 546.24,428.67 L 503.66,412.63 L 443.01,388.36 L 368.46,359.89 L 308.5,336.91 L 199.04,295.03 L 180.05,283.35 L 166.92,268.35 L 154.45,256.9 L 139.58,248.4 L 111.05,235.02 L 89.59,223.06 L 64.15,200.81 L 54.5,184.52 L 50.0,164.73 L 56.24,135.3 L 76.08,113.49 L 100.54,100.86 L 123.23,95.01 L 145.82,94.21 Z"
-                    fill="none"
-                    stroke="rgba(255, 183, 3, 0.10)"
-                    stroke-width="22"
-                    stroke-linejoin="round"
-                    stroke-linecap="round"
-                    transform="translate(3, 3)"/>
-              
-              <!-- ============================================================
-                   SECTEURS COLORÉS — 3 secteurs pour analyse de pilotage
-                   S1 : Start → T2 (ligne droite + freinage T1)
-                   S2 : T2 → T5 (technique, droite/gauche)
-                   S3 : T5 → Start (épingle + ligne droite retour)
-                   ============================================================ -->
-              
-              <!-- SECTEUR 1 (S1) : Start → T2 — Ligne droite + freinage T1 -->
-              <path d="M 539.78,144.08 L 799.66,176.95 L 889.34,189.28 L 933.45,195.18 L 941.01,198.18 L 946.5,202.12 L 949.6,207.92 L 950.02,215.48 L 945.88,222.83 L 937.07,228.11 L 925.89,230.8 L 884.06,231.01 L 745.09,224.9 L 700.87,223.14 L 685.13,223.66 L 672.29,226.66 L 663.49,231.74 L 656.14,239.81 L 633.67,274.71"
-                    fill="none"
-                    stroke="#4ADE80"
-                    stroke-width="8"
-                    stroke-linejoin="round"
-                    stroke-linecap="round"
-                    opacity="0.95"/>
-              
-              <!-- SECTEUR 2 (S2) : T2 → T5 — Section technique -->
-              <path d="M 633.67,274.71 L 593.59,333.02 L 584.17,347.72 L 580.23,356.42 L 579.41,363.46 L 581.37,374.13 L 588.41,384.28 L 599.18,393.29 L 632.63,406.75 L 673.02,422.9 L 686.89,427.25 L 702.84,426.74 L 720.34,418.35 L 755.13,404.78 L 775.02,401.36 L 796.97,401.78 L 821.51,407.16 L 839.94,415.97 L 855.68,428.5 L 865,438.33 L 870.49,450.55 L 871.01,463.08 L 867.28,474.48 L 858.17,486.59 L 843.46,496.22 L 826.79,502.54 L 805.87,505.75 L 788.17,504.82"
-                    fill="none"
-                    stroke="#FFC93C"
-                    stroke-width="8"
-                    stroke-linejoin="round"
-                    stroke-linecap="round"
-                    opacity="0.95"/>
-              
-              <!-- SECTEUR 3 (S3) : T5 → Start — Épingle + ligne retour -->
-              <path d="M 788.17,504.82 L 720.86,496.02 L 661.83,487.52 L 644.33,479.86 L 601.46,454.7 L 575.47,439.68 L 546.27,428.7 L 503.61,412.65 L 443.03,388.32 L 368.47,359.94 L 308.51,336.95 L 199.06,295.01 L 180,283.31 L 166.96,268.39 L 154.43,256.9 L 139.62,248.41 L 111.04,235.05 L 89.6,223.04 L 64.13,200.77 L 54.5,184.51 L 49.94,164.73 L 56.26,135.32 L 76.04,113.47 L 100.58,100.84 L 123.26,95.04 L 145.83,94.21 L 178.04,97.21 L 326.53,117.1 L 539.78,144.08"
-                    fill="none"
-                    stroke="#C084FC"
-                    stroke-width="8"
-                    stroke-linejoin="round"
-                    stroke-linecap="round"
-                    opacity="0.95"/>
-              
-              <!-- Overlay or doré au-dessus de tous les secteurs (subtle) -->
-              <path d="M 145.82,94.21 L 178.04,97.2 L 326.51,117.16 L 799.64,176.96 L 889.3,189.25 L 933.43,195.17 L 940.97,198.18 L 946.48,202.09 L 949.6,207.93 L 950.0,215.49 L 945.86,222.86 L 937.08,228.09 L 925.93,230.83 L 884.06,230.98 L 745.11,224.88 L 700.88,223.2 L 685.16,223.62 L 672.32,226.63 L 663.52,231.71 L 656.1,239.77 L 633.71,274.72 L 593.63,333.0 L 584.17,347.77 L 580.2,356.47 L 579.39,363.5 L 581.33,374.08 L 588.4,384.28 L 599.17,393.3 L 632.59,406.77 L 673.01,422.95 L 686.94,427.29 L 702.81,426.73 L 720.32,418.39 L 755.17,404.73 L 775.01,401.41 L 796.93,401.78 L 821.52,407.15 L 839.98,415.95 L 855.72,428.46 L 864.99,438.36 L 870.45,450.53 L 870.97,463.09 L 867.31,474.44 L 858.17,486.59 L 843.46,496.22 L 826.8,502.56 L 805.87,505.79 L 788.21,504.85 L 720.87,495.99 L 661.89,487.52 L 644.38,479.83 L 601.47,454.7 L 575.49,439.63 L 546.24,428.67 L 503.66,412.63 L 443.01,388.36 L 368.46,359.89 L 308.5,336.91 L 199.04,295.03 L 180.05,283.35 L 166.92,268.35 L 154.45,256.9 L 139.58,248.4 L 111.05,235.02 L 89.59,223.06 L 64.15,200.81 L 54.5,184.52 L 50.0,164.73 L 56.24,135.3 L 76.08,113.49 L 100.54,100.86 L 123.23,95.01 L 145.82,94.21 Z"
-                    fill="none"
-                    stroke="rgba(255, 183, 3, 0.25)"
-                    stroke-width="2"
-                    stroke-linejoin="round"
-                    stroke-linecap="round"/>
-              
-              <!-- ============================================================
-                   PINGS DATA — Points de lecture par virage
-                   Chaque ping = zone de lecture télémétrique (restitution factuelle)
-                   ============================================================ -->
-              
-              <g class="tp-pings">
+              <path d="M 250.6,94.21 L 273.28,97.21 L 377.85,117.1 L 711.05,176.96 L 774.2,189.29 L 805.27,195.19 L 810.59,198.19 L 814.45,202.13 L 816.64,207.93 L 816.93,215.49 L 814.02,222.84 L 807.82,228.12 L 799.94,230.82 L 770.48,231.02 L 672.61,224.91 L 641.48,223.15 L 630.39,223.67 L 621.35,226.67 L 615.15,231.75 L 609.97,239.83 L 594.15,274.73 L 565.92,333.04 L 559.29,347.74 L 556.52,356.44 L 555.93,363.49 L 557.32,374.15 L 562.28,384.3 L 569.86,393.31 L 593.42,406.78 L 621.86,422.94 L 631.63,427.29 L 642.86,426.77 L 655.19,418.38 L 679.69,404.81 L 693.69,401.39 L 709.15,401.81 L 726.43,407.19 L 739.41,416.0 L 750.5,428.53 L 757.06,438.37 L 760.93,450.59 L 761.29,463.12 L 758.67,474.51 L 752.25,486.63 L 741.89,496.26 L 730.15,502.58 L 715.42,505.79 L 702.95,504.86 L 655.55,496.05 L 613.98,487.56 L 601.66,479.9 L 571.47,454.73 L 553.16,439.71 L 532.6,428.74 L 502.55,412.68 L 459.89,388.34 L 407.38,359.97 L 365.16,336.97 L 288.08,295.03 L 274.66,283.33 L 265.47,268.41 L 256.65,256.92 L 246.22,248.42 L 226.09,235.06 L 211.0,223.05 L 193.06,200.78 L 186.28,184.52 L 183.07,164.74 L 187.51,135.33 L 201.44,113.47 L 218.73,100.84 L 234.7,95.04 L 250.6,94.21 Z" fill="none" stroke="rgba(255, 183, 3, 0.12)" stroke-width="18" stroke-linejoin="round" stroke-linecap="round" transform="translate(3, 3)"/>
+              <path d="M 250.6,94.21 L 273.28,97.21 L 377.85,117.1 L 711.05,176.96 L 774.2,189.29 L 805.27,195.19 L 810.59,198.19 L 814.45,202.13 L 816.64,207.93 L 816.93,215.49 L 814.02,222.84 L 807.82,228.12 L 799.94,230.82 L 770.48,231.02 L 672.61,224.91 L 641.48,223.15 L 630.39,223.67 L 621.35,226.67 L 615.15,231.75 L 609.97,239.83 L 594.15,274.73 L 565.92,333.04 L 559.29,347.74 L 556.52,356.44 L 555.93,363.49 L 557.32,374.15 L 562.28,384.3 L 569.86,393.31 L 593.42,406.78 L 621.86,422.94 L 631.63,427.29 L 642.86,426.77 L 655.19,418.38 L 679.69,404.81 L 693.69,401.39 L 709.15,401.81 L 726.43,407.19 L 739.41,416.0 L 750.5,428.53 L 757.06,438.37 L 760.93,450.59 L 761.29,463.12 L 758.67,474.51 L 752.25,486.63 L 741.89,496.26 L 730.15,502.58 L 715.42,505.79 L 702.95,504.86 L 655.55,496.05 L 613.98,487.56 L 601.66,479.9 L 571.47,454.73 L 553.16,439.71 L 532.6,428.74 L 502.55,412.68 L 459.89,388.34 L 407.38,359.97 L 365.16,336.97 L 288.08,295.03 L 274.66,283.33 L 265.47,268.41 L 256.65,256.92 L 246.22,248.42 L 226.09,235.06 L 211.0,223.05 L 193.06,200.78 L 186.28,184.52 L 183.07,164.74 L 187.51,135.33 L 201.44,113.47 L 218.73,100.84 L 234.7,95.04 L 250.6,94.21 Z" fill="none" stroke="url(#tp-track-gradient)" stroke-width="6" stroke-linejoin="round" stroke-linecap="round"/>
+              <path d="M 528.03,144.08 L 711.05,176.96 L 774.2,189.29 L 805.27,195.19 L 810.59,198.19 L 814.45,202.13 L 816.64,207.93 L 816.93,215.49 L 814.02,222.84 L 807.82,228.12 L 799.94,230.82 L 770.48,231.02 L 672.61,224.91 L 641.48,223.15 L 630.39,223.67 L 621.35,226.67 L 615.15,231.75 L 609.97,239.83 L 594.15,274.73" fill="none" stroke="#4ADE80" stroke-width="8" stroke-linejoin="round" stroke-linecap="round" opacity="0.95"/>
+              <path d="M 594.15,274.73 L 565.92,333.04 L 559.29,347.74 L 556.52,356.44 L 555.93,363.49 L 557.32,374.15 L 562.28,384.3 L 569.86,393.31 L 593.42,406.78 L 621.86,422.94 L 631.63,427.29 L 642.86,426.77 L 655.19,418.38 L 679.69,404.81 L 693.69,401.39 L 709.15,401.81 L 726.43,407.19 L 739.41,416.0 L 750.5,428.53 L 757.06,438.37 L 760.93,450.59 L 761.29,463.12 L 758.67,474.51 L 752.25,486.63 L 741.89,496.26 L 730.15,502.58 L 715.42,505.79 L 702.95,504.86" fill="none" stroke="#FFC93C" stroke-width="8" stroke-linejoin="round" stroke-linecap="round" opacity="0.95"/>
+              <path d="M 702.95,504.86 L 655.55,496.05 L 613.98,487.56 L 601.66,479.9 L 571.47,454.73 L 553.16,439.71 L 532.6,428.74 L 502.55,412.68 L 459.89,388.34 L 407.38,359.97 L 365.16,336.97 L 288.08,295.03 L 274.66,283.33 L 265.47,268.41 L 256.65,256.92 L 246.22,248.42 L 226.09,235.06 L 211.0,223.05 L 193.06,200.78 L 186.28,184.52 L 183.07,164.74 L 187.51,135.33 L 201.44,113.47 L 218.73,100.84 L 234.7,95.04 L 250.6,94.21 L 273.28,97.21 L 377.85,117.1 L 528.03,144.08" fill="none" stroke="#C084FC" stroke-width="8" stroke-linejoin="round" stroke-linecap="round" opacity="0.95"/>
+              <path d="M 250.6,94.21 L 273.28,97.21 L 377.85,117.1 L 711.05,176.96 L 774.2,189.29 L 805.27,195.19 L 810.59,198.19 L 814.45,202.13 L 816.64,207.93 L 816.93,215.49 L 814.02,222.84 L 807.82,228.12 L 799.94,230.82 L 770.48,231.02 L 672.61,224.91 L 641.48,223.15 L 630.39,223.67 L 621.35,226.67 L 615.15,231.75 L 609.97,239.83 L 594.15,274.73 L 565.92,333.04 L 559.29,347.74 L 556.52,356.44 L 555.93,363.49 L 557.32,374.15 L 562.28,384.3 L 569.86,393.31 L 593.42,406.78 L 621.86,422.94 L 631.63,427.29 L 642.86,426.77 L 655.19,418.38 L 679.69,404.81 L 693.69,401.39 L 709.15,401.81 L 726.43,407.19 L 739.41,416.0 L 750.5,428.53 L 757.06,438.37 L 760.93,450.59 L 761.29,463.12 L 758.67,474.51 L 752.25,486.63 L 741.89,496.26 L 730.15,502.58 L 715.42,505.79 L 702.95,504.86 L 655.55,496.05 L 613.98,487.56 L 601.66,479.9 L 571.47,454.73 L 553.16,439.71 L 532.6,428.74 L 502.55,412.68 L 459.89,388.34 L 407.38,359.97 L 365.16,336.97 L 288.08,295.03 L 274.66,283.33 L 265.47,268.41 L 256.65,256.92 L 246.22,248.42 L 226.09,235.06 L 211.0,223.05 L 193.06,200.78 L 186.28,184.52 L 183.07,164.74 L 187.51,135.33 L 201.44,113.47 L 218.73,100.84 L 234.7,95.04 L 250.6,94.21 Z" fill="none" stroke="rgba(255, 183, 3, 0.25)" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>
 
-                <!-- PING T1 — Épingle à droite · droite · 169° · PK 330 m -->
+              <!-- PINGS DATA — reperes conserves, coordonnees recalculees -->
+              <g class="tp-pings">
                 <g class="tp-ping" data-corner="T1" data-name="T1 — Épingle à droite" data-type="braking" data-tip="Premier freinage appuyé du tour, en bout de la grande ligne droite : la décélération la plus forte du tracé s'y mesure." onclick="showCornerDetail('T1')">
-                  <circle cx="950.02" cy="215.48" r="22" fill="rgba(255, 201, 60, 0.12)" class="tp-ping-halo"/>
-                  <circle cx="950.02" cy="215.48" r="12" fill="rgba(255, 201, 60, 0.35)" class="tp-ping-pulse">
+                  <circle cx="816.93" cy="215.49" r="22" fill="rgba(255, 201, 60, 0.12)" class="tp-ping-halo"/>
+                  <circle cx="816.93" cy="215.49" r="12" fill="rgba(255, 201, 60, 0.35)" class="tp-ping-pulse">
                     <animate attributeName="r" values="10;16;10" dur="2.5s" begin="0.0s" repeatCount="indefinite"/>
                     <animate attributeName="opacity" values="0.5;0.2;0.5" dur="2.5s" begin="0.0s" repeatCount="indefinite"/>
                   </circle>
-                  <circle cx="950.02" cy="215.48" r="7" fill="#FFC93C"/>
-                  <text x="950.02" y="219.48" text-anchor="middle" fill="#050505" font-family="JetBrains Mono, monospace" font-size="9" font-weight="700">1</text>
+                  <circle cx="816.93" cy="215.49" r="7" fill="#FFC93C"/>
+                  <text x="816.93" y="219.49" text-anchor="middle" fill="#050505" font-family="JetBrains Mono, monospace" font-size="9" font-weight="700">1</text>
                 </g>
 
-                <!-- PING T2 — Gauche rapide · gauche · 69° · PK 549 m -->
                 <g class="tp-ping" data-corner="T2" data-name="T2 — Gauche rapide" data-type="speed" data-tip="Courbe rapide à gauche, négociée sans freinage. La vitesse de passage s'y lit directement dans la donnée." onclick="showCornerDetail('T2')">
-                  <circle cx="672.29" cy="226.66" r="22" fill="rgba(74, 222, 128, 0.12)" class="tp-ping-halo"/>
-                  <circle cx="672.29" cy="226.66" r="12" fill="rgba(74, 222, 128, 0.35)" class="tp-ping-pulse">
+                  <circle cx="621.35" cy="226.67" r="22" fill="rgba(74, 222, 128, 0.12)" class="tp-ping-halo"/>
+                  <circle cx="621.35" cy="226.67" r="12" fill="rgba(74, 222, 128, 0.35)" class="tp-ping-pulse">
                     <animate attributeName="r" values="10;16;10" dur="2.5s" begin="0.4s" repeatCount="indefinite"/>
                     <animate attributeName="opacity" values="0.5;0.2;0.5" dur="2.5s" begin="0.4s" repeatCount="indefinite"/>
                   </circle>
-                  <circle cx="672.29" cy="226.66" r="6" fill="#4ADE80"/>
-                  <text x="672.29" y="230.66" text-anchor="middle" fill="#050505" font-family="JetBrains Mono, monospace" font-size="9" font-weight="700">2</text>
+                  <circle cx="621.35" cy="226.67" r="6" fill="#4ADE80"/>
+                  <text x="621.35" y="230.67" text-anchor="middle" fill="#050505" font-family="JetBrains Mono, monospace" font-size="9" font-weight="700">2</text>
                 </g>
 
-                <!-- PING T3 — Gauche technique · gauche · 85° · PK 725 m -->
                 <g class="tp-ping" data-corner="T3" data-name="T3 — Gauche technique" data-type="precision" data-tip="Gauche technique qui ouvre la section sinueuse. Le placement au point de corde et sa répétabilité se lisent tour après tour — la zone la plus sensible pour la branche Trajectoire du QDI." onclick="showCornerDetail('T3')">
-                  <circle cx="581.37" cy="374.13" r="22" fill="rgba(230, 57, 70, 0.12)" class="tp-ping-halo"/>
-                  <circle cx="581.37" cy="374.13" r="12" fill="rgba(230, 57, 70, 0.35)" class="tp-ping-pulse">
+                  <circle cx="557.32" cy="374.15" r="22" fill="rgba(230, 57, 70, 0.12)" class="tp-ping-halo"/>
+                  <circle cx="557.32" cy="374.15" r="12" fill="rgba(230, 57, 70, 0.35)" class="tp-ping-pulse">
                     <animate attributeName="r" values="10;16;10" dur="2.5s" begin="0.8s" repeatCount="indefinite"/>
                     <animate attributeName="opacity" values="0.5;0.2;0.5" dur="2.5s" begin="0.8s" repeatCount="indefinite"/>
                   </circle>
-                  <circle cx="581.37" cy="374.13" r="6" fill="#E63946"/>
-                  <text x="581.37" y="378.13" text-anchor="middle" fill="#FFFFFF" font-family="JetBrains Mono, monospace" font-size="9" font-weight="700">3</text>
+                  <circle cx="557.32" cy="374.15" r="6" fill="#E63946"/>
+                  <text x="557.32" y="378.15" text-anchor="middle" fill="#FFFFFF" font-family="JetBrains Mono, monospace" font-size="9" font-weight="700">3</text>
                 </g>
 
-                <!-- PING T4 — Gauche d'appui · gauche · 64° · PK 825 m -->
                 <g class="tp-ping" data-corner="T4" data-name="T4 — Gauche d'appui" data-type="acceleration" data-tip="Gauche d'appui suivie d'une réaccélération. La trace longitudinale y montre la continuité de la remise des gaz." onclick="showCornerDetail('T4')">
-                  <circle cx="686.89" cy="427.25" r="22" fill="rgba(74, 222, 128, 0.12)" class="tp-ping-halo"/>
-                  <circle cx="686.89" cy="427.25" r="12" fill="rgba(74, 222, 128, 0.35)" class="tp-ping-pulse">
+                  <circle cx="631.63" cy="427.29" r="22" fill="rgba(74, 222, 128, 0.12)" class="tp-ping-halo"/>
+                  <circle cx="631.63" cy="427.29" r="12" fill="rgba(74, 222, 128, 0.35)" class="tp-ping-pulse">
                     <animate attributeName="r" values="10;16;10" dur="2.5s" begin="1.2s" repeatCount="indefinite"/>
                     <animate attributeName="opacity" values="0.5;0.2;0.5" dur="2.5s" begin="1.2s" repeatCount="indefinite"/>
                   </circle>
-                  <circle cx="686.89" cy="427.25" r="6" fill="#4ADE80"/>
-                  <text x="686.89" y="431.25" text-anchor="middle" fill="#050505" font-family="JetBrains Mono, monospace" font-size="9" font-weight="700">4</text>
+                  <circle cx="631.63" cy="427.29" r="6" fill="#4ADE80"/>
+                  <text x="631.63" y="431.29" text-anchor="middle" fill="#050505" font-family="JetBrains Mono, monospace" font-size="9" font-weight="700">4</text>
                 </g>
 
-                <!-- PING T5 — Épingle Saintonge · droite · 225° · PK 996 m -->
                 <g class="tp-ping" data-corner="T5" data-name="T5 — Épingle Saintonge" data-type="braking" data-tip="Épingle serrée à droite, l'arc le plus fermé du tracé : second freinage fort du tour, suivi d'une longue relance." onclick="showCornerDetail('T5')">
-                  <circle cx="870.49" cy="450.55" r="22" fill="rgba(255, 201, 60, 0.12)" class="tp-ping-halo"/>
-                  <circle cx="870.49" cy="450.55" r="12" fill="rgba(255, 201, 60, 0.35)" class="tp-ping-pulse">
+                  <circle cx="760.93" cy="450.59" r="22" fill="rgba(255, 201, 60, 0.12)" class="tp-ping-halo"/>
+                  <circle cx="760.93" cy="450.59" r="12" fill="rgba(255, 201, 60, 0.35)" class="tp-ping-pulse">
                     <animate attributeName="r" values="10;16;10" dur="2.5s" begin="1.6s" repeatCount="indefinite"/>
                     <animate attributeName="opacity" values="0.5;0.2;0.5" dur="2.5s" begin="1.6s" repeatCount="indefinite"/>
                   </circle>
-                  <circle cx="870.49" cy="450.55" r="7" fill="#FFC93C"/>
-                  <text x="870.49" y="454.55" text-anchor="middle" fill="#050505" font-family="JetBrains Mono, monospace" font-size="9" font-weight="700">5</text>
+                  <circle cx="760.93" cy="450.59" r="7" fill="#FFC93C"/>
+                  <text x="760.93" y="454.59" text-anchor="middle" fill="#050505" font-family="JetBrains Mono, monospace" font-size="9" font-weight="700">5</text>
                 </g>
 
-                <!-- PING T6 — Droite de liaison · droite · 28° · PK 1209 m -->
                 <g class="tp-ping" data-corner="T6" data-name="T6 — Droite de liaison" data-type="fluidity" data-tip="Courbe de liaison à droite, à peine marquée. La continuité de la vitesse s'y lit dans la trace longitudinale." onclick="showCornerDetail('T6')">
-                  <circle cx="644.33" cy="479.86" r="22" fill="rgba(255, 183, 3, 0.12)" class="tp-ping-halo"/>
-                  <circle cx="644.33" cy="479.86" r="12" fill="rgba(255, 183, 3, 0.35)" class="tp-ping-pulse">
+                  <circle cx="601.66" cy="479.9" r="22" fill="rgba(255, 183, 3, 0.12)" class="tp-ping-halo"/>
+                  <circle cx="601.66" cy="479.9" r="12" fill="rgba(255, 183, 3, 0.35)" class="tp-ping-pulse">
                     <animate attributeName="r" values="10;16;10" dur="2.5s" begin="2.0s" repeatCount="indefinite"/>
                     <animate attributeName="opacity" values="0.5;0.2;0.5" dur="2.5s" begin="2.0s" repeatCount="indefinite"/>
                   </circle>
-                  <circle cx="644.33" cy="479.86" r="6" fill="#FFB703"/>
-                  <text x="644.33" y="483.86" text-anchor="middle" fill="#050505" font-family="JetBrains Mono, monospace" font-size="9" font-weight="700">6</text>
+                  <circle cx="601.66" cy="479.9" r="6" fill="#FFB703"/>
+                  <text x="601.66" y="483.9" text-anchor="middle" fill="#050505" font-family="JetBrains Mono, monospace" font-size="9" font-weight="700">6</text>
                 </g>
 
-                <!-- PING T7 — Courbe de rappel · droite · 30° · PK 1620 m -->
                 <g class="tp-ping" data-corner="T7" data-name="T7 — Courbe de rappel" data-type="fluidity" data-tip="Courbe de rappel à droite, en fin de ligne de retour. La régularité d'un tour à l'autre s'y mesure." onclick="showCornerDetail('T7')">
-                  <circle cx="180" cy="283.31" r="22" fill="rgba(255, 183, 3, 0.12)" class="tp-ping-halo"/>
-                  <circle cx="180" cy="283.31" r="12" fill="rgba(255, 183, 3, 0.35)" class="tp-ping-pulse">
+                  <circle cx="274.66" cy="283.33" r="22" fill="rgba(255, 183, 3, 0.12)" class="tp-ping-halo"/>
+                  <circle cx="274.66" cy="283.33" r="12" fill="rgba(255, 183, 3, 0.35)" class="tp-ping-pulse">
                     <animate attributeName="r" values="10;16;10" dur="2.5s" begin="2.4s" repeatCount="indefinite"/>
                     <animate attributeName="opacity" values="0.5;0.2;0.5" dur="2.5s" begin="2.4s" repeatCount="indefinite"/>
                   </circle>
-                  <circle cx="180" cy="283.31" r="6" fill="#FFB703"/>
-                  <text x="180" y="287.31" text-anchor="middle" fill="#050505" font-family="JetBrains Mono, monospace" font-size="9" font-weight="700">7</text>
+                  <circle cx="274.66" cy="283.33" r="6" fill="#FFB703"/>
+                  <text x="274.66" y="287.33" text-anchor="middle" fill="#050505" font-family="JetBrains Mono, monospace" font-size="9" font-weight="700">7</text>
                 </g>
 
-                <!-- PING T8 — Épingle Beltoise · droite · 154° · PK 1818 m -->
                 <g class="tp-ping" data-corner="T8" data-name="T8 — Épingle Beltoise" data-type="precision" data-tip="Le virage signature du tracé, juste avant la ligne de départ. La position au point de corde se lit dans la vitesse mesurée sur toute la ligne droite suivante." onclick="showCornerDetail('T8')">
-                  <circle cx="56.26" cy="135.32" r="22" fill="rgba(230, 57, 70, 0.12)" class="tp-ping-halo"/>
-                  <circle cx="56.26" cy="135.32" r="12" fill="rgba(230, 57, 70, 0.35)" class="tp-ping-pulse">
+                  <circle cx="187.51" cy="135.33" r="22" fill="rgba(230, 57, 70, 0.12)" class="tp-ping-halo"/>
+                  <circle cx="187.51" cy="135.33" r="12" fill="rgba(230, 57, 70, 0.35)" class="tp-ping-pulse">
                     <animate attributeName="r" values="10;16;10" dur="2.5s" begin="2.8s" repeatCount="indefinite"/>
                     <animate attributeName="opacity" values="0.5;0.2;0.5" dur="2.5s" begin="2.8s" repeatCount="indefinite"/>
                   </circle>
-                  <circle cx="56.26" cy="135.32" r="7" fill="#E63946"/>
-                  <text x="56.26" y="139.32" text-anchor="middle" fill="#FFFFFF" font-family="JetBrains Mono, monospace" font-size="9" font-weight="700">8</text>
+                  <circle cx="187.51" cy="135.33" r="7" fill="#E63946"/>
+                  <text x="187.51" y="139.33" text-anchor="middle" fill="#FFFFFF" font-family="JetBrains Mono, monospace" font-size="9" font-weight="700">8</text>
                 </g>
-
               </g>
-              
-              <!-- Labels secteurs S1, S2, S3 -->
               <g class="tp-sector-labels" font-family="JetBrains Mono, monospace" font-size="11" font-weight="700" letter-spacing="2">
-                <!-- S1 label (vert) au milieu de la ligne droite haute -->
-                <g transform="translate(500, 95)">
-                  <rect x="-22" y="-13" width="44" height="20" rx="3" fill="rgba(74, 222, 128, 0.15)" stroke="#4ADE80" stroke-width="1"/>
-                  <text text-anchor="middle" y="2" fill="#4ADE80">S1</text>
-                </g>
-                
-                <!-- S2 label (bleu) à droite -->
-                <g transform="translate(680, 365)">
-                  <rect x="-22" y="-13" width="44" height="20" rx="3" fill="rgba(255, 201, 60, 0.15)" stroke="#FFC93C" stroke-width="1"/>
-                  <text text-anchor="middle" y="2" fill="#FFC93C">S2</text>
-                </g>
-                
-                <!-- S3 label (violet) à gauche -->
-                <g transform="translate(220, 245)">
-                  <rect x="-22" y="-13" width="44" height="20" rx="3" fill="rgba(192, 132, 252, 0.15)" stroke="#C084FC" stroke-width="1"/>
-                  <text text-anchor="middle" y="2" fill="#C084FC">S3</text>
-                </g>
+                <g transform="translate(821.2, 172.5)"><rect x="-22" y="-13" width="44" height="20" rx="3" fill="rgba(74, 222, 128, 0.15)" stroke="#4ADE80" stroke-width="1"/><text text-anchor="middle" y="2" fill="#4ADE80">S1</text></g>
+                <g transform="translate(675.5, 455.2)"><rect x="-22" y="-13" width="44" height="20" rx="3" fill="rgba(255, 201, 60, 0.15)" stroke="#FFC93C" stroke-width="1"/><text text-anchor="middle" y="2" fill="#FFC93C">S2</text></g>
+                <g transform="translate(266.6, 315.9)"><rect x="-22" y="-13" width="44" height="20" rx="3" fill="rgba(192, 132, 252, 0.15)" stroke="#C084FC" stroke-width="1"/><text text-anchor="middle" y="2" fill="#C084FC">S3</text></g>
               </g>
-              
-              <!-- Ligne de départ / arrivée — milieu de la grande ligne droite (PK 0) -->
+              <!-- Ligne de depart / arrivee — milieu de la grande ligne droite (PK 0) -->
               <g class="tp-startline">
-                <g transform="translate(539.78, 144.08) rotate(7.2)">
+                <g transform="translate(528.03, 144.08) rotate(10.2)">
                   <rect x="-3" y="-9.5" width="6" height="19" fill="url(#tp-checker)" stroke="rgba(248,249,250,0.85)" stroke-width="0.8"/>
                 </g>
-                <text x="539.78" y="121" text-anchor="middle" fill="rgba(248,249,250,0.75)" font-family="JetBrains Mono, monospace" font-size="8" letter-spacing="2">DÉPART · ARRIVÉE</text>
+                <text x="528.03" y="121.1" text-anchor="middle" fill="rgba(248,249,250,0.75)" font-family="JetBrains Mono, monospace" font-size="8" letter-spacing="2">DÉPART · ARRIVÉE</text>
               </g>
-              
-              <!-- Direction indicator (flèche, sens du tour) -->
-              <g transform="translate(450, 137) rotate(2)" fill="rgba(255, 183, 3, 0.8)">
-                <polygon points="0,-6 12,0 0,6"/>
-              </g>
-              <text x="395" y="142"
-                    fill="rgba(255, 183, 3, 0.6)"
-                    font-family="JetBrains Mono, monospace" 
-                    font-size="8" 
-                    letter-spacing="2"
-                    font-weight="500">SENS</text>
-              
-              <!-- Indicateur d'échelle bas-droit -->
-              <g transform="translate(800, 545)">
-                <line x1="0" y1="0" x2="132" y2="0" stroke="rgba(248,249,250,0.4)" stroke-width="1"/>
+              <g transform="translate(668.4, 153.0) rotate(10.2)" fill="rgba(255,183,3,0.8)"><polygon points="0,-6 12,0 0,6"/></g>
+              <text x="650.4" y="156.0" transform="rotate(10.2, 650.4, 156.0)" text-anchor="end" fill="rgba(255,183,3,0.6)" font-family="JetBrains Mono, monospace" font-size="8" letter-spacing="2" font-weight="500">SENS</text>
+              <g transform="translate(846.9, 545)">
+                <line x1="0" y1="0" x2="93.1" y2="0" stroke="rgba(248,249,250,0.4)" stroke-width="1"/>
                 <line x1="0" y1="-3" x2="0" y2="3" stroke="rgba(248,249,250,0.4)" stroke-width="1"/>
-                <line x1="132" y1="-3" x2="132" y2="3" stroke="rgba(248,249,250,0.4)" stroke-width="1"/>
-                <text x="66" y="-8" text-anchor="middle" 
-                      fill="rgba(248,249,250,0.4)"
-                      font-family="JetBrains Mono, monospace" 
-                      font-size="8" 
-                      letter-spacing="1">100 m</text>
+                <line x1="93.1" y1="-3" x2="93.1" y2="3" stroke="rgba(248,249,250,0.4)" stroke-width="1"/>
+                <text x="46.5" y="-8" text-anchor="middle" fill="rgba(248,249,250,0.4)" font-family="JetBrains Mono, monospace" font-size="8" letter-spacing="1">100 m</text>
               </g>
-              
-              <!-- Compass NORTH (bas-gauche) -->
               <g transform="translate(70, 545)">
                 <circle r="14" fill="none" stroke="rgba(248,249,250,0.3)" stroke-width="1"/>
                 <polygon points="0,-10 -4,4 4,4" fill="rgba(255,183,3,0.7)"/>
-                <text y="-22" text-anchor="middle" 
-                      fill="rgba(248,249,250,0.5)"
-                      font-family="JetBrains Mono, monospace" 
-                      font-size="9" 
-                      letter-spacing="2">N</text>
+                <text y="-22" text-anchor="middle" fill="rgba(248,249,250,0.5)" font-family="JetBrains Mono, monospace" font-size="9" letter-spacing="2">N</text>
               </g>
-              
             </svg>
           </div>
           
@@ -15136,16 +15010,16 @@ body.pav-tv .nav, body.pav-tv footer, body.pav-tv .cookie, body.pav-tv .founding
       <div class="signatures signatures--quatre reveal-stagger" style="border-top-color: var(--cream-line);">
         <div class="signature">
           <div class="signature-num">T1</div>
-          <h3 class="signature-title">Le pif-paf, l'<em>épingle</em></h3>
+          <h3 class="signature-title">Le freinage de la <em>grande droite</em></h3>
           <p class="signature-text">
-            Une cuvette à l'aveugle suivie d'une bosse, puis l'épingle V2 en montée à +9 %. Engagement tardif, fluidité, freinage en charge variable. C'est ici que se gagne le tour.
+            169° à droite, au bout des 605 mètres de la ligne droite : la décélération la plus forte du tour s'y mesure. La vitesse conservée au point de corde se lit ensuite sur toute la portion vers T2.
           </p>
         </div>
         <div class="signature">
           <div class="signature-num">T2 · T3 · T4</div>
-          <h3 class="signature-title">Triple gauche en <em>dévers</em></h3>
+          <h3 class="signature-title">La séquence des <em>trois gauches</em></h3>
           <p class="signature-text">
-            Une séquence rythmique, en appui constant. La trajectoire se dicte sur la deuxième courbe, jamais la première. Un test de lecture, pas de bras.
+            69°, 85°, 64° — les trois seuls virages à gauche du tracé, enchaînés en moins de trois cents mètres. La répétabilité du point de corde, d'un tour à l'autre, s'y lit mieux que partout ailleurs.
           </p>
         </div>
         <div class="signature">
@@ -15157,9 +15031,9 @@ body.pav-tv .nav, body.pav-tv footer, body.pav-tv .cookie, body.pav-tv .founding
         </div>
         <div class="signature">
           <div class="signature-num">T6 · T7 · T8</div>
-          <h3 class="signature-title">Le retour en <em>relance</em></h3>
+          <h3 class="signature-title">Le retour vers la <em>ligne</em></h3>
           <p class="signature-text">
-            Grande parabolique droite, dernier virage à élargir, puis 605 mètres pied droit. Sortie large : le chrono dépend de la patience, pas de l'agressivité.
+            Deux courbes de liaison à droite — 28°, 30° — puis l'épingle Beltoise, 143°, qui rouvre sur la grande ligne droite. La vitesse mesurée en sortie du dernier virage se lit sur 605 mètres : la donnée la plus parlante du tour.
           </p>
         </div>
       </div>
@@ -20667,7 +20541,7 @@ body.pav-tv .nav, body.pav-tv footer, body.pav-tv .cookie, body.pav-tv .founding
         <p>OXV propose trois offres principales pour la saison 2027 :</p>
         <p>
           · <strong>Access</strong> : 390 € TTC par pilote par session. La première session Access d'un pilote est facturée 250 € TTC ; ce tarif d'entrée s'applique une seule fois, à la première réservation, et n'est pas cumulable avec le pack Heritage. Format demi-journée, le lundi après-midi (14h–18h), quatre relais encadrés.<br/>
-          · <strong>Signature</strong> : 690 € TTC par pilote par session. Format journée complète le vendredi (9h-17h).<br/>
+          · <strong>Signature</strong> : 690 € TTC par pilote par session. Format journée complète le vendredi (9h–17h), six relais encadrés.<br/>
           · <strong>Heritage</strong> : 2 490 € TTC. Pack de 4 sessions Signature à utiliser sur la saison de souscription, avec priorité de réservation sur le calendrier. L'application OXV Mirror est comprise dans toutes les offres, sans surcoût.
         </p>
         <p>Une option Responsabilité Civile circuit (35 € TTC) peut être souscrite pour les pilotes ne disposant pas d'attestation personnelle. Les tarifs sont indiqués TTC et sont susceptibles d'évoluer ; le tarif applicable est celui en vigueur à la date de la pré-inscription validée.</p>
@@ -24269,7 +24143,7 @@ window.adminArticleDelete = async function(id) {
 // Catalogue des offres (centralisé)
 const BK_OFFERS = {
   access:    { name: 'Access',    price: 39000,  desc: 'Lundi après-midi · quatre relais · 20 pilotes max · télémétrie GPS + banque photo & vidéo' },
-  signature: { name: 'Signature', price: 69000,  desc: 'Journée complète · vendredi · télémétrie 25 Hz · média · déjeuner traiteur' },
+  signature: { name: 'Signature', price: 69000,  desc: 'Journée complète · vendredi · six relais · télémétrie 25 Hz · média · déjeuner traiteur' },
   heritage:  { name: 'Heritage',  price: 249000, desc: '4 sessions Signature · priorité de réservation · accès anticipé saison N+1' }
 };
 

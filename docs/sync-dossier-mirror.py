@@ -35,6 +35,26 @@ DST_PDF = os.path.join(SITE, "OXV_Mirror_Dossier_French_Tech.pdf")
 
 VIEWPORT = u'<meta name="viewport" content="width=device-width, initial-scale=1">'
 
+PDF_LIEN = u"""
+<!-- oxv-site:pdf — ajout du site, re-injecte par docs/sync-dossier-mirror.py.
+     Lien vers le PDF assorti, masque a l'impression. -->
+<style>
+  .oxv-pdf-lien { max-width: 800px; margin: 8px auto 56px; padding: 0 24px; text-align: center; }
+  .oxv-pdf-lien a {
+    display: inline-block; padding: 13px 26px; border: 1.5px solid #0B0B0D;
+    color: #0B0B0D; text-decoration: none; font: 600 13px/1 "Archivo", "Hanken Grotesk", sans-serif;
+    letter-spacing: 0.08em; text-transform: uppercase;
+  }
+  .oxv-pdf-lien a:hover, .oxv-pdf-lien a:focus-visible { background: #0B0B0D; color: #FFFFFF; outline: none; }
+  .oxv-pdf-lien small { display: block; margin-top: 10px; color: #8B8F98; font: 400 12px/1.5 "Hanken Grotesk", sans-serif; }
+  @media print { .oxv-pdf-lien { display: none; } }
+</style>
+<div class="oxv-pdf-lien">
+  <a id="oxvPdfLien" href="/OXV_Mirror_Dossier_French_Tech.pdf">Télécharger le dossier — PDF · 1,9 Mo</a>
+  <small>La même édition que cette page, prête à imprimer et à transmettre.</small>
+</div>
+"""
+
 MESURE = u"""
 <!-- oxv-site:mesure \u2014 ajout du site, re-injecte par docs/sync-dossier-mirror.py.
      Sans cookie. Pageview + evenement \u00ab demonstration essayee \u00bb sur #dPlay.
@@ -51,6 +71,8 @@ MESURE = u"""
     function armer() {
       var b = document.getElementById('dPlay');
       if (b) b.addEventListener('click', function () { mesure('dossier_demo_essayee'); });
+      var p = document.getElementById('oxvPdfLien');
+      if (p) p.addEventListener('click', function () { mesure('dossier_pdf_telecharge'); });
     }
     if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', armer);
     else armer();
@@ -79,7 +101,14 @@ def principal():
     else:
         print("  = viewport deja present")
 
-    # 2. bloc de mesure, en fin de document
+    # 2. lien vers le PDF assorti, apres le pied de page (masque a l'impression)
+    if u"oxv-site:pdf" not in s:
+        s = s.rstrip() + u"\n" + PDF_LIEN
+        print("  + lien PDF injecte")
+    else:
+        print("  = lien PDF deja present")
+
+    # 3. bloc de mesure, en fin de document
     if u"oxv-site:mesure" not in s:
         s = s.rstrip() + u"\n" + MESURE
         print("  + bloc de mesure injecte (pageview + #dPlay)")
