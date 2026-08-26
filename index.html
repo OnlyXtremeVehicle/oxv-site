@@ -30700,7 +30700,36 @@ window.loadPartnerProof = async function() {
       return;
     }
 
-    box.innerHTML = rapports.map(r => {
+    // Le cumul de saison : ce que l'année a produit, additionné depuis les
+    // seuls comptes-rendus remis. C'est la lecture qui manque quand on juge
+    // un partenariat journée par journée — et celle qui justifie l'annuel.
+    let partiel = false;
+    const somme = (extraire) => {
+      const brut = rapports.map(extraire);
+      const valeurs = brut.filter(v => typeof v === 'number');
+      if (valeurs.length < brut.length) partiel = true;
+      return valeurs.length ? valeurs.reduce((a, b) => a + b, 0) : null;
+    };
+    const cumul = {
+      journees: rapports.length,
+      // « Présents », pas « rencontrés » : la présence est mesurée, la
+      // rencontre ne l'est pas — on n'affirme que ce qu'on a compté.
+      pilotes: somme(r => (r.details?.presence || {}).presents),
+      contacts: somme(r => (r.details?.production || {}).contacts_consentis),
+      medias: somme(r => (r.details?.production || {}).medias_journee)
+    };
+    const bandeau = `<div class="bento" style="padding:20px 24px;margin-bottom:16px;border-color:rgba(201,162,74,0.28);">
+      <div style="font-family:var(--mono);font-size:9.5px;letter-spacing:0.2em;text-transform:uppercase;color:var(--gold-data);margin-bottom:14px;">Votre saison, à ce jour</div>
+      <div style="display:flex;gap:30px;flex-wrap:wrap;">
+        <div><div style="font-family:var(--mono);font-size:11px;color:var(--cream-mute);margin-bottom:3px;">Journées</div>${proofChiffre(cumul.journees)}</div>
+        <div><div style="font-family:var(--mono);font-size:11px;color:var(--cream-mute);margin-bottom:3px;">Pilotes présents</div>${proofChiffre(cumul.pilotes)}</div>
+        <div><div style="font-family:var(--mono);font-size:11px;color:var(--cream-mute);margin-bottom:3px;">Contacts consentis</div>${proofChiffre(cumul.contacts)}</div>
+        <div><div style="font-family:var(--mono);font-size:11px;color:var(--cream-mute);margin-bottom:3px;">Médias produits</div>${proofChiffre(cumul.medias)}</div>
+      </div>
+      ${partiel ? `<p style="font-family:var(--mono);font-size:9.5px;letter-spacing:0.06em;color:var(--cream-faint);margin:14px 0 0;">Cumul des journées effectivement mesurées : une journée dont une grandeur n'a pas été relevée n'y entre pas.</p>` : ''}
+    </div>`;
+
+    box.innerHTML = bandeau + `<div id="partnerProofContacts"></div>` + rapports.map(r => {
       const d = r.details || {};
       const presence = d.presence || {};
       const production = d.production || {};
@@ -30725,6 +30754,24 @@ window.loadPartnerProof = async function() {
       const remisLe = proofDate(r.shared_at);
       const echeance = proofDate(d.echeance || r.due_on);
 
+      // Une référence stable, à reporter sur une facture ou dans un échange :
+      // un compte-rendu contractuel se cite.
+      const reference = journee.date
+        ? 'OXV-CR-' + String(journee.date).replace(/-/g, '') + '-' + String(r.id).slice(0, 4).toUpperCase()
+        : null;
+
+      // « Essais réalisés » n'a de sens que pour un Pack Essais : ailleurs, la
+      // ligne resterait un tiret perpétuel, ce qui affaiblit le document.
+      const lignesProduction = [
+        proofLigne('Contacts consentis', proofValeur(production.contacts_consentis)),
+        proofLigne('Médias de la journée', proofValeur(production.medias_journee))
+      ];
+      if (production.essais_realises !== undefined && production.essais_realises !== null) {
+        lignesProduction.push(proofLigne('Essais réalisés', proofValeur(production.essais_realises)));
+      } else if (engagement && engagement.formule === 'pack_essais') {
+        lignesProduction.push(proofLigne('Essais réalisés', PROOF_TIRET));
+      }
+
       return `<div class="bento" style="padding:24px;margin-bottom:14px;">
         <div style="display:flex;align-items:baseline;justify-content:space-between;gap:14px;flex-wrap:wrap;margin-bottom:4px;">
           <div style="font-family:var(--display);font-size:17px;font-weight:600;color:var(--offwhite);">${escapeHtml(titre)}</div>
@@ -30733,7 +30780,7 @@ window.loadPartnerProof = async function() {
             : `<span class="tag-inline gold" style="font-size:10px;">Remis</span>`}
         </div>
         <div style="font-family:var(--mono);font-size:10px;letter-spacing:0.08em;color:var(--cream-faint);margin-bottom:18px;">
-          ${engagement && engagement.libelle ? escapeHtml(engagement.libelle) + ' · ' : ''}Échéance contractuelle : ${echeance ? escapeHtml(echeance) : PROOF_TIRET}
+          ${engagement && engagement.libelle ? escapeHtml(engagement.libelle) + ' · ' : ''}Échéance contractuelle : ${echeance ? escapeHtml(echeance) : PROOF_TIRET}${reference ? ' · Réf. ' + escapeHtml(reference) : ''}
         </div>
 
         <div style="display:flex;gap:26px;flex-wrap:wrap;">
@@ -30747,11 +30794,7 @@ window.loadPartnerProof = async function() {
             proofLigne('Pilotes présents', proofValeur(presents)),
             proofLigne('Capacité de la journée', proofValeur(capacite))
           ])}
-          ${proofBloc('Ce que ça a produit', 'var(--green-perf)', [
-            proofLigne('Contacts consentis', proofValeur(production.contacts_consentis)),
-            proofLigne('Médias de la journée', proofValeur(production.medias_journee)),
-            proofLigne('Essais réalisés', proofValeur(production.essais_realises))
-          ])}
+          ${proofBloc('Ce que ça a produit', 'var(--green-perf)', lignesProduction)}
         </div>
 
         ${r.media_summary ? `<div style="margin-top:18px;padding-top:14px;border-top:1px solid var(--bento-border);">
@@ -30767,11 +30810,76 @@ window.loadPartnerProof = async function() {
           Chiffres mesurés le jour de la journée, figés à la remise. Les contacts ne comptent que les pilotes ayant consenti.
         </p>
       </div>`;
-    }).join('');
+    }).join('') + proofReconduction(rapports);
+
+    // Les contacts consentis se chargent après coup : ils viennent d'une
+    // fonction serveur distincte, et leur absence ne doit pas retarder
+    // l'affichage des comptes-rendus.
+    loadPartnerContacts(ids[0]);
   } catch (e) {
     console.warn('[Boucle de preuve]', e);
     box.innerHTML = `<div class="bento" style="padding:22px;">Vos comptes-rendus seront affichés ici dès votre première journée engagée.</div>`;
   }
+};
+
+/* La reconduction se propose au moment où la preuve vient d'être lue — pas
+   par relance trois mois plus tard. C'est le principe affiché sur la page
+   partenaires : « le renouvellement se déclenche sur la preuve ». */
+function proofReconduction(rapports) {
+  const dernier = rapports.find(r => r.details && r.details.engagement);
+  const fin = dernier && dernier.details.engagement.fin;
+  const finTexte = fin ? proofDate(fin) : null;
+  return `<div class="bento" style="padding:22px 24px;border-color:rgba(201,162,74,0.28);">
+    <div style="display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;">
+      <div style="max-width:56ch;">
+        <div style="font-family:var(--display);font-size:15px;font-weight:600;color:var(--offwhite);margin-bottom:5px;">La saison prochaine</div>
+        <p style="font-family:var(--sans);font-size:13px;line-height:1.7;color:var(--cream-mute);margin:0;">${finTexte
+          ? `Votre engagement court jusqu'au ${escapeHtml(finTexte)}. Les dates de la saison suivante s'ouvrent d'abord aux partenaires déjà engagés.`
+          : `Les dates de la saison suivante s'ouvrent d'abord aux partenaires déjà engagés.`}</p>
+      </div>
+      <a class="btn btn-sm" href="mailto:contact@oxvehicle.fr?subject=Reconduction%20partenariat%20OXV"><span>Reconduire →</span></a>
+    </div>
+  </div>`;
+}
+
+/* Les contacts consentis — la promesse « les contacts des pilotes qui ont
+   consenti, et eux seuls » enfin tenue. Le partenaire ne pouvait jusqu'ici
+   lire que des lignes anonymes : partner_leads ne porte ni nom ni courriel,
+   et la RLS de public.users lui interdit de remonter au pilote.
+   `oxv_partner_consented_contacts` fait le pont, et rien de plus : le
+   consentement est la seule clé, et le retirer fait disparaître le contact. */
+window.loadPartnerContacts = async function(partnerAccountId) {
+  const box = document.getElementById('partnerProofContacts');
+  if (!box || !partnerAccountId) return;
+  try {
+    const { data, error } = await supabase.rpc('oxv_partner_consented_contacts', {
+      p_partner_account_id: partnerAccountId
+    });
+    if (error) { console.warn('[Contacts consentis]', error); return; }
+    if (!data || !data.length) {
+      box.innerHTML = `<div class="bento" style="padding:20px 24px;margin-bottom:16px;">
+        <div style="font-family:var(--mono);font-size:9.5px;letter-spacing:0.2em;text-transform:uppercase;color:var(--blue-data);margin-bottom:8px;">Vos contacts consentis</div>
+        <p style="font-family:var(--sans);font-size:13px;line-height:1.7;color:var(--cream-mute);margin:0;">Aucun contact pour le moment. Un pilote n'apparaît ici que s'il a donné son accord, au briefing — jamais autrement.</p>
+      </div>`;
+      return;
+    }
+    box.innerHTML = `<div class="bento" style="padding:20px 24px;margin-bottom:16px;">
+      <div style="display:flex;align-items:baseline;justify-content:space-between;gap:14px;flex-wrap:wrap;margin-bottom:12px;">
+        <div style="font-family:var(--mono);font-size:9.5px;letter-spacing:0.2em;text-transform:uppercase;color:var(--blue-data);">Vos contacts consentis</div>
+        <div style="font-family:var(--mono);font-size:10px;color:var(--cream-faint);">${data.length} pilote${data.length > 1 ? 's' : ''} · accord donné au briefing</div>
+      </div>
+      ${data.map(c => `<div style="display:flex;align-items:baseline;justify-content:space-between;gap:12px;padding:8px 0;border-top:1px solid var(--bento-border);flex-wrap:wrap;">
+        <div style="min-width:180px;">
+          <span style="font-family:var(--sans);font-size:13.5px;color:var(--offwhite);">${escapeHtml([c.prenom, c.nom].filter(Boolean).join(' ') || 'Pilote')}</span>
+          <span style="font-family:var(--mono);font-size:11px;color:var(--cream-faint);"> · ${escapeHtml(new Date(c.consenti_le).toLocaleDateString('fr-FR'))}</span>
+        </div>
+        <div style="font-family:var(--mono);font-size:11.5px;color:var(--cream-mute);text-align:right;">
+          ${c.email ? `<a href="mailto:${escapeHtml(c.email)}" style="color:var(--cream-mute);">${escapeHtml(c.email)}</a>` : ''}${c.telephone ? ' · ' + escapeHtml(c.telephone) : ''}
+        </div>
+      </div>`).join('')}
+      <p style="font-family:var(--mono);font-size:9.5px;letter-spacing:0.06em;color:var(--cream-faint);margin:12px 0 0;">Ces coordonnées vous sont transmises parce que ces pilotes l'ont accepté. Un retrait de leur accord les retire de cette liste.</p>
+    </div>`;
+  } catch (e) { console.warn('[Contacts consentis]', e); }
 };
 
 window.loadAdminPartners = async function() {
@@ -30829,7 +30937,7 @@ window.loadAdminProof = async function() {
     (comptes || []).forEach(c => { nomDe[c.id] = c.display_name; });
 
     const { data: rapports, error: repErr } = await supabase.from('b2b_event_reports')
-      .select('id, session_id, partner_id, status, shared_at, due_on, conclusion');
+      .select('id, session_id, partner_id, status, shared_at, due_on, conclusion, auto_share_blocked');
     if (repErr) {
       // Colonnes absentes = migration_preuve_partenaire.sql pas encore appliquée.
       // On le nomme, plutôt que d'afficher une liste vide qui ferait croire
@@ -30847,6 +30955,10 @@ window.loadAdminProof = async function() {
         (!e.starts_on || e.starts_on <= j.date) && (!e.ends_on || e.ends_on >= j.date));
       const echeance = new Date(j.date); echeance.setDate(echeance.getDate() + 7);
       const echStr = echeance.toLocaleDateString('fr-FR', { day: 'numeric', month: 'short', year: 'numeric' });
+      // La tâche quotidienne remet deux jours avant l'échéance : le défaut
+      // est de livrer, il faut un geste explicite pour retenir.
+      const auto = new Date(j.date); auto.setDate(auto.getDate() + 5);
+      const autoStr = auto.toLocaleDateString('fr-FR', { day: 'numeric', month: 'short' });
       const dateStr = (d => d.charAt(0).toUpperCase() + d.slice(1))(
         new Date(j.date).toLocaleDateString('fr-FR', { weekday: 'short', day: 'numeric', month: 'long', year: 'numeric' }));
 
@@ -30869,12 +30981,18 @@ window.loadAdminProof = async function() {
         lignes.push(`<div style="display:flex;align-items:center;justify-content:space-between;gap:10px;padding:12px 14px;border-top:1px solid var(--bento-border);flex-wrap:wrap;">
           <div style="min-width:220px;">
             <div style="font-family:var(--sans);font-size:14px;color:var(--cream);">${escapeHtml(nomDe[e.partner_account_id] || 'Partenaire')}</div>
-            <div style="font-family:var(--mono);font-size:11px;color:var(--cream-mute);">${escapeHtml(dateStr)} · échéance ${escapeHtml(echStr)}${enRetard ? ' · <span style="color:var(--red);">en retard</span>' : ''}</div>
+            <div style="font-family:var(--mono);font-size:11px;color:var(--cream-mute);">${escapeHtml(dateStr)} · échéance ${escapeHtml(echStr)}${enRetard ? ' · <span style="color:var(--red);">en retard</span>' : ''}${
+              r && r.status !== 'shared'
+                ? (r.auto_share_blocked
+                    ? ' · <span style="color:var(--gold);">remise auto suspendue</span>'
+                    : ` · remise auto le ${escapeHtml(autoStr)}`)
+                : ''}</div>
           </div>
           <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;">
             ${etat}
             <button class="admin-action-btn" onclick="adminCalculerPreuve('${j.id}','${e.partner_account_id}')">Calculer</button>
             ${r && r.status !== 'shared' ? `<button class="admin-action-btn" onclick="adminRemettrePreuve('${r.id}')">Remettre</button>` : ''}
+            ${r && r.status !== 'shared' ? `<button class="admin-action-btn" onclick="adminSuspendrePreuve('${r.id}',${!r.auto_share_blocked})">${r.auto_share_blocked ? 'Réactiver l’auto' : 'Suspendre l’auto'}</button>` : ''}
           </div>
         </div>`);
       });
@@ -30930,6 +31048,23 @@ window.adminCalculerPreuve = async function(sessionId, partnerAccountId) {
   } catch (e) {
     console.error('[Calcul preuve]', e);
     toast(`Calcul impossible : ${e.message || 'migration non appliquée'}`, 'warn');
+  }
+};
+
+/* Suspendre la remise automatique — pour une journée atypique ou un litige.
+   Le défaut reste de livrer : c'est la retenue qui demande un geste. */
+window.adminSuspendrePreuve = async function(reportId, suspendre) {
+  try {
+    const { data, error } = await supabase.rpc('oxv_hold_partner_proof', {
+      p_report_id: reportId, p_hold: suspendre
+    });
+    if (error) throw error;
+    if (!data || !data.ok) { toast(`Impossible : ${data?.raison || 'inconnu'}`, 'warn'); return; }
+    toast(suspendre ? 'Remise automatique suspendue' : 'Remise automatique réactivée', 'ok');
+    loadAdminProof();
+  } catch (e) {
+    console.error('[Suspension preuve]', e);
+    toast(`Impossible : ${e.message || 'migration non appliquée'}`, 'warn');
   }
 };
 
