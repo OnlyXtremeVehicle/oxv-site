@@ -25498,25 +25498,7 @@ window.bkConfirmBooking = async function() {
         p_registration_id: reg.id,
         p_method: bkState.selectedPayment
       });
-      if (payErr?.code === 'PGRST202') {
-        // REPLI TEMPORAIRE — la fonction n'existe pas encore en base.
-        // À retirer une fois migration_reservation_pilote.sql appliquée.
-        // Sans lui, la réservation d'un administrateur, seule à fonctionner
-        // aujourd'hui, cesserait de créer sa ligne de paiement.
-        const { data: insData, error: insErr } = await supabase.from('payments').insert({
-          user_id: userId,
-          registration_id: reg.id,
-          amount: priceDeposit,
-          currency: 'EUR',
-          payment_method: bkState.selectedPayment,
-          status: 'pending',
-          reference: `OXV-${reg.id.slice(0, 8).toUpperCase()}`
-        }).select('id');
-        if (insErr || !insData?.length) {
-          console.error('[booking] paiement non enregistré (repli) :', insErr || 'aucune ligne créée');
-          anomalies.push("le paiement n'a pas été enregistré");
-        }
-      } else if (payErr || !paiement?.ok) {
+      if (payErr || !paiement?.ok) {
         console.error('[booking] paiement non enregistré :', payErr || paiement);
         anomalies.push("le paiement n'a pas été enregistré");
       }
@@ -25528,18 +25510,7 @@ window.bkConfirmBooking = async function() {
       const { data: conso, error: consoErr } = await supabase.rpc('oxv_consume_heritage_session', {
         p_pack_id: bkState.heritagePack.id
       });
-      if (consoErr?.code === 'PGRST202') {
-        // Même repli temporaire, même échéance.
-        const { data: majPack, error: majErr } = await supabase
-          .from('heritage_packs')
-          .update({ sessions_used: (bkState.heritagePack.sessions_used || 0) + 1 })
-          .eq('id', bkState.heritagePack.id)
-          .select('id');
-        if (majErr || !majPack?.length) {
-          console.error('[booking] crédit Heritage non décompté (repli) :', majErr || 'aucune ligne modifiée');
-          anomalies.push("le crédit Heritage n'a pas été décompté");
-        }
-      } else if (consoErr || !conso?.ok) {
+      if (consoErr || !conso?.ok) {
         console.error('[booking] crédit Heritage non décompté :', consoErr || conso);
         anomalies.push("le crédit Heritage n'a pas été décompté");
       }
