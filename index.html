@@ -13926,6 +13926,11 @@ body.pav-tv .nav, body.pav-tv footer, body.pav-tv .cookie, body.pav-tv .founding
   <div class="mob-actions">
     <button class="btn btn-ghost" id="mobAuth" onclick="goTo('login'); closeMob()">Se connecter</button>
     <button class="btn btn-primary" id="mobCtaJoin" onclick="ctaPrimaryGo(); closeMob()">Demander une place</button>
+    <!-- La déconnexion vivait uniquement dans les barres latérales du compte et
+         de l'administration : trente-huit pages n'en offraient aucune, dont
+         l'espace partenaire, l'espace coach et les écrans du pavillon. Le menu
+         étant ouvrable à toutes les largeurs, elle est ici accessible partout. -->
+    <button class="btn btn-ghost" id="mobLogout" style="display:none;" onclick="logoutUser(); closeMob()">Se déconnecter</button>
   </div>
 </div>
 
@@ -23323,6 +23328,11 @@ function onAuthChange() {
       ? function() { goTo('compte'); closeMob(); }
       : function() { goTo('login'); closeMob(); };
   }
+
+  // Déconnexion : proposée dès qu'une session est ouverte, quelle que soit la
+  // page. Un partenaire ou un coach n'a pas de barre latérale de compte.
+  const mobLogout = document.getElementById('mobLogout');
+  if (mobLogout) mobLogout.style.display = logged ? '' : 'none';
 
   // Bandeau « Rejoindre le cercle » : réservé aux visiteurs, masqué une fois connecté
   const fb = document.getElementById('foundingBandeau');
