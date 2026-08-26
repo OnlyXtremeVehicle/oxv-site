@@ -18202,6 +18202,22 @@ body.pav-tv .nav, body.pav-tv footer, body.pav-tv .cookie, body.pav-tv .founding
         </div>
       </div>
 
+      <!-- Boucle de preuve — le compte-rendu contractuel sous sept jours.
+           Les chiffres ne se saisissent pas : ils sont calculés en base par
+           oxv_build_partner_proof, relus ici, puis figés à la remise. -->
+      <div class="admin-section">
+        <div class="admin-section-head">
+          <div class="admin-section-title">Boucle de preuve — comptes-rendus dus</div>
+          <button class="admin-section-action" onclick="loadAdminProof()">Rafraîchir</button>
+        </div>
+        <div id="adminProofRows" class="admin-todo-list">
+          <div class="admin-empty">
+            <div class="admin-empty-icon">○</div>
+            <div class="admin-empty-text">Chargement…</div>
+          </div>
+        </div>
+      </div>
+
     </main>
 
   </div>
@@ -22301,6 +22317,22 @@ body.pav-tv .nav, body.pav-tv footer, body.pav-tv .cookie, body.pav-tv .founding
           </div>
         </div>
         <p style="font-family:var(--sans);font-size:12px;color:var(--cream-faint);margin:20px 0 0;line-height:1.6;">Statistiques de visibilité détaillées : disponibles après le lancement public. Vous n'avez jamais accès aux médias privés des pilotes — c'est une garantie OXV.</p>
+
+        <!-- ╔══════════════════════════════════════════════════════╗
+             ║   LA BOUCLE DE PREUVE — compte-rendu sous sept jours  ║
+             ╚══════════════════════════════════════════════════════╝
+             Le partenaire paie une preuve, pas une visibilité. Ce que la page
+             partenaires promet publiquement se restitue ici, journée par
+             journée. Les chiffres viennent de la mesure : une valeur non
+             mesurée s'affiche en tiret, jamais en zéro. -->
+        <div style="margin-top:34px;">
+          <div style="display:flex;align-items:baseline;justify-content:space-between;gap:16px;flex-wrap:wrap;margin-bottom:6px;">
+            <div style="font-family:var(--mono);font-size:10px;letter-spacing:0.22em;text-transform:uppercase;color:var(--red);">La boucle de preuve</div>
+            <div style="font-family:var(--mono);font-size:10px;letter-spacing:0.1em;color:var(--cream-faint);">Compte-rendu contractuel · sous sept jours</div>
+          </div>
+          <p style="font-family:var(--sans);font-size:13px;line-height:1.7;color:var(--cream-mute);margin:0 0 16px;max-width:62ch;">Ce que vous avez fait, qui était là, ce que ça a produit — journée par journée. Les chiffres viennent de la mesure : ce qui n'a pas été mesuré s'affiche en tiret, jamais en zéro.</p>
+          <div id="partnerProofList" style="font-family:var(--sans);font-size:14px;color:var(--cream-mute);">Chargement…</div>
+        </div>
       </div>
 
       <!-- Mon entreprise & catalogue app (arbitrages 2026-07-18 : self-service, validation OXV par élément,
@@ -30578,7 +30610,168 @@ window.loadPartnerSpace = async function() {
         ? sess.map(s => new Date(s.date).toLocaleDateString('fr-FR', { weekday: 'short', day: 'numeric', month: 'short', year: 'numeric' })).join('<br/>')
         : 'Calendrier en préparation.';
     } catch (e) { if (sesEl) sesEl.textContent = 'Calendrier en préparation.'; }
+    loadPartnerProof();
   } catch (e) { console.warn('[Espace partenaire]', e); }
+};
+
+/* ============================================================
+   LA BOUCLE DE PREUVE — restitution au partenaire
+   ============================================================
+   « Le partenaire paie une preuve, pas une visibilité. » La page partenaires
+   promet un compte-rendu sous sept jours ; c'est ici qu'il se lit.
+
+   Le compte-rendu est un instantané FIGÉ à la remise, pas une vue qui se
+   recalcule : le partenaire doit pouvoir relire exactement ce qui lui a été
+   remis, même si les données bougent après. D'où la lecture de `details`
+   (le jsonb gelé) avant les colonnes.
+
+   La RLS fait le tri : `b2b_reports_partner_select` n'expose que les rapports
+   PARTAGÉS du partenaire lui-même. Un brouillon reste invisible — on ne
+   montre pas une preuve en cours d'écriture.
+
+   Une valeur non mesurée s'écrit « — », jamais « 0 » : un zéro affirme une
+   mesure à zéro, un tiret dit qu'on n'a pas mesuré. Sur un document
+   contractuel, la nuance n'est pas cosmétique. */
+const PROOF_TIRET = '<span style="color:var(--cream-faint);">—</span>';
+
+function proofValeur(v) {
+  return (v === null || v === undefined || v === '') ? PROOF_TIRET : escapeHtml(String(v));
+}
+
+function proofDate(d) {
+  if (!d) return null;
+  return new Date(d).toLocaleDateString('fr-FR', { day: 'numeric', month: 'long', year: 'numeric' });
+}
+
+function proofChiffre(valeur, suffixe) {
+  if (valeur === null || valeur === undefined) return PROOF_TIRET;
+  return `<span style="font-family:var(--mono);font-size:22px;color:var(--offwhite);">${escapeHtml(String(valeur))}</span>${suffixe ? `<span style="font-family:var(--mono);font-size:11px;color:var(--cream-faint);"> ${escapeHtml(suffixe)}</span>` : ''}`;
+}
+
+function proofBloc(titre, couleur, lignes) {
+  return `<div style="flex:1;min-width:190px;">
+    <div style="font-family:var(--mono);font-size:9.5px;letter-spacing:0.2em;text-transform:uppercase;color:${couleur};margin-bottom:10px;">${escapeHtml(titre)}</div>
+    ${lignes.join('')}
+  </div>`;
+}
+
+function proofLigne(libelle, valeurHtml) {
+  return `<div style="display:flex;align-items:baseline;justify-content:space-between;gap:12px;padding:5px 0;border-bottom:1px solid var(--bento-border);">
+    <span style="font-family:var(--sans);font-size:12.5px;color:var(--cream-mute);">${escapeHtml(libelle)}</span>
+    <span style="font-family:var(--mono);font-size:12.5px;color:var(--offwhite);text-align:right;">${valeurHtml}</span>
+  </div>`;
+}
+
+window.loadPartnerProof = async function() {
+  const box = document.getElementById('partnerProofList');
+  if (!box) return;
+  try {
+    const uid = window.OXVApi?.user?.profile?.id;
+    if (!uid) { box.innerHTML = ''; return; }
+
+    const { data: comptes } = await supabase
+      .from('partner_accounts').select('id, display_name').eq('profile_id', uid);
+    if (!comptes || !comptes.length) {
+      box.innerHTML = `<div class="bento" style="padding:22px;">La boucle de preuve démarre avec votre première journée engagée. Votre compte-rendu y sera déposé sous sept jours.</div>`;
+      return;
+    }
+    const ids = comptes.map(c => c.id);
+
+    // La RLS ne laisse passer que les rapports partagés, et seulement les siens.
+    const { data: rapports, error } = await supabase
+      .from('b2b_event_reports')
+      .select('id, session_id, status, registered_count, checked_in_count, media_summary, conclusion, details, due_on, shared_at, generated_at')
+      .in('partner_id', ids)
+      .order('shared_at', { ascending: false, nullsFirst: false });
+
+    if (error) {
+      // Schéma pas encore repointé (migration_preuve_partenaire.sql) : on le
+      // dit, on ne fabrique pas un écran vide qui ferait croire à zéro journée.
+      console.warn('[Boucle de preuve]', error);
+      box.innerHTML = `<div class="bento" style="padding:22px;">Vos comptes-rendus seront affichés ici dès votre première journée engagée.</div>`;
+      return;
+    }
+
+    if (!rapports || !rapports.length) {
+      box.innerHTML = `<div class="bento" style="padding:22px;">
+        <p style="margin:0 0 8px;color:var(--cream-mute);font-size:13.5px;line-height:1.7;">Aucun compte-rendu remis à ce jour.</p>
+        <p style="margin:0;font-family:var(--mono);font-size:11px;letter-spacing:0.06em;color:var(--cream-faint);">Chaque journée engagée donne lieu à un compte-rendu, remis sous sept jours.</p>
+      </div>`;
+      return;
+    }
+
+    box.innerHTML = rapports.map(r => {
+      const d = r.details || {};
+      const presence = d.presence || {};
+      const production = d.production || {};
+      const journee = d.journee || {};
+      const engagement = d.engagement || null;
+
+      // Le détail figé prime ENTIÈREMENT, ses nulls compris : s'il dit qu'une
+      // présence n'a pas été mesurée, aller rechercher un chiffre dans les
+      // colonnes le contredirait. Les colonnes ne servent que pour les
+      // rapports rédigés avant l'existence du détail jsonb.
+      const mesure = !!d.presence;
+      const inscrits = mesure ? (presence.inscrits ?? null) : (r.registered_count ?? null);
+      const presents = mesure ? (presence.presents ?? null) : (r.checked_in_count ?? null);
+      const capacite = presence.capacite ?? null;
+
+      // En français seule l'initiale prend la majuscule : « Vendredi 17 juillet
+      // 2026 ». Un text-transform:capitalize en mettrait une à chaque mot.
+      const titre = journee.date
+        ? (d => d.charAt(0).toUpperCase() + d.slice(1))(
+            new Date(journee.date).toLocaleDateString('fr-FR', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' }))
+        : 'Journée engagée';
+      const remisLe = proofDate(r.shared_at);
+      const echeance = proofDate(d.echeance || r.due_on);
+
+      return `<div class="bento" style="padding:24px;margin-bottom:14px;">
+        <div style="display:flex;align-items:baseline;justify-content:space-between;gap:14px;flex-wrap:wrap;margin-bottom:4px;">
+          <div style="font-family:var(--display);font-size:17px;font-weight:600;color:var(--offwhite);">${escapeHtml(titre)}</div>
+          ${remisLe
+            ? `<span class="tag-inline green" style="font-size:10px;">Remis le ${escapeHtml(remisLe)}</span>`
+            : `<span class="tag-inline gold" style="font-size:10px;">Remis</span>`}
+        </div>
+        <div style="font-family:var(--mono);font-size:10px;letter-spacing:0.08em;color:var(--cream-faint);margin-bottom:18px;">
+          ${engagement && engagement.libelle ? escapeHtml(engagement.libelle) + ' · ' : ''}Échéance contractuelle : ${echeance ? escapeHtml(echeance) : PROOF_TIRET}
+        </div>
+
+        <div style="display:flex;gap:26px;flex-wrap:wrap;">
+          ${proofBloc('Ce que vous avez fait', 'var(--gold-data)', [
+            proofLigne('Formule engagée', proofValeur(engagement && engagement.libelle)),
+            proofLigne('Quantité', proofValeur(engagement && engagement.quantite)),
+            proofLigne('Offres publiées', proofValeur(production.offres_publiees))
+          ])}
+          ${proofBloc('Qui était là', 'var(--blue-data)', [
+            proofLigne('Pilotes inscrits', proofValeur(inscrits)),
+            proofLigne('Pilotes présents', proofValeur(presents)),
+            proofLigne('Capacité de la journée', proofValeur(capacite))
+          ])}
+          ${proofBloc('Ce que ça a produit', 'var(--green-perf)', [
+            proofLigne('Contacts consentis', proofValeur(production.contacts_consentis)),
+            proofLigne('Médias de la journée', proofValeur(production.medias_journee)),
+            proofLigne('Essais réalisés', proofValeur(production.essais_realises))
+          ])}
+        </div>
+
+        ${r.media_summary ? `<div style="margin-top:18px;padding-top:14px;border-top:1px solid var(--bento-border);">
+          <div style="font-family:var(--mono);font-size:9.5px;letter-spacing:0.2em;text-transform:uppercase;color:var(--cream-faint);margin-bottom:6px;">Médias</div>
+          <p style="font-family:var(--sans);font-size:13px;line-height:1.7;color:var(--cream-mute);margin:0;">${escapeHtml(r.media_summary)}</p>
+        </div>` : ''}
+
+        ${r.conclusion ? `<div style="margin-top:16px;padding:14px 16px;border-left:2px solid var(--red);background:rgba(255,255,255,0.02);">
+          <p style="font-family:var(--sans);font-size:13.5px;line-height:1.75;color:var(--cream);margin:0;">${escapeHtml(r.conclusion)}</p>
+        </div>` : ''}
+
+        <p style="font-family:var(--mono);font-size:9.5px;letter-spacing:0.06em;color:var(--cream-faint);margin:16px 0 0;">
+          Chiffres mesurés le jour de la journée, figés à la remise. Les contacts ne comptent que les pilotes ayant consenti.
+        </p>
+      </div>`;
+    }).join('');
+  } catch (e) {
+    console.warn('[Boucle de preuve]', e);
+    box.innerHTML = `<div class="bento" style="padding:22px;">Vos comptes-rendus seront affichés ici dès votre première journée engagée.</div>`;
+  }
 };
 
 window.loadAdminPartners = async function() {
@@ -30599,6 +30792,161 @@ window.loadAdminPartners = async function() {
       <div style="display:flex;gap:8px;">${p.is_published ? '<span class="tag-inline green">Publié</span>' : '<span class="tag-inline gold">Brouillon</span>'}${p.is_premium ? '<span class="tag-inline gold">Premium</span>' : ''}</div>
     </div>`).join('');
   } catch (e) { console.warn('[Admin partenaires]', e); }
+};
+
+/* ============================================================
+   BOUCLE DE PREUVE — côté administration
+   ============================================================
+   Ce que le partenaire paie, c'est le compte-rendu. Cet écran le produit.
+
+   Deux principes tenus ici :
+   · Aucun chiffre n'est saisi. `oxv_build_partner_proof` les calcule en base
+     depuis les inscriptions, les pointages, les contacts consentis et les
+     médias. L'administration relit, ajoute la conclusion — le texte, pas les
+     nombres — puis remet.
+   · La liste suit le CONTRAT, pas l'envie : une journée n'apparaît pour un
+     partenaire que s'il portait un engagement actif couvrant cette date.
+     Sans engagement enregistré, rien n'est dû, et l'écran le dit. */
+
+window.loadAdminProof = async function() {
+  const box = document.getElementById('adminProofRows');
+  if (!box) return;
+  const vide = (txt) => `<div class="admin-empty"><div class="admin-empty-icon">○</div><div class="admin-empty-text">${txt}</div></div>`;
+  try {
+    const today = new Date().toISOString().split('T')[0];
+    const [{ data: journees }, { data: engagements }, { data: comptes }] = await Promise.all([
+      supabase.from('sessions').select('id, date, format, status, max_capacity')
+        .lt('date', today).order('date', { ascending: false }).limit(12),
+      supabase.from('partner_engagements')
+        .select('id, partner_account_id, plan_key, quantity, starts_on, ends_on, status')
+        .eq('status', 'active'),
+      supabase.from('partner_accounts').select('id, display_name, status')
+    ]);
+
+    if (!journees || !journees.length) { box.innerHTML = vide('Aucune journée passée. La boucle de preuve démarre après la première.'); return; }
+
+    const nomDe = {};
+    (comptes || []).forEach(c => { nomDe[c.id] = c.display_name; });
+
+    const { data: rapports, error: repErr } = await supabase.from('b2b_event_reports')
+      .select('id, session_id, partner_id, status, shared_at, due_on, conclusion');
+    if (repErr) {
+      // Colonnes absentes = migration_preuve_partenaire.sql pas encore appliquée.
+      // On le nomme, plutôt que d'afficher une liste vide qui ferait croire
+      // qu'aucun compte-rendu n'est dû.
+      console.warn('[Boucle de preuve admin]', repErr);
+      box.innerHTML = vide("Boucle de preuve indisponible — appliquer migration_preuve_partenaire.sql.");
+      return;
+    }
+    const rapportDe = {};
+    (rapports || []).forEach(r => { if (r.session_id) rapportDe[`${r.session_id}|${r.partner_id}`] = r; });
+
+    const lignes = [];
+    journees.forEach(j => {
+      const concernes = (engagements || []).filter(e =>
+        (!e.starts_on || e.starts_on <= j.date) && (!e.ends_on || e.ends_on >= j.date));
+      const echeance = new Date(j.date); echeance.setDate(echeance.getDate() + 7);
+      const echStr = echeance.toLocaleDateString('fr-FR', { day: 'numeric', month: 'short', year: 'numeric' });
+      const dateStr = (d => d.charAt(0).toUpperCase() + d.slice(1))(
+        new Date(j.date).toLocaleDateString('fr-FR', { weekday: 'short', day: 'numeric', month: 'long', year: 'numeric' }));
+
+      if (!concernes.length) {
+        lignes.push(`<div style="padding:11px 14px;border-top:1px solid var(--bento-border);">
+          <div style="font-family:var(--sans);font-size:13.5px;color:var(--cream);">${escapeHtml(dateStr)}</div>
+          <div style="font-family:var(--mono);font-size:11px;color:var(--cream-faint);">Aucun engagement partenaire sur cette journée — rien n'est dû.</div>
+        </div>`);
+        return;
+      }
+
+      concernes.forEach(e => {
+        const r = rapportDe[`${j.id}|${e.partner_account_id}`];
+        const enRetard = !r || r.status !== 'shared' ? (new Date() > echeance) : false;
+        const etat = r && r.status === 'shared'
+          ? `<span class="tag-inline green">Remis${r.shared_at ? ' le ' + new Date(r.shared_at).toLocaleDateString('fr-FR') : ''}</span>`
+          : r
+            ? `<span class="tag-inline gold">Brouillon</span>`
+            : `<span class="tag-inline">À produire</span>`;
+        lignes.push(`<div style="display:flex;align-items:center;justify-content:space-between;gap:10px;padding:12px 14px;border-top:1px solid var(--bento-border);flex-wrap:wrap;">
+          <div style="min-width:220px;">
+            <div style="font-family:var(--sans);font-size:14px;color:var(--cream);">${escapeHtml(nomDe[e.partner_account_id] || 'Partenaire')}</div>
+            <div style="font-family:var(--mono);font-size:11px;color:var(--cream-mute);">${escapeHtml(dateStr)} · échéance ${escapeHtml(echStr)}${enRetard ? ' · <span style="color:var(--red);">en retard</span>' : ''}</div>
+          </div>
+          <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;">
+            ${etat}
+            <button class="admin-action-btn" onclick="adminCalculerPreuve('${j.id}','${e.partner_account_id}')">Calculer</button>
+            ${r && r.status !== 'shared' ? `<button class="admin-action-btn" onclick="adminRemettrePreuve('${r.id}')">Remettre</button>` : ''}
+          </div>
+        </div>`);
+      });
+    });
+
+    box.innerHTML = lignes.join('') || vide('Rien à produire.');
+  } catch (e) {
+    console.warn('[Boucle de preuve admin]', e);
+    box.innerHTML = vide("Boucle de preuve indisponible — migration_preuve_partenaire.sql n'est pas encore appliquée.");
+  }
+};
+
+/* Calcule la preuve en base, l'affiche pour relecture, et l'enregistre en
+   brouillon. Rien n'est remis au partenaire à ce stade : la RLS masque les
+   brouillons. */
+window.adminCalculerPreuve = async function(sessionId, partnerAccountId) {
+  try {
+    const { data, error } = await supabase.rpc('oxv_build_partner_proof', {
+      p_session_id: sessionId, p_partner_account_id: partnerAccountId
+    });
+    if (error) throw error;
+    if (!data || !data.ok) { toast(`Calcul impossible : ${data?.raison || 'inconnu'}`, 'warn'); return; }
+
+    const p = data.presence || {}, prod = data.production || {};
+    const tiret = (v) => (v === null || v === undefined) ? '—' : v;
+    const resume = [
+      `Journée du ${new Date(data.journee.date).toLocaleDateString('fr-FR')}`,
+      `Inscrits : ${tiret(p.inscrits)} · Présents : ${tiret(p.presents)} · Capacité : ${tiret(p.capacite)}`,
+      `Contacts consentis : ${tiret(prod.contacts_consentis)} · Offres publiées : ${tiret(prod.offres_publiees)} · Médias : ${tiret(prod.medias_journee)}`,
+      '',
+      'Conclusion à joindre au compte-rendu (texte libre, facultatif) :'
+    ].join('\n');
+    const conclusion = prompt(resume, '');
+    if (conclusion === null) return; // annulé : on n'enregistre rien
+
+    const { data: majs, error: upErr } = await supabase.from('b2b_event_reports')
+      .upsert({
+        session_id: sessionId,
+        partner_id: partnerAccountId,
+        registered_count: p.inscrits ?? 0,
+        checked_in_count: p.presents ?? 0,
+        conclusion: conclusion || null,
+        details: data,
+        due_on: data.echeance,
+        status: 'draft'
+      }, { onConflict: 'session_id,partner_id' })
+      .select('id');
+    if (upErr) throw upErr;
+    if (!majs || !majs.length) { toast('Enregistrement refusé', 'warn'); return; }
+
+    toast('Compte-rendu calculé — brouillon enregistré', 'ok');
+    loadAdminProof();
+  } catch (e) {
+    console.error('[Calcul preuve]', e);
+    toast(`Calcul impossible : ${e.message || 'migration non appliquée'}`, 'warn');
+  }
+};
+
+/* La remise : le geste qui rend la preuve opposable et la fait apparaître
+   dans l'espace du partenaire. */
+window.adminRemettrePreuve = async function(reportId) {
+  if (!confirm('Remettre ce compte-rendu au partenaire ? Il deviendra visible dans son espace.')) return;
+  try {
+    const { data, error } = await supabase.rpc('oxv_share_partner_proof', { p_report_id: reportId });
+    if (error) throw error;
+    if (!data || !data.ok) { toast(`Remise impossible : ${data?.raison || 'inconnu'}`, 'warn'); return; }
+    toast(data.deja_remis ? 'Déjà remis' : 'Compte-rendu remis au partenaire', 'ok');
+    loadAdminProof();
+  } catch (e) {
+    console.error('[Remise preuve]', e);
+    toast(`Remise impossible : ${e.message || 'migration non appliquée'}`, 'warn');
+  }
 };
 
 /* ===================== ESPACE COACH + ENTREPRISE PARTENAIRE (arbitrages 2026-07-18) =====================
@@ -32304,6 +32652,7 @@ window.loadAdminDashboard = async function() {
   refreshInboxBadge();
   if (typeof loadAdminCoaches === 'function') loadAdminCoaches();
   if (typeof loadAdminPartners === 'function') loadAdminPartners();
+  if (typeof loadAdminProof === 'function') loadAdminProof();
   if (typeof loadAdminValidations === 'function') loadAdminValidations();
 
   // Greeting
