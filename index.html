@@ -30545,27 +30545,72 @@ window.adminCreateCreditNote = async function(invoiceId, number) {
    RLS : annuaire publié lisible par tous, le partenaire gère SA fiche (owner_id), admin tout. */
 const PARTNER_TYPE_LBL = { garage: 'Garage / préparateur', photographer: 'Photographe / vidéaste', hotel: 'Hôtel / restaurant', transport: 'Transport / stockage', insurance: 'Assurance / équipementier', dealer: 'Concession' };
 
+/* ============================================================
+   AUDIENCE PARTENAIRE — mesure de première main
+   ============================================================
+   Le site promet au partenaire « une audience identifiée, pas une impression
+   publicitaire ». Or window.track() n'envoie qu'à Vercel Analytics et à
+   Plausible : deux services externes, agrégés au domaine, incapables de dire
+   ce qui concerne UN partenaire. La promesse n'était pas vérifiable.
+
+   L'empreinte ci-dessous est un identifiant aléatoire, tiré une fois par
+   navigateur et gardé en local. Aucune donnée personnelle, aucun identifiant
+   publicitaire. Elle sert à compter des PERSONNES par jour plutôt que des
+   clics : la même personne qui ouvre dix fois la même fiche compte pour une.
+   Plus honnête, et bien plus difficile à gonfler. */
+function empreinteVisiteur() {
+  try {
+    let e = localStorage.getItem('oxv_empreinte');
+    if (!e) {
+      e = (crypto.randomUUID ? crypto.randomUUID() : String(Math.random()).slice(2) + Date.now());
+      localStorage.setItem('oxv_empreinte', e);
+    }
+    return e;
+  } catch (_) {
+    // Navigation privée ou stockage refusé : la mesure se fait sans mémoire,
+    // donc sans dédoublonnage. Mieux vaut cela que pas de mesure.
+    return null;
+  }
+}
+
+/* Une mesure ne doit jamais casser une page : tout est avalé. */
+window.suivrePartenaire = function(partnerId, nature) {
+  if (!partnerId || typeof supabase === 'undefined') return;
+  try {
+    supabase.rpc('oxv_track_partner_touch', {
+      p_partner_id: partnerId,
+      p_kind: nature,
+      p_source: 'site',
+      p_empreinte: empreinteVisiteur()
+    }).then(function () {}, function () {});
+  } catch (_) { /* no-op */ }
+};
+
 window.loadPartnersDirectory = async function() {
   const wrap = document.getElementById('partnersDirectoryWrap');
   const grid = document.getElementById('partnersDirectory');
   if (!grid || typeof supabase === 'undefined') return;
   try {
-    const { data, error } = await supabase.from('partners')
-      .select('name, partner_type, description, logo_url, city, region, url, is_premium, is_official_partner')
-      .eq('is_published', true).limit(24);
+    // Source : partner_accounts, le modèle vivant. L'ancienne table `partners`
+    // n'a jamais été alimentée (0 ligne) : l'annuaire restait donc masqué,
+    // alors que la page coach annonce une fiche « publiée dans l'annuaire du
+    // site et dans l'application ». La RLS expose déjà publiquement les
+    // comptes 'validated' : aucune donnée nouvelle n'est rendue visible ici.
+    const { data, error } = await supabase.from('partner_accounts')
+      .select('id, display_name, type, description, logo_url, geo_zone, contact_email')
+      .eq('status', 'validated').limit(24);
     if (error || !data || !data.length) return; // section masquée tant que vide
-    grid.innerHTML = data.map(p => `<div class="bento" style="padding:22px;${p.is_premium ? 'border-color:rgba(201,162,74,0.4);' : ''}">
+    grid.innerHTML = data.map(p => `<div class="bento" role="button" tabindex="0" style="padding:22px;cursor:pointer;" onclick="suivrePartenaire('${p.id}','fiche')" onkeydown="if(event.key==='Enter')suivrePartenaire('${p.id}','fiche')">
       <div style="display:flex;align-items:center;gap:12px;margin-bottom:10px;">
-        ${p.logo_url ? `<img src="${escapeHtml(p.logo_url)}" alt="" loading="lazy" style="width:42px;height:42px;border-radius:8px;object-fit:contain;background:rgba(255,255,255,0.04);" />` : ''}
+        ${p.logo_url ? `<img src="${escapeHtml(p.logo_url)}" alt="" loading="lazy" style="width:42px;height:42px;border-radius:8px;object-fit:contain;background:rgba(255,255,255,0.04);">` : ''}
         <div>
-          <div style="font-family:var(--display);font-weight:600;font-size:15px;color:var(--offwhite);">${escapeHtml(p.name)}</div>
-          <div style="font-family:var(--mono);font-size:10px;letter-spacing:0.1em;color:var(--cream-mute);">${escapeHtml(PARTNER_TYPE_LBL[p.partner_type] || p.partner_type || '')}${p.city ? ' · ' + escapeHtml(p.city) : ''}</div>
+          <div style="font-family:var(--display);font-weight:600;font-size:15px;color:var(--offwhite);">${escapeHtml(p.display_name || '')}</div>
+          <div style="font-family:var(--mono);font-size:10px;letter-spacing:0.1em;color:var(--cream-mute);">${escapeHtml(PARTNER_TYPE_LBL[p.type] || p.type || '')}${p.geo_zone ? ' · ' + escapeHtml(p.geo_zone) : ''}</div>
         </div>
       </div>
       ${p.description ? `<p style="font-family:var(--sans);font-size:12px;line-height:1.6;color:var(--cream-mute);margin:0 0 8px;">${escapeHtml(String(p.description).slice(0, 110))}</p>` : ''}
-      <div style="display:flex;justify-content:space-between;align-items:center;">
-        ${p.is_official_partner ? '<span class="tag-inline gold" style="font-size:10px;">Partenaire officiel</span>' : '<span></span>'}
-        ${p.url ? `<a href="${escapeHtml(p.url)}" target="_blank" rel="noopener" style="font-family:var(--mono);font-size:10px;color:var(--cream-mute);">Site →</a>` : ''}
+      <div style="display:flex;justify-content:flex-end;align-items:center;">
+        ${p.contact_email ? `<a href="mailto:${escapeHtml(p.contact_email)}" onclick="event.stopPropagation();suivrePartenaire('${p.id}','contact')" style="font-family:var(--mono);font-size:10px;color:var(--cream-mute);">Contacter →</a>` : ''}
       </div>
     </div>`).join('');
     if (wrap) wrap.style.display = '';
@@ -30716,13 +30761,15 @@ window.loadPartnerProof = async function() {
       // rencontre ne l'est pas — on n'affirme que ce qu'on a compté.
       pilotes: somme(r => (r.details?.presence || {}).presents),
       contacts: somme(r => (r.details?.production || {}).contacts_consentis),
-      medias: somme(r => (r.details?.production || {}).medias_journee)
+      medias: somme(r => (r.details?.production || {}).medias_journee),
+      regards: somme(r => (r.details?.audience || {}).fiches)
     };
     const bandeau = `<div class="bento" style="padding:20px 24px;margin-bottom:16px;border-color:rgba(201,162,74,0.28);">
       <div style="font-family:var(--mono);font-size:9.5px;letter-spacing:0.2em;text-transform:uppercase;color:var(--gold-data);margin-bottom:14px;">Votre saison, à ce jour</div>
       <div style="display:flex;gap:30px;flex-wrap:wrap;">
         <div><div style="font-family:var(--mono);font-size:11px;color:var(--cream-mute);margin-bottom:3px;">Journées</div>${proofChiffre(cumul.journees)}</div>
         <div><div style="font-family:var(--mono);font-size:11px;color:var(--cream-mute);margin-bottom:3px;">Pilotes présents</div>${proofChiffre(cumul.pilotes)}</div>
+        <div><div style="font-family:var(--mono);font-size:11px;color:var(--cream-mute);margin-bottom:3px;">Fiches ouvertes</div>${proofChiffre(cumul.regards)}</div>
         <div><div style="font-family:var(--mono);font-size:11px;color:var(--cream-mute);margin-bottom:3px;">Contacts consentis</div>${proofChiffre(cumul.contacts)}</div>
         <div><div style="font-family:var(--mono);font-size:11px;color:var(--cream-mute);margin-bottom:3px;">Médias produits</div>${proofChiffre(cumul.medias)}</div>
       </div>
@@ -30762,7 +30809,14 @@ window.loadPartnerProof = async function() {
 
       // « Essais réalisés » n'a de sens que pour un Pack Essais : ailleurs, la
       // ligne resterait un tiret perpétuel, ce qui affaiblit le document.
+      // L'entonnoir, du regard à l'accord. Ce sont des PERSONNES distinctes
+      // par jour, pas des clics : la même personne qui ouvre dix fois votre
+      // fiche compte pour une.
+      const audience = d.audience || {};
       const lignesProduction = [
+        proofLigne('Fiches ouvertes', proofValeur(audience.fiches)),
+        proofLigne('Offres consultées', proofValeur(audience.offres)),
+        proofLigne('Mises en relation', proofValeur(audience.contacts)),
         proofLigne('Contacts consentis', proofValeur(production.contacts_consentis)),
         proofLigne('Médias de la journée', proofValeur(production.medias_journee))
       ];
@@ -30792,7 +30846,10 @@ window.loadPartnerProof = async function() {
           ${proofBloc('Qui était là', 'var(--blue-data)', [
             proofLigne('Pilotes inscrits', proofValeur(inscrits)),
             proofLigne('Pilotes présents', proofValeur(presents)),
-            proofLigne('Capacité de la journée', proofValeur(capacite))
+            proofLigne('Capacité de la journée', proofValeur(capacite)),
+            // La satisfaction du plateau : elle ne s'affiche qu'à partir de
+            // trois réponses — en deçà, un avis serait attribuable.
+            ...(d.satisfaction ? [proofLigne('Note de la journée', proofValeur(d.satisfaction.note) + '<span style="color:var(--cream-faint);"> / 5</span>')] : [])
           ])}
           ${proofBloc('Ce que ça a produit', 'var(--green-perf)', lignesProduction)}
         </div>
