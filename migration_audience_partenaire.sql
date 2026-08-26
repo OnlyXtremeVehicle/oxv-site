@@ -64,6 +64,12 @@ ALTER TABLE public.partner_accounts
 COMMENT ON COLUMN public.partner_accounts.is_published IS
   'Publication a l annuaire public du site. Faux par defaut : validated ne suffit pas, il faut une decision editoriale.';
 
+-- NOTE : le site lit encore l annuaire depuis `partners` (seule table portant
+-- aujourd hui ce feu vert). Une fois cette colonne en place ET de vrais
+-- partenaires marques is_published = true, la bascule du site sur
+-- partner_accounts se fait en une ligne (loadPartnersDirectory). Tant que
+-- personne n est marque, l annuaire reste masque — ce qui est le bon defaut.
+
 -- ------------------------------------------------------------
 -- 1. Les points de contact
 -- ------------------------------------------------------------
