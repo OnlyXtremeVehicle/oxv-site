@@ -30631,12 +30631,27 @@ window.loadPartnerSpace = async function() {
   if (!window.OXVApi?.user?.isLoggedIn) { toast('Connexion requise', 'warn'); goTo('login'); return; }
   try {
     const uid = window.OXVApi.user.profile?.id;
-    const { data: mine } = await supabase.from('partners')
-      .select('id, name, partner_type, city, is_published, is_premium').eq('owner_id', uid);
-    if (!mine || !mine.length) { guard.style.display = ''; content.style.display = 'none'; loadPartnerCompany(); return; }
+    // L'espace s'ouvre sur l'un OU l'autre des deux modèles : `partners`
+    // (annuaire historique) et `partner_accounts` (modèle vivant, celui que
+    // portent les comptes-rendus). Sans cela, un partenaire enregistré côté
+    // application restait devant le portillon — et ne voyait jamais sa
+    // boucle de preuve, qui vit pourtant dans cet écran.
+    const [{ data: mine }, { data: comptes }] = await Promise.all([
+      supabase.from('partners')
+        .select('id, name, partner_type, city, is_published, is_premium').eq('owner_id', uid),
+      supabase.from('partner_accounts')
+        .select('id, display_name, type, geo_zone, status').eq('profile_id', uid)
+    ]);
+    const compte = (comptes || []).find(c => c.status === 'validated');
+    if ((!mine || !mine.length) && !compte) {
+      guard.style.display = ''; content.style.display = 'none'; loadPartnerCompany(); return;
+    }
     guard.style.display = 'none'; content.style.display = '';
     loadPartnerCompany(); // entreprise self-service + catalogue app (arbitrages 2026-07-18)
-    const p = mine[0];
+    const p = (mine && mine.length) ? mine[0] : {
+      name: compte.display_name, partner_type: compte.type,
+      city: compte.geo_zone, is_published: false, is_premium: false
+    };
     const fiche = document.getElementById('partnerSpaceFiche');
     if (fiche) fiche.innerHTML = `<strong style="color:var(--offwhite);">${escapeHtml(p.name)}</strong><br/>
       ${escapeHtml(PARTNER_TYPE_LBL[p.partner_type] || p.partner_type || '')}${p.city ? ' · ' + escapeHtml(p.city) : ''}<br/>
@@ -30644,8 +30659,11 @@ window.loadPartnerSpace = async function() {
     // Contacts entrants (RLS : le partenaire ne voit que les siens, avec consentement)
     const leadsEl = document.getElementById('partnerSpaceLeads');
     try {
+      // partner_leads.partner_id référence partner_accounts, jamais `partners` :
+      // interroger avec l'identifiant de l'annuaire historique ne ramenait rien.
+      if (!compte) throw new Error('pas de compte partenaire');
       const { data: leads } = await supabase.from('partner_leads')
-        .select('id, status, channel, created_at').eq('partner_id', p.id)
+        .select('id, status, channel, created_at').eq('partner_id', compte.id)
         .order('created_at', { ascending: false }).limit(10);
       if (leadsEl) leadsEl.innerHTML = (leads && leads.length)
         ? `<strong style="color:var(--offwhite);">${leads.length}</strong> contact(s) récent(s)<br/>` +
@@ -30692,7 +30710,11 @@ function proofValeur(v) {
 
 function proofDate(d) {
   if (!d) return null;
-  return new Date(d).toLocaleDateString('fr-FR', { day: 'numeric', month: 'long', year: 'numeric' });
+  const dt = new Date(d);
+  const texte = dt.toLocaleDateString('fr-FR', { day: 'numeric', month: 'long', year: 'numeric' });
+  // En français, le premier du mois s'écrit « 1er » — sur un document
+  // contractuel, « du 1 avril » se voit.
+  return dt.getDate() === 1 ? texte.replace(/^1\s/, '1er ') : texte;
 }
 
 function proofChiffre(valeur, suffixe) {
@@ -30783,7 +30805,14 @@ window.loadPartnerProof = async function() {
       ${partiel ? `<p style="font-family:var(--mono);font-size:9.5px;letter-spacing:0.06em;color:var(--cream-faint);margin:14px 0 0;">Cumul des journées effectivement mesurées : une journée dont une grandeur n'a pas été relevée n'y entre pas.</p>` : ''}
     </div>`;
 
-    box.innerHTML = bandeau + `<div id="partnerProofContacts"></div>` + rapports.map(r => {
+    // Le cumul est l'avantage propre de l'Atelier Officiel — formule annuelle
+    // et exclusive, un seul titulaire par saison. Les autres formules gardent
+    // leur compte-rendu journée par journée, ce que le site leur promet.
+    const estAtelier = rapports.some(r => (r.details?.engagement || {}).formule === 'atelier_officiel');
+
+    box.innerHTML = (estAtelier ? bandeau : '')
+      + `<div id="partnerProofPeriodes"></div><div id="partnerProofContacts"></div>`
+      + rapports.map(r => {
       const d = r.details || {};
       const presence = d.presence || {};
       const production = d.production || {};
@@ -30880,6 +30909,7 @@ window.loadPartnerProof = async function() {
     // fonction serveur distincte, et leur absence ne doit pas retarder
     // l'affichage des comptes-rendus.
     loadPartnerContacts(ids[0]);
+    loadPartnerPeriods(ids[0]);
   } catch (e) {
     console.warn('[Boucle de preuve]', e);
     box.innerHTML = `<div class="bento" style="padding:22px;">Vos comptes-rendus seront affichés ici dès votre première journée engagée.</div>`;
@@ -30905,6 +30935,70 @@ function proofReconduction(rapports) {
     </div>
   </div>`;
 }
+
+/* Le bilan de période — l'avantage propre de l'Atelier Officiel.
+   Une journée seule porte peu de matière : vingt pilotes, quelques contacts,
+   une poignée de regards. Le compte-rendu à sept jours reste juste, mais il
+   est maigre. Additionné sur un trimestre, le même partenariat devient
+   lisible — et discutable en reconduction.
+
+   Aucun filtre côté client n'est nécessaire : les bilans ne sont produits que
+   pour la formule atelier_officiel, et la RLS ne laisse passer que les siens,
+   une fois remis. Un autre partenaire n'a tout simplement rien à lire. */
+window.loadPartnerPeriods = async function(partnerAccountId) {
+  const box = document.getElementById('partnerProofPeriodes');
+  if (!box || !partnerAccountId) return;
+  try {
+    const { data, error } = await supabase
+      .from('partner_period_reports')
+      .select('id, period_start, period_end, cadence, details, conclusion, shared_at')
+      .eq('partner_id', partnerAccountId)
+      .order('period_end', { ascending: false });
+    if (error || !data || !data.length) return; // rien à montrer, on n'occupe pas la place
+
+    box.innerHTML = data.map(b => {
+      const d = b.details || {};
+      const presence = d.presence || {};
+      const production = d.production || {};
+      const audience = d.audience || {};
+      const debut = proofDate(b.period_start), fin = proofDate(b.period_end);
+      const jours = Array.isArray(d.journees_detail) ? d.journees_detail : [];
+
+      return `<div class="bento" style="padding:24px;margin-bottom:16px;border-color:rgba(201,162,74,0.28);">
+        <div style="display:flex;align-items:baseline;justify-content:space-between;gap:14px;flex-wrap:wrap;margin-bottom:4px;">
+          <div style="font-family:var(--display);font-size:17px;font-weight:600;color:var(--offwhite);">Bilan ${escapeHtml(b.cadence === 'mensuel' ? 'mensuel' : 'trimestriel')}</div>
+          ${b.shared_at ? `<span class="tag-inline green" style="font-size:10px;">Remis le ${escapeHtml(proofDate(b.shared_at))}</span>` : ''}
+        </div>
+        <div style="font-family:var(--mono);font-size:10px;letter-spacing:0.08em;color:var(--cream-faint);margin-bottom:18px;">
+          ${escapeHtml(d.libelle || 'Atelier Officiel')} · du ${escapeHtml(debut || '—')} au ${escapeHtml(fin || '—')}
+        </div>
+
+        <div style="display:flex;gap:26px;flex-wrap:wrap;margin-bottom:16px;">
+          <div><div style="font-family:var(--mono);font-size:11px;color:var(--cream-mute);margin-bottom:3px;">Journées</div>${proofChiffre(d.journees)}</div>
+          <div><div style="font-family:var(--mono);font-size:11px;color:var(--cream-mute);margin-bottom:3px;">Pilotes présents</div>${proofChiffre(presence.presents)}</div>
+          <div><div style="font-family:var(--mono);font-size:11px;color:var(--cream-mute);margin-bottom:3px;">Fiches ouvertes</div>${proofChiffre(audience.fiches)}</div>
+          <div><div style="font-family:var(--mono);font-size:11px;color:var(--cream-mute);margin-bottom:3px;">Contacts consentis</div>${proofChiffre(production.contacts_consentis)}</div>
+          ${d.satisfaction ? `<div><div style="font-family:var(--mono);font-size:11px;color:var(--cream-mute);margin-bottom:3px;">Note moyenne</div>${proofChiffre(d.satisfaction.note, '/ 5')}</div>` : ''}
+        </div>
+
+        ${jours.length ? `<div style="padding-top:14px;border-top:1px solid var(--bento-border);">
+          <div style="font-family:var(--mono);font-size:9.5px;letter-spacing:0.2em;text-transform:uppercase;color:var(--cream-faint);margin-bottom:8px;">Les journées comptées</div>
+          <div style="display:flex;gap:8px;flex-wrap:wrap;">
+            ${jours.map(j => `<span style="font-family:var(--mono);font-size:11px;color:var(--cream-mute);border:1px solid var(--bento-border);border-radius:4px;padding:3px 8px;">${escapeHtml(new Date(j.date).toLocaleDateString('fr-FR', { day: 'numeric', month: 'short' }))}${j.presents ? ' · ' + escapeHtml(String(j.presents)) : ''}</span>`).join('')}
+          </div>
+        </div>` : ''}
+
+        ${b.conclusion ? `<div style="margin-top:16px;padding:14px 16px;border-left:2px solid var(--red);background:rgba(255,255,255,0.02);">
+          <p style="font-family:var(--sans);font-size:13.5px;line-height:1.75;color:var(--cream);margin:0;">${escapeHtml(b.conclusion)}</p>
+        </div>` : ''}
+
+        <p style="font-family:var(--mono);font-size:9.5px;letter-spacing:0.06em;color:var(--cream-faint);margin:16px 0 0;">
+          Cumul des journées de la période, figé à la remise. Le détail par journée reste consultable ci-dessous.
+        </p>
+      </div>`;
+    }).join('');
+  } catch (e) { console.warn('[Bilan de période]', e); }
+};
 
 /* Les contacts consentis — la promesse « les contacts des pilotes qui ont
    consenti, et eux seuls » enfin tenue. Le partenaire ne pouvait jusqu'ici
