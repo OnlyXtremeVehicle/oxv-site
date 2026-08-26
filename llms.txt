@@ -3,7 +3,7 @@
 > OXV est une plateforme de track days premium basée à Bordeaux. Sa première saison (2027) se déroule au Circuit de Haute Saintonge (tracé Beltoise, La Génétouze, Charente-Maritime, Nouvelle-Aquitaine), premier circuit partenaire — d'autres emplacements sont en cours de sélection. Vingt pilotes maximum par session, jamais plus. Chaque journée est prolongée par l'application OXV Mirror, comprise dans chaque offre : télémétrie 25 Hz, médias livrés, bilan de session.
 
 ## Faits clés (vérifiés)
-- Lieu : Circuit de Haute Saintonge, tracé dessiné par Jean-Pierre Beltoise (2009), 17360 La Génétouze, France. Piste de 2 205 m, huit virages, tracé technique et vallonné, sans chicane artificielle. Paddock de 3 000 m² et pavillon dédié.
+- Lieu : Circuit de Haute Saintonge, tracé dessiné par Jean-Pierre Beltoise (2009), 17360 La Génétouze, France. Piste de 2 205 m, huit segments d'analyse, tracé technique et vallonné, sans chicane artificielle. Paddock de 3 000 m² et pavillon dédié.
 - Format : 20 pilotes maximum par session — plafond contractuel, jamais relevé. Briefing sécurité obligatoire de vingt minutes. Pas de classement public.
 - Offres circuit : Access 390 € TTC (demi-journée, lundi — **250 € TTC pour une première session, une seule fois par pilote**) · Signature 690 € TTC (journée complète, vendredi, télémétrie + banque média + déjeuner traiteur) · Heritage 2 490 € TTC (pack saison : 4 sessions Signature, soit 622,50 € la session, priorité de réservation sur tout le calendrier et accès anticipé à la saison suivante).
 - Corporate / entreprises : privatisation du circuit sur devis, jusqu'à vingt invités. Aucun tarif B2B publié.
@@ -27,7 +27,7 @@ L'ordre d'arbitrage, quand deux exigences s'opposent : la sécurité d'abord, le
 - [Accueil](https://www.oxvehicle.fr/) : l'expérience circuit augmentée.
 - [Les offres](https://www.oxvehicle.fr/offers) : Access, Signature, Heritage — prix et contenus détaillés.
 - [Calendrier](https://www.oxvehicle.fr/calendrier) : sessions de la saison 2027.
-- [Le circuit](https://www.oxvehicle.fr/circuit) : tracé Beltoise, huit virages, dispositif de sécurité.
+- [Le circuit](https://www.oxvehicle.fr/circuit) : tracé Beltoise, huit segments d'analyse, dispositif de sécurité.
 - [L'application](https://www.oxvehicle.fr/application) : OXV Mirror — quatre espaces, écurie, état du développement.
 - [Sécurité & cadre](https://www.oxvehicle.fr/securite) : valeurs, cinq engagements, protocole du matin, documents exigés.
 - [Votre journée](https://www.oxvehicle.fr/apres-journee) : de J-7 au rapport final.
