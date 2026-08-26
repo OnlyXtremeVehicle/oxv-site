@@ -50,6 +50,21 @@
 BEGIN;
 
 -- ------------------------------------------------------------
+-- 0. La publication à l'annuaire — un geste éditorial, pas un statut
+-- ------------------------------------------------------------
+-- `status = 'validated'` dit qu'un compte est légitime, pas qu'il doit
+-- paraître à l'annuaire public : les comptes internes d'OXV sont validés eux
+-- aussi. L'ancienne table `partners` avait un `is_published` ; en passant à
+-- partner_accounts, ce garde-fou manquait — et deux comptes de test se sont
+-- retrouvés publiés. La colonne le rétablit, FAUSSE par défaut : rien ne
+-- paraît sans décision.
+ALTER TABLE public.partner_accounts
+  ADD COLUMN IF NOT EXISTS is_published boolean NOT NULL DEFAULT false;
+
+COMMENT ON COLUMN public.partner_accounts.is_published IS
+  'Publication a l annuaire public du site. Faux par defaut : validated ne suffit pas, il faut une decision editoriale.';
+
+-- ------------------------------------------------------------
 -- 1. Les points de contact
 -- ------------------------------------------------------------
 CREATE TABLE IF NOT EXISTS public.partner_touchpoints (

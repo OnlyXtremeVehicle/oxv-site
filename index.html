@@ -30596,9 +30596,14 @@ window.loadPartnersDirectory = async function() {
     // alors que la page coach annonce une fiche « publiée dans l'annuaire du
     // site et dans l'application ». La RLS expose déjà publiquement les
     // comptes 'validated' : aucune donnée nouvelle n'est rendue visible ici.
+    // `status = 'validated'` ne suffit PAS à publier : les comptes internes
+    // d'OXV le sont aussi. La publication demande un geste éditorial explicite
+    // — is_published, ajouté par migration_audience_partenaire.sql, faux par
+    // défaut. Tant que la migration n'est pas appliquée, la requête échoue et
+    // la section reste masquée : c'est le comportement voulu.
     const { data, error } = await supabase.from('partner_accounts')
       .select('id, display_name, type, description, logo_url, geo_zone, contact_email')
-      .eq('status', 'validated').limit(24);
+      .eq('status', 'validated').eq('is_published', true).limit(24);
     if (error || !data || !data.length) return; // section masquée tant que vide
     grid.innerHTML = data.map(p => `<div class="bento" role="button" tabindex="0" style="padding:22px;cursor:pointer;" onclick="suivrePartenaire('${p.id}','fiche')" onkeydown="if(event.key==='Enter')suivrePartenaire('${p.id}','fiche')">
       <div style="display:flex;align-items:center;gap:12px;margin-bottom:10px;">
