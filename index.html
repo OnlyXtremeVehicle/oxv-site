@@ -25031,6 +25031,19 @@ window.bkOpen = async function() {
   bkState.plate = '';
   bkState.mods = false;
   bkState.modsDetail = '';
+  /* Le seul champ d'état que ce bloc oubliait. `attendedCount` n'est écrit que
+     par `bkLoadOffers` (étape Offre) et lu par `bkComputePrice` au récapitulatif
+     comme à la confirmation : une réservation enchaînée traînait la valeur de la
+     précédente.
+
+     Remis à `null`, jamais à 0 : `bkComputePrice` teste `=== 0` pour appliquer le
+     tarif de première session. Un 0 par défaut facturerait 250 EUR à quelqu'un
+     qui en doit 390. Des deux erreurs possibles, on garde celle qui ne fait pas
+     perdre d'argent — et la vraie valeur arrive dès le chargement des offres.
+
+     `bkSelectVehicle` purge les mêmes champs et ne touche PAS à celui-ci :
+     changer de véhicule ne change pas l'ancienneté du pilote. */
+  bkState.attendedCount = null;
 
   // Correspondance offre / classe : une seule lecture, réutilisée tout le tunnel.
   await bkChargerOffresClasses();
