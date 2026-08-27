@@ -26494,6 +26494,15 @@ window.bkConfirmBooking = async function() {
 
     // Garde-fou anti double-inscription (UX). Le filet de sécurité réel est la
     // contrainte unique partielle DB (user_id, session_id) WHERE status <> 'cancelled'.
+    // Heritage se règle sur un pack : sans pack actif, la formule n'est pas
+    // consommable. On le dit ici, avec un motif — plutôt que de laisser la
+    // confirmation échouer plus bas sur une lecture de champ nul.
+    if (bkState.useHeritage && !bkState.heritagePack) {
+      btn.innerHTML = orig; btn.disabled = false;
+      toast('La formule Heritage se règle sur un pack actif. Aucun pack n’est rattaché à votre compte.', 'warn');
+      return;
+    }
+
     const { data: dup } = await supabase
       .from('registrations')
       .select('id')
@@ -26532,7 +26541,11 @@ window.bkConfirmBooking = async function() {
       session_id: bkState.selectedSession.id,
       vehicle_id: bkState.selectedVehicle.id,
       offer_type: bkState.useHeritage ? 'heritage' : bkState.selectedOffer,
-      heritage_pack_id: bkState.useHeritage ? bkState.heritagePack.id : null,
+      // `bkState.heritagePack` peut être nul : `useHeritage` se pose sur le
+      // simple choix de la carte, sans vérifier qu'un pack existe. Lire `.id`
+      // dessus faisait PLANTER la confirmation, après cinq étapes remplies,
+      // sur la formule la plus chère du catalogue.
+      heritage_pack_id: bkState.useHeritage ? (bkState.heritagePack?.id ?? null) : null,
       // Un vehicule dont les modifications sont declarees attend un EXAMEN,
       // pas seulement un paiement. Sans etat propre, la demande se noyait
       // parmi les reservations ordinaires et personne ne la voyait passer.
