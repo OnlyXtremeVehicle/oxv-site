@@ -7197,6 +7197,81 @@ footer {
   cursor: not-allowed;
 }
 .bk-date.full:hover { border-color: var(--cream-line); background: var(--night-card); }
+
+/* Périmètre de service — la date reste VISIBLE, jamais masquée : c'est le
+   mécanisme de montée en gamme. Grisée, non sélectionnable, motif affiché. */
+.bk-date.hors-perimetre,
+.bk-offer.hors-perimetre {
+  opacity: 0.42;
+  cursor: not-allowed;
+}
+.bk-date.hors-perimetre:hover,
+.bk-offer.hors-perimetre:hover { border-color: var(--cream-line); background: var(--night-card); }
+.bk-perimetre-note {
+  font-family: var(--mono);
+  font-size: 9px;
+  line-height: 1.7;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--cream-faint);
+  margin-top: 6px;
+  display: block;
+}
+.bk-perimetre-panel {
+  border: 1px solid var(--cream-line);
+  border-left: 2px solid var(--red-oxv);
+  background: var(--night-card);
+  padding: 18px 20px;
+  margin-top: 24px;
+}
+.bk-perimetre-panel .titre {
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--cream);
+  margin-bottom: 8px;
+}
+.bk-perimetre-panel .corps {
+  font-size: 13px;
+  line-height: 1.75;
+  color: var(--cream-mute);
+}
+
+/* Fiche de restitution du référentiel — donnée affichée, jamais commentée */
+.bk-ref-fiche {
+  border: 1px solid var(--cream-line);
+  background: var(--night-card);
+  padding: 20px;
+}
+.bk-ref-fiche-nom {
+  font-size: 17px;
+  line-height: 1.4;
+  color: var(--cream);
+  margin-bottom: 16px;
+}
+.bk-ref-fiche-nom em { font-style: italic; color: var(--copper-glow); }
+.bk-ref-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px 20px;
+}
+@media (min-width: 700px) { .bk-ref-grid { grid-template-columns: repeat(4, 1fr); } }
+.bk-ref-cell-label {
+  font-family: var(--mono);
+  font-size: 9px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--cream-faint);
+  margin-bottom: 5px;
+}
+.bk-ref-cell-value {
+  font-family: var(--mono);
+  font-size: 15px;
+  letter-spacing: 0.04em;
+  color: var(--cream);
+}
+.bk-vehicle.hors-referentiel { border-left: 2px solid var(--cream-edge); }
 .bk-date-day {
   font-family: var(--mono);
   font-size: 9px;
@@ -20264,11 +20339,11 @@ body.pav-tv .nav, body.pav-tv footer, body.pav-tv .cookie, body.pav-tv .founding
         </div>
         <div class="bk-progress-step" data-step="2">
           <span class="num">2</span>
-          <span>Date</span>
+          <span>Véhicule</span>
         </div>
         <div class="bk-progress-step" data-step="3">
           <span class="num">3</span>
-          <span>Véhicule</span>
+          <span>Date</span>
         </div>
         <div class="bk-progress-step" data-step="4">
           <span class="num">4</span>
@@ -20298,14 +20373,14 @@ body.pav-tv .nav, body.pav-tv footer, body.pav-tv .cookie, body.pav-tv .founding
             <button class="btn" onclick="goToAccount('compte')"><span>← Annuler</span></button>
           </div>
           <div class="right">
-            <button class="btn btn-primary" onclick="bkGoToStep(2)" id="bkStep1Next" disabled><span>Choisir une date →</span></button>
+            <button class="btn btn-primary" onclick="bkGoToStep(2)" id="bkStep1Next" disabled><span>Déclarer mon véhicule →</span></button>
           </div>
         </div>
       </div>
 
-      <!-- ÉTAPE 2 : Date (filtrée selon offre) -->
-      <div class="bk-step" data-step="2">
-        <div class="bk-step-eyebrow">N° ⊳ · Étape 2 / 4</div>
+      <!-- ÉTAPE 3 : Date (filtrée selon offre et selon la classe du véhicule) -->
+      <div class="bk-step" data-step="3">
+        <div class="bk-step-eyebrow">N° ⊳ · Étape 3 / 4</div>
         <h2 class="bk-step-title">Choisir une <em>date</em>.</h2>
         <p class="bk-step-sub" id="bkStep2Sub">
           Sélectionnez la session qui vous convient parmi les dates disponibles pour votre offre.
@@ -20323,25 +20398,100 @@ body.pav-tv .nav, body.pav-tv footer, body.pav-tv .cookie, body.pav-tv .founding
 
         <div class="bk-actions">
           <div class="left">
-            <button class="btn" onclick="bkGoToStep(1)"><span>← Retour</span></button>
+            <button class="btn" onclick="bkGoToStep(2)"><span>← Retour</span></button>
           </div>
           <div class="right">
-            <button class="btn btn-primary" onclick="bkGoToStep(3)" id="bkStep2Next" disabled><span>Choisir le véhicule →</span></button>
+            <button class="btn btn-primary" onclick="bkGoToStep(4)" id="bkStep3Next" disabled><span>Récapitulatif →</span></button>
           </div>
         </div>
       </div>
 
-      <!-- ÉTAPE 3 : Véhicule -->
-      <div class="bk-step" data-step="3">
-        <div class="bk-step-eyebrow">N° ⊳ · Étape 3 / 4</div>
-        <h2 class="bk-step-title">Quel <em>véhicule</em> ?</h2>
+      <!-- ÉTAPE 2 : Véhicule (périmètre de service, en amont du calendrier et du paiement) -->
+      <div class="bk-step" data-step="2">
+        <div class="bk-step-eyebrow">N° ⊳ · Étape 2 / 4</div>
+        <h2 class="bk-step-title">Votre <em>véhicule</em>.</h2>
         <p class="bk-step-sub">
-          Sélectionnez le véhicule que vous amenez en piste. Il doit être enregistré dans votre dossier pilote.
+          Sélectionnez le véhicule que vous amenez en piste, puis désignez-le dans le référentiel. Le référentiel est l'application des conditions d'accès publiées ; il est révisé chaque année.
         </p>
 
         <div id="bkVehicles" class="bk-vehicles">
           <div class="account-loading" style="grid-column: 1/-1;">— Chargement de vos véhicules…</div>
         </div>
+
+        <!-- Désignation dans le référentiel : cascade marque → modèle → génération -->
+        <div id="bkRefWrap" style="display:none; margin-top: 28px;">
+          <div class="bk-step-eyebrow" style="margin-bottom: 18px;">— Désignation au référentiel</div>
+
+          <div class="account-form">
+            <div class="form-row">
+              <label for="bkRefMarque">Marque</label>
+              <select id="bkRefMarque" onchange="bkRefOnMarque()">
+                <option value="">— Chargement…</option>
+              </select>
+            </div>
+            <div class="form-row">
+              <label for="bkRefModele">Modèle</label>
+              <select id="bkRefModele" onchange="bkRefOnModele()" disabled>
+                <option value="">— Choisissez d'abord une marque</option>
+              </select>
+            </div>
+            <div class="form-row full">
+              <label for="bkRefGeneration">Génération</label>
+              <select id="bkRefGeneration" onchange="bkRefOnGeneration()" disabled>
+                <option value="">— Choisissez d'abord un modèle</option>
+              </select>
+            </div>
+          </div>
+
+          <p style="margin: 4px 0 0;">
+            <a id="bkRefAbsentLink" href="#" onclick="bkRefOuvrirDemande(event)"
+               style="font-family: var(--mono); font-size: 10px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--cream-faint); border-bottom: 1px solid var(--cream-line); text-decoration: none;">
+              Mon véhicule ne figure pas dans cette liste.
+            </a>
+          </p>
+
+          <!-- Fiche de confirmation (restitution, jamais commentaire) -->
+          <div id="bkRefFiche" style="display:none; margin-top: 24px;"></div>
+
+          <!-- Immatriculation + modifications -->
+          <div id="bkRefDeclaration" style="display:none; margin-top: 24px;">
+            <div class="account-form">
+              <div class="form-row">
+                <label for="bkRefPlate">Immatriculation</label>
+                <input type="text" id="bkRefPlate" inputmode="latin" autocomplete="off" maxlength="9"
+                       placeholder="AA-123-AA" style="text-transform: uppercase; font-family: var(--mono); letter-spacing: 0.08em;"
+                       oninput="bkRefFormatPlate(this)" onblur="bkRefMajValidite()"
+                       aria-describedby="bkRefPlateHint" />
+                <span id="bkRefPlateHint" style="font-family: var(--mono); font-size: 9px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--cream-faint); margin-top: 6px; display: block;">Format AA-123-AA · les tirets sont ajoutés automatiquement</span>
+              </div>
+            </div>
+
+            <label class="bk-condition" style="margin-top: 8px;">
+              <input type="checkbox" id="bkRefMods" onchange="bkRefOnMods()" />
+              <div class="bk-condition-text">
+                <div class="bk-condition-title">Modifications</div>
+                <div class="bk-condition-desc">
+                  Ce véhicule a fait l'objet de modifications du moteur, de l'échappement, de la suspension ou du freinage.
+                </div>
+              </div>
+            </label>
+
+            <div class="account-form" id="bkRefModsWrap" style="display:none; margin-top: 12px;">
+              <div class="form-row full">
+                <label for="bkRefModsDetail">Détail des modifications</label>
+                <textarea id="bkRefModsDetail" rows="3" oninput="bkRefMajValidite()"
+                          placeholder="Nature et portée des modifications apportées."></textarea>
+                <span style="font-family: var(--mono); font-size: 9px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--cream-faint); margin-top: 6px; display: block;">Renseignement obligatoire · le dossier passe en examen technique avant confirmation</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Périmètre de service : offre fermée à la classe retenue -->
+          <div id="bkRefPerimetre" style="display:none;"></div>
+        </div>
+
+        <!-- Véhicule absent du référentiel : demande d'examen -->
+        <div id="bkRefDemande" style="display:none; margin-top: 28px;"></div>
 
         <div id="bkInsuranceBlock" style="display:none; margin-top: 24px;">
           <div class="bk-step-eyebrow" style="margin-bottom: 18px;">— Assurance circuit</div>
@@ -20365,10 +20515,10 @@ body.pav-tv .nav, body.pav-tv footer, body.pav-tv .cookie, body.pav-tv .founding
 
         <div class="bk-actions">
           <div class="left">
-            <button class="btn" onclick="bkGoToStep(2)"><span>← Retour</span></button>
+            <button class="btn" onclick="bkGoToStep(1)"><span>← Retour</span></button>
           </div>
           <div class="right">
-            <button class="btn btn-primary" onclick="bkGoToStep(4)" id="bkStep3Next" disabled><span>Récapitulatif →</span></button>
+            <button class="btn btn-primary" onclick="bkGoToStep(3)" id="bkStep2Next" disabled><span>Choisir une date →</span></button>
           </div>
         </div>
       </div>
@@ -24765,8 +24915,64 @@ const bkState = {
   heritagePack: null,
   vehicles: [],
   sessions: [],
-  capacities: {} // session_id -> { access, signature, promotion, total_max }
+  capacities: {}, // session_id -> { access, signature, promotion, total_max }
+
+  // === Périmètre de service (référentiel véhicules) ===
+  // La classe n'est JAMAIS calculée ici : elle est lue sur
+  // public.vehicules_eligibles.classe, colonne générée en base.
+  referentiel: null,      // ligne vehicules_eligibles retenue
+  classeRetenue: null,    // 'I' | 'II' | 'III' — figée à la réservation
+  refCache: {},           // cache mémoire des requêtes du référentiel (durée de session)
+  offresParClasse: null,  // { access: Set('I','II','III'), … } lu sur offres_classes
+  plate: '',
+  mods: false,
+  modsDetail: ''
 };
+
+/* Libellés de classe — dénominations publiées au document d'éligibilité. */
+const BK_CLASSES = { I: 'Sport', II: 'GT', III: 'Supersport' };
+function bkClasseLibelle(c) {
+  if (!c) return '—';
+  return `Classe ${c} — ${BK_CLASSES[c] || ''}`.trim();
+}
+const BK_OFFRE_LABELS = { access: 'Access', signature: 'Signature', heritage: 'Heritage', promotion: 'Promotion' };
+
+/* Table de correspondance offre / classe — lue en base, jamais codée en dur. */
+async function bkChargerOffresClasses() {
+  if (bkState.offresParClasse) return bkState.offresParClasse;
+  const { data, error } = await supabase.from('offres_classes').select('offre, classe');
+  if (error || !data) return null;
+  const map = {};
+  data.forEach(r => {
+    if (!map[r.offre]) map[r.offre] = new Set();
+    map[r.offre].add(r.classe);
+  });
+  bkState.offresParClasse = map;
+  return map;
+}
+
+/* Vrai si l'offre est ouverte à la classe. Tant que la classe n'est pas
+   déterminée, rien n'est fermé : on ne présume pas. */
+function bkOffreOuverte(offre, classe) {
+  if (!classe) return true;
+  const map = bkState.offresParClasse;
+  if (!map || !map[offre]) return true;
+  return map[offre].has(classe);
+}
+
+/* Mention de périmètre affichée sur une offre ou une date fermée. */
+function bkMentionPerimetre(offre) {
+  const map = bkState.offresParClasse;
+  const nom = BK_OFFRE_LABELS[offre] || offre;
+  const journee = offre === 'access' ? 'Demi-journée' : 'Journée';
+  if (!map || !map[offre]) return `${journee} ${nom}.`;
+  const classes = ['I', 'II', 'III'].filter(c => map[offre].has(c));
+  if (classes.length === 0) return `${journee} ${nom}.`;
+  const liste = classes.length === 1
+    ? `à la classe ${classes[0]}`
+    : `aux classes ${classes.slice(0, -1).join(', ')} et ${classes[classes.length - 1]}`;
+  return `${journee} ${nom} — ouverte ${liste}.`;
+}
 
 window.bkOpen = async function() {
   track('start_booking');
@@ -24792,6 +24998,21 @@ window.bkOpen = async function() {
   bkState.selectedPayment = 'card';
   bkState.useHeritage = false;
   bkState.heritagePack = null;
+  bkState.referentiel = null;
+  bkState.classeRetenue = null;
+  bkState.plate = '';
+  bkState.mods = false;
+  bkState.modsDetail = '';
+
+  // Correspondance offre / classe : une seule lecture, réutilisée tout le tunnel.
+  await bkChargerOffresClasses();
+
+  // Aucune étape ne reste franchissable d'une session de réservation à l'autre.
+  ['bkStep1Next', 'bkStep2Next', 'bkStep3Next'].forEach(id => {
+    const b = document.getElementById(id);
+    if (b) b.disabled = true;
+  });
+  bkRefMasquerBloc();
 
   bkUpdateProgress();
   bkShowStep(1);
@@ -24826,6 +25047,8 @@ window.bkGoToStep = function(n) {
 async function bkLoadDatesForOffer() {
   const container = document.getElementById('bkDates');
   if (!container) return;
+
+  bkState.sessionsHorsPerimetre = [];
 
   const selectedOffer = bkState.selectedOffer;
   if (!selectedOffer) {
@@ -24899,6 +25122,27 @@ async function bkLoadDatesForOffer() {
   bkState.capacities = {};
   bkState.regsBySession = regsBySession;
   bkState.currentMonthFilter = 'all';
+
+  // Périmètre de service — les journées dont l'offre n'est pas ouverte à la
+  // classe du véhicule restent AFFICHÉES, grisées et non sélectionnables.
+  // Les masquer supprimerait la montée en gamme : le pilote doit voir ce qui
+  // existe au-dessus.
+  const FORMAT_PAR_OFFRE = { access: 'half_day', signature: 'full_day', heritage: 'full_day' };
+  bkState.sessionsHorsPerimetre = [];
+  if (bkState.classeRetenue) {
+    const dejaListees = new Set(filteredSessions.map(s => s.id));
+    ['access', 'signature'].forEach(o => {
+      if (bkOffreOuverte(o, bkState.classeRetenue)) return;
+      const fmt = FORMAT_PAR_OFFRE[o];
+      (sessions || []).forEach(s => {
+        if (dejaListees.has(s.id)) return;
+        if (s.is_private === true || s.format === 'b2b') return;
+        if (s.format !== fmt) return;
+        dejaListees.add(s.id);
+        bkState.sessionsHorsPerimetre.push({ session: s, offre: o });
+      });
+    });
+  }
 
   // Coach visible DÈS le choix de la date (fondateur 2026-07-19) :
   // journées portant au moins un créneau coach validé → badge sur la carte.
@@ -25020,15 +25264,44 @@ function bkRenderSessions(monthKey) {
       </button>
     `;
   }).join('');
+
+  // Journées hors du périmètre de la classe retenue — visibles, grisées, motivées.
+  const hors = (bkState.sessionsHorsPerimetre || []).filter(x => {
+    if (monthKey === 'all') return true;
+    const d = new Date(x.session.date);
+    return `${d.getFullYear()}-${String(d.getMonth()).padStart(2, '0')}` === monthKey;
+  });
+
+  if (hors.length) {
+    const days = ['Dim', 'Lun', 'Mar', 'Mer', 'Jeu', 'Ven', 'Sam'];
+    const months = ['janv', 'févr', 'mars', 'avr', 'mai', 'juin', 'juil', 'août', 'sept', 'oct', 'nov', 'déc'];
+    container.innerHTML += hors.map(x => {
+      const d = new Date(x.session.date);
+      const isHalfDay = x.session.format === 'half_day';
+      return `
+        <button class="bk-date hors-perimetre" type="button" disabled aria-disabled="true">
+          <span class="bk-date-day">${days[d.getDay()]} · ${isHalfDay ? 'Demi-journée' : 'Journée complète'}</span>
+          <span class="bk-date-main">${d.getDate()} ${months[d.getMonth()]} ${d.getFullYear()}</span>
+          <span class="bk-perimetre-note">${escapeHtml(bkMentionPerimetre(x.offre))}</span>
+        </button>
+      `;
+    }).join('');
+  }
+
+  // Rétablit le marquage de la date retenue après un retour en arrière.
+  if (bkState.selectedSession) {
+    const el = container.querySelector(`.bk-date[data-session-id="${bkState.selectedSession.id}"]`);
+    if (el) el.classList.add('selected');
+  }
 }
 
 window.bkSelectSession = function(sessionId, btn) {
   document.querySelectorAll('.bk-date').forEach(el => el.classList.remove('selected'));
   btn.classList.add('selected');
   bkState.selectedSession = bkState.sessions.find(s => s.id === sessionId);
-  // Active le bouton "Choisir le véhicule" de l'étape 2
-  const step2Next = document.getElementById('bkStep2Next');
-  if (step2Next) step2Next.disabled = false;
+  // Active le bouton « Récapitulatif » de l'étape 3
+  const step3Next = document.getElementById('bkStep3Next');
+  if (step3Next) step3Next.disabled = false;
 };
 
 /* === ÉTAPE 2 : offres === */
@@ -25121,6 +25394,20 @@ async function bkLoadOffers() {
     const isUnlocked = bkState.unlockedOffers[key];
     const isHeritage = key === 'heritage';
 
+    // Périmètre de service : si la classe du véhicule est déjà déterminée
+    // (retour en arrière, seconde réservation), l'offre fermée à cette classe
+    // reste VISIBLE mais n'est pas sélectionnable. On ne la masque jamais.
+    if (bkState.classeRetenue && !bkOffreOuverte(key, bkState.classeRetenue)) {
+      return `
+        <button class="bk-offer hors-perimetre" data-offer="${key}" type="button" disabled aria-disabled="true">
+          <div class="bk-offer-name"><em>${off.name}</em></div>
+          <div class="bk-offer-desc">${off.desc}</div>
+          <div class="bk-offer-price">${(off.price / 100).toLocaleString('fr-FR')} €</div>
+          <div class="bk-offer-meta">${bkMentionPerimetre(key)}</div>
+        </button>
+      `;
+    }
+
     // Heritage : si débloqué et pas de pack actif, propose l'achat
     if (isHeritage) {
       if (!isUnlocked) {
@@ -25183,6 +25470,23 @@ async function bkLoadOffers() {
       </button>
     `;
   }).join('');
+
+  // Une offre déjà retenue puis fermée par la classe du véhicule ne reste pas
+  // sélectionnée en silence : la sélection tombe, l'étape se rejoue.
+  if (bkState.selectedOffer && !bkOffreOuverte(bkState.selectedOffer, bkState.classeRetenue)) {
+    bkState.selectedOffer = null;
+    bkState.useHeritage = false;
+    const s1 = document.getElementById('bkStep1Next');
+    if (s1) s1.disabled = true;
+  }
+
+  // Rétablit le marquage visuel de l'offre retenue après un retour en arrière.
+  if (bkState.selectedOffer) {
+    const sel = offersEl.querySelector(`.bk-offer[data-offer="${bkState.selectedOffer}"]:not(.hors-perimetre)`);
+    if (sel) sel.classList.add('selected');
+    const s1 = document.getElementById('bkStep1Next');
+    if (s1) s1.disabled = false;
+  }
 }
 
 window.bkOfferLocked = function(key) {
@@ -25242,10 +25546,26 @@ async function bkLoadVehicles() {
       </div>
     `;
     document.getElementById('bkInsuranceBlock').style.display = 'none';
+    bkRefMasquerBloc();
+    const s2 = document.getElementById('bkStep2Next');
+    if (s2) s2.disabled = true;
     return;
   }
 
   bkState.vehicles = data;
+
+  // Véhicules déjà désignés au référentiel : on lit leur classe en base.
+  // Aucune classe n'est déduite ici.
+  const refIds = [...new Set(data.map(v => v.referentiel_id).filter(Boolean))];
+  bkState.refParId = {};
+  if (refIds.length) {
+    const { data: refs } = await supabase
+      .from('vehicules_eligibles')
+      .select('*')
+      .eq('statut', 'actif')
+      .in('id', refIds);
+    (refs || []).forEach(r => { bkState.refParId[r.id] = r; });
+  }
 
   container.innerHTML = data.map(v => {
     const photo = v.photo_front_url || v.photo_side_url || v.photo_rear_url || v.photo_interior_url;
@@ -25255,9 +25575,11 @@ async function bkLoadVehicles() {
     const meta = [];
     if (v.year) meta.push(v.year);
     if (v.license_plate) meta.push(escapeHtml(v.license_plate));
+    const ref = v.referentiel_id ? bkState.refParId[v.referentiel_id] : null;
+    if (ref) meta.push(bkClasseLibelle(ref.classe));
 
     return `
-      <button class="bk-vehicle" data-vehicle-id="${v.id}" onclick="bkSelectVehicle('${v.id}', this)">
+      <button class="bk-vehicle${ref ? '' : ' hors-referentiel'}" data-vehicle-id="${v.id}" onclick="bkSelectVehicle('${v.id}', this)">
         <div class="bk-vehicle-thumb">${photoBlock}</div>
         <div class="bk-vehicle-info">
           <div class="bk-vehicle-name">${escapeHtml(v.brand || '')} <em>${escapeHtml(v.model || '')}</em></div>
@@ -25268,13 +25590,465 @@ async function bkLoadVehicles() {
   }).join('');
 
   document.getElementById('bkInsuranceBlock').style.display = 'block';
+
+  // Rétablit une sélection déjà faite (retour en arrière depuis l'étape 3).
+  if (bkState.selectedVehicle) {
+    const frais = data.find(v => v.id === bkState.selectedVehicle.id);
+    if (frais) bkState.selectedVehicle = frais;
+    const el = container.querySelector(`.bk-vehicle[data-vehicle-id="${bkState.selectedVehicle.id}"]`);
+    if (el) el.classList.add('selected');
+    bkRefMajValidite();
+  } else {
+    bkRefMasquerBloc();
+  }
 }
 
-window.bkSelectVehicle = function(vehicleId, btn) {
+/* ==========================================================================
+   ÉTAPE 2 — Désignation au référentiel (périmètre de service)
+
+   Le référentiel `public.vehicules_eligibles` est l'application des conditions
+   d'accès publiées. La colonne `classe` y est GÉNÉRÉE en base : elle n'est ni
+   saisie ici, ni recalculée ici. Le rapport masse / puissance est lu tel qu'il
+   est publié. Aucun chargement global du référentiel : trois requêtes
+   successives, mises en cache pour la durée de la session.
+   ========================================================================== */
+
+function bkRefMasquerBloc() {
+  const w = document.getElementById('bkRefWrap');
+  if (w) w.style.display = 'none';
+  const d = document.getElementById('bkRefDemande');
+  if (d) { d.style.display = 'none'; d.innerHTML = ''; }
+}
+
+window.bkSelectVehicle = async function(vehicleId, btn) {
   document.querySelectorAll('.bk-vehicle').forEach(el => el.classList.remove('selected'));
   btn.classList.add('selected');
   bkState.selectedVehicle = bkState.vehicles.find(v => v.id === vehicleId);
-  document.getElementById('bkStep3Next').disabled = false;
+
+  // Changement de véhicule : la désignation précédente ne suit pas.
+  bkState.referentiel = null;
+  bkState.classeRetenue = null;
+  bkState.mods = false;
+  bkState.modsDetail = '';
+  const chk = document.getElementById('bkRefMods');
+  if (chk) chk.checked = false;
+  const modsWrap = document.getElementById('bkRefModsWrap');
+  if (modsWrap) modsWrap.style.display = 'none';
+  const modsDetail = document.getElementById('bkRefModsDetail');
+  if (modsDetail) modsDetail.value = '';
+
+  const wrap = document.getElementById('bkRefWrap');
+  if (wrap) wrap.style.display = 'block';
+  const demande = document.getElementById('bkRefDemande');
+  if (demande) { demande.style.display = 'none'; demande.innerHTML = ''; }
+
+  // Immatriculation : reprise de la fiche véhicule, reformatée.
+  const plateEl = document.getElementById('bkRefPlate');
+  if (plateEl) {
+    plateEl.value = bkNormalisePlaque(bkState.selectedVehicle?.license_plate || '');
+    bkState.plate = plateEl.value;
+  }
+
+  await bkRefChargerMarques();
+
+  // Véhicule déjà désigné : la cascade se replace sur sa ligne de référentiel.
+  const ref = bkState.selectedVehicle?.referentiel_id
+    ? bkState.refParId[bkState.selectedVehicle.referentiel_id]
+    : null;
+  if (ref) {
+    const selMarque = document.getElementById('bkRefMarque');
+    if (selMarque) selMarque.value = ref.marque;
+    await bkRefOnMarque();
+    const selModele = document.getElementById('bkRefModele');
+    if (selModele) selModele.value = ref.modele;
+    await bkRefOnModele();
+    const selGen = document.getElementById('bkRefGeneration');
+    if (selGen) selGen.value = ref.id;
+    bkRefOnGeneration();
+  } else {
+    const selMarque = document.getElementById('bkRefMarque');
+    if (selMarque) selMarque.value = '';
+    bkRefReinitialiserCascade('modele');
+    bkRefAppliquer(null);
+  }
+
+  bkRefMajValidite();
+};
+
+function bkRefReinitialiserCascade(depuis) {
+  const selModele = document.getElementById('bkRefModele');
+  const selGen = document.getElementById('bkRefGeneration');
+  if (depuis === 'modele' && selModele) {
+    selModele.innerHTML = '<option value="">— Choisissez d\'abord une marque</option>';
+    selModele.disabled = true;
+  }
+  if (selGen) {
+    selGen.innerHTML = '<option value="">— Choisissez d\'abord un modèle</option>';
+    selGen.disabled = true;
+  }
+}
+
+async function bkRefChargerMarques() {
+  const sel = document.getElementById('bkRefMarque');
+  if (!sel) return;
+  if (sel.dataset.charge === '1') return;
+
+  let marques = bkState.refCache['marques'];
+  if (!marques) {
+    const { data, error } = await supabase
+      .from('vehicules_eligibles')
+      .select('marque')
+      .eq('statut', 'actif')
+      .order('marque', { ascending: true });
+    if (error) {
+      sel.innerHTML = '<option value="">— Référentiel indisponible</option>';
+      return;
+    }
+    marques = [...new Set((data || []).map(r => r.marque))];
+    bkState.refCache['marques'] = marques;
+  }
+
+  sel.innerHTML = '<option value="">— Sélectionnez</option>'
+    + marques.map(m => `<option value="${escapeHtml(m)}">${escapeHtml(m)}</option>`).join('');
+  sel.dataset.charge = '1';
+}
+
+window.bkRefOnMarque = async function() {
+  const selMarque = document.getElementById('bkRefMarque');
+  const selModele = document.getElementById('bkRefModele');
+  if (!selMarque || !selModele) return;
+
+  bkRefReinitialiserCascade('modele');
+  bkRefAppliquer(null);
+
+  const marque = selMarque.value;
+  if (!marque) { bkRefMajValidite(); return; }
+
+  const cle = 'mod:' + marque;
+  let modeles = bkState.refCache[cle];
+  if (!modeles) {
+    const { data, error } = await supabase
+      .from('vehicules_eligibles')
+      .select('modele')
+      .eq('statut', 'actif')
+      .eq('marque', marque)
+      .order('modele', { ascending: true });
+    if (error) { selModele.innerHTML = '<option value="">— Référentiel indisponible</option>'; return; }
+    modeles = [...new Set((data || []).map(r => r.modele))];
+    bkState.refCache[cle] = modeles;
+  }
+
+  selModele.innerHTML = '<option value="">— Sélectionnez</option>'
+    + modeles.map(m => `<option value="${escapeHtml(m)}">${escapeHtml(m)}</option>`).join('');
+  selModele.disabled = false;
+  bkRefMajValidite();
+};
+
+window.bkRefOnModele = async function() {
+  const selMarque = document.getElementById('bkRefMarque');
+  const selModele = document.getElementById('bkRefModele');
+  const selGen = document.getElementById('bkRefGeneration');
+  if (!selMarque || !selModele || !selGen) return;
+
+  bkRefReinitialiserCascade();
+  bkRefAppliquer(null);
+
+  const marque = selMarque.value, modele = selModele.value;
+  if (!marque || !modele) { bkRefMajValidite(); return; }
+
+  const cle = `gen:${marque}|${modele}`;
+  let lignes = bkState.refCache[cle];
+  if (!lignes) {
+    const { data, error } = await supabase
+      .from('vehicules_eligibles')
+      .select('*')
+      .eq('statut', 'actif')
+      .eq('marque', marque)
+      .eq('modele', modele)
+      .order('annee_debut', { ascending: true });
+    if (error) { selGen.innerHTML = '<option value="">— Référentiel indisponible</option>'; return; }
+    lignes = data || [];
+    bkState.refCache[cle] = lignes;
+  }
+
+  selGen.innerHTML = '<option value="">— Sélectionnez</option>'
+    + lignes.map(r => `<option value="${r.id}">${escapeHtml(bkRefLibelleGeneration(r))}</option>`).join('');
+  selGen.disabled = false;
+  bkRefMajValidite();
+};
+
+/* Libellé « {generation} · {annee_debut}–{annee_fin} ».
+   Année de fin absente : tiret cadratin. */
+function bkRefLibelleGeneration(r) {
+  const annees = `${r.annee_debut}–${r.annee_fin ? r.annee_fin : '—'}`;
+  return r.generation ? `${r.generation} · ${annees}` : annees;
+}
+
+window.bkRefOnGeneration = function() {
+  const selMarque = document.getElementById('bkRefMarque');
+  const selModele = document.getElementById('bkRefModele');
+  const selGen = document.getElementById('bkRefGeneration');
+  if (!selGen) return;
+
+  const cle = `gen:${selMarque.value}|${selModele.value}`;
+  const lignes = bkState.refCache[cle] || [];
+  const ligne = lignes.find(r => r.id === selGen.value) || null;
+  bkRefAppliquer(ligne);
+  bkRefMajValidite();
+};
+
+/* Espace fine insécable comme séparateur de milliers (micro-typographie FR). */
+function bkNombreFr(n) {
+  const v = Math.round(Number(n));
+  if (!isFinite(v)) return '—';
+  return String(v).replace(/\B(?=(\d{3})+(?!\d))/g, '\u202f');
+}
+
+/* Applique — ou retire — la ligne de référentiel retenue.
+   La classe est LUE sur la ligne, jamais déduite. */
+function bkRefAppliquer(ligne) {
+  const fiche = document.getElementById('bkRefFiche');
+  const decl = document.getElementById('bkRefDeclaration');
+
+  bkState.referentiel = ligne;
+  bkState.classeRetenue = ligne ? ligne.classe : null;
+
+  if (!ligne) {
+    if (fiche) { fiche.style.display = 'none'; fiche.innerHTML = ''; }
+    if (decl) decl.style.display = 'none';
+    bkRefRendrePerimetre();
+    return;
+  }
+
+  const rapport = Number(ligne.ratio_kg_ch).toFixed(2).replace('.', ',');
+
+  if (fiche) {
+    fiche.innerHTML = `
+      <div class="bk-ref-fiche">
+        <div class="bk-ref-fiche-nom">${escapeHtml(ligne.marque)} <em>${escapeHtml(ligne.modele)}</em> · ${escapeHtml(bkRefLibelleGeneration(ligne))}</div>
+        <div class="bk-ref-grid">
+          <div>
+            <div class="bk-ref-cell-label">Puissance</div>
+            <div class="bk-ref-cell-value">${bkNombreFr(ligne.puissance_ch)} ch</div>
+          </div>
+          <div>
+            <div class="bk-ref-cell-label">Masse</div>
+            <div class="bk-ref-cell-value">${bkNombreFr(ligne.masse_kg)} kg</div>
+          </div>
+          <div>
+            <div class="bk-ref-cell-label">Rapport</div>
+            <div class="bk-ref-cell-value">${rapport} kg/ch</div>
+          </div>
+          <div>
+            <div class="bk-ref-cell-label">Classe</div>
+            <div class="bk-ref-cell-value">${escapeHtml(bkClasseLibelle(ligne.classe))}</div>
+          </div>
+        </div>
+      </div>
+    `;
+    fiche.style.display = 'block';
+  }
+  if (decl) decl.style.display = 'block';
+
+  bkRefRendrePerimetre();
+}
+
+/* Périmètre de service — jamais un refus : la définition du service vendu. */
+function bkRefRendrePerimetre() {
+  const el = document.getElementById('bkRefPerimetre');
+  if (!el) return;
+
+  const offre = bkState.selectedOffer;
+  const classe = bkState.classeRetenue;
+  if (!offre || !classe || bkOffreOuverte(offre, classe)) {
+    el.style.display = 'none';
+    el.innerHTML = '';
+    return;
+  }
+
+  const ouvertes = ['access', 'signature', 'heritage']
+    .filter(o => bkOffreOuverte(o, classe))
+    .map(o => BK_OFFRE_LABELS[o]);
+
+  el.innerHTML = `
+    <div class="bk-perimetre-panel">
+      <div class="titre">Périmètre de service</div>
+      <div class="corps">
+        ${escapeHtml(bkMentionPerimetre(offre))} Votre véhicule relève de la ${escapeHtml(bkClasseLibelle(classe))}.
+        ${ouvertes.length ? `Les journées ${ouvertes.join(' et ')} vous sont ouvertes.` : ''}
+        <div style="margin-top: 14px;">
+          <button class="btn btn-sm" type="button" onclick="bkGoToStep(1)"><span>Revoir les offres →</span></button>
+        </div>
+      </div>
+    </div>
+  `;
+  el.style.display = 'block';
+}
+
+/* Immatriculation — AA-123-AA, majuscules, tirets insérés automatiquement. */
+function bkNormalisePlaque(v) {
+  const brut = String(v || '').toUpperCase().replace(/[^A-Z0-9]/g, '');
+  const lettres1 = brut.slice(0, 2).replace(/[^A-Z]/g, '');
+  const reste1 = brut.slice(lettres1.length);
+  const chiffres = reste1.slice(0, 3).replace(/[^0-9]/g, '');
+  const reste2 = reste1.slice(chiffres.length);
+  const lettres2 = reste2.slice(0, 2).replace(/[^A-Z]/g, '');
+  let out = lettres1;
+  if (chiffres) out += '-' + chiffres;
+  if (lettres2) out += '-' + lettres2;
+  return out;
+}
+
+window.bkRefFormatPlate = function(input) {
+  const avant = input.value;
+  const apres = bkNormalisePlaque(avant);
+  if (apres !== avant) input.value = apres;
+  bkState.plate = apres;
+  bkRefMajValidite();
+};
+
+function bkPlaqueValide(v) {
+  return /^[A-Z]{2}-\d{3}-[A-Z]{2}$/.test(String(v || ''));
+}
+
+window.bkRefOnMods = function() {
+  const chk = document.getElementById('bkRefMods');
+  const wrap = document.getElementById('bkRefModsWrap');
+  bkState.mods = !!(chk && chk.checked);
+  if (wrap) wrap.style.display = bkState.mods ? 'block' : 'none';
+  if (!bkState.mods) {
+    const d = document.getElementById('bkRefModsDetail');
+    if (d) d.value = '';
+    bkState.modsDetail = '';
+  }
+  bkRefMajValidite();
+};
+
+/* Condition de passage à l'étape 3. Un véhicule hors périmètre de l'offre
+   retenue n'atteint jamais le calendrier, donc jamais le paiement. */
+window.bkRefMajValidite = function() {
+  const detailEl = document.getElementById('bkRefModsDetail');
+  bkState.modsDetail = detailEl ? detailEl.value.trim() : '';
+  const plateEl = document.getElementById('bkRefPlate');
+  if (plateEl) bkState.plate = plateEl.value;
+
+  bkRefRendrePerimetre();
+
+  const ok = !!bkState.selectedVehicle
+    && !!bkState.referentiel
+    && bkPlaqueValide(bkState.plate)
+    && (!bkState.mods || bkState.modsDetail.length > 0)
+    && bkOffreOuverte(bkState.selectedOffer, bkState.classeRetenue);
+
+  const btn = document.getElementById('bkStep2Next');
+  if (btn) btn.disabled = !ok;
+  return ok;
+};
+
+/* Véhicule absent du référentiel — l'absence ne vaut pas refus : elle ouvre
+   un examen individuel. Enregistré dans demandes_examen_vehicule. */
+window.bkRefOuvrirDemande = function(ev) {
+  if (ev) ev.preventDefault();
+  const el = document.getElementById('bkRefDemande');
+  if (!el) return;
+  if (el.style.display === 'block') { el.style.display = 'none'; el.innerHTML = ''; return; }
+
+  const v = bkState.selectedVehicle || {};
+  const email = window.OXVApi.user.dbProfile?.email || window.OXVApi.user.profile?.email || '';
+
+  el.innerHTML = `
+    <div class="bk-step-eyebrow" style="margin-bottom: 18px;">— Examen individuel</div>
+    <p class="bk-step-sub" style="margin-bottom: 20px;">
+      L'absence d'un véhicule du référentiel ne vaut pas refus : elle ouvre un examen individuel. Réponse annoncée sous soixante-douze heures ouvrées.
+    </p>
+    <div class="account-form">
+      <div class="form-row">
+        <label for="bkDemMarque">Marque</label>
+        <input type="text" id="bkDemMarque" value="${escapeHtml(v.brand || '')}" />
+      </div>
+      <div class="form-row">
+        <label for="bkDemModele">Modèle</label>
+        <input type="text" id="bkDemModele" value="${escapeHtml(v.model || '')}" />
+      </div>
+      <div class="form-row">
+        <label for="bkDemAnnee">Année</label>
+        <input type="number" id="bkDemAnnee" min="1950" max="2030" value="${v.year || ''}" />
+      </div>
+      <div class="form-row">
+        <label for="bkDemPuissance">Puissance (ch)</label>
+        <input type="number" id="bkDemPuissance" min="1" max="2000" value="${v.puissance_ch || ''}" />
+      </div>
+      <div class="form-row">
+        <label for="bkDemMasse">Masse en ordre de marche (kg)</label>
+        <input type="number" id="bkDemMasse" min="101" max="4999" value="${v.mass_kg || ''}" />
+      </div>
+      <div class="form-row">
+        <label for="bkDemPlaque">Immatriculation</label>
+        <input type="text" id="bkDemPlaque" maxlength="9" placeholder="AA-123-AA" style="text-transform: uppercase;" value="${escapeHtml(bkNormalisePlaque(v.license_plate || ''))}" oninput="bkRefFormatPlateSimple(this)" />
+      </div>
+      <div class="form-row full">
+        <label for="bkDemEmail">Adresse électronique</label>
+        <input type="email" id="bkDemEmail" value="${escapeHtml(email)}" />
+      </div>
+    </div>
+    <div class="bk-actions" style="margin-top: 8px;">
+      <div class="left">
+        <button class="btn" type="button" onclick="bkRefOuvrirDemande(event)"><span>Fermer</span></button>
+      </div>
+      <div class="right">
+        <button class="btn btn-primary" type="button" id="bkDemSend" onclick="bkRefEnvoyerDemande()"><span>Demander un examen</span></button>
+      </div>
+    </div>
+  `;
+  el.style.display = 'block';
+};
+
+window.bkRefFormatPlateSimple = function(input) {
+  input.value = bkNormalisePlaque(input.value);
+};
+
+window.bkRefEnvoyerDemande = async function() {
+  const get = id => { const e = document.getElementById(id); return e ? e.value.trim() : ''; };
+  const marque = get('bkDemMarque'), modele = get('bkDemModele'), email = get('bkDemEmail');
+  if (!marque || !modele) { toast('Marque et modèle sont nécessaires.', 'warn'); return; }
+  if (!email || !/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)) { toast('Adresse électronique invalide.', 'warn'); return; }
+
+  const annee = get('bkDemAnnee'), puissance = get('bkDemPuissance'), masse = get('bkDemMasse');
+  const plaque = bkNormalisePlaque(get('bkDemPlaque'));
+
+  const btn = document.getElementById('bkDemSend');
+  const orig = btn ? btn.innerHTML : '';
+  if (btn) { btn.innerHTML = '<span>⟳ Envoi…</span>'; btn.disabled = true; }
+
+  try {
+    const { error } = await supabase.from('demandes_examen_vehicule').insert({
+      user_id: window.OXVApi.user.profile?.id || null,
+      email,
+      marque,
+      modele,
+      annee: annee ? parseInt(annee, 10) : null,
+      puissance_ch: puissance ? parseInt(puissance, 10) : null,
+      masse_kg: masse ? parseFloat(masse) : null,
+      immatriculation: plaque || null
+    });
+    if (error) throw error;
+
+    const el = document.getElementById('bkRefDemande');
+    if (el) {
+      el.innerHTML = `
+        <div class="bk-perimetre-panel">
+          <div class="titre">Demande enregistrée</div>
+          <div class="corps">
+            Votre véhicule est transmis à l'examen individuel. Réponse annoncée sous soixante-douze heures ouvrées, à l'adresse ${escapeHtml(email)}.
+          </div>
+        </div>
+      `;
+    }
+  } catch (err) {
+    console.warn('[booking] demande d\'examen :', err);
+    if (btn) { btn.innerHTML = orig; btn.disabled = false; }
+    toast('Demande non enregistrée. Écrivez à contact@oxvehicle.fr.', 'warn');
+  }
 };
 
 window.bkSelectInsurance = function(opt, el) {
@@ -25349,8 +26123,20 @@ function bkBuildRecap() {
     </div>
     <div class="bk-recap-line">
       <span class="bk-recap-label">Véhicule</span>
-      <span class="bk-recap-value">${escapeHtml(vehicle.brand || '')} ${escapeHtml(vehicle.model || '')}${vehicle.license_plate ? ` · ${escapeHtml(vehicle.license_plate)}` : ''}</span>
+      <span class="bk-recap-value">${escapeHtml(vehicle.brand || '')} ${escapeHtml(vehicle.model || '')}${bkState.plate ? ` · ${escapeHtml(bkState.plate)}` : (vehicle.license_plate ? ` · ${escapeHtml(vehicle.license_plate)}` : '')}</span>
     </div>
+    ${bkState.classeRetenue ? `
+      <div class="bk-recap-line">
+        <span class="bk-recap-label">Classe retenue</span>
+        <span class="bk-recap-value">${escapeHtml(bkClasseLibelle(bkState.classeRetenue))}</span>
+      </div>
+    ` : ''}
+    ${bkState.mods ? `
+      <div class="bk-recap-line">
+        <span class="bk-recap-label">Modifications déclarées</span>
+        <span class="bk-recap-value">Oui · examen technique avant confirmation</span>
+      </div>
+    ` : ''}
     <div class="bk-recap-line">
       <span class="bk-recap-label">Assurance circuit</span>
       <span class="bk-recap-value">${insuranceLabel}</span>
@@ -25382,7 +26168,31 @@ function bkBuildRecap() {
 window.bkConfirmBooking = async function() {
   // Validation finale
   if (!bkState.selectedSession || !bkState.selectedOffer || !bkState.selectedVehicle) {
-    toast('Sélection incomplète. Vérifiez offre + date + véhicule.', 'warn');
+    toast('Sélection incomplète. Vérifiez offre + véhicule + date.', 'warn');
+    return;
+  }
+
+  // Périmètre de service — dernier filet côté client. Le filet réel est le
+  // trigger `registrations_offre_ouverte_a_la_classe_trg` en base : une
+  // combinaison offre / classe absente d'offres_classes y est rejetée.
+  if (!bkState.referentiel || !bkState.classeRetenue) {
+    toast('Votre véhicule doit être désigné au référentiel à l’étape 2.', 'warn');
+    bkGoToStep(2);
+    return;
+  }
+  if (!bkOffreOuverte(bkState.selectedOffer, bkState.classeRetenue)) {
+    toast(bkMentionPerimetre(bkState.selectedOffer), 'warn');
+    bkGoToStep(1);
+    return;
+  }
+  if (!bkPlaqueValide(bkState.plate)) {
+    toast('Immatriculation attendue au format AA-123-AA.', 'warn');
+    bkGoToStep(2);
+    return;
+  }
+  if (bkState.mods && !bkState.modsDetail) {
+    toast('Le détail des modifications est nécessaire.', 'warn');
+    bkGoToStep(2);
     return;
   }
 
@@ -25470,7 +26280,26 @@ window.bkConfirmBooking = async function() {
       return;
     }
 
-    // Création de la registration
+    // Désignation du véhicule au référentiel : la fiche pilote garde le lien.
+    // Écriture avant l'inscription — la donnée du dossier précède l'engagement.
+    try {
+      const { error: vehErr } = await supabase
+        .from('vehicles')
+        .update({
+          referentiel_id: bkState.referentiel.id,
+          generation: bkState.referentiel.generation,
+          puissance_ch: bkState.referentiel.puissance_ch,
+          mass_kg: bkState.referentiel.masse_kg,
+          license_plate: bkState.plate
+        })
+        .eq('id', bkState.selectedVehicle.id)
+        .eq('user_id', userId);
+      if (vehErr) console.warn('[booking] désignation référentiel :', vehErr);
+    } catch (e) { console.warn('[booking] désignation référentiel :', e); }
+
+    // Création de la registration.
+    // `classe_retenue` est FIGÉE ici : une révision ultérieure du référentiel
+    // ne reclasse jamais une réservation déjà enregistrée.
     const regData = {
       user_id: userId,
       session_id: bkState.selectedSession.id,
@@ -25480,7 +26309,10 @@ window.bkConfirmBooking = async function() {
       status: 'pending',
       price_total: priceTotal,
       price_deposit: priceDeposit,
-      insurance_option: bkState.selectedInsurance
+      insurance_option: bkState.selectedInsurance,
+      classe_retenue: bkState.classeRetenue,
+      modifications_declarees: bkState.mods,
+      modifications_detail: bkState.mods ? bkState.modsDetail : null
     };
 
     const { data: reg, error: regErr } = await supabase
@@ -25494,6 +26326,14 @@ window.bkConfirmBooking = async function() {
       if (regErr.code === '23505') {
         btn.innerHTML = orig; btn.disabled = false;
         toast('Vous êtes déjà inscrit à cette session.', 'warn');
+        return;
+      }
+      // Périmètre de service refusé en base (trigger offre / classe, ou détail
+      // de modifications manquant) → on rend le motif, pas l'erreur brute.
+      if (regErr.code === '23514' || /périmètre de service/i.test(regErr.message || '')) {
+        btn.innerHTML = orig; btn.disabled = false;
+        toast(bkMentionPerimetre(bkState.useHeritage ? 'heritage' : bkState.selectedOffer), 'warn');
+        bkGoToStep(1);
         return;
       }
       throw regErr;
@@ -25584,10 +26424,17 @@ window.bkConfirmBooking = async function() {
 // Hook quand on change d'étape : load des données nécessaires
 const _origBkGoToStep = window.bkGoToStep;
 window.bkGoToStep = function(n) {
+  // Périmètre de service : au-delà de l'étape véhicule, l'offre retenue doit
+  // être ouverte à la classe du véhicule. Le calendrier — donc le paiement —
+  // reste hors d'atteinte tant que ce n'est pas le cas.
+  if (n >= 3 && bkState.classeRetenue && !bkOffreOuverte(bkState.selectedOffer, bkState.classeRetenue)) {
+    toast(bkMentionPerimetre(bkState.selectedOffer), 'warn');
+    return;
+  }
   _origBkGoToStep(n);
   if (n === 1) bkLoadOffers();
-  if (n === 2) bkLoadDatesForOffer();
-  if (n === 3) bkLoadVehicles();
+  if (n === 2) bkLoadVehicles();
+  if (n === 3) bkLoadDatesForOffer();
   if (n === 4) { bkBuildRecap(); if (typeof window.bkRenderCoachOption === 'function') bkRenderCoachOption(); }
 };
 
