@@ -19018,6 +19018,32 @@ body.pav-tv .nav, body.pav-tv footer, body.pav-tv .cookie, body.pav-tv .founding
           </div>
         </div>
 
+        <!-- Classes admises sur le plateau. Se CUMULE avec les offres :
+             la formule dit ce que le catalogue ouvre, la journée dit ce que le
+             plateau de ce jour-là accueille. Aucune ne rattrape l'autre. -->
+        <div class="form-row" id="newSessionClassesRow">
+          <label class="form-label">Classes admises</label>
+          <div class="form-checkboxes">
+            <label class="form-checkbox">
+              <input type="checkbox" id="newSessionClasseI" checked />
+              <span>Classe I — Sport</span>
+            </label>
+            <label class="form-checkbox">
+              <input type="checkbox" id="newSessionClasseII" checked />
+              <span>Classe II — GT</span>
+            </label>
+            <label class="form-checkbox">
+              <input type="checkbox" id="newSessionClasseIII" checked />
+              <span>Classe III — Supersport</span>
+            </label>
+          </div>
+          <div class="form-hint">
+            Ce que le plateau accueille ce jour-là. Par défaut les trois. Restreindre
+            ferme la journée aux véhicules concernés : la base le vérifie à
+            l'inscription, l'interface ne fait que l'annoncer.
+          </div>
+        </div>
+
         <!-- Capacité totale (auto-calculée) -->
         <div class="form-row" id="newSessionCapacityRow">
           <label class="form-label">Capacité</label>
@@ -19194,6 +19220,7 @@ body.pav-tv .nav, body.pav-tv footer, body.pav-tv .cookie, body.pav-tv .founding
       <div class="form-row"><label for="ase-cap">Capacité totale</label><input type="number" id="ase-cap" min="0" max="40" /></div>
       <div class="form-row"><label for="ase-cap-access">Capacité Access</label><input type="number" id="ase-cap-access" min="0" max="40" /></div>
       <div class="form-row"><label for="ase-cap-sig">Capacité Signature</label><input type="number" id="ase-cap-sig" min="0" max="40" /></div>
+      <div class="form-row full"><label>Classes admises</label><div style="display:flex;gap:20px;flex-wrap:wrap;padding-top:6px;"><label style="display:flex;align-items:center;gap:7px;font-family:var(--sans);color:var(--cream);cursor:pointer;"><input type="checkbox" id="aseClasseI" /><span>Classe I — Sport</span></label><label style="display:flex;align-items:center;gap:7px;font-family:var(--sans);color:var(--cream);cursor:pointer;"><input type="checkbox" id="aseClasseII" /><span>Classe II — GT</span></label><label style="display:flex;align-items:center;gap:7px;font-family:var(--sans);color:var(--cream);cursor:pointer;"><input type="checkbox" id="aseClasseIII" /><span>Classe III — Supersport</span></label></div></div>
       <div class="form-row full"><label for="ase-notes">Notes internes</label><textarea id="ase-notes" rows="3" style="background:rgba(0,0,0,0.4);border:1px solid var(--bento-border);color:var(--cream);padding:10px 14px;border-radius:6px;width:100%;font-family:var(--sans);"></textarea></div>
     </div>
     <div style="display:flex;gap:8px;justify-content:flex-end;margin-top:16px;">
@@ -20459,7 +20486,7 @@ body.pav-tv .nav, body.pav-tv footer, body.pav-tv .cookie, body.pav-tv .founding
             <div class="account-form">
               <div class="form-row">
                 <label for="bkRefPlate">Immatriculation</label>
-                <input type="text" id="bkRefPlate" inputmode="latin" autocomplete="off" maxlength="9"
+                <input type="text" id="bkRefPlate" inputmode="latin" autocomplete="off" maxlength="14"
                        placeholder="AA-123-AA" style="text-transform: uppercase; font-family: var(--mono); letter-spacing: 0.08em;"
                        oninput="bkRefFormatPlate(this)" onblur="bkRefMajValidite()"
                        aria-describedby="bkRefPlateHint" />
@@ -25089,17 +25116,34 @@ async function bkLoadDatesForOffer() {
   // Filtre selon le format de session lié à l'offre :
   // Access → demi-journée (lundi)
   // Signature / Heritage → journée complète (vendredi)
+  /* La journée admet-elle la classe retenue ?
+
+     Deux replis, et ils disent la même chose : on ne restreint pas sur une
+     absence. Une journée créée avant ce champ n'a pas de liste — elle admettait
+     tout le monde, et c'est ce qu'on conserve. Une classe non établie (véhicule
+     non désigné au référentiel) ne fait pas non plus écarter la journée : un
+     manque de donnée n'est pas un écart, c'est la règle des trois états. */
+  const journeeAdmetLaClasse = (s) => {
+    if (!bkState.classeRetenue) return true;
+    const admises = Array.isArray(s.classes_admises) && s.classes_admises.length
+      ? s.classes_admises
+      : ['I', 'II', 'III'];
+    return admises.indexOf(bkState.classeRetenue) !== -1;
+  };
+
   const filteredSessions = (sessions || []).filter(s => {
     if (s.is_private === true) return false;
     if (s.format === 'b2b') return false;
+    if (!journeeAdmetLaClasse(s)) return false;
     if (selectedOffer === 'access') return s.format === 'half_day';
     return s.format === 'full_day'; // signature, heritage
   });
 
-  if (filteredSessions.length === 0) {
-    container.innerHTML = `<div class="account-empty" style="grid-column: 1/-1;"><div class="account-empty-icon">○</div><p class="account-empty-text">Aucune date disponible pour cette offre. Contactez-nous ou choisissez une autre offre.</p></div>`;
-    return;
-  }
+  /* Aucun retour anticipé ici. C'était le JUMEAU du défaut corrigé dans
+     `bkRenderSessions` : sortir sur `filteredSessions` vide, c'est sortir avant
+     d'avoir construit les journées grisées — donc montrer une page vide
+     exactement quand il fallait montrer ce qui existe au-dessus. Le rendu sait
+     désormais traiter le cas vide, et il connaît les deux listes. */
 
   // Places restantes : vue d'agrégats publique session_availability (aucune PII).
   // Remplace le comptage direct sur registrations, faussé par la RLS (chaque pilote
@@ -25132,7 +25176,34 @@ async function bkLoadDatesForOffer() {
   bkState.sessionsHorsPerimetre = [];
   if (bkState.classeRetenue) {
     const dejaListees = new Set(filteredSessions.map(s => s.id));
-    ['access', 'signature'].forEach(o => {
+
+    /* D'abord les journées que CETTE journée-là n'admet pas. Elles priment sur
+       le motif de formule : dire « la formule Signature vous est fermée » à
+       quelqu'un dont c'est la journée qui ne l'accueille pas serait faux, et
+       l'enverrait changer de formule sans rien y gagner. */
+    (sessions || []).forEach(s => {
+      if (dejaListees.has(s.id)) return;
+      if (s.is_private === true || s.format === 'b2b') return;
+      if (journeeAdmetLaClasse(s)) return;
+      dejaListees.add(s.id);
+      // Le motif dit ce qui EST admis, pas ce qui ne l'est pas : « ouverte aux
+      // classes II et III » se vérifie et oriente ; « vous n'êtes pas admis »
+      // ne fait que constater, et se lit comme une décision sur la personne.
+      const admises = Array.isArray(s.classes_admises) && s.classes_admises.length
+        ? s.classes_admises
+        : ['I', 'II', 'III'];
+      bkState.sessionsHorsPerimetre.push({
+        session: s,
+        offre: selectedOffer,
+        motif: 'Journée ouverte aux classes ' + admises.join(' et ') + '.'
+      });
+    });
+
+    /* Puis les journées dont la FORMULE est fermée à la classe : la montée en
+       gamme. Heritage y figure — sans restriction par journée son absence était
+       sans effet, Signature et Heritage étant ouvertes aux mêmes classes ; avec
+       elle, une journée peut fermer l'une sans l'autre. */
+    ['access', 'signature', 'heritage'].forEach(o => {
       if (bkOffreOuverte(o, bkState.classeRetenue)) return;
       const fmt = FORMAT_PAR_OFFRE[o];
       (sessions || []).forEach(s => {
@@ -25149,6 +25220,10 @@ async function bkLoadDatesForOffer() {
   // journées portant au moins un créneau coach validé → badge sur la carte.
   bkState.coachDates = new Set();
   try {
+    // `filteredSessions` peut désormais être vide (le retour anticipé a sauté) :
+    // `filteredSessions[0].date` lèverait une exception, avalée par le catch,
+    // et le badge coach disparaîtrait sans que rien ne le signale.
+    if (!filteredSessions.length) throw new Error('aucune journée ouverte');
     const dMin = filteredSessions[0].date, dMax = filteredSessions[filteredSessions.length - 1].date;
     const { data: cs } = await supabase.from('coach_availability').select('starts_at').eq('status', 'open')
       .gte('starts_at', dMin + 'T00:00:00').lte('starts_at', dMax + 'T23:59:59');
@@ -25238,12 +25313,24 @@ function bkRenderSessions(monthKey) {
         return key === monthKey;
       });
 
-  if (filtered.length === 0) {
+  // Les journées hors du périmètre de la classe retenue se calculent AVANT le
+  // cas vide. Sortir ici quand `filtered` est vide annulait la montée en gamme
+  // au moment precis où elle sert : un pilote dont aucune journée n'est ouverte
+  // à sa classe voyait une page vide, au lieu des journées supérieures grisées.
+  const hors = (bkState.sessionsHorsPerimetre || []).filter(x => {
+    if (monthKey === 'all') return true;
+    const d = new Date(x.session.date);
+    return `${d.getFullYear()}-${String(d.getMonth()).padStart(2, '0')}` === monthKey;
+  });
+
+  if (filtered.length === 0 && hors.length === 0) {
     container.innerHTML = `<div class="account-empty" style="grid-column: 1/-1;"><div class="account-empty-icon">○</div><p class="account-empty-text">Aucune session sur cette période.</p></div>`;
     return;
   }
 
-  container.innerHTML = filtered.map(s => {
+  container.innerHTML = '';
+
+  container.innerHTML += filtered.map(s => {
     const caps = bkState.capacities[s.id];
     const isFull = caps.remaining.total === 0;
     const date = new Date(s.date);
@@ -25267,12 +25354,6 @@ function bkRenderSessions(monthKey) {
   }).join('');
 
   // Journées hors du périmètre de la classe retenue — visibles, grisées, motivées.
-  const hors = (bkState.sessionsHorsPerimetre || []).filter(x => {
-    if (monthKey === 'all') return true;
-    const d = new Date(x.session.date);
-    return `${d.getFullYear()}-${String(d.getMonth()).padStart(2, '0')}` === monthKey;
-  });
-
   if (hors.length) {
     const days = ['Dim', 'Lun', 'Mar', 'Mer', 'Jeu', 'Ven', 'Sam'];
     const months = ['janv', 'févr', 'mars', 'avr', 'mai', 'juin', 'juil', 'août', 'sept', 'oct', 'nov', 'déc'];
@@ -25283,7 +25364,7 @@ function bkRenderSessions(monthKey) {
         <button class="bk-date hors-perimetre" type="button" disabled aria-disabled="true">
           <span class="bk-date-day">${days[d.getDay()]} · ${isHalfDay ? 'Demi-journée' : 'Journée complète'}</span>
           <span class="bk-date-main">${d.getDate()} ${months[d.getMonth()]} ${d.getFullYear()}</span>
-          <span class="bk-perimetre-note">${escapeHtml(bkMentionPerimetre(x.offre))}</span>
+          <span class="bk-perimetre-note">${escapeHtml(x.motif || bkMentionPerimetre(x.offre))}</span>
         </button>
       `;
     }).join('');
@@ -25915,8 +25996,25 @@ window.bkRefFormatPlate = function(input) {
   bkRefMajValidite();
 };
 
+/* Une plaque est-elle plausible ?
+
+   On valide la FORME NORMALISEE (majuscules, sans separateur), pas la mise en
+   forme : « AB-123-CD » et « AB123CD » sont la meme plaque.
+
+   Deux cas, et le second compte autant que le premier :
+   - la forme SIV, deux lettres / trois chiffres / deux lettres ;
+   - tout le reste — FNI (« 1234 AB 17 »), collection, plaque etrangere — pour
+     lequel on exige une forme PLAUSIBLE, pas une forme francaise : quatre a
+     douze caracteres, au moins une lettre et au moins un chiffre.
+
+   Refuser ici ce qu'on ne reconnait pas fermait le tunnel aux youngtimers,
+   c'est-a-dire au profil meme des formules Signature et Heritage. Le controle
+   reel de la plaque a lieu au paddock, pas dans une expression reguliere. */
 function bkPlaqueValide(v) {
-  return /^[A-Z]{2}-\d{3}-[A-Z]{2}$/.test(String(v || ''));
+  const brut = String(v || '').toUpperCase().replace(/[^A-Z0-9]/g, '');
+  if (/^[A-Z]{2}[0-9]{3}[A-Z]{2}$/.test(brut)) return true;
+  return brut.length >= 4 && brut.length <= 12
+    && /[A-Z]/.test(brut) && /[0-9]/.test(brut);
 }
 
 window.bkRefOnMods = function() {
@@ -25992,7 +26090,7 @@ window.bkRefOuvrirDemande = function(ev) {
       </div>
       <div class="form-row">
         <label for="bkDemPlaque">Immatriculation</label>
-        <input type="text" id="bkDemPlaque" maxlength="9" placeholder="AA-123-AA" style="text-transform: uppercase;" value="${escapeHtml(bkNormalisePlaque(v.license_plate || ''))}" oninput="bkRefFormatPlateSimple(this)" />
+        <input type="text" id="bkDemPlaque" maxlength="14" placeholder="AA-123-AA" style="text-transform: uppercase;" value="${escapeHtml(bkNormalisePlaque(v.license_plate || ''))}" oninput="bkRefFormatPlateSimple(this)" />
       </div>
       <div class="form-row full">
         <label for="bkDemEmail">Adresse électronique</label>
@@ -36071,6 +36169,17 @@ window.updateAddSessionForm = function() {
   }
 };
 
+/* Les classes admises lues depuis un groupe de cases (`prefixe` + I/II/III).
+   L'ordre rendu est stable — I, II, III — bien que la base compare par
+   appartenance : un ordre stable rend les journaux et les comparaisons
+   lisibles, et evite des differences qui n'en sont pas. */
+function oxvLireClassesAdmises(prefixe) {
+  return ['I', 'II', 'III'].filter(function (c) {
+    const el = document.getElementById(prefixe + c);
+    return el ? el.checked : false;
+  });
+}
+
 window.confirmAddSession = async function() {
   const dateStr = document.getElementById('newSessionDate').value;
   if (!dateStr) {
@@ -36088,6 +36197,15 @@ window.confirmAddSession = async function() {
   const accessOk = document.getElementById('newSessionOfferAccess').checked;
   const sigOk = document.getElementById('newSessionOfferSignature').checked;
   const notes = document.getElementById('newSessionNotes').value.trim();
+
+  // Tout décocher n'est pas une politique de plateau, c'est une journée fermée
+  // — et une journée fermée se dit par son statut, pas par une liste vide.
+  // La base porte la même contrainte ; celle-ci ne fait que l'annoncer tôt.
+  const classesAdmises = oxvLireClassesAdmises('newSessionClasse');
+  if (classesAdmises.length === 0) {
+    toast('Une journée admet au moins une classe', 'warn');
+    return;
+  }
 
   // Détermine les valeurs selon le format
   let isPrivate = false;
@@ -36147,6 +36265,7 @@ window.confirmAddSession = async function() {
         capacity_morning: capMorning,
         capacity_afternoon: capAfternoon,
         season_type: seasonType,
+        classes_admises: classesAdmises,
         notes: notes || null
       })
       .select()
@@ -36587,6 +36706,16 @@ window.adminOpenSessionEdit = function() {
   set('ase-cap-access', s.capacity_access);
   set('ase-cap-sig', s.capacity_signature);
   set('ase-notes', s.notes || '');
+  // Une journée d'avant ce champ n'a pas de valeur : on retombe sur les trois
+  // classes, qui est ce qu'elle admettait de fait. Afficher trois cases vides
+  // laisserait croire qu'elle n'admet personne.
+  const admises = Array.isArray(s.classes_admises) && s.classes_admises.length
+    ? s.classes_admises
+    : ['I', 'II', 'III'];
+  ['I', 'II', 'III'].forEach(function (c) {
+    const el = document.getElementById('aseClasse' + c);
+    if (el) el.checked = admises.indexOf(c) !== -1;
+  });
   const m = document.getElementById('adminSessionEditModal'); if (m) m.classList.add('open');
 };
 window.adminCloseSessionEdit = function() { const m = document.getElementById('adminSessionEditModal'); if (m) m.classList.remove('open'); };
@@ -36597,6 +36726,8 @@ window.adminSaveSession = async function() {
   const numOrNull = (v) => { const n = parseInt(v, 10); return isNaN(n) ? null : n; };
   const date = val('ase-date');
   if (!date) { toast('La date est requise', 'warn'); return; }
+  const classesAdmises = oxvLireClassesAdmises('aseClasse');
+  if (classesAdmises.length === 0) { toast('Une journée admet au moins une classe', 'warn'); return; }
   const patch = {
     date,
     start_time: val('ase-start') || null,
@@ -36604,6 +36735,7 @@ window.adminSaveSession = async function() {
     max_capacity: numOrNull(val('ase-cap')),
     capacity_access: numOrNull(val('ase-cap-access')),
     capacity_signature: numOrNull(val('ase-cap-sig')),
+    classes_admises: classesAdmises,
     notes: val('ase-notes').trim() || null
   };
   const btn = document.querySelector('#adminSessionEditModal .btn-primary');
