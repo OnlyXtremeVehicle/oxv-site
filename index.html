@@ -4216,6 +4216,7 @@ footer {
 }
 .session-table .session-status.pending   { color: #C9A24A; border-color: #C9A24A; }
 .session-table .session-status.confirmed { color: var(--copper-glow); border-color: var(--copper); }
+.session-table .session-status.en_examen { color: #C9A24A; border-color: #C9A24A; }
 .session-table .session-status.cancelled { color: #E07878; border-color: #C45959; }
 .session-table .session-status.attended  { color: var(--copper-glow); border-color: var(--copper-glow); }
 .session-table .session-status.no_show   { color: var(--cream-mute); border-color: var(--cream-line); }
@@ -25886,16 +25887,23 @@ function bkRefRendrePerimetre() {
 }
 
 /* Immatriculation — AA-123-AA, majuscules, tirets insérés automatiquement. */
+/* Met en forme une plaque SIV pendant la frappe : AB123CD -> AB-123-CD.
+   Ce qui n'entre PAS dans la forme SIV est rendu tel quel.
+
+   L'ancienne version filtrait caractere par caractere et mutilait tout le
+   reste : « 1234ABC75 » (plaque de collection FNI) ressortait « -123-A ».
+   Une plaque mutilee ne trace plus rien — et OXV vend une formule Heritage,
+   donc ces plaques-la se presenteront. Mieux vaut une plaque non mise en
+   forme qu'une plaque fausse : la base normalise de toute facon en majuscules
+   sans separateur, et c'est elle qui sert au rapprochement. */
 function bkNormalisePlaque(v) {
   const brut = String(v || '').toUpperCase().replace(/[^A-Z0-9]/g, '');
-  const lettres1 = brut.slice(0, 2).replace(/[^A-Z]/g, '');
-  const reste1 = brut.slice(lettres1.length);
-  const chiffres = reste1.slice(0, 3).replace(/[^0-9]/g, '');
-  const reste2 = reste1.slice(chiffres.length);
-  const lettres2 = reste2.slice(0, 2).replace(/[^A-Z]/g, '');
-  let out = lettres1;
-  if (chiffres) out += '-' + chiffres;
-  if (lettres2) out += '-' + lettres2;
+  // Forme SIV en cours de saisie : 0-2 lettres, 0-3 chiffres, 0-2 lettres.
+  const m = /^([A-Z]{0,2})([0-9]{0,3})([A-Z]{0,2})$/.exec(brut);
+  if (!m) return brut;
+  let out = m[1];
+  if (m[2]) out += (out ? '-' : '') + m[2];
+  if (m[3]) out += '-' + m[3];
   return out;
 }
 
@@ -26306,13 +26314,36 @@ window.bkConfirmBooking = async function() {
       vehicle_id: bkState.selectedVehicle.id,
       offer_type: bkState.useHeritage ? 'heritage' : bkState.selectedOffer,
       heritage_pack_id: bkState.useHeritage ? bkState.heritagePack.id : null,
-      status: 'pending',
+      // Un vehicule dont les modifications sont declarees attend un EXAMEN,
+      // pas seulement un paiement. Sans etat propre, la demande se noyait
+      // parmi les reservations ordinaires et personne ne la voyait passer.
+      //
+      // La reservation reste VISIBLE du pilote (seul le libelle change) et
+      // occupe toujours sa place : aucune branche du tunnel ne filtre sur
+      // 'pending', toutes filtrent sur 'cancelled'.
+      //
+      // Elle reste ANNULABLE, mais ce n'etait pas acquis : le declencheur
+      // `registrations_garde_pilote` n'autorisait l'annulation par un compte
+      // pilote que depuis pending / pending_payment / confirmed. Introduire
+      // 'en_examen' sans le corriger aurait affiche un bouton « Annuler » qui
+      // echoue. La migration lot12_en_examen_reste_annulable_par_le_pilote
+      // ajoute 'en_examen' a cette liste : examiner un vehicule est une
+      // diligence d'OXV, jamais une retenue du membre.
+      status: bkState.mods ? 'en_examen' : 'pending',
       price_total: priceTotal,
       price_deposit: priceDeposit,
       insurance_option: bkState.selectedInsurance,
       classe_retenue: bkState.classeRetenue,
       modifications_declarees: bkState.mods,
-      modifications_detail: bkState.mods ? bkState.modsDetail : null
+      modifications_detail: bkState.mods ? bkState.modsDetail : null,
+      // La plaque est FIGEE ici, au meme titre que `classe_retenue`.
+      // `vehicles.license_plate` suit le vehicule : si le membre la change plus
+      // tard, tout l'historique se reecrirait. Copiee sur l'inscription, elle
+      // garde la trace du vehicule TEL QU'IL S'EST PRESENTE ce jour-la — c'est
+      // ce que demande un constat, qui porte sur un etat date.
+      // La base la normalise (majuscules, sans separateur, `normaliser_plaque`)
+      // pour que « AB-123-CD » et « ab 123 cd » se rapprochent.
+      immatriculation: bkState.plate || null
     };
 
     const { data: reg, error: regErr } = await supabase
@@ -30514,6 +30545,7 @@ function renderSessionsTable(rows, isPast) {
     const statusKey = reg.status;
     const statusLabel = {
       pending:   'En attente',
+      en_examen: 'En examen',
       confirmed: 'Confirmée',
       cancelled: 'Annulée',
       attended:  'Effectuée',
@@ -30546,6 +30578,7 @@ function renderSessionsTable(rows, isPast) {
     const statusKey = reg.status;
     const statusLabel = {
       pending:   'En attente',
+      en_examen: 'En examen',
       confirmed: 'Confirmée',
       cancelled: 'Annulée',
       attended:  'Effectuée',
