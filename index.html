@@ -7201,6 +7201,34 @@ footer {
 
 /* Périmètre de service — la date reste VISIBLE, jamais masquée : c'est le
    mécanisme de montée en gamme. Grisée, non sélectionnable, motif affiché. */
+/* Le geste offert sur une journee qu'on ne peut pas prendre. Discret : il
+   accompagne un ecart, il ne le celebre pas. */
+.bk-date-enveloppe { display: flex; flex-direction: column; gap: 6px; }
+/* Une exclusion enoncee, pas une alerte : elle informe, elle n'interpelle pas. */
+.bk-exclusion-note {
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 0.3px;
+  color: var(--cream-mute);
+  margin: 6px 0 0 0;
+}
+.bk-intention {
+  margin-top: 8px;
+  background: transparent;
+  border: 1px solid var(--cream-line);
+  color: var(--cream-mute);
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 0.4px;
+  padding: 8px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+  min-height: 36px;
+  width: 100%;
+}
+.bk-intention:hover:not(:disabled) { border-color: var(--copper); color: var(--cream); }
+.bk-intention:disabled { opacity: 0.55; cursor: default; }
+
 .bk-date.hors-perimetre,
 .bk-offer.hors-perimetre {
   opacity: 0.42;
@@ -19025,15 +19053,15 @@ body.pav-tv .nav, body.pav-tv footer, body.pav-tv .cookie, body.pav-tv .founding
           <label class="form-label">Classes admises</label>
           <div class="form-checkboxes">
             <label class="form-checkbox">
-              <input type="checkbox" id="newSessionClasseI" checked />
+              <input type="checkbox" id="newSessionClasseI" checked onchange="oxvAfficherImpactClasses('newSessionClasse','newSessionClassesImpact',null)" />
               <span>Classe I — Sport</span>
             </label>
             <label class="form-checkbox">
-              <input type="checkbox" id="newSessionClasseII" checked />
+              <input type="checkbox" id="newSessionClasseII" checked onchange="oxvAfficherImpactClasses('newSessionClasse','newSessionClassesImpact',null)" />
               <span>Classe II — GT</span>
             </label>
             <label class="form-checkbox">
-              <input type="checkbox" id="newSessionClasseIII" checked />
+              <input type="checkbox" id="newSessionClasseIII" checked onchange="oxvAfficherImpactClasses('newSessionClasse','newSessionClassesImpact',null)" />
               <span>Classe III — Supersport</span>
             </label>
           </div>
@@ -19042,6 +19070,7 @@ body.pav-tv .nav, body.pav-tv footer, body.pav-tv .cookie, body.pav-tv .founding
             ferme la journée aux véhicules concernés : la base le vérifie à
             l'inscription, l'interface ne fait que l'annoncer.
           </div>
+          <div class="form-hint" id="newSessionClassesImpact"></div>
         </div>
 
         <!-- Capacité totale (auto-calculée) -->
@@ -19220,7 +19249,7 @@ body.pav-tv .nav, body.pav-tv footer, body.pav-tv .cookie, body.pav-tv .founding
       <div class="form-row"><label for="ase-cap">Capacité totale</label><input type="number" id="ase-cap" min="0" max="40" /></div>
       <div class="form-row"><label for="ase-cap-access">Capacité Access</label><input type="number" id="ase-cap-access" min="0" max="40" /></div>
       <div class="form-row"><label for="ase-cap-sig">Capacité Signature</label><input type="number" id="ase-cap-sig" min="0" max="40" /></div>
-      <div class="form-row full"><label>Classes admises</label><div style="display:flex;gap:20px;flex-wrap:wrap;padding-top:6px;"><label style="display:flex;align-items:center;gap:7px;font-family:var(--sans);color:var(--cream);cursor:pointer;"><input type="checkbox" id="aseClasseI" /><span>Classe I — Sport</span></label><label style="display:flex;align-items:center;gap:7px;font-family:var(--sans);color:var(--cream);cursor:pointer;"><input type="checkbox" id="aseClasseII" /><span>Classe II — GT</span></label><label style="display:flex;align-items:center;gap:7px;font-family:var(--sans);color:var(--cream);cursor:pointer;"><input type="checkbox" id="aseClasseIII" /><span>Classe III — Supersport</span></label></div></div>
+      <div class="form-row full"><label>Classes admises</label><div style="display:flex;gap:20px;flex-wrap:wrap;padding-top:6px;"><label style="display:flex;align-items:center;gap:7px;font-family:var(--sans);color:var(--cream);cursor:pointer;"><input type="checkbox" id="aseClasseI" onchange="oxvAfficherImpactClasses('aseClasse','aseClassesImpact',window._currentAdminSessionId)" /><span>Classe I — Sport</span></label><label style="display:flex;align-items:center;gap:7px;font-family:var(--sans);color:var(--cream);cursor:pointer;"><input type="checkbox" id="aseClasseII" onchange="oxvAfficherImpactClasses('aseClasse','aseClassesImpact',window._currentAdminSessionId)" /><span>Classe II — GT</span></label><label style="display:flex;align-items:center;gap:7px;font-family:var(--sans);color:var(--cream);cursor:pointer;"><input type="checkbox" id="aseClasseIII" onchange="oxvAfficherImpactClasses('aseClasse','aseClassesImpact',window._currentAdminSessionId)" /><span>Classe III — Supersport</span></label></div><div class="form-hint" id="aseClassesImpact" style="margin-top:8px;"></div></div>
       <div class="form-row full"><label for="ase-notes">Notes internes</label><textarea id="ase-notes" rows="3" style="background:rgba(0,0,0,0.4);border:1px solid var(--bento-border);color:var(--cream);padding:10px 14px;border-radius:6px;width:100%;font-family:var(--sans);"></textarea></div>
     </div>
     <div style="display:flex;gap:8px;justify-content:flex-end;margin-top:16px;">
@@ -25113,10 +25142,15 @@ async function bkLoadDatesForOffer() {
   const minDate = new Date();
   minDate.setDate(minDate.getDate() + 3);
   const minDateStr = minDate.toISOString().split('T')[0];
+  // La requête descend jusqu'à AUJOURD'HUI, et le délai de trois jours se
+  // tranche ici. Filtrer côté serveur rendait ces journées indénombrables :
+  // on ne peut pas dire « trois journées sont trop proches » quand on ne les a
+  // jamais reçues.
+  const aujourdhui = new Date().toISOString().split('T')[0];
   const { data: sessions, error } = await supabase
     .from('sessions_public')
     .select('*')
-    .gte('date', minDateStr)
+    .gte('date', aujourdhui)
     .not('status', 'in', '(cancelled,archived)')
     .eq('is_private', false)
     .order('date', { ascending: true });
@@ -25144,7 +25178,20 @@ async function bkLoadDatesForOffer() {
     return admises.indexOf(bkState.classeRetenue) !== -1;
   };
 
+  /* Les journées écartées par le seul délai de trois jours. On les compte pour
+     pouvoir le DIRE : elles auraient convenu à ce pilote, sur cette formule,
+     avec ce véhicule. C'est la seule des cinq exclusions silencieuses qui le
+     concerne vraiment — les autres (annulée, archivée, privatisée) portent sur
+     des journées qui n'existent pas pour le public. */
+  bkState.journeesTropProches = (sessions || []).filter(s => {
+    if (s.date >= minDateStr) return false;
+    if (s.is_private === true || s.format === 'b2b') return false;
+    if (!journeeAdmetLaClasse(s)) return false;
+    return selectedOffer === 'access' ? s.format === 'half_day' : s.format === 'full_day';
+  }).length;
+
   const filteredSessions = (sessions || []).filter(s => {
+    if (s.date < minDateStr) return false;
     if (s.is_private === true) return false;
     if (s.format === 'b2b') return false;
     if (!journeeAdmetLaClasse(s)) return false;
@@ -25357,14 +25404,28 @@ function bkRenderSessions(monthKey) {
     const placesLabel = isFull ? 'Complet' : `${caps.remaining.total} / ${caps.capa.total} places`;
 
     return `
+      <div class="bk-date-enveloppe">
       <button class="bk-date${isFull ? ' full' : ''}" data-session-id="${s.id}" onclick="bkSelectSession('${s.id}', this)" ${isFull ? 'disabled' : ''}>
         <span class="bk-date-day ${dayClass}">${dayLabel} · ${isHalfDay ? 'Demi-journée' : 'Journée complète'}</span>
         <span class="bk-date-main">${dateLabel}</span>
         <span class="bk-date-meta"><strong>${placesLabel}</strong> · ${formatLabel.split(' · ')[1]}</span>
         ${bkState.coachDates && bkState.coachDates.has(s.date) ? '<span class="cal-card-coach">Coach disponible</span>' : ''}
       </button>
+      ${isFull ? `<button class="bk-intention" type="button" data-session="${s.id}" data-cause="journee_complete" onclick="bkDeposerIntention(this)">Prévenez-moi s’il se libère une place</button>` : ''}
+      </div>
     `;
   }).join('');
+
+  /* Ce que le calendrier a retiré sans le montrer. Une ligne, sous la grille :
+     le pilote qui cherchait « ce vendredi » comprend enfin pourquoi il n'y est
+     pas, et sait quand revenir. */
+  const trop = bkState.journeesTropProches || 0;
+  if (trop > 0 && monthKey === 'all') {
+    container.innerHTML += `
+      <p class="bk-exclusion-note" style="grid-column: 1/-1;">
+        ${trop} journée${trop > 1 ? 's ne figurent' : ' ne figure'} pas ici : les inscriptions ferment trois jours avant la date.
+      </p>`;
+  }
 
   // Journées hors du périmètre de la classe retenue — visibles, grisées, motivées.
   if (hors.length) {
@@ -25373,12 +25434,21 @@ function bkRenderSessions(monthKey) {
     container.innerHTML += hors.map(x => {
       const d = new Date(x.session.date);
       const isHalfDay = x.session.format === 'half_day';
+      /* `div` et non plus `button` : la carte contient desormais un bouton, et
+         un bouton ne s'imbrique pas dans un bouton — le HTML l'interdit et les
+         navigateurs le reparent de facons divergentes. `aria-disabled` reste
+         porte par la carte : elle n'est toujours pas selectionnable. */
+      const motif = x.motif || bkMentionPerimetre(x.offre);
+      const cause = x.motif ? 'classe_non_admise' : 'formule_fermee_a_la_classe';
       return `
-        <button class="bk-date hors-perimetre" type="button" disabled aria-disabled="true">
+        <div class="bk-date hors-perimetre" aria-disabled="true">
           <span class="bk-date-day">${days[d.getDay()]} · ${isHalfDay ? 'Demi-journée' : 'Journée complète'}</span>
           <span class="bk-date-main">${d.getDate()} ${months[d.getMonth()]} ${d.getFullYear()}</span>
-          <span class="bk-perimetre-note">${escapeHtml(x.motif || bkMentionPerimetre(x.offre))}</span>
-        </button>
+          <span class="bk-perimetre-note">${escapeHtml(motif)}</span>
+          <button class="bk-intention" type="button"
+                  data-session="${x.session.id}" data-cause="${cause}"
+                  onclick="bkDeposerIntention(this)">Prévenez-moi si elle s’ouvre</button>
+        </div>
       `;
     }).join('');
   }
@@ -26023,6 +26093,44 @@ window.bkRefFormatPlate = function(input) {
    Refuser ici ce qu'on ne reconnait pas fermait le tunnel aux youngtimers,
    c'est-a-dire au profil meme des formules Signature et Heritage. Le controle
    reel de la plaque a lieu au paddock, pas dans une expression reguliere. */
+/* Depose l'intention d'un pilote sur une journee qu'il ne peut pas reserver.
+
+   Trois causes distinctes, parce qu'elles appellent trois reponses
+   differentes : ouvrir la classe, ouvrir une autre formule, ou ajouter une
+   date. Les confondre rendrait la mesure inutilisable.
+
+   Une intention par pilote et par journee — la base porte la contrainte
+   d'unicite. C'est un signal, pas un compteur de clics : dix visites du meme
+   pilote ne valent pas dix pilotes ecartes. */
+window.bkDeposerIntention = async function(btn) {
+  const sessionId = btn.getAttribute('data-session');
+  const cause = btn.getAttribute('data-cause');
+  const userId = window.OXVApi.user.profile?.id;
+  if (!userId) { toast('Connectez-vous pour être prévenu.', 'warn'); return; }
+
+  btn.disabled = true;
+  const libelleInitial = btn.textContent;
+  btn.textContent = 'Enregistrement…';
+  try {
+    const { error } = await supabase
+      .from('intentions_journee')
+      .upsert({
+        session_id: sessionId,
+        user_id: userId,
+        classe: bkState.classeRetenue || null,
+        motif: cause
+      }, { onConflict: 'session_id,user_id' });
+    if (error) throw error;
+    btn.textContent = 'Nous vous préviendrons';
+    track('intention_journee', { motif: cause });
+  } catch (e) {
+    console.warn('[OXV intention]', e);
+    btn.textContent = libelleInitial;
+    btn.disabled = false;
+    toast('Enregistrement impossible pour le moment.', 'warn');
+  }
+};
+
 function bkPlaqueValide(v) {
   const brut = String(v || '').toUpperCase().replace(/[^A-Z0-9]/g, '');
   if (/^[A-Z]{2}[0-9]{3}[A-Z]{2}$/.test(brut)) return true;
@@ -36186,6 +36294,61 @@ window.updateAddSessionForm = function() {
    L'ordre rendu est stable — I, II, III — bien que la base compare par
    appartenance : un ordre stable rend les journaux et les comparaisons
    lisibles, et evite des differences qui n'en sont pas. */
+/* Chiffre l'effet d'une restriction de classe et l'ecrit sous les cases.
+
+   `sessionId` vaut null a la creation : la journee n'existe pas encore, donc
+   aucune inscription ni intention ne peut la viser, et la fonction rend
+   naturellement zero sur ces deux postes. Le parc, lui, se compte dans les
+   deux cas.
+
+   La part d'inconnu est TOUJOURS dite. « Zero vehicule exclu » et « la classe
+   d'aucun vehicule n'est connue » sont deux phrases opposees, et la premiere
+   rassurerait a tort sur un geste dont personne ne peut mesurer le cout. */
+async function oxvAfficherImpactClasses(prefixe, cibleId, sessionId) {
+  const el = document.getElementById(cibleId);
+  if (!el) return;
+  const classes = oxvLireClassesAdmises(prefixe);
+
+  if (classes.length === 0) {
+    el.textContent = 'Une journée admet au moins une classe.';
+    return;
+  }
+  if (classes.length === 3) {
+    el.textContent = 'Les trois classes sont admises : cette journée n’écarte personne.';
+    return;
+  }
+
+  el.textContent = 'Calcul…';
+  try {
+    const { data, error } = await supabase.rpc('impact_restriction_journee', {
+      p_session_id: sessionId || null,
+      p_classes: classes
+    });
+    if (error) throw error;
+    const r = Array.isArray(data) ? data[0] : data;
+    if (!r) { el.textContent = ''; return; }
+
+    const parts = [];
+    if (r.inscriptions_touchees > 0) {
+      parts.push(`${r.inscriptions_touchees} inscription${r.inscriptions_touchees > 1 ? 's' : ''} en cours porte${r.inscriptions_touchees > 1 ? 'nt' : ''} une classe retirée — l’enregistrement sera refusé tant qu’elles ne sont pas traitées.`);
+    }
+    if (r.intentions_deja_deposees > 0) {
+      parts.push(`${r.intentions_deja_deposees} pilote${r.intentions_deja_deposees > 1 ? 's' : ''} avai${r.intentions_deja_deposees > 1 ? 'ent' : 't'} demandé à être prévenu pour cette journée.`);
+    }
+    if (r.parc_total === 0) {
+      parts.push('Aucun véhicule au garage : l’effet sur le parc n’est pas mesurable.');
+    } else if (r.parc_sans_classe_connue === r.parc_total) {
+      parts.push(`La classe d’aucun des ${r.parc_total} véhicules du parc n’est connue : l’effet de cette restriction n’est pas mesurable aujourd’hui.`);
+    } else {
+      parts.push(`Parc : ${r.parc_exclu} véhicule${r.parc_exclu > 1 ? 's' : ''} exclu${r.parc_exclu > 1 ? 's' : ''} sur ${r.parc_total}${r.parc_sans_classe_connue > 0 ? `, ${r.parc_sans_classe_connue} de classe inconnue` : ''}.`);
+    }
+    el.textContent = parts.join(' ');
+  } catch (e) {
+    console.warn('[OXV impact classes]', e);
+    el.textContent = 'Effet non mesurable pour le moment.';
+  }
+}
+
 function oxvLireClassesAdmises(prefixe) {
   return ['I', 'II', 'III'].filter(function (c) {
     const el = document.getElementById(prefixe + c);
@@ -36729,6 +36892,9 @@ window.adminOpenSessionEdit = function() {
     const el = document.getElementById('aseClasse' + c);
     if (el) el.checked = admises.indexOf(c) !== -1;
   });
+  // L'etat courant se lit AVANT le premier geste : une journee deja restreinte
+  // doit dire ce qu'elle ecarte, sans qu'on ait besoin de decocher pour l'apprendre.
+  oxvAfficherImpactClasses('aseClasse', 'aseClassesImpact', window._currentAdminSessionId);
   const m = document.getElementById('adminSessionEditModal'); if (m) m.classList.add('open');
 };
 window.adminCloseSessionEdit = function() { const m = document.getElementById('adminSessionEditModal'); if (m) m.classList.remove('open'); };
