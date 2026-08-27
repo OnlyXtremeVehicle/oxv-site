@@ -17982,7 +17982,7 @@ body.pav-tv .nav, body.pav-tv footer, body.pav-tv .cookie, body.pav-tv .founding
         <div class="pref-row">
           <div class="pref-row-info" style="width:100%;">
             <div class="pref-row-title">Votre écurie — rouler et réserver ensemble</div>
-            <div class="pref-row-desc">Une écurie est une équipe qui réserve ses sessions ensemble. Partagez votre lien : la personne invitée crée son compte et rejoint votre écurie automatiquement. Pas de réduction chez OXV — une <strong style="color:var(--cream);">écurie</strong>. Vos filleuls rejoignent votre groupe, leur candidature passe en <strong style="color:var(--cream);">fast-track</strong>, et l'écurie grandit — <span style="font-family:var(--mono);font-size:11px;">5 membres : priorité de réservation collective · 10 : box dédié un jour de session · 20 : écurie nommée sur le plateau</span>. Seuls les filleuls ayant validé leur première session comptent.</div>
+            <div class="pref-row-desc">Une écurie est une équipe qui réserve ses sessions ensemble. Partagez votre lien : la personne invitée crée son compte et rejoint votre écurie automatiquement. Le parrainage ne donne pas de réduction — il donne une <strong style="color:var(--cream);">écurie</strong>. C'est la réservation <strong style="color:var(--cream);">groupée</strong> qui ouvre une condition tarifaire : <strong style="color:var(--cream);">−10 % par pilote</strong> dès lors qu'OXV a confirmé une sortie d'écurie. En dessous de 17 pilotes, votre écurie rejoint une journée Access, ouverte aux trois classes ; à partir de 17, le circuit vous est privatisé sur l'une des trois dates que vous proposez. Vos filleuls rejoignent votre groupe, leur candidature passe en <strong style="color:var(--cream);">fast-track</strong>, et l'écurie grandit — <span style="font-family:var(--mono);font-size:11px;">5 membres : priorité de réservation collective · 10 : box dédié un jour de session · 20 : écurie nommée sur le plateau</span>. Seuls les filleuls ayant validé leur première session comptent.</div>
             <div id="crewCodeBox" style="margin-top:14px;display:flex;align-items:center;gap:12px;flex-wrap:wrap;">
               <button class="btn btn-sm btn-primary" id="crewShareBtn" onclick="partagerInvitationEcurie()"><span>Partager mon invitation</span></button>
               <button class="btn btn-sm" id="crewCodeBtn" onclick="getMyReferralCode()"><span>Afficher mon code</span></button>
@@ -21310,7 +21310,7 @@ body.pav-tv .nav, body.pav-tv footer, body.pav-tv .cookie, body.pav-tv .founding
     <div class="reveal" style="margin-bottom:18px;">
       <div style="font-family:var(--mono);font-size:10px;letter-spacing:0.22em;text-transform:uppercase;color:var(--gold);margin-bottom:8px;">— Avantages partenaire, cumulables</div>
       <h2 class="section-title" style="font-size:clamp(26px,3.5vw,38px);margin:0 0 10px;">Ils montent<br/>avec <em>vous</em>.</h2>
-      <p style="font-family:var(--sans);font-size:15px;line-height:1.7;color:var(--cream-mute);max-width:700px;margin:0 0 26px;">Chaque pilote que vous amenez renforce votre place dans l'écosystème. Jamais une remise — les accès restent au même prix pour tous.</p>
+      <p style="font-family:var(--sans);font-size:15px;line-height:1.7;color:var(--cream-mute);max-width:700px;margin:0 0 26px;">Chaque pilote que vous amenez renforce votre place dans l'écosystème. Le parrainage ne se paie jamais en remise : il construit une écurie. Seule la réservation groupée d'une écurie ouvre une condition tarifaire, et elle porte sur la journée, jamais sur le parrainage.</p>
     </div>
     <div class="reveal bento" style="padding:26px;margin-bottom:48px;">
       <ul style="list-style:none;margin:0;padding:0;">
@@ -21327,7 +21327,7 @@ body.pav-tv .nav, body.pav-tv footer, body.pav-tv .cookie, body.pav-tv .founding
           <span style="font-family:var(--sans);font-size:14px;line-height:1.65;color:var(--cream-mute);">+ Invitations aux événements du cercle</span>
         </li>
       </ul>
-      <p style="font-family:var(--mono);font-size:10px;letter-spacing:0.14em;text-transform:uppercase;color:var(--cream-faint);margin:16px 0 0;">Cumulables · jamais une remise — les accès restent au même prix pour tous</p>
+      <p style="font-family:var(--mono);font-size:10px;letter-spacing:0.14em;text-transform:uppercase;color:var(--cream-faint);margin:16px 0 0;">Cumulables · le parrainage ne se paie pas en remise</p>
     </div>
 
     <!-- Nos coachs partenaires (PR-HUB-05) — profils publiés, lus en direct -->
@@ -33198,7 +33198,12 @@ window.bkInviterEcurie = async function() {
 };
 
 /* ===================== ÉCURIES & PARRAINAGE (PR-HUB-03) =====================
-   Option C fondateur : pas de réduction — le parrainage construit une écurie.
+   Option C fondateur : le PARRAINAGE ne donne pas de réduction — il construit
+   une écurie. Révisé le 27/08/2026 : la RÉSERVATION GROUPÉE d'une écurie, elle,
+   ouvre -10 % par pilote (arbitrage fondateur). Les deux ne se confondent pas —
+   l'un récompense un apport de membres, l'autre est une condition d'effectif sur
+   une journée. Le rabais est conditionné en base : il exige une reservations_ecurie
+   au statut « confirmee » portant la même écurie et la même journée.
    Paliers par taille (membres validés) : 5 priorité collective · 10 box · 20 nommée plateau.
    Toute écriture passe par des fonctions SECURITY DEFINER (anti-abus serveur). */
 
@@ -36003,6 +36008,9 @@ function renderPilotHeritage(packs) {
       <div class="admin-empty">
         <div class="admin-empty-icon">⌬</div>
         <div class="admin-empty-text">Ce pilote n'a aucun pack Heritage.</div>
+        <div style="margin-top:14px;">
+          <button class="admin-action-btn" onclick="adminCreerPackHeritage()">Enregistrer un pack Heritage</button>
+        </div>
       </div>
     `;
     return;
@@ -36041,6 +36049,13 @@ function renderPilotHeritage(packs) {
       </div>
     `;
   }).join('');
+
+  // Un pack se renouvelle d'une saison a l'autre : le geste reste offert meme
+  // quand le pilote en porte deja un.
+  list.innerHTML += `
+    <div style="margin-top:16px;">
+      <button class="admin-action-btn" onclick="adminCreerPackHeritage()">Enregistrer un pack Heritage</button>
+    </div>`;
 }
 
 
@@ -36191,6 +36206,49 @@ window.adminCancelRegistration = async function(regId) {
   }
 
   toast('Inscription annulée', 'ok');
+  loadAdminPiloteDetail();
+};
+
+/* Enregistre un pack Heritage souscrit par un pilote.
+
+   Le prix et le nombre de sessions viennent des valeurs par defaut de la base
+   (249 000 centimes, 4 sessions) : les retaper ici creerait un second barreme
+   qui divergerait du premier au premier changement de tarif.
+
+   La validite court sur douze mois a compter de la souscription. C'est la
+   lecture la plus simple d'un pack saisonnier, et elle est modifiable a la
+   main dans la fiche si un accord particulier le demande. */
+window.adminCreerPackHeritage = async function() {
+  const pilotId = window._currentAdminPilotId;
+  if (!pilotId) { toast('Aucun pilote selectionne', 'warn'); return; }
+
+  const debut = prompt(
+    'Date de souscription du pack Heritage (AAAA-MM-JJ) :',
+    new Date().toISOString().split('T')[0]
+  );
+  if (!debut) return;
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(debut)) { toast('Date attendue au format AAAA-MM-JJ', 'warn'); return; }
+
+  const fin = new Date(debut + 'T00:00:00');
+  if (Number.isNaN(fin.getTime())) { toast('Date invalide', 'warn'); return; }
+  fin.setFullYear(fin.getFullYear() + 1);
+  const finStr = fin.toISOString().split('T')[0];
+
+  if (!confirm(`Enregistrer un pack Heritage pour ce pilote ?\n4 sessions Signature, valable du ${debut} au ${finStr}.`)) return;
+
+  // `price_total` et `sessions_total` sont laisses aux defauts de la base :
+  // une seule source pour le barreme du pack.
+  const { error } = await supabase
+    .from('heritage_packs')
+    .insert({ user_id: pilotId, purchased_at: debut + 'T12:00:00Z', valid_from: debut, valid_until: finStr });
+
+  if (error) {
+    console.warn('[OXV heritage]', error);
+    toast('Enregistrement impossible : ' + (error.message || ''), 'warn');
+    return;
+  }
+
+  toast('Pack Heritage enregistre', 'ok');
   loadAdminPiloteDetail();
 };
 
