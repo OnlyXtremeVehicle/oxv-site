@@ -36631,7 +36631,14 @@ window.updateAddSessionForm = function() {
     document.getElementById('newSessionOfferSignature').checked = false;
   } else {
     offersRow.style.display = 'flex';
-    capacityInfo.textContent = '20 pilotes (journée complète)';
+    capacityInfo.textContent = '20 pilotes — Signature (et Heritage)';
+    /* Décision fondateur : Access est une demi-journée, Signature une journée
+       complète. Il n'y a donc rien à cocher ici — et la base le confirmerait
+       durement : sans tarif actif pour access/full_day, elle refuse de publier
+       la journée (« Activez la ligne tarifaire avant de publier »). Autant ne
+       pas offrir un choix qui ne produit qu'une journée invendable. */
+    document.getElementById('newSessionOfferAccess').checked = false;
+    document.getElementById('newSessionOfferSignature').checked = true;
   }
 };
 
@@ -36715,8 +36722,9 @@ window.confirmAddSession = async function() {
   }
 
   const format = document.querySelector('input[name="newSessionFormat"]:checked').value;
-  const accessOk = document.getElementById('newSessionOfferAccess').checked;
-  const sigOk = document.getElementById('newSessionOfferSignature').checked;
+  // Les offres ne se lisent plus des cases : le format les décide seul —
+  // demi-journée → Access, journée complète → Signature (et Heritage).
+  // Les cases restent affichées pour dire ce que la journée portera.
   const notes = document.getElementById('newSessionNotes').value.trim();
 
   // Tout décocher n'est pas une politique de plateau, c'est une journée fermée
@@ -36744,20 +36752,14 @@ window.confirmAddSession = async function() {
     maxCapacity = 20;
     capAccess = 20;
   } else {
-    // full_day (vendredi) → Signature, et Heritage qui consomme une session Signature
-    if (!accessOk && !sigOk) {
-      toast('Cochez au moins une offre', 'warn');
-      return;
-    }
-    availableOffers = { access: accessOk, signature: sigOk };
+    /* full_day (vendredi) → Signature, et Heritage qui consomme une session
+       Signature. Access n'y a pas sa place : c'est une demi-journée (décision
+       fondateur), il n'a pas de tarif actif en journée complète, et la base
+       refuse de publier une journée dont la seule formule ouverte n'a pas de
+       ligne tarifaire. Le format décide donc seul, comme pour la demi-journée. */
+    availableOffers = { access: false, signature: true };
     maxCapacity = 20;
-    // Répartition : 2 offres → 10/10, sinon l'offre cochée prend les 20 places
-    if (accessOk && sigOk) {
-      capAccess = 10; capSig = 10;
-    } else {
-      if (accessOk) capAccess = 20;
-      if (sigOk) capSig = 20;
-    }
+    capAccess = 0; capSig = 20;
   }
 
   // Détermine season_type (haute saison de mai à octobre)
