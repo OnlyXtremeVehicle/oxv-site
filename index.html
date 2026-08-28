@@ -25243,6 +25243,10 @@ async function bkLoadDatesForOffer() {
        l'enverrait changer de formule sans rien y gagner. */
     (sessions || []).forEach(s => {
       if (dejaListees.has(s.id)) return;
+      // Une journée trop proche n'est pas écartée pour sa classe : la griser
+      // avec un motif de classe serait un mensonge, et l'intention déposée
+      // fausserait la mesure.
+      if (s.date < minDateStr) return;
       if (s.is_private === true || s.format === 'b2b') return;
       if (journeeAdmetLaClasse(s)) return;
       dejaListees.add(s.id);
@@ -25268,6 +25272,7 @@ async function bkLoadDatesForOffer() {
       const fmt = FORMAT_PAR_OFFRE[o];
       (sessions || []).forEach(s => {
         if (dejaListees.has(s.id)) return;
+        if (s.date < minDateStr) return;
         if (s.is_private === true || s.format === 'b2b') return;
         if (s.format !== fmt) return;
         dejaListees.add(s.id);
@@ -25383,8 +25388,16 @@ function bkRenderSessions(monthKey) {
     return `${d.getFullYear()}-${String(d.getMonth()).padStart(2, '0')}` === monthKey;
   });
 
+  const tropProches = bkState.journeesTropProches || 0;
+
   if (filtered.length === 0 && hors.length === 0) {
-    container.innerHTML = `<div class="account-empty" style="grid-column: 1/-1;"><div class="account-empty-icon">○</div><p class="account-empty-text">Aucune session sur cette période.</p></div>`;
+    // La note d'exclusion vit AUSSI ici. C'est le troisième jumeau du même
+    // défaut : sortir avant de l'écrire, c'est la supprimer précisément quand
+    // elle est la seule chose à dire au pilote.
+    const note = tropProches > 0 && monthKey === 'all'
+      ? `<p class="bk-exclusion-note" style="grid-column: 1/-1;">${tropProches} journée${tropProches > 1 ? 's ne figurent' : ' ne figure'} pas ici : les inscriptions ferment trois jours avant la date.</p>`
+      : '';
+    container.innerHTML = `<div class="account-empty" style="grid-column: 1/-1;"><div class="account-empty-icon">○</div><p class="account-empty-text">Aucune session sur cette période.</p></div>${note}`;
     return;
   }
 
@@ -25419,11 +25432,10 @@ function bkRenderSessions(monthKey) {
   /* Ce que le calendrier a retiré sans le montrer. Une ligne, sous la grille :
      le pilote qui cherchait « ce vendredi » comprend enfin pourquoi il n'y est
      pas, et sait quand revenir. */
-  const trop = bkState.journeesTropProches || 0;
-  if (trop > 0 && monthKey === 'all') {
+  if (tropProches > 0 && monthKey === 'all') {
     container.innerHTML += `
       <p class="bk-exclusion-note" style="grid-column: 1/-1;">
-        ${trop} journée${trop > 1 ? 's ne figurent' : ' ne figure'} pas ici : les inscriptions ferment trois jours avant la date.
+        ${tropProches} journée${tropProches > 1 ? 's ne figurent' : ' ne figure'} pas ici : les inscriptions ferment trois jours avant la date.
       </p>`;
   }
 
@@ -26483,11 +26495,48 @@ window.bkConfirmBooking = async function() {
     const sessionFormat = bkState.selectedSession.format || 'full_day';
     const offerPrice = bkComputePrice(bkState.selectedOffer, sessionFormat, bkState.attendedCount);
 
+    /* LA REMISE D'ECURIE.
+
+       Le fil annonce automatiquement « la remise de 10 % s'applique d'elle-meme ».
+       Voici l'endroit ou elle s'applique — et le seul.
+
+       On ne DECIDE pas de la remise : on la demande. Le declencheur
+       `registrations_remise_justifiee` exige une reservation d'ecurie confirmee
+       portant la meme ecurie et la meme journee, et que le pilote en soit
+       membre. Un site qui s'accorderait un rabais serait refuse par la base.
+
+       Une lecture qui echoue ne coute rien : `crewId` reste nul, la remise ne
+       s'applique pas, et le pilote paie le tarif normal. Une panne de reseau ne
+       doit jamais empecher une reservation. */
+    let crewId = null;
+    let remisePct = 0;
+    try {
+      const { data: monEcurie } = await supabase.rpc('oxv_my_crew_id');
+      if (monEcurie) {
+        const { data: sortie } = await supabase
+          .from('reservations_ecurie')
+          .select('id')
+          .eq('crew_id', monEcurie)
+          .eq('session_id', bkState.selectedSession.id)
+          .eq('statut', 'confirmee')
+          .maybeSingle();
+        if (sortie) { crewId = monEcurie; remisePct = 10; }
+      }
+    } catch (e) { console.warn('[booking] remise ecurie :', e); }
+
     let priceTotal;
     if (bkState.useHeritage) {
+      /* Un pack est un PREPAIEMENT : la journee est deja achetee. Il ne reste
+         que l'assurance, sur laquelle une remise d'ecurie n'a pas de prise —
+         et cumuler les deux reviendrait a rabattre un tarif deja preferentiel. */
       priceTotal = insurancePrice;
+      crewId = null;
+      remisePct = 0;
     } else {
-      priceTotal = offerPrice + insurancePrice;
+      // La remise porte sur la journee, jamais sur l'assurance : celle-ci est
+      // reversee a l'assureur, elle n'est pas une marge sur laquelle ceder.
+      const journee = Math.round((offerPrice * (100 - remisePct)) / 100);
+      priceTotal = journee + insurancePrice;
     }
     // price_deposit = price_total dans la nouvelle politique (paiement intégral)
     const priceDeposit = priceTotal;
@@ -26546,6 +26595,12 @@ window.bkConfirmBooking = async function() {
       // dessus faisait PLANTER la confirmation, après cinq étapes remplies,
       // sur la formule la plus chère du catalogue.
       heritage_pack_id: bkState.useHeritage ? (bkState.heritagePack?.id ?? null) : null,
+      /* L'ecurie au titre de laquelle l'inscription est posee, FIGEE ici comme
+         la classe et la plaque. Quitter son ecurie ensuite ne reecrit pas le
+         passe — et la base exige ce lien pour accorder la remise. */
+      crew_id: crewId,
+      remise_pct: remisePct,
+      remise_motif: remisePct > 0 ? 'ecurie' : null,
       // Un vehicule dont les modifications sont declarees attend un EXAMEN,
       // pas seulement un paiement. Sans etat propre, la demande se noyait
       // parmi les reservations ordinaires et personne ne la voyait passer.
@@ -26593,10 +26648,23 @@ window.bkConfirmBooking = async function() {
       }
       // Périmètre de service refusé en base (trigger offre / classe, ou détail
       // de modifications manquant) → on rend le motif, pas l'erreur brute.
-      if (regErr.code === '23514' || /périmètre de service/i.test(regErr.message || '')) {
+      /* Le code 23514 couvre DEUX refus distincts : le périmètre de service
+         (offre × classe, ou classe admise ce jour-là) et le montant (plancher
+         de prix, pack Heritage). Les confondre renvoyait un pilote refusé sur
+         le montant à l'étape 1 pour changer une offre qui n'y était pour rien.
+         On distingue sur le texte, que la base rédige pour être lu. */
+      const messageBase = regErr.message || '';
+      if (/périmètre de service/i.test(messageBase)) {
         btn.innerHTML = orig; btn.disabled = false;
         toast(bkMentionPerimetre(bkState.useHeritage ? 'heritage' : bkState.selectedOffer), 'warn');
         bkGoToStep(1);
+        return;
+      }
+      if (regErr.code === '23514') {
+        // Montant, tarif manquant, pack Heritage : le motif de la base est plus
+        // précis que tout ce qu'on pourrait réécrire ici.
+        btn.innerHTML = orig; btn.disabled = false;
+        toast(messageBase || 'Cette réservation n’a pas pu être enregistrée.', 'warn');
         return;
       }
       throw regErr;
@@ -36322,6 +36390,14 @@ window.openAddSessionModal = function() {
   document.querySelector('input[name="newSessionFormat"][value="full_day"]').checked = true;
   document.getElementById('newSessionOfferAccess').checked = true;
   document.getElementById('newSessionOfferSignature').checked = false;
+  // Les trois classes reviennent cochées, et l'encart d'impact se vide : sans
+  // cela, la restriction de la journée précédente se reconduisait en silence.
+  ['I', 'II', 'III'].forEach(function (c) {
+    const el = document.getElementById('newSessionClasse' + c);
+    if (el) el.checked = true;
+  });
+  const impact = document.getElementById('newSessionClassesImpact');
+  if (impact) impact.textContent = '';
   // Circuits partenaires (multi-circuit) — Haute Saintonge présélectionné
   const cs = document.getElementById('newSessionCircuit');
   if (cs) {
