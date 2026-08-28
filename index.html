@@ -18327,6 +18327,25 @@ body.pav-tv .nav, body.pav-tv footer, body.pav-tv .cookie, body.pav-tv .founding
         </div>
       </div>
 
+      <!-- Demandes d'écurie — le fil de l'application dépose, personne ne
+           répondait : la table portait ses droits d'administration sans écran.
+           Elle rejoint la file plutôt que d'ouvrir une treizième page.
+           Ce sont des DILIGENCES, pas des échéances : aucun délai de CGV ne
+           court dessus. On affiche donc un âge, jamais un compte à rebours —
+           mêler les deux ferait clignoter ce qui peut attendre lundi. -->
+      <div class="admin-section">
+        <div class="admin-section-head">
+          <div class="admin-section-title">Demandes d'écurie — à instruire</div>
+          <button class="admin-section-action" onclick="loadAdminEcuries()">Rafraîchir</button>
+        </div>
+        <div id="adminEcurieRows" class="admin-todo-list">
+          <div class="admin-empty">
+            <div class="admin-empty-icon">○</div>
+            <div class="admin-empty-text">Chargement…</div>
+          </div>
+        </div>
+      </div>
+
     </main>
 
   </div>
@@ -32395,6 +32414,161 @@ window.adminCalculerPreuve = async function(sessionId, partnerAccountId) {
 
 /* Suspendre la remise automatique — pour une journée atypique ou un litige.
    Le défaut reste de livrer : c'est la retenue qui demande un geste. */
+/* ============================================================
+   DEMANDES D'ÉCURIE — instruire ce que le fil de l'application dépose
+   ============================================================
+   `reservations_ecurie` portait ses droits d'administration depuis le début et
+   n'avait aucun écran : les capitaines déposaient, personne ne répondait.
+
+   Ce sont des DILIGENCES, pas des échéances : aucun délai de CGV ne court
+   dessus. On affiche donc l'âge de la demande, jamais un compte à rebours.
+
+   Deux voies, fixées par les CGV et par la base (seuil : dix-sept pilotes) :
+   · moins de 17 — l'écurie REJOINT une journée Access ouverte aux trois
+     classes. Le déclencheur refuse toute autre journée : « une écurie s'y
+     insérerait amputée. » Le sélecteur n'offre donc que celles-là.
+   · 17 et plus — PRIVATISATION. Le capitaine propose trois dates ; confirmer
+     réserve la journée retenue et libère les deux autres.
+
+   `formule` est une colonne GÉNÉRÉE : ne jamais l'écrire.
+   Confirmer sans journée est refusé — « sans elle, aucun pilote ne peut
+   s'inscrire ». Le sélecteur est donc obligatoire avant confirmation. */
+
+const ECURIE_SEUIL_PRIVATISATION = 17;
+
+/* Les statuts de la base sont des clés, pas des libellés : « dates_proposees »
+   ne se lit pas dans une file qu'on parcourt le lundi matin. */
+const ECURIE_STATUT_LBL = {
+  deposee: 'Déposée',
+  dates_proposees: 'Dates proposées',
+  confirmee: 'Confirmée',
+  close: 'Close'
+};
+
+function ecurieAge(cree) {
+  if (!cree) return '';
+  const jours = Math.floor((Date.now() - new Date(cree).getTime()) / 86400000);
+  if (jours <= 0) return "déposée aujourd'hui";
+  if (jours === 1) return 'déposée hier';
+  return `déposée il y a ${jours} jours`;
+}
+
+window.loadAdminEcuries = async function() {
+  const box = document.getElementById('adminEcurieRows');
+  if (!box) return;
+  const vide = (t) => `<div class="admin-empty"><div class="admin-empty-icon">○</div><div class="admin-empty-text">${t}</div></div>`;
+  try {
+    const { data: demandes, error } = await supabase
+      .from('reservations_ecurie')
+      .select('id, crew_id, capitaine_id, effectif_annonce, formule, statut, session_id, message, reponse, cree_le, repondu_le')
+      .neq('statut', 'close')
+      .order('cree_le', { ascending: true });
+    if (error) { console.warn('[Écuries]', error); box.innerHTML = vide('Demandes indisponibles.'); return; }
+    if (!demandes || !demandes.length) { box.innerHTML = vide('Aucune demande en attente.'); return; }
+
+    const aujourdhui = new Date().toISOString().split('T')[0];
+    const [{ data: ecuries }, { data: capitaines }, { data: dates }, { data: journees }] = await Promise.all([
+      supabase.from('crews').select('id, name').in('id', demandes.map(d => d.crew_id)),
+      supabase.from('users').select('id, first_name, last_name, email').in('id', demandes.map(d => d.capitaine_id)),
+      supabase.from('reservations_ecurie_dates').select('reservation_id, rang, date_souhaitee').in('reservation_id', demandes.map(d => d.id)),
+      supabase.from('sessions').select('id, date, format, status, classes_admises, is_private')
+        .gte('date', aujourdhui).not('status', 'in', '(cancelled,archived)').order('date')
+    ]);
+
+    const nomEcurie = {}; (ecuries || []).forEach(e => { nomEcurie[e.id] = e.name; });
+    const nomCap = {}; (capitaines || []).forEach(u => {
+      nomCap[u.id] = [u.first_name, u.last_name].filter(Boolean).join(' ') || u.email || 'Capitaine';
+    });
+    const datesDe = {}; (dates || []).forEach(d => {
+      (datesDe[d.reservation_id] = datesDe[d.reservation_id] || []).push(d);
+    });
+
+    // Une journée d'insertion doit admettre les TROIS classes : le déclencheur
+    // refuse le reste, autant ne pas les proposer.
+    const ouverteAuxTrois = (s) => {
+      const a = Array.isArray(s.classes_admises) && s.classes_admises.length ? s.classes_admises : ['I','II','III'];
+      return ['I','II','III'].every(c => a.indexOf(c) !== -1);
+    };
+
+    box.innerHTML = demandes.map(d => {
+      const privatisation = (d.effectif_annonce || 0) >= ECURIE_SEUIL_PRIVATISATION;
+      const souhaitees = (datesDe[d.id] || []).sort((a, b) => (a.rang || 0) - (b.rang || 0));
+
+      const candidates = privatisation
+        ? (journees || []).filter(s => souhaitees.some(x => x.date_souhaitee === s.date))
+        : (journees || []).filter(s => s.format === 'half_day' && s.is_private === false && ouverteAuxTrois(s));
+
+      const options = candidates.map(s =>
+        `<option value="${s.id}"${s.id === d.session_id ? ' selected' : ''}>${escapeHtml(new Date(s.date).toLocaleDateString('fr-FR', { weekday: 'short', day: 'numeric', month: 'short' }))}</option>`
+      ).join('');
+
+      return `<div style="padding:14px;border-top:1px solid var(--bento-border);">
+        <div style="display:flex;align-items:baseline;justify-content:space-between;gap:12px;flex-wrap:wrap;">
+          <div style="font-family:var(--sans);font-size:14px;color:var(--cream);">
+            ${escapeHtml(nomEcurie[d.crew_id] || 'Écurie')}
+            <span style="font-family:var(--mono);font-size:11px;color:var(--cream-mute);"> · ${escapeHtml(String(d.effectif_annonce || 0))} pilotes annoncés</span>
+          </div>
+          <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;">
+            <span class="tag-inline${privatisation ? ' gold' : ''}" style="font-size:10px;">${privatisation ? 'Privatisation' : 'Insertion'}</span>
+            <span class="tag-inline" style="font-size:10px;">${escapeHtml(ECURIE_STATUT_LBL[d.statut] || d.statut)}</span>
+          </div>
+        </div>
+        <div style="font-family:var(--mono);font-size:11px;color:var(--cream-faint);margin-top:3px;">
+          ${escapeHtml(nomCap[d.capitaine_id] || 'Capitaine')} · ${escapeHtml(ecurieAge(d.cree_le))}${d.repondu_le ? ' · répondu le ' + escapeHtml(new Date(d.repondu_le).toLocaleDateString('fr-FR')) : ''}
+        </div>
+        ${d.message ? `<p style="font-family:var(--sans);font-size:13px;line-height:1.6;color:var(--cream-mute);margin:8px 0 0;">${escapeHtml(d.message)}</p>` : ''}
+        ${souhaitees.length ? `<div style="font-family:var(--mono);font-size:11px;color:var(--cream-mute);margin-top:8px;">Dates souhaitées : ${souhaitees.map(x => escapeHtml(new Date(x.date_souhaitee).toLocaleDateString('fr-FR'))).join(' · ')}</div>` : ''}
+        ${d.reponse ? `<p style="font-family:var(--sans);font-size:12.5px;line-height:1.6;color:var(--cream);margin:8px 0 0;padding-left:10px;border-left:2px solid var(--gold);">${escapeHtml(d.reponse)}</p>` : ''}
+        <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-top:10px;">
+          <select id="ecJour-${d.id}" class="form-input" style="max-width:230px;padding:6px 10px;font-size:12px;" aria-label="Journée retenue">
+            <option value="">— Journée retenue —</option>${options}
+          </select>
+          <button class="admin-action-btn" onclick="adminEcurieConfirmer('${d.id}')">Confirmer</button>
+          <button class="admin-action-btn" onclick="adminEcurieRepondre('${d.id}')">Répondre</button>
+          <button class="admin-action-btn" onclick="adminEcurieClore('${d.id}')">Clore</button>
+        </div>
+        ${candidates.length ? '' : `<div style="font-family:var(--mono);font-size:10.5px;color:var(--gold);margin-top:8px;">${privatisation
+            ? "Aucune journée ne porte l'une des dates souhaitées — il faut la créer avant de confirmer."
+            : "Aucune journée Access ouverte aux trois classes à venir — l'insertion serait refusée."}</div>`}
+      </div>`;
+    }).join('');
+  } catch (e) {
+    console.warn('[Écuries]', e);
+    box.innerHTML = vide('Demandes indisponibles.');
+  }
+};
+
+/* Le message d'exception de la base est rédigé pour être lu : on le remonte
+   tel quel plutôt que de le remplacer par « une erreur est survenue ». */
+async function ecurieEcrire(id, champs, succes) {
+  const { data, error } = await supabase
+    .from('reservations_ecurie').update(champs).eq('id', id).select('id');
+  if (error) { toast(error.message || 'Écriture refusée', 'warn'); return false; }
+  if (!data || !data.length) { toast('Écriture refusée — demande inchangée', 'warn'); return false; }
+  toast(succes, 'ok');
+  loadAdminEcuries();
+  return true;
+}
+
+window.adminEcurieConfirmer = async function(id) {
+  const sel = document.getElementById('ecJour-' + id);
+  const sessionId = sel ? sel.value : '';
+  if (!sessionId) { toast('Choisissez la journée retenue avant de confirmer.', 'warn'); return; }
+  await ecurieEcrire(id, { statut: 'confirmee', session_id: sessionId, repondu_le: new Date().toISOString() },
+                     'Demande confirmée — la journée est retenue');
+};
+
+window.adminEcurieRepondre = async function(id) {
+  const texte = prompt("Votre réponse au capitaine (elle lui est transmise telle quelle) :", '');
+  if (texte === null || !texte.trim()) return;
+  await ecurieEcrire(id, { reponse: texte.trim(), repondu_le: new Date().toISOString() }, 'Réponse enregistrée');
+};
+
+window.adminEcurieClore = async function(id) {
+  if (!confirm('Clore cette demande ? Elle quitte la file.')) return;
+  await ecurieEcrire(id, { statut: 'close', repondu_le: new Date().toISOString() }, 'Demande close');
+};
+
 window.adminSuspendrePreuve = async function(reportId, suspendre) {
   try {
     const { data, error } = await supabase.rpc('oxv_hold_partner_proof', {
@@ -34135,6 +34309,7 @@ window.loadAdminDashboard = async function() {
   if (typeof loadAdminCoaches === 'function') loadAdminCoaches();
   if (typeof loadAdminPartners === 'function') loadAdminPartners();
   if (typeof loadAdminProof === 'function') loadAdminProof();
+  if (typeof loadAdminEcuries === 'function') loadAdminEcuries();
   if (typeof loadAdminValidations === 'function') loadAdminValidations();
 
   // Greeting
