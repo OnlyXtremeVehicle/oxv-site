@@ -25077,6 +25077,16 @@ window.bkOpen = async function() {
   // Correspondance offre / classe : une seule lecture, réutilisée tout le tunnel.
   await bkChargerOffresClasses();
 
+  /* L'ecurie du lecteur, lue une fois. Elle sert a lui montrer les journees qui
+     lui sont reservees — et a masquer celles d'une autre ecurie. Une lecture
+     qui echoue laisse `null` : le pilote voit alors le calendrier public, ce
+     qui est l'etat le moins surprenant. */
+  bkState.monEcurieId = null;
+  try {
+    const { data: mienne } = await supabase.rpc('oxv_my_crew_id');
+    bkState.monEcurieId = mienne || null;
+  } catch (e) { console.warn('[booking] ecurie du lecteur :', e); }
+
   // Aucune étape ne reste franchissable d'une session de réservation à l'autre.
   ['bkStep1Next', 'bkStep2Next', 'bkStep3Next'].forEach(id => {
     const b = document.getElementById(id);
@@ -25190,10 +25200,19 @@ async function bkLoadDatesForOffer() {
     return selectedOffer === 'access' ? s.format === 'half_day' : s.format === 'full_day';
   }).length;
 
+  /* Une journee reservee a une ecurie reste au calendrier — l'ecurie doit la
+     voir — mais elle n'est proposee qu'a ses membres. La base refuse toute
+     autre inscription ; l'interface evite au pilote d'aller jusqu'au paiement
+     pour l'apprendre. */
+  const monEcurieId = bkState.monEcurieId || null;
+  const journeeOuverteAMoi = (s) =>
+    !s.reserve_a_ecurie || s.reserve_a_ecurie === monEcurieId;
+
   const filteredSessions = (sessions || []).filter(s => {
     if (s.date < minDateStr) return false;
     if (s.is_private === true) return false;
     if (s.format === 'b2b') return false;
+    if (!journeeOuverteAMoi(s)) return false;
     if (!journeeAdmetLaClasse(s)) return false;
     if (selectedOffer === 'access') return s.format === 'half_day';
     return s.format === 'full_day'; // signature, heritage
@@ -25248,6 +25267,7 @@ async function bkLoadDatesForOffer() {
       // fausserait la mesure.
       if (s.date < minDateStr) return;
       if (s.is_private === true || s.format === 'b2b') return;
+      if (!journeeOuverteAMoi(s)) return;
       if (journeeAdmetLaClasse(s)) return;
       dejaListees.add(s.id);
       // Le motif dit ce qui EST admis, pas ce qui ne l'est pas : « ouverte aux
@@ -25274,6 +25294,7 @@ async function bkLoadDatesForOffer() {
         if (dejaListees.has(s.id)) return;
         if (s.date < minDateStr) return;
         if (s.is_private === true || s.format === 'b2b') return;
+        if (!journeeOuverteAMoi(s)) return;
         if (s.format !== fmt) return;
         dejaListees.add(s.id);
         bkState.sessionsHorsPerimetre.push({ session: s, offre: o });
