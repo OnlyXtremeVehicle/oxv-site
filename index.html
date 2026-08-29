@@ -18395,6 +18395,24 @@ body.pav-tv .nav, body.pav-tv footer, body.pav-tv .cookie, body.pav-tv .founding
         </div>
       </div>
 
+      <!-- Immatriculations à vérifier.
+           La base pose le verdict automatiquement ; ce qu'elle ne peut pas
+           trancher — copropriété réelle, plaque étrangère, rapport HistoVec
+           produit par le pilote — attend ici. Sans cet écran, le contrôle
+           serait une porte fermée sans personne derrière. -->
+      <div class="admin-section">
+        <div class="admin-section-head">
+          <div class="admin-section-title">Immatriculations à vérifier</div>
+          <button class="admin-section-action" onclick="loadAdminPlaques()">Rafraîchir</button>
+        </div>
+        <div id="adminPlaqueRows" class="admin-todo-list">
+          <div class="admin-empty">
+            <div class="admin-empty-icon">○</div>
+            <div class="admin-empty-text">Chargement…</div>
+          </div>
+        </div>
+      </div>
+
     </main>
 
   </div>
@@ -20406,6 +20424,7 @@ body.pav-tv .nav, body.pav-tv footer, body.pav-tv .cookie, body.pav-tv .founding
       <div class="form-row">
         <label for="vh-plate">Immatriculation</label>
         <input type="text" id="vh-plate" placeholder="AB-123-CD" maxlength="14" style="text-transform: uppercase;" oninput="vhFormatPlate(this)" />
+        <span id="vhPlaqueEtat" style="font-family:var(--mono);font-size:9px;letter-spacing:0.18em;text-transform:uppercase;color:var(--cream-faint);margin-top:6px;display:block;">Le véhicule est validé une fois l'immatriculation vérifiée.</span>
       </div>
 
       <!-- La modification est une propriété de la VOITURE, pas d'une journée.
@@ -25985,6 +26004,29 @@ function bkRefRendreReprise() {
   if (!bkPlaqueValide(bkState.plate)) manques.push('l’immatriculation');
   if (bkState.mods && !bkState.modsDetail) manques.push('le détail des modifications');
 
+  /* Contrôle d'immatriculation. Le test porte sur la PRÉSENCE du verdict :
+     tant que la base ne le rend pas, on ne barre personne — le site ne doit
+     pas inventer un refus qu'il n'a pas reçu. */
+  const plq = v.plaque_statut;
+  if (plq && plq !== 'conforme') {
+    if (fiche) {
+      fiche.innerHTML = `
+        <div class="bk-perimetre-panel">
+          <div class="titre">${plq === 'refusee' ? 'Immatriculation refusée' : 'Immatriculation en cours de vérification'}</div>
+          <div class="corps">
+            ${escapeHtml(v.plaque_motif || 'Nous vérifions cette immatriculation avant de valider le véhicule.')}
+            ${plq === 'refusee' ? ' Corrigez-la au garage.' : ' Un véhicule se valide une fois son immatriculation vérifiée.'}
+            <div style="margin-top:14px;">
+              <button class="btn btn-sm" type="button" onclick="goToAccount('compte-vehicules')"><span>Ouvrir le garage →</span></button>
+            </div>
+          </div>
+        </div>`;
+      fiche.style.display = 'block';
+    }
+    bkRefRendrePerimetre();
+    return;
+  }
+
   if (manques.length) {
     if (fiche) {
       const liste = manques.length > 1
@@ -26350,8 +26392,10 @@ window.bkRefMajValidite = function() {
      bkSelectVehicle. Cette fonction ne fait plus que juger. */
   bkRefRendrePerimetre();
 
+  const plq = bkState.selectedVehicle?.plaque_statut;
   const ok = !!bkState.selectedVehicle
     && !!bkState.referentiel
+    && (!plq || plq === 'conforme')
     && bkPlaqueValide(bkState.plate)
     && (!bkState.mods || bkState.modsDetail.length > 0)
     && bkOffreOuverte(bkState.selectedOffer, bkState.classeRetenue);
@@ -29788,6 +29832,16 @@ window.openVehicleModal = async function(vehicle) {
   vhRefAppliquer(null);
   const zoneDem = document.getElementById('vhRefDemande');
   if (zoneDem) { zoneDem.style.display = 'none'; zoneDem.innerHTML = ''; }
+  // Le verdict du véhicule précédent ne suit pas le suivant.
+  const etatRaz = document.getElementById('vhPlaqueEtat');
+  if (etatRaz) {
+    etatRaz.textContent = 'Le véhicule est validé une fois l’immatriculation vérifiée.';
+    etatRaz.style.color = 'var(--cream-faint)';
+    etatRaz.style.textTransform = 'uppercase';
+    etatRaz.style.letterSpacing = '0.18em';
+    etatRaz.style.fontFamily = 'var(--mono)';
+    etatRaz.style.fontSize = '9px';
+  }
   ['vh-modele','vh-generation'].forEach(id => {
     const el = document.getElementById(id);
     if (el) { el.innerHTML = '<option value="">— Choisissez d’abord ' + (id === 'vh-modele' ? 'une marque' : 'un modèle') + '</option>'; el.disabled = true; }
@@ -29826,6 +29880,18 @@ window.openVehicleModal = async function(vehicle) {
     const det = document.getElementById('vh-mods-detail');
     if (det) det.value = vehicle.modifications_detail || '';
     vhRefOnMods();
+
+    // Verdict en cours sur l'immatriculation, dit sous le champ.
+    const etat = document.getElementById('vhPlaqueEtat');
+    if (etat && vehicle.plaque_statut && vehicle.plaque_statut !== 'conforme') {
+      etat.textContent = vehicle.plaque_motif
+        || (vehicle.plaque_statut === 'refusee' ? 'Immatriculation refusée.' : 'Immatriculation en cours de vérification.');
+      etat.style.color = vehicle.plaque_statut === 'refusee' ? 'var(--red)' : 'var(--gold-data)';
+      etat.style.textTransform = 'none';
+      etat.style.letterSpacing = '0';
+      etat.style.fontFamily = 'var(--sans)';
+      etat.style.fontSize = '11.5px';
+    }
 
     // Photos existantes
     const slotMap = {
@@ -30082,7 +30148,23 @@ function renderVehicleCard(v) {
   const meta = [];
   if (v.year) meta.push(`<span>${v.year}</span>`);
   if (v.color) meta.push(`<span>${v.color}</span>`);
-  if (v.license_plate) meta.push(`<span>${v.license_plate}</span>`);
+  if (v.license_plate) meta.push(`<span>${escapeHtml(v.license_plate)}</span>`);
+
+  /* État du véhicule, dit sur la carte. Un pilote doit savoir avant de
+     réserver, pas à la cinquième étape du tunnel. L'ordre suit la gravité :
+     une plaque refusée prime sur une désignation manquante. */
+  let etat = null;
+  if (v.plaque_statut === 'refusee') etat = { t: 'Immatriculation refusée', c: 'var(--red)' };
+  else if (v.plaque_statut === 'a_verifier') etat = { t: 'Immatriculation en vérification', c: 'var(--gold-data)' };
+  else if (!v.referentiel_id) etat = { t: 'Désignation à compléter', c: 'var(--gold-data)' };
+  else if (v.modifie) etat = { t: 'Modifications déclarées', c: 'var(--gold-data)' };
+
+  const bandeau = etat
+    ? `<div style="font-family:var(--mono);font-size:9px;letter-spacing:0.18em;text-transform:uppercase;color:${etat.c};margin-top:8px;">${escapeHtml(etat.t)}</div>`
+    : '';
+  const motif = (v.plaque_motif && v.plaque_statut !== 'conforme')
+    ? `<div style="font-family:var(--sans);font-size:11.5px;line-height:1.45;color:var(--cream-mute);margin-top:6px;">${escapeHtml(v.plaque_motif)}</div>`
+    : '';
 
   const tier = v.declared_value && v.declared_value >= 10000000
     ? '— Véhicule premium' // > 100k€
@@ -30095,10 +30177,11 @@ function renderVehicleCard(v) {
         <div class="vehicle-card-tier">${tier}</div>
         <div class="vehicle-card-name">${v.brand || ''} <em>${v.model || ''}</em></div>
         <div class="vehicle-card-meta">${meta.join('')}</div>
+        ${bandeau}${motif}
       </div>
       <div class="vehicle-card-foot">
         <button onclick="editVehicle('${v.id}')">Modifier</button>
-        <button class="danger" onclick="deleteVehicle('${v.id}', '${(v.brand || '').replace(/'/g, "\'")} ${(v.model || '').replace(/'/g, "\'")}')">Supprimer</button>
+        <button class="danger" onclick="deleteVehicle('${v.id}', '${((v.brand || '') + ' ' + (v.model || '')).replace(/'/g, '’')}')">Supprimer</button>
       </div>
     </div>
   `;
@@ -30167,6 +30250,11 @@ window.saveVehicle = async function() {
   const orig = btn ? btn.innerHTML : '';
   if (btn) { btn.innerHTML = '<span>⟳ Enregistrement…</span>'; btn.disabled = true; }
 
+  /* Le contrôle d'immatriculation est posé par la base, pas ici : le site
+     relit le verdict et le rapporte. Un client modifié ne peut pas se
+     déclarer conforme. */
+  let verdictPlaque = null;
+
   try {
     let vehicleId = currentVehicle?.id;
 
@@ -30198,9 +30286,10 @@ window.saveVehicle = async function() {
         .update(baseData)
         .eq('id', vehicleId)
         .eq('user_id', userId)
-        .select('id');
+        .select();
       if (error) throw error;
       if (!maj || !maj.length) throw new Error('Mise à jour refusée — le véhicule est inchangé');
+      verdictPlaque = maj[0];
     } else {
       // Création
       const { data, error } = await supabase
@@ -30210,6 +30299,7 @@ window.saveVehicle = async function() {
         .single();
       if (error) throw error;
       vehicleId = data.id;
+      verdictPlaque = data;
     }
 
     // Étape 2 — Upload des photos en attente
@@ -30239,7 +30329,17 @@ window.saveVehicle = async function() {
 
     if (btn) { btn.innerHTML = orig; btn.disabled = false; }
 
-    toast(currentVehicle ? 'Véhicule mis à jour' : 'Véhicule ajouté', 'ok');
+    /* Le verdict prime sur le simple « enregistré » : un véhicule dont
+       l'immatriculation n'est pas conforme n'est pas réservable, et le
+       pilote doit l'apprendre maintenant, pas à l'étape 3. */
+    const st = verdictPlaque && verdictPlaque.plaque_statut;
+    if (st === 'refusee') {
+      toast(verdictPlaque.plaque_motif || 'Immatriculation refusée', 'warn');
+    } else if (st === 'a_verifier') {
+      toast(verdictPlaque.plaque_motif || 'Immatriculation à vérifier par OXV', 'warn');
+    } else {
+      toast(currentVehicle ? 'Véhicule mis à jour' : 'Véhicule ajouté', 'ok');
+    }
     closeVehicleModal();
     loadVehicles();
   } catch (err) {
@@ -33091,6 +33191,64 @@ window.loadAdminIntentions = async function() {
 };
 
 /* ============================================================
+   IMMATRICULATIONS — ce que la machine n'a pas pu trancher
+   ============================================================
+   Le contrôle de plaque est automatique et posé par la base : forme,
+   unicité, cohérence avec le millésime. Ce qui reste ici, ce sont les cas
+   qu'aucune règle ne tranche — une copropriété réelle, une plaque
+   étrangère, un rapport HistoVec que le pilote a produit. */
+const PLAQUE_STATUT_LBL = { conforme: 'Conforme', a_verifier: 'À vérifier', refusee: 'Refusée' };
+
+window.loadAdminPlaques = async function() {
+  const box = document.getElementById('adminPlaqueRows');
+  if (!box) return;
+  const vide = (t) => `<div class="admin-empty"><div class="admin-empty-icon">○</div><div class="admin-empty-text">${t}</div></div>`;
+  try {
+    const { data, error } = await supabase
+      .from('vehicles')
+      .select('id, user_id, brand, model, year, license_plate, plaque_statut, plaque_motif, histovec_statut, plaque_verifiee_le')
+      .in('plaque_statut', ['a_verifier', 'refusee'])
+      .order('plaque_verifiee_le', { ascending: true });
+    if (error) { console.warn('[Plaques]', error); box.innerHTML = vide('Contrôles indisponibles.'); return; }
+    if (!data || !data.length) { box.innerHTML = vide('Aucune immatriculation en attente.'); return; }
+
+    box.innerHTML = data.map(v => `
+      <div style="display:flex;align-items:center;justify-content:space-between;gap:10px;padding:12px 14px;border-top:1px solid var(--bento-border);flex-wrap:wrap;">
+        <div style="min-width:250px;flex:1;">
+          <div style="font-family:var(--sans);font-size:14px;color:var(--cream);">${escapeHtml([v.brand, v.model, v.year].filter(Boolean).join(' '))}</div>
+          <div style="font-family:var(--mono);font-size:11px;color:var(--cream-mute);">${escapeHtml(v.license_plate || 'sans plaque')} · ${escapeHtml(ecurieAge(v.plaque_verifiee_le))}${v.histovec_statut ? ' · HistoVec ' + escapeHtml(v.histovec_statut) : ''}</div>
+          <div style="font-family:var(--sans);font-size:11.5px;line-height:1.45;color:var(--cream-faint);margin-top:4px;">${escapeHtml(v.plaque_motif || '')}</div>
+        </div>
+        <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;">
+          <span class="tag-inline" style="font-size:10px;">${escapeHtml(PLAQUE_STATUT_LBL[v.plaque_statut] || v.plaque_statut)}</span>
+          <button class="admin-action-btn" onclick="adminPlaqueStatuer('${v.id}','conforme')">Valider</button>
+          <button class="admin-action-btn" onclick="adminPlaqueStatuer('${v.id}','refusee')">Refuser</button>
+        </div>
+      </div>`).join('');
+  } catch (e) { console.warn('[Plaques]', e); box.innerHTML = vide('Contrôles indisponibles.'); }
+};
+
+window.adminPlaqueStatuer = async function(id, statut) {
+  const motif = prompt(
+    statut === 'conforme'
+      ? "Sur quoi repose cette validation ? (rapport HistoVec, copropriété constatée…)"
+      : "Motif du refus, transmis au pilote :", '');
+  if (motif === null) return;
+  if (statut === 'refusee' && !motif.trim()) { toast('Un refus se motive.', 'warn'); return; }
+  try {
+    // La levée passe par la base : elle seule vérifie que l'appelant est
+    // administrateur, et son message d'exception est rédigé pour être lu.
+    const { error } = await supabase.rpc('oxv_statuer_plaque', {
+      p_vehicle_id: id, p_statut: statut, p_motif: motif.trim() || null,
+      p_histovec: statut === 'conforme' ? 'verifiee' : null
+    });
+    if (error) { toast(error.message || 'Écriture refusée', 'warn'); return; }
+    toast(statut === 'conforme' ? 'Immatriculation validée' : 'Immatriculation refusée', 'ok');
+    loadAdminPlaques();
+  } catch (e) { console.warn('[Plaque]', e); toast(e.message || 'Écriture refusée', 'warn'); }
+};
+
+/* ============================================================
    ENGAGEMENTS PARTENAIRES — le chaînon qui manquait
    ============================================================
    La boucle de preuve suit le CONTRAT : une journée n'est due à un partenaire
@@ -34966,6 +35124,7 @@ window.loadAdminDashboard = async function() {
   if (typeof loadAdminExamens === 'function') loadAdminExamens();
   if (typeof loadAdminIntentions === 'function') loadAdminIntentions();
   if (typeof loadAdminEngagements === 'function') loadAdminEngagements();
+  if (typeof loadAdminPlaques === 'function') loadAdminPlaques();
   if (typeof loadAdminValidations === 'function') loadAdminValidations();
 
   // Greeting
