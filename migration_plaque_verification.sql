@@ -118,13 +118,12 @@ GRANT EXECUTE ON FUNCTION public.oxv_controler_plaque(text, integer, uuid, uuid)
 -- ------------------------------------------------------------
 -- Posé après, le déclencheur préserverait l'ancienne valeur (NULL) et la
 -- reprise ne se ferait jamais. L'ordre compte.
+-- `UPDATE ... FROM LATERAL` ne peut pas referencer la table cible : Postgres
+-- refuse (42P10). L'appel se fait donc directement dans le SET.
 UPDATE public.vehicles v
-SET plaque_statut = c.j->>'statut',
-    plaque_motif  = c.j->>'motif',
+SET plaque_statut = (public.oxv_controler_plaque(v.license_plate, v.year, v.id, v.user_id))->>'statut',
+    plaque_motif  = (public.oxv_controler_plaque(v.license_plate, v.year, v.id, v.user_id))->>'motif',
     plaque_verifiee_le = now()
-FROM LATERAL (
-  SELECT public.oxv_controler_plaque(v.license_plate, v.year, v.id, v.user_id) AS j
-) c
 WHERE v.plaque_statut IS NULL;
 
 -- ------------------------------------------------------------

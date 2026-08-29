@@ -25887,10 +25887,12 @@ async function bkLoadVehicles() {
   const refIds = [...new Set(data.map(v => v.referentiel_id).filter(Boolean))];
   bkState.refParId = {};
   if (refIds.length) {
+    // Sans les lignes exclues, un véhicule dont la ligne a été retirée du
+    // référentiel s'afficherait « à désigner » — ce qui est faux, et ne dit
+    // rien au pilote.
     const { data: refs } = await supabase
       .from('vehicules_eligibles')
       .select('*')
-      .eq('statut', 'actif')
       .in('id', refIds);
     (refs || []).forEach(r => { bkState.refParId[r.id] = r; });
   }
@@ -25999,6 +26001,25 @@ function bkRefRendreReprise() {
   if (wrap) wrap.style.display = 'block';
 
   const ligne = bkState.referentiel;
+
+  // Une ligne retirée du référentiel depuis la désignation : on le dit.
+  if (ligne && ligne.statut === 'exclu') {
+    if (fiche) {
+      const r = Number(ligne.ratio_kg_ch).toFixed(2).replace('.', ',');
+      fiche.innerHTML = `
+        <div class="bk-perimetre-panel">
+          <div class="titre">Hors critères d’accès</div>
+          <div class="corps">
+            ${escapeHtml(ligne.marque)} ${escapeHtml(ligne.modele)} · ${escapeHtml(bkRefLibelleGeneration(ligne))} — rapport ${escapeHtml(r)} kg/ch.
+            Ce véhicule ne peut pas être engagé sur une journée OXV.
+          </div>
+        </div>`;
+      fiche.style.display = 'block';
+    }
+    bkRefRendrePerimetre();
+    return;
+  }
+
   const manques = [];
   if (!ligne) manques.push('la désignation au référentiel');
   if (!bkPlaqueValide(bkState.plate)) manques.push('l’immatriculation');
@@ -26395,6 +26416,7 @@ window.bkRefMajValidite = function() {
   const plq = bkState.selectedVehicle?.plaque_statut;
   const ok = !!bkState.selectedVehicle
     && !!bkState.referentiel
+    && bkState.referentiel.statut !== 'exclu'
     && (!plq || plq === 'conforme')
     && bkPlaqueValide(bkState.plate)
     && (!bkState.mods || bkState.modsDetail.length > 0)
@@ -29625,8 +29647,12 @@ async function vhRefChargerMarques() {
   if (!sel) return;
   let marques = vhRef.cache['marques'];
   if (!marques) {
+    // On charge AUSSI les lignes exclues. « Votre voiture n'est pas dans la
+    // liste » et « votre voiture est à 7,00 kg/ch quand le seuil est de
+    // 6,00 » ne disent pas la même chose : la seconde évite au pilote une
+    // demande d'examen qui ne peut aboutir.
     const { data, error } = await supabase
-      .from('vehicules_eligibles').select('marque').eq('statut', 'actif')
+      .from('vehicules_eligibles').select('marque')
       .order('marque', { ascending: true });
     if (error) { sel.innerHTML = '<option value="">— Référentiel indisponible</option>'; return; }
     marques = [...new Set((data || []).map(r => r.marque))];
@@ -29657,7 +29683,7 @@ window.vhRefOnMarque = async function() {
   let modeles = vhRef.cache[cle];
   if (!modeles) {
     const { data, error } = await supabase
-      .from('vehicules_eligibles').select('modele').eq('statut', 'actif').eq('marque', marque)
+      .from('vehicules_eligibles').select('modele').eq('marque', marque)
       .order('modele', { ascending: true });
     if (error) { selModele.innerHTML = '<option value="">— Référentiel indisponible</option>'; return; }
     modeles = [...new Set((data || []).map(r => r.modele))];
@@ -29685,7 +29711,7 @@ window.vhRefOnModele = async function() {
   const cle = `gen:${marque}|${modele}`;
   if (!vhRef.cache[cle]) {
     const { data, error } = await supabase
-      .from('vehicules_eligibles').select('*').eq('statut', 'actif')
+      .from('vehicules_eligibles').select('*')
       .eq('marque', marque).eq('modele', modele)
       .order('annee_debut', { ascending: true });
     if (error) { selGen.innerHTML = '<option value="">— Référentiel indisponible</option>'; return; }
@@ -29714,7 +29740,8 @@ function vhRefPeuplerGenerations() {
   selGen.innerHTML = '<option value="">— Sélectionnez</option>'
     + lignes.map(r => {
         const hors = annee && !vhRefCouvre(r, annee) ? ` · hors millésime ${annee}` : '';
-        return `<option value="${r.id}">${escapeHtml(vhRefLibelle(r))}${escapeHtml(hors)}</option>`;
+        const exclu = r.statut === 'exclu' ? ' · hors critères d’accès' : '';
+        return `<option value="${r.id}">${escapeHtml(vhRefLibelle(r))}${escapeHtml(hors)}${escapeHtml(exclu)}</option>`;
       }).join('');
   selGen.disabled = false;
 
@@ -29743,10 +29770,31 @@ window.vhRefOnGeneration = function() {
 
 /* La classe est LUE sur la ligne du référentiel, jamais déduite. */
 function vhRefAppliquer(ligne) {
-  vhRef.ligne = ligne;
+  /* Une ligne exclue n'est PAS une désignation : elle est affichée pour dire
+     pourquoi, jamais pour être retenue. `vhRef.ligne` reste nul, donc
+     l'enregistrement refuse — la règle tient à un seul endroit. */
+  vhRef.ligne = (ligne && ligne.statut === 'exclu') ? null : ligne;
   const fiche = document.getElementById('vhRefFiche');
   if (!fiche) return;
   if (!ligne) { fiche.style.display = 'none'; fiche.innerHTML = ''; return; }
+
+  if (ligne.statut === 'exclu') {
+    const r = Number(ligne.ratio_kg_ch).toFixed(2).replace('.', ',');
+    const cause = Number(ligne.masse_kg) > 2400
+      ? `Masse ${bkNombreFr(ligne.masse_kg)} kg. Le référentiel admet jusqu’à 2 400 kg.`
+      : `Rapport masse/puissance ${r} kg/ch. Le référentiel admet jusqu’à 6,00 kg/ch.`;
+    fiche.innerHTML = `
+      <div class="bk-perimetre-panel">
+        <div class="titre">Hors critères d’accès</div>
+        <div class="corps">
+          ${escapeHtml(ligne.marque)} ${escapeHtml(ligne.modele)} · ${escapeHtml(vhRefLibelle(ligne))} — ${escapeHtml(cause)}
+          Ce véhicule ne peut pas être engagé sur une journée OXV. Le référentiel est
+          l’application des conditions d’accès publiées ; il est révisé chaque année.
+        </div>
+      </div>`;
+    fiche.style.display = 'block';
+    return;
+  }
 
   const annee = vhAnneeSaisie();
   const rapport = Number(ligne.ratio_kg_ch).toFixed(2).replace('.', ',');
