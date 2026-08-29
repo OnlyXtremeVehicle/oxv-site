@@ -1,0 +1,613 @@
+<title>Seuil d'accès OXV</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans+Condensed:wght@600;700&family=IBM+Plex+Sans:wght@400;500&display=swap">
+
+<style>
+:root{
+  --noir:#0A0A0B; --surface:#131315; --surface-2:#1A1A1D; --ligne:#26262A; --ligne-fine:#1E1E22;
+  --creme:#EDE9E1; --creme-mute:#948F86; --creme-faint:#5E5A54;
+  --or:#C8A24A; --rouge:#C4362F;
+  --c3:#C8A24A; --c2:#7FA8C9; --c1:#8E9B8C; --cx:#C4362F;
+  --sans:"IBM Plex Sans",system-ui,sans-serif;
+  --cond:"IBM Plex Sans Condensed","IBM Plex Sans",system-ui,sans-serif;
+  --mono:"IBM Plex Mono",ui-monospace,monospace;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--noir);color:var(--creme);font-family:var(--sans);font-size:15px;line-height:1.55;
+     -webkit-font-smoothing:antialiased}
+.wrap{max-width:1120px;margin:0 auto;padding:40px 24px 96px}
+.eyebrow{font-family:var(--mono);font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--or);margin:0 0 10px}
+h1{font-family:var(--cond);font-weight:700;font-size:clamp(30px,4.4vw,46px);line-height:1.05;letter-spacing:-.015em;
+   margin:0 0 14px;text-wrap:balance}
+h2{font-family:var(--cond);font-weight:600;font-size:20px;letter-spacing:-.005em;margin:0 0 4px}
+.lede{color:var(--creme-mute);max-width:66ch;margin:0}
+.lede b{color:var(--creme);font-weight:500}
+hr.sep{border:0;border-top:1px solid var(--ligne);margin:44px 0 32px}
+
+/* ---------- instrument ---------- */
+.panneau{background:var(--surface);border:1px solid var(--ligne);padding:26px 24px 20px}
+.axe-legende{display:flex;gap:20px;flex-wrap:wrap;font-family:var(--mono);font-size:10.5px;
+             letter-spacing:.13em;text-transform:uppercase;color:var(--creme-mute);margin-bottom:20px}
+.pastille{display:inline-block;width:9px;height:9px;margin-right:7px;vertical-align:1px}
+.axe{position:relative;height:120px;margin:0 6px}
+.bande{position:absolute;top:0;bottom:34px;opacity:.07}
+.tick{position:absolute;bottom:34px;width:2px;height:56px;opacity:.85;cursor:crosshair;border-radius:1px}
+.tick:hover{opacity:1;height:72px}
+.seuil-ligne{position:absolute;top:0;bottom:26px;width:2px;background:var(--rouge);pointer-events:none}
+.seuil-ligne::after{content:attr(data-l);position:absolute;top:-2px;left:8px;font-family:var(--mono);font-size:10px;
+  letter-spacing:.12em;text-transform:uppercase;color:var(--rouge);white-space:nowrap}
+.borne{position:absolute;top:14px;bottom:26px;width:1px;background:var(--ligne);pointer-events:none}
+.borne::after{content:attr(data-l);position:absolute;top:-14px;left:6px;font-family:var(--mono);font-size:9.5px;
+  letter-spacing:.12em;text-transform:uppercase;color:var(--creme-faint);white-space:nowrap}
+.graduations{position:absolute;left:0;right:0;bottom:0;height:30px;border-top:1px solid var(--ligne)}
+.grad{position:absolute;top:6px;font-family:var(--mono);font-size:10px;color:var(--creme-faint);transform:translateX(-50%)}
+
+.reglage{display:flex;align-items:center;gap:18px;flex-wrap:wrap;margin-top:26px;padding-top:22px;
+         border-top:1px solid var(--ligne-fine)}
+.reglage label{font-family:var(--mono);font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--creme-mute)}
+input[type=range]{-webkit-appearance:none;appearance:none;flex:1;min-width:220px;height:2px;background:var(--ligne);outline:none}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:16px;height:16px;background:var(--rouge);
+  border:2px solid var(--noir);cursor:grab;border-radius:50%}
+input[type=range]::-moz-range-thumb{width:16px;height:16px;background:var(--rouge);border:2px solid var(--noir);
+  cursor:grab;border-radius:50%}
+input[type=range]:focus-visible{outline:2px solid var(--or);outline-offset:6px}
+.valeur{font-family:var(--mono);font-size:26px;font-weight:500;color:var(--rouge);font-variant-numeric:tabular-nums;min-width:112px}
+.valeur small{font-size:12px;color:var(--creme-faint);margin-left:4px}
+.btn{font-family:var(--mono);font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--creme-mute);
+     background:transparent;border:1px solid var(--ligne);padding:9px 15px;cursor:pointer}
+.btn:hover{color:var(--creme);border-color:var(--creme-faint)}
+.btn:focus-visible{outline:2px solid var(--or);outline-offset:2px}
+.btn.actif{color:var(--noir);background:var(--or);border-color:var(--or)}
+
+/* ---------- compteurs ---------- */
+.compteurs{display:grid;grid-template-columns:repeat(auto-fit,minmax(158px,1fr));gap:1px;background:var(--ligne);
+           border:1px solid var(--ligne);margin-top:1px}
+.compteur{background:var(--surface);padding:20px 20px 17px}
+.compteur .n{font-family:var(--mono);font-size:34px;font-weight:500;line-height:1;font-variant-numeric:tabular-nums}
+.compteur .t{font-family:var(--mono);font-size:10px;letter-spacing:.16em;text-transform:uppercase;
+             color:var(--creme-mute);margin-top:9px}
+.compteur .d{font-size:12px;color:var(--creme-faint);margin-top:3px;line-height:1.4}
+.delta{font-family:var(--mono);font-size:12px;margin-left:8px;vertical-align:5px}
+
+/* ---------- bascule ---------- */
+.bascule{margin-top:28px;border:1px solid var(--ligne);background:var(--surface-2)}
+.bascule-head{padding:15px 20px;border-bottom:1px solid var(--ligne);font-family:var(--mono);font-size:10.5px;
+  letter-spacing:.16em;text-transform:uppercase;color:var(--or)}
+.bascule-corps{padding:6px 20px 16px;max-height:230px;overflow-y:auto}
+.bascule-l{display:flex;justify-content:space-between;gap:14px;padding:8px 0;border-bottom:1px solid var(--ligne-fine);
+  font-size:13.5px;align-items:baseline}
+.bascule-l:last-child{border-bottom:0}
+.bascule-l span{font-family:var(--mono);font-size:12.5px;font-variant-numeric:tabular-nums;color:var(--creme-mute)}
+.vide{color:var(--creme-faint);font-size:13px;padding:10px 0}
+
+/* ---------- table ---------- */
+.outils{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin:0 0 16px}
+.champ{font-family:var(--mono);font-size:12px;background:var(--surface);border:1px solid var(--ligne);
+  color:var(--creme);padding:9px 13px;min-width:210px}
+.champ::placeholder{color:var(--creme-faint)}
+.champ:focus-visible{outline:2px solid var(--or);outline-offset:-1px;border-color:var(--or)}
+.tableau{overflow-x:auto;border:1px solid var(--ligne)}
+table{width:100%;border-collapse:collapse;font-size:13.5px;min-width:760px}
+thead th{font-family:var(--mono);font-size:9.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--creme-mute);
+  text-align:left;padding:13px 14px;background:var(--surface-2);border-bottom:1px solid var(--ligne);
+  position:sticky;top:0;cursor:pointer;user-select:none;white-space:nowrap}
+thead th:hover{color:var(--creme)}
+thead th[aria-sort]{color:var(--or)}
+tbody td{padding:11px 14px;border-bottom:1px solid var(--ligne-fine);vertical-align:middle}
+tbody tr:hover{background:var(--surface)}
+tbody tr.refusee .nom{color:var(--creme-faint)}
+.nom{font-weight:500}
+.nom em{font-style:normal;color:var(--creme-mute);font-weight:400}
+.gen{font-family:var(--mono);font-size:11.5px;color:var(--creme-faint);display:block;margin-top:2px}
+.num{font-family:var(--mono);font-variant-numeric:tabular-nums;text-align:right;white-space:nowrap}
+.puce{display:inline-flex;align-items:center;gap:7px;font-family:var(--mono);font-size:10.5px;letter-spacing:.1em;
+      text-transform:uppercase;white-space:nowrap}
+.puce i{width:8px;height:8px;display:block;font-style:normal;flex:none}
+.bt{font-family:var(--mono);font-size:9.5px;letter-spacing:.12em;text-transform:uppercase;padding:6px 11px;
+    border:1px solid var(--ligne);background:transparent;color:var(--creme-faint);cursor:pointer;white-space:nowrap}
+.bt:hover{color:var(--creme);border-color:var(--creme-faint)}
+.bt:focus-visible{outline:2px solid var(--or);outline-offset:2px}
+.bt.forcee{color:var(--rouge);border-color:var(--rouge)}
+.bt.gardee{color:var(--or);border-color:var(--or)}
+.note{font-size:12.5px;color:var(--creme-faint);margin-top:14px;max-width:70ch}
+footer{margin-top:56px;padding-top:24px;border-top:1px solid var(--ligne);font-family:var(--mono);font-size:10.5px;
+  letter-spacing:.13em;text-transform:uppercase;color:var(--creme-faint);display:flex;justify-content:space-between;
+  gap:16px;flex-wrap:wrap}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+@media (max-width:640px){.axe{height:100px}.wrap{padding:28px 16px 72px}}
+</style>
+
+<div class="wrap">
+  <p class="eyebrow">Référentiel · révision 2026 · 410 véhicules</p>
+  <h1>Où passe la ligne&nbsp;?</h1>
+  <p class="lede">Le référentiel classe une voiture par son rapport <b>masse / puissance</b>. Trois classes, puis un plancher :
+  au-delà, le véhicule n'est pas admis. Ce plancher vaut aujourd'hui <b>6,00 kg/ch</b> et il écarte
+  <b id="ledeN">38</b> voitures — dont quatre à moins de 0,05 de la ligne. Déplacez-le, ou tranchez au cas par cas.</p>
+
+  <hr class="sep">
+
+  <div class="panneau">
+    <div class="axe-legende">
+      <span><i class="pastille" style="background:var(--c3)"></i>Classe III · Supersport</span>
+      <span><i class="pastille" style="background:var(--c2)"></i>Classe II · GT</span>
+      <span><i class="pastille" style="background:var(--c1)"></i>Classe I · Sport</span>
+      <span><i class="pastille" style="background:var(--cx)"></i>Refusée</span>
+    </div>
+
+    <div class="axe" id="axe"></div>
+
+    <div class="reglage">
+      <label for="seuil">Plancher d'accès</label>
+      <div class="valeur"><span id="seuilVal">6,00</span><small>kg/ch</small></div>
+      <input type="range" id="seuil" min="4.5" max="9.5" step="0.01" value="6"
+             aria-label="Plancher d'accès en kilogrammes par cheval">
+      <button class="btn" id="reset">Revenir à 6,00</button>
+    </div>
+  </div>
+
+  <div class="compteurs" id="compteurs"></div>
+
+  <div class="bascule">
+    <div class="bascule-head" id="basculeTitre">Ce que le déplacement fait basculer</div>
+    <div class="bascule-corps" id="basculeCorps"></div>
+  </div>
+
+  <hr class="sep">
+
+  <h2>Les 410 véhicules</h2>
+  <p class="lede" style="margin-bottom:20px">Triez par colonne. <b>Refuser</b> ou <b>Garder</b> force une décision sur une
+  voiture précise, quel que soit le plancher — c'est là que se règlent les cas que le calcul ne tranche pas.</p>
+
+  <div class="outils">
+    <input type="search" class="champ" id="recherche" placeholder="Marque, modèle, génération…" aria-label="Rechercher un véhicule">
+    <button class="btn actif" data-filtre="tous">Tous</button>
+    <button class="btn" data-filtre="III">Classe III</button>
+    <button class="btn" data-filtre="II">Classe II</button>
+    <button class="btn" data-filtre="I">Classe I</button>
+    <button class="btn" data-filtre="X">Refusées</button>
+    <button class="btn" data-filtre="F">Décidées à la main</button>
+    <button class="btn" id="copier" style="margin-left:auto">Copier la décision</button>
+  </div>
+
+  <div class="tableau">
+    <table>
+      <thead>
+        <tr>
+          <th data-tri="nom">Véhicule</th>
+          <th data-tri="annee" class="num">Années</th>
+          <th data-tri="ch" class="num">Puissance</th>
+          <th data-tri="kg" class="num">Masse</th>
+          <th data-tri="ratio" aria-sort="ascending" class="num">kg/ch</th>
+          <th data-tri="classe">Classe</th>
+          <th>Décision</th>
+        </tr>
+      </thead>
+      <tbody id="corps"></tbody>
+    </table>
+  </div>
+  <p class="note" id="compte"></p>
+
+  <footer>
+    <span>Base fouvuqkdxarjpjbqnsjq · table vehicules_eligibles</span>
+    <span id="etatSauve">Vos décisions restent sur cet appareil</span>
+  </footer>
+</div>
+
+<script>
+const BORNES = { III: 3.5, II: 5.0 };
+const PARC = [
+["Lotus","Evija","Evija",2023,null,2011,1680,0.84],["Koenigsegg","Agera","RS",2015,2018,1176,1395,1.19],
+["Bugatti","Chiron","Chiron",2016,2022,1500,1996,1.33],["Ferrari","SF90","Stradale",2019,null,1000,1570,1.57],
+["BAC","Mono","Mono R",2019,null,343,555,1.62],["McLaren","Senna","Senna",2018,2020,800,1309,1.64],
+["Ferrari","LaFerrari","LaFerrari",2013,2016,963,1585,1.65],["McLaren","P1","P1",2013,2015,916,1547,1.69],
+["Lamborghini","Revuelto","Revuelto",2023,null,1015,1772,1.75],["McLaren","765LT","765LT",2020,2022,765,1339,1.75],
+["Ferrari","296","GTB",2022,null,830,1470,1.77],["Praga","R1","R1",2012,null,390,690,1.77],
+["McLaren","F1","F1",1992,1998,627,1138,1.81],["Vuhl","05","RR",2017,null,385,695,1.81],
+["Donkervoort","D8","GTO-40",2018,null,380,695,1.83],["Pagani","Huayra","Huayra",2012,2018,730,1350,1.85],
+["McLaren","750S","750S",2023,null,750,1389,1.85],["Caterham","Seven","620R",2013,null,310,572,1.85],
+["Ariel","Atom","4",2018,null,320,595,1.86],["Ferrari","296","GTS",2022,null,830,1540,1.86],
+["Bugatti","Veyron","16.4",2005,2011,1001,1888,1.89],["Porsche","918","Spyder",2013,2015,887,1674,1.89],
+["Ferrari","488","Pista",2018,2019,720,1385,1.92],["Noble","M600","M600",2010,null,650,1250,1.92],
+["Ultima","GTR","GTR",1999,null,534,1030,1.93],["Norma","M20","FC",2016,null,300,585,1.95],
+["McLaren","720S","P14",2017,2023,720,1419,1.97],["Lamborghini","Aventador","SVJ",2018,2022,770,1525,1.98],
+["Ferrari","F8","Tributo",2019,2023,720,1435,1.99],["Ruf","CTR3","CTR3",2007,null,700,1400,2.00],
+["Ferrari","812","Superfast",2017,2022,800,1630,2.04],["Pagani","Zonda","F",2005,2009,602,1230,2.04],
+["Elemental","RP1","RP1",2017,null,320,660,2.06],["McLaren","620R","620R",2020,null,620,1282,2.07],
+["Ferrari","Enzo","Enzo",2002,2004,660,1365,2.07],["Zenos","E10","R",2015,2017,350,725,2.07],
+["Lamborghini","Huracan","STO",2020,null,640,1339,2.09],["Porsche","911","991 GT2 RS",2017,2019,700,1470,2.10],
+["Ford","GT","Mk II",2017,2022,656,1385,2.11],["Dallara","Stradale","Stradale",2018,null,400,855,2.14],
+["Tesla","Model S","Plaid",2021,null,1020,2190,2.15],["Lamborghini","Huracan","Performante",2017,2019,640,1382,2.16],
+["Porsche","Taycan","Turbo GT J1",2024,null,1034,2270,2.20],["Ferrari","488","GTB",2015,2019,670,1475,2.20],
+["McLaren","Artura","Artura",2022,null,680,1498,2.20],["Ferrari","F12","berlinetta",2012,2017,740,1630,2.20],
+["Porsche","911","997 GT2 RS",2010,2011,620,1370,2.21],["Mercedes-AMG","GT","Black Series",2020,2022,730,1615,2.21],
+["Lamborghini","Aventador","LP700-4",2011,2016,700,1575,2.25],["Porsche","Carrera GT","980",2004,2006,612,1380,2.25],
+["McLaren","600LT","600LT",2018,2020,600,1356,2.26],["Lotus","3-Eleven","3-Eleven",2016,2018,410,925,2.26],
+["Ferrari","F40","F40",1987,1992,478,1100,2.30],["Chevrolet","Corvette","C8 Z06",2023,null,679,1560,2.30],
+["Ferrari","458","Speciale",2013,2015,605,1395,2.31],["Dodge","Viper","ACR",2016,2017,654,1520,2.32],
+["Lamborghini","Huracan","LP610-4",2014,null,610,1422,2.33],["Aston Martin","DBS","Superleggera",2018,null,725,1693,2.34],
+["Ferrari","F50","F50",1995,1997,520,1230,2.37],["Maserati","MC20","MC20",2020,null,630,1500,2.38],
+["McLaren","MP4-12C","MP4-12C",2011,2014,600,1434,2.39],["Chevrolet","Corvette","C7 Z06",2015,2019,659,1598,2.42],
+["Ford","Mustang","Shelby GT500",2020,null,771,1900,2.46],["Westfield","Sport","250",2015,null,250,620,2.48],
+["Porsche","911","992 Turbo S",2020,null,650,1640,2.52],["Lamborghini","Gallardo","Superleggera",2007,2008,530,1340,2.53],
+["Ferrari","Roma","Coupe",2020,null,620,1570,2.53],["McLaren","570S","P13",2015,2021,570,1440,2.53],
+["Lamborghini","Gallardo","LP560-4",2008,2013,560,1430,2.55],["Aston Martin","Vantage","V12",2022,null,700,1795,2.56],
+["Lotus","Exige","430 Cup",2018,2021,430,1110,2.58],["Lamborghini","Murcielago","LP640",2006,2010,640,1665,2.60],
+["Ferrari","458","Italia",2009,2015,570,1485,2.61],["Wiesmann","GT","MF5",2009,2013,555,1450,2.61],
+["McLaren","570GT","570GT",2016,2020,570,1495,2.62],["Porsche","911","992 S/T",2023,null,525,1380,2.63],
+["Lexus","LFA","LFA",2010,2012,560,1480,2.64],["Ferrari","430","Scuderia",2007,2009,510,1350,2.65],
+["TVR","Sagaris","Sagaris",2005,2006,406,1078,2.66],["Caterham","Seven","420",2017,null,210,560,2.67],
+["Radical","SR3","RSX",2016,null,232,620,2.67],["Audi","R8","4S V10 Performance",2019,null,620,1660,2.68],
+["Chevrolet","Camaro","ZL1",2017,null,659,1780,2.70],["Ferrari","599","GTB Fiorano",2006,2012,620,1690,2.73],
+["Porsche","911","991 R",2016,2016,500,1370,2.74],["Porsche","911","992 GT3 RS",2022,null,525,1450,2.76],
+["Chevrolet","Corvette","C6 Z06",2006,2013,512,1420,2.77],["Porsche","911","992 GT3 Touring",2021,null,510,1418,2.78],
+["Porsche","911","992 GT3",2021,null,510,1418,2.78],["Mercedes-AMG","GT R","C190",2017,2021,585,1630,2.79],
+["Alfa Romeo","Giulia","GTAm",2021,2022,540,1520,2.81],["Ligier","JS2","R",2019,null,320,900,2.81],
+["KTM","X-Bow","R",2013,null,300,847,2.82],["Dodge","Challenger","SRT Hellcat",2015,null,717,2020,2.82],
+["Porsche","911","991 GT3 Touring",2017,2019,500,1413,2.83],["Porsche","Cayman","718 GT4 RS",2022,null,500,1415,2.83],
+["Porsche","911","992 Turbo",2020,null,580,1640,2.83],["Mercedes-AMG","SLS","C197",2010,2014,571,1620,2.84],
+["Porsche","911","991 GT3 RS",2015,2019,500,1420,2.84],["Porsche","911","991 GT3",2013,2019,500,1430,2.86],
+["Nissan","GT-R","R35 Nismo",2014,null,600,1720,2.87],["Porsche","911","991 Turbo S",2013,2019,560,1605,2.87],
+["Ford","GT","Mk I",2005,2006,550,1583,2.88],["Audi","R8","4S V10",2015,null,570,1660,2.91],
+["Jaguar","XE","SV Project 8",2018,2019,600,1745,2.91],["Aston Martin","Vantage","V12 S",2013,2018,573,1665,2.91],
+["Tesla","Model S","P100D",2016,2020,772,2250,2.91],["Audi","R8","4S V10 RWD",2019,null,540,1595,2.95],
+["BMW","M4","G82 CSL",2022,null,550,1625,2.95],["Ferrari","F430","Berlinetta",2004,2009,490,1450,2.96],
+["Jaguar","F-Type","SVR",2016,2020,575,1705,2.97],["Porsche","911","993 GT2",1995,1998,430,1295,3.01],
+["BMW","M4","F82 GTS",2016,2017,500,1510,3.02],["Porsche","911","997 GT3 RS",2007,2011,450,1370,3.04],
+["Chevrolet","Corvette","C8 Stingray",2020,null,502,1530,3.05],["Porsche","Taycan","Turbo S J1",2020,null,761,2320,3.05],
+["Dodge","Viper","SRT-10",2003,2010,510,1560,3.06],["Honda","NSX","NC1",2016,2022,581,1776,3.06],
+["TVR","Tuscan","Speed Six",1999,2006,360,1100,3.06],["Nissan","GT-R","R35",2008,null,570,1752,3.07],
+["Aston Martin","DB11","V12",2016,null,608,1875,3.08],["Ferrari","California","T",2014,2017,560,1730,3.09],
+["BMW","M8","F92 Competition",2019,null,625,1950,3.12],["Porsche","911","996 GT2",2001,2005,462,1440,3.12],
+["BMW","M5","F90 Competition",2018,null,625,1970,3.15],["Mercedes-AMG","SL63","R231",2012,2019,585,1845,3.15],
+["Jaguar","F-Type","R Coupe",2014,null,550,1730,3.15],["Morgan","Plus Six","Plus Six",2019,null,340,1075,3.16],
+["Alfa Romeo","Giulia","Quadrifoglio",2016,null,510,1620,3.18],["Mercedes-AMG","E63 S","W213",2017,null,612,1955,3.19],
+["Jaguar","XKR-S","X150",2011,2014,550,1753,3.19],["Aston Martin","Vantage","V8 2018",2018,null,510,1630,3.20],
+["Mercedes-AMG","GT 63 S","X290",2018,null,639,2045,3.20],["Ford","Mustang","Shelby GT350",2015,2020,533,1710,3.21],
+["BMW","M2","G87 CS",2025,null,530,1700,3.21],["Lotus","Exige","350 Sport",2016,2018,350,1125,3.21],
+["Maserati","GranTurismo","Trofeo",2023,null,550,1795,3.26],["Lamborghini","Countach","LP5000 QV",1985,1990,455,1490,3.27],
+["Alpina","B5","G30",2017,null,608,2000,3.29],["Mercedes-AMG","E63","W212",2009,2016,557,1840,3.30],
+["BMW","M6","F13",2012,2018,560,1850,3.30],["Lamborghini","Diablo","VT",1993,1999,492,1625,3.30],
+["Porsche","911","997 Turbo",2006,2012,480,1585,3.30],["Porsche","Panamera","971 Turbo S E-Hybrid",2020,null,700,2310,3.30],
+["BMW","M5","F10",2011,2016,560,1870,3.34],["Chevrolet","Corvette","C7 Stingray",2014,2019,466,1560,3.35],
+["Porsche","911","997 GT3",2006,2011,415,1395,3.36],["Lotus","Exige","S V6",2012,2021,350,1176,3.36],
+["BMW","M6","E63",2005,2010,507,1710,3.37],["Porsche","911","992 Carrera S",2019,null,450,1515,3.37],
+["Porsche","Boxster","718 Spyder",2019,null,420,1420,3.38],["Porsche","Cayman","718 GT4",2019,null,420,1420,3.38],
+["Lamborghini","Urus","Urus",2018,null,650,2200,3.38],["BMW","M4","G82 Competition",2021,null,510,1725,3.38],
+["Lotus","Evora","GT410",2018,2021,416,1405,3.38],["BMW","M4","F82 CS",2017,2018,460,1560,3.39],
+["Mercedes-AMG","GT","C190",2015,2021,476,1615,3.39],["BMW","M3","G80 Competition",2021,null,510,1730,3.39],
+["BMW","M3","G80",2021,null,510,1730,3.39],["Mercedes-AMG","C63 S","W205",2015,2021,510,1745,3.42],
+["Porsche","911","991 Carrera S",2011,2019,420,1440,3.43],["Hyundai","Ioniq 5 N","NE",2024,null,650,2230,3.43],
+["Ferrari","512","TR",1991,1994,428,1473,3.44],["Audi","RS7","C8",2019,null,600,2065,3.44],
+["Bentley","Continental GT","Speed",2021,null,659,2273,3.45],["Audi","RS6","C8 Avant",2019,null,600,2075,3.46],
+["Audi","RS6","C7 Avant",2013,2018,560,1935,3.46],["Mercedes-AMG","CLK63","Black Series",2007,2009,507,1760,3.47],
+["Porsche","Cayman","981 GT4",2015,2016,385,1340,3.48],["Ferrari","360","Modena",1999,2005,400,1390,3.48],
+["Porsche","911","997 Carrera GTS",2010,2012,408,1420,3.48],["Porsche","911","996 GT3 RS",2003,2005,381,1330,3.49],
+["BMW","M2","F87 CS",2020,2021,450,1575,3.50],["Porsche","Cayman","718 GTS 4.0",2020,null,400,1405,3.51],
+["Chevrolet","Corvette","C5 Z06",2001,2004,405,1420,3.51],["Ferrari","F355","Berlinetta",1994,1999,380,1350,3.55],
+["Porsche","Cayenne","9YA Turbo GT",2021,null,640,2270,3.55],["Caterham","Seven","310",2017,null,152,540,3.55],
+["Aston Martin","Vanquish","S",2004,2007,528,1875,3.55],["Spyker","C8","Aileron",2009,2014,400,1425,3.56],
+["Lexus","RC F","Track Edition",2019,null,481,1715,3.57],["Alfa Romeo","Stelvio","Quadrifoglio",2018,null,510,1830,3.59],
+["Lotus","Emira","V6",2022,null,405,1458,3.60],["Alpine","A110","R",2022,null,300,1082,3.61],
+["BMW","M5","E60",2005,2010,507,1830,3.61],["Alpine","A110","R Turini",2023,null,300,1082,3.61],
+["Audi","TT RS","8S",2016,2022,400,1450,3.62],["Tesla","Model 3","Performance",2019,null,510,1850,3.63],
+["Porsche","Panamera","971 Turbo",2016,null,550,1995,3.63],["BMW","M4","F82",2014,2020,431,1572,3.65],
+["Porsche","911","996 Turbo",2000,2005,420,1540,3.67],["Mercedes-AMG","A45 S","W177",2019,null,421,1550,3.68],
+["Porsche","911","993 Turbo",1995,1998,408,1500,3.68],["BMW","M3","F80",2014,2018,431,1595,3.70],
+["Alpine","A110","S",2019,null,300,1114,3.71],["Audi","R8","42 V8",2007,2015,420,1560,3.71],
+["Lotus","Elise","250 Cup",2017,2021,250,931,3.72],["Alpine","A110","GT",2022,null,300,1119,3.73],
+["Aston Martin","DB9","DB9",2004,2016,470,1760,3.74],["BMW","M2","G87",2023,null,460,1725,3.75],
+["Porsche","911","996 GT3",1999,2005,360,1350,3.75],["Kia","EV6","GT",2022,null,585,2200,3.76],
+["Lexus","RC F","XC10",2014,null,477,1795,3.76],["BMW","M2","F87 Competition",2018,2020,410,1550,3.78],
+["Mercedes-AMG","C63","W204",2008,2014,457,1730,3.79],["Mercedes-AMG","CLA45 S","C118",2019,null,421,1610,3.82],
+["Audi","RS5","B9",2017,null,450,1730,3.84],["BMW","M3","E46 CSL",2003,2004,360,1385,3.85],
+["Polestar","1","1",2019,2021,609,2350,3.86],["Audi","RS Q8","4M",2019,null,600,2315,3.86],
+["Ferrari","Testarossa","Testarossa",1984,1991,390,1506,3.86],["BMW","X3 M","F97 Competition",2019,null,510,1970,3.86],
+["Ford","Mustang","VI GT V8",2015,2023,450,1740,3.87],["Porsche","Boxster","718 S",2016,null,350,1355,3.87],
+["Mercedes-AMG","A45","W176",2015,2018,381,1480,3.88],["Alpina","B3","G20",2020,null,462,1800,3.90],
+["Maserati","GranTurismo","MC Stradale",2011,2019,460,1800,3.91],["Porsche","911","992 Carrera",2019,null,385,1505,3.91],
+["Porsche","Cayman","987 R",2011,2012,330,1295,3.92],["Audi","RS3","8Y",2021,null,400,1570,3.92],
+["Audi","RS e-tron GT","J1",2021,null,598,2347,3.92],["Morgan","Plus Four","Plus Four",2020,null,258,1013,3.93],
+["Audi","RS4","B7",2005,2008,420,1650,3.93],["BMW","M3","E90",2007,2011,420,1655,3.94],
+["BMW","M3","E92",2007,2013,420,1655,3.94],["Porsche","Cayman","718 S",2016,null,350,1385,3.96],
+["Porsche","Cayman","981 GTS",2014,2016,340,1345,3.96],["Lotus","Emira","i4 First Edition",2023,null,365,1446,3.96],
+["Audi","RS4","B9 Avant",2017,null,450,1790,3.98],["Caterham","Seven","270",2016,null,135,540,4.00],
+["Porsche","911","997 Carrera S",2004,2012,355,1425,4.01],["Tesla","Model 3","Performance Highland",2024,null,460,1844,4.01],
+["Porsche","911","991 Carrera",2011,2019,350,1415,4.04],["BMW","M2","F87",2016,2021,370,1495,4.04],
+["Lexus","IS F","XE20",2007,2014,423,1715,4.05],["Lexus","LC","500",2017,null,477,1935,4.06],
+["BMW","i4","M50 G26",2021,null,544,2215,4.07],["Porsche","911","964 Turbo 3.6",1993,1994,360,1470,4.08],
+["Porsche","Boxster","981 GTS",2014,2016,330,1345,4.08],["Mini","John Cooper Works","GP3 F56",2020,2021,306,1255,4.10],
+["Lotus","Evora","S",2010,2021,350,1437,4.11],["BMW","Z4","M Coupe E86",2006,2008,343,1420,4.14],
+["Audi","RS3","8V",2015,2020,367,1520,4.14],["Porsche","Cayman","981 S",2012,2016,325,1350,4.15],
+["Porsche","Boxster","981 S",2012,2016,315,1320,4.19],["Porsche","Taycan","4S J1",2020,null,530,2220,4.19],
+["Lotus","Elise","S3 S 220",2011,2021,220,924,4.20],["Cupra","Formentor","VZ5",2021,null,390,1645,4.22],
+["Aston Martin","Vantage","V8 4.3",2005,2008,385,1630,4.23],["Lotus","Exige","S2 S",2006,2011,220,930,4.23],
+["Mercedes-AMG","C43","W205",2016,2021,390,1660,4.26],["Audi","TT RS","8J",2009,2014,340,1450,4.26],
+["Porsche","911","993 Carrera RS",1995,1996,300,1279,4.26],["Alfa Romeo","4C","960",2013,2020,240,1025,4.27],
+["Mercedes-AMG","SLK55","R171",2004,2010,360,1540,4.28],["BMW","Z3","M Coupe E36/8",1998,2002,321,1375,4.28],
+["Audi","RS Q3","F3",2019,null,400,1715,4.29],["Porsche","911","997 Carrera",2004,2012,325,1395,4.29],
+["Honda","Civic Type R","FK8",2017,2021,320,1380,4.31],["Porsche","911","930 Turbo",1975,1989,300,1300,4.33],
+["Honda","Civic Type R","FL5",2022,null,329,1429,4.34],["Renault","Megane","IV RS Trophy-R",2019,2020,300,1306,4.35],
+["Tesla","Model Y","Performance",2020,null,460,2003,4.35],["Ford","Focus","RS Mk3",2016,2018,350,1524,4.35],
+["Volkswagen","Golf","VII GTI Clubsport S",2016,2016,310,1360,4.39],["Porsche","911","996 Carrera",1998,2004,300,1320,4.40],
+["Alpine","A110","Base",2017,null,252,1110,4.40],["BMW","1M","E82",2011,2012,340,1495,4.40],
+["Peugeot","308","GTi 270",2015,2021,272,1205,4.43],["Polestar","2","BST edition 270",2023,null,476,2113,4.44],
+["Honda","Civic Type R","FK2",2015,2017,310,1378,4.45],["Porsche","Macan","95B GTS",2020,null,440,1960,4.45],
+["Toyota","GR Supra","A90 3.0",2019,null,340,1520,4.47],["BMW","M340i","G20",2019,null,374,1670,4.47],
+["Lotus","Elise","S2 111S",2004,2011,192,860,4.48],["BMW","M5","E39",1998,2003,400,1795,4.49],
+["BMW","M240i","G42",2021,null,374,1690,4.52],["Ginetta","G40","Cup",2010,null,175,795,4.54],
+["Mazda","RX-7","FD3S",1992,2002,280,1270,4.54],["Subaru","Impreza","22B STI",1998,1998,280,1270,4.54],
+["BMW","M3","E36",1992,1999,321,1460,4.55],["Porsche","Cayman","718",2016,null,300,1365,4.55],
+["Porsche","Boxster","987 S",2004,2012,295,1345,4.56],["BMW","M3","E46",2000,2006,343,1570,4.58],
+["Porsche","Cayman","987 S",2005,2012,295,1350,4.58],["Porsche","Boxster","718",2016,null,300,1385,4.62],
+["Nissan","370Z","Z34",2009,2020,328,1520,4.63],["Audi","RS3","8P",2011,2012,340,1575,4.63],
+["Ferrari","348","tb",1989,1995,300,1393,4.64],["Audi","TTS","8S",2014,2023,310,1440,4.65],
+["Opel","Speedster","Turbo",2003,2005,200,930,4.65],["Seat","Leon","Cupra 300",2017,2020,300,1395,4.65],
+["Volkswagen","Golf","VIII R 20 Years",2022,null,333,1551,4.66],["Audi","S3","8V",2013,2020,310,1450,4.68],
+["Renault","Megane","III RS Trophy-R",2014,2015,275,1297,4.72],["Porsche","911","964 Carrera RS",1992,1993,260,1230,4.73],
+["BMW","Z4","M40i G29",2018,null,340,1610,4.74],["Seat","Leon","Cupra R 290",2017,2018,290,1375,4.74],
+["Peugeot","RCZ","R",2013,2015,270,1280,4.74],["Volkswagen","Golf","VII R",2013,2020,310,1476,4.76],
+["Toyota","Supra","A80",1993,2002,330,1570,4.76],["Renault","Megane","IV RS Trophy",2019,2023,300,1430,4.77],
+["Audi","e-tron GT","J1",2020,null,476,2280,4.79],["Genesis","G70","3.3T",2018,null,370,1780,4.81],
+["Ford","Focus","RS Mk2",2009,2011,305,1467,4.81],["Cupra","Leon","VZ 300",2020,null,300,1450,4.83],
+["Mercedes-AMG","A35","W177",2018,null,306,1480,4.84],["Volkswagen","Golf","VIII R",2020,null,320,1551,4.85],
+["Volkswagen","Golf","VIII GTI Clubsport",2020,null,300,1462,4.87],["Cupra","Leon","VZ Cup",2024,null,300,1465,4.88],
+["Mitsubishi","Lancer","Evo VI Tommi Makinen",1999,2001,280,1365,4.88],["Honda","NSX","NA1",1990,2005,280,1370,4.89],
+["Audi","S3","8Y",2020,null,310,1520,4.90],["Toyota","GR Corolla","E210",2022,null,300,1470,4.90],
+["Toyota","GR Yaris","XP210",2020,null,261,1280,4.90],["Audi","S4","B8",2008,2016,333,1650,4.95],
+["Nissan","Silvia","S15 Spec-R",1999,2002,250,1240,4.96],["Subaru","Impreza","GR WRX STI",2008,2014,300,1505,5.02],
+["Mitsubishi","Lancer","Evo VIII",2003,2005,280,1410,5.04],["Porsche","911","993 Carrera",1994,1998,272,1370,5.04],
+["BMW","M135i","F40",2019,null,306,1550,5.07],["Mitsubishi","Lancer","Evo IX",2005,2007,280,1420,5.07],
+["BMW","335i","E92",2006,2013,306,1560,5.10],["Subaru","WRX STI","VA",2014,2021,300,1534,5.11],
+["Nissan","Skyline","R32 GT-R",1989,1994,280,1430,5.11],["Renault","Megane","IV RS 280",2018,2023,280,1430,5.11],
+["Hyundai","i30 N","PD Performance",2017,null,275,1429,5.20],["Hyundai","Veloster N","JS",2019,2022,275,1429,5.20],
+["Peugeot","508","PSE",2021,null,360,1875,5.21],["Mini","John Cooper Works","Challenge F56",2018,2019,231,1205,5.22],
+["Mitsubishi","Lancer","Evo X",2007,2016,295,1540,5.22],["Renault","Megane","III RS 265",2012,2015,265,1387,5.23],
+["Porsche","Boxster","986 S",1999,2004,252,1320,5.24],["Honda","S2000","AP1 AP2",1999,2009,240,1260,5.25],
+["Subaru","Impreza","GD WRX STI",2001,2007,280,1470,5.25],["Abarth","695","Biposto",2014,2016,190,997,5.25],
+["Volkswagen","Scirocco","R",2009,2017,265,1390,5.25],["Opel","Astra","OPC J",2012,2018,280,1475,5.27],
+["Porsche","Cayman","987",2005,2012,245,1300,5.31],["Nissan","Pulsar","GTI-R",1990,1994,230,1230,5.35],
+["Toyota","Yaris","GRMN",2018,2018,212,1135,5.35],["Volkswagen","Golf","VI R",2009,2013,270,1450,5.37],
+["Porsche","911","964 Carrera",1989,1994,250,1350,5.40],["Toyota","GR Supra","A90 2.0",2020,null,258,1395,5.41],
+["Alfa Romeo","147","GTA",2002,2005,250,1360,5.44],["Ford","Fiesta","ST200 Mk7",2016,2017,200,1090,5.45],
+["Nissan","350Z","Z33",2003,2009,280,1530,5.46],["Toyota","GR86","ZN8",2021,null,234,1280,5.47],
+["Subaru","BRZ","ZD8",2021,null,234,1280,5.47],["Renault","Clio","IV RS Trophy",2015,2019,220,1204,5.47],
+["BMW","130i","E87",2005,2011,265,1450,5.47],["Renault","Clio","V6 Phase 2",2003,2005,255,1400,5.49],
+["Nissan","Skyline","R33 GT-R",1995,1998,280,1540,5.50],["Nissan","300ZX","Z32",1989,2000,283,1560,5.51],
+["Volkswagen","Golf","VII GTI Performance",2013,2020,245,1350,5.51],["Mini","John Cooper Works","F56",2015,null,231,1275,5.52],
+["Nissan","Skyline","R34 GT-R",1999,2002,280,1560,5.57],["BMW","M3","E30",1986,1991,215,1200,5.58],
+["Honda","Integra","Type R DC2",1995,2001,190,1060,5.58],["Peugeot","208","GTi by Peugeot Sport",2013,2015,208,1160,5.58],
+["Peugeot","208","GTi 30th",2015,2019,208,1160,5.58],["Ford","Escort","RS Cosworth",1992,1996,227,1275,5.62],
+["Skoda","Octavia","RS 245",2017,2020,245,1395,5.69],["Mazda","MX-5","ND2",2018,null,184,1050,5.71],
+["Abarth","595","Competizione",2012,2023,180,1035,5.75],["Toyota","Celica","GT-Four ST205",1994,1999,242,1400,5.79],
+["Alfa Romeo","Giulietta","QV 240",2014,2020,240,1395,5.81],["Hyundai","i20 N","BC3",2021,null,204,1190,5.83],
+["Mazda","RX-8","SE3P",2003,2012,231,1360,5.89],["Ford","Fiesta","ST Mk8",2018,2022,200,1187,5.94],
+["Citroen","DS3","Racing",2011,2013,207,1240,5.99],["Renault","Clio","II RS 182",2004,2005,182,1090,5.99],
+["Renault","Megane","II RS 225",2004,2009,225,1355,6.02],["Renault","Clio","IV RS 200",2013,2016,200,1204,6.02],
+["Honda","Civic Type R","EP3",2001,2005,200,1204,6.02],["Lotus","Elise","S1",1996,2001,120,725,6.04],
+["Mitsubishi","3000GT","Z16A",1990,1999,286,1730,6.05],["Abarth","595","esseesse",2019,null,180,1090,6.06],
+["Renault","R5","Turbo 2",1983,1986,160,970,6.06],["Ford","Sierra","RS Cosworth",1986,1992,204,1240,6.08],
+["Renault","Clio","III RS 200",2009,2012,203,1240,6.11],["Porsche","Boxster","986 2.5",1996,1999,204,1250,6.13],
+["Volkswagen","Golf","IV R32",2002,2004,241,1477,6.13],["Subaru","BRZ","ZC6",2012,2020,200,1230,6.15],
+["Lancia","Delta","HF Integrale Evo",1991,1994,210,1300,6.19],["Toyota","GT86","ZN6",2012,2020,200,1240,6.20],
+["Abarth","124","Spider",2016,2019,170,1060,6.24],["Opel","Corsa","OPC Nurburgring",2011,2014,210,1315,6.26],
+["Mazda","RX-7","FC3S",1985,1991,200,1260,6.30],["Honda","Civic Type R","FN2",2007,2011,201,1267,6.30],
+["Alpine","A310","V6",1976,1984,150,980,6.53],["Volkswagen","Polo","GTI AW",2017,null,207,1355,6.55],
+["Volkswagen","Corrado","VR6",1991,1995,190,1250,6.58],["Volkswagen","Golf","V GTI",2004,2008,200,1336,6.68],
+["Mini","Cooper S","R53",2002,2006,170,1140,6.71],["Seat","Ibiza","Cupra 6J",2009,2015,180,1240,6.89],
+["Peugeot","306","GTi-6",1996,2001,167,1150,6.89],["Peugeot","205","GTI 1.9",1986,1994,130,910,7.00],
+["Mazda","MX-5","NC",2005,2015,160,1140,7.13],["Toyota","MR2","SW20",1989,1999,175,1250,7.14],
+["Mazda","MX-5","NB",1998,2005,146,1065,7.29],["Mazda","MX-5","NA",1989,1997,131,955,7.29],
+["Skoda","Fabia","RS 1.4 TSI",2010,2014,180,1315,7.31],["Suzuki","Swift","Sport ZC33S",2018,null,129,970,7.52],
+["Alfa Romeo","GTV6","116",1981,1986,160,1210,7.56],["Citroen","Saxo","VTS",1996,2003,120,935,7.79],
+["Renault","Twingo","II RS 133",2008,2013,133,1049,7.89],["Peugeot","106","S16",1996,2003,120,950,7.92],
+["Citroen","C2","VTS",2003,2009,125,1030,8.24],["Volkswagen","Up","GTI",2018,2023,116,1070,9.22]
+];
+
+const CLE = "oxv-seuil-2026";
+let seuil = 6.0;
+let forcees = {};            // index -> "refus" | "garde"
+let filtre = "tous", recherche = "", triCle = "ratio", triSens = 1;
+
+try {
+  const brut = localStorage.getItem(CLE);
+  if (brut) { const o = JSON.parse(brut); seuil = o.seuil ?? 6; forcees = o.forcees || {}; }
+} catch (e) { /* stockage indisponible : on part du réglage d'usine */ }
+
+const sauver = () => {
+  try { localStorage.setItem(CLE, JSON.stringify({ seuil, forcees })); } catch (e) {}
+};
+
+const fr2 = n => n.toFixed(2).replace(".", ",");
+const espace = n => String(n).replace(/\B(?=(\d{3})+(?!\d))/g, " ");
+const nom = v => `${v[0]} ${v[1]}`;
+const annees = v => v[4] ? `${v[3]}–${v[4]}` : `depuis ${v[3]}`;
+
+// La classe se calcule ici comme en base : rapport, puis plancher.
+function classe(v, s) {
+  if (v[6] > 2400 || v[7] > s) return "X";
+  if (v[7] < BORNES.III) return "III";
+  if (v[7] < BORNES.II) return "II";
+  return "I";
+}
+function verdict(i, s) {
+  const f = forcees[i];
+  if (f === "refus") return "X";
+  const c = classe(PARC[i], s);
+  if (f === "garde" && c === "X") return classe(PARC[i], 99);
+  return c;
+}
+const COULEUR = { III: "var(--c3)", II: "var(--c2)", I: "var(--c1)", X: "var(--cx)" };
+const NOMCL = { III: "III · Supersport", II: "II · GT", I: "I · Sport", X: "Refusée" };
+
+/* ---------- l'axe ---------- */
+const RMIN = 0.5, RMAX = 9.6;
+const pos = r => ((r - RMIN) / (RMAX - RMIN)) * 100;
+
+function dessinerAxe() {
+  const axe = document.getElementById("axe");
+  const bandes = [
+    { de: RMIN, a: BORNES.III, c: "var(--c3)" },
+    { de: BORNES.III, a: BORNES.II, c: "var(--c2)" },
+    { de: BORNES.II, a: seuil, c: "var(--c1)" },
+    { de: seuil, a: RMAX, c: "var(--cx)" }
+  ];
+  let h = bandes.filter(b => b.a > b.de).map(b =>
+    `<div class="bande" style="left:${pos(b.de)}%;width:${pos(b.a) - pos(b.de)}%;background:${b.c}"></div>`).join("");
+
+  h += PARC.map((v, i) => {
+    const c = verdict(i, seuil);
+    return `<div class="tick" style="left:${pos(v[7])}%;background:${COULEUR[c]}" title="${nom(v)} · ${v[2]} — ${fr2(v[7])} kg/ch"></div>`;
+  }).join("");
+
+  h += `<div class="borne" style="left:${pos(BORNES.III)}%" data-l="3,50 · III|II"></div>`;
+  h += `<div class="borne" style="left:${pos(BORNES.II)}%" data-l="5,00 · II|I"></div>`;
+  h += `<div class="seuil-ligne" style="left:${pos(seuil)}%" data-l="${fr2(seuil)} plancher"></div>`;
+
+  let g = '<div class="graduations">';
+  for (let r = 1; r <= 9; r++) g += `<div class="grad" style="left:${pos(r)}%">${r},0</div>`;
+  axe.innerHTML = h + g + "</div>";
+}
+
+/* ---------- compteurs ---------- */
+function compter(s) {
+  const c = { III: 0, II: 0, I: 0, X: 0 };
+  PARC.forEach((v, i) => c[verdict(i, s)]++);
+  return c;
+}
+function dessinerCompteurs() {
+  const c = compter(seuil), ref = compter(6.0);
+  const carte = (cle, titre, desc) => {
+    const d = c[cle] - ref[cle];
+    const signe = d > 0 ? "+" : "";
+    const dh = d === 0 ? "" :
+      `<span class="delta" style="color:${d > 0 ? "var(--c1)" : "var(--cx)"}">${signe}${d}</span>`;
+    return `<div class="compteur"><div class="n" style="color:${COULEUR[cle]}">${c[cle]}${dh}</div>
+      <div class="t">${titre}</div><div class="d">${desc}</div></div>`;
+  };
+  document.getElementById("compteurs").innerHTML =
+    carte("III", "Classe III", "Moins de 3,50 kg/ch") +
+    carte("II", "Classe II", "3,50 à 5,00 kg/ch") +
+    carte("I", "Classe I", `5,00 à ${fr2(seuil)} kg/ch`) +
+    carte("X", "Refusées", `Au-delà de ${fr2(seuil)} kg/ch`);
+}
+
+/* ---------- ce qui bascule ---------- */
+function dessinerBascule() {
+  const bas = Math.min(seuil, 6.0), haut = Math.max(seuil, 6.0);
+  const entre = PARC.map((v, i) => [v, i]).filter(([v]) => v[7] > bas && v[7] <= haut);
+  const titre = document.getElementById("basculeTitre");
+  const corps = document.getElementById("basculeCorps");
+
+  if (Math.abs(seuil - 6.0) < 0.005) {
+    titre.textContent = "Le plancher est à sa valeur actuelle";
+    corps.innerHTML = `<p class="vide">Déplacez le curseur pour voir quelles voitures changent de sort.</p>`;
+    return;
+  }
+  const admises = seuil > 6.0;
+  titre.textContent = admises
+    ? `${entre.length} voiture${entre.length > 1 ? "s" : ""} entrerai${entre.length > 1 ? "ent" : "t"} au référentiel`
+    : `${entre.length} voiture${entre.length > 1 ? "s" : ""} en sortirai${entre.length > 1 ? "ent" : "t"}`;
+  corps.innerHTML = entre.length
+    ? entre.sort((a, b) => a[0][7] - b[0][7]).map(([v]) =>
+        `<div class="bascule-l"><div>${nom(v)} <em style="color:var(--creme-faint)">${v[2]}</em></div>
+         <span>${fr2(v[7])} kg/ch</span></div>`).join("")
+    : `<p class="vide">Aucune voiture dans cet intervalle.</p>`;
+}
+
+/* ---------- table ---------- */
+function dessinerTable() {
+  const q = recherche.trim().toLowerCase();
+  let lignes = PARC.map((v, i) => ({ v, i, c: verdict(i, seuil) }));
+
+  if (q) lignes = lignes.filter(({ v }) => (v[0] + " " + v[1] + " " + v[2]).toLowerCase().includes(q));
+  if (filtre === "F") lignes = lignes.filter(({ i }) => forcees[i]);
+  else if (filtre !== "tous") lignes = lignes.filter(({ c }) => c === filtre);
+
+  const cles = {
+    nom: x => nom(x.v).toLowerCase(), annee: x => x.v[3], ch: x => x.v[5],
+    kg: x => x.v[6], ratio: x => x.v[7], classe: x => ["III", "II", "I", "X"].indexOf(x.c)
+  };
+  const f = cles[triCle];
+  lignes.sort((a, b) => { const A = f(a), B = f(b); return (A < B ? -1 : A > B ? 1 : 0) * triSens; });
+
+  document.getElementById("corps").innerHTML = lignes.map(({ v, i, c }) => {
+    const fo = forcees[i];
+    const etat = fo === "refus" ? "forcee" : fo === "garde" ? "gardee" : "";
+    const libelle = fo === "refus" ? "Refusée à la main" : fo === "garde" ? "Gardée à la main" : (c === "X" ? "Garder" : "Refuser");
+    return `<tr class="${c === "X" ? "refusee" : ""}">
+      <td><div class="nom">${v[0]} <em>${v[1]}</em></div><span class="gen">${v[2]}</span></td>
+      <td class="num">${annees(v)}</td>
+      <td class="num">${v[5]} ch</td>
+      <td class="num">${espace(v[6])} kg</td>
+      <td class="num" style="color:${COULEUR[c]}">${fr2(v[7])}</td>
+      <td><span class="puce" style="color:${COULEUR[c]}"><i style="background:${COULEUR[c]}"></i>${NOMCL[c]}</span></td>
+      <td><button class="bt ${etat}" data-i="${i}">${libelle}</button></td>
+    </tr>`;
+  }).join("");
+
+  const nf = Object.keys(forcees).length;
+  document.getElementById("compte").textContent =
+    `${lignes.length} véhicule${lignes.length > 1 ? "s" : ""} affiché${lignes.length > 1 ? "s" : ""} sur 410.` +
+    (nf ? ` ${nf} décision${nf > 1 ? "s" : ""} prise${nf > 1 ? "s" : ""} à la main.` : "");
+}
+
+function tout() { dessinerAxe(); dessinerCompteurs(); dessinerBascule(); dessinerTable(); }
+
+/* ---------- événements ---------- */
+const curseur = document.getElementById("seuil");
+curseur.value = seuil;
+document.getElementById("seuilVal").textContent = fr2(seuil);
+curseur.addEventListener("input", e => {
+  seuil = parseFloat(e.target.value);
+  document.getElementById("seuilVal").textContent = fr2(seuil);
+  sauver(); tout();
+});
+document.getElementById("reset").addEventListener("click", () => {
+  seuil = 6.0; curseur.value = 6;
+  document.getElementById("seuilVal").textContent = "6,00";
+  sauver(); tout();
+});
+document.getElementById("recherche").addEventListener("input", e => { recherche = e.target.value; dessinerTable(); });
+
+document.querySelectorAll("[data-filtre]").forEach(b => b.addEventListener("click", () => {
+  document.querySelectorAll("[data-filtre]").forEach(x => x.classList.remove("actif"));
+  b.classList.add("actif"); filtre = b.dataset.filtre; dessinerTable();
+}));
+
+document.querySelectorAll("[data-tri]").forEach(th => th.addEventListener("click", () => {
+  const c = th.dataset.tri;
+  triSens = (c === triCle) ? -triSens : 1; triCle = c;
+  document.querySelectorAll("[data-tri]").forEach(x => x.removeAttribute("aria-sort"));
+  th.setAttribute("aria-sort", triSens === 1 ? "ascending" : "descending");
+  dessinerTable();
+}));
+
+document.getElementById("corps").addEventListener("click", e => {
+  const b = e.target.closest("button[data-i]");
+  if (!b) return;
+  const i = b.dataset.i, c = classe(PARC[i], seuil);
+  if (forcees[i]) delete forcees[i];
+  else forcees[i] = (c === "X") ? "garde" : "refus";
+  sauver(); tout();
+});
+
+document.getElementById("copier").addEventListener("click", async () => {
+  const c = compter(seuil);
+  const l = [`Seuil d'accès retenu : ${fr2(seuil)} kg/ch`,
+    `Classe III ${c.III} · Classe II ${c.II} · Classe I ${c.I} · Refusées ${c.X}`, ""];
+  const man = Object.keys(forcees);
+  if (man.length) {
+    l.push("Décisions prises à la main :");
+    man.forEach(i => l.push(`  ${forcees[i] === "refus" ? "REFUSER" : "GARDER "} — ${nom(PARC[i])} ${PARC[i][2]} (${fr2(PARC[i][7])} kg/ch)`));
+  } else l.push("Aucune décision individuelle.");
+  const t = l.join("\n");
+  const btn = document.getElementById("copier");
+  try { await navigator.clipboard.writeText(t); btn.textContent = "Copié"; }
+  catch (e) { btn.textContent = "Copie impossible"; }
+  setTimeout(() => { btn.textContent = "Copier la décision"; }, 1800);
+});
+
+document.getElementById("ledeN").textContent = compter(6.0).X;
+tout();
+</script>

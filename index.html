@@ -18413,6 +18413,23 @@ body.pav-tv .nav, body.pav-tv footer, body.pav-tv .cookie, body.pav-tv .founding
         </div>
       </div>
 
+      <!-- Inscriptions mises en examen.
+           La base ouvre l'examen toute seule — modifications déclarées après
+           coup, immatriculation qui tombe, révision du référentiel. Elle ne le
+           referme jamais : « la cause a disparu » est un jugement. -->
+      <div class="admin-section">
+        <div class="admin-section-head">
+          <div class="admin-section-title">Inscriptions à examiner</div>
+          <button class="admin-section-action" onclick="loadAdminExamenInscriptions()">Rafraîchir</button>
+        </div>
+        <div id="adminExamenInscRows" class="admin-todo-list">
+          <div class="admin-empty">
+            <div class="admin-empty-icon">○</div>
+            <div class="admin-empty-text">Chargement…</div>
+          </div>
+        </div>
+      </div>
+
     </main>
 
   </div>
@@ -33239,6 +33256,83 @@ window.loadAdminIntentions = async function() {
 };
 
 /* ============================================================
+   INSCRIPTIONS MISES EN EXAMEN — la base ouvre, un humain ferme
+   ============================================================
+   Trois causes ouvrent un examen sans que personne n'ait à y penser : des
+   modifications déclarées après la réservation, une immatriculation qui
+   cesse d'être conforme, et la révision annuelle du référentiel — celle-ci
+   changeait jusqu'ici la classe d'une voiture déjà engagée sans que rien ne
+   le dise.
+
+   Une inscription non payée passe en examen ; une inscription CONFIRMÉE
+   garde son statut et porte seulement son motif. Défaire un engagement payé
+   est une décision commerciale, pas une conséquence automatique — elle se
+   prend ici, à la main. */
+window.loadAdminExamenInscriptions = async function() {
+  const box = document.getElementById('adminExamenInscRows');
+  if (!box) return;
+  const vide = (t) => `<div class="admin-empty"><div class="admin-empty-icon">○</div><div class="admin-empty-text">${t}</div></div>`;
+  try {
+    const { data, error } = await supabase
+      .from('registrations')
+      .select('id, user_id, vehicle_id, session_id, status, motif_examen, examen_ouvert_le, offer_type')
+      .not('motif_examen', 'is', null)
+      .order('examen_ouvert_le', { ascending: true });
+    if (error) { console.warn('[Examens]', error); box.innerHTML = vide('Instruction indisponible.'); return; }
+    if (!data || !data.length) { box.innerHTML = vide('Aucune inscription en examen.'); return; }
+
+    const vIds = [...new Set(data.map(r => r.vehicle_id).filter(Boolean))];
+    const sIds = [...new Set(data.map(r => r.session_id).filter(Boolean))];
+    const [{ data: vehs }, { data: sess }] = await Promise.all([
+      vIds.length ? supabase.from('vehicles').select('id, brand, model, license_plate').in('id', vIds) : { data: [] },
+      sIds.length ? supabase.from('sessions').select('id, date, format').in('id', sIds) : { data: [] }
+    ]);
+    const veh = {}; (vehs || []).forEach(v => { veh[v.id] = v; });
+    const jour = {}; (sess || []).forEach(x => { jour[x.id] = x; });
+
+    box.innerHTML = data.map(r => {
+      const v = veh[r.vehicle_id] || {};
+      const j = jour[r.session_id];
+      const d = j ? (x => x.charAt(0).toUpperCase() + x.slice(1))(
+        new Date(j.date).toLocaleDateString('fr-FR', { weekday: 'long', day: 'numeric', month: 'long' }))
+        : 'Journée inconnue';
+      const paye = r.status === 'confirmed';
+      return `<div style="display:flex;align-items:flex-start;justify-content:space-between;gap:12px;padding:13px 14px;border-top:1px solid var(--bento-border);flex-wrap:wrap;">
+        <div style="min-width:280px;flex:1;">
+          <div style="font-family:var(--sans);font-size:14px;color:var(--cream);">${escapeHtml([v.brand, v.model].filter(Boolean).join(' ') || 'Véhicule')} <span style="font-family:var(--mono);font-size:11px;color:var(--cream-faint);">${escapeHtml(v.license_plate || '')}</span></div>
+          <div style="font-family:var(--mono);font-size:11px;color:var(--cream-mute);">${escapeHtml(d)} · ${escapeHtml(BK_OFFRE_LABELS[r.offer_type] || r.offer_type || '')} · ${escapeHtml(ecurieAge(r.examen_ouvert_le))}</div>
+          <div style="font-family:var(--sans);font-size:12.5px;line-height:1.45;color:var(--cream-faint);margin-top:5px;">${escapeHtml(r.motif_examen || '')}</div>
+        </div>
+        <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;">
+          <span class="tag-inline${paye ? '' : ' green'}" style="font-size:10px;">${paye ? 'Engagement payé' : 'Non payée'}</span>
+          <button class="admin-action-btn" onclick="adminExamenClore('${r.id}', true)">Admettre</button>
+          <button class="admin-action-btn" onclick="adminExamenClore('${r.id}', false)">Refuser</button>
+        </div>
+      </div>`;
+    }).join('');
+  } catch (e) { console.warn('[Examens]', e); box.innerHTML = vide('Instruction indisponible.'); }
+};
+
+window.adminExamenClore = async function(id, admis) {
+  const note = prompt(admis
+    ? "Sur quoi repose l’admission ? (versée au dossier)"
+    : "Motif du refus — l’inscription sera annulée :", '');
+  if (note === null) return;
+  if (!admis && !note.trim()) { toast('Un refus se motive.', 'warn'); return; }
+  if (!admis && !confirm("Refuser annule l’inscription. Confirmer ?")) return;
+  try {
+    /* La garde d'administration vit dans la base, pas ici : son message
+       d'exception est rédigé pour être lu, on le remonte tel quel. */
+    const { error } = await supabase.rpc('oxv_clore_examen', {
+      p_registration_id: id, p_admis: admis, p_note: note.trim() || null
+    });
+    if (error) { toast(error.message || 'Écriture refusée', 'warn'); return; }
+    toast(admis ? 'Véhicule admis' : 'Inscription annulée', 'ok');
+    loadAdminExamenInscriptions();
+  } catch (e) { console.warn('[Examen]', e); toast(e.message || 'Écriture refusée', 'warn'); }
+};
+
+/* ============================================================
    IMMATRICULATIONS — ce que la machine n'a pas pu trancher
    ============================================================
    Le contrôle de plaque est automatique et posé par la base : forme,
@@ -35173,6 +35267,7 @@ window.loadAdminDashboard = async function() {
   if (typeof loadAdminIntentions === 'function') loadAdminIntentions();
   if (typeof loadAdminEngagements === 'function') loadAdminEngagements();
   if (typeof loadAdminPlaques === 'function') loadAdminPlaques();
+  if (typeof loadAdminExamenInscriptions === 'function') loadAdminExamenInscriptions();
   if (typeof loadAdminValidations === 'function') loadAdminValidations();
 
   // Greeting
