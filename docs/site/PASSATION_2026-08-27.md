@@ -148,3 +148,56 @@ Sept commits, dans l'ordre.
 > `index.html` fait 38 000 lignes. Une conversation qui ne travaille que sur le
 > tunnel de réservation gagne à recevoir d'abord ce document, puis le fichier —
 > plutôt que l'inverse.
+
+---
+
+## 5. Arbitrage du 28/08/2026 — l'app fait le paddock, le site fait le bureau
+
+Les deux postes ont bâti l'instruction des sorties d'écurie le même jour : le
+site (commit `f5efff3`, à partir de ce document) et l'application. Le fondateur
+a tranché la duplication.
+
+**Le site garde l'instruction des écuries.** L'écran équivalent a été retiré de
+l'application (`app/(admin)/ecuries.tsx` et son service), et la file de l'app
+n'affiche plus le domaine `ecurie`.
+
+### Ce que le site peut reprendre tel quel
+
+`public.oxv_file_administration()` rend, en un appel, tout ce qui attend une
+main côté administration. Elle est **complète** — le domaine `ecurie` y figure
+toujours — et n'est filtrée que côté application. Le site ne l'utilise pas
+encore ; elle couvrirait quatre postes qu'il n'a aujourd'hui aucune surface
+pour montrer :
+
+| Domaine | Ce qu'il signale |
+|---|---|
+| `intentions` | Les pilotes écartés qui ont demandé à être prévenus, groupés par journée. Le site écrit dans `intentions_journee` ; personne ne les lit. |
+| `journee_a_valider` | Les journées `proposee` créées par un dépôt d'écurie, à valider sous sept jours. `echeance` porte la date. |
+| `calendrier` | Aucune journée publique au calendrier — le tunnel n'a rien à proposer. |
+| `tarif` | Une combinaison offre × format sans ligne tarifaire active. |
+
+Elle rend deux notions de délai qu'il ne faut pas confondre :
+
+- `sous_engagement` = le poste court sous les **72 h ouvrées** des CGV. Le délai
+  se CALCULE, et l'unique implémentation vit dans l'application
+  (`examenSuiviLogic.etatDelai`). Un portage sur le site doit la réécrire —
+  ou mieux, ne pas la réécrire et se contenter d'un âge.
+- `echeance` = une date **déjà arrêtée en base** (sept jours de validation).
+  Elle se LIT, elle ne se calcule pas.
+
+### Colonnes nées après le commit du site
+
+L'écran d'écurie du site ne les affiche pas encore :
+
+- `reservations_ecurie.echeance_inscriptions` — au-delà, les places non prises
+  retournent au calendrier. **La réservation est évaluée à la lecture** : pas
+  de tâche planifiée, donc pas d'état qui dérive.
+- `sessions.validation_due_le` — les sept jours d'une journée `proposee`.
+- `public.oxv_avancement_ecurie(crew_id)` — combien annoncés, combien inscrits,
+  combien restent. Un COMPTE, jamais des noms.
+
+### Ce que l'application garde
+
+Les examens de véhicule (`app/(admin)/examens-vehicule.tsx`) : le site **écrit**
+dans `demandes_examen_vehicule` mais n'a aucun écran pour les instruire. Pas de
+duplication — et regarder un véhicule est un geste de paddock.
