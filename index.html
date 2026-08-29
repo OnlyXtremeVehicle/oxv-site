@@ -18346,6 +18346,55 @@ body.pav-tv .nav, body.pav-tv footer, body.pav-tv .cookie, body.pav-tv .founding
         </div>
       </div>
 
+      <!-- Examens de véhicule — le tunnel dépose une demande quand un véhicule
+           est absent du référentiel. La table portait ses droits ; rien ne la
+           lisait. Diligence d'OXV, jamais une retenue du membre : un âge, pas
+           une échéance. -->
+      <div class="admin-section">
+        <div class="admin-section-head">
+          <div class="admin-section-title">Examens de véhicule — à instruire</div>
+          <button class="admin-section-action" onclick="loadAdminExamens()">Rafraîchir</button>
+        </div>
+        <div id="adminExamenRows" class="admin-todo-list">
+          <div class="admin-empty">
+            <div class="admin-empty-icon">○</div>
+            <div class="admin-empty-text">Chargement…</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Intentions écartées — « Prévenez-moi ». Ce n'est pas une tâche, c'est
+           un SIGNAL : il dit quelle journée ouvrir. Groupé par journée, parce
+           qu'un pilote isolé ne décide rien et que cinq, si. -->
+      <div class="admin-section">
+        <div class="admin-section-head">
+          <div class="admin-section-title">Demandes écartées — quelles journées ouvrir</div>
+          <button class="admin-section-action" onclick="loadAdminIntentions()">Rafraîchir</button>
+        </div>
+        <div id="adminIntentionRows" class="admin-todo-list">
+          <div class="admin-empty">
+            <div class="admin-empty-icon">○</div>
+            <div class="admin-empty-text">Chargement…</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Engagements partenaires — le chaînon manquant de la boucle de preuve :
+           sans engagement enregistré, aucun compte-rendu n'est dû, donc aucun
+           n'est produit. Ni le site ni l'application ne savaient en créer. -->
+      <div class="admin-section">
+        <div class="admin-section-head">
+          <div class="admin-section-title">Engagements partenaires</div>
+          <button class="admin-section-action" onclick="loadAdminEngagements()">Rafraîchir</button>
+        </div>
+        <div id="adminEngagementRows" class="admin-todo-list">
+          <div class="admin-empty">
+            <div class="admin-empty-icon">○</div>
+            <div class="admin-empty-text">Chargement…</div>
+          </div>
+        </div>
+      </div>
+
     </main>
 
   </div>
@@ -20321,21 +20370,57 @@ body.pav-tv .nav, body.pav-tv footer, body.pav-tv .cookie, body.pav-tv .founding
     <h2 class="vmodal-title" id="vmTitle">Ajouter une <em>voiture</em>.</h2>
 
     <div class="account-form">
-      <div class="form-row">
-        <label for="vh-brand">Marque</label>
-        <input type="text" id="vh-brand" placeholder="Ex. Porsche, BMW, Alpine..." />
-      </div>
-      <div class="form-row">
-        <label for="vh-model">Modèle</label>
-        <input type="text" id="vh-model" placeholder="Ex. 911 GT3, M3 Competition..." />
-      </div>
+      <!-- Désignation au référentiel.
+           L'année vient EN PREMIER : c'est elle qui dit quelle génération est
+           la vôtre. Une 911 GT3 de 2022 est une 992, pas une 991 — le tunnel
+           laissait choisir la mauvaise sans rien dire. -->
       <div class="form-row">
         <label for="vh-year">Année</label>
-        <input type="number" id="vh-year" placeholder="2022" min="1950" max="2030" />
+        <input type="number" id="vh-year" placeholder="2022" min="1950" max="2030" onchange="vhRefOnAnnee()" oninput="vhRefOnAnnee()" />
       </div>
       <div class="form-row">
+        <label for="vh-marque">Marque</label>
+        <select id="vh-marque" onchange="vhRefOnMarque()">
+          <option value="">— Chargement…</option>
+        </select>
+      </div>
+      <div class="form-row">
+        <label for="vh-modele">Modèle</label>
+        <select id="vh-modele" onchange="vhRefOnModele()" disabled>
+          <option value="">— Choisissez d'abord une marque</option>
+        </select>
+      </div>
+      <div class="form-row">
+        <label for="vh-generation">Génération</label>
+        <select id="vh-generation" onchange="vhRefOnGeneration()" disabled>
+          <option value="">— Choisissez d'abord un modèle</option>
+        </select>
+      </div>
+      <div class="form-row full">
+        <a id="vhRefAbsentLink" href="#" onclick="vhRefOuvrirDemande(event)"
+           style="font-family:var(--mono);font-size:10px;letter-spacing:0.14em;text-transform:uppercase;color:var(--cream-mute);text-decoration:underline;text-underline-offset:4px;">Mon véhicule ne figure pas dans cette liste.</a>
+      </div>
+      <div class="form-row full" id="vhRefFiche" style="display:none;"></div>
+      <div class="form-row full" id="vhRefDemande" style="display:none;"></div>
+
+      <div class="form-row">
         <label for="vh-plate">Immatriculation</label>
-        <input type="text" id="vh-plate" placeholder="AB-123-CD" maxlength="10" style="text-transform: uppercase;" />
+        <input type="text" id="vh-plate" placeholder="AB-123-CD" maxlength="14" style="text-transform: uppercase;" oninput="vhFormatPlate(this)" />
+      </div>
+
+      <!-- La modification est une propriété de la VOITURE, pas d'une journée.
+           Déclarée ici, elle vaut pour toutes les réservations à venir — plus
+           de risque de deux déclarations contradictoires pour la même auto. -->
+      <div class="form-row full">
+        <label style="display:flex;gap:10px;align-items:flex-start;cursor:pointer;text-transform:none;letter-spacing:0;">
+          <input type="checkbox" id="vh-mods" onchange="vhRefOnMods()" style="margin-top:3px;flex-shrink:0;" />
+          <span style="font-family:var(--sans);font-size:13px;line-height:1.5;color:var(--cream-mute);">Ce véhicule a fait l'objet de modifications du moteur, de l'échappement, de la suspension ou du freinage.</span>
+        </label>
+      </div>
+      <div class="form-row full" id="vhModsWrap" style="display:none;">
+        <label for="vh-mods-detail">Détail des modifications</label>
+        <textarea id="vh-mods-detail" rows="3" placeholder="Nature et portée des modifications apportées."></textarea>
+        <span style="font-family:var(--mono);font-size:9px;letter-spacing:0.18em;text-transform:uppercase;color:var(--cream-faint);margin-top:6px;">Une réservation portant ce véhicule passera en examen. Elle reste visible et annulable.</span>
       </div>
       <div class="form-row">
         <label for="vh-value">Valeur déclarée (€)</label>
@@ -20487,7 +20572,7 @@ body.pav-tv .nav, body.pav-tv footer, body.pav-tv .cookie, body.pav-tv .founding
         <div class="bk-step-eyebrow">N° ⊳ · Étape 2 / 4</div>
         <h2 class="bk-step-title">Votre <em>véhicule</em>.</h2>
         <p class="bk-step-sub">
-          Sélectionnez le véhicule que vous amenez en piste, puis désignez-le dans le référentiel. Le référentiel est l'application des conditions d'accès publiées ; il est révisé chaque année.
+          Sélectionnez le véhicule que vous amenez en piste. Sa désignation au référentiel, son immatriculation et ses éventuelles modifications sont reprises de votre garage — elles décrivent la voiture, pas la journée. Le référentiel est l'application des conditions d'accès publiées ; il est révisé chaque année.
         </p>
 
         <div id="bkVehicles" class="bk-vehicles">
@@ -20496,9 +20581,9 @@ body.pav-tv .nav, body.pav-tv footer, body.pav-tv .cookie, body.pav-tv .founding
 
         <!-- Désignation dans le référentiel : cascade marque → modèle → génération -->
         <div id="bkRefWrap" style="display:none; margin-top: 28px;">
-          <div class="bk-step-eyebrow" style="margin-bottom: 18px;">— Désignation au référentiel</div>
+          <div class="bk-step-eyebrow" style="margin-bottom: 18px;">— Fiche du véhicule</div>
 
-          <div class="account-form">
+          <div class="account-form" id="bkRefCascade">
             <div class="form-row">
               <label for="bkRefMarque">Marque</label>
               <select id="bkRefMarque" onchange="bkRefOnMarque()">
@@ -25800,7 +25885,9 @@ async function bkLoadVehicles() {
     if (v.year) meta.push(v.year);
     if (v.license_plate) meta.push(escapeHtml(v.license_plate));
     const ref = v.referentiel_id ? bkState.refParId[v.referentiel_id] : null;
+    // Ce qui manque se dit sur la carte, la ou le pilote clique — pas apres.
     if (ref) meta.push(bkClasseLibelle(ref.classe));
+    else meta.push('Désignation à compléter');
 
     return `
       <button class="bk-vehicle${ref ? '' : ' hors-referentiel'}" data-vehicle-id="${v.id}" onclick="bkSelectVehicle('${v.id}', this)">
@@ -25844,60 +25931,106 @@ function bkRefMasquerBloc() {
   if (d) { d.style.display = 'none'; d.innerHTML = ''; }
 }
 
-window.bkSelectVehicle = async function(vehicleId, btn) {
-  document.querySelectorAll('.bk-vehicle').forEach(el => el.classList.remove('selected'));
-  btn.classList.add('selected');
-  bkState.selectedVehicle = bkState.vehicles.find(v => v.id === vehicleId);
+window.bkSelectVehicle = async function(vehicleId, el) {
+  document.querySelectorAll('.bk-vehicle').forEach(e => e.classList.remove('selected'));
+  if (el) el.classList.add('selected');
 
-  // Changement de véhicule : la désignation précédente ne suit pas.
-  bkState.referentiel = null;
-  bkState.classeRetenue = null;
-  bkState.mods = false;
-  bkState.modsDetail = '';
-  const chk = document.getElementById('bkRefMods');
-  if (chk) chk.checked = false;
-  const modsWrap = document.getElementById('bkRefModsWrap');
-  if (modsWrap) modsWrap.style.display = 'none';
-  const modsDetail = document.getElementById('bkRefModsDetail');
-  if (modsDetail) modsDetail.value = '';
+  const v = (bkState.vehicles || []).find(x => x.id === vehicleId);
+  bkState.selectedVehicle = v || null;
 
-  const wrap = document.getElementById('bkRefWrap');
-  if (wrap) wrap.style.display = 'block';
-  const demande = document.getElementById('bkRefDemande');
-  if (demande) { demande.style.display = 'none'; demande.innerHTML = ''; }
+  /* La désignation appartient au véhicule, plus au tunnel (décision fondateur
+     du 2026-08-29). On la LIT sur la fiche du garage : marque, modèle,
+     génération, immatriculation, modifications. La réservation ne redemande
+     rien — elle ne fait que choisir. */
+  const ref = v && v.referentiel_id ? bkState.refParId[v.referentiel_id] : null;
+  bkState.referentiel = ref || null;
+  bkState.classeRetenue = ref ? ref.classe : null;
+  bkState.plate = bkNormalisePlaque(v ? (v.license_plate || '') : '');
+  bkState.mods = !!(v && v.modifie);
+  bkState.modsDetail = (v && v.modifications_detail) ? String(v.modifications_detail).trim() : '';
 
-  // Immatriculation : reprise de la fiche véhicule, reformatée.
-  const plateEl = document.getElementById('bkRefPlate');
-  if (plateEl) {
-    plateEl.value = bkNormalisePlaque(bkState.selectedVehicle?.license_plate || '');
-    bkState.plate = plateEl.value;
-  }
-
-  await bkRefChargerMarques();
-
-  // Véhicule déjà désigné : la cascade se replace sur sa ligne de référentiel.
-  const ref = bkState.selectedVehicle?.referentiel_id
-    ? bkState.refParId[bkState.selectedVehicle.referentiel_id]
-    : null;
-  if (ref) {
-    const selMarque = document.getElementById('bkRefMarque');
-    if (selMarque) selMarque.value = ref.marque;
-    await bkRefOnMarque();
-    const selModele = document.getElementById('bkRefModele');
-    if (selModele) selModele.value = ref.modele;
-    await bkRefOnModele();
-    const selGen = document.getElementById('bkRefGeneration');
-    if (selGen) selGen.value = ref.id;
-    bkRefOnGeneration();
-  } else {
-    const selMarque = document.getElementById('bkRefMarque');
-    if (selMarque) selMarque.value = '';
-    bkRefReinitialiserCascade('modele');
-    bkRefAppliquer(null);
-  }
-
+  bkRefRendreReprise();
   bkRefMajValidite();
 };
+
+/* Reprise en lecture seule de la fiche du garage.
+   Un véhicule incomplet n'est pas un refus : c'est un renvoi vers l'endroit
+   où la donnée se corrige — le garage — et la réservation reprend ensuite. */
+function bkRefRendreReprise() {
+  const wrap = document.getElementById('bkRefWrap');
+  const fiche = document.getElementById('bkRefFiche');
+  const decl = document.getElementById('bkRefDeclaration');
+  const cascade = document.getElementById('bkRefCascade');
+  const lien = document.getElementById('bkRefAbsentLink');
+  const demande = document.getElementById('bkRefDemande');
+
+  // Le tunnel ne désigne plus : la cascade et le formulaire sont retirés.
+  if (cascade) cascade.style.display = 'none';
+  if (decl) decl.style.display = 'none';
+  if (lien) lien.style.display = 'none';
+  if (demande) { demande.style.display = 'none'; demande.innerHTML = ''; }
+
+  const v = bkState.selectedVehicle;
+  if (!v) {
+    if (wrap) wrap.style.display = 'none';
+    if (fiche) { fiche.style.display = 'none'; fiche.innerHTML = ''; }
+    bkRefRendrePerimetre();
+    return;
+  }
+  if (wrap) wrap.style.display = 'block';
+
+  const ligne = bkState.referentiel;
+  const manques = [];
+  if (!ligne) manques.push('la désignation au référentiel');
+  if (!bkPlaqueValide(bkState.plate)) manques.push('l’immatriculation');
+  if (bkState.mods && !bkState.modsDetail) manques.push('le détail des modifications');
+
+  if (manques.length) {
+    if (fiche) {
+      const liste = manques.length > 1
+        ? manques.slice(0, -1).join(', ') + ' et ' + manques[manques.length - 1]
+        : manques[0];
+      fiche.innerHTML = `
+        <div class="bk-perimetre-panel">
+          <div class="titre">Fiche du véhicule à compléter</div>
+          <div class="corps">
+            Il manque ${escapeHtml(liste)} sur ${escapeHtml([v.brand, v.model].filter(Boolean).join(' ') || 'ce véhicule')}.
+            Ces informations décrivent la voiture, pas la journée : elles se renseignent une fois, au garage.
+            <div style="margin-top:14px;">
+              <button class="btn btn-sm" type="button" onclick="goToAccount('compte-vehicules')"><span>Compléter au garage →</span></button>
+            </div>
+          </div>
+        </div>`;
+      fiche.style.display = 'block';
+    }
+    bkRefRendrePerimetre();
+    return;
+  }
+
+  const rapport = Number(ligne.ratio_kg_ch).toFixed(2).replace('.', ',');
+  if (fiche) {
+    fiche.innerHTML = `
+      <div class="bk-ref-fiche">
+        <div class="bk-ref-fiche-nom">${escapeHtml(ligne.marque)} <em>${escapeHtml(ligne.modele)}</em> &middot; ${escapeHtml(bkRefLibelleGeneration(ligne))}</div>
+        <div class="bk-ref-grid">
+          <div><div class="bk-ref-cell-label">Puissance</div><div class="bk-ref-cell-value">${bkNombreFr(ligne.puissance_ch)} ch</div></div>
+          <div><div class="bk-ref-cell-label">Masse</div><div class="bk-ref-cell-value">${bkNombreFr(ligne.masse_kg)} kg</div></div>
+          <div><div class="bk-ref-cell-label">Rapport</div><div class="bk-ref-cell-value">${rapport} kg/ch</div></div>
+          <div><div class="bk-ref-cell-label">Classe</div><div class="bk-ref-cell-value">${escapeHtml(bkClasseLibelle(ligne.classe))}</div></div>
+        </div>
+        <div class="bk-ref-grid" style="margin-top:2px;">
+          <div><div class="bk-ref-cell-label">Immatriculation</div><div class="bk-ref-cell-value">${escapeHtml(bkState.plate)}</div></div>
+          <div><div class="bk-ref-cell-label">Modifications</div><div class="bk-ref-cell-value">${bkState.mods ? 'Déclarées' : 'Aucune'}</div></div>
+        </div>
+        ${bkState.mods ? `<div style="font-family:var(--mono);font-size:10px;letter-spacing:0.14em;text-transform:uppercase;color:var(--gold-data);margin-top:10px;">Votre réservation passera en examen. Elle reste visible et annulable.</div>` : ''}
+        <div style="margin-top:12px;">
+          <a href="#" onclick="event.preventDefault(); goToAccount('compte-vehicules');" style="font-family:var(--mono);font-size:10px;letter-spacing:0.14em;text-transform:uppercase;color:var(--cream-mute);text-decoration:underline;text-underline-offset:4px;">Corriger cette fiche au garage</a>
+        </div>
+      </div>`;
+    fiche.style.display = 'block';
+  }
+  bkRefRendrePerimetre();
+}
 
 function bkRefReinitialiserCascade(depuis) {
   const selModele = document.getElementById('bkRefModele');
@@ -26004,7 +26137,7 @@ window.bkRefOnModele = async function() {
 /* Libellé « {generation} · {annee_debut}–{annee_fin} ».
    Année de fin absente : tiret cadratin. */
 function bkRefLibelleGeneration(r) {
-  const annees = `${r.annee_debut}–${r.annee_fin ? r.annee_fin : '—'}`;
+  const annees = r.annee_fin ? `${r.annee_debut}–${r.annee_fin}` : `depuis ${r.annee_debut}`;
   return r.generation ? `${r.generation} · ${annees}` : annees;
 }
 
@@ -26213,11 +26346,8 @@ window.bkRefOnMods = function() {
 /* Condition de passage à l'étape 3. Un véhicule hors périmètre de l'offre
    retenue n'atteint jamais le calendrier, donc jamais le paiement. */
 window.bkRefMajValidite = function() {
-  const detailEl = document.getElementById('bkRefModsDetail');
-  bkState.modsDetail = detailEl ? detailEl.value.trim() : '';
-  const plateEl = document.getElementById('bkRefPlate');
-  if (plateEl) bkState.plate = plateEl.value;
-
+  /* Plus rien n'est saisi ici : l'etat vient de la fiche du garage, posee par
+     bkSelectVehicle. Cette fonction ne fait plus que juger. */
   bkRefRendrePerimetre();
 
   const ok = !!bkState.selectedVehicle
@@ -29412,19 +29542,255 @@ let currentVehicle = null;       // null = création, sinon objet véhicule en c
 let pendingPhotos = {};          // Fichiers sélectionnés en attente d'upload : {front: File, side: File...}
 let existingPhotoUrls = {};      // URLs déjà en Supabase pour véhicule en édition
 
+/* ============================================================
+   DÉSIGNATION AU RÉFÉRENTIEL — au garage, plus au tunnel
+   ============================================================
+   Décision fondateur du 2026-08-29. Marque, modèle, génération et
+   modifications décrivent une VOITURE : ils se déclarent une fois, à
+   l'ajout au garage ou à sa modification. La réservation ne fait plus que
+   choisir un véhicule déjà connu.
+
+   Ce que cela répare, concrètement : le tunnel proposait toutes les
+   générations d'un modèle sans jamais regarder l'année saisie. Une 911 GT3
+   de 2022 pouvait être désignée « 991 GT3 · 2013–2019 » — 500 ch et 1 430 kg
+   au lieu de 510 ch et 1 418 kg. La classe s'en trouvait fondée sur la
+   mauvaise ligne. */
+const vhRef = { cache: {}, ligne: null };
+
+/* Une génération couvre-t-elle le millésime saisi ?
+   Année absente : on ne prétend rien — tout est recevable. */
+function vhRefCouvre(r, annee) {
+  if (!annee) return true;
+  if (annee < r.annee_debut) return false;
+  if (r.annee_fin && annee > r.annee_fin) return false;
+  return true;
+}
+
+function vhAnneeSaisie() {
+  const v = parseInt(document.getElementById('vh-year')?.value || '', 10);
+  return (v >= 1950 && v <= 2030) ? v : null;
+}
+
+function vhRefLibelle(r) {
+  const annees = r.annee_fin ? `${r.annee_debut}–${r.annee_fin}` : `depuis ${r.annee_debut}`;
+  return r.generation ? `${r.generation} · ${annees}` : annees;
+}
+
+async function vhRefChargerMarques() {
+  const sel = document.getElementById('vh-marque');
+  if (!sel) return;
+  let marques = vhRef.cache['marques'];
+  if (!marques) {
+    const { data, error } = await supabase
+      .from('vehicules_eligibles').select('marque').eq('statut', 'actif')
+      .order('marque', { ascending: true });
+    if (error) { sel.innerHTML = '<option value="">— Référentiel indisponible</option>'; return; }
+    marques = [...new Set((data || []).map(r => r.marque))];
+    vhRef.cache['marques'] = marques;
+  }
+  sel.innerHTML = '<option value="">— Sélectionnez</option>'
+    + marques.map(m => `<option value="${escapeHtml(m)}">${escapeHtml(m)}</option>`).join('');
+}
+
+window.vhRefOnMarque = async function() {
+  const selMarque = document.getElementById('vh-marque');
+  const selModele = document.getElementById('vh-modele');
+  const selGen = document.getElementById('vh-generation');
+  if (!selMarque || !selModele || !selGen) return;
+
+  selGen.innerHTML = '<option value="">— Choisissez d’abord un modèle</option>';
+  selGen.disabled = true;
+  vhRefAppliquer(null);
+
+  const marque = selMarque.value;
+  if (!marque) {
+    selModele.innerHTML = '<option value="">— Choisissez d’abord une marque</option>';
+    selModele.disabled = true;
+    return;
+  }
+
+  const cle = 'mod:' + marque;
+  let modeles = vhRef.cache[cle];
+  if (!modeles) {
+    const { data, error } = await supabase
+      .from('vehicules_eligibles').select('modele').eq('statut', 'actif').eq('marque', marque)
+      .order('modele', { ascending: true });
+    if (error) { selModele.innerHTML = '<option value="">— Référentiel indisponible</option>'; return; }
+    modeles = [...new Set((data || []).map(r => r.modele))];
+    vhRef.cache[cle] = modeles;
+  }
+  selModele.innerHTML = '<option value="">— Sélectionnez</option>'
+    + modeles.map(m => `<option value="${escapeHtml(m)}">${escapeHtml(m)}</option>`).join('');
+  selModele.disabled = false;
+};
+
+window.vhRefOnModele = async function() {
+  const selMarque = document.getElementById('vh-marque');
+  const selModele = document.getElementById('vh-modele');
+  const selGen = document.getElementById('vh-generation');
+  if (!selMarque || !selModele || !selGen) return;
+  vhRefAppliquer(null);
+
+  const marque = selMarque.value, modele = selModele.value;
+  if (!marque || !modele) {
+    selGen.innerHTML = '<option value="">— Choisissez d’abord un modèle</option>';
+    selGen.disabled = true;
+    return;
+  }
+
+  const cle = `gen:${marque}|${modele}`;
+  if (!vhRef.cache[cle]) {
+    const { data, error } = await supabase
+      .from('vehicules_eligibles').select('*').eq('statut', 'actif')
+      .eq('marque', marque).eq('modele', modele)
+      .order('annee_debut', { ascending: true });
+    if (error) { selGen.innerHTML = '<option value="">— Référentiel indisponible</option>'; return; }
+    vhRef.cache[cle] = data || [];
+  }
+  vhRefPeuplerGenerations();
+};
+
+/* Peuple la liste des générations en tenant compte du millésime.
+   Une génération qui ne couvre pas l'année reste OFFERTE — un véhicule peut
+   être immatriculé l'année suivant sa production — mais elle est dite « hors
+   millésime ». La génération qui couvre l'année est présélectionnée. */
+function vhRefPeuplerGenerations() {
+  const selMarque = document.getElementById('vh-marque');
+  const selModele = document.getElementById('vh-modele');
+  const selGen = document.getElementById('vh-generation');
+  if (!selMarque || !selModele || !selGen) return;
+
+  const lignes = vhRef.cache[`gen:${selMarque.value}|${selModele.value}`] || [];
+  if (!lignes.length) return;
+
+  const annee = vhAnneeSaisie();
+  const choix = selGen.value;
+  const couvrantes = lignes.filter(r => vhRefCouvre(r, annee));
+
+  selGen.innerHTML = '<option value="">— Sélectionnez</option>'
+    + lignes.map(r => {
+        const hors = annee && !vhRefCouvre(r, annee) ? ` · hors millésime ${annee}` : '';
+        return `<option value="${r.id}">${escapeHtml(vhRefLibelle(r))}${escapeHtml(hors)}</option>`;
+      }).join('');
+  selGen.disabled = false;
+
+  // On ne défait jamais un choix déjà fait ; on n'en propose un que s'il est
+  // sans ambiguïté — une seule génération couvre l'année.
+  if (choix && lignes.some(r => r.id === choix)) selGen.value = choix;
+  else if (couvrantes.length === 1) selGen.value = couvrantes[0].id;
+
+  vhRefOnGeneration();
+}
+
+window.vhRefOnAnnee = function() {
+  const selGen = document.getElementById('vh-generation');
+  if (!selGen || selGen.disabled) return;
+  vhRefPeuplerGenerations();
+};
+
+window.vhRefOnGeneration = function() {
+  const selMarque = document.getElementById('vh-marque');
+  const selModele = document.getElementById('vh-modele');
+  const selGen = document.getElementById('vh-generation');
+  if (!selGen) return;
+  const lignes = vhRef.cache[`gen:${selMarque.value}|${selModele.value}`] || [];
+  vhRefAppliquer(lignes.find(r => r.id === selGen.value) || null);
+};
+
+/* La classe est LUE sur la ligne du référentiel, jamais déduite. */
+function vhRefAppliquer(ligne) {
+  vhRef.ligne = ligne;
+  const fiche = document.getElementById('vhRefFiche');
+  if (!fiche) return;
+  if (!ligne) { fiche.style.display = 'none'; fiche.innerHTML = ''; return; }
+
+  const annee = vhAnneeSaisie();
+  const rapport = Number(ligne.ratio_kg_ch).toFixed(2).replace('.', ',');
+  const alerte = annee && !vhRefCouvre(ligne, annee)
+    ? `<div style="font-family:var(--mono);font-size:10px;letter-spacing:0.14em;text-transform:uppercase;color:var(--gold-data);margin-top:10px;">Génération produite ${ligne.annee_fin ? `de ${ligne.annee_debut} à ${ligne.annee_fin}` : `depuis ${ligne.annee_debut}`} · millésime déclaré ${annee}</div>`
+    : '';
+
+  fiche.innerHTML = `
+    <div class="bk-ref-fiche">
+      <div class="bk-ref-fiche-nom">${escapeHtml(ligne.marque)} <em>${escapeHtml(ligne.modele)}</em> · ${escapeHtml(vhRefLibelle(ligne))}</div>
+      <div class="bk-ref-grid">
+        <div><div class="bk-ref-cell-label">Puissance</div><div class="bk-ref-cell-value">${bkNombreFr(ligne.puissance_ch)} ch</div></div>
+        <div><div class="bk-ref-cell-label">Masse</div><div class="bk-ref-cell-value">${bkNombreFr(ligne.masse_kg)} kg</div></div>
+        <div><div class="bk-ref-cell-label">Rapport</div><div class="bk-ref-cell-value">${rapport} kg/ch</div></div>
+        <div><div class="bk-ref-cell-label">Classe</div><div class="bk-ref-cell-value">${escapeHtml(bkClasseLibelle(ligne.classe))}</div></div>
+      </div>
+      ${alerte}
+    </div>`;
+  fiche.style.display = 'block';
+}
+
+window.vhRefOnMods = function() {
+  const chk = document.getElementById('vh-mods');
+  const wrap = document.getElementById('vhModsWrap');
+  if (wrap) wrap.style.display = (chk && chk.checked) ? 'block' : 'none';
+};
+
+window.vhFormatPlate = function(input) {
+  const apres = bkNormalisePlaque(input.value);
+  if (apres !== input.value) input.value = apres;
+};
+
+/* Véhicule absent du référentiel : on ouvre une demande d'examen. Elle est
+   instruite au tableau de bord — elle ne disparaît plus dans le vide. */
+window.vhRefOuvrirDemande = async function(e) {
+  if (e) e.preventDefault();
+  const zone = document.getElementById('vhRefDemande');
+  if (!zone) return;
+
+  const marque = (document.getElementById('vh-marque')?.selectedOptions?.[0]?.text || '').replace(/^—.*/, '').trim();
+  const modele = (document.getElementById('vh-modele')?.selectedOptions?.[0]?.text || '').replace(/^—.*/, '').trim();
+  const annee = vhAnneeSaisie();
+  const plaque = document.getElementById('vh-plate')?.value || '';
+
+  const saisie = prompt(
+    "Décrivez votre véhicule (marque, modèle, année, puissance, masse). Nous l’examinons et vous répondons.",
+    [marque, modele, annee].filter(Boolean).join(' ')
+  );
+  if (saisie === null || !saisie.trim()) return;
+
+  try {
+    const { data, error } = await supabase.from('demandes_examen_vehicule').insert({
+      user_id: window.OXVApi.user.profile?.id || null,
+      email: window.OXVApi.user.profile?.email || null,
+      marque: marque || null, modele: saisie.trim(), annee: annee,
+      immatriculation: plaque || null, statut: 'en_attente'
+    }).select('id');
+    if (error) { toast(error.message || 'Demande refusée', 'warn'); return; }
+    if (!data || !data.length) { toast('Demande refusée — rien n’a été enregistré', 'warn'); return; }
+    zone.innerHTML = `<div style="padding:12px 14px;border:1px solid var(--cream-line);font-family:var(--mono);font-size:11px;color:var(--cream-mute);">Demande enregistrée. Nous examinons ce véhicule et vous répondons par courriel.</div>`;
+    zone.style.display = 'block';
+    toast('Demande d’examen enregistrée', 'ok');
+  } catch (err) { console.warn('[Examen]', err); toast('Demande refusée', 'warn'); }
+};
+
 /**
  * Ouvre le modal d'ajout / édition de véhicule
  * @param {Object} vehicle - véhicule à éditer, ou null pour création
  */
-window.openVehicleModal = function(vehicle) {
+window.openVehicleModal = async function(vehicle) {
   currentVehicle = vehicle || null;
   pendingPhotos = {};
   existingPhotoUrls = {};
 
   // Reset visuel des inputs
-  ['vh-brand','vh-model','vh-year','vh-plate','vh-value','vh-notes'].forEach(id => {
+  ['vh-year','vh-plate','vh-value','vh-notes','vh-mods-detail'].forEach(id => {
     const el = document.getElementById(id);
     if (el) el.value = '';
+  });
+  const chkMods = document.getElementById('vh-mods');
+  if (chkMods) chkMods.checked = false;
+  vhRefOnMods();
+  vhRefAppliquer(null);
+  const zoneDem = document.getElementById('vhRefDemande');
+  if (zoneDem) { zoneDem.style.display = 'none'; zoneDem.innerHTML = ''; }
+  ['vh-modele','vh-generation'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) { el.innerHTML = '<option value="">— Choisissez d’abord ' + (id === 'vh-modele' ? 'une marque' : 'un modèle') + '</option>'; el.disabled = true; }
   });
 
   // Reset des 4 zones photos
@@ -29451,13 +29817,15 @@ window.openVehicleModal = function(vehicle) {
     document.getElementById('vmEyebrow').textContent = '— Modifier le véhicule';
     document.getElementById('vmTitle').innerHTML = 'Modifier la <em>voiture</em>.';
 
-    document.getElementById('vh-brand').value = vehicle.brand || '';
-    document.getElementById('vh-model').value = vehicle.model || '';
     document.getElementById('vh-year').value = vehicle.year || '';
-    document.getElementById('vh-plate').value = vehicle.license_plate || '';
+    document.getElementById('vh-plate').value = bkNormalisePlaque(vehicle.license_plate || '');
     // Convertit centimes -> euros pour l'affichage
     document.getElementById('vh-value').value = vehicle.declared_value ? Math.round(vehicle.declared_value / 100) : '';
     document.getElementById('vh-notes').value = vehicle.notes || '';
+    if (chkMods) chkMods.checked = !!vehicle.modifie;
+    const det = document.getElementById('vh-mods-detail');
+    if (det) det.value = vehicle.modifications_detail || '';
+    vhRefOnMods();
 
     // Photos existantes
     const slotMap = {
@@ -29478,6 +29846,33 @@ window.openVehicleModal = function(vehicle) {
   }
 
   document.getElementById('vehicleModal').classList.add('open');
+
+  // Le référentiel se charge une fois le modal ouvert : la saisie ne dépend
+  // pas du réseau pour commencer.
+  await vhRefChargerMarques();
+  if (vehicle) {
+    let ref = null;
+    if (vehicle.referentiel_id) {
+      const { data } = await supabase.from('vehicules_eligibles')
+        .select('*').eq('id', vehicle.referentiel_id).maybeSingle();
+      ref = data || null;
+    }
+    const selMarque = document.getElementById('vh-marque');
+    if (ref && selMarque) {
+      selMarque.value = ref.marque;
+      await vhRefOnMarque();
+      const selModele = document.getElementById('vh-modele');
+      if (selModele) selModele.value = ref.modele;
+      await vhRefOnModele();
+      const selGen = document.getElementById('vh-generation');
+      if (selGen) { selGen.value = ref.id; vhRefOnGeneration(); }
+    } else if (selMarque && vehicle.brand) {
+      // Véhicule antérieur au référentiel : la marque se replace si elle y
+      // figure, la désignation reste à terminer. On ne devine pas le modèle.
+      const opt = [...selMarque.options].find(o => o.value.toLowerCase() === String(vehicle.brand).toLowerCase());
+      if (opt) { selMarque.value = opt.value; await vhRefOnMarque(); }
+    }
+  }
 };
 
 window.closeVehicleModal = function() {
@@ -29740,17 +30135,29 @@ window.saveVehicle = async function() {
 
   const get = (id) => { const el = document.getElementById(id); return el ? el.value.trim() : ''; };
 
-  const brand = get('vh-brand');
-  const model = get('vh-model');
   const year = get('vh-year');
   const plate = get('vh-plate').toUpperCase();
   const value = get('vh-value');
   const notes = get('vh-notes');
 
-  if (!brand || !model) {
-    toast('Marque et modèle obligatoires', 'warn');
+  // La désignation est la ligne de référentiel retenue : marque et modèle en
+  // découlent, ils ne sont plus saisis à la main. Deux orthographes de la
+  // même voiture ne peuvent plus coexister.
+  const ligne = vhRef.ligne;
+  if (!ligne) {
+    toast('Désignez le véhicule au référentiel : marque, modèle, génération.', 'warn');
     return;
   }
+  const brand = ligne.marque;
+  const model = ligne.modele;
+
+  const modifie = !!document.getElementById('vh-mods')?.checked;
+  const modsDetail = get('vh-mods-detail');
+  if (modifie && !modsDetail) {
+    toast('Précisez la nature des modifications déclarées.', 'warn');
+    return;
+  }
+
   if (year && (parseInt(year) < 1950 || parseInt(year) > 2030)) {
     toast('Année invalide', 'warn');
     return;
@@ -29771,17 +30178,29 @@ window.saveVehicle = async function() {
       year: year ? parseInt(year) : null,
       license_plate: plate || null,
       declared_value: value ? Math.round(parseFloat(value) * 100) : null, // euros -> centimes
-      notes: notes || null
+      notes: notes || null,
+      // Caractéristiques LUES sur le référentiel, jamais saisies : elles
+      // fondent la classe, donc les offres ouvertes au véhicule.
+      referentiel_id: ligne.id,
+      generation: ligne.generation,
+      puissance_ch: ligne.puissance_ch,
+      mass_kg: ligne.masse_kg,
+      modifie: modifie,
+      modifications_detail: modifie ? modsDetail : null
     };
 
     if (vehicleId) {
-      // Mise à jour
-      const { error } = await supabase
+      // Mise à jour. Un refus RLS ne lève pas d'erreur : il renvoie zéro
+      // ligne. Sans cette vérification, le site annonçait « mis à jour »
+      // sur une écriture qui n'avait pas eu lieu.
+      const { data: maj, error } = await supabase
         .from('vehicles')
         .update(baseData)
         .eq('id', vehicleId)
-        .eq('user_id', userId);
+        .eq('user_id', userId)
+        .select('id');
       if (error) throw error;
+      if (!maj || !maj.length) throw new Error('Mise à jour refusée — le véhicule est inchangé');
     } else {
       // Création
       const { data, error } = await supabase
@@ -32543,6 +32962,231 @@ window.loadAdminEcuries = async function() {
   }
 };
 
+/* ============================================================
+   EXAMENS DE VÉHICULE — une absence n'est pas un refus
+   ============================================================
+   Le tunnel dépose une demande quand un véhicule ne figure pas au référentiel.
+   La table portait ses droits d'administration depuis le début et personne ne
+   la lisait : les pilotes écrivaient dans le vide.
+
+   Diligence d'OXV, jamais une retenue du membre — sa réservation reste
+   annulable pendant ce temps. Donc un âge, pas un compte à rebours. */
+const EXAMEN_STATUT_LBL = {
+  en_attente: 'En attente',
+  instruite: 'Instruite',
+  referencee: 'Référencée',
+  hors_perimetre: 'Hors périmètre'
+};
+
+window.loadAdminExamens = async function() {
+  const box = document.getElementById('adminExamenRows');
+  if (!box) return;
+  const vide = (t) => `<div class="admin-empty"><div class="admin-empty-icon">○</div><div class="admin-empty-text">${t}</div></div>`;
+  try {
+    const { data, error } = await supabase
+      .from('demandes_examen_vehicule')
+      .select('id, email, marque, modele, annee, puissance_ch, masse_kg, immatriculation, statut, reponse, cree_le')
+      .eq('statut', 'en_attente')
+      .order('cree_le', { ascending: true });
+    if (error) { console.warn('[Examens]', error); box.innerHTML = vide('Demandes indisponibles.'); return; }
+    if (!data || !data.length) { box.innerHTML = vide('Aucun examen en attente.'); return; }
+
+    box.innerHTML = data.map(d => {
+      const fiche = [d.marque, d.modele, d.annee].filter(Boolean).join(' ');
+      const tech = [
+        d.puissance_ch ? d.puissance_ch + ' ch' : null,
+        d.masse_kg ? Math.round(d.masse_kg) + ' kg' : null,
+        d.immatriculation || null
+      ].filter(Boolean).join(' · ');
+      return `<div style="display:flex;align-items:center;justify-content:space-between;gap:10px;padding:12px 14px;border-top:1px solid var(--bento-border);flex-wrap:wrap;">
+        <div style="min-width:230px;">
+          <div style="font-family:var(--sans);font-size:14px;color:var(--cream);">${escapeHtml(fiche || 'Véhicule non désigné')}</div>
+          <div style="font-family:var(--mono);font-size:11px;color:var(--cream-mute);">${escapeHtml(tech || '—')}</div>
+          <div style="font-family:var(--mono);font-size:10.5px;color:var(--cream-faint);">${escapeHtml(d.email || '')} · ${escapeHtml(ecurieAge(d.cree_le))}</div>
+        </div>
+        <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;">
+          <span class="tag-inline" style="font-size:10px;">${escapeHtml(EXAMEN_STATUT_LBL[d.statut] || d.statut)}</span>
+          <button class="admin-action-btn" onclick="adminExamenStatuer('${d.id}','referencee')">Référencer</button>
+          <button class="admin-action-btn" onclick="adminExamenStatuer('${d.id}','hors_perimetre')">Hors périmètre</button>
+          <button class="admin-action-btn" onclick="adminExamenRepondre('${d.id}')">Répondre</button>
+        </div>
+      </div>`;
+    }).join('');
+  } catch (e) { console.warn('[Examens]', e); box.innerHTML = vide('Demandes indisponibles.'); }
+};
+
+async function examenEcrire(id, champs, succes) {
+  const { data, error } = await supabase
+    .from('demandes_examen_vehicule').update(champs).eq('id', id).select('id');
+  if (error) { toast(error.message || 'Écriture refusée', 'warn'); return; }
+  if (!data || !data.length) { toast('Écriture refusée — demande inchangée', 'warn'); return; }
+  toast(succes, 'ok');
+  loadAdminExamens();
+}
+
+window.adminExamenStatuer = async function(id, statut) {
+  await examenEcrire(id, { statut, instruite_le: new Date().toISOString() },
+    statut === 'referencee' ? 'Véhicule référencé' : 'Demande classée hors périmètre');
+};
+
+window.adminExamenRepondre = async function(id) {
+  const t = prompt("Votre réponse au pilote (transmise telle quelle) :", '');
+  if (t === null || !t.trim()) return;
+  await examenEcrire(id, { reponse: t.trim(), statut: 'instruite', instruite_le: new Date().toISOString() },
+    'Réponse enregistrée');
+};
+
+/* ============================================================
+   DEMANDES ÉCARTÉES — le signal, pas la tâche
+   ============================================================
+   « Prévenez-moi » se remplissait sans que rien ne l'affiche. Ce n'est pas une
+   file de travail : c'est ce qui dit QUELLE JOURNÉE OUVRIR. Un pilote isolé ne
+   décide rien ; cinq sur la même date, si. D'où le groupement par journée, et
+   le tri par nombre plutôt que par ancienneté. */
+window.loadAdminIntentions = async function() {
+  const box = document.getElementById('adminIntentionRows');
+  if (!box) return;
+  const vide = (t) => `<div class="admin-empty"><div class="admin-empty-icon">○</div><div class="admin-empty-text">${t}</div></div>`;
+  try {
+    const { data, error } = await supabase
+      .from('intentions_journee')
+      .select('id, session_id, classe, motif, cree_le')
+      .order('cree_le', { ascending: false });
+    if (error) { console.warn('[Intentions]', error); box.innerHTML = vide('Signal indisponible.'); return; }
+    if (!data || !data.length) { box.innerHTML = vide("Aucune demande écartée — personne n'a demandé à être prévenu."); return; }
+
+    const ids = [...new Set(data.map(i => i.session_id).filter(Boolean))];
+    const { data: journees } = ids.length
+      ? await supabase.from('sessions').select('id, date, format').in('id', ids)
+      : { data: [] };
+    const dateDe = {}; (journees || []).forEach(s => { dateDe[s.id] = s; });
+
+    const groupes = {};
+    data.forEach(i => {
+      const k = i.session_id || 'sans-journee';
+      groupes[k] = groupes[k] || { n: 0, classes: {}, motifs: {}, dernier: i.cree_le };
+      groupes[k].n++;
+      if (i.classe) groupes[k].classes[i.classe] = (groupes[k].classes[i.classe] || 0) + 1;
+      if (i.motif) groupes[k].motifs[i.motif] = (groupes[k].motifs[i.motif] || 0) + 1;
+    });
+
+    box.innerHTML = Object.entries(groupes)
+      .sort((a, b) => b[1].n - a[1].n)
+      .map(([k, g]) => {
+        const s = dateDe[k];
+        const titre = s
+          ? (d => d.charAt(0).toUpperCase() + d.slice(1))(new Date(s.date).toLocaleDateString('fr-FR', { weekday: 'long', day: 'numeric', month: 'long' }))
+          : 'Journée non précisée';
+        const classes = Object.entries(g.classes).map(([c, n]) => `classe ${c} : ${n}`).join(' · ');
+        const motifs = Object.entries(g.motifs).map(([m, n]) => `${m} (${n})`).join(' · ');
+        return `<div style="display:flex;align-items:center;justify-content:space-between;gap:10px;padding:12px 14px;border-top:1px solid var(--bento-border);flex-wrap:wrap;">
+          <div style="min-width:230px;">
+            <div style="font-family:var(--sans);font-size:14px;color:var(--cream);">${escapeHtml(titre)}${s ? `<span style="font-family:var(--mono);font-size:11px;color:var(--cream-faint);"> · ${escapeHtml(s.format === 'half_day' ? 'demi-journée' : 'journée complète')}</span>` : ''}</div>
+            <div style="font-family:var(--mono);font-size:11px;color:var(--cream-mute);">${escapeHtml(classes || '—')}${motifs ? ' · ' + escapeHtml(motifs) : ''}</div>
+          </div>
+          <div style="font-family:var(--mono);font-size:20px;color:var(--gold);">${g.n}<span style="font-size:11px;color:var(--cream-faint);"> pilote${g.n > 1 ? 's' : ''}</span></div>
+        </div>`;
+      }).join('');
+  } catch (e) { console.warn('[Intentions]', e); box.innerHTML = vide('Signal indisponible.'); }
+};
+
+/* ============================================================
+   ENGAGEMENTS PARTENAIRES — le chaînon qui manquait
+   ============================================================
+   La boucle de preuve suit le CONTRAT : une journée n'est due à un partenaire
+   que s'il porte un engagement actif la couvrant. Or ni le site ni
+   l'application ne savaient en créer — toute la machine (compte-rendu à sept
+   jours, bilan trimestriel, audience, contacts consentis) attendait une ligne
+   que personne ne pouvait écrire.
+
+   Le montant convenu n'est PAS demandé ici : la grille B2B reste interne
+   (CLAUDE.md §2.4) et le compte-rendu ne s'en sert pas. */
+window.loadAdminEngagements = async function() {
+  const box = document.getElementById('adminEngagementRows');
+  if (!box) return;
+  const vide = (t) => `<div class="admin-empty"><div class="admin-empty-icon">○</div><div class="admin-empty-text">${t}</div></div>`;
+  try {
+    const [{ data: engagements }, { data: comptes }, { data: plans }] = await Promise.all([
+      supabase.from('partner_engagements')
+        .select('id, partner_account_id, plan_key, quantity, starts_on, ends_on, status')
+        .neq('status', 'cancelled').order('starts_on', { ascending: false }),
+      supabase.from('partner_accounts').select('id, display_name').eq('status', 'validated').order('display_name'),
+      supabase.from('partner_plans').select('key, label').eq('is_active', true).order('sort_order')
+    ]);
+
+    const nom = {}; (comptes || []).forEach(c => { nom[c.id] = c.display_name; });
+    const libelle = {}; (plans || []).forEach(p => { libelle[p.key] = p.label; });
+
+    const formulaire = `<div style="padding:14px;border-top:1px solid var(--bento-border);">
+      <div style="font-family:var(--mono);font-size:10px;letter-spacing:0.18em;text-transform:uppercase;color:var(--gold-data);margin-bottom:10px;">Enregistrer un engagement</div>
+      <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center;">
+        <select id="engPartenaire" class="form-input" style="max-width:200px;padding:6px 10px;font-size:12px;" aria-label="Partenaire">
+          <option value="">— Partenaire —</option>
+          ${(comptes || []).map(c => `<option value="${c.id}">${escapeHtml(c.display_name || '')}</option>`).join('')}
+        </select>
+        <select id="engFormule" class="form-input" style="max-width:200px;padding:6px 10px;font-size:12px;" aria-label="Formule">
+          <option value="">— Formule —</option>
+          ${(plans || []).map(p => `<option value="${p.key}">${escapeHtml(p.label || p.key)}</option>`).join('')}
+        </select>
+        <input id="engQuantite" class="form-input" type="number" min="1" value="1" style="max-width:80px;padding:6px 10px;font-size:12px;" aria-label="Quantité">
+        <input id="engDebut" class="form-input" type="date" style="max-width:150px;padding:6px 10px;font-size:12px;" aria-label="Début">
+        <input id="engFin" class="form-input" type="date" style="max-width:150px;padding:6px 10px;font-size:12px;" aria-label="Fin">
+        <button class="admin-action-btn" onclick="adminEngagementCreer()">Enregistrer</button>
+      </div>
+      <div style="font-family:var(--mono);font-size:10px;color:var(--cream-faint);margin-top:8px;">Sans engagement actif couvrant une journée, aucun compte-rendu n'est dû — donc aucun n'est produit.</div>
+    </div>`;
+
+    const lignes = (engagements || []).map(e => {
+      const periode = [e.starts_on, e.ends_on].filter(Boolean)
+        .map(d => new Date(d).toLocaleDateString('fr-FR')).join(' → ') || 'sans échéance';
+      return `<div style="display:flex;align-items:center;justify-content:space-between;gap:10px;padding:12px 14px;border-top:1px solid var(--bento-border);flex-wrap:wrap;">
+        <div style="min-width:220px;">
+          <div style="font-family:var(--sans);font-size:14px;color:var(--cream);">${escapeHtml(nom[e.partner_account_id] || 'Partenaire')}</div>
+          <div style="font-family:var(--mono);font-size:11px;color:var(--cream-mute);">${escapeHtml(libelle[e.plan_key] || e.plan_key)} · ${escapeHtml(String(e.quantity || 1))} · ${escapeHtml(periode)}</div>
+        </div>
+        <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;">
+          <span class="tag-inline${e.status === 'active' ? ' green' : ''}" style="font-size:10px;">${escapeHtml(e.status)}</span>
+          ${e.status === 'active' ? `<button class="admin-action-btn" onclick="adminEngagementClore('${e.id}')">Clore</button>` : ''}
+        </div>
+      </div>`;
+    }).join('');
+
+    box.innerHTML = formulaire + (lignes || `<div style="padding:12px 14px;border-top:1px solid var(--bento-border);font-family:var(--mono);font-size:11px;color:var(--cream-faint);">Aucun engagement enregistré.</div>`);
+  } catch (e) { console.warn('[Engagements]', e); box.innerHTML = vide('Engagements indisponibles.'); }
+};
+
+window.adminEngagementCreer = async function() {
+  const partenaire = document.getElementById('engPartenaire')?.value;
+  const formule = document.getElementById('engFormule')?.value;
+  const quantite = parseInt(document.getElementById('engQuantite')?.value || '1', 10);
+  const debut = document.getElementById('engDebut')?.value || null;
+  const fin = document.getElementById('engFin')?.value || null;
+  if (!partenaire || !formule) { toast('Choisissez un partenaire et une formule.', 'warn'); return; }
+  if (!(quantite > 0)) { toast('La quantité doit être supérieure à zéro.', 'warn'); return; }
+  if (debut && fin && fin < debut) { toast('La fin ne peut pas précéder le début.', 'warn'); return; }
+  try {
+    const { data, error } = await supabase.from('partner_engagements').insert({
+      partner_account_id: partenaire, plan_key: formule, quantity: quantite,
+      starts_on: debut, ends_on: fin, status: 'active'
+    }).select('id');
+    if (error) { toast(error.message || 'Enregistrement refusé', 'warn'); return; }
+    if (!data || !data.length) { toast('Enregistrement refusé — aucune ligne créée', 'warn'); return; }
+    toast('Engagement enregistré — les comptes-rendus suivront', 'ok');
+    loadAdminEngagements();
+    if (typeof loadAdminProof === 'function') loadAdminProof();
+  } catch (e) { console.error('[Engagement]', e); toast(e.message || 'Enregistrement refusé', 'warn'); }
+};
+
+window.adminEngagementClore = async function(id) {
+  if (!confirm("Clore cet engagement ? Les journées suivantes ne donneront plus lieu à un compte-rendu.")) return;
+  const { data, error } = await supabase.from('partner_engagements')
+    .update({ status: 'ended', updated_at: new Date().toISOString() }).eq('id', id).select('id');
+  if (error) { toast(error.message || 'Écriture refusée', 'warn'); return; }
+  if (!data || !data.length) { toast('Écriture refusée — engagement inchangé', 'warn'); return; }
+  toast('Engagement clos', 'ok');
+  loadAdminEngagements();
+};
+
 /* Le message d'exception de la base est rédigé pour être lu : on le remonte
    tel quel plutôt que de le remplacer par « une erreur est survenue ». */
 async function ecurieEcrire(id, champs, succes) {
@@ -34319,6 +34963,9 @@ window.loadAdminDashboard = async function() {
   if (typeof loadAdminPartners === 'function') loadAdminPartners();
   if (typeof loadAdminProof === 'function') loadAdminProof();
   if (typeof loadAdminEcuries === 'function') loadAdminEcuries();
+  if (typeof loadAdminExamens === 'function') loadAdminExamens();
+  if (typeof loadAdminIntentions === 'function') loadAdminIntentions();
+  if (typeof loadAdminEngagements === 'function') loadAdminEngagements();
   if (typeof loadAdminValidations === 'function') loadAdminValidations();
 
   // Greeting
