@@ -21423,12 +21423,17 @@ body.pav-tv .nav, body.pav-tv footer, body.pav-tv .cookie, body.pav-tv .founding
         </div>
       </div>
 
-      <!-- QDI du plateau (PR-HUB-11) — affichage opt-in, par récence, JAMAIS trié par score -->
+      <!-- La marge du plateau (PR-HUB-11) — affichage opt-in, par récence, JAMAIS trié par score.
+           NOMMER CE QU'ON MONTRE : la vue `qdi_public` ne porte AUCUNE colonne de QDI. Elle rend
+           `margin_global` et `margin_zone` — la marge, pas le Quality Driving Index. Le bloc a
+           porté le titre « Le QDI du plateau » jusqu'au 29/08/2026 ; il annonçait un indicateur
+           et en affichait un autre. Le QDI vit dans l'application (cinq branches, radar) et n'est
+           pas publié ici. -->
       <div style="margin-top: 64px;">
-        <div class="plateau-members-label">Le QDI du plateau</div>
-        <p style="font-family:var(--sans);font-size:13px;line-height:1.65;color:var(--cream-mute);max-width:620px;margin:8px 0 18px;">Chaque pilote choisit si son Quality Driving Index est visible — anonymement, avec son nom, ou pas du tout. Affichage par dernière session, <strong style="color:var(--cream);">jamais un classement</strong>.</p>
-        <div id="plateauQdi" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:12px;">
-          <div class="plateau-empty">Les QDI partagés apparaîtront ici après les premières sessions.</div>
+        <div class="plateau-members-label">La marge du plateau</div>
+        <p style="font-family:var(--sans);font-size:13px;line-height:1.65;color:var(--cream-mute);max-width:620px;margin:8px 0 18px;">Chaque pilote choisit si sa marge est visible — anonymement, avec son nom, ou pas du tout. Affichage par dernière session, <strong style="color:var(--cream);">jamais un classement</strong>.</p>
+        <div id="plateauMarge" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:12px;">
+          <div class="plateau-empty">Les marges partagées apparaîtront ici après les premières sessions.</div>
         </div>
       </div>
 
@@ -22314,22 +22319,22 @@ body.pav-tv .nav, body.pav-tv footer, body.pav-tv .cookie, body.pav-tv .founding
         <div class="home-data-pillar trajectory reveal">
           <div class="home-data-pillar-dot"></div>
           <div class="home-data-pillar-name">Trajectoire</div>
-          <p class="home-data-pillar-text">Précision des lignes, points de corde, gestion des zones de freinage.</p>
+          <p class="home-data-pillar-text">Répétabilité de la ligne : l'écart, en mètres, entre vos tours aux mêmes points.</p>
         </div>
         <div class="home-data-pillar fluidity reveal">
           <div class="home-data-pillar-dot"></div>
           <div class="home-data-pillar-name">Fluidité</div>
-          <p class="home-data-pillar-text">Régularité des inputs volant, absence de corrections brusques, transitions.</p>
+          <p class="home-data-pillar-text">Douceur des transitions latérales : les à-coups que la voiture encaisse, ou n'encaisse pas.</p>
         </div>
         <div class="home-data-pillar braking reveal">
           <div class="home-data-pillar-dot"></div>
           <div class="home-data-pillar-name">Freinage</div>
-          <p class="home-data-pillar-text">Points d'attaque, progressivité, modulation, relâche au corde.</p>
+          <p class="home-data-pillar-text">Progressivité des phases de décélération, lue sur le G longitudinal.</p>
         </div>
         <div class="home-data-pillar acceleration reveal">
           <div class="home-data-pillar-dot"></div>
           <div class="home-data-pillar-name">Accélération</div>
-          <p class="home-data-pillar-text">Progressivité à la remise des gaz, anticipation, traction en sortie.</p>
+          <p class="home-data-pillar-text">Continuité de la reprise en sortie : le G longitudinal qui monte sans à-coups.</p>
         </div>
         <div class="home-data-pillar regularity reveal">
           <div class="home-data-pillar-dot"></div>
@@ -22341,7 +22346,7 @@ body.pav-tv .nav, body.pav-tv footer, body.pav-tv .cookie, body.pav-tv .founding
       <div class="bento reveal" style="padding:28px;margin-top:40px;max-width:860px;margin-left:auto;margin-right:auto;">
         <div style="font-family:var(--mono);font-size:10px;letter-spacing:0.22em;text-transform:uppercase;color:var(--blue-data);margin-bottom:12px;">Méthodologie &amp; références</div>
         <p style="font-family:var(--sans);font-size:14px;line-height:1.7;color:var(--cream-mute);margin:0 0 14px;">
-          Le QDI n'est pas une note magique : chaque dimension repose sur des mesures télémétriques établies de l'analyse de pilotage — cercle de friction pour le freinage et l'accélération, régularité des entrées volant pour la fluidité, écart-type des temps au tour pour la régularité. Le calcul est <strong style="color:var(--cream);">versionné</strong> (chaque analyse porte sa version d'algorithme) et vos données brutes restent <strong style="color:var(--cream);">exportables</strong> pour vérification.
+          Le QDI n'est pas une note magique : chaque dimension repose sur des mesures télémétriques établies de l'analyse de pilotage — cercle de friction pour le freinage et l'accélération, dispersion de la ligne entre vos tours pour la trajectoire, écart-type des temps au tour pour la régularité. Le boîtier enregistre le GPS et les accélérations à 25 Hz : il n'y a <strong style="color:var(--cream);">ni capteur de volant, ni capteur de pédales</strong>. Ce que le QDI lit, ce sont les conséquences de vos gestes sur la voiture — jamais les gestes eux-mêmes. Le calcul est <strong style="color:var(--cream);">versionné</strong> (chaque analyse porte sa version d'algorithme) et vos données brutes restent <strong style="color:var(--cream);">exportables</strong> pour vérification.
         </p>
         <p style="font-family:var(--sans);font-size:12px;line-height:1.7;color:var(--cream-faint);margin:0;">
           Références : Milliken &amp; Milliken, <em>Race Car Vehicle Dynamics</em> (SAE International, 1995) · Segers, <em>Analysis Techniques for Racecar Data Acquisition</em> (SAE, 2ᵉ éd., 2014) · Bentley, <em>Speed Secrets</em> (1998) · Taruffi, <em>The Technique of Motor Racing</em> (1958). Le QDI mesure la maîtrise, pas la vitesse — et n'établit aucun classement.
@@ -23763,7 +23768,7 @@ window.goTo = function(page, opts) {
   if (page === 'plateau') {
     setTimeout(() => {
       if (typeof window.loadPlateau === 'function') window.loadPlateau();
-      if (typeof window.loadPlateauQdi === 'function') window.loadPlateauQdi();
+      if (typeof window.loadPlateauMarge === 'function') window.loadPlateauMarge();
       if (typeof window.loadPlateauCrews === 'function') window.loadPlateauCrews();
     }, 150);
   }
@@ -33678,9 +33683,13 @@ async function renderFeedbackPrompts(past, containerEl) {
   } catch (e) { console.warn('[Feedback prompts]', e); }
 }
 
-/* QDI du plateau (PR-HUB-11) — lecture vue publique opt-in, tri par RÉCENCE (jamais par score). */
-window.loadPlateauQdi = async function() {
-  const grid = document.getElementById('plateauQdi');
+/* La marge du plateau (PR-HUB-11) — lecture vue publique opt-in, tri par RÉCENCE (jamais par score).
+   La vue s'appelle `qdi_public` pour des raisons d'histoire, mais elle ne rend que la MARGE :
+   ses colonnes sont display_name, nominative, margin_global, margin_zone, computed_at,
+   sessions_count. Aucune branche de QDI n'y figure. Le nom de la fonction dit ce qu'elle
+   affiche, pas ce que la vue prétend s'appeler. */
+window.loadPlateauMarge = async function() {
+  const grid = document.getElementById('plateauMarge');
   if (!grid || typeof supabase === 'undefined') return;
   try {
     const { data, error } = await supabase.from('qdi_public')
@@ -33699,7 +33708,7 @@ window.loadPlateauQdi = async function() {
         <div style="font-family:var(--mono);font-size:10px;color:var(--cream-faint);margin-top:6px;">${zoneLbl(r.margin_zone)}${r.sessions_count ? ' · ' + r.sessions_count + ' session' + (r.sessions_count > 1 ? 's' : '') : ''}${d ? ' · ' + d : ''}</div>
       </div>`;
     }).join('');
-  } catch (e) { console.warn('[QDI plateau]', e); }
+  } catch (e) { console.warn('[Marge plateau]', e); }
 };
 
 /* ===================== ESPACE COACH (PR-HUB-05) =====================

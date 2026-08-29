@@ -201,3 +201,46 @@ L'écran d'écurie du site ne les affiche pas encore :
 Les examens de véhicule (`app/(admin)/examens-vehicule.tsx`) : le site **écrit**
 dans `demandes_examen_vehicule` mais n'a aucun écran pour les instruire. Pas de
 duplication — et regarder un véhicule est un geste de paddock.
+
+---
+
+## 6. Vérification du 29/08/2026 — la méthodologie QDI, et ce qu'elle promettait
+
+`docs/site/QDI_METHODOLOGIE.md` a été **vérifié point par point, puis supprimé**.
+Son point 5 demandait de porter la correspondance branche → formule dans le dépôt
+de l'application ; c'est fait, et le document y vit désormais :
+**`docs/architecture/21_QDI_METHODOLOGIE.md` (dépôt app)** — à côté des formules
+qu'il décrit. Une garde (`src/__tests__/qdiMethodologie.guard.test.ts`) tient
+l'accord entre les deux.
+
+### Ce que la vérification a trouvé, et qui était publié
+
+**1. Le site annonçait des capteurs qui n'existent pas.** La Fluidité était
+présentée comme la « régularité des inputs volant », le Freinage comme
+« modulation, relâche au corde ». Le boîtier fournit GPS + centrale inertielle à
+25 Hz : **ni volant, ni pédales, ni pression de frein**. Le code de l'application
+l'assume explicitement depuis toujours ; le texte public, non.
+
+Les cinq encarts piliers et le paragraphe « Méthodologie & références » ont été
+réécrits sur ce que le boîtier mesure réellement. Le paragraphe **dit maintenant
+l'absence de capteurs**, au lieu de la contourner — c'est un argument premium, pas
+un aveu.
+
+**2. « Le QDI du plateau » n'affichait pas de QDI.** La vue `qdi_public` ne porte
+aucune branche : ses colonnes sont `display_name`, `nominative`, `margin_global`,
+`margin_zone`, `computed_at`, `sessions_count`. Le bloc affichait la **marge** sous
+un titre de QDI, avec un score sur 100 en or.
+
+Renommé « **La marge du plateau** ». `#plateauQdi` → `#plateauMarge`,
+`loadPlateauQdi` → `loadPlateauMarge` (les 4 occurrences, aucune autre référence).
+Le nom de la vue reste `qdi_public` — le renommer en base casserait la lecture
+anonyme ; le commentaire du bloc explique l'écart.
+
+### Ce qui reste, et qui est un arbitrage produit
+
+La page Progression affiche cinq piliers **pondérés** — Trajectoire 30 %, Fluidité
+25 %, Freinage 20 %… — sur des valeurs d'exemple. **Cette pondération n'existe pas
+dans le code** : `computeQdi` rend cinq branches indépendantes et ne compose aucun
+score global. Soit la maquette retire les pourcentages, soit un composite est
+décidé et implémenté avec un incrément de `QDI_ALGO_VERSION`. Ce n'est pas une
+correction à faire seul.
