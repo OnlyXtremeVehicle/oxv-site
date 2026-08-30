@@ -22822,7 +22822,7 @@ select option:hover {
      réservations reçues, retours de visite. La restitution QDI
      reste sur l'application (doctrine §2.1 : le coach exerce sous
      sa propre responsabilité). Tables app existantes uniquement :
-     coach_profiles / coach_availability / coaching_bookings / coach_reviews.
+     coach_profiles / coach_availability / coaching_bookings / coach_pilots.
      ============================================================ -->
 <div class="page" id="page-coach-espace">
   <!-- Héro personnalisé (rempli par loadCoachEspace) : le coach arrive CHEZ LUI,
@@ -22859,7 +22859,7 @@ select option:hover {
           <div class="bento" style="padding:18px 20px;"><div class="ce-stat" id="ceStatBookings">—</div><div class="ce-stat-lbl">Demandes en attente</div></div>
           <div class="bento" style="padding:18px 20px;"><div class="ce-stat" id="ceStatSlots">—</div><div class="ce-stat-lbl">Créneaux à venir</div></div>
           <div class="bento" style="padding:18px 20px;"><div class="ce-stat" id="ceStatPilots">—</div><div class="ce-stat-lbl">Pilotes suivis</div></div>
-          <div class="bento" style="padding:18px 20px;"><div class="ce-stat" id="ceStatRating">—</div><div class="ce-stat-lbl">Note moyenne</div></div>
+          <div class="bento" style="padding:18px 20px;"><div class="ce-stat" id="ceStatDone">—</div><div class="ce-stat-lbl">Séances données</div></div>
         </div>
 
         <!-- Écran de session UNIFIÉ (fondateur 2026-07-19 v2) : tout se pilote sur
@@ -33555,7 +33555,7 @@ window.adminRemettrePreuve = async function(reportId) {
 };
 
 /* ===================== ESPACE COACH + ENTREPRISE PARTENAIRE (arbitrages 2026-07-18) =====================
-   Zéro table nouvelle : coach_profiles / coach_availability / coaching_bookings / coach_reviews
+   Zéro table nouvelle : coach_profiles / coach_availability / coaching_bookings / coach_pilots
    + partner_accounts / partner_offers (modèle app partagé). Conventions de statut de l'app respectées :
    créneau proposé = 'closed' (en attente), publié = 'open' (admin) · entreprise 'pending'→'validated' (admin)
    · offre 'draft'→'published' (admin). Le verrou serveur (triggers anti auto-publication) est dans
@@ -33750,11 +33750,18 @@ async function ceLoadStats(uid) {
     const { count: np } = await supabase.from('coach_pilots').select('id', { count: 'exact', head: true }).eq('coach_id', uid).eq('active', true);
     set('ceStatPilots', np ?? 0);
   } catch (e) { set('ceStatPilots', '—'); }
+  /* La tuile annonçait une « note moyenne » tirée de `coach_reviews` — une
+     table qui N'EXISTE PAS en base, et qu'aucun écran n'alimente : la requête
+     partait en 404 à chaque ouverture de l'espace coach, et le chiffre restait
+     un tiret. Le repo interdit une erreur console permanente (§3).
+
+     On compte désormais ce que le coach a réellement fait. */
   try {
-    const { data: revs } = await supabase.from('coach_reviews').select('rating').eq('coach_id', uid);
-    const rs = (revs || []).map(r => Number(r.rating)).filter(isFinite);
-    set('ceStatRating', rs.length ? (rs.reduce((a, b) => a + b, 0) / rs.length).toFixed(1) + '/5' : '—');
-  } catch (e) { set('ceStatRating', '—'); }
+    const { count: nd } = await supabase.from('coaching_bookings')
+      .select('id', { count: 'exact', head: true })
+      .eq('coach_id', uid).eq('status', 'completed');
+    set('ceStatDone', nd ?? 0);
+  } catch (e) { set('ceStatDone', '—'); }
 }
 /* — Fiche coach PUBLIQUE (modale) : l'outil de sélection du coach par les pilotes.
      RLS : fiche publiée lisible par tous ; le coach voit la sienne même en brouillon (aperçu). — */
@@ -33771,13 +33778,12 @@ window.showCoachFiche = async function(coachId) {
       const { data: s } = await supabase.from('coach_availability').select('id, starts_at, ends_at').eq('coach_id', coachId).eq('status', 'open').gte('starts_at', new Date().toISOString()).order('starts_at').limit(6);
       slots = s || [];
     } catch (e) {}
-    let rating = null, nbAvis = 0;
-    try {
-      const { data: revs } = await supabase.from('coach_reviews').select('rating').eq('coach_id', coachId);
-      const rs = (revs || []).map(r => Number(r.rating)).filter(isFinite);
-      nbAvis = rs.length;
-      if (rs.length) rating = (rs.reduce((a, b) => a + b, 0) / rs.length).toFixed(1);
-    } catch (e) {}
+    /* Pas de note : le systeme d'avis n'existe pas. `coach_reviews` n'a
+       jamais ete cree en base et aucun ecran ne permet a un pilote de noter
+       son coach. La requete partait en 404 a chaque ouverture de fiche.
+       Le code qui suit traite deja `rating = null` : la fiche s'affiche sans
+       note, ce qui est la verite. */
+    const rating = null, nbAvis = 0;
     const specs = Array.isArray(p.specialties) ? p.specialties : [];
     const medias = Array.isArray(p.media) ? p.media : [];
     const liens = [
@@ -33939,17 +33945,19 @@ window.ceRespondBooking = async function(id, status) {
   toast(error ? 'Action refusée' : 'Réservation mise à jour', error ? 'warn' : 'ok');
   if (!error) ceLoadBookings(window.OXVApi.user.profile?.id);
 };
+/* Les retours de pilotes n'existent pas : `coach_reviews` n'a jamais ete
+   cree en base, et aucun ecran ne permet a un pilote de noter son coach. La
+   requete partait en 404 a chaque ouverture de l'espace.
+
+   On masque le bloc plutot que de promettre une fonction absente. Le jour ou
+   les avis existeront, il suffira de rebrancher cette fonction : le balisage
+   est intact. */
 async function ceLoadReviews(uid) {
   const box = document.getElementById('ceReviews');
   if (!box) return;
-  try {
-    const { data: rvs } = await supabase.from('coach_reviews').select('pilot_first_name, rating, comment, created_at').eq('coach_id', uid).order('created_at', { ascending: false }).limit(8);
-    box.innerHTML = (rvs && rvs.length) ? rvs.map(r => `<div style="padding:8px 0;border-top:1px solid var(--bento-border);">
-      <span style="font-family:var(--mono);font-size:11px;color:var(--gold-data);">${'●'.repeat(Math.max(0, Math.min(5, r.rating || 0)))}${'○'.repeat(5 - Math.max(0, Math.min(5, r.rating || 0)))}</span>
-      <strong style="color:var(--offwhite);font-size:13px;margin-left:8px;">${escapeHtml(r.pilot_first_name || 'Pilote')}</strong>
-      ${r.comment ? `<div style="font-size:12px;color:var(--cream-mute);margin-top:3px;">« ${escapeHtml(String(r.comment).slice(0, 200))} »</div>` : ''}
-    </div>`).join('') : 'Aucun retour pour le moment — ils arrivent après vos premières visites.';
-  } catch (e) { box.textContent = 'Retours indisponibles.'; }
+  const carte = box.closest('.bento');
+  if (carte) carte.style.display = 'none';
+  box.innerHTML = '';
 }
 
 /* — Entreprise partenaire (self-service) + offres/événements du catalogue app — */
@@ -34662,7 +34670,7 @@ window.loadPlateauMarge = async function() {
 
 /* ===================== ESPACE COACH (PR-HUB-05) =====================
    Le site se branche sur l'écosystème coach EXISTANT de l'app (coach_profiles,
-   coach_pilots, coach_reviews) — aucun modèle parallèle. RLS déjà en place :
+   coach_pilots) — aucun modèle parallèle. RLS déjà en place :
    profils publiés lisibles par tous, relation lisible par le pilote, admin tout. */
 
 window.loadCoachVitrine = async function() {
@@ -34673,12 +34681,9 @@ window.loadCoachVitrine = async function() {
       .select('coach_id, headline, bio, specialties, palmares, photo_url, season_price_eur, session_price_eur, instagram_url, youtube_url, website_url')
       .eq('is_published', true).limit(12);
     if (error || !profiles || !profiles.length) return; // état vide honnête conservé
-    // Note moyenne (lisible connecté uniquement — dégradation propre en anonyme)
-    let ratings = {};
-    try {
-      const { data: revs } = await supabase.from('coach_reviews').select('coach_id, rating');
-      (revs || []).forEach(r => { (ratings[r.coach_id] = ratings[r.coach_id] || []).push(r.rating); });
-    } catch (e) {}
+    // Pas de note : le systeme d'avis n'existe pas (voir ceLoadReviews).
+    // Le rendu ci-dessous traite deja l'absence, il affiche la fiche sans note.
+    const ratings = {};
     // Créneaux publiés ('open' = validés par OXV) — lisibles connecté, dégradation propre en anonyme
     let slotsByCoach = {};
     try {
