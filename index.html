@@ -26832,22 +26832,16 @@ window.bkConfirmBooking = async function() {
       crew_id: crewId,
       remise_pct: remisePct,
       remise_motif: remisePct > 0 ? 'ecurie' : null,
-      // Un vehicule dont les modifications sont declarees attend un EXAMEN,
-      // pas seulement un paiement. Sans etat propre, la demande se noyait
-      // parmi les reservations ordinaires et personne ne la voyait passer.
-      //
-      // La reservation reste VISIBLE du pilote (seul le libelle change) et
-      // occupe toujours sa place : aucune branche du tunnel ne filtre sur
-      // 'pending', toutes filtrent sur 'cancelled'.
-      //
-      // Elle reste ANNULABLE, mais ce n'etait pas acquis : le declencheur
-      // `registrations_garde_pilote` n'autorisait l'annulation par un compte
-      // pilote que depuis pending / pending_payment / confirmed. Introduire
-      // 'en_examen' sans le corriger aurait affiche un bouton « Annuler » qui
-      // echoue. La migration lot12_en_examen_reste_annulable_par_le_pilote
-      // ajoute 'en_examen' a cette liste : examiner un vehicule est une
-      // diligence d'OXV, jamais une retenue du membre.
-      status: bkState.mods ? 'en_examen' : 'pending',
+      /* L'examen a lieu AVANT, sur le vehicule : seule une voiture validee
+         est proposee ici. Des modifications declarees ont donc deja ete
+         examinees et admises — rouvrir un examen a la reservation ferait
+         recommencer une instruction close.
+
+         Le repli sur 'en_examen' ne sert qu'aux fiches anterieures a la
+         validation du vehicule, qui n'en portent pas encore le statut. */
+      status: (bkState.selectedVehicle?.statut_validation === 'valide'
+               || !bkState.selectedVehicle?.statut_validation && !bkState.mods)
+              ? 'pending' : 'en_examen',
       price_total: priceTotal,
       price_deposit: priceDeposit,
       insurance_option: bkState.selectedInsurance,
