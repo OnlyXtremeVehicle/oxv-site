@@ -16017,6 +16017,37 @@ body.pav-tv .nav, body.pav-tv footer, body.pav-tv .cookie, body.pav-tv .founding
 @media (min-width: 880px) {
   .contact-cols { grid-template-columns: 1.4fr 1fr !important; gap: 80px !important; }
 }
+
+/* ============================================================
+   MENUS DEROULANTS NATIFS — lisibles
+   ============================================================
+   Le panneau d'un <select> est peint par le SYSTEME, pas par la page. Sans
+   fond OPAQUE declare sur les <option>, Windows le rend blanc — et la
+   couleur creme du site devenait du blanc sur blanc, illisible.
+
+   Ni `background: transparent` (.form-row select) ni `rgba(0,0,0,.4)` (la
+   regle globale) ne suffisent : un fond semi-transparent se composite sur le
+   blanc du systeme. Il faut une couleur PLEINE, et elle doit porter sur les
+   options elles-memes.
+
+   Regle posee ici, en fin de feuille, pour passer apres toutes les autres
+   sans recourir a !important. Le select FERME garde son apparence : on ne
+   touche qu'au panneau. */
+select option,
+select optgroup {
+  background-color: #101013;
+  color: var(--cream, #f2ede4);
+}
+select option:checked,
+select option:hover {
+  background-color: #1c1c20;
+  color: var(--gold, #ffb703);
+}
+/* Firefox peint le panneau depuis le fond du select : il lui faut une
+   couleur pleine, que les autres navigateurs ignorent une fois ferme. */
+@supports (-moz-appearance: none) {
+  select { background-color: #101013; }
+}
 </style>
 <!-- ============ AUTH : SIGNUP ============ -->
 <div class="page" id="page-signup">
