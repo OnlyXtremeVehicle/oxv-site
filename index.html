@@ -24153,6 +24153,11 @@ function oxvRouteFromLocation() {
     else { window.__scanPilote = r.pilotId; toast('Connexion requise pour le contrôle pilote', 'warn'); goTo('login', { fromPop: true }); }
     return;
   }
+  /* `article` ne s'atteint que par openArticle(), qui le REMPLIT. Une URL nue
+     — /article, ou un lien tronque — ouvrait la coquille vide : un titre
+     absent, un corps absent, et pour seul contenu le bouton de retour.
+     On renvoie a la liste, qui est la reponse utile. */
+  if (r.page === 'article') { goTo('actualites', { fromPop: true }); return; }
   const exists = document.getElementById('page-' + r.page);
   goTo(exists ? r.page : 'home', { fromPop: true });
 }
@@ -40191,7 +40196,14 @@ function pavAccueilRender() {
   const badgeTxt = etat === 'ouverte' ? 'Piste ouverte' : (etat === 'pause' ? 'Piste en pause' : 'Piste fermée');
   const titre = PAV.demo ? 'Session Signature' : (sess ? pavFormatLabel(sess.format).split(' · ')[0] : 'Session');
   const type = PAV.demo ? 'Journée complète' : (sess ? (pavFormatLabel(sess.format).split(' · ')[1] || '') : '');
-  const sousTitre = PAV.demo ? 'Tracé Jean-Pierre Beltoise · 1,4 km · Sens horaire' : pavEsc(c.name || '');
+  /* Le tracé fait 2,21 km, pas 1,4 : la donnée de démonstration affichait un
+     chiffre faux, et l'écran est publiquement atteignable (?demo=1). La base
+     porte la mesure exacte (circuits.length_km) — on la lit plutôt que de la
+     réécrire, et la démo retombe sur la valeur du circuit par défaut. */
+  const kmDemo = Number(c && c.length_km) > 0 ? Number(c.length_km).toFixed(2).replace('.', ',') : '2,21';
+  const sousTitre = PAV.demo
+    ? 'Tracé Jean-Pierre Beltoise · ' + kmDemo + ' km · Sens horaire'
+    : pavEsc(c.name || '');
   const sousMarque = PAV.demo ? 'Pavillon · Circuit de Haute Saintonge' : ('Pavillon' + (c.name ? ' · ' + pavEsc(c.name) : '')) + (PAV.demo ? ' · Démo' : '');
   st.innerHTML = '<div class="pav-scene pav-a">' +
     '<div class="pav-hd"><div class="pav-marque">' + PAV_INSIGNE + '<span class="pav-oxv">OXV</span><span class="pav-sousmarque">' + sousMarque + (PAV.demo ? ' · Démo' : '') + '</span></div>' +
