@@ -18402,7 +18402,7 @@ body.pav-tv .nav, body.pav-tv footer, body.pav-tv .cookie, body.pav-tv .founding
            serait une porte fermée sans personne derrière. -->
       <div class="admin-section">
         <div class="admin-section-head">
-          <div class="admin-section-title">Immatriculations à vérifier</div>
+          <div class="admin-section-title">Véhicules à valider</div>
           <button class="admin-section-action" onclick="loadAdminPlaques()">Rafraîchir</button>
         </div>
         <div id="adminPlaqueRows" class="admin-todo-list">
@@ -18419,7 +18419,7 @@ body.pav-tv .nav, body.pav-tv footer, body.pav-tv .cookie, body.pav-tv .founding
            referme jamais : « la cause a disparu » est un jugement. -->
       <div class="admin-section">
         <div class="admin-section-head">
-          <div class="admin-section-title">Inscriptions à examiner</div>
+          <div class="admin-section-title">Réservations à revoir</div>
           <button class="admin-section-action" onclick="loadAdminExamenInscriptions()">Rafraîchir</button>
         </div>
         <div id="adminExamenInscRows" class="admin-todo-list">
@@ -25925,7 +25925,11 @@ async function bkLoadVehicles() {
     const ref = v.referentiel_id ? bkState.refParId[v.referentiel_id] : null;
     // Ce qui manque se dit sur la carte, la ou le pilote clique — pas apres.
     if (ref) meta.push(bkClasseLibelle(ref.classe));
-    else meta.push('Désignation à compléter');
+    if (v.statut_validation && v.statut_validation !== 'valide') {
+      meta.push(v.statut_validation === 'en_verification' ? 'En vérification'
+              : v.statut_validation === 'refuse' ? 'Écarté'
+              : 'Fiche à compléter');
+    }
 
     return `
       <button class="bk-vehicle${ref ? '' : ' hors-referentiel'}" data-vehicle-id="${v.id}" onclick="bkSelectVehicle('${v.id}', this)">
@@ -25994,6 +25998,12 @@ window.bkSelectVehicle = async function(vehicleId, el) {
 /* Reprise en lecture seule de la fiche du garage.
    Un véhicule incomplet n'est pas un refus : c'est un renvoi vers l'endroit
    où la donnée se corrige — le garage — et la réservation reprend ensuite. */
+/* Reprise en lecture seule de la fiche du garage.
+
+   La validation appartient au VEHICULE : le site LIT `statut_validation`, il
+   ne le recompose pas a partir de trois controles epars. Une voiture non
+   validee n'est pas refusee ici — elle est renvoyee la ou sa donnee se
+   corrige, le garage. */
 function bkRefRendreReprise() {
   const wrap = document.getElementById('bkRefWrap');
   const fiche = document.getElementById('bkRefFiche');
@@ -26002,7 +26012,6 @@ function bkRefRendreReprise() {
   const lien = document.getElementById('bkRefAbsentLink');
   const demande = document.getElementById('bkRefDemande');
 
-  // Le tunnel ne désigne plus : la cascade et le formulaire sont retirés.
   if (cascade) cascade.style.display = 'none';
   if (decl) decl.style.display = 'none';
   if (lien) lien.style.display = 'none';
@@ -26017,43 +26026,20 @@ function bkRefRendreReprise() {
   }
   if (wrap) wrap.style.display = 'block';
 
-  const ligne = bkState.referentiel;
-
-  // Une ligne retirée du référentiel depuis la désignation : on le dit.
-  if (ligne && ligne.statut === 'exclu') {
-    if (fiche) {
-      const r = Number(ligne.ratio_kg_ch).toFixed(2).replace('.', ',');
-      fiche.innerHTML = `
-        <div class="bk-perimetre-panel">
-          <div class="titre">Hors critères d’accès</div>
-          <div class="corps">
-            ${escapeHtml(ligne.marque)} ${escapeHtml(ligne.modele)} · ${escapeHtml(bkRefLibelleGeneration(ligne))} — rapport ${escapeHtml(r)} kg/ch.
-            Ce véhicule ne peut pas être engagé sur une journée OXV.
-          </div>
-        </div>`;
-      fiche.style.display = 'block';
-    }
-    bkRefRendrePerimetre();
-    return;
-  }
-
-  const manques = [];
-  if (!ligne) manques.push('la désignation au référentiel');
-  if (!bkPlaqueValide(bkState.plate)) manques.push('l’immatriculation');
-  if (bkState.mods && !bkState.modsDetail) manques.push('le détail des modifications');
-
-  /* Contrôle d'immatriculation. Le test porte sur la PRÉSENCE du verdict :
-     tant que la base ne le rend pas, on ne barre personne — le site ne doit
-     pas inventer un refus qu'il n'a pas reçu. */
-  const plq = v.plaque_statut;
-  if (plq && plq !== 'conforme') {
+  const etat = v.statut_validation;
+  if (etat && etat !== 'valide') {
+    const titre = etat === 'incomplet' ? 'Fiche du véhicule à compléter'
+                : etat === 'en_verification' ? 'Véhicule en cours de vérification'
+                : 'Véhicule écarté';
+    const suite = etat === 'en_verification'
+      ? ' Nous vous répondons avant votre journée.'
+      : ' Un véhicule se choisit une fois validé.';
     if (fiche) {
       fiche.innerHTML = `
         <div class="bk-perimetre-panel">
-          <div class="titre">${plq === 'refusee' ? 'Immatriculation refusée' : 'Immatriculation en cours de vérification'}</div>
+          <div class="titre">${escapeHtml(titre)}</div>
           <div class="corps">
-            ${escapeHtml(v.plaque_motif || 'Nous vérifions cette immatriculation avant de valider le véhicule.')}
-            ${plq === 'refusee' ? ' Corrigez-la au garage.' : ' Un véhicule se valide une fois son immatriculation vérifiée.'}
+            ${escapeHtml(v.validation_motif || 'Ce véhicule n’est pas encore validé.')}${suite}
             <div style="margin-top:14px;">
               <button class="btn btn-sm" type="button" onclick="goToAccount('compte-vehicules')"><span>Ouvrir le garage →</span></button>
             </div>
@@ -26065,24 +26051,9 @@ function bkRefRendreReprise() {
     return;
   }
 
-  if (manques.length) {
-    if (fiche) {
-      const liste = manques.length > 1
-        ? manques.slice(0, -1).join(', ') + ' et ' + manques[manques.length - 1]
-        : manques[0];
-      fiche.innerHTML = `
-        <div class="bk-perimetre-panel">
-          <div class="titre">Fiche du véhicule à compléter</div>
-          <div class="corps">
-            Il manque ${escapeHtml(liste)} sur ${escapeHtml([v.brand, v.model].filter(Boolean).join(' ') || 'ce véhicule')}.
-            Ces informations décrivent la voiture, pas la journée : elles se renseignent une fois, au garage.
-            <div style="margin-top:14px;">
-              <button class="btn btn-sm" type="button" onclick="goToAccount('compte-vehicules')"><span>Compléter au garage →</span></button>
-            </div>
-          </div>
-        </div>`;
-      fiche.style.display = 'block';
-    }
+  const ligne = bkState.referentiel;
+  if (!ligne) {
+    if (fiche) { fiche.style.display = 'none'; fiche.innerHTML = ''; }
     bkRefRendrePerimetre();
     return;
   }
@@ -26102,7 +26073,6 @@ function bkRefRendreReprise() {
           <div><div class="bk-ref-cell-label">Immatriculation</div><div class="bk-ref-cell-value">${escapeHtml(bkState.plate)}</div></div>
           <div><div class="bk-ref-cell-label">Modifications</div><div class="bk-ref-cell-value">${bkState.mods ? 'Déclarées' : 'Aucune'}</div></div>
         </div>
-        ${bkState.mods ? `<div style="font-family:var(--mono);font-size:10px;letter-spacing:0.14em;text-transform:uppercase;color:var(--gold-data);margin-top:10px;">Votre réservation passera en examen. Elle reste visible et annulable.</div>` : ''}
         <div style="margin-top:12px;">
           <a href="#" onclick="event.preventDefault(); goToAccount('compte-vehicules');" style="font-family:var(--mono);font-size:10px;letter-spacing:0.14em;text-transform:uppercase;color:var(--cream-mute);text-decoration:underline;text-underline-offset:4px;">Corriger cette fiche au garage</a>
         </div>
@@ -26430,11 +26400,12 @@ window.bkRefMajValidite = function() {
      bkSelectVehicle. Cette fonction ne fait plus que juger. */
   bkRefRendrePerimetre();
 
-  const plq = bkState.selectedVehicle?.plaque_statut;
+  /* La base a deja tout juge : designation, immatriculation, modifications,
+     criteres d'acces. On lit son verdict au lieu de refaire ses controles. */
+  const val = bkState.selectedVehicle?.statut_validation;
   const ok = !!bkState.selectedVehicle
     && !!bkState.referentiel
-    && bkState.referentiel.statut !== 'exclu'
-    && (!plq || plq === 'conforme')
+    && (!val || val === 'valide')
     && bkPlaqueValide(bkState.plate)
     && (!bkState.mods || bkState.modsDetail.length > 0)
     && bkOffreOuverte(bkState.selectedOffer, bkState.classeRetenue);
@@ -29948,10 +29919,9 @@ window.openVehicleModal = async function(vehicle) {
 
     // Verdict en cours sur l'immatriculation, dit sous le champ.
     const etat = document.getElementById('vhPlaqueEtat');
-    if (etat && vehicle.plaque_statut && vehicle.plaque_statut !== 'conforme') {
-      etat.textContent = vehicle.plaque_motif
-        || (vehicle.plaque_statut === 'refusee' ? 'Immatriculation refusée.' : 'Immatriculation en cours de vérification.');
-      etat.style.color = vehicle.plaque_statut === 'refusee' ? 'var(--red)' : 'var(--gold-data)';
+    if (etat && vehicle.statut_validation && vehicle.statut_validation !== 'valide') {
+      etat.textContent = vehicle.validation_motif || 'Véhicule en cours de vérification.';
+      etat.style.color = vehicle.statut_validation === 'refuse' ? 'var(--red)' : 'var(--gold-data)';
       etat.style.textTransform = 'none';
       etat.style.letterSpacing = '0';
       etat.style.fontFamily = 'var(--sans)';
@@ -30219,16 +30189,16 @@ function renderVehicleCard(v) {
      réserver, pas à la cinquième étape du tunnel. L'ordre suit la gravité :
      une plaque refusée prime sur une désignation manquante. */
   let etat = null;
-  if (v.plaque_statut === 'refusee') etat = { t: 'Immatriculation refusée', c: 'var(--red)' };
-  else if (v.plaque_statut === 'a_verifier') etat = { t: 'Immatriculation en vérification', c: 'var(--gold-data)' };
-  else if (!v.referentiel_id) etat = { t: 'Désignation à compléter', c: 'var(--gold-data)' };
-  else if (v.modifie) etat = { t: 'Modifications déclarées', c: 'var(--gold-data)' };
+  if (v.statut_validation === 'valide') etat = { t: 'Validé · sélectionnable', c: 'var(--gold-data)' };
+  else if (v.statut_validation === 'refuse') etat = { t: 'Écarté', c: 'var(--red)' };
+  else if (v.statut_validation === 'en_verification') etat = { t: 'En cours de vérification', c: 'var(--gold-data)' };
+  else if (v.statut_validation === 'incomplet') etat = { t: 'Fiche à compléter', c: 'var(--gold-data)' };
 
   const bandeau = etat
     ? `<div style="font-family:var(--mono);font-size:9px;letter-spacing:0.18em;text-transform:uppercase;color:${etat.c};margin-top:8px;">${escapeHtml(etat.t)}</div>`
     : '';
-  const motif = (v.plaque_motif && v.plaque_statut !== 'conforme')
-    ? `<div style="font-family:var(--sans);font-size:11.5px;line-height:1.45;color:var(--cream-mute);margin-top:6px;">${escapeHtml(v.plaque_motif)}</div>`
+  const motif = (v.validation_motif && v.statut_validation !== 'valide')
+    ? `<div style="font-family:var(--sans);font-size:11.5px;line-height:1.45;color:var(--cream-mute);margin-top:6px;">${escapeHtml(v.validation_motif)}</div>`
     : '';
 
   const tier = v.declared_value && v.declared_value >= 10000000
@@ -33256,18 +33226,16 @@ window.loadAdminIntentions = async function() {
 };
 
 /* ============================================================
-   INSCRIPTIONS MISES EN EXAMEN — la base ouvre, un humain ferme
+   RÉSERVATIONS À REVOIR — la conséquence, pas la décision
    ============================================================
-   Trois causes ouvrent un examen sans que personne n'ait à y penser : des
-   modifications déclarées après la réservation, une immatriculation qui
-   cesse d'être conforme, et la révision annuelle du référentiel — celle-ci
-   changeait jusqu'ici la classe d'une voiture déjà engagée sans que rien ne
-   le dise.
+   Ce qui s'instruit, c'est le VÉHICULE : il se valide une fois, puis il
+   devient sélectionnable. Cet écran-ci ne fait qu'en tirer les conséquences
+   — une voiture déjà engagée qui cesse d'être validée laisse des journées
+   à venir qui la portent encore. Elles apparaissent ici avec le motif venu
+   de la fiche du véhicule.
 
-   Une inscription non payée passe en examen ; une inscription CONFIRMÉE
-   garde son statut et porte seulement son motif. Défaire un engagement payé
-   est une décision commerciale, pas une conséquence automatique — elle se
-   prend ici, à la main. */
+   La réservation elle-même n'est jamais défaite automatiquement : maintenir
+   ou annuler se décide à la main. */
 window.loadAdminExamenInscriptions = async function() {
   const box = document.getElementById('adminExamenInscRows');
   if (!box) return;
@@ -33304,9 +33272,9 @@ window.loadAdminExamenInscriptions = async function() {
           <div style="font-family:var(--sans);font-size:12.5px;line-height:1.45;color:var(--cream-faint);margin-top:5px;">${escapeHtml(r.motif_examen || '')}</div>
         </div>
         <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;">
-          <span class="tag-inline${paye ? '' : ' green'}" style="font-size:10px;">${paye ? 'Engagement payé' : 'Non payée'}</span>
-          <button class="admin-action-btn" onclick="adminExamenClore('${r.id}', true)">Admettre</button>
-          <button class="admin-action-btn" onclick="adminExamenClore('${r.id}', false)">Refuser</button>
+          <span class="tag-inline${paye ? '' : ' green'}" style="font-size:10px;">${paye ? 'Journée réglée' : 'En attente de règlement'}</span>
+          <button class="admin-action-btn" onclick="adminExamenClore('${r.id}', true)">Maintenir</button>
+          <button class="admin-action-btn" onclick="adminExamenClore('${r.id}', false)">Annuler</button>
         </div>
       </div>`;
     }).join('');
@@ -33339,7 +33307,8 @@ window.adminExamenClore = async function(id, admis) {
    unicité, cohérence avec le millésime. Ce qui reste ici, ce sont les cas
    qu'aucune règle ne tranche — une copropriété réelle, une plaque
    étrangère, un rapport HistoVec que le pilote a produit. */
-const PLAQUE_STATUT_LBL = { conforme: 'Conforme', a_verifier: 'À vérifier', refusee: 'Refusée' };
+const VALIDATION_LBL = { incomplet: 'Fiche à compléter', en_verification: 'À vérifier',
+                         valide: 'Validé', refuse: 'Écarté' };
 
 window.loadAdminPlaques = async function() {
   const box = document.getElementById('adminPlaqueRows');
@@ -33348,23 +33317,32 @@ window.loadAdminPlaques = async function() {
   try {
     const { data, error } = await supabase
       .from('vehicles')
-      .select('id, user_id, brand, model, year, license_plate, plaque_statut, plaque_motif, histovec_statut, plaque_verifiee_le')
-      .in('plaque_statut', ['a_verifier', 'refusee'])
-      .order('plaque_verifiee_le', { ascending: true });
-    if (error) { console.warn('[Plaques]', error); box.innerHTML = vide('Contrôles indisponibles.'); return; }
-    if (!data || !data.length) { box.innerHTML = vide('Aucune immatriculation en attente.'); return; }
+      .select('id, user_id, brand, model, year, license_plate, statut_validation, validation_motif, validation_le, histovec_statut')
+      .eq('statut_validation', 'en_verification')
+      .order('validation_le', { ascending: true });
+    if (error) { console.warn('[Validation]', error); box.innerHTML = vide('Contrôles indisponibles.'); return; }
+    if (!data || !data.length) { box.innerHTML = vide('Aucun véhicule en attente de validation.'); return; }
+
+    /* Une voiture peut etre deja engagee : on dit combien de journees a venir
+       la portent, pour que la decision se prenne en connaissance de cause. */
+    const ids = data.map(v => v.id);
+    const { data: engagees } = await supabase
+      .from('registrations').select('vehicle_id, session_id')
+      .in('vehicle_id', ids).in('status', ['pending','pending_payment','confirmed','en_examen']);
+    const compte = {};
+    (engagees || []).forEach(r => { compte[r.vehicle_id] = (compte[r.vehicle_id] || 0) + 1; });
 
     box.innerHTML = data.map(v => `
       <div style="display:flex;align-items:center;justify-content:space-between;gap:10px;padding:12px 14px;border-top:1px solid var(--bento-border);flex-wrap:wrap;">
         <div style="min-width:250px;flex:1;">
           <div style="font-family:var(--sans);font-size:14px;color:var(--cream);">${escapeHtml([v.brand, v.model, v.year].filter(Boolean).join(' '))}</div>
-          <div style="font-family:var(--mono);font-size:11px;color:var(--cream-mute);">${escapeHtml(v.license_plate || 'sans plaque')} · ${escapeHtml(ecurieAge(v.plaque_verifiee_le))}${v.histovec_statut ? ' · HistoVec ' + escapeHtml(v.histovec_statut) : ''}</div>
-          <div style="font-family:var(--sans);font-size:11.5px;line-height:1.45;color:var(--cream-faint);margin-top:4px;">${escapeHtml(v.plaque_motif || '')}</div>
+          <div style="font-family:var(--mono);font-size:11px;color:var(--cream-mute);">${escapeHtml(v.license_plate || 'sans plaque')} · ${escapeHtml(ecurieAge(v.validation_le))}${compte[v.id] ? ' · ' + compte[v.id] + ' journée' + (compte[v.id] > 1 ? 's' : '') + ' à venir' : ''}</div>
+          <div style="font-family:var(--sans);font-size:11.5px;line-height:1.45;color:var(--cream-faint);margin-top:4px;">${escapeHtml(v.validation_motif || '')}</div>
         </div>
         <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;">
-          <span class="tag-inline" style="font-size:10px;">${escapeHtml(PLAQUE_STATUT_LBL[v.plaque_statut] || v.plaque_statut)}</span>
-          <button class="admin-action-btn" onclick="adminPlaqueStatuer('${v.id}','conforme')">Valider</button>
-          <button class="admin-action-btn" onclick="adminPlaqueStatuer('${v.id}','refusee')">Refuser</button>
+          <span class="tag-inline" style="font-size:10px;">${escapeHtml(VALIDATION_LBL[v.statut_validation] || v.statut_validation)}</span>
+          <button class="admin-action-btn" onclick="adminPlaqueStatuer('${v.id}','valide')">Valider</button>
+          <button class="admin-action-btn" onclick="adminPlaqueStatuer('${v.id}','refuse')">Écarter</button>
         </div>
       </div>`).join('');
   } catch (e) { console.warn('[Plaques]', e); box.innerHTML = vide('Contrôles indisponibles.'); }
@@ -33372,22 +33350,24 @@ window.loadAdminPlaques = async function() {
 
 window.adminPlaqueStatuer = async function(id, statut) {
   const motif = prompt(
-    statut === 'conforme'
-      ? "Sur quoi repose cette validation ? (rapport HistoVec, copropriété constatée…)"
-      : "Motif du refus, transmis au pilote :", '');
+    statut === 'valide'
+      ? "Sur quoi repose cette validation ? (rapport HistoVec, modifications examinées, copropriété constatée…)"
+      : "Motif, transmis au pilote :", '');
   if (motif === null) return;
-  if (statut === 'refusee' && !motif.trim()) { toast('Un refus se motive.', 'warn'); return; }
+  if (statut === 'refuse' && !motif.trim()) { toast('Un refus se motive.', 'warn'); return; }
   try {
-    // La levée passe par la base : elle seule vérifie que l'appelant est
-    // administrateur, et son message d'exception est rédigé pour être lu.
-    const { error } = await supabase.rpc('oxv_statuer_plaque', {
-      p_vehicle_id: id, p_statut: statut, p_motif: motif.trim() || null,
-      p_histovec: statut === 'conforme' ? 'verifiee' : null
+    /* La décision passe par la base : elle seule vérifie que l'appelant est
+       administrateur, et son message d'exception est rédigé pour être lu.
+       Elle tient jusqu'à ce que les FAITS changent — une plaque, une
+       désignation, une modification remettent le rapprochement en marche. */
+    const { error } = await supabase.rpc('oxv_statuer_vehicule', {
+      p_vehicle_id: id, p_statut: statut, p_motif: motif.trim() || null
     });
     if (error) { toast(error.message || 'Écriture refusée', 'warn'); return; }
-    toast(statut === 'conforme' ? 'Immatriculation validée' : 'Immatriculation refusée', 'ok');
+    toast(statut === 'valide' ? 'Véhicule validé' : 'Véhicule écarté', 'ok');
     loadAdminPlaques();
-  } catch (e) { console.warn('[Plaque]', e); toast(e.message || 'Écriture refusée', 'warn'); }
+    if (typeof loadAdminExamenInscriptions === 'function') loadAdminExamenInscriptions();
+  } catch (e) { console.warn('[Validation]', e); toast(e.message || 'Écriture refusée', 'warn'); }
 };
 
 /* ============================================================
