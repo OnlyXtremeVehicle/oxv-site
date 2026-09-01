@@ -21776,7 +21776,7 @@ select option:hover {
             <p style="font-family:var(--sans);font-size:14px;line-height:1.6;color:var(--cream-mute);margin:0;">L'application et la captation se choisissent, jamais imposées.</p>
           </div>
         </div>
-        <p style="font-family:var(--sans);font-size:14px;line-height:1.65;color:var(--cream-mute);max-width:820px;margin:18px 0 0;">L'assurance circuit est souscrite par le pilote et présentée au briefing avec le permis et le contrôle technique. Elle couvre les véhicules des autres pilotes et les installations de la piste. <strong style="color:var(--cream);">Elle n'assure pas le véhicule de son souscripteur</strong> : l'assurance auto classique exclut la conduite sur circuit.</p>
+        <p style="font-family:var(--sans);font-size:14px;line-height:1.65;color:var(--cream-mute);max-width:820px;margin:18px 0 0;"><button class="link-inline" onclick="goTo('assurance-circuit')" style="background:none;border:none;color:var(--oxv-red);cursor:pointer;padding:0;font:inherit;">L'assurance circuit</button> est souscrite par le pilote et présentée au briefing avec le permis et le contrôle technique. Elle couvre les véhicules des autres pilotes et les installations de la piste. <strong style="color:var(--cream);">Elle n'assure pas le véhicule de son souscripteur</strong> : l'assurance auto classique exclut la conduite sur circuit.</p>
       </div>
 
       <!-- Ce qu'OXV ne fera jamais (TrustBlock) -->
@@ -22548,7 +22548,7 @@ select option:hover {
       <p style="font-family:var(--sans);font-size:15px;line-height:1.7;color:var(--cream-mute);max-width:640px;margin:0 0 24px;">Six éléments concrets, vérifiables, qui fondent le sérieux d'OXV.</p>
       <div class="reveal" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px;margin-bottom:40px;">
         <div class="bento" style="padding:24px;"><div style="font-family:var(--display);font-size:10px;letter-spacing:0.2em;text-transform:uppercase;color:var(--gold);margin-bottom:8px;">Un circuit réel, pas un slogan</div><p style="font-family:var(--sans);font-size:14px;line-height:1.6;color:var(--cream-mute);margin:0;">Le tracé Beltoise au Circuit de Haute Saintonge, dessiné par Jean-Pierre Beltoise en 2009, exploité par Julien Beltoise. Tracé technique, sans chicane artificielle — <button class="link-inline" onclick="goTo('circuit')" style="background:none;border:none;color:var(--oxv-red);cursor:pointer;padding:0;font:inherit;">voir le circuit</button>.</p></div>
-        <div class="bento" style="padding:24px;"><div style="font-family:var(--display);font-size:10px;letter-spacing:0.2em;text-transform:uppercase;color:var(--gold);margin-bottom:8px;">Un cadre de sécurité opposable</div><p style="font-family:var(--sans);font-size:14px;line-height:1.6;color:var(--cream-mute);margin:0;">Briefing obligatoire, documents vérifiés (permis, RC piste, contrôle technique), vingt pilotes maximum — <button class="link-inline" onclick="goTo('securite')" style="background:none;border:none;color:var(--oxv-red);cursor:pointer;padding:0;font:inherit;">sécurité &amp; cadre</button>.</p></div>
+        <div class="bento" style="padding:24px;"><div style="font-family:var(--display);font-size:10px;letter-spacing:0.2em;text-transform:uppercase;color:var(--gold);margin-bottom:8px;">Un cadre de sécurité opposable</div><p style="font-family:var(--sans);font-size:14px;line-height:1.6;color:var(--cream-mute);margin:0;">Briefing obligatoire, documents vérifiés (permis, RC piste, contrôle technique), vingt pilotes maximum. <button class="link-inline" onclick="goTo('rouler-sur-circuit')" style="background:none;border:none;color:var(--oxv-red);cursor:pointer;padding:0;font:inherit;">les six conditions</button> · <button class="link-inline" onclick="goTo('securite')" style="background:none;border:none;color:var(--oxv-red);cursor:pointer;padding:0;font:inherit;">sécurité &amp; cadre</button>.</p></div>
         <div class="bento" style="padding:24px;"><div style="font-family:var(--display);font-size:10px;letter-spacing:0.2em;text-transform:uppercase;color:var(--gold);margin-bottom:8px;">Vos données vous appartiennent</div><p style="font-family:var(--sans);font-size:14px;line-height:1.6;color:var(--cream-mute);margin:0;">Chiffrées, hébergées en Union européenne, jamais revendues. L'app compagnon est en opt-in : vous décidez.</p></div>
         <div class="bento" style="padding:24px;"><div style="font-family:var(--display);font-size:10px;letter-spacing:0.2em;text-transform:uppercase;color:var(--gold);margin-bottom:8px;">Des conditions claires</div><p style="font-family:var(--sans);font-size:14px;line-height:1.6;color:var(--cream-mute);margin:0;">Tarifs TTC affichés, annulation gratuite jusqu'à 7 jours avant, paiement en ligne sécurisé — <button class="link-inline" onclick="goTo('cgv')" style="background:none;border:none;color:var(--oxv-red);cursor:pointer;padding:0;font:inherit;">nos CGV</button>.</p></div>
         <div class="bento" style="padding:24px;"><div style="font-family:var(--display);font-size:10px;letter-spacing:0.2em;text-transform:uppercase;color:var(--gold);margin-bottom:8px;">Un écosystème transparent</div><p style="font-family:var(--sans);font-size:14px;line-height:1.6;color:var(--cream-mute);margin:0;">Partenaires sélectionnés et espace presse ouvert — <button class="link-inline" onclick="goTo('partenaires')" style="background:none;border:none;color:var(--oxv-red);cursor:pointer;padding:0;font:inherit;">partenaires</button> · <button class="link-inline" onclick="goTo('presse')" style="background:none;border:none;color:var(--oxv-red);cursor:pointer;padding:0;font:inherit;">presse</button>.</p></div>
@@ -23290,6 +23290,92 @@ select option:hover {
 <div class="page" id="page-pavillon-regie"><div class="pav-tool" id="pavToolRegie"></div></div>
 <!-- /pavillon -->
 
+
+<!-- ============ GUIDE : rouler-sur-circuit ============ -->
+<div class="page" id="page-rouler-sur-circuit">
+  <section class="page-hero">
+    <div class="wrap">
+      <div class="page-hero-eyebrow">N° ⬡ · Guide</div>
+      <h1 class="page-hero-title">Rouler sur circuit :<br/>ce qu'il faut <em>vraiment</em>.</h1>
+      <p class="page-hero-lede">Six conditions, vérifiées pilote par pilote le jour même. Aucune n'est déclarée sur parole. Voici la liste complète, sans zone grise.</p>
+    </div>
+  </section>
+  <section class="section">
+    <div class="wrap" style="max-width:1000px;">
+<h2 class="section-title" style="font-size:32px;margin-bottom:8px;">Les six <em>conditions</em>.</h2><p style="font-family:var(--sans);font-size:15px;line-height:1.7;color:var(--cream-mute);max-width:680px;margin:0 0 22px;">Elles sont contrôlées au briefing, avant que la première roue ne touche la piste.</p><div class="reveal" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px;margin-bottom:40px;"><div class="bento" style="padding:24px;"><div style="font-family:var(--display);font-size:10px;letter-spacing:0.2em;text-transform:uppercase;color:var(--gold);margin-bottom:8px;">01 · Le permis</div><p style="font-family:var(--sans);font-size:14px;line-height:1.6;color:var(--cream-mute);margin:0;">Permis B en cours de validité, présenté au briefing avec les autres pièces. Aucune licence sportive n'est exigée pour une journée OXV.</p></div><div class="bento" style="padding:24px;"><div style="font-family:var(--display);font-size:10px;letter-spacing:0.2em;text-transform:uppercase;color:var(--gold);margin-bottom:8px;">02 · L'assurance circuit</div><p style="font-family:var(--sans);font-size:14px;line-height:1.6;color:var(--cream-mute);margin:0;">Souscrite par le pilote, jamais fournie par l'organisateur. Elle couvre les véhicules des autres pilotes et les installations de la piste. <button class="link-inline" onclick="goTo('assurance-circuit')" style="background:none;border:none;color:var(--oxv-red);cursor:pointer;padding:0;font:inherit;">ce qu'elle couvre exactement</button>.</p></div><div class="bento" style="padding:24px;"><div style="font-family:var(--display);font-size:10px;letter-spacing:0.2em;text-transform:uppercase;color:var(--gold);margin-bottom:8px;">03 · Le contrôle technique</div><p style="font-family:var(--sans);font-size:14px;line-height:1.6;color:var(--cream-mute);margin:0;">En cours de validité, présenté avec le permis et l'attestation d'assurance.</p></div><div class="bento" style="padding:24px;"><div style="font-family:var(--display);font-size:10px;letter-spacing:0.2em;text-transform:uppercase;color:var(--gold);margin-bottom:8px;">04 · L'équipement</div><p style="font-family:var(--sans);font-size:14px;line-height:1.6;color:var(--cream-mute);margin:0;">Casque homologué, chaussures fermées, anneau de remorquage à bord. <button class="link-inline" onclick="goTo('equipement-circuit')" style="background:none;border:none;color:var(--oxv-red);cursor:pointer;padding:0;font:inherit;">le détail de l'équipement</button>.</p></div><div class="bento" style="padding:24px;"><div style="font-family:var(--display);font-size:10px;letter-spacing:0.2em;text-transform:uppercase;color:var(--gold);margin-bottom:8px;">05 · Le niveau sonore</div><p style="font-family:var(--sans);font-size:14px;line-height:1.6;color:var(--cream-mute);margin:0;">Le véhicule passe au sonomètre à l'arrivée. La norme est celle du circuit, pas celle d'OXV. Un dépassement ferme l'accès à la piste.</p></div><div class="bento" style="padding:24px;"><div style="font-family:var(--display);font-size:10px;letter-spacing:0.2em;text-transform:uppercase;color:var(--gold);margin-bottom:8px;">06 · Le briefing</div><p style="font-family:var(--sans);font-size:14px;line-height:1.6;color:var(--cream-mute);margin:0;">Vingt minutes, obligatoire, jamais renouvelé. Drapeaux, trajectoires, dépassements, zones de vigilance. Personne n'entre en piste sans l'avoir suivi.</p></div></div><h2 class="section-title" style="font-size:32px;margin-bottom:8px;">Et la <em>voiture</em> ?</h2><p style="font-family:var(--sans);font-size:15px;line-height:1.7;color:var(--cream-mute);max-width:680px;margin:0 0 22px;">Le référentiel d'accès OXV s'applique au rapport masse / puissance du véhicule, pas à sa marque ni à sa valeur. Chaque voiture y est désignée par sa marque, son modèle et sa génération, ce qui détermine sa classe : Sport, GT ou Supersport. La classe décide des journées qui vous sont ouvertes. Une voiture se déclare une fois, au garage, et reste sélectionnable ensuite.</p><h2 class="section-title" style="font-size:28px;margin:8px 0 18px;">Questions <em>fréquentes</em>.</h2><div class="bento" style="padding:22px 24px;margin-bottom:12px;"><div style="font-family:var(--sans);font-size:15px;font-weight:500;color:var(--cream);margin-bottom:8px;">Faut-il une licence FFSA pour rouler sur circuit ?</div><p style="font-family:var(--sans);font-size:14px;line-height:1.65;color:var(--cream-mute);margin:0;">Non, pas pour une journée de roulage libre. Le permis B suffit. Une licence devient nécessaire en compétition, ce qui n'est pas l'objet d'une journée OXV : il n'y a ni chronométrage officiel ni classement.</p></div><div class="bento" style="padding:22px 24px;margin-bottom:12px;"><div style="font-family:var(--sans);font-size:15px;font-weight:500;color:var(--cream);margin-bottom:8px;">Puis-je venir avec une voiture de série ?</div><p style="font-family:var(--sans);font-size:14px;line-height:1.65;color:var(--cream-mute);margin:0;">Oui, si elle satisfait le référentiel d'accès et la norme sonore du circuit. La très grande majorité des sportives de série y répondent.</p></div><div class="bento" style="padding:22px 24px;margin-bottom:12px;"><div style="font-family:var(--sans);font-size:15px;font-weight:500;color:var(--cream);margin-bottom:8px;">Combien de pilotes en même temps ?</div><p style="font-family:var(--sans);font-size:14px;line-height:1.65;color:var(--cream-mute);margin:0;">Vingt inscrits par journée, jamais vingt-et-un. La jauge porte sur les inscriptions, pas sur le nombre de voitures en piste à un instant donné : le roulage se fait par relais encadrés.</p></div><div class="bento" style="padding:22px 24px;margin-bottom:12px;"><div style="font-family:var(--sans);font-size:15px;font-weight:500;color:var(--cream);margin-bottom:8px;">Que se passe-t-il s'il pleut ?</div><p style="font-family:var(--sans);font-size:14px;line-height:1.65;color:var(--cream-mute);margin:0;">La journée est maintenue. Le chef de piste adapte les relais si les conditions l'exigent.</p></div><div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:34px;"><button class="btn btn-primary btn-lg" onclick="ctaPrimaryGo()"><span>Voir les journées</span></button><button class="btn btn-lg" onclick="goTo('contact')"><span>Poser une question</span></button></div>
+    </div>
+  </section>
+</div>
+<!-- /rouler-sur-circuit -->
+
+<!-- ============ GUIDE : assurance-circuit ============ -->
+<div class="page" id="page-assurance-circuit">
+  <section class="page-hero">
+    <div class="wrap">
+      <div class="page-hero-eyebrow">N° ⬡ · Guide</div>
+      <h1 class="page-hero-title">Assurance circuit :<br/>ce que votre contrat <em>exclut</em>.</h1>
+      <p class="page-hero-lede">C'est la question qui revient le plus, et la réponse surprend souvent : votre assurance auto n'assure pas votre voiture sur circuit. Voici les trois couvertures qui se superposent, et celle qui manque.</p>
+    </div>
+  </section>
+  <section class="section">
+    <div class="wrap" style="max-width:1000px;">
+<h2 class="section-title" style="font-size:32px;margin-bottom:8px;">Trois <em>couvertures</em>, pas une.</h2><div class="reveal" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px;margin-bottom:40px;"><div class="bento" style="padding:24px;"><div style="font-family:var(--display);font-size:10px;letter-spacing:0.2em;text-transform:uppercase;color:var(--gold);margin-bottom:8px;">01 · La RC de l'organisateur</div><p style="font-family:var(--sans);font-size:14px;line-height:1.6;color:var(--cream-mute);margin:0;">Incluse dans votre journée, sans démarche de votre part. Elle couvre la responsabilité civile d'OXV en tant qu'organisateur.</p></div><div class="bento" style="padding:24px;"><div style="font-family:var(--display);font-size:10px;letter-spacing:0.2em;text-transform:uppercase;color:var(--gold);margin-bottom:8px;">02 · Votre assurance circuit</div><p style="font-family:var(--sans);font-size:14px;line-height:1.6;color:var(--cream-mute);margin:0;">Souscrite par vous, présentée au briefing. Elle couvre les dommages que vous pourriez causer aux véhicules des autres pilotes et aux installations de la piste.</p></div><div class="bento" style="padding:24px;"><div style="font-family:var(--display);font-size:10px;letter-spacing:0.2em;text-transform:uppercase;color:var(--gold);margin-bottom:8px;">03 · Votre propre véhicule</div><p style="font-family:var(--sans);font-size:14px;line-height:1.6;color:var(--cream-mute);margin:0;">Il n'est couvert par aucune des deux. L'assurance auto classique exclut la conduite sur circuit : en cas de dommage à votre voiture, vous en supportez le coût.</p></div></div><div class="bento" style="padding:28px;margin-bottom:40px;border-color:var(--gold);"><div style="font-family:var(--display);font-size:11px;letter-spacing:0.2em;text-transform:uppercase;color:var(--gold);margin-bottom:12px;">Le point qui coûte cher</div><p style="font-family:var(--sans);font-size:15px;line-height:1.7;color:var(--cream-mute);margin:0;">Beaucoup de pilotes découvrent l'exclusion après le sinistre. Elle figure dans les conditions générales de presque tous les contrats auto : la conduite sur circuit fermé en est écartée, y compris hors compétition. Des garanties spécifiques existent chez des assureurs spécialisés, à souscrire à la journée ou à l'année. OXV n'en commercialise aucune et n'en recommande aucune : le choix vous appartient.</p></div><h2 class="section-title" style="font-size:28px;margin:8px 0 18px;">Questions <em>fréquentes</em>.</h2><div class="bento" style="padding:22px 24px;margin-bottom:12px;"><div style="font-family:var(--sans);font-size:15px;font-weight:500;color:var(--cream);margin-bottom:8px;">Mon assurance tous risques me couvre-t-elle sur circuit ?</div><p style="font-family:var(--sans);font-size:14px;line-height:1.65;color:var(--cream-mute);margin:0;">Dans la quasi-totalité des contrats, non. L'exclusion figure aux conditions générales et vise la conduite sur circuit fermé, compétition ou non. Vérifiez votre contrat, article par article, avant de vous engager.</p></div><div class="bento" style="padding:22px 24px;margin-bottom:12px;"><div style="font-family:var(--sans);font-size:15px;font-weight:500;color:var(--cream);margin-bottom:8px;">L'assurance circuit est-elle obligatoire chez OXV ?</div><p style="font-family:var(--sans);font-size:14px;line-height:1.65;color:var(--cream-mute);margin:0;">Oui. Elle est souscrite par le pilote et présentée au briefing avec le permis et le contrôle technique. Sans elle, l'accès à la piste est fermé.</p></div><div class="bento" style="padding:22px 24px;margin-bottom:12px;"><div style="font-family:var(--sans);font-size:15px;font-weight:500;color:var(--cream);margin-bottom:8px;">Que couvre-t-elle exactement ?</div><p style="font-family:var(--sans);font-size:14px;line-height:1.65;color:var(--cream-mute);margin:0;">Les véhicules des autres pilotes et les installations de la piste. Elle n'assure pas le véhicule de son souscripteur.</p></div><div class="bento" style="padding:22px 24px;margin-bottom:12px;"><div style="font-family:var(--sans);font-size:15px;font-weight:500;color:var(--cream);margin-bottom:8px;">Et si je loue une voiture de piste ?</div><p style="font-family:var(--sans);font-size:14px;line-height:1.65;color:var(--cream-mute);margin:0;">La couverture dépend du contrat de location. La location d'un véhicule de piste est possible via nos partenaires : demandez-nous, nous vous mettons en relation.</p></div><div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:34px;"><button class="btn btn-primary btn-lg" onclick="ctaPrimaryGo()"><span>Voir les journées</span></button><button class="btn btn-lg" onclick="goTo('contact')"><span>Poser une question</span></button></div>
+    </div>
+  </section>
+</div>
+<!-- /assurance-circuit -->
+
+<!-- ============ GUIDE : equipement-circuit ============ -->
+<div class="page" id="page-equipement-circuit">
+  <section class="page-hero">
+    <div class="wrap">
+      <div class="page-hero-eyebrow">N° ⬡ · Guide</div>
+      <h1 class="page-hero-title">L'équipement<br/><em>exigé</em> en piste.</h1>
+      <p class="page-hero-lede">Trois éléments contrôlés pilote par pilote, avant le premier tour. Rien de plus, rien de moins.</p>
+    </div>
+  </section>
+  <section class="section">
+    <div class="wrap" style="max-width:1000px;">
+<h2 class="section-title" style="font-size:32px;margin-bottom:8px;">Ce qui est <em>vérifié</em>.</h2><div class="reveal" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px;margin-bottom:40px;"><div class="bento" style="padding:24px;"><div style="font-family:var(--display);font-size:10px;letter-spacing:0.2em;text-transform:uppercase;color:var(--gold);margin-bottom:8px;">01 · Le casque</div><p style="font-family:var(--sans);font-size:14px;line-height:1.6;color:var(--cream-mute);margin:0;">Homologué, à la norme retenue par le circuit. Il est contrôlé au briefing, pas déclaré sur parole. Un casque de moto homologué convient dans la plupart des cas.</p></div><div class="bento" style="padding:24px;"><div style="font-family:var(--display);font-size:10px;letter-spacing:0.2em;text-transform:uppercase;color:var(--gold);margin-bottom:8px;">02 · Les chaussures</div><p style="font-family:var(--sans);font-size:14px;line-height:1.6;color:var(--cream-mute);margin:0;">Fermées, semelle fine de préférence. Les chaussures ouvertes ferment l'accès à la piste.</p></div><div class="bento" style="padding:24px;"><div style="font-family:var(--display);font-size:10px;letter-spacing:0.2em;text-transform:uppercase;color:var(--gold);margin-bottom:8px;">03 · L'anneau de remorquage</div><p style="font-family:var(--sans);font-size:14px;line-height:1.6;color:var(--cream-mute);margin:0;">À bord du véhicule, accessible. Il permet d'évacuer une voiture immobilisée sans immobiliser la journée des autres.</p></div></div><p style="font-family:var(--sans);font-size:15px;line-height:1.7;color:var(--cream-mute);max-width:680px;margin:0 0 22px;">Le circuit peut exiger davantage selon la journée. Les exigences complémentaires sont communiquées avant la session, jamais découvertes sur place.</p><h2 class="section-title" style="font-size:32px;margin-bottom:8px;">Ce qui n'est <em>pas</em> exigé.</h2><p style="font-family:var(--sans);font-size:15px;line-height:1.7;color:var(--cream-mute);max-width:680px;margin:0 0 22px;">Une journée de roulage libre n'est pas une épreuve de compétition. La combinaison ignifugée, le harnais et l'arceau relèvent de la course, pas d'une journée OXV. Vous roulez dans votre voiture, avec votre équipement de route, dans un cadre encadré.</p><h2 class="section-title" style="font-size:28px;margin:8px 0 18px;">Questions <em>fréquentes</em>.</h2><div class="bento" style="padding:22px 24px;margin-bottom:12px;"><div style="font-family:var(--sans);font-size:15px;font-weight:500;color:var(--cream);margin-bottom:8px;">Quel casque pour rouler sur circuit ?</div><p style="font-family:var(--sans);font-size:14px;line-height:1.65;color:var(--cream-mute);margin:0;">Un casque homologué, intégral ou jet selon ce que retient le circuit. La norme applicable est celle du circuit, communiquée avant la session. Le casque est contrôlé au briefing.</p></div><div class="bento" style="padding:22px 24px;margin-bottom:12px;"><div style="font-family:var(--sans);font-size:15px;font-weight:500;color:var(--cream);margin-bottom:8px;">Faut-il une combinaison ?</div><p style="font-family:var(--sans);font-size:14px;line-height:1.65;color:var(--cream-mute);margin:0;">Non, pas pour une journée de roulage libre. Des vêtements couvrants et des chaussures fermées suffisent.</p></div><div class="bento" style="padding:22px 24px;margin-bottom:12px;"><div style="font-family:var(--sans);font-size:15px;font-weight:500;color:var(--cream);margin-bottom:8px;">Puis-je emmener un passager ?</div><p style="font-family:var(--sans);font-size:14px;line-height:1.65;color:var(--cream-mute);margin:0;">Le passager relève du règlement du circuit et de la journée. Posez-nous la question avant de réserver, nous vous répondons pour la date visée.</p></div><div class="bento" style="padding:22px 24px;margin-bottom:12px;"><div style="font-family:var(--sans);font-size:15px;font-weight:500;color:var(--cream);margin-bottom:8px;">Où trouver un anneau de remorquage ?</div><p style="font-family:var(--sans);font-size:14px;line-height:1.65;color:var(--cream-mute);margin:0;">Il est livré avec le véhicule, généralement dans le coffre avec l'outillage de bord. Vérifiez sa présence avant de partir.</p></div><div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:34px;"><button class="btn btn-primary btn-lg" onclick="ctaPrimaryGo()"><span>Voir les journées</span></button><button class="btn btn-lg" onclick="goTo('contact')"><span>Poser une question</span></button></div>
+    </div>
+  </section>
+</div>
+<!-- /equipement-circuit -->
+
+<!-- ============ GUIDE : premiere-fois-circuit ============ -->
+<div class="page" id="page-premiere-fois-circuit">
+  <section class="page-hero">
+    <div class="wrap">
+      <div class="page-hero-eyebrow">N° ⬡ · Guide</div>
+      <h1 class="page-hero-title">Première journée :<br/>le <em>déroulé</em>, heure par heure.</h1>
+      <p class="page-hero-lede">Ce qui se passe entre le moment où vous franchissez le portail et celui où vous repartez. Aucune surprise, c'est le même déroulé à chaque journée.</p>
+    </div>
+  </section>
+  <section class="section">
+    <div class="wrap" style="max-width:1000px;">
+<h2 class="section-title" style="font-size:32px;margin-bottom:8px;">Le <em>matin</em>.</h2><div class="reveal" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px;margin-bottom:40px;"><div class="bento" style="padding:24px;"><div style="font-family:var(--display);font-size:10px;letter-spacing:0.2em;text-transform:uppercase;color:var(--gold);margin-bottom:8px;">08:00 · L'arrivée</div><p style="font-family:var(--sans);font-size:14px;line-height:1.6;color:var(--cream-mute);margin:0;">Vous présentez permis, attestation d'assurance circuit et contrôle technique. Votre équipement est vérifié.</p></div><div class="bento" style="padding:24px;"><div style="font-family:var(--display);font-size:10px;letter-spacing:0.2em;text-transform:uppercase;color:var(--gold);margin-bottom:8px;">Le contrôle</div><p style="font-family:var(--sans);font-size:14px;line-height:1.6;color:var(--cream-mute);margin:0;">Passage au sonomètre et vérification de l'état du véhicule : état général, freins, pneus, niveaux.</p></div><div class="bento" style="padding:24px;"><div style="font-family:var(--display);font-size:10px;letter-spacing:0.2em;text-transform:uppercase;color:var(--gold);margin-bottom:8px;">Le briefing</div><p style="font-family:var(--sans);font-size:14px;line-height:1.6;color:var(--cream-mute);margin:0;">Vingt minutes. Drapeaux, trajectoires, règles de dépassement, zones de vigilance. Obligatoire, jamais renouvelé en cours de journée.</p></div><div class="bento" style="padding:24px;"><div style="font-family:var(--display);font-size:10px;letter-spacing:0.2em;text-transform:uppercase;color:var(--gold);margin-bottom:8px;">La piste</div><p style="font-family:var(--sans);font-size:14px;line-height:1.6;color:var(--cream-mute);margin:0;">Chef de piste, relais encadrés. Vous roulez par relais, pas en continu : c'est ce qui permet de tenir vingt inscrits sans saturer la piste.</p></div></div><h2 class="section-title" style="font-size:32px;margin-bottom:8px;">Deux <em>formats</em>.</h2><div class="reveal" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px;margin-bottom:40px;"><div class="bento" style="padding:24px;"><div style="font-family:var(--display);font-size:10px;letter-spacing:0.2em;text-transform:uppercase;color:var(--gold);margin-bottom:8px;">Access · demi-journée</div><p style="font-family:var(--sans);font-size:14px;line-height:1.6;color:var(--cream-mute);margin:0;">Le lundi après-midi, de 14 h à 18 h, quatre relais. 390 € TTC, et 250 € TTC pour une première session, une seule fois par pilote.</p></div><div class="bento" style="padding:24px;"><div style="font-family:var(--display);font-size:10px;letter-spacing:0.2em;text-transform:uppercase;color:var(--gold);margin-bottom:8px;">Signature · journée complète</div><p style="font-family:var(--sans);font-size:14px;line-height:1.6;color:var(--cream-mute);margin:0;">Le vendredi, six relais, déjeuner traiteur. 690 € TTC, télémétrie et banque média comprises.</p></div></div><h2 class="section-title" style="font-size:32px;margin-bottom:8px;">Ce que vous <em>emportez</em>.</h2><p style="font-family:var(--sans);font-size:15px;line-height:1.7;color:var(--cream-mute);max-width:680px;margin:0 0 22px;">Les premières photos arrivent le soir même. La télémétrie de votre journée est disponible dans l'application deux jours après, le bilan de session le lendemain. L'application est comprise dans chaque offre, sans abonnement. <button class="link-inline" onclick="goTo('apres-journee')" style="background:none;border:none;color:var(--oxv-red);cursor:pointer;padding:0;font:inherit;">le détail de ce qui suit la journée</button>.</p><h2 class="section-title" style="font-size:28px;margin:8px 0 18px;">Questions <em>fréquentes</em>.</h2><div class="bento" style="padding:22px 24px;margin-bottom:12px;"><div style="font-family:var(--sans);font-size:15px;font-weight:500;color:var(--cream);margin-bottom:8px;">Je n'ai jamais roulé sur circuit. Est-ce un problème ?</div><p style="font-family:var(--sans);font-size:14px;line-height:1.65;color:var(--cream-mute);margin:0;">Non. Le briefing pose le même cadre pour tout le monde, et les relais sont encadrés par un chef de piste. Vous roulez à votre rythme : il n'y a ni classement ni chronométrage officiel.</p></div><div class="bento" style="padding:22px 24px;margin-bottom:12px;"><div style="font-family:var(--sans);font-size:15px;font-weight:500;color:var(--cream);margin-bottom:8px;">Puis-je être accompagné ?</div><p style="font-family:var(--sans);font-size:14px;line-height:1.65;color:var(--cream-mute);margin:0;">Oui, le paddock est accessible à vos accompagnants. Leur accès à la piste relève du règlement du circuit.</p></div><div class="bento" style="padding:22px 24px;margin-bottom:12px;"><div style="font-family:var(--sans);font-size:15px;font-weight:500;color:var(--cream);margin-bottom:8px;">Combien de temps roule-t-on réellement ?</div><p style="font-family:var(--sans);font-size:14px;line-height:1.65;color:var(--cream-mute);margin:0;">Quatre relais en demi-journée Access, six en journée complète Signature. Le temps de piste effectif dépend des conditions et du déroulé de la journée.</p></div><div class="bento" style="padding:22px 24px;margin-bottom:12px;"><div style="font-family:var(--sans);font-size:15px;font-weight:500;color:var(--cream);margin-bottom:8px;">Faut-il préparer sa voiture ?</div><p style="font-family:var(--sans);font-size:14px;line-height:1.65;color:var(--cream-mute);margin:0;">Un véhicule en bon état d'entretien suffit. Freins et pneus sont les deux points vérifiés le matin : partez avec de la marge sur les deux.</p></div><div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:34px;"><button class="btn btn-primary btn-lg" onclick="ctaPrimaryGo()"><span>Voir les journées</span></button><button class="btn btn-lg" onclick="goTo('contact')"><span>Poser une question</span></button></div>
+    </div>
+  </section>
+</div>
+<!-- /premiere-fois-circuit -->
+
+<!-- ============ GUIDE : track-day-bordeaux ============ -->
+<div class="page" id="page-track-day-bordeaux">
+  <section class="page-hero">
+    <div class="wrap">
+      <div class="page-hero-eyebrow">N° ⬡ · Accès</div>
+      <h1 class="page-hero-title">Rouler sur circuit<br/>près de <em>Bordeaux</em>.</h1>
+      <p class="page-hero-lede">Le circuit partenaire d'OXV est à une heure de Bordeaux, quarante-cinq minutes de Libourne. Assez proche pour partir le matin et rentrer le soir, sans nuit d'hôtel ni plateau de transport.</p>
+    </div>
+  </section>
+  <section class="section">
+    <div class="wrap" style="max-width:1000px;">
+<h2 class="section-title" style="font-size:32px;margin-bottom:8px;">Les <em>distances</em>.</h2><div class="reveal" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px;margin-bottom:40px;"><div class="bento" style="padding:24px;"><div style="font-family:var(--display);font-size:10px;letter-spacing:0.2em;text-transform:uppercase;color:var(--gold);margin-bottom:8px;">Depuis Bordeaux</div><p style="font-family:var(--sans);font-size:14px;line-height:1.6;color:var(--cream-mute);margin:0;">70 km, environ une heure par la N10 puis la D137.</p></div><div class="bento" style="padding:24px;"><div style="font-family:var(--display);font-size:10px;letter-spacing:0.2em;text-transform:uppercase;color:var(--gold);margin-bottom:8px;">Depuis Libourne</div><p style="font-family:var(--sans);font-size:14px;line-height:1.6;color:var(--cream-mute);margin:0;">Environ quarante-cinq minutes.</p></div><div class="bento" style="padding:24px;"><div style="font-family:var(--display);font-size:10px;letter-spacing:0.2em;text-transform:uppercase;color:var(--gold);margin-bottom:8px;">Depuis Cognac</div><p style="font-family:var(--sans);font-size:14px;line-height:1.6;color:var(--cream-mute);margin:0;">Environ une heure.</p></div><div class="bento" style="padding:24px;"><div style="font-family:var(--display);font-size:10px;letter-spacing:0.2em;text-transform:uppercase;color:var(--gold);margin-bottom:8px;">Depuis Saintes</div><p style="font-family:var(--sans);font-size:14px;line-height:1.6;color:var(--cream-mute);margin:0;">Moins de quarante minutes.</p></div></div><p style="font-family:var(--sans);font-size:15px;line-height:1.7;color:var(--cream-mute);max-width:680px;margin:0 0 22px;">Le Circuit de Haute Saintonge se trouve à La Génétouze, en Charente-Maritime. C'est le premier circuit partenaire d'OXV ; d'autres emplacements sont en cours de sélection. <button class="link-inline" onclick="goTo('circuit')" style="background:none;border:none;color:var(--oxv-red);cursor:pointer;padding:0;font:inherit;">voir le circuit</button>.</p><h2 class="section-title" style="font-size:32px;margin-bottom:8px;">Pourquoi la <em>distance</em> compte.</h2><p style="font-family:var(--sans);font-size:15px;line-height:1.7;color:var(--cream-mute);max-width:680px;margin:0 0 22px;">Une journée de piste à deux heures de route se prépare comme un déplacement : départ la veille, nuit sur place, retour le lendemain. À une heure, elle tient dans une journée. C'est ce qui sépare une sortie exceptionnelle d'une pratique régulière, et c'est la raison pour laquelle OXV a choisi ce circuit en premier.</p><h2 class="section-title" style="font-size:28px;margin:8px 0 18px;">Questions <em>fréquentes</em>.</h2><div class="bento" style="padding:22px 24px;margin-bottom:12px;"><div style="font-family:var(--sans);font-size:15px;font-weight:500;color:var(--cream);margin-bottom:8px;">Y a-t-il un circuit plus près de Bordeaux ?</div><p style="font-family:var(--sans);font-size:14px;line-height:1.65;color:var(--cream-mute);margin:0;">Aucun circuit ouvert au roulage automobile n'est plus proche du centre de Bordeaux. Les autres circuits de Nouvelle-Aquitaine demandent nettement plus de route.</p></div><div class="bento" style="padding:22px 24px;margin-bottom:12px;"><div style="font-family:var(--sans);font-size:15px;font-weight:500;color:var(--cream);margin-bottom:8px;">Peut-on venir et repartir dans la journée ?</div><p style="font-family:var(--sans);font-size:14px;line-height:1.65;color:var(--cream-mute);margin:0;">Oui. C'est le cas de la majorité des pilotes venus de Bordeaux, de Libourne ou du Bassin.</p></div><div class="bento" style="padding:22px 24px;margin-bottom:12px;"><div style="font-family:var(--sans);font-size:15px;font-weight:500;color:var(--cream);margin-bottom:8px;">Faut-il un plateau pour transporter la voiture ?</div><p style="font-family:var(--sans);font-size:14px;line-height:1.65;color:var(--cream-mute);margin:0;">Non, sauf si vous le souhaitez. Les véhicules admis sont homologués route et viennent par leurs propres moyens.</p></div><div class="bento" style="padding:22px 24px;margin-bottom:12px;"><div style="font-family:var(--sans);font-size:15px;font-weight:500;color:var(--cream);margin-bottom:8px;">Où se garer, où déjeuner ?</div><p style="font-family:var(--sans);font-size:14px;line-height:1.65;color:var(--cream-mute);margin:0;">Le paddock accueille les véhicules et les accompagnants. Le déjeuner traiteur est compris dans la journée Signature.</p></div><div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:34px;"><button class="btn btn-primary btn-lg" onclick="ctaPrimaryGo()"><span>Voir les journées</span></button><button class="btn btn-lg" onclick="goTo('contact')"><span>Poser une question</span></button></div>
+    </div>
+  </section>
+</div>
+<!-- /track-day-bordeaux -->
+
 <!-- ============ FOOTER ============ -->
 <footer>
   <div class="foot-rule" aria-hidden="true"></div>
@@ -23303,6 +23389,17 @@ select option:hover {
           </div>
           <p class="foot-tag">Sessions confidentielles au Circuit de Haute Saintonge. Vingt pilotes. Un seul niveau d'exigence.</p>
           <button class="btn btn-sm" style="font-family:var(--mono);font-size:9px;letter-spacing:0.22em;text-transform:uppercase;" onclick="ctaPrimaryGo()"><span>Pré-inscription saison 2027 →</span></button>
+        </div>
+
+        <div class="foot-col">
+          <h5>Guides</h5>
+          <ul>
+            <li><button onclick="goTo('rouler-sur-circuit')">Rouler sur circuit</button></li>
+            <li><button onclick="goTo('premiere-fois-circuit')">Première fois sur circuit</button></li>
+            <li><button onclick="goTo('assurance-circuit')">Assurance circuit</button></li>
+            <li><button onclick="goTo('equipement-circuit')">L'équipement exigé</button></li>
+            <li><button onclick="goTo('track-day-bordeaux')">Circuit près de Bordeaux</button></li>
+          </ul>
         </div>
 
         <div class="foot-col">
@@ -24038,6 +24135,13 @@ const OXV_PAGE_SEO = {
   'pavillon-regie':    { title: 'Pavillon · Régie · OXV', description: 'Console d\'état piste du Pavillon.' },
   'coach-espace':      { title: 'Espace coach · OXV', description: 'Espace de gestion des coachs partenaires OXV.' },
 
+  /* Guides — les questions qu'un pilote pose avant sa première journée. */
+  'rouler-sur-circuit':    { title: 'Rouler sur circuit : les 6 conditions · OXV', description: 'Permis, assurance circuit, contrôle technique, casque, niveau sonore, briefing. Les six conditions vérifiées avant de rouler, sans zone grise.' },
+  'assurance-circuit':     { title: 'Assurance circuit : ce que votre contrat exclut · OXV', description: 'Votre assurance auto n\'assure pas votre voiture sur circuit. Les trois couvertures qui se superposent, et celle qui manque.' },
+  'equipement-circuit':    { title: 'Équipement circuit : casque, chaussures, anneau · OXV', description: 'Trois éléments contrôlés pilote par pilote avant le premier tour. Ce qui est exigé, et ce qui ne l\'est pas.' },
+  'premiere-fois-circuit': { title: 'Première fois sur circuit : le déroulé d\'une journée · OXV', description: 'De l\'arrivée à 8 h au bilan de session : ce qui se passe, heure par heure, lors d\'une première journée de roulage.' },
+  'track-day-bordeaux':    { title: 'Rouler sur circuit près de Bordeaux · OXV', description: 'Le circuit partenaire d\'OXV est à 70 km de Bordeaux, 45 minutes de Libourne. Partir le matin, rentrer le soir.' },
+
   /* Pages sans référencement — toutes en noindex. Ce qui compte ici n'est pas
      Google, c'est l'ONGLET : sans entrée propre, une page héritait du titre
      posé par la précédente, et « Mes véhicules » s'affichait « Connexion ». */
@@ -24135,6 +24239,7 @@ function oxvUpdateSEO(page, opts) {
   oxvSetCanonical(url);
   oxvSetMeta('name', 'robots', OXV_NOINDEX_PAGES.includes(page) ? 'noindex, nofollow' : 'index, follow');
   oxvSetArticleJsonLd(isArticle ? opts.article : null, url);
+  oxvSetGuideFaqJsonLd(page, url);
 }
 
 /* SEO (PR-HUB-08) : sessions à venir en schema.org Event (ItemList), injecté dynamiquement.
@@ -24162,6 +24267,80 @@ function oxvSetEventsJsonLd(sessions) {
         offers: { '@type': 'AggregateOffer', lowPrice: '390', highPrice: '690', priceCurrency: 'EUR', availability: 'https://schema.org/PreOrder', url: 'https://www.oxvehicle.fr/calendrier' },
         url: 'https://www.oxvehicle.fr/calendrier'
       }
+    }))
+  });
+}
+
+/* FAQ structuree des guides.
+   Une FAQPage decrit la page ou la FAQ se trouve : on la pose a l'entree du
+   guide et on la retire en sortant, plutot que d'empiler un bloc statique qui
+   parlerait de toutes les pages a la fois. Les questions sont EXACTEMENT
+   celles affichees a l'ecran — Google refuse le contraire, et ce serait
+   mentir aux deux. */
+const OXV_GUIDE_FAQ = {
+  'rouler-sur-circuit': [
+    ['Faut-il une licence FFSA pour rouler sur circuit ?',
+     'Non, pas pour une journee de roulage libre. Le permis B suffit. Une licence devient necessaire en competition, ce qui n\'est pas l\'objet d\'une journee OXV : il n\'y a ni chronometrage officiel ni classement.'],
+    ['Puis-je venir avec une voiture de serie ?',
+     'Oui, si elle satisfait le referentiel d\'acces et la norme sonore du circuit. La tres grande majorite des sportives de serie y repondent.'],
+    ['Combien de pilotes en meme temps ?',
+     'Vingt inscrits par journee, jamais vingt-et-un. La jauge porte sur les inscriptions, pas sur le nombre de voitures en piste a un instant donne : le roulage se fait par relais encadres.'],
+    ['Que se passe-t-il s\'il pleut ?',
+     'La journee est maintenue. Le chef de piste adapte les relais si les conditions l\'exigent.']
+  ],
+  'assurance-circuit': [
+    ['Mon assurance tous risques me couvre-t-elle sur circuit ?',
+     'Dans la quasi-totalite des contrats, non. L\'exclusion figure aux conditions generales et vise la conduite sur circuit ferme, competition ou non.'],
+    ['L\'assurance circuit est-elle obligatoire chez OXV ?',
+     'Oui. Elle est souscrite par le pilote et presentee au briefing avec le permis et le controle technique. Sans elle, l\'acces a la piste est ferme.'],
+    ['Que couvre-t-elle exactement ?',
+     'Les vehicules des autres pilotes et les installations de la piste. Elle n\'assure pas le vehicule de son souscripteur.'],
+    ['Et si je loue une voiture de piste ?',
+     'La couverture depend du contrat de location. La location d\'un vehicule de piste est possible via nos partenaires.']
+  ],
+  'equipement-circuit': [
+    ['Quel casque pour rouler sur circuit ?',
+     'Un casque homologue, integral ou jet selon ce que retient le circuit. La norme applicable est celle du circuit, communiquee avant la session. Le casque est controle au briefing.'],
+    ['Faut-il une combinaison ?',
+     'Non, pas pour une journee de roulage libre. Des vetements couvrants et des chaussures fermees suffisent.'],
+    ['Puis-je emmener un passager ?',
+     'Le passager releve du reglement du circuit et de la journee. Posez-nous la question avant de reserver.'],
+    ['Ou trouver un anneau de remorquage ?',
+     'Il est livre avec le vehicule, generalement dans le coffre avec l\'outillage de bord.']
+  ],
+  'premiere-fois-circuit': [
+    ['Je n\'ai jamais roule sur circuit. Est-ce un probleme ?',
+     'Non. Le briefing pose le meme cadre pour tout le monde, et les relais sont encadres par un chef de piste. Vous roulez a votre rythme : il n\'y a ni classement ni chronometrage officiel.'],
+    ['Puis-je etre accompagne ?',
+     'Oui, le paddock est accessible a vos accompagnants. Leur acces a la piste releve du reglement du circuit.'],
+    ['Combien de temps roule-t-on reellement ?',
+     'Quatre relais en demi-journee Access, six en journee complete Signature. Le temps de piste effectif depend des conditions et du deroule de la journee.'],
+    ['Faut-il preparer sa voiture ?',
+     'Un vehicule en bon etat d\'entretien suffit. Freins et pneus sont les deux points verifies le matin.']
+  ],
+  'track-day-bordeaux': [
+    ['Y a-t-il un circuit plus pres de Bordeaux ?',
+     'Aucun circuit ouvert au roulage automobile n\'est plus proche du centre de Bordeaux. Les autres circuits de Nouvelle-Aquitaine demandent nettement plus de route.'],
+    ['Peut-on venir et repartir dans la journee ?',
+     'Oui. C\'est le cas de la majorite des pilotes venus de Bordeaux, de Libourne ou du Bassin.'],
+    ['Faut-il un plateau pour transporter la voiture ?',
+     'Non, sauf si vous le souhaitez. Les vehicules admis sont homologues route et viennent par leurs propres moyens.'],
+    ['Ou se garer, ou dejeuner ?',
+     'Le paddock accueille les vehicules et les accompagnants. Le dejeuner traiteur est compris dans la journee Signature.']
+  ]
+};
+
+function oxvSetGuideFaqJsonLd(page, url) {
+  let el = document.getElementById('ld-guide-faq');
+  const faq = OXV_GUIDE_FAQ[page];
+  if (!faq) { if (el) el.remove(); return; }
+  if (!el) { el = document.createElement('script'); el.type = 'application/ld+json'; el.id = 'ld-guide-faq'; document.head.appendChild(el); }
+  el.textContent = JSON.stringify({
+    '@context': 'https://schema.org', '@type': 'FAQPage',
+    inLanguage: 'fr-FR', mainEntityOfPage: url,
+    mainEntity: faq.map(([q, r]) => ({
+      '@type': 'Question', name: q,
+      acceptedAnswer: { '@type': 'Answer', text: r }
     }))
   });
 }

@@ -14,6 +14,13 @@
 - Paiement : en ligne sécurisé (CB, Visa, PayPal, Apple Pay), communiqué par lien après la pré-inscription.
 - Contact : contact@oxvehicle.fr — Site : https://www.oxvehicle.fr
 
+## Guides pratiques (pages publiques)
+- Rouler sur circuit, les six conditions : https://www.oxvehicle.fr/rouler-sur-circuit — permis B, assurance circuit souscrite par le pilote, contrôle technique, casque homologué, niveau sonore à la norme du circuit, briefing obligatoire de vingt minutes. Aucune licence FFSA n'est exigée pour une journée de roulage libre.
+- Assurance circuit : https://www.oxvehicle.fr/assurance-circuit — trois couvertures se superposent. La RC de l'organisateur est incluse. L'assurance circuit du pilote couvre les véhicules des autres pilotes et les installations de la piste. Le véhicule du souscripteur n'est couvert par aucune des deux : l'assurance auto classique exclut la conduite sur circuit.
+- Équipement exigé : https://www.oxvehicle.fr/equipement-circuit — casque homologué, chaussures fermées, anneau de remorquage à bord. Contrôlés pilote par pilote au briefing. Ni combinaison ni harnais ne sont exigés pour une journée de roulage libre.
+- Première fois sur circuit : https://www.oxvehicle.fr/premiere-fois-circuit — déroulé heure par heure, de l'arrivée à 8 h au bilan de session.
+- Accès depuis Bordeaux : https://www.oxvehicle.fr/track-day-bordeaux — 70 km et environ une heure depuis Bordeaux, quarante-cinq minutes depuis Libourne, une heure depuis Cognac.
+
 ## Notre politique — cinq engagements écrits et opposables
 1. **La sécurité d'abord** — jauge stricte, briefing systématique, encadrement à chaque relais.
 2. **La règle du miroir** — OXV restitue des faits mesurés. Il ne juge pas, ne conseille pas, ne prescrit aucun pilotage. La lecture causale appartient aux coachs indépendants ; la décision, au pilote.
