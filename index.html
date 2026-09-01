@@ -6151,7 +6151,7 @@ footer {
   border-color: #C45959;
 }
 
-/* === ADMIN : D\u00e9tail session (page d\u00e9di\u00e9e) === */
+/* === ADMIN : Détail session (page dédiée) === */
 .admin-sd-header {
   background: rgba(18, 18, 20, 0.6);
   border: 1px solid rgba(239, 230, 210, 0.08);
@@ -6200,7 +6200,7 @@ footer {
   flex-wrap: wrap;
 }
 
-/* Bandeau alerte (annul\u00e9e, privatis\u00e9e) */
+/* Bandeau alerte (annulée, privatisée) */
 .admin-sd-banner {
   padding: 16px 22px;
   margin-bottom: 24px;
@@ -24866,7 +24866,8 @@ window.adminArticleTogglePublish = async function(id) {
   if (!a) return;
   if (typeof supabase === 'undefined') { toast('Supabase indisponible', 'warn'); return; }
   const target = !(a.published !== false); // inverse l'état courant
-  const { error } = await supabase.from('articles').update({ published: target, updated_at: new Date().toISOString() }).eq('id', id);
+  const { data: maj, error } = await supabase.from('articles')
+    .update({ published: target, updated_at: new Date().toISOString() }).eq('id', id).select('id');
   if (error) { console.warn('[Articles] toggle:', error); toast('Erreur : ' + error.message, 'warn'); return; }
   toast(target ? 'Article publié' : 'Article dépublié', 'success');
   await oxvHydrateArticles(true);
@@ -25018,8 +25019,9 @@ window.adminArticleDelete = async function(id) {
   if (!a) return;
   if (!confirm("Supprimer définitivement l'article « " + a.title.replace(/\*/g, '') + " » ?")) return;
   if (typeof supabase === 'undefined') { toast('Supabase indisponible', 'warn'); return; }
-  const { error } = await supabase.from('articles').delete().eq('id', id);
+  const { data: sup, error } = await supabase.from('articles').delete().eq('id', id).select('id');
   if (error) { console.warn('[Articles] delete:', error); toast('Erreur : ' + error.message, 'warn'); return; }
+  if (!sup || !sup.length) { toast('Suppression refusée — l’article est conservé', 'warn'); return; }
   toast('Article supprimé', 'success');
   await oxvHydrateArticles(true);
   loadAdminArticles();
@@ -27973,8 +27975,9 @@ window.adminToggleVisible = async function(mediaId, sessionId, currentState) {
 
 window.adminDeleteMedia = async function(mediaId, sessionId) {
   if (!confirm('Supprimer ce média définitivement ?')) return;
-  const { error } = await supabase.from('media').delete().eq('id', mediaId);
+  const { data: sup, error } = await supabase.from('media').delete().eq('id', mediaId).select('id');
   if (error) { toast(`Erreur : ${error.message}`, 'warn'); return; }
+  if (!sup || !sup.length) { toast('Suppression refusée — le média est conservé', 'warn'); return; }
   toast('Média supprimé', 'ok');
   await adminLoadPanel(sessionId);
   loadAdminMedias();
@@ -29598,16 +29601,23 @@ window.saveProfile = async function() {
   const orig = btn ? btn.innerHTML : '';
   if (btn) { btn.innerHTML = '<span>⟳ Enregistrement…</span>'; btn.disabled = true; }
 
-  const { error } = await supabase
+  // Un refus RLS renvoie zéro ligne sans erreur : on constate l'écriture
+  // au lieu de la supposer.
+  const { data: majProfil, error } = await supabase
     .from('users')
     .update(updates)
-    .eq('id', userId);
+    .eq('id', userId)
+    .select('id');
 
   if (btn) { btn.innerHTML = orig; btn.disabled = false; }
 
   if (error) {
     console.warn('Profile save error:', error);
     toast('Erreur sauvegarde · réessayez', 'warn');
+    return;
+  }
+  if (!majProfil || !majProfil.length) {
+    toast('Enregistrement refusé — le profil est inchangé', 'warn');
     return;
   }
 
@@ -30428,15 +30438,22 @@ window.deleteVehicle = async function(vehicleId, label) {
     await deletePhotoFromStorage(slot, vehicleId);
   }
 
-  // Supprime la ligne en BDD
-  const { error } = await supabase
+  // Supprime la ligne en BDD.
+  // Un refus RLS ne leve pas d'erreur : il renvoie zero ligne. Sans ce
+  // constat, le site annoncait « Vehicule supprime » sans rien supprimer.
+  const { data: supprimes, error } = await supabase
     .from('vehicles')
     .delete()
     .eq('id', vehicleId)
-    .eq('user_id', userId);
+    .eq('user_id', userId)
+    .select('id');
 
   if (error) {
     toast('Erreur suppression', 'warn');
+    return;
+  }
+  if (!supprimes || !supprimes.length) {
+    toast('Suppression refusee \u2014 le vehicule est conserve', 'warn');
     return;
   }
 
@@ -33642,8 +33659,9 @@ window.ceUploadPhoto = async function(input) {
     const up = await supabase.storage.from('coach-media').upload(path, blob, { contentType: 'image/webp' });
     if (up.error) throw up.error;
     const { data: pub } = supabase.storage.from('coach-media').getPublicUrl(path);
-    const { error } = await supabase.from('coach_profiles').update({ photo_url: pub.publicUrl, updated_at: new Date().toISOString() }).eq('coach_id', uid);
+    const { data: maj, error } = await supabase.from('coach_profiles').update({ photo_url: pub.publicUrl, updated_at: new Date().toISOString() }).eq('coach_id', uid).select('id');
     if (error) throw error;
+    if (!maj || !maj.length) { toast('Écriture refusée — rien n’a changé', 'warn'); return; }
     toast('Photo mise à jour', 'ok');
     window.loadCoachEspace();
   } catch (e) { toast('Téléversement refusé', 'warn'); console.warn('[ceUploadPhoto]', e); }
@@ -33677,16 +33695,16 @@ window.ceAddMedia = async function() {
   const isImg = /\.(jpe?g|png|webp|gif)(\?|$)/i.test(u);
   if (!yt && !isImg) { toast('Lien YouTube ou image directe (jpg, png, webp) uniquement', 'warn'); return; }
   list.push({ type: yt ? 'youtube' : 'image', url: u.slice(0, 400) });
-  const { error } = await supabase.from('coach_profiles').update({ media: list, updated_at: new Date().toISOString() }).eq('coach_id', uid);
-  if (!error) { if (inp) inp.value = ''; window.__ceProf.media = list; ceRenderMedias(window.__ceProf); toast('Média ajouté', 'ok'); }
+  const { data: maj, error } = await supabase.from('coach_profiles').update({ media: list, updated_at: new Date().toISOString() }).eq('coach_id', uid).select('id');
+  if (!error && maj && maj.length) { if (inp) inp.value = ''; window.__ceProf.media = list; ceRenderMedias(window.__ceProf); toast('Média ajouté', 'ok'); }
   else toast('Enregistrement refusé', 'warn');
 };
 window.ceRemoveMedia = async function(i) {
   const uid = window.OXVApi.user.profile?.id;
   const list = Array.isArray(window.__ceProf?.media) ? window.__ceProf.media.slice() : [];
   list.splice(i, 1);
-  const { error } = await supabase.from('coach_profiles').update({ media: list, updated_at: new Date().toISOString() }).eq('coach_id', uid);
-  if (!error) { window.__ceProf.media = list; ceRenderMedias(window.__ceProf); }
+  const { data: maj, error } = await supabase.from('coach_profiles').update({ media: list, updated_at: new Date().toISOString() }).eq('coach_id', uid).select('id');
+  if (!error && maj && maj.length) { window.__ceProf.media = list; ceRenderMedias(window.__ceProf); }
   else toast('Enregistrement refusé', 'warn');
 };
 /* — Photo de fiche téléversée depuis l'appareil (compressée, bucket coach-media/{uid}/) — */
@@ -33704,8 +33722,9 @@ window.ceUploadMediaPhoto = async function(input) {
     if (up.error) throw up.error;
     const { data: pub } = supabase.storage.from('coach-media').getPublicUrl(path);
     list.push({ type: 'image', url: pub.publicUrl });
-    const { error } = await supabase.from('coach_profiles').update({ media: list, updated_at: new Date().toISOString() }).eq('coach_id', uid);
+    const { data: maj, error } = await supabase.from('coach_profiles').update({ media: list, updated_at: new Date().toISOString() }).eq('coach_id', uid).select('id');
     if (error) throw error;
+    if (!maj || !maj.length) { toast('Enregistrement refusé — la fiche est inchangée', 'warn'); return; }
     window.__ceProf.media = list; ceRenderMedias(window.__ceProf);
     toast('Photo ajoutée à votre fiche', 'ok');
   } catch (e) { toast('Téléversement refusé', 'warn'); console.warn('[ceUploadMediaPhoto]', e); }
@@ -33722,8 +33741,9 @@ window.ceCancelSlot = async function(id) {
 window.ceSaveBookingNote = async function(id) {
   const el = document.getElementById('ceNote-' + id);
   const note = (el?.value || '').trim().slice(0, 600);
-  const { error } = await supabase.from('coaching_bookings').update({ coach_note: note || null, updated_at: new Date().toISOString() }).eq('id', id);
-  toast(error ? 'Enregistrement refusé' : 'Retour de visite enregistré', error ? 'warn' : 'ok');
+  const { data: maj, error } = await supabase.from('coaching_bookings').update({ coach_note: note || null, updated_at: new Date().toISOString() }).eq('id', id).select('id');
+  const passe = !error && maj && maj.length;
+  toast(passe ? 'Retour de visite enregistré' : 'Enregistrement refusé', passe ? 'ok' : 'warn');
 };
 /* — Publication de la fiche par le coach (la candidature a déjà été validée par OXV) — */
 window.ceTogglePublish = async function() {
@@ -34033,8 +34053,9 @@ window.pcUploadLogo = async function(input) {
     const up = await supabase.storage.from('partner-media').upload(path, blob, { contentType: 'image/webp' });
     if (up.error) throw up.error;
     const { data: pub } = supabase.storage.from('partner-media').getPublicUrl(path);
-    const { error } = await supabase.from('partner_accounts').update({ logo_url: pub.publicUrl, updated_at: new Date().toISOString() }).eq('id', window.__pcAccountId);
+    const { data: maj, error } = await supabase.from('partner_accounts').update({ logo_url: pub.publicUrl, updated_at: new Date().toISOString() }).eq('id', window.__pcAccountId).select('id');
     if (error) throw error;
+    if (!maj || !maj.length) { toast('Écriture refusée — rien n’a changé', 'warn'); return; }
     toast('Logo mis à jour', 'ok');
     loadPartnerCompany();
   } catch (e) { toast('Téléversement refusé', 'warn'); console.warn('[pcUploadLogo]', e); }
@@ -34053,7 +34074,7 @@ function pcRenderMedias(acc) {
   }).join('') || '<p style="font-family:var(--mono);font-size:10px;color:var(--cream-faint);grid-column:1/-1;margin:0;">Aucun média — montrez votre atelier, vos produits, vos réalisations.</p>';
 }
 async function pcSetMedias(list) {
-  const { error } = await supabase.from('partner_accounts').update({ media: list, updated_at: new Date().toISOString() }).eq('id', window.__pcAccountId);
+  const { data: maj, error } = await supabase.from('partner_accounts').update({ media: list, updated_at: new Date().toISOString() }).eq('id', window.__pcAccountId).select('id');
   if (!error) { window.__pcAccount.media = list; pcRenderMedias(window.__pcAccount); }
   return !error;
 }
@@ -34599,15 +34620,19 @@ window.saveFeedback = async function() {
     publish_ok: !!document.getElementById('fbPublishOk')?.classList.contains('checked')
   };
   try {
-    let error;
+    let error, ecrit = true;
     if (existingId) {
-      ({ error } = await supabase.from('session_feedback').update(payload).eq('id', existingId));
+      /* Un retour deja depose : la mise a jour peut etre refusee sans erreur.
+         On constate la ligne au lieu de remercier dans le vide. */
+      const r = await supabase.from('session_feedback').update(payload).eq('id', existingId).select('id');
+      error = r.error; ecrit = !!(r.data && r.data.length);
     } else {
       const uid = window.OXVApi.user.profile?.id;
       const { data: reg } = await supabase.from('registrations').select('session_id').eq('id', regId).maybeSingle();
       ({ error } = await supabase.from('session_feedback').insert({ ...payload, registration_id: regId, user_id: uid, session_id: reg?.session_id }));
     }
     if (error) throw error;
+    if (!ecrit) { toast('Enregistrement refusé — votre retour est inchangé', 'warn'); return; }
     if (typeof track === 'function') track('submit_feedback');
     toast('Merci pour votre retour', 'ok');
     document.getElementById('feedbackModal').classList.remove('open');
@@ -35225,7 +35250,7 @@ window.inboxSetStatus = async function(id, status, opts) {
   const patch = { status };
   if (status === 'read') { patch.read_at = new Date().toISOString(); patch.read_by = window.OXVApi.user.profile?.id || null; }
   if (status === 'replied') { patch.replied_at = new Date().toISOString(); }
-  const { error } = await supabase.from('contact_messages').update(patch).eq('id', id);
+  const { data: majMsg, error } = await supabase.from('contact_messages').update(patch).eq('id', id).select('id');
   if (error) { toast(`Erreur : ${error.message}`, 'warn'); return; }
   const m = (window.OXV_INBOX || []).find(x => x.id === id); if (m) Object.assign(m, patch);
   if (!opts.silent) { toast('Statut mis à jour', 'ok'); inboxCloseModal(); }
@@ -35241,8 +35266,9 @@ window.inboxSaveNote = async function() {
   const m = window._inboxCurrent; if (!m) return;
   const note = (document.getElementById('inboxModalNote') || {}).value || '';
   const meta = Object.assign({}, m.metadata || {}, { admin_notes: note });
-  const { error } = await supabase.from('contact_messages').update({ metadata: meta }).eq('id', m.id);
+  const { data: maj, error } = await supabase.from('contact_messages').update({ metadata: meta }).eq('id', m.id).select('id');
   if (error) { toast(`Erreur : ${error.message}`, 'warn'); return; }
+  if (!maj || !maj.length) { toast('Écriture refusée — rien n’a changé', 'warn'); return; }
   m.metadata = meta; toast('Note enregistrée', 'ok');
 };
 
@@ -35258,8 +35284,9 @@ window.inboxSaveCrm = async function() {
     updated_by: window.OXVApi?.user?.profile?.id || null
   };
   const meta = Object.assign({}, m.metadata || {}, { crm });
-  const { error } = await supabase.from('contact_messages').update({ metadata: meta }).eq('id', m.id);
+  const { data: maj, error } = await supabase.from('contact_messages').update({ metadata: meta }).eq('id', m.id).select('id');
   if (error) { toast(`Erreur : ${error.message}`, 'warn'); return; }
+  if (!maj || !maj.length) { toast('Écriture refusée — rien n’a changé', 'warn'); return; }
   m.metadata = meta; toast('Suivi commercial enregistré', 'ok');
   inboxRender();
 };
@@ -36670,7 +36697,8 @@ window.saveAdminNotes = async function() {
   const { error } = await supabase
     .from('users')
     .update({ admin_notes: ta.value })
-    .eq('id', pilotId);
+    .eq('id', pilotId)
+    .select('id');
 
   if (error) {
     toast('Erreur enregistrement notes', 'warn');
@@ -38240,7 +38268,7 @@ window.adminSaveSession = async function() {
   const btn = document.querySelector('#adminSessionEditModal .btn-primary');
   if (btn) btn.style.pointerEvents = 'none';
   try {
-    const { error } = await supabase.from('sessions').update(patch).eq('id', id);
+    const { data: majSession, error } = await supabase.from('sessions').update(patch).eq('id', id).select('id');
     if (error) throw error;
     toast('Session mise à jour', 'ok');
     adminCloseSessionEdit();
@@ -38641,9 +38669,11 @@ window.adminUnprivatizeSession = async function() {
   const { error } = await supabase
     .from('sessions')
     .update({ is_private: false })
-    .eq('id', sessionId);
+    .eq('id', sessionId)
+    .select('id');
 
   if (error) { toast('Erreur', 'warn'); return; }
+  if (!data || !data.length) { toast('Écriture refusée — la journée est inchangée', 'warn'); return; }
   toast('Session redevenue publique', 'ok');
   loadAdminSessionDetail();
 };
@@ -38730,7 +38760,9 @@ window.adminMarkAttended = async function(registrationId, pilotId, pilotName) {
     await supabase
       .from('users')
       .update({ attended_count: (userData.attended_count || 0) + 1 })
-      .eq('id', pilotId);
+      .eq('id', pilotId)
+      .select('id')
+      .then(({ data }) => { if (!data || !data.length) console.warn('[Présence] compteur non incrémenté (écriture refusée)'); });
   }
 
   // Note : les marges (app_session_analyses) sont calculées par l'algo trackviz
