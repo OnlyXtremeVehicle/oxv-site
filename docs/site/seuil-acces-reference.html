@@ -122,8 +122,8 @@ footer{margin-top:56px;padding-top:24px;border-top:1px solid var(--ligne);font-f
   <p class="eyebrow">Référentiel · révision 2026 · 410 véhicules</p>
   <h1>Où passe la ligne&nbsp;?</h1>
   <p class="lede">Le référentiel classe une voiture par son rapport <b>masse / puissance</b>. Trois classes, puis un plancher :
-  au-delà, le véhicule n'est pas admis. Ce plancher vaut aujourd'hui <b>6,00 kg/ch</b> et il écarte
-  <b id="ledeN">38</b> voitures — dont quatre à moins de 0,05 de la ligne. Déplacez-le, ou tranchez au cas par cas.</p>
+  au-delà, le véhicule n'est pas admis. Ce plancher a été porté à <b>6,30 kg/ch</b> le 30 août 2026. Il écarte désormais
+  <b id="ledeN">20</b> voitures, à partir de 6,53. Déplacez-le pour voir ce qui bascule, ou tranchez au cas par cas.</p>
 
   <hr class="sep">
 
@@ -139,10 +139,10 @@ footer{margin-top:56px;padding-top:24px;border-top:1px solid var(--ligne);font-f
 
     <div class="reglage">
       <label for="seuil">Plancher d'accès</label>
-      <div class="valeur"><span id="seuilVal">6,00</span><small>kg/ch</small></div>
-      <input type="range" id="seuil" min="4.5" max="9.5" step="0.01" value="6"
+      <div class="valeur"><span id="seuilVal">6,30</span><small>kg/ch</small></div>
+      <input type="range" id="seuil" min="4.5" max="9.5" step="0.01" value="6.3"
              aria-label="Plancher d'accès en kilogrammes par cheval">
-      <button class="btn" id="reset">Revenir à 6,00</button>
+      <button class="btn" id="reset">Revenir à 6,30</button>
     </div>
   </div>
 
@@ -405,13 +405,13 @@ const PARC = [
 ];
 
 const CLE = "oxv-seuil-2026";
-let seuil = 6.0;
+let seuil = 6.3;
 let forcees = {};            // index -> "refus" | "garde"
 let filtre = "tous", recherche = "", triCle = "ratio", triSens = 1;
 
 try {
   const brut = localStorage.getItem(CLE);
-  if (brut) { const o = JSON.parse(brut); seuil = o.seuil ?? 6; forcees = o.forcees || {}; }
+  if (brut) { const o = JSON.parse(brut); seuil = o.seuil ?? 6.3; forcees = o.forcees || {}; }
 } catch (e) { /* stockage indisponible : on part du réglage d'usine */ }
 
 const sauver = () => {
@@ -476,7 +476,7 @@ function compter(s) {
   return c;
 }
 function dessinerCompteurs() {
-  const c = compter(seuil), ref = compter(6.0);
+  const c = compter(seuil), ref = compter(6.3);
   const carte = (cle, titre, desc) => {
     const d = c[cle] - ref[cle];
     const signe = d > 0 ? "+" : "";
@@ -494,17 +494,17 @@ function dessinerCompteurs() {
 
 /* ---------- ce qui bascule ---------- */
 function dessinerBascule() {
-  const bas = Math.min(seuil, 6.0), haut = Math.max(seuil, 6.0);
+  const bas = Math.min(seuil, 6.3), haut = Math.max(seuil, 6.3);
   const entre = PARC.map((v, i) => [v, i]).filter(([v]) => v[7] > bas && v[7] <= haut);
   const titre = document.getElementById("basculeTitre");
   const corps = document.getElementById("basculeCorps");
 
-  if (Math.abs(seuil - 6.0) < 0.005) {
+  if (Math.abs(seuil - 6.3) < 0.005) {
     titre.textContent = "Le plancher est à sa valeur actuelle";
     corps.innerHTML = `<p class="vide">Déplacez le curseur pour voir quelles voitures changent de sort.</p>`;
     return;
   }
-  const admises = seuil > 6.0;
+  const admises = seuil > 6.3;
   titre.textContent = admises
     ? `${entre.length} voiture${entre.length > 1 ? "s" : ""} entrerai${entre.length > 1 ? "ent" : "t"} au référentiel`
     : `${entre.length} voiture${entre.length > 1 ? "s" : ""} en sortirai${entre.length > 1 ? "ent" : "t"}`;
@@ -564,8 +564,8 @@ curseur.addEventListener("input", e => {
   sauver(); tout();
 });
 document.getElementById("reset").addEventListener("click", () => {
-  seuil = 6.0; curseur.value = 6;
-  document.getElementById("seuilVal").textContent = "6,00";
+  seuil = 6.3; curseur.value = 6.3;
+  document.getElementById("seuilVal").textContent = "6,30";
   sauver(); tout();
 });
 document.getElementById("recherche").addEventListener("input", e => { recherche = e.target.value; dessinerTable(); });
@@ -608,6 +608,6 @@ document.getElementById("copier").addEventListener("click", async () => {
   setTimeout(() => { btn.textContent = "Copier la décision"; }, 1800);
 });
 
-document.getElementById("ledeN").textContent = compter(6.0).X;
+document.getElementById("ledeN").textContent = compter(6.3).X;
 tout();
 </script>
