@@ -210,6 +210,10 @@
 
   /* ─── Variables marque OXV (alignées DA V3) ─── */
   --oxv-red:      #D80F1F;   /* Rouge OXV (DA V3) — CTA, état actif, signature */
+  --oxv-red-texte: #E8414E;  /* Le même rouge, éclairci pour le PETIT texte :
+                                #D80F1F tombe à 3,78:1 sur le carbone, sous le
+                                seuil de 4,5:1. Celui-ci tient 4,99:1. L'insigne,
+                                les aplats et les SVG gardent #D80F1F. */
   --oxv-gold:     #C9A24A;   /* Or data (DA V3) — signal premium rare */
   --oxv-night:    #0A0A0A;   /* Fond marque */
   --oxv-cream:    #F5F2EA;   /* Texte marque — blanc cassé */
@@ -605,7 +609,7 @@ h1, h2, h3, h4, h5 {
 .brand-insignia {
   width: 24px;
   height: 24px;
-  color: var(--oxv-red);
+  color: var(--oxv-red-texte);
   flex-shrink: 0;
 }
 .brand-insignia svg, .brand-insignia use { width: 100%; height: 100%; display: block; fill: currentColor; }
@@ -2106,7 +2110,7 @@ footer {
 .foot-brand-insignia {
   width: 32px;
   height: 32px;
-  color: var(--oxv-red);
+  color: var(--oxv-red-texte);
   margin-bottom: 24px;
   opacity: 0.85;
 }
@@ -12275,7 +12279,7 @@ textarea:focus-visible {
 .oxv-boot-insignia {
   width: 64px;
   height: 64px;
-  color: var(--oxv-red);
+  color: var(--oxv-red-texte);
   animation: oxv-boot-enter 0.9s cubic-bezier(.16,1,.3,1) both, oxv-pulse 3s ease-in-out 1s infinite;
   margin-bottom: 28px;
 }
@@ -12562,7 +12566,7 @@ textarea:focus-visible {
   color: var(--cream);
   margin-bottom: 20px;
 }
-.home-ecosystem-title em { font-style: italic; color: var(--oxv-red); }
+.home-ecosystem-title em { font-style: italic; color: var(--oxv-red-texte); }
 .home-ecosystem-lede { font-size: 15px; color: var(--cream-mute); line-height: 1.65; max-width: 520px; }
 .home-ecosystem-grid {
   display: grid;
@@ -12587,7 +12591,7 @@ textarea:focus-visible {
   font-size: 10px;
   letter-spacing: 0.28em;
   text-transform: uppercase;
-  color: var(--oxv-red);
+  color: var(--oxv-red-texte);
   margin-bottom: 20px;
 }
 .home-ecosystem-pillar-name {
@@ -12615,7 +12619,7 @@ textarea:focus-visible {
   font-size: 10px;
   letter-spacing: 0.28em;
   text-transform: uppercase;
-  color: var(--oxv-red);
+  color: var(--oxv-red-texte);
   margin-bottom: 16px;
 }
 .about-block-title {
@@ -12650,7 +12654,7 @@ textarea:focus-visible {
   font-family: var(--display);
   font-size: 40px;
   font-weight: 400;
-  color: var(--oxv-red);
+  color: var(--oxv-red-texte);
   margin-bottom: 12px;
   font-style: italic;
 }
@@ -12670,7 +12674,7 @@ textarea:focus-visible {
   color: var(--cream);
   margin-bottom: 16px;
 }
-.about-cta-headline em { font-style: italic; color: var(--oxv-red); }
+.about-cta-headline em { font-style: italic; color: var(--oxv-red-texte); }
 .about-cta-sub { font-size: 15px; color: var(--cream-mute); margin-bottom: 36px; }
 
 /* ─── Sprint 3 — Corporate refonte ─── */
@@ -12700,7 +12704,7 @@ textarea:focus-visible {
   margin-bottom: 20px;
 }
 .corp-format.signature-level .corp-format-badge { color: var(--oxv-gold); }
-.corp-format:not(.signature-level) .corp-format-badge { color: var(--oxv-red); }
+.corp-format:not(.signature-level) .corp-format-badge { color: var(--oxv-red-texte); }
 .corp-format-name {
   font-family: var(--display);
   font-size: 28px;
@@ -12757,7 +12761,7 @@ textarea:focus-visible {
 .corp-scenario-icon {
   font-size: 24px;
   margin-bottom: 16px;
-  color: var(--oxv-red);
+  color: var(--oxv-red-texte);
 }
 .corp-scenario-title {
   font-family: var(--display);
@@ -12797,7 +12801,7 @@ textarea:focus-visible {
   font-size: 11px;
   letter-spacing: 0.18em;
   text-transform: uppercase;
-  color: var(--oxv-red);
+  color: var(--oxv-red-texte);
   text-decoration: none;
   cursor: pointer;
   transition: opacity 0.2s;
@@ -12838,7 +12842,7 @@ textarea:focus-visible {
   color: var(--cream-mute);
   margin-bottom: 18px;
 }
-.actu-card-cat { color: var(--oxv-red); }
+.actu-card-cat { color: var(--oxv-red-texte); }
 .actu-card-title {
   font-family: var(--display);
   font-size: 21px;
@@ -12854,7 +12858,7 @@ textarea:focus-visible {
   font-size: 11px;
   letter-spacing: 0.18em;
   text-transform: uppercase;
-  color: var(--oxv-red);
+  color: var(--oxv-red-texte);
 }
 
 /* Corps d'article */
@@ -12872,7 +12876,7 @@ textarea:focus-visible {
   border: none;
   transition: color 0.2s;
 }
-.article-back:hover { color: var(--oxv-red); }
+.article-back:hover { color: var(--oxv-red-texte); }
 .article-col { max-width: 720px; margin: 0 auto; }
 .article-meta {
   display: flex;
@@ -12885,7 +12889,7 @@ textarea:focus-visible {
   color: var(--cream-mute);
   margin-bottom: 24px;
 }
-.article-meta .cat { color: var(--oxv-red); }
+.article-meta .cat { color: var(--oxv-red-texte); }
 .article-title {
   font-family: var(--display);
   font-size: clamp(28px, 5vw, 48px);
@@ -12915,7 +12919,7 @@ textarea:focus-visible {
   margin: 48px 0 18px;
   line-height: 1.25;
 }
-.article-body h2 em { font-style: italic; color: var(--oxv-red); }
+.article-body h2 em { font-style: italic; color: var(--oxv-red-texte); }
 .article-body strong { color: var(--cream-soft); font-weight: 600; }
 .article-body blockquote {
   margin: 36px 0;
@@ -13025,7 +13029,7 @@ textarea:focus-visible {
   color: var(--cream-mute);
   margin-bottom: 8px;
 }
-.admin-article-row-meta .cat { color: var(--oxv-red); }
+.admin-article-row-meta .cat { color: var(--oxv-red-texte); }
 .admin-article-row-meta .feat { color: var(--oxv-gold); }
 .admin-article-row-title {
   font-family: var(--display);
@@ -13081,7 +13085,7 @@ textarea:focus-visible {
   font-size: 10px;
   letter-spacing: 0.2em;
   text-transform: uppercase;
-  color: var(--oxv-red);
+  color: var(--oxv-red-texte);
   margin-bottom: 14px;
 }
 .edito-month-items { display: flex; flex-direction: column; gap: 8px; }
@@ -13281,7 +13285,9 @@ textarea:focus-visible {
 /* — 1b. Kickers & eyebrows : mono rouge OXV (l'or n'est jamais décoratif) — */
 .kicker, .page-hero-eyebrow, .home-hero-eyebrow {
   font-family: var(--mono);
-  color: var(--red-oxv);
+  /* Eyebrows de 9 à 11 px : #D80F1F y tombe à 3,78:1, sous le seuil de
+     4,5:1. Même rouge, éclairci, 4,99:1. */
+  color: var(--oxv-red-texte);
   letter-spacing: 0.24em;
 }
 
@@ -15243,7 +15249,7 @@ body.pav-tv .nav, body.pav-tv footer, body.pav-tv .cookie, body.pav-tv .founding
           <h2 class="section-title">La sécurité en piste,<br/>opérée par le <em>circuit</em>.</h2>
         </div>
         <p class="section-lede">
-          Le dispositif est permanent et professionnel, tenu par le Circuit de Haute Saintonge. OXV y ajoute son cadre — <button class="link-inline" onclick="goTo('securite')" style="background:none;border:none;color:var(--oxv-red);cursor:pointer;padding:0;font:inherit;">notre politique</button>, contrôlée au briefing, pilote par pilote.
+          Le dispositif est permanent et professionnel, tenu par le Circuit de Haute Saintonge. OXV y ajoute son cadre — <button class="link-inline" onclick="goTo('securite')" style="background:none;border:none;color:var(--oxv-red-texte);cursor:pointer;padding:0;font:inherit;">notre politique</button>, contrôlée au briefing, pilote par pilote.
         </p>
       </div>
 
@@ -15638,7 +15644,7 @@ body.pav-tv .nav, body.pav-tv footer, body.pav-tv .cookie, body.pav-tv .founding
           <div class="about-block-kicker">— Le circuit</div>
           <h2 class="section-heading">Beltoise, <em>La Génétouze</em>.</h2>
           <div class="about-block-text">
-            <p>Dessiné en 2009 par Jean-Pierre Beltoise, sur les hauteurs de Charente-Maritime. Un tracé technique, sans chicane artificielle. Un circuit qui s'apprend, session après session. <button class="link-inline" onclick="goTo('circuit')" style="background:none;border:none;color:var(--oxv-red);cursor:pointer;padding:0;font:inherit;">Le détail du tracé</button>.</p>
+            <p>Dessiné en 2009 par Jean-Pierre Beltoise, sur les hauteurs de Charente-Maritime. Un tracé technique, sans chicane artificielle. Un circuit qui s'apprend, session après session. <button class="link-inline" onclick="goTo('circuit')" style="background:none;border:none;color:var(--oxv-red-texte);cursor:pointer;padding:0;font:inherit;">Le détail du tracé</button>.</p>
             <p>OXV a choisi ce tracé parce qu'il révèle. Pas parce qu'il impressionne. Premier circuit partenaire de la plateforme. D'autres emplacements sont en cours de sélection.</p>
           </div>
         </div>
@@ -16045,6 +16051,24 @@ body.pav-tv .nav, body.pav-tv footer, body.pav-tv .cookie, body.pav-tv .founding
    Regle posee ici, en fin de feuille, pour passer apres toutes les autres
    sans recourir a !important. Le select FERME garde son apparence : on ne
    touche qu'au panneau. */
+/* Le rouge d'insigne en petit texte : éclairci pour rester lisible.
+   Mesuré sur la production : .kicker à 9 px, .page-hero-eyebrow à 10 px et
+   .link-inline à 14 px portaient #D80F1F, soit 3,78:1 — sous le seuil.
+   Les titres, l'insigne et les aplats ne sont pas concernés. */
+.kicker,
+.about-block-kicker,
+.home-ecosystem-pillar-num,
+.circuit-annee-block-link,
+.corp-format-badge,
+.link-inline,
+.actu-card .cat {
+  color: var(--oxv-red-texte, #E8414E);
+}
+.page-hero-eyebrow[style*="oxv-red"],
+.page-hero-eyebrow[style*="D80F1F"] {
+  color: var(--oxv-red-texte, #E8414E) !important;
+}
+
 select option,
 select optgroup {
   background-color: #101013;
@@ -16436,7 +16460,7 @@ select option:hover {
 <div class="page" id="page-login">
   <div id="crewInviteBanner" style="display:none;background:rgba(216,15,31,0.10);border-bottom:1px solid rgba(216,15,31,0.35);padding:14px 0;">
     <div class="wrap" style="display:flex;gap:14px;align-items:center;flex-wrap:wrap;justify-content:center;text-align:center;">
-      <span style="font-family:var(--mono);font-size:10px;letter-spacing:0.2em;text-transform:uppercase;color:var(--oxv-red);">Invitation d'écurie</span>
+      <span style="font-family:var(--mono);font-size:10px;letter-spacing:0.2em;text-transform:uppercase;color:var(--oxv-red-texte);">Invitation d'écurie</span>
       <span style="font-family:var(--sans);font-size:14px;color:var(--cream);">Connectez-vous ou créez votre compte : vous rejoindrez l'écurie qui vous a invité.</span>
     </div>
   </div>
@@ -19889,17 +19913,17 @@ select option:hover {
         </div>
 
         <div class="admin-field">
-          <label for="afTitle">Titre <span style="color:var(--oxv-red);">*</span> <span class="admin-field-hint">— *mot* pour l'italique</span></label>
+          <label for="afTitle">Titre <span style="color:var(--oxv-red-texte);">*</span> <span class="admin-field-hint">— *mot* pour l'italique</span></label>
           <input type="text" id="afTitle" placeholder="Ex. OXV ouvre les pré-inscriptions de sa *première saison*." />
         </div>
 
         <div class="admin-field">
-          <label for="afLead">Chapô <span style="color:var(--oxv-red);">*</span> <span class="admin-field-hint">— phrase d'accroche en tête d'article</span></label>
+          <label for="afLead">Chapô <span style="color:var(--oxv-red-texte);">*</span> <span class="admin-field-hint">— phrase d'accroche en tête d'article</span></label>
           <textarea id="afLead" rows="3" placeholder="Le résumé qui donne envie de lire la suite."></textarea>
         </div>
 
         <div class="admin-field">
-          <label for="afBody">Corps de l'article <span style="color:var(--oxv-red);">*</span> <span class="admin-field-hint">— ## titre · &gt; citation · - liste · **gras** · *italique* · ligne vide = nouveau paragraphe</span></label>
+          <label for="afBody">Corps de l'article <span style="color:var(--oxv-red-texte);">*</span> <span class="admin-field-hint">— ## titre · &gt; citation · - liste · **gras** · *italique* · ligne vide = nouveau paragraphe</span></label>
           <textarea id="afBody" rows="16" placeholder="Premier paragraphe.&#10;&#10;## Une section&#10;&#10;Texte avec **gras** et *italique*.&#10;&#10;&gt; Une citation marquante.&#10;&#10;- Premier point&#10;- Deuxième point"></textarea>
         </div>
 
@@ -19950,7 +19974,7 @@ select option:hover {
       <div class="bento" style="padding:24px;margin-top:24px;">
         <h3 class="prog-evolution-title" style="margin-bottom:14px;">Comment ça marche</h3>
         <p style="font-family:var(--sans);font-size:14px;color:var(--cream-mute);line-height:1.7;margin:0 0 12px;">
-          Les articles sont enregistrés <strong style="color:var(--cream);">dans la base OXV</strong> (Supabase) et partagés entre tous les administrateurs. Ils alimentent directement la page <button class="link-inline" onclick="goTo('actualites')" style="background:none;border:none;color:var(--oxv-red);cursor:pointer;padding:0;font:inherit;">Actualités</button> publique, avec filtres par catégorie.
+          Les articles sont enregistrés <strong style="color:var(--cream);">dans la base OXV</strong> (Supabase) et partagés entre tous les administrateurs. Ils alimentent directement la page <button class="link-inline" onclick="goTo('actualites')" style="background:none;border:none;color:var(--oxv-red-texte);cursor:pointer;padding:0;font:inherit;">Actualités</button> publique, avec filtres par catégorie.
         </p>
         <p style="font-family:var(--sans);font-size:14px;color:var(--cream-mute);line-height:1.7;margin:0;">
           <strong style="color:var(--cream);">Statuts :</strong> « Publié » apparaît sur la grille Actualités, « Brouillon » reste masqué du public. « Dépublier » retire un article de la grille sans le supprimer. Le calendrier éditorial regroupe les articles par mois selon leur date. Le bouton <strong style="color:var(--cream);">✉ Newsletter</strong> diffuse l'article en campagne Brevo à la liste d'abonnés — une seule diffusion par article (confirmation pour re-diffuser). Tant que la clé API Brevo n'est pas configurée, rien n'est envoyé et le bouton l'indique honnêtement.
@@ -21776,7 +21800,7 @@ select option:hover {
             <p style="font-family:var(--sans);font-size:14px;line-height:1.6;color:var(--cream-mute);margin:0;">L'application et la captation se choisissent, jamais imposées.</p>
           </div>
         </div>
-        <p style="font-family:var(--sans);font-size:14px;line-height:1.65;color:var(--cream-mute);max-width:820px;margin:18px 0 0;"><button class="link-inline" onclick="goTo('assurance-circuit')" style="background:none;border:none;color:var(--oxv-red);cursor:pointer;padding:0;font:inherit;">L'assurance circuit</button> est souscrite par le pilote et présentée au briefing avec le permis et le contrôle technique. Elle couvre les véhicules des autres pilotes et les installations de la piste. <strong style="color:var(--cream);">Elle n'assure pas le véhicule de son souscripteur</strong> : l'assurance auto classique exclut la conduite sur circuit.</p>
+        <p style="font-family:var(--sans);font-size:14px;line-height:1.65;color:var(--cream-mute);max-width:820px;margin:18px 0 0;"><button class="link-inline" onclick="goTo('assurance-circuit')" style="background:none;border:none;color:var(--oxv-red-texte);cursor:pointer;padding:0;font:inherit;">L'assurance circuit</button> est souscrite par le pilote et présentée au briefing avec le permis et le contrôle technique. Elle couvre les véhicules des autres pilotes et les installations de la piste. <strong style="color:var(--cream);">Elle n'assure pas le véhicule de son souscripteur</strong> : l'assurance auto classique exclut la conduite sur circuit.</p>
       </div>
 
       <!-- Ce qu'OXV ne fera jamais (TrustBlock) -->
@@ -21784,11 +21808,11 @@ select option:hover {
         <div class="kicker">— Nos engagements</div>
         <h2 class="section-title" style="margin-top:18px;margin-bottom:20px;">Ce qu'OXV ne fera <em>jamais</em>.</h2>
         <ul style="list-style:none;padding:0;margin:0;display:grid;gap:12px;max-width:760px;">
-          <li style="font-family:var(--sans);font-size:15px;color:var(--cream-mute);padding-left:22px;position:relative;"><span style="position:absolute;left:0;color:var(--oxv-red);">✕</span> Vous donner des consignes de pilotage en temps réel.</li>
-          <li style="font-family:var(--sans);font-size:15px;color:var(--cream-mute);padding-left:22px;position:relative;"><span style="position:absolute;left:0;color:var(--oxv-red);">✕</span> Afficher un classement public ou comparer votre niveau aux autres sans votre accord.</li>
-          <li style="font-family:var(--sans);font-size:15px;color:var(--cream-mute);padding-left:22px;position:relative;"><span style="position:absolute;left:0;color:var(--oxv-red);">✕</span> Donner accès à votre télémétrie à un partenaire sans votre consentement.</li>
-          <li style="font-family:var(--sans);font-size:15px;color:var(--cream-mute);padding-left:22px;position:relative;"><span style="position:absolute;left:0;color:var(--oxv-red);">✕</span> Vendre vos données personnelles.</li>
-          <li style="font-family:var(--sans);font-size:15px;color:var(--cream-mute);padding-left:22px;position:relative;"><span style="position:absolute;left:0;color:var(--oxv-red);">✕</span> Surcharger une session : vingt pilotes maximum, jamais vingt-et-un.</li>
+          <li style="font-family:var(--sans);font-size:15px;color:var(--cream-mute);padding-left:22px;position:relative;"><span style="position:absolute;left:0;color:var(--oxv-red-texte);">✕</span> Vous donner des consignes de pilotage en temps réel.</li>
+          <li style="font-family:var(--sans);font-size:15px;color:var(--cream-mute);padding-left:22px;position:relative;"><span style="position:absolute;left:0;color:var(--oxv-red-texte);">✕</span> Afficher un classement public ou comparer votre niveau aux autres sans votre accord.</li>
+          <li style="font-family:var(--sans);font-size:15px;color:var(--cream-mute);padding-left:22px;position:relative;"><span style="position:absolute;left:0;color:var(--oxv-red-texte);">✕</span> Donner accès à votre télémétrie à un partenaire sans votre consentement.</li>
+          <li style="font-family:var(--sans);font-size:15px;color:var(--cream-mute);padding-left:22px;position:relative;"><span style="position:absolute;left:0;color:var(--oxv-red-texte);">✕</span> Vendre vos données personnelles.</li>
+          <li style="font-family:var(--sans);font-size:15px;color:var(--cream-mute);padding-left:22px;position:relative;"><span style="position:absolute;left:0;color:var(--oxv-red-texte);">✕</span> Surcharger une session : vingt pilotes maximum, jamais vingt-et-un.</li>
         </ul>
       </div>
 
@@ -21898,11 +21922,11 @@ select option:hover {
           <div style="display:flex;align-items:center;gap:14px;margin-bottom:14px;">
             <svg width="46" height="46" viewBox="0 0 46 46" fill="none" aria-hidden="true"><circle cx="23" cy="23" r="21" stroke="rgba(216,15,31,0.25)" stroke-width="1"/><circle cx="23" cy="16" r="3.4" fill="#D80F1F"/><circle cx="15" cy="29" r="3.4" fill="rgba(216,15,31,0.55)"/><circle cx="31" cy="29" r="3.4" fill="rgba(216,15,31,0.55)"/><path d="M23 16 L15 29 M23 16 L31 29 M15 29 L31 29" stroke="rgba(216,15,31,0.45)" stroke-width="1.2"/></svg>
             <div>
-              <div style="font-family:var(--mono);font-size:9px;letter-spacing:0.24em;color:#D80F1F;">ESPACE 03</div>
+              <div style="font-family:var(--mono);font-size:9px;letter-spacing:0.24em;color:var(--oxv-red-texte);">ESPACE 03</div>
               <div style="font-family:var(--display);font-weight:600;font-size:21px;color:var(--offwhite);">Club</div>
             </div>
           </div>
-          <ul style="list-style:none;margin:0;padding:0;"><li style="display:grid;grid-template-columns:14px 1fr;gap:10px;align-items:start;margin-bottom:9px;"><span style="color:#D80F1F;font-family:var(--mono);font-size:11px;line-height:1.5;">—</span><span style="font-family:var(--sans);font-size:13.5px;line-height:1.55;color:var(--cream-mute);">Le Pass et son QR de présence</span></li><li style="display:grid;grid-template-columns:14px 1fr;gap:10px;align-items:start;margin-bottom:9px;"><span style="color:#D80F1F;font-family:var(--mono);font-size:11px;line-height:1.5;">—</span><span style="font-family:var(--sans);font-size:13.5px;line-height:1.55;color:var(--cream-mute);">Le calendrier et la réservation</span></li><li style="display:grid;grid-template-columns:14px 1fr;gap:10px;align-items:start;margin-bottom:9px;"><span style="color:#D80F1F;font-family:var(--mono);font-size:11px;line-height:1.5;">—</span><span style="font-family:var(--sans);font-size:13.5px;line-height:1.55;color:var(--cream-mute);">Votre écurie et son fil, dans l'espace Club</span></li><li style="display:grid;grid-template-columns:14px 1fr;gap:10px;align-items:start;margin-bottom:9px;"><span style="color:#D80F1F;font-family:var(--mono);font-size:11px;line-height:1.5;">—</span><span style="font-family:var(--sans);font-size:13.5px;line-height:1.55;color:var(--cream-mute);">Les salons — un par circuit</span></li><li style="display:grid;grid-template-columns:14px 1fr;gap:10px;align-items:start;margin-bottom:9px;"><span style="color:#D80F1F;font-family:var(--mono);font-size:11px;line-height:1.5;">—</span><span style="font-family:var(--sans);font-size:13.5px;line-height:1.55;color:var(--cream-mute);">Le coach du jour, si vous en voulez un</span></li></ul>
+          <ul style="list-style:none;margin:0;padding:0;"><li style="display:grid;grid-template-columns:14px 1fr;gap:10px;align-items:start;margin-bottom:9px;"><span style="color:var(--oxv-red-texte);font-family:var(--mono);font-size:11px;line-height:1.5;">—</span><span style="font-family:var(--sans);font-size:13.5px;line-height:1.55;color:var(--cream-mute);">Le Pass et son QR de présence</span></li><li style="display:grid;grid-template-columns:14px 1fr;gap:10px;align-items:start;margin-bottom:9px;"><span style="color:var(--oxv-red-texte);font-family:var(--mono);font-size:11px;line-height:1.5;">—</span><span style="font-family:var(--sans);font-size:13.5px;line-height:1.55;color:var(--cream-mute);">Le calendrier et la réservation</span></li><li style="display:grid;grid-template-columns:14px 1fr;gap:10px;align-items:start;margin-bottom:9px;"><span style="color:var(--oxv-red-texte);font-family:var(--mono);font-size:11px;line-height:1.5;">—</span><span style="font-family:var(--sans);font-size:13.5px;line-height:1.55;color:var(--cream-mute);">Votre écurie et son fil, dans l'espace Club</span></li><li style="display:grid;grid-template-columns:14px 1fr;gap:10px;align-items:start;margin-bottom:9px;"><span style="color:var(--oxv-red-texte);font-family:var(--mono);font-size:11px;line-height:1.5;">—</span><span style="font-family:var(--sans);font-size:13.5px;line-height:1.55;color:var(--cream-mute);">Les salons — un par circuit</span></li><li style="display:grid;grid-template-columns:14px 1fr;gap:10px;align-items:start;margin-bottom:9px;"><span style="color:var(--oxv-red-texte);font-family:var(--mono);font-size:11px;line-height:1.5;">—</span><span style="font-family:var(--sans);font-size:13.5px;line-height:1.55;color:var(--cream-mute);">Le coach du jour, si vous en voulez un</span></li></ul>
         </div>
         <div class="bento" style="padding:26px;">
           <div style="display:flex;align-items:center;gap:14px;margin-bottom:14px;">
@@ -21935,7 +21959,7 @@ select option:hover {
 
       <div class="reveal mk-rangee">
         <div class="mk-txt">
-          <div style="font-family:var(--mono);font-size:9px;letter-spacing:0.24em;text-transform:uppercase;color:var(--oxv-red);margin-bottom:10px;">01 · L'arrivée</div>
+          <div style="font-family:var(--mono);font-size:9px;letter-spacing:0.24em;text-transform:uppercase;color:var(--oxv-red-texte);margin-bottom:10px;">01 · L'arrivée</div>
           <h3 style="font-family:var(--display);font-weight:600;font-size:24px;color:var(--offwhite);margin:0 0 12px;">Vous y êtes.</h3>
           <p style="font-family:var(--sans);font-size:14.5px;line-height:1.7;color:var(--cream-mute);margin:0;">Au paddock, l'app vous accueille d'un geste : l'insigne se dessine au trait, une seule fois par jour, et un seul bouton vous attend. Pas de tableau de bord, pas de réglages : la journée commence par une présence, pas par un menu.</p>
         </div>
@@ -21956,7 +21980,7 @@ select option:hover {
 
       <div class="reveal mk-rangee inv">
         <div class="mk-txt">
-          <div style="font-family:var(--mono);font-size:9px;letter-spacing:0.24em;text-transform:uppercase;color:var(--oxv-red);margin-bottom:10px;">02 · En piste</div>
+          <div style="font-family:var(--mono);font-size:9px;letter-spacing:0.24em;text-transform:uppercase;color:var(--oxv-red-texte);margin-bottom:10px;">02 · En piste</div>
           <h3 style="font-family:var(--display);font-weight:600;font-size:24px;color:var(--offwhite);margin:0 0 12px;">Le silence, littéralement.</h3>
           <p style="font-family:var(--sans);font-size:14.5px;line-height:1.7;color:var(--cream-mute);margin:0;">Pendant que la voiture roule, voici l'écran entier : un voyant, un mot. Aucun chrono, aucune vitesse, aucun message. C'est l'écran le plus travaillé de l'application, et il est presque vide. Le silence en roulage n'est pas une promesse marketing : c'est cet écran.</p>
         </div>
@@ -21978,7 +22002,7 @@ select option:hover {
 
       <div class="reveal mk-rangee">
         <div class="mk-txt">
-          <div style="font-family:var(--mono);font-size:9px;letter-spacing:0.24em;text-transform:uppercase;color:var(--oxv-red);margin-bottom:10px;">03 · Le soir</div>
+          <div style="font-family:var(--mono);font-size:9px;letter-spacing:0.24em;text-transform:uppercase;color:var(--oxv-red-texte);margin-bottom:10px;">03 · Le soir</div>
           <h3 style="font-family:var(--display);font-weight:600;font-size:24px;color:var(--offwhite);margin:0 0 12px;">Le bilan rend votre journée.</h3>
           <p style="font-family:var(--sans);font-size:14.5px;line-height:1.7;color:var(--cream-mute);margin:0;">Le chrono d'abord, puis la marge du pilote, en nombre nu, sans jauge qui dramatise. Et quand une donnée manque, l'app le dit : « Véhicule non caractérisé — exclu du calcul. » Un tiret vaut mieux qu'un chiffre inventé.</p>
         </div>
@@ -22015,7 +22039,7 @@ select option:hover {
 
       <div class="reveal mk-rangee inv">
         <div class="mk-txt">
-          <div style="font-family:var(--mono);font-size:9px;letter-spacing:0.24em;text-transform:uppercase;color:var(--oxv-red);margin-bottom:10px;">04 · La mesure</div>
+          <div style="font-family:var(--mono);font-size:9px;letter-spacing:0.24em;text-transform:uppercase;color:var(--oxv-red-texte);margin-bottom:10px;">04 · La mesure</div>
           <h3 style="font-family:var(--display);font-weight:600;font-size:24px;color:var(--offwhite);margin:0 0 12px;">La séance, mesure par mesure.</h3>
           <p style="font-family:var(--sans);font-size:14.5px;line-height:1.7;color:var(--cream-mute);margin:0;">Huit sections ancrées, du résumé au nuage d'appuis. Ce nuage n'écrête jamais : son cercle porte sa propre échelle, parce qu'un nuage tassé au bord se lirait comme une limite d'adhérence, et ce serait un mensonge.</p>
         </div>
@@ -22058,7 +22082,7 @@ select option:hover {
 
       <div class="reveal mk-rangee">
         <div class="mk-txt">
-          <div style="font-family:var(--mono);font-size:9px;letter-spacing:0.24em;text-transform:uppercase;color:var(--oxv-red);margin-bottom:10px;">05 · Au fil des mois</div>
+          <div style="font-family:var(--mono);font-size:9px;letter-spacing:0.24em;text-transform:uppercase;color:var(--oxv-red-texte);margin-bottom:10px;">05 · Au fil des mois</div>
           <h3 style="font-family:var(--display);font-weight:600;font-size:24px;color:var(--offwhite);margin:0 0 12px;">Votre signature. Vous vs vous.</h3>
           <p style="font-family:var(--sans);font-size:14.5px;line-height:1.7;color:var(--cream-mute);margin:0;">Cinq branches, aucune note chiffrée : un polygone, cinq couleurs, et votre empreinte mois par mois. Une branche non mesurée disparaît. Elle n'est jamais tirée à zéro. Le seul comparant autorisé, c'est vous.</p>
         </div>
@@ -22089,7 +22113,7 @@ select option:hover {
 
       <div class="reveal mk-rangee inv">
         <div class="mk-txt">
-          <div style="font-family:var(--mono);font-size:9px;letter-spacing:0.24em;text-transform:uppercase;color:var(--oxv-red);margin-bottom:10px;">06 · À plusieurs</div>
+          <div style="font-family:var(--mono);font-size:9px;letter-spacing:0.24em;text-transform:uppercase;color:var(--oxv-red-texte);margin-bottom:10px;">06 · À plusieurs</div>
           <h3 style="font-family:var(--display);font-weight:600;font-size:24px;color:var(--offwhite);margin:0 0 12px;">L'écurie, sans chrono.</h3>
           <p style="font-family:var(--sans);font-size:14.5px;line-height:1.7;color:var(--cream-mute);margin:0;">Un nom, un insigne dessiné au trait, des pilotes. Pas un temps, pas un rang, pas un « meilleur » : une garde automatique interdit tout chrono sur cet écran. L'annuaire des écuries est trié, mais jamais numéroté.</p>
         </div>
@@ -22121,7 +22145,7 @@ select option:hover {
 
       <div class="reveal mk-rangee">
         <div class="mk-txt">
-          <div style="font-family:var(--mono);font-size:9px;letter-spacing:0.24em;text-transform:uppercase;color:var(--oxv-red);margin-bottom:10px;">07 · Vos données</div>
+          <div style="font-family:var(--mono);font-size:9px;letter-spacing:0.24em;text-transform:uppercase;color:var(--oxv-red-texte);margin-bottom:10px;">07 · Vos données</div>
           <h3 style="font-family:var(--display);font-weight:600;font-size:24px;color:var(--offwhite);margin:0 0 12px;">Des réglages qui se lisent.</h3>
           <p style="font-family:var(--sans);font-size:14.5px;line-height:1.7;color:var(--cream-mute);margin:0;">Chaque interrupteur dit ce qu'il fait, en une ligne factuelle. Tout est coupé par défaut, l'export de vos données est un bouton, la suppression du compte aussi. Un écran « Méthode » explique, grandeur par grandeur, ce qui est mesuré, déduit ou inféré.</p>
         </div>
@@ -22148,7 +22172,7 @@ select option:hover {
 
       <div class="reveal mk-rangee inv">
         <div class="mk-txt">
-          <div style="font-family:var(--mono);font-size:9px;letter-spacing:0.24em;text-transform:uppercase;color:var(--oxv-red);margin-bottom:10px;">08 · Entre les journées</div>
+          <div style="font-family:var(--mono);font-size:9px;letter-spacing:0.24em;text-transform:uppercase;color:var(--oxv-red-texte);margin-bottom:10px;">08 · Entre les journées</div>
           <h3 style="font-family:var(--display);font-weight:600;font-size:24px;color:var(--offwhite);margin:0 0 12px;">La route, à votre goût, puis à votre écurie.</h3>
           <p style="font-family:var(--sans);font-size:14.5px;line-height:1.7;color:var(--cream-mute);margin:0;">Choisissez la sinuosité, posez une adresse ou touchez un point remarquable : l'app trace votre balade. Hors chrono, donc sans or et sans classement : juste la route. Et la sortie d'écurie se partage en une phrase, sans un chiffre — « Place de Pons → La Table du Cognac → Circuit de Haute Saintonge » — avec le rendez-vous, l'étape à table, et deux réponses possibles : « Je viens » ou « Je ne viens pas ».</p>
         </div>
@@ -22191,7 +22215,7 @@ select option:hover {
 
       <div class="reveal mk-rangee">
         <div class="mk-txt">
-          <div style="font-family:var(--mono);font-size:9px;letter-spacing:0.24em;text-transform:uppercase;color:var(--oxv-red);margin-bottom:10px;">09 · Vos médias</div>
+          <div style="font-family:var(--mono);font-size:9px;letter-spacing:0.24em;text-transform:uppercase;color:var(--oxv-red-texte);margin-bottom:10px;">09 · Vos médias</div>
           <h3 style="font-family:var(--display);font-weight:600;font-size:24px;color:var(--offwhite);margin:0 0 12px;">Tout est à vous. Littéralement.</h3>
           <p style="font-family:var(--sans);font-size:14.5px;line-height:1.7;color:var(--cream-mute);margin:0;">Vos photos et vidéos de roulage sont déposées par OXV après chaque journée, visibles de vous seul, en plein écran, à votre nom. Vous partagez par des liens qui expirent tous, où rien n'est exposé par défaut, révocables d'un geste. Et l'archive complète de vos données se récupère en un bouton, au format ouvert.</p>
         </div>
@@ -22224,7 +22248,7 @@ select option:hover {
       </div>
       <div class="reveal" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:16px;margin-bottom:48px;">
         <div class="bento" style="padding:22px;">
-          <div style="font-family:var(--mono);font-size:9px;letter-spacing:0.22em;text-transform:uppercase;margin-bottom:8px;color:var(--oxv-red);">Le pass du jour J</div>
+          <div style="font-family:var(--mono);font-size:9px;letter-spacing:0.22em;text-transform:uppercase;margin-bottom:8px;color:var(--oxv-red-texte);">Le pass du jour J</div>
           <p style="font-family:var(--sans);font-size:13.5px;line-height:1.6;color:var(--cream-mute);margin:0;">Votre QR de présence, le check-in d'un geste : la journée commence sans papier.</p>
         </div>
         <div class="bento" style="padding:22px;">
@@ -22245,7 +22269,7 @@ select option:hover {
       <div class="reveal" style="margin-bottom:20px;">
         <div class="kicker">— Espace Club</div>
         <h2 class="section-title" style="font-size:clamp(28px,3.8vw,42px);margin:18px 0 10px;">Rouler à plusieurs.<br/>Sans quitter son <em>miroir</em>.</h2>
-        <p style="font-family:var(--sans);font-size:15px;line-height:1.7;color:var(--cream-mute);max-width:700px;margin:0 0 26px;">Une écurie est une équipe qui réserve ses sessions ensemble. Vous la créez, vous la nommez, et vous invitez par un lien : la personne qui l'ouvre crée son compte et se retrouve dans votre écurie, sans code à recopier. Trois usages suivent — organiser une journée, partager ce qu'on en garde, rouler ensemble sur route. Le miroir reste individuel ; la route, elle, se partage. Tout se pilote depuis vos <button class="link-inline" onclick="goTo('compte-preferences')" style="background:none;border:none;color:var(--oxv-red);cursor:pointer;padding:0;font:inherit;">préférences</button>.</p>
+        <p style="font-family:var(--sans);font-size:15px;line-height:1.7;color:var(--cream-mute);max-width:700px;margin:0 0 26px;">Une écurie est une équipe qui réserve ses sessions ensemble. Vous la créez, vous la nommez, et vous invitez par un lien : la personne qui l'ouvre crée son compte et se retrouve dans votre écurie, sans code à recopier. Trois usages suivent — organiser une journée, partager ce qu'on en garde, rouler ensemble sur route. Le miroir reste individuel ; la route, elle, se partage. Tout se pilote depuis vos <button class="link-inline" onclick="goTo('compte-preferences')" style="background:none;border:none;color:var(--oxv-red-texte);cursor:pointer;padding:0;font:inherit;">préférences</button>.</p>
       </div>
 
       <div class="reveal" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(430px,100%),1fr));gap:16px;margin-bottom:48px;">
@@ -22423,7 +22447,7 @@ select option:hover {
       <div class="reveal" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:16px;margin-bottom:48px;">
         <div class="bento" style="padding:24px;">
           <div style="font-family:var(--mono);font-size:9px;letter-spacing:0.22em;text-transform:uppercase;margin-bottom:8px;color:var(--ok);">Le capteur est arrêté</div>
-          <p style="font-family:var(--sans);font-size:14px;line-height:1.65;color:var(--cream-mute);margin:0;">RaceBox — GPS et centrale inertielle, vingt-cinq mesures par seconde. Il est nommé comme sous-traitant dans notre <button class="link-inline" onclick="goTo('privacy')" style="background:none;border:none;color:var(--oxv-red);cursor:pointer;padding:0;font:inherit;">politique de confidentialité</button> : le choix est écrit, pas à l'étude.</p>
+          <p style="font-family:var(--sans);font-size:14px;line-height:1.65;color:var(--cream-mute);margin:0;">RaceBox — GPS et centrale inertielle, vingt-cinq mesures par seconde. Il est nommé comme sous-traitant dans notre <button class="link-inline" onclick="goTo('privacy')" style="background:none;border:none;color:var(--oxv-red-texte);cursor:pointer;padding:0;font:inherit;">politique de confidentialité</button> : le choix est écrit, pas à l'étude.</p>
         </div>
         <div class="bento" style="padding:24px;">
           <div style="font-family:var(--mono);font-size:9px;letter-spacing:0.22em;text-transform:uppercase;margin-bottom:8px;color:var(--ok);">L'appairage fonctionne</div>
@@ -22547,12 +22571,12 @@ select option:hover {
       <h2 class="section-title" style="font-size:32px;margin-bottom:8px;">Des <em>preuves</em>, pas des promesses.</h2>
       <p style="font-family:var(--sans);font-size:15px;line-height:1.7;color:var(--cream-mute);max-width:640px;margin:0 0 24px;">Six éléments concrets, vérifiables, qui fondent le sérieux d'OXV.</p>
       <div class="reveal" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px;margin-bottom:40px;">
-        <div class="bento" style="padding:24px;"><div style="font-family:var(--display);font-size:10px;letter-spacing:0.2em;text-transform:uppercase;color:var(--gold);margin-bottom:8px;">Un circuit réel, pas un slogan</div><p style="font-family:var(--sans);font-size:14px;line-height:1.6;color:var(--cream-mute);margin:0;">Le tracé Beltoise au Circuit de Haute Saintonge, dessiné par Jean-Pierre Beltoise en 2009, exploité par Julien Beltoise. Tracé technique, sans chicane artificielle — <button class="link-inline" onclick="goTo('circuit')" style="background:none;border:none;color:var(--oxv-red);cursor:pointer;padding:0;font:inherit;">voir le circuit</button>.</p></div>
-        <div class="bento" style="padding:24px;"><div style="font-family:var(--display);font-size:10px;letter-spacing:0.2em;text-transform:uppercase;color:var(--gold);margin-bottom:8px;">Un cadre de sécurité opposable</div><p style="font-family:var(--sans);font-size:14px;line-height:1.6;color:var(--cream-mute);margin:0;">Briefing obligatoire, documents vérifiés (permis, RC piste, contrôle technique), vingt pilotes maximum. <button class="link-inline" onclick="goTo('rouler-sur-circuit')" style="background:none;border:none;color:var(--oxv-red);cursor:pointer;padding:0;font:inherit;">les six conditions</button> · <button class="link-inline" onclick="goTo('securite')" style="background:none;border:none;color:var(--oxv-red);cursor:pointer;padding:0;font:inherit;">sécurité &amp; cadre</button>.</p></div>
+        <div class="bento" style="padding:24px;"><div style="font-family:var(--display);font-size:10px;letter-spacing:0.2em;text-transform:uppercase;color:var(--gold);margin-bottom:8px;">Un circuit réel, pas un slogan</div><p style="font-family:var(--sans);font-size:14px;line-height:1.6;color:var(--cream-mute);margin:0;">Le tracé Beltoise au Circuit de Haute Saintonge, dessiné par Jean-Pierre Beltoise en 2009, exploité par Julien Beltoise. Tracé technique, sans chicane artificielle — <button class="link-inline" onclick="goTo('circuit')" style="background:none;border:none;color:var(--oxv-red-texte);cursor:pointer;padding:0;font:inherit;">voir le circuit</button>.</p></div>
+        <div class="bento" style="padding:24px;"><div style="font-family:var(--display);font-size:10px;letter-spacing:0.2em;text-transform:uppercase;color:var(--gold);margin-bottom:8px;">Un cadre de sécurité opposable</div><p style="font-family:var(--sans);font-size:14px;line-height:1.6;color:var(--cream-mute);margin:0;">Briefing obligatoire, documents vérifiés (permis, RC piste, contrôle technique), vingt pilotes maximum. <button class="link-inline" onclick="goTo('rouler-sur-circuit')" style="background:none;border:none;color:var(--oxv-red-texte);cursor:pointer;padding:0;font:inherit;">les six conditions</button> · <button class="link-inline" onclick="goTo('securite')" style="background:none;border:none;color:var(--oxv-red-texte);cursor:pointer;padding:0;font:inherit;">sécurité &amp; cadre</button>.</p></div>
         <div class="bento" style="padding:24px;"><div style="font-family:var(--display);font-size:10px;letter-spacing:0.2em;text-transform:uppercase;color:var(--gold);margin-bottom:8px;">Vos données vous appartiennent</div><p style="font-family:var(--sans);font-size:14px;line-height:1.6;color:var(--cream-mute);margin:0;">Chiffrées, hébergées en Union européenne, jamais revendues. L'app compagnon est en opt-in : vous décidez.</p></div>
-        <div class="bento" style="padding:24px;"><div style="font-family:var(--display);font-size:10px;letter-spacing:0.2em;text-transform:uppercase;color:var(--gold);margin-bottom:8px;">Des conditions claires</div><p style="font-family:var(--sans);font-size:14px;line-height:1.6;color:var(--cream-mute);margin:0;">Tarifs TTC affichés, annulation gratuite jusqu'à 7 jours avant, paiement en ligne sécurisé — <button class="link-inline" onclick="goTo('cgv')" style="background:none;border:none;color:var(--oxv-red);cursor:pointer;padding:0;font:inherit;">nos CGV</button>.</p></div>
-        <div class="bento" style="padding:24px;"><div style="font-family:var(--display);font-size:10px;letter-spacing:0.2em;text-transform:uppercase;color:var(--gold);margin-bottom:8px;">Un écosystème transparent</div><p style="font-family:var(--sans);font-size:14px;line-height:1.6;color:var(--cream-mute);margin:0;">Partenaires sélectionnés et espace presse ouvert — <button class="link-inline" onclick="goTo('partenaires')" style="background:none;border:none;color:var(--oxv-red);cursor:pointer;padding:0;font:inherit;">partenaires</button> · <button class="link-inline" onclick="goTo('presse')" style="background:none;border:none;color:var(--oxv-red);cursor:pointer;padding:0;font:inherit;">presse</button>.</p></div>
-        <div class="bento" style="padding:24px;"><div style="font-family:var(--display);font-size:10px;letter-spacing:0.2em;text-transform:uppercase;color:var(--gold);margin-bottom:8px;">Ce qui prolonge la journée</div><p style="font-family:var(--sans);font-size:14px;line-height:1.6;color:var(--cream-mute);margin:0;">Médias, télémétrie, bilan de session : ce que vous emportez est réel et daté — <button class="link-inline" onclick="goTo('apres-journee')" style="background:none;border:none;color:var(--oxv-red);cursor:pointer;padding:0;font:inherit;">après votre journée</button>.</p></div>
+        <div class="bento" style="padding:24px;"><div style="font-family:var(--display);font-size:10px;letter-spacing:0.2em;text-transform:uppercase;color:var(--gold);margin-bottom:8px;">Des conditions claires</div><p style="font-family:var(--sans);font-size:14px;line-height:1.6;color:var(--cream-mute);margin:0;">Tarifs TTC affichés, annulation gratuite jusqu'à 7 jours avant, paiement en ligne sécurisé — <button class="link-inline" onclick="goTo('cgv')" style="background:none;border:none;color:var(--oxv-red-texte);cursor:pointer;padding:0;font:inherit;">nos CGV</button>.</p></div>
+        <div class="bento" style="padding:24px;"><div style="font-family:var(--display);font-size:10px;letter-spacing:0.2em;text-transform:uppercase;color:var(--gold);margin-bottom:8px;">Un écosystème transparent</div><p style="font-family:var(--sans);font-size:14px;line-height:1.6;color:var(--cream-mute);margin:0;">Partenaires sélectionnés et espace presse ouvert — <button class="link-inline" onclick="goTo('partenaires')" style="background:none;border:none;color:var(--oxv-red-texte);cursor:pointer;padding:0;font:inherit;">partenaires</button> · <button class="link-inline" onclick="goTo('presse')" style="background:none;border:none;color:var(--oxv-red-texte);cursor:pointer;padding:0;font:inherit;">presse</button>.</p></div>
+        <div class="bento" style="padding:24px;"><div style="font-family:var(--display);font-size:10px;letter-spacing:0.2em;text-transform:uppercase;color:var(--gold);margin-bottom:8px;">Ce qui prolonge la journée</div><p style="font-family:var(--sans);font-size:14px;line-height:1.6;color:var(--cream-mute);margin:0;">Médias, télémétrie, bilan de session : ce que vous emportez est réel et daté — <button class="link-inline" onclick="goTo('apres-journee')" style="background:none;border:none;color:var(--oxv-red-texte);cursor:pointer;padding:0;font:inherit;">après votre journée</button>.</p></div>
       </div>
 
       <div class="bento" style="padding:28px;margin-bottom:40px;border-color:var(--gold);">
@@ -22695,7 +22719,7 @@ select option:hover {
   <section class="section">
     <div class="wrap" style="max-width:1000px;">
       <div id="partnerSpaceGuard" style="display:none;" class="bento">
-        <p style="font-family:var(--sans);font-size:14px;color:var(--cream-mute);margin:0;padding:8px;">Cet espace est réservé aux partenaires signés. <button class="link-inline" onclick="goTo('partenaires')" style="background:none;border:none;color:var(--oxv-red);cursor:pointer;padding:0;font:inherit;">Proposer un partenariat →</button></p>
+        <p style="font-family:var(--sans);font-size:14px;color:var(--cream-mute);margin:0;padding:8px;">Cet espace est réservé aux partenaires signés. <button class="link-inline" onclick="goTo('partenaires')" style="background:none;border:none;color:var(--oxv-red-texte);cursor:pointer;padding:0;font:inherit;">Proposer un partenariat →</button></p>
       </div>
       <div id="partnerSpaceContent" style="display:none;">
         <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:16px;margin-bottom:24px;">
@@ -22866,7 +22890,7 @@ select option:hover {
   <section class="section" style="padding-top:24px;">
     <div class="wrap" style="max-width:1080px;">
       <div id="coachEspaceGuard" style="display:none;" class="bento">
-        <p style="font-family:var(--sans);font-size:14px;color:var(--cream-mute);margin:0;padding:8px;">Cet espace est réservé aux coachs partenaires OXV. <button class="link-inline" onclick="goTo('coach')" style="background:none;border:none;color:var(--oxv-red);cursor:pointer;padding:0;font:inherit;">Devenir coach partenaire →</button></p>
+        <p style="font-family:var(--sans);font-size:14px;color:var(--cream-mute);margin:0;padding:8px;">Cet espace est réservé aux coachs partenaires OXV. <button class="link-inline" onclick="goTo('coach')" style="background:none;border:none;color:var(--oxv-red-texte);cursor:pointer;padding:0;font:inherit;">Devenir coach partenaire →</button></p>
       </div>
       <div id="coachEspaceContent" style="display:none;">
 
@@ -23060,12 +23084,12 @@ select option:hover {
         <div class="bento" style="padding:26px;">
           <div style="display:flex;align-items:baseline;justify-content:space-between;gap:12px;margin-bottom:12px;">
             <div>
-              <div style="font-family:var(--mono);font-size:9px;letter-spacing:0.24em;color:#D80F1F;">FORMAT 01</div>
+              <div style="font-family:var(--mono);font-size:9px;letter-spacing:0.24em;color:var(--oxv-red-texte);">FORMAT 01</div>
               <div style="font-family:var(--display);font-weight:600;font-size:20px;color:var(--offwhite);margin-top:2px;">Pack Essais Concession</div>
             </div>
             <div style="font-family:var(--mono);font-size:8.5px;letter-spacing:0.16em;text-transform:uppercase;color:var(--cream-faint);white-space:nowrap;">À la journée</div>
           </div>
-          <ul style="list-style:none;margin:0;padding:0;"><li style="display:grid;grid-template-columns:12px 1fr;gap:10px;align-items:start;margin-bottom:8px;"><span style="color:#D80F1F;font-family:var(--mono);font-size:10px;line-height:1.6;">—</span><span style="font-family:var(--sans);font-size:13.5px;line-height:1.55;color:var(--cream-mute);">Deux véhicules en piste, sur une journée du cercle</span></li><li style="display:grid;grid-template-columns:12px 1fr;gap:10px;align-items:start;margin-bottom:8px;"><span style="color:#D80F1F;font-family:var(--mono);font-size:10px;line-height:1.6;">—</span><span style="font-family:var(--sans);font-size:13.5px;line-height:1.55;color:var(--cream-mute);">Des pilotes présélectionnés — propriétaires de GT, pas des curieux</span></li><li style="display:grid;grid-template-columns:12px 1fr;gap:10px;align-items:start;margin-bottom:8px;"><span style="color:#D80F1F;font-family:var(--mono);font-size:10px;line-height:1.6;">—</span><span style="font-family:var(--sans);font-size:13.5px;line-height:1.55;color:var(--cream-mute);">L'essai dans les conditions réelles du circuit, pas sur un parking</span></li><li style="display:grid;grid-template-columns:12px 1fr;gap:10px;align-items:start;margin-bottom:8px;"><span style="color:#D80F1F;font-family:var(--mono);font-size:10px;line-height:1.6;">—</span><span style="font-family:var(--sans);font-size:13.5px;line-height:1.55;color:var(--cream-mute);">Le compte-rendu des essais réalisés, sous sept jours</span></li></ul>
+          <ul style="list-style:none;margin:0;padding:0;"><li style="display:grid;grid-template-columns:12px 1fr;gap:10px;align-items:start;margin-bottom:8px;"><span style="color:var(--oxv-red-texte);font-family:var(--mono);font-size:10px;line-height:1.6;">—</span><span style="font-family:var(--sans);font-size:13.5px;line-height:1.55;color:var(--cream-mute);">Deux véhicules en piste, sur une journée du cercle</span></li><li style="display:grid;grid-template-columns:12px 1fr;gap:10px;align-items:start;margin-bottom:8px;"><span style="color:var(--oxv-red-texte);font-family:var(--mono);font-size:10px;line-height:1.6;">—</span><span style="font-family:var(--sans);font-size:13.5px;line-height:1.55;color:var(--cream-mute);">Des pilotes présélectionnés — propriétaires de GT, pas des curieux</span></li><li style="display:grid;grid-template-columns:12px 1fr;gap:10px;align-items:start;margin-bottom:8px;"><span style="color:var(--oxv-red-texte);font-family:var(--mono);font-size:10px;line-height:1.6;">—</span><span style="font-family:var(--sans);font-size:13.5px;line-height:1.55;color:var(--cream-mute);">L'essai dans les conditions réelles du circuit, pas sur un parking</span></li><li style="display:grid;grid-template-columns:12px 1fr;gap:10px;align-items:start;margin-bottom:8px;"><span style="color:var(--oxv-red-texte);font-family:var(--mono);font-size:10px;line-height:1.6;">—</span><span style="font-family:var(--sans);font-size:13.5px;line-height:1.55;color:var(--cream-mute);">Le compte-rendu des essais réalisés, sous sept jours</span></li></ul>
         </div>
         <div class="bento" style="padding:26px;">
           <div style="display:flex;align-items:baseline;justify-content:space-between;gap:12px;margin-bottom:12px;">
@@ -23302,7 +23326,7 @@ select option:hover {
   </section>
   <section class="section">
     <div class="wrap" style="max-width:1000px;">
-<h2 class="section-title" style="font-size:32px;margin-bottom:8px;">Les six <em>conditions</em>.</h2><p style="font-family:var(--sans);font-size:15px;line-height:1.7;color:var(--cream-mute);max-width:680px;margin:0 0 22px;">Elles sont contrôlées au briefing, avant que la première roue ne touche la piste.</p><div class="reveal" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px;margin-bottom:40px;"><div class="bento" style="padding:24px;"><div style="font-family:var(--display);font-size:10px;letter-spacing:0.2em;text-transform:uppercase;color:var(--gold);margin-bottom:8px;">01 · Le permis</div><p style="font-family:var(--sans);font-size:14px;line-height:1.6;color:var(--cream-mute);margin:0;">Permis B en cours de validité, présenté au briefing avec les autres pièces. Aucune licence sportive n'est exigée pour une journée OXV.</p></div><div class="bento" style="padding:24px;"><div style="font-family:var(--display);font-size:10px;letter-spacing:0.2em;text-transform:uppercase;color:var(--gold);margin-bottom:8px;">02 · L'assurance circuit</div><p style="font-family:var(--sans);font-size:14px;line-height:1.6;color:var(--cream-mute);margin:0;">Souscrite par le pilote, jamais fournie par l'organisateur. Elle couvre les véhicules des autres pilotes et les installations de la piste. <button class="link-inline" onclick="goTo('assurance-circuit')" style="background:none;border:none;color:var(--oxv-red);cursor:pointer;padding:0;font:inherit;">ce qu'elle couvre exactement</button>.</p></div><div class="bento" style="padding:24px;"><div style="font-family:var(--display);font-size:10px;letter-spacing:0.2em;text-transform:uppercase;color:var(--gold);margin-bottom:8px;">03 · Le contrôle technique</div><p style="font-family:var(--sans);font-size:14px;line-height:1.6;color:var(--cream-mute);margin:0;">En cours de validité, présenté avec le permis et l'attestation d'assurance.</p></div><div class="bento" style="padding:24px;"><div style="font-family:var(--display);font-size:10px;letter-spacing:0.2em;text-transform:uppercase;color:var(--gold);margin-bottom:8px;">04 · L'équipement</div><p style="font-family:var(--sans);font-size:14px;line-height:1.6;color:var(--cream-mute);margin:0;">Casque homologué, chaussures fermées, anneau de remorquage à bord. <button class="link-inline" onclick="goTo('equipement-circuit')" style="background:none;border:none;color:var(--oxv-red);cursor:pointer;padding:0;font:inherit;">le détail de l'équipement</button>.</p></div><div class="bento" style="padding:24px;"><div style="font-family:var(--display);font-size:10px;letter-spacing:0.2em;text-transform:uppercase;color:var(--gold);margin-bottom:8px;">05 · Le niveau sonore</div><p style="font-family:var(--sans);font-size:14px;line-height:1.6;color:var(--cream-mute);margin:0;">Le véhicule passe au sonomètre à l'arrivée. La norme est celle du circuit, pas celle d'OXV. Un dépassement ferme l'accès à la piste.</p></div><div class="bento" style="padding:24px;"><div style="font-family:var(--display);font-size:10px;letter-spacing:0.2em;text-transform:uppercase;color:var(--gold);margin-bottom:8px;">06 · Le briefing</div><p style="font-family:var(--sans);font-size:14px;line-height:1.6;color:var(--cream-mute);margin:0;">Vingt minutes, obligatoire, jamais renouvelé. Drapeaux, trajectoires, dépassements, zones de vigilance. Personne n'entre en piste sans l'avoir suivi.</p></div></div><h2 class="section-title" style="font-size:32px;margin-bottom:8px;">Et la <em>voiture</em> ?</h2><p style="font-family:var(--sans);font-size:15px;line-height:1.7;color:var(--cream-mute);max-width:680px;margin:0 0 22px;">Le référentiel d'accès OXV s'applique au rapport masse / puissance du véhicule, pas à sa marque ni à sa valeur. Chaque voiture y est désignée par sa marque, son modèle et sa génération, ce qui détermine sa classe : Sport, GT ou Supersport. La classe décide des journées qui vous sont ouvertes. Une voiture se déclare une fois, au garage, et reste sélectionnable ensuite.</p><h2 class="section-title" style="font-size:28px;margin:8px 0 18px;">Questions <em>fréquentes</em>.</h2><div class="bento" style="padding:22px 24px;margin-bottom:12px;"><div style="font-family:var(--sans);font-size:15px;font-weight:500;color:var(--cream);margin-bottom:8px;">Faut-il une licence FFSA pour rouler sur circuit ?</div><p style="font-family:var(--sans);font-size:14px;line-height:1.65;color:var(--cream-mute);margin:0;">Non, pas pour une journée de roulage libre. Le permis B suffit. Une licence devient nécessaire en compétition, ce qui n'est pas l'objet d'une journée OXV : il n'y a ni chronométrage officiel ni classement.</p></div><div class="bento" style="padding:22px 24px;margin-bottom:12px;"><div style="font-family:var(--sans);font-size:15px;font-weight:500;color:var(--cream);margin-bottom:8px;">Puis-je venir avec une voiture de série ?</div><p style="font-family:var(--sans);font-size:14px;line-height:1.65;color:var(--cream-mute);margin:0;">Oui, si elle satisfait le référentiel d'accès et la norme sonore du circuit. La très grande majorité des sportives de série y répondent.</p></div><div class="bento" style="padding:22px 24px;margin-bottom:12px;"><div style="font-family:var(--sans);font-size:15px;font-weight:500;color:var(--cream);margin-bottom:8px;">Combien de pilotes en même temps ?</div><p style="font-family:var(--sans);font-size:14px;line-height:1.65;color:var(--cream-mute);margin:0;">Vingt inscrits par journée, jamais vingt-et-un. La jauge porte sur les inscriptions, pas sur le nombre de voitures en piste à un instant donné : le roulage se fait par relais encadrés.</p></div><div class="bento" style="padding:22px 24px;margin-bottom:12px;"><div style="font-family:var(--sans);font-size:15px;font-weight:500;color:var(--cream);margin-bottom:8px;">Que se passe-t-il s'il pleut ?</div><p style="font-family:var(--sans);font-size:14px;line-height:1.65;color:var(--cream-mute);margin:0;">La journée est maintenue. Le chef de piste adapte les relais si les conditions l'exigent.</p></div><div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:34px;"><button class="btn btn-primary btn-lg" onclick="ctaPrimaryGo()"><span>Voir les journées</span></button><button class="btn btn-lg" onclick="goTo('contact')"><span>Poser une question</span></button></div>
+<h2 class="section-title" style="font-size:32px;margin-bottom:8px;">Les six <em>conditions</em>.</h2><p style="font-family:var(--sans);font-size:15px;line-height:1.7;color:var(--cream-mute);max-width:680px;margin:0 0 22px;">Elles sont contrôlées au briefing, avant que la première roue ne touche la piste.</p><div class="reveal" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px;margin-bottom:40px;"><div class="bento" style="padding:24px;"><div style="font-family:var(--display);font-size:10px;letter-spacing:0.2em;text-transform:uppercase;color:var(--gold);margin-bottom:8px;">01 · Le permis</div><p style="font-family:var(--sans);font-size:14px;line-height:1.6;color:var(--cream-mute);margin:0;">Permis B en cours de validité, présenté au briefing avec les autres pièces. Aucune licence sportive n'est exigée pour une journée OXV.</p></div><div class="bento" style="padding:24px;"><div style="font-family:var(--display);font-size:10px;letter-spacing:0.2em;text-transform:uppercase;color:var(--gold);margin-bottom:8px;">02 · L'assurance circuit</div><p style="font-family:var(--sans);font-size:14px;line-height:1.6;color:var(--cream-mute);margin:0;">Souscrite par le pilote, jamais fournie par l'organisateur. Elle couvre les véhicules des autres pilotes et les installations de la piste. <button class="link-inline" onclick="goTo('assurance-circuit')" style="background:none;border:none;color:var(--oxv-red-texte);cursor:pointer;padding:0;font:inherit;">ce qu'elle couvre exactement</button>.</p></div><div class="bento" style="padding:24px;"><div style="font-family:var(--display);font-size:10px;letter-spacing:0.2em;text-transform:uppercase;color:var(--gold);margin-bottom:8px;">03 · Le contrôle technique</div><p style="font-family:var(--sans);font-size:14px;line-height:1.6;color:var(--cream-mute);margin:0;">En cours de validité, présenté avec le permis et l'attestation d'assurance.</p></div><div class="bento" style="padding:24px;"><div style="font-family:var(--display);font-size:10px;letter-spacing:0.2em;text-transform:uppercase;color:var(--gold);margin-bottom:8px;">04 · L'équipement</div><p style="font-family:var(--sans);font-size:14px;line-height:1.6;color:var(--cream-mute);margin:0;">Casque homologué, chaussures fermées, anneau de remorquage à bord. <button class="link-inline" onclick="goTo('equipement-circuit')" style="background:none;border:none;color:var(--oxv-red-texte);cursor:pointer;padding:0;font:inherit;">le détail de l'équipement</button>.</p></div><div class="bento" style="padding:24px;"><div style="font-family:var(--display);font-size:10px;letter-spacing:0.2em;text-transform:uppercase;color:var(--gold);margin-bottom:8px;">05 · Le niveau sonore</div><p style="font-family:var(--sans);font-size:14px;line-height:1.6;color:var(--cream-mute);margin:0;">Le véhicule passe au sonomètre à l'arrivée. La norme est celle du circuit, pas celle d'OXV. Un dépassement ferme l'accès à la piste.</p></div><div class="bento" style="padding:24px;"><div style="font-family:var(--display);font-size:10px;letter-spacing:0.2em;text-transform:uppercase;color:var(--gold);margin-bottom:8px;">06 · Le briefing</div><p style="font-family:var(--sans);font-size:14px;line-height:1.6;color:var(--cream-mute);margin:0;">Vingt minutes, obligatoire, jamais renouvelé. Drapeaux, trajectoires, dépassements, zones de vigilance. Personne n'entre en piste sans l'avoir suivi.</p></div></div><h2 class="section-title" style="font-size:32px;margin-bottom:8px;">Et la <em>voiture</em> ?</h2><p style="font-family:var(--sans);font-size:15px;line-height:1.7;color:var(--cream-mute);max-width:680px;margin:0 0 22px;">Le référentiel d'accès OXV s'applique au rapport masse / puissance du véhicule, pas à sa marque ni à sa valeur. Chaque voiture y est désignée par sa marque, son modèle et sa génération, ce qui détermine sa classe : Sport, GT ou Supersport. La classe décide des journées qui vous sont ouvertes. Une voiture se déclare une fois, au garage, et reste sélectionnable ensuite.</p><h2 class="section-title" style="font-size:28px;margin:8px 0 18px;">Questions <em>fréquentes</em>.</h2><div class="bento" style="padding:22px 24px;margin-bottom:12px;"><div style="font-family:var(--sans);font-size:15px;font-weight:500;color:var(--cream);margin-bottom:8px;">Faut-il une licence FFSA pour rouler sur circuit ?</div><p style="font-family:var(--sans);font-size:14px;line-height:1.65;color:var(--cream-mute);margin:0;">Non, pas pour une journée de roulage libre. Le permis B suffit. Une licence devient nécessaire en compétition, ce qui n'est pas l'objet d'une journée OXV : il n'y a ni chronométrage officiel ni classement.</p></div><div class="bento" style="padding:22px 24px;margin-bottom:12px;"><div style="font-family:var(--sans);font-size:15px;font-weight:500;color:var(--cream);margin-bottom:8px;">Puis-je venir avec une voiture de série ?</div><p style="font-family:var(--sans);font-size:14px;line-height:1.65;color:var(--cream-mute);margin:0;">Oui, si elle satisfait le référentiel d'accès et la norme sonore du circuit. La très grande majorité des sportives de série y répondent.</p></div><div class="bento" style="padding:22px 24px;margin-bottom:12px;"><div style="font-family:var(--sans);font-size:15px;font-weight:500;color:var(--cream);margin-bottom:8px;">Combien de pilotes en même temps ?</div><p style="font-family:var(--sans);font-size:14px;line-height:1.65;color:var(--cream-mute);margin:0;">Vingt inscrits par journée, jamais vingt-et-un. La jauge porte sur les inscriptions, pas sur le nombre de voitures en piste à un instant donné : le roulage se fait par relais encadrés.</p></div><div class="bento" style="padding:22px 24px;margin-bottom:12px;"><div style="font-family:var(--sans);font-size:15px;font-weight:500;color:var(--cream);margin-bottom:8px;">Que se passe-t-il s'il pleut ?</div><p style="font-family:var(--sans);font-size:14px;line-height:1.65;color:var(--cream-mute);margin:0;">La journée est maintenue. Le chef de piste adapte les relais si les conditions l'exigent.</p></div><div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:34px;"><button class="btn btn-primary btn-lg" onclick="ctaPrimaryGo()"><span>Voir les journées</span></button><button class="btn btn-lg" onclick="goTo('contact')"><span>Poser une question</span></button></div>
     </div>
   </section>
 </div>
@@ -23353,7 +23377,7 @@ select option:hover {
   </section>
   <section class="section">
     <div class="wrap" style="max-width:1000px;">
-<h2 class="section-title" style="font-size:32px;margin-bottom:8px;">Le <em>matin</em>.</h2><div class="reveal" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px;margin-bottom:40px;"><div class="bento" style="padding:24px;"><div style="font-family:var(--display);font-size:10px;letter-spacing:0.2em;text-transform:uppercase;color:var(--gold);margin-bottom:8px;">08:00 · L'arrivée</div><p style="font-family:var(--sans);font-size:14px;line-height:1.6;color:var(--cream-mute);margin:0;">Vous présentez permis, attestation d'assurance circuit et contrôle technique. Votre équipement est vérifié.</p></div><div class="bento" style="padding:24px;"><div style="font-family:var(--display);font-size:10px;letter-spacing:0.2em;text-transform:uppercase;color:var(--gold);margin-bottom:8px;">Le contrôle</div><p style="font-family:var(--sans);font-size:14px;line-height:1.6;color:var(--cream-mute);margin:0;">Passage au sonomètre et vérification de l'état du véhicule : état général, freins, pneus, niveaux.</p></div><div class="bento" style="padding:24px;"><div style="font-family:var(--display);font-size:10px;letter-spacing:0.2em;text-transform:uppercase;color:var(--gold);margin-bottom:8px;">Le briefing</div><p style="font-family:var(--sans);font-size:14px;line-height:1.6;color:var(--cream-mute);margin:0;">Vingt minutes. Drapeaux, trajectoires, règles de dépassement, zones de vigilance. Obligatoire, jamais renouvelé en cours de journée.</p></div><div class="bento" style="padding:24px;"><div style="font-family:var(--display);font-size:10px;letter-spacing:0.2em;text-transform:uppercase;color:var(--gold);margin-bottom:8px;">La piste</div><p style="font-family:var(--sans);font-size:14px;line-height:1.6;color:var(--cream-mute);margin:0;">Chef de piste, relais encadrés. Vous roulez par relais, pas en continu : c'est ce qui permet de tenir vingt inscrits sans saturer la piste.</p></div></div><h2 class="section-title" style="font-size:32px;margin-bottom:8px;">Deux <em>formats</em>.</h2><div class="reveal" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px;margin-bottom:40px;"><div class="bento" style="padding:24px;"><div style="font-family:var(--display);font-size:10px;letter-spacing:0.2em;text-transform:uppercase;color:var(--gold);margin-bottom:8px;">Access · demi-journée</div><p style="font-family:var(--sans);font-size:14px;line-height:1.6;color:var(--cream-mute);margin:0;">Le lundi après-midi, de 14 h à 18 h, quatre relais. 390 € TTC, et 250 € TTC pour une première session, une seule fois par pilote.</p></div><div class="bento" style="padding:24px;"><div style="font-family:var(--display);font-size:10px;letter-spacing:0.2em;text-transform:uppercase;color:var(--gold);margin-bottom:8px;">Signature · journée complète</div><p style="font-family:var(--sans);font-size:14px;line-height:1.6;color:var(--cream-mute);margin:0;">Le vendredi, six relais, déjeuner traiteur. 690 € TTC, télémétrie et banque média comprises.</p></div></div><h2 class="section-title" style="font-size:32px;margin-bottom:8px;">Ce que vous <em>emportez</em>.</h2><p style="font-family:var(--sans);font-size:15px;line-height:1.7;color:var(--cream-mute);max-width:680px;margin:0 0 22px;">Les premières photos arrivent le soir même. La télémétrie de votre journée est disponible dans l'application deux jours après, le bilan de session le lendemain. L'application est comprise dans chaque offre, sans abonnement. <button class="link-inline" onclick="goTo('apres-journee')" style="background:none;border:none;color:var(--oxv-red);cursor:pointer;padding:0;font:inherit;">le détail de ce qui suit la journée</button>.</p><h2 class="section-title" style="font-size:28px;margin:8px 0 18px;">Questions <em>fréquentes</em>.</h2><div class="bento" style="padding:22px 24px;margin-bottom:12px;"><div style="font-family:var(--sans);font-size:15px;font-weight:500;color:var(--cream);margin-bottom:8px;">Je n'ai jamais roulé sur circuit. Est-ce un problème ?</div><p style="font-family:var(--sans);font-size:14px;line-height:1.65;color:var(--cream-mute);margin:0;">Non. Le briefing pose le même cadre pour tout le monde, et les relais sont encadrés par un chef de piste. Vous roulez à votre rythme : il n'y a ni classement ni chronométrage officiel.</p></div><div class="bento" style="padding:22px 24px;margin-bottom:12px;"><div style="font-family:var(--sans);font-size:15px;font-weight:500;color:var(--cream);margin-bottom:8px;">Puis-je être accompagné ?</div><p style="font-family:var(--sans);font-size:14px;line-height:1.65;color:var(--cream-mute);margin:0;">Oui, le paddock est accessible à vos accompagnants. Leur accès à la piste relève du règlement du circuit.</p></div><div class="bento" style="padding:22px 24px;margin-bottom:12px;"><div style="font-family:var(--sans);font-size:15px;font-weight:500;color:var(--cream);margin-bottom:8px;">Combien de temps roule-t-on réellement ?</div><p style="font-family:var(--sans);font-size:14px;line-height:1.65;color:var(--cream-mute);margin:0;">Quatre relais en demi-journée Access, six en journée complète Signature. Le temps de piste effectif dépend des conditions et du déroulé de la journée.</p></div><div class="bento" style="padding:22px 24px;margin-bottom:12px;"><div style="font-family:var(--sans);font-size:15px;font-weight:500;color:var(--cream);margin-bottom:8px;">Faut-il préparer sa voiture ?</div><p style="font-family:var(--sans);font-size:14px;line-height:1.65;color:var(--cream-mute);margin:0;">Un véhicule en bon état d'entretien suffit. Freins et pneus sont les deux points vérifiés le matin : partez avec de la marge sur les deux.</p></div><div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:34px;"><button class="btn btn-primary btn-lg" onclick="ctaPrimaryGo()"><span>Voir les journées</span></button><button class="btn btn-lg" onclick="goTo('contact')"><span>Poser une question</span></button></div>
+<h2 class="section-title" style="font-size:32px;margin-bottom:8px;">Le <em>matin</em>.</h2><div class="reveal" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px;margin-bottom:40px;"><div class="bento" style="padding:24px;"><div style="font-family:var(--display);font-size:10px;letter-spacing:0.2em;text-transform:uppercase;color:var(--gold);margin-bottom:8px;">08:00 · L'arrivée</div><p style="font-family:var(--sans);font-size:14px;line-height:1.6;color:var(--cream-mute);margin:0;">Vous présentez permis, attestation d'assurance circuit et contrôle technique. Votre équipement est vérifié.</p></div><div class="bento" style="padding:24px;"><div style="font-family:var(--display);font-size:10px;letter-spacing:0.2em;text-transform:uppercase;color:var(--gold);margin-bottom:8px;">Le contrôle</div><p style="font-family:var(--sans);font-size:14px;line-height:1.6;color:var(--cream-mute);margin:0;">Passage au sonomètre et vérification de l'état du véhicule : état général, freins, pneus, niveaux.</p></div><div class="bento" style="padding:24px;"><div style="font-family:var(--display);font-size:10px;letter-spacing:0.2em;text-transform:uppercase;color:var(--gold);margin-bottom:8px;">Le briefing</div><p style="font-family:var(--sans);font-size:14px;line-height:1.6;color:var(--cream-mute);margin:0;">Vingt minutes. Drapeaux, trajectoires, règles de dépassement, zones de vigilance. Obligatoire, jamais renouvelé en cours de journée.</p></div><div class="bento" style="padding:24px;"><div style="font-family:var(--display);font-size:10px;letter-spacing:0.2em;text-transform:uppercase;color:var(--gold);margin-bottom:8px;">La piste</div><p style="font-family:var(--sans);font-size:14px;line-height:1.6;color:var(--cream-mute);margin:0;">Chef de piste, relais encadrés. Vous roulez par relais, pas en continu : c'est ce qui permet de tenir vingt inscrits sans saturer la piste.</p></div></div><h2 class="section-title" style="font-size:32px;margin-bottom:8px;">Deux <em>formats</em>.</h2><div class="reveal" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px;margin-bottom:40px;"><div class="bento" style="padding:24px;"><div style="font-family:var(--display);font-size:10px;letter-spacing:0.2em;text-transform:uppercase;color:var(--gold);margin-bottom:8px;">Access · demi-journée</div><p style="font-family:var(--sans);font-size:14px;line-height:1.6;color:var(--cream-mute);margin:0;">Le lundi après-midi, de 14 h à 18 h, quatre relais. 390 € TTC, et 250 € TTC pour une première session, une seule fois par pilote.</p></div><div class="bento" style="padding:24px;"><div style="font-family:var(--display);font-size:10px;letter-spacing:0.2em;text-transform:uppercase;color:var(--gold);margin-bottom:8px;">Signature · journée complète</div><p style="font-family:var(--sans);font-size:14px;line-height:1.6;color:var(--cream-mute);margin:0;">Le vendredi, six relais, déjeuner traiteur. 690 € TTC, télémétrie et banque média comprises.</p></div></div><h2 class="section-title" style="font-size:32px;margin-bottom:8px;">Ce que vous <em>emportez</em>.</h2><p style="font-family:var(--sans);font-size:15px;line-height:1.7;color:var(--cream-mute);max-width:680px;margin:0 0 22px;">Les premières photos arrivent le soir même. La télémétrie de votre journée est disponible dans l'application deux jours après, le bilan de session le lendemain. L'application est comprise dans chaque offre, sans abonnement. <button class="link-inline" onclick="goTo('apres-journee')" style="background:none;border:none;color:var(--oxv-red-texte);cursor:pointer;padding:0;font:inherit;">le détail de ce qui suit la journée</button>.</p><h2 class="section-title" style="font-size:28px;margin:8px 0 18px;">Questions <em>fréquentes</em>.</h2><div class="bento" style="padding:22px 24px;margin-bottom:12px;"><div style="font-family:var(--sans);font-size:15px;font-weight:500;color:var(--cream);margin-bottom:8px;">Je n'ai jamais roulé sur circuit. Est-ce un problème ?</div><p style="font-family:var(--sans);font-size:14px;line-height:1.65;color:var(--cream-mute);margin:0;">Non. Le briefing pose le même cadre pour tout le monde, et les relais sont encadrés par un chef de piste. Vous roulez à votre rythme : il n'y a ni classement ni chronométrage officiel.</p></div><div class="bento" style="padding:22px 24px;margin-bottom:12px;"><div style="font-family:var(--sans);font-size:15px;font-weight:500;color:var(--cream);margin-bottom:8px;">Puis-je être accompagné ?</div><p style="font-family:var(--sans);font-size:14px;line-height:1.65;color:var(--cream-mute);margin:0;">Oui, le paddock est accessible à vos accompagnants. Leur accès à la piste relève du règlement du circuit.</p></div><div class="bento" style="padding:22px 24px;margin-bottom:12px;"><div style="font-family:var(--sans);font-size:15px;font-weight:500;color:var(--cream);margin-bottom:8px;">Combien de temps roule-t-on réellement ?</div><p style="font-family:var(--sans);font-size:14px;line-height:1.65;color:var(--cream-mute);margin:0;">Quatre relais en demi-journée Access, six en journée complète Signature. Le temps de piste effectif dépend des conditions et du déroulé de la journée.</p></div><div class="bento" style="padding:22px 24px;margin-bottom:12px;"><div style="font-family:var(--sans);font-size:15px;font-weight:500;color:var(--cream);margin-bottom:8px;">Faut-il préparer sa voiture ?</div><p style="font-family:var(--sans);font-size:14px;line-height:1.65;color:var(--cream-mute);margin:0;">Un véhicule en bon état d'entretien suffit. Freins et pneus sont les deux points vérifiés le matin : partez avec de la marge sur les deux.</p></div><div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:34px;"><button class="btn btn-primary btn-lg" onclick="ctaPrimaryGo()"><span>Voir les journées</span></button><button class="btn btn-lg" onclick="goTo('contact')"><span>Poser une question</span></button></div>
     </div>
   </section>
 </div>
@@ -23370,7 +23394,7 @@ select option:hover {
   </section>
   <section class="section">
     <div class="wrap" style="max-width:1000px;">
-<h2 class="section-title" style="font-size:32px;margin-bottom:8px;">Les <em>distances</em>.</h2><div class="reveal" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px;margin-bottom:40px;"><div class="bento" style="padding:24px;"><div style="font-family:var(--display);font-size:10px;letter-spacing:0.2em;text-transform:uppercase;color:var(--gold);margin-bottom:8px;">Depuis Bordeaux</div><p style="font-family:var(--sans);font-size:14px;line-height:1.6;color:var(--cream-mute);margin:0;">70 km, environ une heure par la N10 puis la D137.</p></div><div class="bento" style="padding:24px;"><div style="font-family:var(--display);font-size:10px;letter-spacing:0.2em;text-transform:uppercase;color:var(--gold);margin-bottom:8px;">Depuis Libourne</div><p style="font-family:var(--sans);font-size:14px;line-height:1.6;color:var(--cream-mute);margin:0;">Environ quarante-cinq minutes.</p></div><div class="bento" style="padding:24px;"><div style="font-family:var(--display);font-size:10px;letter-spacing:0.2em;text-transform:uppercase;color:var(--gold);margin-bottom:8px;">Depuis Cognac</div><p style="font-family:var(--sans);font-size:14px;line-height:1.6;color:var(--cream-mute);margin:0;">Environ une heure.</p></div><div class="bento" style="padding:24px;"><div style="font-family:var(--display);font-size:10px;letter-spacing:0.2em;text-transform:uppercase;color:var(--gold);margin-bottom:8px;">Depuis Saintes</div><p style="font-family:var(--sans);font-size:14px;line-height:1.6;color:var(--cream-mute);margin:0;">Moins de quarante minutes.</p></div></div><p style="font-family:var(--sans);font-size:15px;line-height:1.7;color:var(--cream-mute);max-width:680px;margin:0 0 22px;">Le Circuit de Haute Saintonge se trouve à La Génétouze, en Charente-Maritime. C'est le premier circuit partenaire d'OXV ; d'autres emplacements sont en cours de sélection. <button class="link-inline" onclick="goTo('circuit')" style="background:none;border:none;color:var(--oxv-red);cursor:pointer;padding:0;font:inherit;">voir le circuit</button>.</p><h2 class="section-title" style="font-size:32px;margin-bottom:8px;">Pourquoi la <em>distance</em> compte.</h2><p style="font-family:var(--sans);font-size:15px;line-height:1.7;color:var(--cream-mute);max-width:680px;margin:0 0 22px;">Une journée de piste à deux heures de route se prépare comme un déplacement : départ la veille, nuit sur place, retour le lendemain. À une heure, elle tient dans une journée. C'est ce qui sépare une sortie exceptionnelle d'une pratique régulière, et c'est la raison pour laquelle OXV a choisi ce circuit en premier.</p><h2 class="section-title" style="font-size:28px;margin:8px 0 18px;">Questions <em>fréquentes</em>.</h2><div class="bento" style="padding:22px 24px;margin-bottom:12px;"><div style="font-family:var(--sans);font-size:15px;font-weight:500;color:var(--cream);margin-bottom:8px;">Y a-t-il un circuit plus près de Bordeaux ?</div><p style="font-family:var(--sans);font-size:14px;line-height:1.65;color:var(--cream-mute);margin:0;">Aucun circuit ouvert au roulage automobile n'est plus proche du centre de Bordeaux. Les autres circuits de Nouvelle-Aquitaine demandent nettement plus de route.</p></div><div class="bento" style="padding:22px 24px;margin-bottom:12px;"><div style="font-family:var(--sans);font-size:15px;font-weight:500;color:var(--cream);margin-bottom:8px;">Peut-on venir et repartir dans la journée ?</div><p style="font-family:var(--sans);font-size:14px;line-height:1.65;color:var(--cream-mute);margin:0;">Oui. C'est le cas de la majorité des pilotes venus de Bordeaux, de Libourne ou du Bassin.</p></div><div class="bento" style="padding:22px 24px;margin-bottom:12px;"><div style="font-family:var(--sans);font-size:15px;font-weight:500;color:var(--cream);margin-bottom:8px;">Faut-il un plateau pour transporter la voiture ?</div><p style="font-family:var(--sans);font-size:14px;line-height:1.65;color:var(--cream-mute);margin:0;">Non, sauf si vous le souhaitez. Les véhicules admis sont homologués route et viennent par leurs propres moyens.</p></div><div class="bento" style="padding:22px 24px;margin-bottom:12px;"><div style="font-family:var(--sans);font-size:15px;font-weight:500;color:var(--cream);margin-bottom:8px;">Où se garer, où déjeuner ?</div><p style="font-family:var(--sans);font-size:14px;line-height:1.65;color:var(--cream-mute);margin:0;">Le paddock accueille les véhicules et les accompagnants. Le déjeuner traiteur est compris dans la journée Signature.</p></div><div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:34px;"><button class="btn btn-primary btn-lg" onclick="ctaPrimaryGo()"><span>Voir les journées</span></button><button class="btn btn-lg" onclick="goTo('contact')"><span>Poser une question</span></button></div>
+<h2 class="section-title" style="font-size:32px;margin-bottom:8px;">Les <em>distances</em>.</h2><div class="reveal" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px;margin-bottom:40px;"><div class="bento" style="padding:24px;"><div style="font-family:var(--display);font-size:10px;letter-spacing:0.2em;text-transform:uppercase;color:var(--gold);margin-bottom:8px;">Depuis Bordeaux</div><p style="font-family:var(--sans);font-size:14px;line-height:1.6;color:var(--cream-mute);margin:0;">70 km, environ une heure par la N10 puis la D137.</p></div><div class="bento" style="padding:24px;"><div style="font-family:var(--display);font-size:10px;letter-spacing:0.2em;text-transform:uppercase;color:var(--gold);margin-bottom:8px;">Depuis Libourne</div><p style="font-family:var(--sans);font-size:14px;line-height:1.6;color:var(--cream-mute);margin:0;">Environ quarante-cinq minutes.</p></div><div class="bento" style="padding:24px;"><div style="font-family:var(--display);font-size:10px;letter-spacing:0.2em;text-transform:uppercase;color:var(--gold);margin-bottom:8px;">Depuis Cognac</div><p style="font-family:var(--sans);font-size:14px;line-height:1.6;color:var(--cream-mute);margin:0;">Environ une heure.</p></div><div class="bento" style="padding:24px;"><div style="font-family:var(--display);font-size:10px;letter-spacing:0.2em;text-transform:uppercase;color:var(--gold);margin-bottom:8px;">Depuis Saintes</div><p style="font-family:var(--sans);font-size:14px;line-height:1.6;color:var(--cream-mute);margin:0;">Moins de quarante minutes.</p></div></div><p style="font-family:var(--sans);font-size:15px;line-height:1.7;color:var(--cream-mute);max-width:680px;margin:0 0 22px;">Le Circuit de Haute Saintonge se trouve à La Génétouze, en Charente-Maritime. C'est le premier circuit partenaire d'OXV ; d'autres emplacements sont en cours de sélection. <button class="link-inline" onclick="goTo('circuit')" style="background:none;border:none;color:var(--oxv-red-texte);cursor:pointer;padding:0;font:inherit;">voir le circuit</button>.</p><h2 class="section-title" style="font-size:32px;margin-bottom:8px;">Pourquoi la <em>distance</em> compte.</h2><p style="font-family:var(--sans);font-size:15px;line-height:1.7;color:var(--cream-mute);max-width:680px;margin:0 0 22px;">Une journée de piste à deux heures de route se prépare comme un déplacement : départ la veille, nuit sur place, retour le lendemain. À une heure, elle tient dans une journée. C'est ce qui sépare une sortie exceptionnelle d'une pratique régulière, et c'est la raison pour laquelle OXV a choisi ce circuit en premier.</p><h2 class="section-title" style="font-size:28px;margin:8px 0 18px;">Questions <em>fréquentes</em>.</h2><div class="bento" style="padding:22px 24px;margin-bottom:12px;"><div style="font-family:var(--sans);font-size:15px;font-weight:500;color:var(--cream);margin-bottom:8px;">Y a-t-il un circuit plus près de Bordeaux ?</div><p style="font-family:var(--sans);font-size:14px;line-height:1.65;color:var(--cream-mute);margin:0;">Aucun circuit ouvert au roulage automobile n'est plus proche du centre de Bordeaux. Les autres circuits de Nouvelle-Aquitaine demandent nettement plus de route.</p></div><div class="bento" style="padding:22px 24px;margin-bottom:12px;"><div style="font-family:var(--sans);font-size:15px;font-weight:500;color:var(--cream);margin-bottom:8px;">Peut-on venir et repartir dans la journée ?</div><p style="font-family:var(--sans);font-size:14px;line-height:1.65;color:var(--cream-mute);margin:0;">Oui. C'est le cas de la majorité des pilotes venus de Bordeaux, de Libourne ou du Bassin.</p></div><div class="bento" style="padding:22px 24px;margin-bottom:12px;"><div style="font-family:var(--sans);font-size:15px;font-weight:500;color:var(--cream);margin-bottom:8px;">Faut-il un plateau pour transporter la voiture ?</div><p style="font-family:var(--sans);font-size:14px;line-height:1.65;color:var(--cream-mute);margin:0;">Non, sauf si vous le souhaitez. Les véhicules admis sont homologués route et viennent par leurs propres moyens.</p></div><div class="bento" style="padding:22px 24px;margin-bottom:12px;"><div style="font-family:var(--sans);font-size:15px;font-weight:500;color:var(--cream);margin-bottom:8px;">Où se garer, où déjeuner ?</div><p style="font-family:var(--sans);font-size:14px;line-height:1.65;color:var(--cream-mute);margin:0;">Le paddock accueille les véhicules et les accompagnants. Le déjeuner traiteur est compris dans la journée Signature.</p></div><div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:34px;"><button class="btn btn-primary btn-lg" onclick="ctaPrimaryGo()"><span>Voir les journées</span></button><button class="btn btn-lg" onclick="goTo('contact')"><span>Poser une question</span></button></div>
     </div>
   </section>
 </div>
@@ -23425,7 +23449,7 @@ select option:hover {
             <li><button onclick="ctaPrimaryGo()">Réserver</button></li>
             <li><button onclick="goTo('login')">Se connecter</button></li>
             <li><button onclick="goTo('demande')">Créer un compte</button></li>
-            <li><button onclick="goTo('application')">App OXV Mirror <span style="color:var(--oxv-red);font-size:8px;letter-spacing:0.15em;margin-left:6px;">2027</span></button></li>
+            <li><button onclick="goTo('application')">App OXV Mirror <span style="color:var(--oxv-red-texte);font-size:8px;letter-spacing:0.15em;margin-left:6px;">2027</span></button></li>
           </ul>
         </div>
 
@@ -30048,7 +30072,7 @@ function vhRefAppliquer(ligne) {
     const r = Number(ligne.ratio_kg_ch).toFixed(2).replace('.', ',');
     const cause = Number(ligne.masse_kg) > 2400
       ? `Masse ${bkNombreFr(ligne.masse_kg)} kg. Le référentiel admet jusqu’à 2 400 kg.`
-      : `Rapport masse/puissance ${r} kg/ch. Le référentiel admet jusqu’à 6,00 kg/ch.`;
+      : `Rapport masse/puissance ${r} kg/ch. Le référentiel admet jusqu’à 6,30 kg/ch.`;
     fiche.innerHTML = `
       <div class="bk-perimetre-panel">
         <div class="titre">Hors critères d’accès</div>
