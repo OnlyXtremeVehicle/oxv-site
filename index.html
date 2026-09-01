@@ -16084,6 +16084,64 @@ select option:hover {
 @supports (-moz-appearance: none) {
   select { background-color: #101013; }
 }
+
+/* ── HistoVec au garage ──────────────────────────────────────
+   Un encart discret quand il n'y a rien a faire, et qui se deplie seulement
+   quand le pilote doit agir. La demarche tient en trois lignes : un bouton qui
+   ouvre le site officiel, un champ ou coller, une issue pour ceux qui ne sont
+   pas titulaires. Tout le reste couterait des inscriptions. */
+.hv-etat {
+  font-family: var(--mono); font-size: 9px; letter-spacing: 0.18em;
+  text-transform: uppercase; margin-top: 8px;
+}
+.hv-bloc {
+  margin-top: 10px; padding: 12px 13px;
+  border: 1px solid var(--cream-line); border-left: 2px solid var(--gold-data);
+  background: rgba(255, 255, 255, 0.02);
+}
+.hv-bloc p {
+  margin: 0 0 10px; font-family: var(--sans); font-size: 11.5px;
+  line-height: 1.5; color: var(--cream-mute);
+}
+.hv-bloc .hv-cta {
+  display: inline-block; margin-bottom: 10px; padding: 8px 13px;
+  font-family: var(--mono); font-size: 9.5px; letter-spacing: 0.14em;
+  text-transform: uppercase; text-decoration: none;
+  color: var(--night); background: var(--gold-data);
+}
+.hv-bloc .hv-cta:hover { background: var(--copper-glow, #FFC93C); }
+.hv-rangee { display: flex; gap: 7px; flex-wrap: wrap; }
+.hv-bloc input[type="url"], .hv-bloc textarea {
+  flex: 1 1 190px; min-width: 0; padding: 8px 10px;
+  font-family: var(--mono); font-size: 11px;
+  color: var(--cream); background: #101013;
+  border: 1px solid var(--cream-line);
+}
+.hv-bloc textarea { width: 100%; resize: vertical; min-height: 58px; }
+.hv-bloc input[type="url"]:focus, .hv-bloc textarea:focus {
+  outline: none; border-color: var(--gold-data);
+}
+.hv-bloc button {
+  padding: 8px 13px; font-family: var(--mono); font-size: 9.5px;
+  letter-spacing: 0.14em; text-transform: uppercase; cursor: pointer;
+  color: var(--cream); background: transparent; border: 1px solid var(--cream-line);
+}
+.hv-bloc button:hover { border-color: var(--cream-faint); }
+/* La specificite doit battre `.hv-bloc button` (0,1,1), sinon l'issue rend
+   comme un gros bouton encadre alors que c'est une porte de secours : elle
+   doit se voir sans peser autant que l'action principale. */
+.hv-bloc button.hv-lien {
+  display: block; width: 100%; margin-top: 9px; padding: 0;
+  border: 0; background: none; text-align: left;
+  font-family: var(--sans); font-size: 11px; letter-spacing: normal;
+  text-transform: none; color: var(--cream-faint);
+  text-decoration: underline; text-underline-offset: 3px; cursor: pointer;
+}
+.hv-bloc button.hv-lien:hover { color: var(--cream-mute); border: 0; }
+.hv-motif {
+  margin-top: 7px; font-family: var(--sans); font-size: 11px;
+  line-height: 1.45; color: var(--cream-mute);
+}
 </style>
 <!-- ============ AUTH : SIGNUP ============ -->
 <div class="page" id="page-signup">
@@ -18480,6 +18538,25 @@ select option:hover {
         </div>
       </div>
 
+      <!-- Rapports HistoVec.
+           Le dépôt d'un rapport ne change PAS le verdict de véhicule : les deux
+           axes sont séparés, et c'est voulu. Il faut donc sa propre file, sinon
+           un rapport déposé n'apparaît nulle part et le pilote attend un examen
+           que personne ne voit. Un contrôle sans personne derrière fait croire
+           à une vérification : c'est pire que pas de contrôle. -->
+      <div class="admin-section">
+        <div class="admin-section-head">
+          <div class="admin-section-title">Rapports HistoVec</div>
+          <button class="admin-section-action" onclick="loadAdminHistovec()">Rafraîchir</button>
+        </div>
+        <div id="adminHistovecRows" class="admin-todo-list">
+          <div class="admin-empty">
+            <div class="admin-empty-icon">○</div>
+            <div class="admin-empty-text">Chargement…</div>
+          </div>
+        </div>
+      </div>
+
       <!-- Inscriptions mises en examen.
            La base ouvre l'examen toute seule — modifications déclarées après
            coup, immatriculation qui tombe, révision du référentiel. Elle ne le
@@ -19221,24 +19298,12 @@ select option:hover {
              plateau de ce jour-là accueille. Aucune ne rattrape l'autre. -->
         <div class="form-row" id="newSessionClassesRow">
           <label class="form-label">Classes admises</label>
-          <div class="form-checkboxes">
-            <label class="form-checkbox">
-              <input type="checkbox" id="newSessionClasseI" checked onchange="oxvAfficherImpactClasses('newSessionClasse','newSessionClassesImpact',null)" />
-              <span>Classe I — Sport</span>
-            </label>
-            <label class="form-checkbox">
-              <input type="checkbox" id="newSessionClasseII" checked onchange="oxvAfficherImpactClasses('newSessionClasse','newSessionClassesImpact',null)" />
-              <span>Classe II — GT</span>
-            </label>
-            <label class="form-checkbox">
-              <input type="checkbox" id="newSessionClasseIII" checked onchange="oxvAfficherImpactClasses('newSessionClasse','newSessionClassesImpact',null)" />
-              <span>Classe III — Supersport</span>
-            </label>
-          </div>
+          <select id="newSessionClasses" onchange="oxvAfficherImpactClasses('newSessionClasses','newSessionClassesImpact',null)"><option value="I,II,III">Les trois classes — n’écarte personne</option><option value="I,II">Classes I et II — Sport et GT</option><option value="II,III">Classes II et III — GT et Supersport</option><option value="I">Classe I seule — Sport</option><option value="II">Classe II seule — GT</option><option value="III">Classe III seule — Supersport</option></select>
           <div class="form-hint">
             Ce que le plateau accueille ce jour-là. Par défaut les trois. Restreindre
             ferme la journée aux véhicules concernés : la base le vérifie à
-            l'inscription, l'interface ne fait que l'annoncer.
+            l'inscription, l'interface ne fait que l'annoncer. Les classes admises
+            se suivent — I et III sans II ne se propose pas, et la base le refuse.
           </div>
           <div class="form-hint" id="newSessionClassesImpact"></div>
         </div>
@@ -19419,7 +19484,7 @@ select option:hover {
       <div class="form-row"><label for="ase-cap">Capacité totale</label><input type="number" id="ase-cap" min="0" max="40" /></div>
       <div class="form-row"><label for="ase-cap-access">Capacité Access</label><input type="number" id="ase-cap-access" min="0" max="40" /></div>
       <div class="form-row"><label for="ase-cap-sig">Capacité Signature</label><input type="number" id="ase-cap-sig" min="0" max="40" /></div>
-      <div class="form-row full"><label>Classes admises</label><div style="display:flex;gap:20px;flex-wrap:wrap;padding-top:6px;"><label style="display:flex;align-items:center;gap:7px;font-family:var(--sans);color:var(--cream);cursor:pointer;"><input type="checkbox" id="aseClasseI" onchange="oxvAfficherImpactClasses('aseClasse','aseClassesImpact',window._currentAdminSessionId)" /><span>Classe I — Sport</span></label><label style="display:flex;align-items:center;gap:7px;font-family:var(--sans);color:var(--cream);cursor:pointer;"><input type="checkbox" id="aseClasseII" onchange="oxvAfficherImpactClasses('aseClasse','aseClassesImpact',window._currentAdminSessionId)" /><span>Classe II — GT</span></label><label style="display:flex;align-items:center;gap:7px;font-family:var(--sans);color:var(--cream);cursor:pointer;"><input type="checkbox" id="aseClasseIII" onchange="oxvAfficherImpactClasses('aseClasse','aseClassesImpact',window._currentAdminSessionId)" /><span>Classe III — Supersport</span></label></div><div class="form-hint" id="aseClassesImpact" style="margin-top:8px;"></div></div>
+      <div class="form-row full"><label>Classes admises</label><select id="aseClasses" onchange="oxvAfficherImpactClasses('aseClasses','aseClassesImpact',window._currentAdminSessionId)"><option value="I,II,III">Les trois classes — n’écarte personne</option><option value="I,II">Classes I et II — Sport et GT</option><option value="II,III">Classes II et III — GT et Supersport</option><option value="I">Classe I seule — Sport</option><option value="II">Classe II seule — GT</option><option value="III">Classe III seule — Supersport</option></select><div class="form-hint" id="aseClassesImpact" style="margin-top:8px;"></div></div>
       <div class="form-row full"><label for="ase-notes">Notes internes</label><textarea id="ase-notes" rows="3" style="background:rgba(0,0,0,0.4);border:1px solid var(--bento-border);color:var(--cream);padding:10px 14px;border-radius:6px;width:100%;font-family:var(--sans);"></textarea></div>
     </div>
     <div style="display:flex;gap:8px;justify-content:flex-end;margin-top:16px;">
@@ -30573,7 +30638,7 @@ function renderVehicleCard(v) {
         <div class="vehicle-card-tier">${tier}</div>
         <div class="vehicle-card-name">${v.brand || ''} <em>${v.model || ''}</em></div>
         <div class="vehicle-card-meta">${meta.join('')}</div>
-        ${bandeau}${motif}
+        ${bandeau}${motif}${oxvHistovecBloc(v)}
       </div>
       <div class="vehicle-card-foot">
         <button onclick="editVehicle('${v.id}')">Modifier</button>
@@ -30582,6 +30647,135 @@ function renderVehicleCard(v) {
     </div>
   `;
 }
+
+/* ============================================================
+   HistoVec — le rapport que seul le titulaire peut produire
+   ============================================================
+   `oxv_controler_plaque` ne verifie qu'une FORME : que la chaine ressemble a
+   une plaque, et qu'aucun autre compte ne la porte. Elle n'interroge rien, et
+   ne le pourra pas : l'acces au SIV est ferme par le Code de la route a une
+   liste close ou OXV ne figure pas, et les API commerciales rendent les
+   caracteristiques du vehicule, jamais le titulaire.
+
+   HistoVec est la seule voie. Seul le titulaire du certificat en cours de
+   validite genere le rapport, via FranceConnect, en une trentaine de secondes,
+   et le partage par un lien valable 15 jours.
+
+   CE BLOC NE BLOQUE RIEN. Ni l'ajout d'un vehicule, ni la reservation. C'est
+   une decision de taux de remplissage : un rapport dure 15 jours, l'exiger
+   deux mois avant la seance produirait un papier perime le jour venu. On le
+   demande au bon moment, et « je ne suis pas titulaire » ouvre un examen
+   humain au lieu d'un mur — en LOA, en LLD, en vehicule de societe, le
+   titulaire est le loueur, et c'est frequent sur notre parc. */
+
+const OXV_HISTOVEC_SITE = 'https://histovec.interieur.gouv.fr/';
+
+/* Miroir exact de public.oxv_histovec_etat(). Les deux doivent bouger
+   ensemble : un ecran qui dirait « valide » sur un rapport que la base tient
+   pour perime serait pire que pas d'ecran du tout. */
+function oxvHistovecEtat(v) {
+  const st = v.histovec_statut;
+  const le = v.histovec_verifie_le ? new Date(v.histovec_verifie_le) : null;
+  if (!st || !le || isNaN(le.getTime())) return 'absent';
+  if (st === 'non_titulaire' || st === 'refuse') return st;
+  return (Date.now() - le.getTime()) / 86400000 > 15 ? 'expire' : st;
+}
+
+const OXV_HISTOVEC_LIBELLE = {
+  absent:        { t: 'HistoVec · non fourni',              c: 'var(--cream-faint)' },
+  fourni:        { t: 'HistoVec · reçu, en cours d’examen', c: 'var(--gold-data)' },
+  verifie:       { t: 'HistoVec · vérifié',                c: 'var(--gold-data)' },
+  expire:        { t: 'HistoVec · périmé',                  c: 'var(--oxv-red-texte)' },
+  non_titulaire: { t: 'HistoVec · situation en examen',     c: 'var(--gold-data)' },
+  refuse:        { t: 'HistoVec · non concordant',          c: 'var(--oxv-red-texte)' }
+};
+
+function oxvHistovecBloc(v) {
+  const etat = oxvHistovecEtat(v);
+  const lib = OXV_HISTOVEC_LIBELLE[etat] || OXV_HISTOVEC_LIBELLE.absent;
+  const ligne = `<div class="hv-etat" style="color:${lib.c};">${escapeHtml(lib.t)}</div>`;
+
+  // Rien a faire : le rapport est la, ou il est chez nous.
+  if (etat === 'fourni' || etat === 'verifie' || etat === 'non_titulaire') {
+    const m = v.histovec_motif
+      ? `<div class="hv-motif">${escapeHtml(v.histovec_motif)}</div>` : '';
+    return ligne + m;
+  }
+
+  const motif = (etat === 'refuse' && v.histovec_motif)
+    ? `<div class="hv-motif">${escapeHtml(v.histovec_motif)}</div>` : '';
+  const rappel = etat === 'expire'
+    ? 'Votre rapport a plus de 15 jours. Un rapport HistoVec ne vaut que 15 jours : il en faut un neuf.'
+    : 'Le rapport HistoVec est délivré par le ministère de l’Intérieur. Vous seul pouvez le produire, avec FranceConnect, en une trentaine de secondes. Il vaut 15 jours.';
+  const id = escapeHtml(v.id);
+
+  return ligne + motif + `
+    <div class="hv-bloc">
+      <p>${rappel}</p>
+      <a class="hv-cta" href="${OXV_HISTOVEC_SITE}" target="_blank" rel="noopener noreferrer">Générer mon rapport →</a>
+      <div class="hv-rangee">
+        <input type="url" id="hv-url-${id}" placeholder="Collez ici le lien de partage" inputmode="url" autocomplete="off" />
+        <button type="button" onclick="oxvDeposerHistovec('${id}')">Enregistrer</button>
+      </div>
+      <button type="button" class="hv-lien" onclick="oxvHistovecOuvrirIssue('${id}')">Je ne suis pas le titulaire (LOA, société, véhicule prêté)</button>
+      <div id="hv-issue-${id}" style="display:none;margin-top:9px;">
+        <textarea id="hv-precision-${id}" placeholder="Votre situation en une phrase : LOA, LLD, véhicule de société, véhicule d’un proche…"></textarea>
+        <div class="hv-rangee" style="margin-top:7px;">
+          <button type="button" onclick="oxvHistovecNonTitulaire('${id}')">Envoyer pour examen</button>
+        </div>
+      </div>
+    </div>`;
+}
+
+window.oxvHistovecOuvrirIssue = function (vehicleId) {
+  const el = document.getElementById('hv-issue-' + vehicleId);
+  if (!el) return;
+  el.style.display = el.style.display === 'none' ? 'block' : 'none';
+  if (el.style.display === 'block') {
+    const t = document.getElementById('hv-precision-' + vehicleId);
+    if (t) t.focus();
+  }
+};
+
+/* Le controle du lien est fait par la base, jamais ici : un client modifie ne
+   doit pas pouvoir poser un lien vers n'importe quoi. On relit le verdict. */
+window.oxvDeposerHistovec = async function (vehicleId) {
+  const champ = document.getElementById('hv-url-' + vehicleId);
+  const url = champ ? champ.value.trim() : '';
+  if (!url) { toast('Collez le lien que HistoVec vous donne.', 'warn'); return; }
+
+  const { data, error } = await supabase.rpc('oxv_deposer_histovec', {
+    p_vehicle_id: vehicleId, p_url: url
+  });
+  if (error) {
+    console.warn('[OXV histovec depot]', error);
+    toast('Le lien n’a pas pu être enregistré.', 'warn');
+    return;
+  }
+  if (!data || !data.statut) {
+    toast(data && data.motif ? data.motif : 'Ce lien n’a pas été reconnu.', 'warn');
+    return;
+  }
+  toast('Rapport reçu. Nous le regardons avant votre séance.', 'ok');
+  if (typeof loadVehicles === 'function') loadVehicles();
+};
+
+window.oxvHistovecNonTitulaire = async function (vehicleId) {
+  const t = document.getElementById('hv-precision-' + vehicleId);
+  const precision = t ? t.value.trim() : '';
+  if (!precision) { toast('Précisez votre situation en une phrase.', 'warn'); return; }
+
+  const { error } = await supabase.rpc('oxv_histovec_non_titulaire', {
+    p_vehicle_id: vehicleId, p_precision: precision
+  });
+  if (error) {
+    console.warn('[OXV histovec non titulaire]', error);
+    toast('Votre message n’a pas pu être enregistré.', 'warn');
+    return;
+  }
+  toast('C’est noté. Nous revenons vers vous avant votre séance.', 'ok');
+  if (typeof loadVehicles === 'function') loadVehicles();
+};
 
 /**
  * Ouvre le modal en mode édition pour un véhicule donné
@@ -33716,6 +33910,81 @@ window.loadAdminPlaques = async function() {
   } catch (e) { console.warn('[Plaques]', e); box.innerHTML = vide('Contrôles indisponibles.'); }
 };
 
+/* ============================================================
+   RAPPORTS HISTOVEC — ce que la machine ne peut pas lire
+   ============================================================
+   La base verifie que le lien pointe vers le domaine du ministere. Elle ne
+   peut pas faire davantage : le rapport est une page servie par l'Etat, pas
+   une donnee interrogeable. Quelqu'un doit l'ouvrir et comparer.
+
+   Deux files se rejoignent ici :
+     · `fourni` — un lien est arrive, personne ne l'a encore ouvert ;
+     · `non_titulaire` — LOA, LLD, vehicule de societe. Le pilote ne PEUT pas
+       produire de rapport, et c'est frequent sur les sportives recentes. On
+       lui a ouvert un examen humain plutot qu'un mur ; encore faut-il que
+       quelqu'un l'instruise. */
+const HISTOVEC_LBL = { fourni: 'Rapport à ouvrir', non_titulaire: 'Non titulaire' };
+
+window.loadAdminHistovec = async function() {
+  const box = document.getElementById('adminHistovecRows');
+  if (!box) return;
+  const vide = (t) => `<div class="admin-empty"><div class="admin-empty-icon">○</div><div class="admin-empty-text">${t}</div></div>`;
+  try {
+    const { data, error } = await supabase
+      .from('vehicles')
+      .select('id, brand, model, year, license_plate, histovec_statut, histovec_url, histovec_motif, histovec_verifie_le')
+      .in('histovec_statut', ['fourni', 'non_titulaire'])
+      .order('histovec_verifie_le', { ascending: true });
+    if (error) { console.warn('[HistoVec]', error); box.innerHTML = vide('Rapports indisponibles.'); return; }
+    if (!data || !data.length) { box.innerHTML = vide('Aucun rapport en attente.'); return; }
+
+    box.innerHTML = data.map(v => {
+      /* Un rapport de plus de 15 jours est perime AU MOMENT OU ON LE LIT. Le
+         dire ici evite de valider sur un document qui ne vaut plus rien. */
+      const perime = v.histovec_verifie_le
+        && (Date.now() - new Date(v.histovec_verifie_le).getTime()) / 86400000 > 15;
+      const lien = v.histovec_url
+        ? `<a class="admin-action-btn" href="${escapeHtml(v.histovec_url)}" target="_blank" rel="noopener noreferrer" style="text-decoration:none;">Ouvrir le rapport ↗</a>`
+        : '';
+      const motif = v.histovec_motif
+        ? `<div style="font-family:var(--sans);font-size:12px;line-height:1.45;color:var(--cream-faint);margin-top:5px;">${escapeHtml(v.histovec_motif)}</div>`
+        : '';
+      return `<div style="display:flex;align-items:flex-start;justify-content:space-between;gap:10px;padding:12px 14px;border-top:1px solid var(--bento-border);flex-wrap:wrap;">
+        <div style="min-width:250px;flex:1;">
+          <div style="font-family:var(--sans);font-size:14px;color:var(--cream);">${escapeHtml([v.brand, v.model, v.year].filter(Boolean).join(' '))}</div>
+          <div style="font-family:var(--mono);font-size:11px;color:var(--cream-mute);">${escapeHtml(v.license_plate || 'sans plaque')} · ${escapeHtml(ecurieAge(v.histovec_verifie_le))}${perime ? ' · rapport périmé' : ''}</div>
+          ${motif}
+        </div>
+        <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;">
+          <span class="tag-inline${perime ? '' : ' green'}" style="font-size:10px;">${escapeHtml(HISTOVEC_LBL[v.histovec_statut] || v.histovec_statut)}</span>
+          ${lien}
+          <button class="admin-action-btn" onclick="adminHistovecStatuer('${v.id}','verifie')">Concordant</button>
+          <button class="admin-action-btn" onclick="adminHistovecStatuer('${v.id}','refuse')">Non concordant</button>
+        </div>
+      </div>`;
+    }).join('');
+  } catch (e) { console.warn('[HistoVec]', e); box.innerHTML = vide('Rapports indisponibles.'); }
+};
+
+window.adminHistovecStatuer = async function(id, verdict) {
+  const motif = prompt(
+    verdict === 'verifie'
+      ? "Sur quoi repose la concordance ? (versé au dossier, facultatif)"
+      : "Motif, transmis au pilote :", '');
+  if (motif === null) return;
+  if (verdict === 'refuse' && !motif.trim()) { toast('Un refus se motive.', 'warn'); return; }
+  try {
+    /* La garde d'administration vit dans la base : elle seule verifie
+       l'appelant, et son message d'exception est redige pour etre lu. */
+    const { error } = await supabase.rpc('oxv_statuer_histovec', {
+      p_vehicle_id: id, p_verdict: verdict, p_motif: motif.trim() || null
+    });
+    if (error) { toast(error.message || 'Écriture refusée', 'warn'); return; }
+    toast(verdict === 'verifie' ? 'Rapport concordant' : 'Rapport écarté', 'ok');
+    loadAdminHistovec();
+  } catch (e) { console.warn('[HistoVec]', e); toast(e.message || 'Écriture refusée', 'warn'); }
+};
+
 window.adminPlaqueStatuer = async function(id, statut) {
   const motif = prompt(
     statut === 'valide'
@@ -35630,6 +35899,7 @@ window.loadAdminDashboard = async function() {
   if (typeof loadAdminIntentions === 'function') loadAdminIntentions();
   if (typeof loadAdminEngagements === 'function') loadAdminEngagements();
   if (typeof loadAdminPlaques === 'function') loadAdminPlaques();
+  if (typeof loadAdminHistovec === 'function') loadAdminHistovec();
   if (typeof loadAdminExamenInscriptions === 'function') loadAdminExamenInscriptions();
   if (typeof loadAdminValidations === 'function') loadAdminValidations();
 
@@ -37912,10 +38182,7 @@ window.openAddSessionModal = function() {
   document.getElementById('newSessionOfferSignature').checked = false;
   // Les trois classes reviennent cochées, et l'encart d'impact se vide : sans
   // cela, la restriction de la journée précédente se reconduisait en silence.
-  ['I', 'II', 'III'].forEach(function (c) {
-    const el = document.getElementById('newSessionClasse' + c);
-    if (el) el.checked = true;
-  });
+  oxvPoserClassesAdmises('newSessionClasses', ['I', 'II', 'III']);
   const impact = document.getElementById('newSessionClassesImpact');
   if (impact) impact.textContent = '';
   // Circuits partenaires (multi-circuit) — Haute Saintonge présélectionné
@@ -37984,7 +38251,9 @@ async function oxvAfficherImpactClasses(prefixe, cibleId, sessionId) {
   const classes = oxvLireClassesAdmises(prefixe);
 
   if (classes.length === 0) {
-    el.textContent = 'Une journée admet au moins une classe.';
+    // La liste ne propose plus la plage vide, et la base la refuse. Ce cas ne
+    // survient donc que si la liste est absente du DOM ; on ne dit rien.
+    el.textContent = '';
     return;
   }
   if (classes.length === 3) {
@@ -38023,11 +38292,28 @@ async function oxvAfficherImpactClasses(prefixe, cibleId, sessionId) {
   }
 }
 
-function oxvLireClassesAdmises(prefixe) {
-  return ['I', 'II', 'III'].filter(function (c) {
-    const el = document.getElementById(prefixe + c);
-    return el ? el.checked : false;
-  });
+/* Le parametre garde son nom d'origine par souci de continuite, mais il
+   designe desormais l'ID d'une liste deroulante, plus le prefixe de trois
+   cases. La valeur est la plage, ecrite « I,II ». */
+function oxvLireClassesAdmises(selectId) {
+  const el = document.getElementById(selectId);
+  if (!el || !el.value) return ['I', 'II', 'III'];
+  return el.value.split(',').filter(Boolean);
+}
+
+/* Pose la plage dans la liste. Une journee d'avant ce champ, ou une plage
+   qu'aucune option ne porte, retombe sur les trois classes : c'est ce qu'elle
+   admettait de fait, et c'est la seule valeur qui n'ecarte personne a tort. */
+function oxvPoserClassesAdmises(selectId, classes) {
+  const el = document.getElementById(selectId);
+  if (!el) return;
+  const ordre = ['I', 'II', 'III'];
+  const v = (Array.isArray(classes) && classes.length ? classes : ordre)
+    .filter(function (c) { return ordre.indexOf(c) !== -1; })
+    .sort(function (a, b) { return ordre.indexOf(a) - ordre.indexOf(b); })
+    .join(',');
+  const connue = Array.prototype.some.call(el.options, function (o) { return o.value === v; });
+  el.value = connue ? v : 'I,II,III';
 }
 
 window.confirmAddSession = async function() {
@@ -38052,7 +38338,7 @@ window.confirmAddSession = async function() {
   // Tout décocher n'est pas une politique de plateau, c'est une journée fermée
   // — et une journée fermée se dit par son statut, pas par une liste vide.
   // La base porte la même contrainte ; celle-ci ne fait que l'annoncer tôt.
-  const classesAdmises = oxvLireClassesAdmises('newSessionClasse');
+  const classesAdmises = oxvLireClassesAdmises('newSessionClasses');
   if (classesAdmises.length === 0) {
     toast('Une journée admet au moins une classe', 'warn');
     return;
@@ -38557,13 +38843,10 @@ window.adminOpenSessionEdit = function() {
   const admises = Array.isArray(s.classes_admises) && s.classes_admises.length
     ? s.classes_admises
     : ['I', 'II', 'III'];
-  ['I', 'II', 'III'].forEach(function (c) {
-    const el = document.getElementById('aseClasse' + c);
-    if (el) el.checked = admises.indexOf(c) !== -1;
-  });
+  oxvPoserClassesAdmises('aseClasses', admises);
   // L'etat courant se lit AVANT le premier geste : une journee deja restreinte
   // doit dire ce qu'elle ecarte, sans qu'on ait besoin de decocher pour l'apprendre.
-  oxvAfficherImpactClasses('aseClasse', 'aseClassesImpact', window._currentAdminSessionId);
+  oxvAfficherImpactClasses('aseClasses', 'aseClassesImpact', window._currentAdminSessionId);
   const m = document.getElementById('adminSessionEditModal'); if (m) m.classList.add('open');
 };
 window.adminCloseSessionEdit = function() { const m = document.getElementById('adminSessionEditModal'); if (m) m.classList.remove('open'); };
@@ -38574,7 +38857,7 @@ window.adminSaveSession = async function() {
   const numOrNull = (v) => { const n = parseInt(v, 10); return isNaN(n) ? null : n; };
   const date = val('ase-date');
   if (!date) { toast('La date est requise', 'warn'); return; }
-  const classesAdmises = oxvLireClassesAdmises('aseClasse');
+  const classesAdmises = oxvLireClassesAdmises('aseClasses');
   if (classesAdmises.length === 0) { toast('Une journée admet au moins une classe', 'warn'); return; }
   const patch = {
     date,
