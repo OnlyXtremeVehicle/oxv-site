@@ -2160,6 +2160,15 @@ footer {
   color: var(--cream-mute);
   opacity: 0.35;
 }
+.foot-adresse {
+  display: flex; flex-wrap: wrap; gap: 6px 18px; align-items: baseline;
+  margin-top: 14px; padding-top: 14px; border-top: 1px solid var(--cream-line);
+  font-style: normal; font-family: var(--mono); font-size: 10px;
+  letter-spacing: 0.14em; text-transform: uppercase; color: var(--cream-faint);
+}
+.foot-adresse a { color: var(--cream-mute); text-decoration: none; }
+.foot-adresse a:hover { color: var(--cream); text-decoration: underline; text-underline-offset: 3px; }
+
 .foot-bottom-coords {
   display: flex;
   gap: 24px;
@@ -13858,6 +13867,9 @@ body.pav-tv .nav, body.pav-tv footer, body.pav-tv .cookie, body.pav-tv .founding
 .mk-hair{border-top:1px solid #22242C}
 .mk-pill{display:inline-block;border:1px solid #3A3E4C;border-radius:999px;padding:5px 12px;font-family:'JetBrains Mono',monospace;font-size:8.5px;letter-spacing:.16em;text-transform:uppercase;color:#E8E9ED}
 .mk-pill--rouge{border-color:#C8102E}
+.mk-onglets{scrollbar-width:none;-ms-overflow-style:none}
+.mk-onglets::-webkit-scrollbar{display:none}
+.mk-onglets .mk-pill{flex:0 0 auto}
 .mk-toggle{width:34px;height:20px;border-radius:999px;position:relative;flex:0 0 auto}
 .mk-toggle::after{content:'';position:absolute;top:2.5px;width:15px;height:15px;border-radius:50%;background:#E8E9ED}
 .mk-toggle.on{background:#9195A3}.mk-toggle.on::after{right:2.5px}
@@ -22011,7 +22023,11 @@ select option:hover {
           <div class="mk-phone" role="img" aria-label="Écran de séance : rail d'ancres, tour de référence avec ses statistiques, et le nuage d'appuis G-G avec son cercle d'échelle à 1,5 g.">
             <div class="mk-screen">
               <div class="mk-eyebrow" style="text-align:center;color:#A9ADBB;">4 juil. 2026 · Circuit de Haute Saintonge</div>
-              <div style="display:flex;gap:6px;margin-top:11px;overflow:hidden;">
+              <!-- Barre d'onglets de l'application. `overflow:hidden` coupait le
+                   dernier onglet sur un téléphone de 375 px : « Télémétrie »
+                   dépassait à 421. Dans l'app cette barre DÉFILE — le laisser
+                   défiler ici est plus fidèle, pas moins. -->
+              <div class="mk-onglets" style="display:flex;gap:6px;margin-top:11px;overflow-x:auto;">
                 <span class="mk-pill" style="background:#202329;border-color:#3A3E4C;">Résumé</span><span class="mk-pill">Tours</span><span class="mk-pill">Delta</span><span class="mk-pill">Tracé</span><span class="mk-pill">Télémétrie</span>
               </div>
               <div class="mk-card">
@@ -23337,6 +23353,15 @@ select option:hover {
         </div>
         <div>© 2027 OXV · RGPD · Données hébergées dans l'UE</div>
       </div>
+
+      <!-- Coordonnées : elles n'existaient que sur la page « Mentions
+           légales ». Légalement cela suffit ; pour un visiteur qui cherche
+           où joindre OXV, non. Donnée reprise des mentions, à la lettre. -->
+      <address class="foot-adresse">
+        <span>OXV · Only Xtreme Vehicle</span>
+        <span>Le Petit Châtaignier, 17360 La Génétouze, France</span>
+        <a href="mailto:contact@oxvehicle.fr">contact@oxvehicle.fr</a>
+      </address>
     </div>
   </div>
 </footer>
@@ -23972,28 +23997,28 @@ const OXV_NOINDEX_PAGES = ['login', 'signup', 'forgot-password', 'reset-password
   'compte', 'compte-profil', 'compte-vehicules', 'compte-documents', 'compte-sessions',
   'compte-checkup', 'compte-medias', 'compte-progression', 'compte-heritage', 'compte-paiements', 'compte-preferences',
   'admin', 'admin-pilotes', 'admin-pilote-detail', 'admin-sessions', 'admin-session-detail',
-  'admin-paiements', 'admin-medias', 'admin-articles', 'admin-emails', 'admin-stats', 'admin-securite', 'admin-demandes', 'admin-validations', 'demande', 'partenaire-espace', 'coach-espace', 'partenaire-connexion',
+  'admin-paiements', 'admin-medias', 'admin-articles', 'admin-emails', 'admin-stats', 'admin-securite', 'admin-demandes', 'admin-validations', 'admin-inbox', 'demande', 'partenaire-espace', 'coach-espace', 'partenaire-connexion',
   'pavillon-accueil', 'pavillon-coach', 'pavillon-admin', 'pavillon-controle', 'pavillon-regie'];
 
 // Titre + description par page publique
 const OXV_PAGE_SEO = {
-  home:        { title: 'OXV — Track day signature · Circuit de Haute Saintonge', description: 'OXV organise des track days confidentiels sur le tracé Beltoise au Circuit de Haute Saintonge. Vingt pilotes par session, télémétrie, médias livrés dans l\'app. Saison 2027.' },
-  offers:      { title: 'Les offres — Access, Signature, Heritage · OXV', description: 'Trois offres pour rouler sur le tracé Beltoise : Access (390 € TTC, 250 € la première session), Signature (690 € TTC) et Heritage (2 490 € TTC). Télémétrie 25 Hz, banque média dans l\'app, coach partenaire en option.' },
+  home:        { title: 'OXV — Track day signature · Circuit de Haute Saintonge', description: 'Track days confidentiels au Circuit de Haute Saintonge. Vingt pilotes inscrits par journée, télémétrie et médias livrés dans l\'application. Saison 2027.' },
+  offers:      { title: 'Les offres — Access, Signature, Heritage · OXV', description: 'Access 390 € TTC (250 € la première session), Signature 690 € TTC, Heritage 2 490 € TTC. Vingt pilotes par journée, jamais plus.' },
   calendrier:  { title: 'Calendrier de la saison 2027 · OXV', description: 'Le calendrier des sessions OXV au Circuit de Haute Saintonge. Lundis après-midi, vendredis journée complète. Vingt pilotes maximum.' },
   circuit:     { title: 'Le circuit de Haute Saintonge — tracé Beltoise · OXV', description: 'Dessiné en 2009 par Jean-Pierre Beltoise. 2 205 m, huit segments d’analyse, tracé technique, aucune chicane artificielle. Le tracé que pilote OXV.' },
   corporate:   { title: 'OXV Corporate — privatisation du tracé Beltoise', description: 'Privatisez le Circuit de Haute Saintonge. Deux formats sur devis, trois scénarios : comité de direction, concession, lancement produit.' },
-  securite:    { title: 'Sécurité & cadre · OXV', description: 'Le cadre de sécurité OXV : briefing obligatoire, documents vérifiés, silence total en roulage, lecture des données après la session, vingt pilotes maximum. Et la place exacte de la donnée.' },
-  'apres-journee': { title: 'Votre journée OXV — avant, pendant, après', description: 'De J-7 au rapport final : rituels de préparation, roulage silencieux, puis médias dès le soir, télémétrie dans l\'app, bilan de session, rapport Signature et carnet de saison. Un miroir, jamais un classement.' },
-  preuves:     { title: 'Preuves & garanties — pourquoi faire confiance à OXV', description: 'Des preuves vérifiables, pas des promesses : circuit Beltoise réel, cadre de sécurité opposable, données chiffrées en UE, conditions claires, écosystème transparent. Et ce qu\'OXV ne fera jamais.' },
-  application: { title: 'OXV Mirror — l\'application track day data & média', description: 'Pass OXV, Trace du jour, Data Lab 25 Hz, rapport QDI sous 48 h, médias livrés, carnet de piste, coach opt-in. Application comprise dans chaque offre, sans abonnement pilote. Espace Coach 550 € TTC la saison, 0 % de commission. iOS & Android, printemps 2027.' },
-  partenaires: { title: 'Partenaires — rejoindre l\'écosystème OXV', description: 'Garage, photographe, hôtel, transport, assurance, concession : proposez un partenariat à OXV et accédez à une audience de pilotes exigeants au Circuit de Haute Saintonge.' },
-  presse:      { title: 'Presse & médias · OXV', description: 'Espace presse OXV : faits clés vérifiés, kit média sur demande et contact journaliste. Track days confidentiels sur le tracé Beltoise, doctrine de données premium.' },
+  securite:    { title: 'Sécurité & cadre · OXV', description: 'Briefing obligatoire, documents vérifiés, silence total en roulage, lecture des données après la session. Le cadre de sécurité OXV, et la place de la donnée.' },
+  'apres-journee': { title: 'Votre journée OXV — avant, pendant, après', description: 'De J-7 au rapport final : préparation, roulage silencieux, médias dès le soir, télémétrie, bilan de session. Un miroir, jamais un classement.' },
+  preuves:     { title: 'Preuves & garanties — pourquoi faire confiance à OXV', description: 'Des preuves vérifiables, pas des promesses : circuit réel, cadre opposable, données chiffrées en UE, conditions claires. Et ce qu\'OXV ne fera jamais.' },
+  application: { title: 'OXV Mirror — l\'application track day data & média', description: 'Pass, Trace du jour, Data Lab 25 Hz, rapport QDI sous 48 h, médias livrés. Comprise dans chaque offre, sans abonnement pilote. iOS et Android, printemps 2027.' },
+  partenaires: { title: 'Partenaires — rejoindre l\'écosystème OXV', description: 'Garage, photographe, hôtel, transport, assurance, concession : proposez un partenariat à OXV et accédez à une audience de pilotes exigeants.' },
+  presse:      { title: 'Presse & médias · OXV', description: 'Espace presse OXV : faits clés vérifiés, kit média sur demande, contact journaliste. Track days confidentiels au Circuit de Haute Saintonge.' },
   about:       { title: 'À propos — le manifeste OXV', description: 'Pourquoi OXV existe. La sécurité d\'abord, le développement toujours, la sensation enfin. Vingt pilotes par session, jamais plus.' },
   actualites:  { title: 'Actualités — le journal de la saison · OXV', description: 'Annonces, coulisses, technique et presse. Le journal de la première saison OXV au Circuit de Haute Saintonge.' },
   contact:     { title: 'Contact · OXV', description: 'Contactez OXV pour une session, une privatisation corporate ou toute question sur le track day au Circuit de Haute Saintonge.' },
   booking:     { title: 'Réserver une session · OXV', description: 'Pré-inscription en ligne aux sessions OXV de la saison 2027. Access, Signature ou Heritage sur le tracé Beltoise.' },
-  founding:    { title: 'Founding Members — Rejoindre le cercle OXV', description: 'Postulez au programme Founding Members OXV : accès prioritaire, tarif fondateur et participation active à la construction du cercle. Trente places, pas trente-et-une.' },
-  coach:       { title: 'Devenir coach partenaire OXV · Licence Fondateur 2027', description: 'Coach diplômé BPJEPS : rejoignez le cercle des coachs partenaires OXV. Espace Coach 550 € TTC la saison, 0 % de commission, outil de données multi-pilotes, avantages partenaires progressifs et mise en relation avec les membres.' },
+  founding:    { title: 'Founding Members — Rejoindre le cercle OXV', description: 'Programme Founding Members OXV : accès prioritaire, tarif fondateur, participation à la construction du cercle. Trente places, pas trente-et-une.' },
+  coach:       { title: 'Devenir coach partenaire OXV · Licence Fondateur 2027', description: 'Coach diplômé BPJEPS : rejoignez les coachs partenaires OXV. Espace Coach 550 € TTC la saison, 0 % de commission, outil de données multi-pilotes.' },
   plateau:     { title: 'Le plateau — la communauté OXV · Saison 2027', description: 'Le plateau OXV : vingt pilotes, quatre principes, un cercle. Découvrez la communauté active et les membres de la saison en cours au Circuit de Haute Saintonge.' },
   mentions:    { title: 'Mentions légales · OXV', description: 'Mentions légales du site OXV — Only Xtreme Vehicle.' },
   cgv:         { title: 'Conditions générales de vente · OXV', description: 'Conditions générales de vente OXV : offres, paiements, annulations.' },
@@ -24011,7 +24036,41 @@ const OXV_PAGE_SEO = {
   'pavillon-admin':    { title: 'Pavillon · Photos · OXV', description: 'Gestion des photos diffusées au Pavillon.' },
   'pavillon-controle': { title: 'Pavillon · Télécommande coach · OXV', description: 'Télécommande de l\'écran du stand coach.' },
   'pavillon-regie':    { title: 'Pavillon · Régie · OXV', description: 'Console d\'état piste du Pavillon.' },
-  'coach-espace':      { title: 'Espace coach · OXV', description: 'Espace de gestion des coachs partenaires OXV.' }
+  'coach-espace':      { title: 'Espace coach · OXV', description: 'Espace de gestion des coachs partenaires OXV.' },
+
+  /* Pages sans référencement — toutes en noindex. Ce qui compte ici n'est pas
+     Google, c'est l'ONGLET : sans entrée propre, une page héritait du titre
+     posé par la précédente, et « Mes véhicules » s'affichait « Connexion ». */
+  'forgot-password':    { title: 'Mot de passe oublié · OXV', description: 'Récupérer l’accès à votre espace pilote OXV.' },
+  'reset-password':     { title: 'Nouveau mot de passe · OXV', description: 'Définir un nouveau mot de passe pour votre espace pilote OXV.' },
+  'verify-email':       { title: 'Vérification de l’adresse · OXV', description: 'Confirmation de votre adresse électronique OXV.' },
+  'partenaire-espace':  { title: 'Espace partenaire · OXV', description: 'Fiche, contacts entrants et comptes rendus du partenaire OXV.' },
+
+  compte:               { title: 'Tableau de bord · Espace pilote OXV', description: 'Votre dossier pilote OXV.' },
+  'compte-profil':      { title: 'Mon profil · Espace pilote OXV', description: 'Vos informations personnelles OXV.' },
+  'compte-vehicules':   { title: 'Mes véhicules · Espace pilote OXV', description: 'Votre garage OXV : désignation, immatriculation, validation.' },
+  'compte-documents':   { title: 'Mes documents · Espace pilote OXV', description: 'Permis, pièce d’identité et assurances de votre dossier OXV.' },
+  'compte-sessions':    { title: 'Mes journées · Espace pilote OXV', description: 'Vos réservations et journées OXV.' },
+  'compte-checkup':     { title: 'Mon dossier · Espace pilote OXV', description: 'État de votre dossier pilote OXV avant la journée.' },
+  'compte-medias':      { title: 'Mes médias · Espace pilote OXV', description: 'Photos et vidéos de vos journées OXV.' },
+  'compte-heritage':    { title: 'Mon pack Heritage · Espace pilote OXV', description: 'Suivi de votre pack Heritage OXV.' },
+  'compte-paiements':   { title: 'Mes paiements · Espace pilote OXV', description: 'Factures et règlements de vos journées OXV.' },
+  'compte-progression': { title: 'Ma progression · Espace pilote OXV', description: 'Restitution factuelle de vos données de roulage OXV.' },
+  'compte-preferences': { title: 'Mes préférences · Espace pilote OXV', description: 'Notifications et préférences de votre compte OXV.' },
+
+  admin:                { title: 'Tableau de bord · Admin OXV', description: 'Administration OXV.' },
+  'admin-pilotes':      { title: 'Pilotes · Admin OXV', description: 'Gestion des pilotes OXV.' },
+  'admin-pilote-detail':{ title: 'Dossier pilote · Admin OXV', description: 'Dossier d’un pilote OXV.' },
+  'admin-demandes':     { title: 'Demandes · Admin OXV', description: 'Demandes d’inscription OXV.' },
+  'admin-sessions':     { title: 'Journées · Admin OXV', description: 'Gestion des journées OXV.' },
+  'admin-session-detail': { title: 'Détail de la journée · Admin OXV', description: 'Détail d’une journée OXV.' },
+  'admin-paiements':    { title: 'Paiements · Admin OXV', description: 'Paiements et factures OXV.' },
+  'admin-inbox':        { title: 'Messages · Admin OXV', description: 'Messages reçus par OXV.' },
+  'admin-medias':       { title: 'Médias · Admin OXV', description: 'Médias des journées OXV.' },
+  'admin-articles':     { title: 'Articles · Admin OXV', description: 'Rédaction des actualités OXV.' },
+  'admin-emails':       { title: 'Courriels · Admin OXV', description: 'Modèles de courriels OXV.' },
+  'admin-stats':        { title: 'Statistiques · Admin OXV', description: 'Statistiques OXV.' },
+  'admin-securite':     { title: 'Sécurité · Admin OXV', description: 'Sécurité du compte d’administration OXV.' }
 };
 
 function oxvRouteToPath(page, articleId) {
