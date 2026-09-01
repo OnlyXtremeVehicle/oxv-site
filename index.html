@@ -30131,7 +30131,7 @@ function vhRefAppliquer(ligne) {
     const r = Number(ligne.ratio_kg_ch).toFixed(2).replace('.', ',');
     const cause = Number(ligne.masse_kg) > 2400
       ? `Masse ${bkNombreFr(ligne.masse_kg)} kg. Le référentiel admet jusqu’à 2 400 kg.`
-      : `Rapport masse/puissance ${r} kg/ch. Le référentiel admet jusqu’à 6,30 kg/ch.`;
+      : `Rapport masse/puissance ${r} kg/ch. Le référentiel admet jusqu’à 6,00 kg/ch.`;
     fiche.innerHTML = `
       <div class="bk-perimetre-panel">
         <div class="titre">Hors critères d’accès</div>
