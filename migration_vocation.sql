@@ -21,21 +21,11 @@
 --   changer la classe change qui roule avec qui. Le fondateur valide les
 --   vocations avant que la règle ne bouge.
 --
--- ÉTAPE 2 (à venir, sur validation) : `classe` devient fonction de la vocation
---   ET du rapport. Le rapport ne disparaît pas — il gradue À L'INTÉRIEUR d'une
---   vocation, avec des bornes propres à chacune. Forme proposée :
---
---     vocation      Classe I          Classe II           Classe III
---     serie         ratio >= 4,0      3,0 <= r < 4,0      r < 3,0
---     gt            ratio >= 4,5      3,0 <= r < 4,5      r < 3,0
---     supersport    —                 ratio >= 3,5        r < 3,5
---     barquette     —                 ratio >= 2,5        r < 2,5
---     suv           ratio >= 4,0      ratio < 4,0         —
---
---   Effet sur les cas qui ont déclenché la demande : la 308 GTi (serie, 4,43)
---   passe en Classe I ; la 911 997 Carrera (gt, 4,29), l'Alpine A110 (gt, 4,40)
---   et l'Alfa 4C (gt, 4,27) restent en II ; la Caterham 620R (barquette, 1,85)
---   reste en III sans être « avec les Ferrari » au sens du plateau.
+-- ÉTAPE 2 : FAITE le 2026-09-02, voir migration_classe_vocation.sql.
+--   La borne des `gt` retenue n'est pas celle esquissée ici : le fondateur a
+--   demandé que l'Alpine A110 et l'Alfa 4C passent en Classe I, et aucun seuil
+--   de rapport ne les prend sans emmener les 911 Carrera de base. La règle
+--   finale ajoute donc une condition de PUISSANCE aux `gt` seulement.
 
 ALTER TABLE public.vehicules_eligibles ADD COLUMN IF NOT EXISTS vocation text;
 
