@@ -16085,6 +16085,36 @@ select option:hover {
   select { background-color: #101013; }
 }
 
+/* ── Le plateau ──────────────────────────────────────────────
+   Trois segments, celui du plateau retenu en or. Ce n'est pas un graphique :
+   c'est un reperage. Le pilote doit VOIR ou il se situe entre les trois, pas
+   lire une echelle. */
+.plateau-jauge {
+  display: inline-flex; gap: 3px; vertical-align: middle;
+}
+.plateau-jauge i {
+  display: block; width: 16px; height: 3px;
+  background: var(--cream-line); font-style: normal;
+}
+.plateau-jauge i.on { background: var(--gold-data); }
+
+/* La bande porte la consequence : le plateau decide des journees ouvertes.
+   Une case parmi quatre ne le dirait pas assez. */
+.plateau-bandeau {
+  display: flex; align-items: center; gap: 12px; flex-wrap: wrap;
+  margin-top: 14px; padding-top: 13px; border-top: 1px solid var(--cream-line);
+}
+.plateau-bandeau .lbl {
+  font-family: var(--mono); font-size: 9px; letter-spacing: 0.18em;
+  text-transform: uppercase; color: var(--cream-faint);
+}
+.plateau-bandeau .val {
+  font-family: var(--mono); font-size: 14px; color: var(--gold-data);
+}
+.plateau-bandeau .sur {
+  font-family: var(--mono); font-size: 10px; color: var(--cream-faint);
+}
+
 /* ── HistoVec au garage ──────────────────────────────────────
    Un encart discret quand il n'y a rien a faire, et qui se deplie seulement
    quand le pilote doit agir. La demarche tient en trois lignes : un bouton qui
@@ -18107,7 +18137,7 @@ select option:hover {
         <div class="pref-row">
           <div class="pref-row-info" style="width:100%;">
             <div class="pref-row-title">Votre écurie — rouler et réserver ensemble</div>
-            <div class="pref-row-desc">Une écurie est une équipe qui réserve ses sessions ensemble. Partagez votre lien : la personne invitée crée son compte et rejoint votre écurie automatiquement. Le parrainage ne donne pas de réduction — il donne une <strong style="color:var(--cream);">écurie</strong>. C'est la réservation <strong style="color:var(--cream);">groupée</strong> qui ouvre une condition tarifaire : <strong style="color:var(--cream);">−10 % par pilote</strong> dès lors qu'OXV a confirmé une sortie d'écurie. En dessous de 17 pilotes, votre écurie rejoint une journée Access, ouverte aux trois classes ; à partir de 17, le circuit vous est privatisé sur l'une des trois dates que vous proposez. Vos filleuls rejoignent votre groupe, leur candidature passe en <strong style="color:var(--cream);">fast-track</strong>, et l'écurie grandit — <span style="font-family:var(--mono);font-size:11px;">5 membres : priorité de réservation collective · 10 : box dédié un jour de session · 20 : écurie nommée sur le plateau</span>. Seuls les filleuls ayant validé leur première session comptent.</div>
+            <div class="pref-row-desc">Une écurie est une équipe qui réserve ses sessions ensemble. Partagez votre lien : la personne invitée crée son compte et rejoint votre écurie automatiquement. Le parrainage ne donne pas de réduction — il donne une <strong style="color:var(--cream);">écurie</strong>. C'est la réservation <strong style="color:var(--cream);">groupée</strong> qui ouvre une condition tarifaire : <strong style="color:var(--cream);">−10 % par pilote</strong> dès lors qu'OXV a confirmé une sortie d'écurie. En dessous de 17 pilotes, votre écurie rejoint une journée Access, ouverte aux trois plateaux ; à partir de 17, le circuit vous est privatisé sur l'une des trois dates que vous proposez. Vos filleuls rejoignent votre groupe, leur candidature passe en <strong style="color:var(--cream);">fast-track</strong>, et l'écurie grandit — <span style="font-family:var(--mono);font-size:11px;">5 membres : priorité de réservation collective · 10 : box dédié un jour de session · 20 : écurie nommée sur le plateau</span>. Seuls les filleuls ayant validé leur première session comptent.</div>
             <div id="crewCodeBox" style="margin-top:14px;display:flex;align-items:center;gap:12px;flex-wrap:wrap;">
               <button class="btn btn-sm btn-primary" id="crewShareBtn" onclick="partagerInvitationEcurie()"><span>Partager mon invitation</span></button>
               <button class="btn btn-sm" id="crewCodeBtn" onclick="getMyReferralCode()"><span>Afficher mon code</span></button>
@@ -19297,13 +19327,13 @@ select option:hover {
              la formule dit ce que le catalogue ouvre, la journée dit ce que le
              plateau de ce jour-là accueille. Aucune ne rattrape l'autre. -->
         <div class="form-row" id="newSessionClassesRow">
-          <label class="form-label">Classes admises</label>
-          <select id="newSessionClasses" onchange="oxvAfficherImpactClasses('newSessionClasses','newSessionClassesImpact',null)"><option value="I,II,III">Les trois classes — n’écarte personne</option><option value="I,II">Classes I et II — Sport et GT</option><option value="II,III">Classes II et III — GT et Supersport</option><option value="I">Classe I seule — Sport</option><option value="II">Classe II seule — GT</option><option value="III">Classe III seule — Supersport</option></select>
+          <label class="form-label">Plateaux admis</label>
+          <select id="newSessionClasses" onchange="oxvAfficherImpactClasses('newSessionClasses','newSessionClassesImpact',null)"><option value="I,II,III">Les trois plateaux — n’écarte personne</option><option value="I,II">Plateaux 1 et 2</option><option value="II,III">Plateaux 2 et 3</option><option value="I">Plateau 1 seul · sportives de route</option><option value="II">Plateau 2 seul · coupés et berlines rapides</option><option value="III">Plateau 3 seul · supersportives et voitures de piste</option></select>
           <div class="form-hint">
-            Ce que le plateau accueille ce jour-là. Par défaut les trois. Restreindre
+            Ce que la piste accueille ce jour-là. Par défaut les trois. Restreindre
             ferme la journée aux véhicules concernés : la base le vérifie à
-            l'inscription, l'interface ne fait que l'annoncer. Les classes admises
-            se suivent — I et III sans II ne se propose pas, et la base le refuse.
+            l'inscription, l'interface ne fait que l'annoncer. Les plateaux admis
+            se suivent — 1 et 3 sans le 2 ne se propose pas, et la base le refuse.
           </div>
           <div class="form-hint" id="newSessionClassesImpact"></div>
         </div>
@@ -19484,7 +19514,7 @@ select option:hover {
       <div class="form-row"><label for="ase-cap">Capacité totale</label><input type="number" id="ase-cap" min="0" max="40" /></div>
       <div class="form-row"><label for="ase-cap-access">Capacité Access</label><input type="number" id="ase-cap-access" min="0" max="40" /></div>
       <div class="form-row"><label for="ase-cap-sig">Capacité Signature</label><input type="number" id="ase-cap-sig" min="0" max="40" /></div>
-      <div class="form-row full"><label>Classes admises</label><select id="aseClasses" onchange="oxvAfficherImpactClasses('aseClasses','aseClassesImpact',window._currentAdminSessionId)"><option value="I,II,III">Les trois classes — n’écarte personne</option><option value="I,II">Classes I et II — Sport et GT</option><option value="II,III">Classes II et III — GT et Supersport</option><option value="I">Classe I seule — Sport</option><option value="II">Classe II seule — GT</option><option value="III">Classe III seule — Supersport</option></select><div class="form-hint" id="aseClassesImpact" style="margin-top:8px;"></div></div>
+      <div class="form-row full"><label>Plateaux admis</label><select id="aseClasses" onchange="oxvAfficherImpactClasses('aseClasses','aseClassesImpact',window._currentAdminSessionId)"><option value="I,II,III">Les trois plateaux — n’écarte personne</option><option value="I,II">Plateaux 1 et 2</option><option value="II,III">Plateaux 2 et 3</option><option value="I">Plateau 1 seul · sportives de route</option><option value="II">Plateau 2 seul · coupés et berlines rapides</option><option value="III">Plateau 3 seul · supersportives et voitures de piste</option></select><div class="form-hint" id="aseClassesImpact" style="margin-top:8px;"></div></div>
       <div class="form-row full"><label for="ase-notes">Notes internes</label><textarea id="ase-notes" rows="3" style="background:rgba(0,0,0,0.4);border:1px solid var(--bento-border);color:var(--cream);padding:10px 14px;border-radius:6px;width:100%;font-family:var(--sans);"></textarea></div>
     </div>
     <div style="display:flex;gap:8px;justify-content:flex-end;margin-top:16px;">
@@ -21078,7 +21108,7 @@ select option:hover {
         </p>
         <p>Une option Responsabilité Civile circuit (35 € TTC) peut être souscrite pour les pilotes ne disposant pas d'attestation personnelle. Les tarifs sont indiqués TTC et sont susceptibles d'évoluer ; le tarif applicable est celui en vigueur à la date de la pré-inscription validée.</p>
         <p><strong>Sortie d'écurie.</strong> Une écurie constituée peut solliciter une sortie groupée. La condition tarifaire est une remise de <strong>10 % par pilote sur le tarif de la journée</strong> ; elle porte sur le tarif de la journée seul — ni l'option Responsabilité Civile, ni le pack Heritage, qui est déjà un tarif préférentiel prépayé. Elle se cumule en revanche avec le tarif de première session : un pilote qui découvre OXV au sein d'une écurie bénéficie des deux. Elle est acquise dès lors qu'OXV a confirmé la sortie sur une journée déterminée, et pour cette journée seulement ; chaque pilote s'inscrit individuellement et doit être membre de l'écurie au moment de son inscription.<br/>
-          En dessous de dix-sept pilotes annoncés, l'écurie rejoint une journée Access ouverte aux trois classes de roulage, aux côtés d'autres pilotes. À partir de dix-sept, l'écurie propose trois dates et OXV lui réserve le circuit sur l'une d'elles ; la journée retenue n'est alors réservable que par les membres de l'écurie. OXV répond à toute demande de sortie d'écurie dans un délai de soixante-douze heures ouvrées.</p>
+          En dessous de dix-sept pilotes annoncés, l'écurie rejoint une journée Access ouverte aux trois plateaux, aux côtés d'autres pilotes. À partir de dix-sept, l'écurie propose trois dates et OXV lui réserve le circuit sur l'une d'elles ; la journée retenue n'est alors réservable que par les membres de l'écurie. OXV répond à toute demande de sortie d'écurie dans un délai de soixante-douze heures ouvrées.</p>
         <p>Pour les offres OXV Corporate (privatisations B2B), les tarifs sont communiqués sur devis personnalisé.</p>
 
         <h2>Article 3 — Réservation et paiement</h2>
@@ -23391,7 +23421,7 @@ select option:hover {
   </section>
   <section class="section">
     <div class="wrap" style="max-width:1000px;">
-<h2 class="section-title" style="font-size:32px;margin-bottom:8px;">Les six <em>conditions</em>.</h2><p style="font-family:var(--sans);font-size:15px;line-height:1.7;color:var(--cream-mute);max-width:680px;margin:0 0 22px;">Elles sont contrôlées au briefing, avant que la première roue ne touche la piste.</p><div class="reveal" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px;margin-bottom:40px;"><div class="bento" style="padding:24px;"><div style="font-family:var(--display);font-size:10px;letter-spacing:0.2em;text-transform:uppercase;color:var(--gold);margin-bottom:8px;">01 · Le permis</div><p style="font-family:var(--sans);font-size:14px;line-height:1.6;color:var(--cream-mute);margin:0;">Permis B en cours de validité, présenté au briefing avec les autres pièces. Aucune licence sportive n'est exigée pour une journée OXV.</p></div><div class="bento" style="padding:24px;"><div style="font-family:var(--display);font-size:10px;letter-spacing:0.2em;text-transform:uppercase;color:var(--gold);margin-bottom:8px;">02 · L'assurance circuit</div><p style="font-family:var(--sans);font-size:14px;line-height:1.6;color:var(--cream-mute);margin:0;">Souscrite par le pilote, jamais fournie par l'organisateur. Elle couvre les véhicules des autres pilotes et les installations de la piste. <button class="link-inline" onclick="goTo('assurance-circuit')" style="background:none;border:none;color:var(--oxv-red-texte);cursor:pointer;padding:0;font:inherit;">ce qu'elle couvre exactement</button>.</p></div><div class="bento" style="padding:24px;"><div style="font-family:var(--display);font-size:10px;letter-spacing:0.2em;text-transform:uppercase;color:var(--gold);margin-bottom:8px;">03 · Le contrôle technique</div><p style="font-family:var(--sans);font-size:14px;line-height:1.6;color:var(--cream-mute);margin:0;">En cours de validité, présenté avec le permis et l'attestation d'assurance.</p></div><div class="bento" style="padding:24px;"><div style="font-family:var(--display);font-size:10px;letter-spacing:0.2em;text-transform:uppercase;color:var(--gold);margin-bottom:8px;">04 · L'équipement</div><p style="font-family:var(--sans);font-size:14px;line-height:1.6;color:var(--cream-mute);margin:0;">Casque homologué, chaussures fermées, anneau de remorquage à bord. <button class="link-inline" onclick="goTo('equipement-circuit')" style="background:none;border:none;color:var(--oxv-red-texte);cursor:pointer;padding:0;font:inherit;">le détail de l'équipement</button>.</p></div><div class="bento" style="padding:24px;"><div style="font-family:var(--display);font-size:10px;letter-spacing:0.2em;text-transform:uppercase;color:var(--gold);margin-bottom:8px;">05 · Le niveau sonore</div><p style="font-family:var(--sans);font-size:14px;line-height:1.6;color:var(--cream-mute);margin:0;">Le véhicule passe au sonomètre à l'arrivée. La norme est celle du circuit, pas celle d'OXV. Un dépassement ferme l'accès à la piste.</p></div><div class="bento" style="padding:24px;"><div style="font-family:var(--display);font-size:10px;letter-spacing:0.2em;text-transform:uppercase;color:var(--gold);margin-bottom:8px;">06 · Le briefing</div><p style="font-family:var(--sans);font-size:14px;line-height:1.6;color:var(--cream-mute);margin:0;">Vingt minutes, obligatoire, jamais renouvelé. Drapeaux, trajectoires, dépassements, zones de vigilance. Personne n'entre en piste sans l'avoir suivi.</p></div></div><h2 class="section-title" style="font-size:32px;margin-bottom:8px;">Et la <em>voiture</em> ?</h2><p style="font-family:var(--sans);font-size:15px;line-height:1.7;color:var(--cream-mute);max-width:680px;margin:0 0 22px;">Le référentiel d'accès OXV s'applique au véhicule, pas à sa valeur. Chaque voiture y est désignée par sa marque, son modèle et sa génération. Sa classe (Sport, GT ou Supersport) se lit alors sur deux critères : ce qu'est la voiture, et son rapport masse / puissance. La classe décide des journées qui vous sont ouvertes. Une voiture se déclare une fois, au garage, et reste sélectionnable ensuite.</p><h2 class="section-title" style="font-size:28px;margin:8px 0 18px;">Questions <em>fréquentes</em>.</h2><div class="bento" style="padding:22px 24px;margin-bottom:12px;"><div style="font-family:var(--sans);font-size:15px;font-weight:500;color:var(--cream);margin-bottom:8px;">Faut-il une licence FFSA pour rouler sur circuit ?</div><p style="font-family:var(--sans);font-size:14px;line-height:1.65;color:var(--cream-mute);margin:0;">Non, pas pour une journée de roulage libre. Le permis B suffit. Une licence devient nécessaire en compétition, ce qui n'est pas l'objet d'une journée OXV : il n'y a ni chronométrage officiel ni classement.</p></div><div class="bento" style="padding:22px 24px;margin-bottom:12px;"><div style="font-family:var(--sans);font-size:15px;font-weight:500;color:var(--cream);margin-bottom:8px;">Puis-je venir avec une voiture de série ?</div><p style="font-family:var(--sans);font-size:14px;line-height:1.65;color:var(--cream-mute);margin:0;">Oui, si elle satisfait le référentiel d'accès et la norme sonore du circuit. La très grande majorité des sportives de série y répondent.</p></div><div class="bento" style="padding:22px 24px;margin-bottom:12px;"><div style="font-family:var(--sans);font-size:15px;font-weight:500;color:var(--cream);margin-bottom:8px;">Combien de pilotes en même temps ?</div><p style="font-family:var(--sans);font-size:14px;line-height:1.65;color:var(--cream-mute);margin:0;">Vingt inscrits par journée, jamais vingt-et-un. La jauge porte sur les inscriptions, pas sur le nombre de voitures en piste à un instant donné : le roulage se fait par relais encadrés.</p></div><div class="bento" style="padding:22px 24px;margin-bottom:12px;"><div style="font-family:var(--sans);font-size:15px;font-weight:500;color:var(--cream);margin-bottom:8px;">Que se passe-t-il s'il pleut ?</div><p style="font-family:var(--sans);font-size:14px;line-height:1.65;color:var(--cream-mute);margin:0;">La journée est maintenue. Le chef de piste adapte les relais si les conditions l'exigent.</p></div><div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:34px;"><button class="btn btn-primary btn-lg" onclick="ctaPrimaryGo()"><span>Voir les journées</span></button><button class="btn btn-lg" onclick="goTo('contact')"><span>Poser une question</span></button></div>
+<h2 class="section-title" style="font-size:32px;margin-bottom:8px;">Les six <em>conditions</em>.</h2><p style="font-family:var(--sans);font-size:15px;line-height:1.7;color:var(--cream-mute);max-width:680px;margin:0 0 22px;">Elles sont contrôlées au briefing, avant que la première roue ne touche la piste.</p><div class="reveal" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px;margin-bottom:40px;"><div class="bento" style="padding:24px;"><div style="font-family:var(--display);font-size:10px;letter-spacing:0.2em;text-transform:uppercase;color:var(--gold);margin-bottom:8px;">01 · Le permis</div><p style="font-family:var(--sans);font-size:14px;line-height:1.6;color:var(--cream-mute);margin:0;">Permis B en cours de validité, présenté au briefing avec les autres pièces. Aucune licence sportive n'est exigée pour une journée OXV.</p></div><div class="bento" style="padding:24px;"><div style="font-family:var(--display);font-size:10px;letter-spacing:0.2em;text-transform:uppercase;color:var(--gold);margin-bottom:8px;">02 · L'assurance circuit</div><p style="font-family:var(--sans);font-size:14px;line-height:1.6;color:var(--cream-mute);margin:0;">Souscrite par le pilote, jamais fournie par l'organisateur. Elle couvre les véhicules des autres pilotes et les installations de la piste. <button class="link-inline" onclick="goTo('assurance-circuit')" style="background:none;border:none;color:var(--oxv-red-texte);cursor:pointer;padding:0;font:inherit;">ce qu'elle couvre exactement</button>.</p></div><div class="bento" style="padding:24px;"><div style="font-family:var(--display);font-size:10px;letter-spacing:0.2em;text-transform:uppercase;color:var(--gold);margin-bottom:8px;">03 · Le contrôle technique</div><p style="font-family:var(--sans);font-size:14px;line-height:1.6;color:var(--cream-mute);margin:0;">En cours de validité, présenté avec le permis et l'attestation d'assurance.</p></div><div class="bento" style="padding:24px;"><div style="font-family:var(--display);font-size:10px;letter-spacing:0.2em;text-transform:uppercase;color:var(--gold);margin-bottom:8px;">04 · L'équipement</div><p style="font-family:var(--sans);font-size:14px;line-height:1.6;color:var(--cream-mute);margin:0;">Casque homologué, chaussures fermées, anneau de remorquage à bord. <button class="link-inline" onclick="goTo('equipement-circuit')" style="background:none;border:none;color:var(--oxv-red-texte);cursor:pointer;padding:0;font:inherit;">le détail de l'équipement</button>.</p></div><div class="bento" style="padding:24px;"><div style="font-family:var(--display);font-size:10px;letter-spacing:0.2em;text-transform:uppercase;color:var(--gold);margin-bottom:8px;">05 · Le niveau sonore</div><p style="font-family:var(--sans);font-size:14px;line-height:1.6;color:var(--cream-mute);margin:0;">Le véhicule passe au sonomètre à l'arrivée. La norme est celle du circuit, pas celle d'OXV. Un dépassement ferme l'accès à la piste.</p></div><div class="bento" style="padding:24px;"><div style="font-family:var(--display);font-size:10px;letter-spacing:0.2em;text-transform:uppercase;color:var(--gold);margin-bottom:8px;">06 · Le briefing</div><p style="font-family:var(--sans);font-size:14px;line-height:1.6;color:var(--cream-mute);margin:0;">Vingt minutes, obligatoire, jamais renouvelé. Drapeaux, trajectoires, dépassements, zones de vigilance. Personne n'entre en piste sans l'avoir suivi.</p></div></div><h2 class="section-title" style="font-size:32px;margin-bottom:8px;">Et la <em>voiture</em> ?</h2><p style="font-family:var(--sans);font-size:15px;line-height:1.7;color:var(--cream-mute);max-width:680px;margin:0 0 22px;">Le référentiel d'accès OXV s'applique au véhicule, pas à sa valeur. Chaque voiture y est désignée par sa marque, son modèle et sa génération. Deux choses en découlent : sa <b>vocation</b> — ce qu'elle est — et son <b>plateau</b>, le groupe avec lequel elle roule. Le plateau décide des journées qui vous sont ouvertes. Une voiture se déclare une fois, au garage, et reste sélectionnable ensuite.</p><h2 class="section-title" style="font-size:28px;margin:8px 0 18px;">Questions <em>fréquentes</em>.</h2><div class="bento" style="padding:22px 24px;margin-bottom:12px;"><div style="font-family:var(--sans);font-size:15px;font-weight:500;color:var(--cream);margin-bottom:8px;">Faut-il une licence FFSA pour rouler sur circuit ?</div><p style="font-family:var(--sans);font-size:14px;line-height:1.65;color:var(--cream-mute);margin:0;">Non, pas pour une journée de roulage libre. Le permis B suffit. Une licence devient nécessaire en compétition, ce qui n'est pas l'objet d'une journée OXV : il n'y a ni chronométrage officiel ni classement.</p></div><div class="bento" style="padding:22px 24px;margin-bottom:12px;"><div style="font-family:var(--sans);font-size:15px;font-weight:500;color:var(--cream);margin-bottom:8px;">Puis-je venir avec une voiture de série ?</div><p style="font-family:var(--sans);font-size:14px;line-height:1.65;color:var(--cream-mute);margin:0;">Oui, si elle satisfait le référentiel d'accès et la norme sonore du circuit. La très grande majorité des sportives de série y répondent.</p></div><div class="bento" style="padding:22px 24px;margin-bottom:12px;"><div style="font-family:var(--sans);font-size:15px;font-weight:500;color:var(--cream);margin-bottom:8px;">Combien de pilotes en même temps ?</div><p style="font-family:var(--sans);font-size:14px;line-height:1.65;color:var(--cream-mute);margin:0;">Vingt inscrits par journée, jamais vingt-et-un. La jauge porte sur les inscriptions, pas sur le nombre de voitures en piste à un instant donné : le roulage se fait par relais encadrés.</p></div><div class="bento" style="padding:22px 24px;margin-bottom:12px;"><div style="font-family:var(--sans);font-size:15px;font-weight:500;color:var(--cream);margin-bottom:8px;">Que se passe-t-il s'il pleut ?</div><p style="font-family:var(--sans);font-size:14px;line-height:1.65;color:var(--cream-mute);margin:0;">La journée est maintenue. Le chef de piste adapte les relais si les conditions l'exigent.</p></div><div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:34px;"><button class="btn btn-primary btn-lg" onclick="ctaPrimaryGo()"><span>Voir les journées</span></button><button class="btn btn-lg" onclick="goTo('contact')"><span>Poser une question</span></button></div>
     </div>
   </section>
 </div>
@@ -25557,11 +25587,50 @@ const bkState = {
   modsDetail: ''
 };
 
-/* Libellés de classe — dénominations publiées au document d'éligibilité. */
-const BK_CLASSES = { I: 'Sport', II: 'GT', III: 'Supersport' };
+/* ── Deux axes, dits separement ──────────────────────────────
+   « Classe II — GT » melangeait ce QU EST la voiture et AVEC QUI elle roule.
+   Depuis que la vocation existe, le mot « GT » designait les deux a la fois :
+   une Alpine A110, de vocation GT, etait affichee « Classe I — Sport ».
+
+   La VOCATION dit ce qu'est la voiture. Le PLATEAU dit avec qui elle roule —
+   c'est le mot du circuit pour le groupe qui roule ensemble, et il ne se
+   confond avec rien.
+
+   La base ne bouge pas : `classe` garde I / II / III. Seul l'affichage change. */
+const OXV_VOCATIONS = {
+  serie: 'Série', gt: 'GT', supersport: 'Supersport',
+  barquette: 'Barquette', suv: 'SUV'
+};
+const OXV_PLATEAUX = { I: 1, II: 2, III: 3 };
+
+function oxvVocationLibelle(v) { return OXV_VOCATIONS[v] || '—'; }
+function oxvPlateauNumero(c) { return OXV_PLATEAUX[c] || null; }
+
+/* Conserve son nom : six appels le referencent, et le renommer n'apporterait
+   rien qu'un diff. Ce qu'il rend, en revanche, a change. */
 function bkClasseLibelle(c) {
-  if (!c) return '—';
-  return `Classe ${c} — ${BK_CLASSES[c] || ''}`.trim();
+  const n = oxvPlateauNumero(c);
+  return n ? `Plateau ${n}` : '—';
+}
+
+function oxvPlateauJauge(c) {
+  const n = oxvPlateauNumero(c);
+  if (!n) return '';
+  let g = '';
+  for (let i = 1; i <= 3; i++) g += `<i class="${i === n ? 'on' : ''}"></i>`;
+  return `<span class="plateau-jauge" role="img" aria-label="Plateau ${n} sur 3">${g}</span>`;
+}
+
+/* La bande complete : libelle, jauge, rang. Rendue vide si la classe n'est pas
+   etablie — annoncer « Plateau — » ne dirait rien de plus que le silence. */
+function oxvPlateauBandeau(c) {
+  const n = oxvPlateauNumero(c);
+  if (!n) return '';
+  return `<div class="plateau-bandeau">
+      <span class="lbl">Plateau</span>
+      ${oxvPlateauJauge(c)}
+      <span class="val">${n}</span><span class="sur">sur 3</span>
+    </div>`;
 }
 const BK_OFFRE_LABELS = { access: 'Access', signature: 'Signature', heritage: 'Heritage', promotion: 'Promotion' };
 
@@ -25596,9 +25665,10 @@ function bkMentionPerimetre(offre) {
   if (!map || !map[offre]) return `${journee} ${nom}.`;
   const classes = ['I', 'II', 'III'].filter(c => map[offre].has(c));
   if (classes.length === 0) return `${journee} ${nom}.`;
-  const liste = classes.length === 1
-    ? `à la classe ${classes[0]}`
-    : `aux classes ${classes.slice(0, -1).join(', ')} et ${classes[classes.length - 1]}`;
+  const n = classes.map(oxvPlateauNumero);
+  const liste = n.length === 1
+    ? `au plateau ${n[0]}`
+    : `aux plateaux ${n.slice(0, -1).join(', ')} et ${n[n.length - 1]}`;
   return `${journee} ${nom} — ouverte ${liste}.`;
 }
 
@@ -26491,8 +26561,9 @@ function bkRefRendreReprise() {
           <div><div class="bk-ref-cell-label">Puissance</div><div class="bk-ref-cell-value">${bkNombreFr(ligne.puissance_ch)} ch</div></div>
           <div><div class="bk-ref-cell-label">Masse</div><div class="bk-ref-cell-value">${bkNombreFr(ligne.masse_kg)} kg</div></div>
           <div><div class="bk-ref-cell-label">Rapport</div><div class="bk-ref-cell-value">${rapport} kg/ch</div></div>
-          <div><div class="bk-ref-cell-label">Classe</div><div class="bk-ref-cell-value">${escapeHtml(bkClasseLibelle(ligne.classe))}</div></div>
+          <div><div class="bk-ref-cell-label">Vocation</div><div class="bk-ref-cell-value">${escapeHtml(oxvVocationLibelle(ligne.vocation))}</div></div>
         </div>
+        ${oxvPlateauBandeau(ligne.classe)}
         <div class="bk-ref-grid" style="margin-top:2px;">
           <div><div class="bk-ref-cell-label">Immatriculation</div><div class="bk-ref-cell-value">${escapeHtml(bkState.plate)}</div></div>
           <div><div class="bk-ref-cell-label">Modifications</div><div class="bk-ref-cell-value">${bkState.mods ? 'Déclarées' : 'Aucune'}</div></div>
@@ -26671,10 +26742,11 @@ function bkRefAppliquer(ligne) {
             <div class="bk-ref-cell-value">${rapport} kg/ch</div>
           </div>
           <div>
-            <div class="bk-ref-cell-label">Classe</div>
-            <div class="bk-ref-cell-value">${escapeHtml(bkClasseLibelle(ligne.classe))}</div>
+            <div class="bk-ref-cell-label">Vocation</div>
+            <div class="bk-ref-cell-value">${escapeHtml(oxvVocationLibelle(ligne.vocation))}</div>
           </div>
         </div>
+        ${oxvPlateauBandeau(ligne.classe)}
       </div>
     `;
     fiche.style.display = 'block';
@@ -26705,7 +26777,7 @@ function bkRefRendrePerimetre() {
     <div class="bk-perimetre-panel">
       <div class="titre">Périmètre de service</div>
       <div class="corps">
-        ${escapeHtml(bkMentionPerimetre(offre))} Votre véhicule relève de la ${escapeHtml(bkClasseLibelle(classe))}.
+        ${escapeHtml(bkMentionPerimetre(offre))} Votre véhicule roule au ${escapeHtml(bkClasseLibelle(classe))}.
         ${ouvertes.length ? `Les journées ${ouvertes.join(' et ')} vous sont ouvertes.` : ''}
         <div style="margin-top: 14px;">
           <button class="btn btn-sm" type="button" onclick="bkGoToStep(1)"><span>Revoir les offres →</span></button>
@@ -27019,10 +27091,16 @@ function bkBuildRecap() {
       <span class="bk-recap-label">Véhicule</span>
       <span class="bk-recap-value">${escapeHtml(vehicle.brand || '')} ${escapeHtml(vehicle.model || '')}${bkState.plate ? ` · ${escapeHtml(bkState.plate)}` : (vehicle.license_plate ? ` · ${escapeHtml(vehicle.license_plate)}` : '')}</span>
     </div>
+    ${bkState.referentiel && bkState.referentiel.vocation ? `
+      <div class="bk-recap-line">
+        <span class="bk-recap-label">Vocation</span>
+        <span class="bk-recap-value">${escapeHtml(oxvVocationLibelle(bkState.referentiel.vocation))}</span>
+      </div>
+    ` : ''}
     ${bkState.classeRetenue ? `
       <div class="bk-recap-line">
-        <span class="bk-recap-label">Classe retenue</span>
-        <span class="bk-recap-value">${escapeHtml(bkClasseLibelle(bkState.classeRetenue))}</span>
+        <span class="bk-recap-label">Plateau</span>
+        <span class="bk-recap-value">${oxvPlateauJauge(bkState.classeRetenue)} ${oxvPlateauNumero(bkState.classeRetenue)} sur 3</span>
       </div>
     ` : ''}
     ${bkState.mods ? `
@@ -30223,8 +30301,9 @@ function vhRefAppliquer(ligne) {
         <div><div class="bk-ref-cell-label">Puissance</div><div class="bk-ref-cell-value">${bkNombreFr(ligne.puissance_ch)} ch</div></div>
         <div><div class="bk-ref-cell-label">Masse</div><div class="bk-ref-cell-value">${bkNombreFr(ligne.masse_kg)} kg</div></div>
         <div><div class="bk-ref-cell-label">Rapport</div><div class="bk-ref-cell-value">${rapport} kg/ch</div></div>
-        <div><div class="bk-ref-cell-label">Classe</div><div class="bk-ref-cell-value">${escapeHtml(bkClasseLibelle(ligne.classe))}</div></div>
+        <div><div class="bk-ref-cell-label">Vocation</div><div class="bk-ref-cell-value">${escapeHtml(oxvVocationLibelle(ligne.vocation))}</div></div>
       </div>
+      ${oxvPlateauBandeau(ligne.classe)}
       ${alerte}
     </div>`;
   fiche.style.display = 'block';
@@ -38257,7 +38336,7 @@ async function oxvAfficherImpactClasses(prefixe, cibleId, sessionId) {
     return;
   }
   if (classes.length === 3) {
-    el.textContent = 'Les trois classes sont admises : cette journée n’écarte personne.';
+    el.textContent = 'Les trois plateaux sont admis : cette journée n’écarte personne.';
     return;
   }
 
@@ -38273,7 +38352,7 @@ async function oxvAfficherImpactClasses(prefixe, cibleId, sessionId) {
 
     const parts = [];
     if (r.inscriptions_touchees > 0) {
-      parts.push(`${r.inscriptions_touchees} inscription${r.inscriptions_touchees > 1 ? 's' : ''} en cours porte${r.inscriptions_touchees > 1 ? 'nt' : ''} une classe retirée — l’enregistrement sera refusé tant qu’elles ne sont pas traitées.`);
+      parts.push(`${r.inscriptions_touchees} inscription${r.inscriptions_touchees > 1 ? 's' : ''} en cours porte${r.inscriptions_touchees > 1 ? 'nt' : ''} un plateau retiré — l’enregistrement sera refusé tant qu’elles ne sont pas traitées.`);
     }
     if (r.intentions_deja_deposees > 0) {
       parts.push(`${r.intentions_deja_deposees} pilote${r.intentions_deja_deposees > 1 ? 's' : ''} avai${r.intentions_deja_deposees > 1 ? 'ent' : 't'} demandé à être prévenu pour cette journée.`);
@@ -38281,9 +38360,9 @@ async function oxvAfficherImpactClasses(prefixe, cibleId, sessionId) {
     if (r.parc_total === 0) {
       parts.push('Aucun véhicule au garage : l’effet sur le parc n’est pas mesurable.');
     } else if (r.parc_sans_classe_connue === r.parc_total) {
-      parts.push(`La classe d’aucun des ${r.parc_total} véhicules du parc n’est connue : l’effet de cette restriction n’est pas mesurable aujourd’hui.`);
+      parts.push(`Le plateau d’aucun des ${r.parc_total} véhicules du parc n’est établi : l’effet de cette restriction n’est pas mesurable aujourd’hui.`);
     } else {
-      parts.push(`Parc : ${r.parc_exclu} véhicule${r.parc_exclu > 1 ? 's' : ''} exclu${r.parc_exclu > 1 ? 's' : ''} sur ${r.parc_total}${r.parc_sans_classe_connue > 0 ? `, ${r.parc_sans_classe_connue} de classe inconnue` : ''}.`);
+      parts.push(`Parc : ${r.parc_exclu} véhicule${r.parc_exclu > 1 ? 's' : ''} exclu${r.parc_exclu > 1 ? 's' : ''} sur ${r.parc_total}${r.parc_sans_classe_connue > 0 ? `, ${r.parc_sans_classe_connue} de plateau inconnu` : ''}.`);
     }
     el.textContent = parts.join(' ');
   } catch (e) {
