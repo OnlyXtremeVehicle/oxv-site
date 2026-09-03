@@ -28,7 +28,7 @@ OXV est une plateforme multi-circuit basée à Bordeaux. **Le Circuit de Haute-S
 - Ne jamais inventer d'autres circuits partenaires : les emplacements non confirmés s'affichent « Sélection en cours ».
 
 ### 2.3 Vocabulaire gelé
-- **QDI** : 79 occurrences sur le site (recompte du 2026-08-18 ; 64 au 2026-07-04, l'ancien « ~136 » datait d'une version encore antérieure). Le compte **ne doit pas baisser** — il sert de garde-fou contre une suppression accidentelle de vocabulaire, pas de cible. Vocabulaire figé (QDI, marges, 7-segments). **Aucun renommage** avant données réelles de roulage. (Le QDI est abandonné côté app pilote — cela ne concerne pas le site pour l'instant.)
+- **QDI** : **78 occurrences** sur le site (recompte du 2026-09-03 ; 79 au 2026-08-18, 64 au 2026-07-04, l'ancien « ~136 » datait d'une version encore antérieure). ⚠️ La baisse de 79 à 78 est **voulue et vérifiée** : le commit `0399fe5` du 29/08 a renommé « Le QDI du plateau » en « La marge du plateau », parce que la vue `qdi_public` ne porte aucune colonne de QDI — le site annonçait un indicateur et en affichait un autre. Ne pas « restaurer » cette occurrence. Le compte **ne doit pas baisser** — il sert de garde-fou contre une suppression accidentelle de vocabulaire, pas de cible. Vocabulaire figé (QDI, marges, 7-segments). **Aucun renommage** avant données réelles de roulage. (Le QDI est abandonné côté app pilote — cela ne concerne pas le site pour l'instant.)
 - **Couleurs piliers QDI intouchables** : Trajectoire `#60A5FA` · Fluidité `#FFB703` · Freinage `#E63946` · Accélération `#4ADE80` · Régularité `#C084FC`. Ce sont des couleurs de DONNÉE, jamais de fond.
 - **Faucon** : totem strictement interne. Jamais dans le contenu client (pas de « Falcon Eye », « Dive Mode », etc.). Vocabulaire HUD autorisé : Cap, Trajectoire, Anticipation, Visée, Plongée.
 
@@ -95,6 +95,7 @@ vivent les pages publiques.
 - **Pas de refactoring spéculatif.** Modifications ciblées sur des éléments validés uniquement. La base est bonne : on la développe, on ne la refond pas.
 - Avant de modifier une edge function : l'inspecter (`get_edge_function` via MCP Supabase ou lecture du dossier `supabase/functions/`). Les fonctions marquées « ACTIVE » peuvent être des templates non implémentés.
 - Toute incohérence structurelle détectée (contradiction de contenu, de prix, de logique) : **la signaler avant de produire**, ne pas la résoudre silencieusement.
+- **Deux implémentations d'une même règle se comparent au MÊME INSTANT.** Le dépôt porte désormais deux miroirs : `oxvHistovecEtat()` ↔ `oxv_histovec_etat()`, et la règle de classe de l'outil de seuil ↔ la colonne générée `vehicules_eligibles.classe`. Un banc qui décale d'une seconde un côté et pas l'autre invente des écarts au point de bascule — c'est arrivé le 03/09, deux faux défauts à J-15. Construire la grille en secondes, identique des deux côtés, et **éviter le point d'égalité exact** plutôt que d'espérer le franchir.
 - **Un script de correction doit écrire son fichier même s'il échoue en route.** Une assertion qui lève avant le `write` fait perdre tous les remplacements déjà annoncés « ok » en console. Vérifier le rendu, jamais les logs seuls.
 - **Après tout retrait de prix ou de mention, vérifier aussi le JSON-LD et `llms.txt`.** Une page peut être propre à l'œil et continuer d'annoncer un prix aux moteurs de recherche.
 - **Tout schéma ou carte SVG se mesure à 375 px de large**, pas à l'œil sur grand écran : un viewBox large y écrase ses libellés à deux ou trois pixels. Reprendre les classes `.oxv-schema-wrap` et `.oxv-schema`.
@@ -114,7 +115,7 @@ vivent les pages publiques.
 # Doctrine miroir — ne doit retourner AUCUNE occurrence côté contenu pilote
 grep -n -i "coach ia\|oxv coach\|coaching ia\|par ia\|falcon\|dive mode" index.html
 
-# QDI — le compte ne doit pas baisser sans instruction explicite (79 au 2026-08-18)
+# QDI — le compte ne doit pas baisser sans instruction explicite (78 au 2026-09-03)
 grep -c "QDI" index.html
 
 # Aucun tarif pilote pour l'application, aucune trace de l'ancienne licence coach
