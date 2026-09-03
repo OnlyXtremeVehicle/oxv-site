@@ -59,6 +59,38 @@ OXV est une plateforme multi-circuit basée à Bordeaux. **Le Circuit de Haute-S
 - Style de titre de référence : eyebrow monospace + heading avec mot-clé en `<em>` (voir page charte du site).
 - Palette validée : fond noir carbone, doré, rouge, blanc. Insigne rouge : favicon, header, footer, signatures — jamais en décoration répétée.
 
+### 2.6 bis — Donnée de chronométrage tierce (garde `plateauNonPublic`)
+Le paquet de démarrage d'`oxv-app` (30/08/2026) déclare cette garde **bloquante
+avant toute mise en ligne**. Elle contraint le site, parce que c'est ici que
+vivent les pages publiques.
+
+- **Aucune donnée de chronométrage produite par un tiers ne sort sur une page
+  publique du site**, ni sur `/pavillon/accueil`, ni dans un export client. Le
+  référentiel de plateau reste interne.
+- C'est un **engagement contractuel**, pris dans le courrier à ITS : l'arrêt de
+  lecture doit être tenable en une seconde, un dimanche. Une page publique qui
+  rediffuserait la donnée le rendrait intenable.
+- **État au 2026-09-03 : aucune source tierce n'est branchée sur le site** —
+  vérifié, zéro occurrence. La règle protège l'avenir, pas le présent.
+- Le grep de §4 ne rattrape que l'évident. Toute page qui afficherait un
+  classement, un temps au tour ou une position venus d'ailleurs qu'OXV se
+  **relit à la main** avant publication.
+
+### 2.6 ter — Deux décisions prises le 2026-09-03, à ne pas rouvrir
+- **Jetons de design partagés : ajournés.** L'étude de design d'`oxv-app`
+  demande une source unique `tokens.json` pour les deux dépôts, faute de quoi
+  « la divergence deviendra votre allure ». Mesure faite sur ce dépôt :
+  **118 couleurs écrites en dur contre 78 variables déclarées** — dont une part
+  légitime, les `--pv-*` qui reproduisent la palette de l'application dans ses
+  aperçus et qu'on ne corrige pas. Décision fondateur : **on attend que l'app
+  publie ses jetons** (sa phase 2, derrière un codemod de 868 usages de
+  `fontSize`, donc après Le Mans) pour ne faire le travail qu'une fois.
+- **Typographie : la recherche d'`oxv-app` ne rouvre pas l'arbitrage du site.**
+  Ses cinq critères (axe `GRAD`, chiffres tabulaires, taille optique,
+  désambiguïsation, unité des chasses) sont calibrés pour une tablette au
+  camion, en plein soleil, affichant des nombres à 25 Hz. Le site garde son
+  propre arbitrage. On en retient la méthode — mesurer, pas choisir.
+
 ### 2.6 Discipline d'ingénierie
 - **Pas de refactoring spéculatif.** Modifications ciblées sur des éléments validés uniquement. La base est bonne : on la développe, on ne la refond pas.
 - Avant de modifier une edge function : l'inspecter (`get_edge_function` via MCP Supabase ou lecture du dossier `supabase/functions/`). Les fonctions marquées « ACTIVE » peuvent être des templates non implémentés.
@@ -94,6 +126,10 @@ grep -n "2,2 km" index.html
 
 # Créneau Access du matin — supprimé, doit rester vide
 grep -n "9h-13h" index.html
+
+# Garde `plateauNonPublic` (§2.6 bis) — aucune source de chronométrage tierce
+# sur une page publique. Doit rester vide.
+grep -n -i "plateau_lecture\|plateau_lecteur\|its.chrono\|apex.timing\|live.timing" index.html
 ```
 
 Exception : la page coach partenaire humain et son SEO peuvent contenir « coach » — jamais associé à une IA ni à OXV comme opérateur du coaching.
